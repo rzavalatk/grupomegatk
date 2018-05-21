@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+acees_model_payment_custom_user,account.payment.invoices.custom,model_account_payment_invoices_custom,group_deposito_custom_lectura,1,0,0,0
+acees_model_payment_custom_mansger,account.payment.invoices.custom,model_account_payment_invoices_custom,group_deposito_custom_manager,1,1,1,1
+access_model_payment_line_custom_user,account.payment.line.custom,model_account_payment_line_custom,group_deposito_custom_lectura,1,0,0,0
+access_model_payment_line_custom_manager,account.payment.line.custom,model_account_payment_line_custom,group_deposito_custom_manager,1,1,1,1

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<record model="ir.module.category" id="module_category_depositos">
+            <field name="name">Depositos de Clientes</field>
+            <field name="description">Contabilidad</field>
+            <field name="sequence">4</field>
+</record>
+
+<record id="group_deposito_custom_manager" model="res.groups">
+<field name="category_id" ref="module_category_depositos"/>
+<field name="name">Usuario Manager</field>
+</record>
+
+<record id="group_deposito_custom_lectura" model="res.groups">
+<field name="category_id" ref="module_category_depositos"/>
+<field name="name">Usuario de Lectura</field>
+</record>
+
+<record id="group_deposito_custom_validate" model="res.groups">
+<field name="category_id" ref="module_category_depositos"/>
+<field name="name">Registro de pagos</field>
+</record>
+
+
+
+
+</data>
+</odoo>
+
+

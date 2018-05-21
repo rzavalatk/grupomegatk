@@ -1,0 +1,320 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_pdc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-26 17:24+0000\n"
+"PO-Revision-Date: 2017-11-26 11:25-0600\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_GT\n"
+"X-Generator: Poedit 1.8.9\n"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_move_id
+msgid "Asiento Contable"
+msgstr "Asiento Contable"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_journal_id
+msgid "Banco"
+msgstr "Banco"
+
+#. module: account_pdc
+#: selection:account.payment.invoices.custom,state:0
+msgid "Borrador"
+msgstr "Borrador"
+
+#. module: account_pdc
+#: selection:account.payment.invoices.custom,state:0
+msgid "Cancelado"
+msgstr "Cancelado"
+
+#. module: account_pdc
+#: selection:account.payment.line.custom,state:0
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_partner_id
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_partner_id
+msgid "Cliente"
+msgstr "Cliente"
+
+#. module: account_pdc
+#: model:ir.module.category,description:account_pdc.module_category_depositos
+msgid "Contabilidad"
+msgstr "Contabilidad"
+
+#. module: account_pdc
+#: model:ir.actions.act_window,help:account_pdc.action_payment_customer_new1
+msgid "Crear primer desposito de cliente"
+msgstr "Crear primer desposito de cliente"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_create_uid
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_create_date
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: account_pdc
+#: model:ir.actions.act_window,name:account_pdc.action_payment_customer_new1
+#: model:ir.module.category,name:account_pdc.module_category_depositos
+#: model:ir.ui.menu,name:account_pdc.action_payment_customer_new
+msgid "Depositos de Clientes"
+msgstr "Depositos de Clientes"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_custom_tree
+msgid "Depositos de clientes"
+msgstr "Depositos de clientes"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_diferencia
+msgid "Diferencia"
+msgstr "Diferencia"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_display_name
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_display_name
+msgid "Display Name"
+msgstr "Nombre a Mostrar"
+
+#. module: account_pdc
+#: selection:account.payment.line.custom,state:0
+msgid "Draft"
+msgstr "Draft"
+
+#. module: account_pdc
+#: code:addons/account_pdc/models/account_payment.py:61
+#, python-format
+msgid "El monto debe de ser mayor que cero"
+msgstr "El monto debe de ser mayor que cero"
+
+#. module: account_pdc
+#: code:addons/account_pdc/models/account_payment.py:157
+#, python-format
+msgid "El monto ingresado es mayor que el saldo de la factura"
+msgstr "El monto ingresado es mayor que el saldo de la factura"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_state
+msgid "Estado"
+msgstr "Estado"
+
+#. module: account_pdc
+#: code:addons/account_pdc/models/account_payment.py:68
+#, python-format
+msgid "Existen diferencias, verifique el monto de las facturas"
+msgstr "Existen diferencias, verifique el monto de las facturas"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_invoice_ids
+msgid "Facturas"
+msgstr "Facturas"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Facturas de Clientes"
+msgstr "Facturas de Clientes"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_date_invoice
+msgid "Fecha de factura"
+msgstr "Fecha de factura"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_date
+msgid "Fecha de registro"
+msgstr "Fecha de registro"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_date_due
+msgid "Fecha de vencimiento"
+msgstr "Fecha de vencimiento"
+
+#. module: account_pdc
+#: model:ir.model.fields,help:account_pdc.field_account_payment_invoices_custom_effective_date
+msgid "Fecha del deposito del cheque"
+msgstr "Fecha del deposito del cheque"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_effective_date
+msgid "Fecha efectiva"
+msgstr "Fecha efectiva"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_id
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_invoice_id
+msgid "Invoices"
+msgstr "Facturas"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom___last_update
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_write_uid
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_write_date
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_amount
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_monto_pago
+msgid "Monto a pagar"
+msgstr "Monto a pagar"
+
+#. module: account_pdc
+#: code:addons/account_pdc/models/account_payment.py:40
+#, python-format
+msgid "No existen facturas para este cliente"
+msgstr "No existen facturas para este cliente"
+
+#. module: account_pdc
+#: code:addons/account_pdc/models/account_payment.py:63
+#, python-format
+msgid "No existen facturas para registrar pagos"
+msgstr "No existen facturas para registrar pagos"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_notes
+msgid "Notas"
+msgstr "Notas"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Notas Generales"
+msgstr "Notas Generales"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Notas Generales para el pago a realizar"
+msgstr "Notas Generales para el pago a realizar"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_number
+msgid "Número de factura"
+msgstr "Número de factura"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Obtener Facturas"
+msgstr "Obtener Facturas"
+
+#. module: account_pdc
+#: selection:account.payment.line.custom,state:0
+msgid "Open"
+msgstr "Open"
+
+#. module: account_pdc
+#: selection:account.payment.invoices.custom,state:0
+msgid "Pagado"
+msgstr "Pagado"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_pago_id
+msgid "Pago"
+msgstr "Pago"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Pagos de clientes"
+msgstr "Pagos de clientes"
+
+#. module: account_pdc
+#: selection:account.payment.line.custom,state:0
+msgid "Paid"
+msgstr "Paid"
+
+#. module: account_pdc
+#: selection:account.payment.line.custom,state:0
+msgid "Pro-forma"
+msgstr "Pro-forma"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_name
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_name
+msgid "Referencia"
+msgstr "Referencia"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_invoices_custom_bank_reference
+msgid "Referencia de pago"
+msgstr "Referencia de pago"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Registrar Pagos"
+msgstr "Registrar Pagos"
+
+#. module: account_pdc
+#: model:res.groups,name:account_pdc.group_deposito_custom_validate
+msgid "Registro de pagos"
+msgstr "Registro de pagos"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_residual
+msgid "Saldo de pendiente"
+msgstr "Saldo de pendiente"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_state
+msgid "Status"
+msgstr "Estado"
+
+#. module: account_pdc
+#: model:ir.ui.view,arch_db:account_pdc.account_payment_invoices_form_inherited
+msgid "Total"
+msgstr "Total"
+
+#. module: account_pdc
+#: model:ir.model.fields,field_description:account_pdc.field_account_payment_line_custom_amount_total
+msgid "Total de factura"
+msgstr "Total de factura"
+
+#. module: account_pdc
+#: model:res.groups,name:account_pdc.group_deposito_custom_manager
+msgid "Usuario Manager"
+msgstr "Usuario Manager"
+
+#. module: account_pdc
+#: model:res.groups,name:account_pdc.group_deposito_custom_lectura
+msgid "Usuario de Lectura"
+msgstr "Usuario de Lectura"
+
+#. module: account_pdc
+#: model:ir.model,name:account_pdc.model_account_payment_invoices_custom
+msgid "account.payment.invoices.custom"
+msgstr "account.payment.invoices.custom"
+
+#. module: account_pdc
+#: model:ir.model,name:account_pdc.model_account_payment_line_custom
+msgid "account.payment.line.custom"
+msgstr "account.payment.line.custom"
