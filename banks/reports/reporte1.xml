@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="check_print">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+				    <t t-if="o and 'company_id' in o">
+					<t t-set="company" t-value="o.company_id"></t>
+				    </t>
+				    <t t-if="not o or not 'company_id' in o">
+					<t t-set="company" t-value="res_company"></t>
+				    </t>
+
+   		 <div class="header">
+			<strong><p class="text-right"><span t-field="o.number"/></p></strong>
+		 </div>				
+<div class="page">
+
+<style>
+tr.box {
+    width: 300px;
+    padding: 25px;
+    border: 2px solid black;
+    margin: 25px;
+}
+.subrayado{
+    text-decoration: underline;
+}
+.page{
+	font-family: "Times New Roman", Georgia, Serif;
+}
+</style>
+
+<table style="width:70%; font-size:14px; border:1px; padding:3px 0px 0px 0px"> 
+	<tbody>	
+		<!--<t t-if="format(o.journal_id.id) == 1">
+						<tr style="width:100%; padding:0px 0px 0px 0px"><td>
+							<table style="width:100%; font-size:12px; padding:0px 0px 4px 0px"> 
+						   		<tbody><tr>
+								      <td></td></tr>
+								</tbody>
+							</table>
+						      </td>
+						</tr>
+		</t>--->
+		<tr>	
+			<td style="width:100%;">	
+				<t t-if="format(o.journal_id.id) == 1">		
+					<table style="width:100%; font-size:12px; padding:15px 0px 0px 0px"> 
+				           <tbody>
+						<tr>
+							
+							
+								<t t-if="format(o.journal_id.id) == 1">
+									<td style="width:30%;"></td>
+									<td style="width:25%;"></td>
+									<td style="width:45%;">
+										<table style="width:100%; font-size:14px;">
+											<tbody>	<tr>
+											       <td style="width:30%;">
+													<strong><p class="text-left">Tegucigalpa</p></strong>
+												</td>
+												<td style="width:10%;">
+													<strong><p class="text-left"><span t-esc="time.strftime('%d',time.strptime(o.date,'%Y-%m-%d'))"/></p></strong>
+												</td> 
+												<td style="width:10%;">
+													<strong><p class="text-left">de</p></strong>
+												</td>
+												<td style="width:25%;">
+													<strong><p class="text-left">
+													<span t-esc="conver_mont(time.strftime('%B',time.strptime(o.date,'%Y-%m-%d')))"/></p></strong>
+												</td>
+												<td style="width:15%;">
+													<strong><p class="text-left">de</p></strong>
+												</td>
+												<td style="width:10%;">
+													<strong><p class="text-left">
+													<span t-esc="time.strftime('%Y',time.strptime(o.date,'%Y-%m-%d'))"/></p></strong>
+												</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</t>
+							
+						</tr>
+						
+					
+					</tbody>
+				</table>
+			       </t>
+				<t t-if="format(o.journal_id.id) != 1">		
+					<table style="width:100%; font-size:12px; border:1px; padding:0px 0px 0px 0px;"> 
+				
+					<tbody>
+						<tr>
+								<t t-if="format(o.journal_id.id) != 1">
+									<td style="width:30%;"></td>
+									<td style="width:20%;"></td>
+									<td style="width:50%;">
+										<table style="width:100%; font-size:14px;">
+											<tbody>		
+												<tr>	
+													<td style="width:1%;">
+														<strong><p class="text-left"></p></strong>
+													</td>
+													<td style="width:25%;">
+														<strong><p class="text-center"><span t-esc="time.strftime('%d',time.strptime(o.date,'%Y-%m-%d'))"/></p></strong>
+													</td>
+													<td style="width:30%;">
+														<strong><p class="text-center">
+														<span t-esc="conver_mont(time.strftime('%B',time.strptime(o.date,'%Y-%m-%d')))"/></p></strong>
+													</td>
+											
+													<td style="width:10%;">
+														<strong><p class="text-center">de</p></strong>
+													</td> 
+													<td style="width:34%;">
+														<strong><p class="text-center">
+														<span t-esc="time.strftime('%Y',time.strptime(o.date,'%Y-%m-%d'))"/></p></strong>
+													</td>
+											
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</t>
+							
+						</tr>
+						
+					
+					</tbody>
+				</table>
+			     </t>
+			</td>
+		</tr>
+		<tr>	
+			<td style="width:100%; padding:24px 23px 1px 0px;">
+				<table style="width:100%; font-size:14px; border:1px;"> 
+					<tbody>
+						<tr>
+							<td style="width:74%;"><strong><p class="text-left">**<span t-esc="mayuscula(o.memo)"/>**</p> </strong></td>
+							<td style="width:26%;"><strong><p class="text-left"><span t-field="o.journal_id.currency.symbol"/>. **<span t-field="o.total"/>**</p></strong></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>	
+			<td style="width:100%; padding:7px 20px 200px 0px;">
+				<table style="width:100%; font-size:14px; border:1px;"> 
+					<tbody>
+						
+						<tr>
+							<!--<td style="width:90%;"><strong><p class="text-left">**<span t-esc="mayuscula(o.amounttext)"/>**</p></strong></td>-->
+							<td style="width:10%;"></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr style="width:100%;">
+			<table style="width:80%; font-size:14px; border:1px; padding:20px 20px 10px 20px;"> 
+				<tbody>
+					<tr>
+						<td><strong><p class="text-left"><span t-field="company.name"/></p></strong></td>
+					</tr>
+					<tr>
+						<td><strong><p class="text-left">BANCO DEL QUE SE EMITE: </p></strong></td>
+					</tr>
+					<tr>
+						<td><strong><p class="text-left">NUMERO DE CUENTA: </p></strong></td>
+					</tr>
+					<tr>
+						<td><strong><p class="text-left">CHEQUE No. <span t-field="o.number"/>, EMITIDO EL <span t-esc="fecha_hoy()"/></p></strong> </td>
+					</tr>
+					<tr>
+						<td><strong><p class="text-left">A FAVOR DE:  ***<span t-esc="mayuscula(o.name)"/>***</p></strong></td>
+					</tr>
+					<tr>
+						<td><strong><p class="text-left">DESCRIPCION: <span t-esc="mayuscula(o.memo)"/></p></strong> </td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</tr>
+		<br/>
+		<br/>
+		<tr>
+			<table style="width:90%; font-size:14px; border:1px; border:1px; padding:40px 20px 20px 20px;"> 
+				<tbody>
+					<tr>
+						<th style="width:15%;"><p class="text-center">CTA CTAB</p></th>
+						<th style="width:15%;"><p class="text-center">CUENTA-NOMBRE</p></th>
+						<th style="width:40%;"><p class="text-center">DESCRIPCION</p></th>
+						<th style="width:15%;"><p class="text-center">DEBE</p></th>
+						<th style="width:15%;"><p class="text-center">HABER</p></th>
+					</tr>
+					<t t-foreach="o.move_ids" t-as="a">
+						<tr>
+							<td><strong><p class="text-center"><span t-field="a.account_id.code"/></p></strong></td>
+							<td><strong><p class="text-center"><span t-field="a.account_id.name"/></p></strong></td>
+							<td><strong><p class="text-center"><span t-esc="cortar(a.name)"/></p></strong></td>
+							<td style="font-size:16px;"><strong><p class="text-right"> </p></strong></td>
+							<td style="font-size:16px;"><strong><p class="text-right"> </p></strong></td>
+						</tr>
+					</t>
+					<tr class="border-black" >
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="font-size:16px;" ><p class="text-right"><strong></strong></p></td>
+							<td style="font-size:16px;"><p class="text-right"><strong></strong></p></td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</tr>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+			<table style="width:100%; font-size:14px; padding:25px 25px 25px 25px;"> 
+				<tbody>
+					<tr>
+						<td style="width:33%; padding:25px 10px 10px 10px;"><strong><u><p class="text-center"><span t-field="o.user_creator.name"/><br/><hr style="color: solid black; size=2;"></hr></p></u></strong></td>
+						<td style="width:33%; padding:25px 10px 10px 10px;"><strong><p class="text-center"><br/><hr style="color: solid black; size=2;"></hr></p></strong></td>
+						<td style="width:34%; padding:25px 10px 10px 10px;"><strong><p class="text-center"><br/><hr style="color: solid black; size=2;"></hr></p></strong></td>
+					</tr>
+					<tr>
+						<td style="width:33%; padding:5px 10px 10px 10px;"><strong><p class="text-center">ELABORADO POR</p> </strong></td>
+						<td style="width:33%; padding:5px 10px 10px 10px;"><strong><p class="text-center">AUTORIZADO POR</p></strong> </td>
+						<td style="width:34%; padding:5px 10px 10px 10px;"><strong><p class="text-center">RECIBIDO POR</p></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</tr>
+	</tbody>
+</table>
+
+
+						</div>
+
+					</t>
+				
+			</t>
+		</template>
+	</data>
+</openerp>

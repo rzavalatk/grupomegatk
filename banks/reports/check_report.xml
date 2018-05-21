@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>     
+	<report
+		id="banks_check_print"
+		model="banks.check"
+		string="Voucher"
+		report_type="qweb-pdf"
+		name="banks.check_print"
+		file="banks.check_print"
+	/>
+
+<!--<record id="banks_check_print" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="banks.checks_paper_format"/>
+</record> -->
+
+</data>
+</odoo>

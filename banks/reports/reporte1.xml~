@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="mcheck_print">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+<div class="footer">
+<br/>
+<br/>
+<br/>
+
+<table style="width:100%;  border:1px;"> 
+		<td style="width:10%; font-size:20px;">
+			<p class="text-left"><span t-field="o.number"/></p>
+		</td>
+		<td style="width:10%; font-size:15px;">
+		</td>
+		<td style="width:10%; font-size:15px;">
+			<p class="text-left"><span t-field="o.number"/></p>
+		</td>
+		<td style="width:15%; font-size:15px;">
+		</td>
+</table>
+</div>
+ 			
+						<div class="page">																																																			
+
+<style>
+tr.box {
+    width: 300px;
+    padding: 25px;
+    border: 2px solid black;
+    margin: 25px;
+}
+</style>
+
+					
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+<tr>
+<td style="width:10%;"></td>
+<td style="width:60%;"><p class="text-right">
+<span t-esc="time.strftime('%d',time.strptime(o.date,'%Y-%m-%d'))"/></p>
+</td> 
+<td style="width:10%;"/>
+<td style="width:30%;"><p class="text-center">
+<span t-esc="time.strftime('%B',time.strptime(o.date,'%Y-%m-%d'))"/></p>
+</td>
+<td style="width:10%;"></td>
+<td style="width:20%;"><p class="text-right">
+<span t-esc="time.strftime('%Y',time.strptime(o.date,'%Y-%m-%d'))"/></p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td colspan="1" style="width:10%;"> <div style="text-aling:justify"><p> </p></div></td>
+<td colspan="2" style="width:70%;"><p class="text-left">  <b><span t-field="o.reference"/> </b></p></td>
+<td style="width:40%;"></td>
+<td> <p class="text-right"><b><span t-field="o.amount"/></b></p></td>
+</tr>
+<br/>
+<tr>
+<td style="width:10%;"></td>
+<td colspan="3"><p> <span t-field="o.amounttext"/></p> </td>
+</tr>
+
+
+</tbody>
+</table>
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+<td colspan="4"><p class="text-justify"> <span t-field="o.name"/></p></td>
+</tbody>
+</table>
+<br/><br/><br/><br/>
+
+
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+
+<tr>
+<th style="width:45%;"></th>
+<th style="width:25%;"></th>
+<th style="width:15%;"><p class="text-right"></p></th>
+<th style="width:15%;"><p class="text-right"></p></th>
+</tr>
+<t t-foreach="o.move_ids" t-as="a">
+<tr>
+<td><span t-field="a.account_id.code"/>-<span t-field="a.account_id.name"/></td>
+<td><span t-field="a.name"/></td>
+<td><p class="text-right"> <span t-field="a.debit"/></p></td>
+<td><p class="text-right"> <span t-field="a.credit"/></p></td>
+</tr>
+</t>
+<tr class="border-black">
+<td colspan="2"></td>
+
+<td><p class="text-right"><strong><span t-field="o.amountdebit"/></strong></p></td>
+<td><p class="text-right"><strong><span t-field="o.amountcredit"/></strong></p></td>
+</tr>
+</tbody>
+</table>
+
+
+						</div>
+
+					</t>
+				
+			</t>
+		</template>
+	</data>
+</openerp>
