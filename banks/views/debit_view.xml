@@ -40,7 +40,7 @@
         <notebook>
         <page string="Detalle de Transacción">
             <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
-                <tree editable="top">
+                <tree editable="bottom">
                    <field name="account_id" options="{'no_create': True}"/>
                    <field name="name"/>
                    <field name="partner_id" options="{'no_create': True}"/>
