@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-<data>
- 
     <record id="factura_proveedor_cai_banks" model="ir.ui.view">
         <field name="name">account.invoice.form.inherit.cai</field>
         <field name="model">account.invoice</field>
@@ -13,5 +11,4 @@
  			</field>
         </field>
     </record>
-</data> 
 </odoo>
