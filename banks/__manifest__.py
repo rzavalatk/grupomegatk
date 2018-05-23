@@ -14,7 +14,7 @@
     'data': [
         "security/groups.xml",
         "security/ir.model.access.csv",
-        #views/factura_proveedor.xml",
+        #"views/factura_proveedor.xml",
         "views/main_menu_view.xml", 
         "wizard/journal_settings_view.xml",
         "views/ir_sequence_view.xml",

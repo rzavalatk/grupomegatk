@@ -119,7 +119,7 @@ class BanksPayment(models.Model):
             vals = {
                 'pago_id': self.id,
                 'partner_id': self.partner_id.id,
-                'number': invoice.numero_factura,
+                #'number': invoice.internal_number,
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
                 'name': invoice.name,
