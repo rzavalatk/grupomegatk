@@ -82,6 +82,8 @@ class Debit(models.Model):
                 else:
                     credit_line += 0
                     debit_line += 0
+            self.total_debitos = debit_line
+            self.total_creditos = credit_line
             self.rest_credit = self.total - (debit_line - credit_line)
         else:
             for lines in self.debit_line:
@@ -92,7 +94,13 @@ class Debit(models.Model):
                 else:
                     credit_line += 0
                     debit_line += 0
+            self.total_debitos = debit_line
+            self.total_creditos = credit_line
             self.rest_credit = self.total - (credit_line - debit_line)
+
+        print "*" * 200
+        print self.rest_credit
+        print "*" * 200
 
     def get_currency(self):
         return self.env.user.company_id.currency_id.id
@@ -107,12 +115,14 @@ class Debit(models.Model):
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
     msg = fields.Char("Error de configuración", compute=get_msg_number)
-    rest_credit = fields.Float( string='Diferencia',compute=_compute_rest_credit)
+    rest_credit = fields.Float( string='Diferencia', compute=_compute_rest_credit)
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     number = fields.Char("Número")
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
     company_id = fields.Many2one("res.company", "Empresa", required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
+    total_debitos = fields.Float("Total débitos", compute=_compute_rest_credit)
+    total_creditos = fields.Float("Total créditos", compute=_compute_rest_credit)
 
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
@@ -133,7 +143,7 @@ class Debit(models.Model):
             raise Warning(_("No existen detalles de movimientos a registrar"))
         if self.total < 0:
             raise Warning(_("El total debe de ser mayor que cero"))
-        if not self.rest_credit == 0:
+        if not round(self.rest_credit, 2) == 0.0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
         self.write({'state': 'validated'})
@@ -248,6 +258,10 @@ class Debit(models.Model):
         self.write({'state': 'anulated'})
 
     @api.multi
+    def action_draft(self):
+        self.write({'state': 'draft'})
+
+    @api.multi
     def action_anulate(self):
         self.write({'state': 'anulated'})
         self.update_seq()
@@ -268,7 +282,7 @@ class Debitline(models.Model):
     partner_id = fields.Many2one('res.partner', 'Empresa')
     account_id = fields.Many2one('account.account', 'Cuenta', required=True)
     name = fields.Char('Descripción')
-    amount = fields.Monetary('Monto', required=True)
+    amount = fields.Float('Monto', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency')
     analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica")
     move_type = fields.Selection([('debit', 'Débito'), ('credit', 'Crédito')], 'Débito/Crédito', default='debit', required=True)

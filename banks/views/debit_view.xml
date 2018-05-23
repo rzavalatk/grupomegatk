@@ -8,6 +8,7 @@
     <field name="arch" type="xml">
     <form string="Debits">
     <header>
+        <button name="action_draft" type="object" string="Cambiar a Borrador" states="anulated" class="oe_highlight"/>
         <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
         <button name="action_anulate_debit" type="object" string="Anular Registro" groups="banks.banks_anular_registros"
@@ -23,7 +24,7 @@
         <group colspan="4">
         <group cols="2">
             <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="journal_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+            <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
             <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
         </group>
         <group cols="2">
@@ -39,16 +40,24 @@
         </group>
         <notebook>
         <page string="Detalle de Transacción">
-            <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
-                <tree editable="top">
-                   <field name="account_id" options="{'no_create': True}"/>
-                   <field name="name"/>
-                   <field name="partner_id" options="{'no_create': True}"/>
-                   <field name="analytic_id" options="{'no_create': True}"/>
-                   <field name="amount"/>
-                   <field name="move_type"/>
-                </tree>
-            </field>
+        <group colspan="4">
+        <group cols="2">
+             <field name="total_debitos"/>
+        </group>
+        <group cols="2">
+            <field name="total_creditos"/>
+        </group>
+        </group>
+        <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
+            <tree editable="bottom">
+               <field name="account_id" options="{'no_create': True}"/>
+               <field name="name"/>
+               <field name="partner_id" options="{'no_create': True}"/>
+               <field name="analytic_id" options="{'no_create': True}"/>
+               <field name="amount"/>
+               <field name="move_type"/>
+            </tree>
+        </field>
         </page>
         <page string="Apuntes Contables" attrs="{'invisible': [('state','!=','validated')]}">
 			<group>

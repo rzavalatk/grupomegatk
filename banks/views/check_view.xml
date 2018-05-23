@@ -44,7 +44,7 @@
         <group colspan="4">
         <group cols="2">
         <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
-        <field name="journal_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+        <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
         <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
         </group>
         <group cols="2">
