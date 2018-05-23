@@ -98,10 +98,6 @@ class Debit(models.Model):
             self.total_creditos = credit_line
             self.rest_credit = round(self.total - (credit_line - debit_line), 2)
 
-        print "*" * 200
-        print self.rest_credit
-        print "*" * 200
-
     def get_currency(self):
         return self.env.user.company_id.currency_id.id
 
