@@ -6,4 +6,3 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     numero_factura = fields.Char('Número de factura', help='Número de factura')
-    cai_proveedor = fields.Char("CAI de Proveedor")
