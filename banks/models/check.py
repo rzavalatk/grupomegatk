@@ -140,7 +140,7 @@ class Check(models.Model):
             raise Warning(_("No existen detalles de movimientos a registrar"))
         if self.total < 0:
             raise Warning(_("El total debe de ser mayor que cero"))
-        if not self.difference == 0:
+        if not round(self.difference, 2) == 0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
         self.write({'state': 'validated'})
         self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()

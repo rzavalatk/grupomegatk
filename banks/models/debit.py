@@ -82,6 +82,8 @@ class Debit(models.Model):
                 else:
                     credit_line += 0
                     debit_line += 0
+            self.total_debitos = debit_line
+            self.total_creditos = credit_line
             self.rest_credit = self.total - (debit_line - credit_line)
         else:
             for lines in self.debit_line:
@@ -92,6 +94,8 @@ class Debit(models.Model):
                 else:
                     credit_line += 0
                     debit_line += 0
+            self.total_debitos = debit_line
+            self.total_creditos = credit_line
             self.rest_credit = self.total - (credit_line - debit_line)
 
     def get_currency(self):
@@ -107,12 +111,14 @@ class Debit(models.Model):
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
     msg = fields.Char("Error de configuración", compute=get_msg_number)
-    rest_credit = fields.Float( string='Diferencia',compute=_compute_rest_credit)
+    rest_credit = fields.Float( string='Diferencia', compute=_compute_rest_credit)
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     number = fields.Char("Número")
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
     company_id = fields.Many2one("res.company", "Empresa", required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
+    total_debitos = fields.Float("Total débitos", compute=_compute_rest_credit)
+    total_creditos = fields.Float("Total créditos", compute=_compute_rest_credit)
 
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
@@ -133,7 +139,7 @@ class Debit(models.Model):
             raise Warning(_("No existen detalles de movimientos a registrar"))
         if self.total < 0:
             raise Warning(_("El total debe de ser mayor que cero"))
-        if not round(self.rest_credit, 2) == 0:
+        if not round(self.rest_credit, 2) == 0.0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
         self.write({'state': 'validated'})

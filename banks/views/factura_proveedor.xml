@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+    <record id="factura_proveedor_cai" model="ir.ui.view">
+        <field name="name">factura.proveedores.pagos</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+ 			<field name="date_due" position="after">
+ 				<field name="numero_factura"/>
+ 				<field name="cai_proveedor"/>
+ 			</field>
+        </field>
+    </record>
+</data> 
+</odoo>

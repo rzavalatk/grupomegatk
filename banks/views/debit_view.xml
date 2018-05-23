@@ -39,16 +39,24 @@
         </group>
         <notebook>
         <page string="Detalle de Transacción">
-            <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
-                <tree editable="bottom">
-                   <field name="account_id" options="{'no_create': True}"/>
-                   <field name="name"/>
-                   <field name="partner_id" options="{'no_create': True}"/>
-                   <field name="analytic_id" options="{'no_create': True}"/>
-                   <field name="amount"/>
-                   <field name="move_type"/>
-                </tree>
-            </field>
+        <group colspan="4">
+        <group cols="2">
+             <field name="total_debitos"/>
+        </group>
+        <group cols="2">
+            <field name="total_creditos"/>
+        </group>
+        </group>
+        <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
+            <tree editable="bottom">
+               <field name="account_id" options="{'no_create': True}"/>
+               <field name="name"/>
+               <field name="partner_id" options="{'no_create': True}"/>
+               <field name="analytic_id" options="{'no_create': True}"/>
+               <field name="amount"/>
+               <field name="move_type"/>
+            </tree>
+        </field>
         </page>
         <page string="Apuntes Contables" attrs="{'invisible': [('state','!=','validated')]}">
 			<group>
