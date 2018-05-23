@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="factura_proveedor_cai_banks" model="ir.ui.view">
-        <field name="name">account.invoice.form.inherit.cai</field>
+ <record id="factura_cai_form_inherit" model="ir.ui.view">
+        <field name="name">factura.cai.inherit</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_supplier_form"/>
         <field name="arch" type="xml">
-            <field name="date_due" position="after">
- 				<field name="numero_factura"/>
- 				<field name="cai_suplidor"/>
- 			</field>
+        	<field name="date_due" position="after">
+        		<field name="numero_factura"/>
+        		<field name="cai_proveedor"/>
+        	</field>
         </field>
     </record>
 </odoo>
