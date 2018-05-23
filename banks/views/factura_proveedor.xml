@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
  			<field name="date_due" position="after">
  				<field name="numero_factura"/>
- 				<field name="cai_proveedor"/>
+ 				<field name="cai_suplidor"/>
  			</field>
         </field>
     </record>
