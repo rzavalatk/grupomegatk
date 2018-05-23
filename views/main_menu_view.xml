@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+<menuitem id="menu_banks" name="Bancos" string="Bancos" web_icon="banks,static/description/icon.png"/>
+<menuitem  id="menu_banks_gestion" name="Transacciones Bancarias" parent="menu_banks" sequence="20"/>
+
+<menuitem  id="menu_banks_pagos" name="Gestión de Pagos" parent="menu_banks" sequence="40"/>
+<menuitem action="account_pdc.action_payment_customer_new1" id="menu_management_payment" name="Pagos de Clientes"
+           parent="menu_banks_pagos" sequence="10"/>
+
+</data>
+</odoo>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+
+
+<record model="ir.ui.view" id="view_banks_check_search">
+    <field name="name">check.search</field>
+    <field name="model">banks.check</field>
+    <field name="arch" type="xml">
+    <search string = 'search'>
+        <field name="name" filter_domain="[('name', 'ilike', self)]" string="Pagado a"/>
+        <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>            
+        <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
+         <group expand="0" string="Group By">
+               <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
+               <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
+               <filter string="Pagado a" domain="[]" context="{'group_by':'journal_id'}"/>
+               <filter string="Referencia" domain="[]" context="{'group_by':'name'}"/>
+        </group>
+        
+        </search>
+    </field>
+</record>
+
+<record id="check_form_view" model="ir.ui.view">
+<field name="name">Cheque</field>
+<field name="model">banks.check</field>
+<field name="arch" type="xml">
+<form string="Debits">
+<header>
+    <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
+    <button name="action_anulate" type="object" string="Anular Registro" states="draft" class="oe_highlight"/>
+    <button name="action_anulate_cheque" type="object" string="Anular Registro" groups="banks.banks_anular_registros"
+           confirm="Esta seguro que quiere anular este cheque?" states="validated" class="oe_highlight"/>
+    <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
+</header>
+    <sheet>
+        <h1>
+            <field name="number_calc"  class="oe_inline" readonly='1'/>
+            <field name="number"  readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
+        </h1>
+        <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
+        <group colspan="4">
+        <group cols="2">
+        <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
+        <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+        <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
+        </group>
+        <group cols="2">
+            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="currency_id" options="{'no_create': True}"/>
+            <field name="doc_type" invisible="1"/>
+            <field name="es_moneda_base" invisible="1"/>
+            <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}" />
+        </group>
+        </group>
+        <group col="2" colspan="4">
+            <group cols="2">
+                <field name="name"  attrs="{'readonly': [('state','!=','draft')]}"/>
+            </group>
+            <group cols="2">
+                <field name="memo" placeholder="Descripción de Cheque Emitido" attrs="{'readonly': [('state','!=','draft')]}"/>
+            </group>
+        </group>
+        <notebook>
+        <page string="Detalle de Transacción">
+            <field name="check_lines" attrs="{'readonly': [('state','!=','draft')]}">
+                <tree editable="top">
+                   <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+                   <field name="name"/>
+                   <field name="partner_id" options="{'no_create': True}" />
+                   <field name="analytic_id" options="{'no_create': True}"/>
+                   <field name="amount"/>
+                   <field name="move_type"/>
+                </tree>
+            </field>
+        </page>
+        <page string="Apuntes Conatbles" attrs="{'invisible': [('state','!=','validated')]}">
+            <separator string="Apunte Contable"/>
+            <group>
+                <field name="move_id" readonly="1" widget="many2one_tree" options="{'middle_node_select': False}"  >
+                </field>
+            </group>
+        </page>
+        </notebook>
+        <group class="oe_subtotal_footer oe_right">
+            <field name="difference" widget="monetary" options="{'currency_field': 'currency_id'}"/>                      
+        </group>
+    
+    </sheet>
+    <div class="oe_chatter">
+          <field name="message_ids" widget="mail_thread"/>
+    </div>
+    </form>
+    </field>
+</record>
+
+
+<record model="ir.ui.view" id="banks_cheque_view_tree">
+    <field name="name">Gestion de Cheques</field>
+    <field name="model">banks.check</field>
+    <field name="arch" type="xml">
+    <tree string="Cheques a Terceros" colors="blue:state=='draft';black:state=='validated';red:state=='anulated'" create="true" default_order="state">
+		<field name="number"/>
+        <field name="name" />
+        <field name="date" />
+        <field name="journal_id" widget="selection" />
+        <field name="total" sum="total"/>
+        <field name="currency_id"/>
+        <field name="state"/>
+         <field name="company_id"/>
+    </tree>
+    </field>
+</record>
+
+<record id="action_check" model="ir.actions.act_window">
+    <field name="name">Cheques a Terceros</field>
+    <field name="res_model">banks.check</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('doc_type','=','check')]</field>
+    <field name="context">{'default_doc_type':'check'}</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click para crear un nuevo registro.
+    </p>
+    </field>
+</record>    
+
+<record id="action_transferencia" model="ir.actions.act_window">
+    <field name="name">Transferencias a Terceros</field>
+    <field name="res_model">banks.check</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('doc_type','=','transference')]</field>
+    <field name="context">{'default_doc_type':'transference'}</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click para crear un nuevo registro.
+    </p>
+    </field>
+</record>  
+
+<menuitem action="action_check" id="management_check_menu" parent="menu_banks_gestion" sequence="100"/>
+<menuitem action="action_transferencia" id="management_transferencia_menu" parent="menu_banks_gestion" sequence="150"/>
+
+
+</data>
+</odoo>

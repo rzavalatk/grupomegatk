@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="view_banks_0account_journal_form_config">
+			<field name="name">account.journal.banks.form.config</field>
+			<field name="model">account.journal</field>
+			<field name="inherit_id" ref="account.view_account_journal_form"/> 
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='default_credit_account_id']" position="after" string='Allow Multi-Sequence'>
+					<field name="multi_seq_banks" attrs="{'invisible': [('type','not in',['bank','cash'])]}"/>
+				</xpath>
+				<xpath expr="//page[@name='advanced_settings']" position="after">
+					<page string="Transacciones Bancarias" attrs="{'invisible': [('multi_seq_banks','!=',True)]}" >
+								
+							<field name="secuencia_ids" >
+								<tree>
+									<field name="name" />
+									<field name="prefix" />
+									<field name="number_next_actual"/>
+									<field name="move_type"/>
+								</tree>
+							</field>
+						
+					</page>
+				</xpath>
+
+			</field>
+		</record>
+	</data>
+</odoo>

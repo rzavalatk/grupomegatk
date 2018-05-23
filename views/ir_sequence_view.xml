@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	  <record model="ir.ui.view" id="ir_sequence_vitt_config">
+      	<field name="name">ir.sequence.vitt.view.inh</field>
+      	<field name="model">ir.sequence</field>
+	    <field name="inherit_id" ref="base.sequence_view" />
+		<field name="arch" type="xml">
+
+        <field name="active" position="after">
+        	<field name="move_type"/>
+        </field>
+		
+	   	</field>
+   	  </record>
+	</data>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <record id="view_invoice_supplier_payment_wizard" model="ir.ui.view">
+        <field name="name">banks.invoice.payment.supplier.form</field>
+        <field name="model">banks.invoice.payment.supplier</field>
+        <field name="arch" type="xml">
+        <form string="Pago de Factura">
+            <group>
+                <group>
+                    <field name="journal_id" widget='selection'/>
+                    <field name="amount"/>
+                    <field name="doc_type"/>
+                </group>
+                <group>
+                    <field name="fecha"/> 
+                    <field name="ref"/>        
+                    <field name="invoice_number"/>
+                </group>
+            </group>
+            <h1>
+                <field name="name" readonly="1"/>
+            </h1>
+            <h2>
+                <field name="msg" readonly="1"/>
+            </h2>
+            <footer>
+                <button string='Registrar Pago' name="action_pago" type="object" class="oe_highlight"/>
+                        or
+                <button string="Cancel" class="oe_link" special="cancel"/>
+            </footer>
+        </form>
+        </field>
+    </record>
+
+
+
+    <record id="action_pagar_factura" model="ir.actions.act_window">
+        <field name="name">Pago de Proveedores</field>
+        <field name="res_model">banks.invoice.payment.supplier</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_invoice_supplier_payment_wizard"/>
+        <field name="nodestroy">True</field>
+        <field name="target">new</field>
+    </record>
+
+
+
+    <!--<record id="view_invoice_supplier_payment_inh" model="ir.ui.view">
+    <field name="name">account.invoice.supplier.payment</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_supplier_form"/>
+    <field name="arch" type="xml">
+	<xpath expr="//header" position="replace">
+		<header>
+                        <button name="action_invoice_open" type="object" states="draft,proforma2" string="Validar" class="oe_highlight" groups="account.group_account_invoice"/>
+                       
+                        <button name="%(account.action_account_invoice_refund)d" type='action' string='Ask Refund' groups="account.group_account_invoice" attrs="{'invisible': ['|',('type', 'in', ['in_refund','out_refund']),('state','not in',('open','paid'))]}"/>
+
+<button name="%(action_pagar_factura)d" type="action" string="Pagar Factura" states="open" class="oe_highlight"/>
+                        <button name="action_invoice_cancel" type="object" states="draft,proforma2" string="Cancel Bill" groups="account.group_account_invoice"/>
+                        <button name="action_invoice_draft" states="cancel" string="Set to Draft" type="object" groups="account.group_account_invoice"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,paid" />
+           </header> 
+	    </xpath>
+    </field>
+  </record>-->
+
+  <menuitem action="action_banks_payment_proveedores" id="action_payment_customer_new" string="Pago de Proveedores" parent="account.menu_finance_payables" sequence="50"/>
+
+    </data> 
+</odoo>

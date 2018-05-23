@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+	<record model="ir.module.category" id="module_category_banks">
+            <field name="name">Gestión de Bancos</field>
+            <field name="description">Gestión de Bancos</field>
+            <field name="sequence">4</field>
+	</record>
+	
+    <record id="banks_check_manager" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Cheques Usuario Avanzado </field>
+    </record>
+
+    <record id="banks_check_user" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Cheques Usuario Restringido</field>
+    </record>
+
+    <record id="banks_debit_credit_manager" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Débitos y Créditos Avanzado</field>
+    </record>
+
+     <record id="banks_debit_credit_user" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Débitos y Créditos Usuarios</field>
+    </record>
+
+	<record id="banks_supplier_payment_manager" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Pago a Proveedores Avanzado</field>
+    </record>
+
+	<record id="banks_supplier_payment_user" model="res.groups">
+		<field name="category_id" ref="module_category_banks"/>
+        <field name="name">Pago a Proveedores Restringido</field>
+    </record>
+
+    <record id="banks_anular_registros" model="res.groups">
+        <field name="category_id" ref="module_category_banks"/>
+        <field name="name">Anulación de registros</field>
+    </record>
+
+
+</data>
+</odoo>
