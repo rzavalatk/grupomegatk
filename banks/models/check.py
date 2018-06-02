@@ -72,7 +72,7 @@ class Check(models.Model):
     check_lines = fields.One2many("banks.check.line", "check_id", "Detalle de cheques", required=True)
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('postdated', 'Post-Fechado'), ('anulated', 'Anulado')], string='Estado', readonly=True, default='draft')
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
-    difference = fields.Monetary(string='Diferencia', compute='_compute_rest_credit')
+    difference = fields.Float(string='Diferencia', compute='_compute_rest_credit')
     doc_type = fields.Selection([('check', 'Cheque'), ('transference', 'Transferencia')], string='Tipo de Transacción', required=True)
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
