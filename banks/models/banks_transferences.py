@@ -112,7 +112,7 @@ class Vittbankstransferences(models.Model):
             'account_id': self.journal_id_in.default_credit_account_id.id,
             'date': self.date,
         }
-        if self.journal_id_in.currency_id:
+        if self.journal_id_out.currency_id:
             vals_debe["currency_id"] = self.currency_id.id
             vals_debe["amount_currency"] = self.total
         lineas.append((0, 0, vals_debe))

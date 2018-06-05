@@ -25,7 +25,7 @@
                 <field name="journal_id_out"  attrs="{'readonly': [('state','!=','draft')]}"
                     domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
                 <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
-				<field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
             </group>
             <group cols="2">
                 <field name="journal_id_in" widget="selection" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
@@ -33,7 +33,7 @@
                 <field name="es_moneda_base" invisible="1"/>
                 <field name="currency_rate" attrs="{'readonly': [('state','!=','draft')]}"/>
 
-				<field name="move_id"/>
+                <field name="move_id"/>
             </group>
         </group>
         <group colspan="4">
@@ -52,11 +52,11 @@
     <field name="model">banks.transferences</field>
     <field name="arch" type="xml">
         <tree string="Transferencia entre bancos" >
-			<field name="journal_id_out"/>
+            <field name="journal_id_out"/>
             <field name="journal_id_in"/>
-			<field name="total"/>
-			<field name="date"/>
-			<field name="currency_id"/>
+            <field name="total"/>
+            <field name="date"/>
+            <field name="currency_id"/>
         </tree>
     </field>
  </record>
