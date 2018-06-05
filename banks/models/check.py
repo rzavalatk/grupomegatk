@@ -159,8 +159,11 @@ class Check(models.Model):
             #'company_id': self.company_id.id,
         }
         if self.journal_id.currency_id:
-            vals_credit["currency_id"] = self.currency_id.id
-            vals_credit["amount_currency"] = self.total * -1
+            if not self.company_id.currency_id == self.currency_id:
+                vals_credit["currency_id"] = self.currency_id.id
+                vals_credit["amount_currency"] = self.total * -1
+            else:
+                vals_credit["amount_currency"] = 0.0
 
         for line in self.check_lines:
             if line.move_type == 'debit':
@@ -174,8 +177,11 @@ class Check(models.Model):
                     'analytic_account_id': line.analytic_id.id,
                 }
                 if self.journal_id.currency_id:
-                    vals_debe["currency_id"] = self.currency_id.id
-                    vals_debe["amount_currency"] = self.total
+                    if not self.company_id.currency_id == self.currency_id:
+                        vals_debe["currency_id"] = self.currency_id.id
+                        vals_debe["amount_currency"] = self.total
+                    else:
+                        vals_credit["amount_currency"] = 0.0
                 lineas.append((0, 0, vals_debe))
             if line.move_type == 'credit':
                 vals_credit_line = {
@@ -188,8 +194,11 @@ class Check(models.Model):
                     'analytic_account_id': line.analytic_id.id,
                 }
                 if self.journal_id.currency_id:
-                    vals_credit_line["currency_id"] = self.currency_id.id
-                    vals_credit_line["amount_currency"] = self.total * -1
+                    if not self.company_id.currency_id == self.currency_id:
+                        vals_credit_line["currency_id"] = self.currency_id.id
+                        vals_credit_line["amount_currency"] = self.total * -1
+                    else:
+                        vals_credit["amount_currency"] = 0.0
                 lineas.append((0, 0, vals_credit_line))
         lineas.append((0, 0, vals_credit))
         values = {

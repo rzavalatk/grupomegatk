@@ -111,7 +111,7 @@ class Debit(models.Model):
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
     msg = fields.Char("Error de configuración", compute=get_msg_number)
-    rest_credit = fields.Float( string='Diferencia', compute=_compute_rest_credit)
+    rest_credit = fields.Float('Diferencia', compute=_compute_rest_credit)
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     number = fields.Char("Número")
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
@@ -159,8 +159,11 @@ class Debit(models.Model):
                 'date': self.date,
             }
             if self.journal_id.currency_id:
-                vals_haber["currency_id"] = self.currency_id.id
-                vals_haber["amount_currency"] = self.total * -1
+                if not self.company_id.currency_id == self.currency_id:
+                    vals_haber["currency_id"] = self.currency_id.id
+                    vals_haber["amount_currency"] = self.total * -1
+                else:
+                    vals_haber["amount_currency"] = 0.0
             for line in self.debit_line:
                 # LINEA DE DEBITO
                 if line.move_type == 'debit':
@@ -174,8 +177,11 @@ class Debit(models.Model):
                         'analytic_account_id': line.analytic_id.id,
                     }
                     if self.journal_id.currency_id:
-                        vals_debe["currency_id"] = self.currency_id.id
-                        vals_debe["amount_currency"] = line.amount
+                        if not self.company_id.currency_id == self.currency_id:
+                            vals_debe["currency_id"] = self.currency_id.id
+                            vals_debe["amount_currency"] = line.amount
+                        else:
+                            vals_debe["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_debe))
                 if line.move_type == 'credit':
                     vals_credit = {
@@ -188,8 +194,11 @@ class Debit(models.Model):
                         'analytic_account_id': line.analytic_id.id,
                     }
                     if self.journal_id.currency_id:
-                        vals_credit["currency_id"] = self.currency_id.id
-                        vals_credit["amount_currency"] = line.amount * -1
+                        if not self.company_id.currency_id == self.currency_id:
+                            vals_credit["currency_id"] = self.currency_id.id
+                            vals_credit["amount_currency"] = line.amount * -1
+                        else:
+                            vals_credit["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_credit))
             lineas.append((0, 0, vals_haber))
         else:
@@ -201,8 +210,11 @@ class Debit(models.Model):
                 'date': self.date,
             }
             if self.journal_id.currency_id:
-                vals_credit["currency_id"] = self.currency_id.id
-                vals_credit["amount_currency"] = self.total
+                if not self.company_id.currency_id == self.currency_id:
+                    vals_credit["currency_id"] = self.currency_id.id
+                    vals_credit["amount_currency"] = self.total
+                else:
+                    vals_credit["amount_currency"] = 0.0
             for line in self.debit_line:
                 if line.move_type == 'credit':
                     vals_debe = {
@@ -216,8 +228,11 @@ class Debit(models.Model):
                         'analytic_account_id': line.analytic_id.id,
                     }
                     if self.journal_id.currency_id:
-                        vals_debe["currency_id"] = self.currency_id.id
-                        vals_debe["amount_currency"] = line.amount
+                        if not self.company_id.currency_id == self.currency_id:
+                            vals_debe["currency_id"] = self.currency_id.id
+                            vals_debe["amount_currency"] = line.amount
+                        else:
+                            vals_debe["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_debe))
                 if line.move_type == 'debit':
                     vals_credit = {
@@ -231,8 +246,11 @@ class Debit(models.Model):
                         'analytic_account_id': line.analytic_id.id,
                     }
                     if self.journal_id.currency_id:
-                        vals_credit["currency_id"] = self.currency_id.id
-                        vals_credit["amount_currency"] = line.amount  * -1
+                        if not self.company_id.currency_id == self.currency_id:
+                            vals_credit["currency_id"] = self.currency_id.id
+                            vals_credit["amount_currency"] = line.amount  * -1
+                        else:
+                            vals_credit["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_credit))
             lineas.append((0, 0, vals_credit))
         values = {
