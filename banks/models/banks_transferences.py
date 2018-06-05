@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
-
+from odoo import models, fields, api, _
 
 class Vittbankstransferences(models.Model):
     _name = 'banks.transferences'
+    _rec_name = "number"
     _inherit = ['mail.thread']
     _description = "Transferencias entre Bancos"
 
@@ -38,14 +38,25 @@ class Vittbankstransferences(models.Model):
     def get_currency(self):
         return self.env.user.company_id.currency_id.id
 
+    @api.onchange("currency_id")
+    def onchangecurrency(self):
+        if self.currency_id:
+            if self.currency_id != self.company_id.currency_id:
+                tasa = self.currency_id.with_context(date=self.date)
+                self.currency_rate = 1 / tasa.rate 
+                self.es_moneda_base = False
+            else:
+                self.currency_rate = 1
+                self.es_moneda_base = True
+
     journal_id_out = fields.Many2one("account.journal", "De Banco", required=True, domain="[('type', 'in',['bank'])]")
     journal_id_in = fields.Many2one("account.journal", "A Banco", required=True, domain="[('type', 'in',['bank'])]")
     date = fields.Date(string="Fecha", help="Fecha efectia de transacción", required=True)
     total = fields.Float(string='Total', required=True)
     memo = fields.Text(string="Descripción", required=True)
     currency_id = fields.Many2one("res.currency", "Moneda", default=get_currency)
-    state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], 
-    	string="Estado", default='draft')
+    state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
+    currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
     number = fields.Char("Número")
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
@@ -53,9 +64,21 @@ class Vittbankstransferences(models.Model):
     company_id = fields.Many2one("res.company", "Empresa", required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
 
+    @api.multi
+    def unlink(self):
+        for move in self:
+            if move.state == 'validated' or move.state == 'anulated':
+                raise Warning(_('No puede eliminar registros contabilizados'))
+        return super(Vittbankstransferences, self).unlink()
+
     @api.onchange("journal_id_out")
     def onchangejournal(self):
         self.get_msg_number()
+        if self.journal_id_out:
+            if self.journal_id_out.currency_id:
+                self.currency_id = self.journal_id_out.currency_id.id
+            else:
+                self.currency_id = self.company_id.currency_id.id
 
     @api.multi
     def action_validate(self):
@@ -75,19 +98,23 @@ class Vittbankstransferences(models.Model):
         vals_haber = {
             'debit': 0.0,
             'credit': self.total,
-            'amount_currency': 0.0,
             'name': self.memo,
             'account_id': self.journal_id_out.default_credit_account_id.id,
             'date': self.date,
         }
+        if self.journal_id_out.currency_id:
+            vals_haber["currency_id"] = self.currency_id.id
+            vals_haber["amount_currency"] = self.total * -1
         vals_debe = {
             'debit': self.total,
             'credit': 0.0,
-            'amount_currency': 0.0,
             'name': self.memo,
             'account_id': self.journal_id_in.default_credit_account_id.id,
             'date': self.date,
         }
+        if self.journal_id_in.currency_id:
+            vals_debe["currency_id"] = self.currency_id.id
+            vals_debe["amount_currency"] = self.total
         lineas.append((0, 0, vals_debe))
         lineas.append((0, 0, vals_haber))
         values = {
