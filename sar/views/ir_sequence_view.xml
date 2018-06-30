@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record model="ir.ui.view" id="ir_sequence_vitt_config">
+        <field name="name">ir.sequence.vitt.view.inh</field>
+        <field name="model">ir.sequence</field>
+        <field name="inherit_id" ref="base.sequence_view" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <field name="active" position="after">
+                <field name="is_fiscal_sequence"/>
+	 
+            </field>
+
+            <notebook position="inside">
+                <page string="Fiscal Sequences" readonly="True" attrs="{'invisible': [('is_fiscal_sequence','!=',True)]}">
+                    <group col="2" colspan="2">           
+                        <separator string="Fiscal Sequences" colspan="2"/>
+                        <group>
+                            <field name="expiration_date"/>
+                            <field name="vitt_min_value" />
+                            <field name="vitt_max_value"/>
+                            <field name="vitt_number_next_actual"/>
+                        </group>
+                        <group>
+                            <field name="vitt_prefix"/>
+                            <field name="vitt_padding"/>
+                            <spearator string="Alerts" colspan="2"/>
+                            <field name="percentage_alert"/>
+                            <field name="percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <notebook>
+                            <page string="Fiscal Regime">
+                                <field name="fiscal_sequence_regime_ids" options="{'no_create': True}">
+                                    <tree editable="top">
+                                      <field name="authorization_code_id"/>
+                                      <field name="_from"/>
+                                      <field name="_to"/>
+                                      <field name="actived"/>
+                                  </tree>
+                              </field>
+                          </page>
+                      </notebook>
+                  </group>
+                </page>
+
+                <page string="Users" attrs="{'invisible': [('is_fiscal_sequence','!=',True)]}">
+                    <separator  string="Users"/>   
+                    <field name="user_ids" options="{'no_create': True}"></field>
+                </page>
+            </notebook>
+
+        </field>
+    </record>
+</data>
+</odoo>
