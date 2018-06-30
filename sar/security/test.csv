@@ -1,0 +1,7 @@
+model_id:id,group_id:id,id,name,perm_read,perm_write,perm_create,perm_unlink
+model_sar_authorization_code,sar_fiscal_seq_user,access_sar_authorization_code_user,sar.authorization.code,1,1,0,0
+model_sar_authorization_code,sar_fiscal_seq_manager,access_sar_authorization_code_manager,sar.authorization.code,1,1,1,1
+model_sar_fiscal_sequence_regime ,sar_fiscal_seq_user,access_sar_fiscal_sequence_regime_user,sar.fiscal.sequence.regime,1,1,0,0
+model_sar_fiscal_sequence_regime ,sar_fiscal_seq_manager,access_sar_fiscal_sequence_regime_manager,sar.fiscal.sequence.regime,1,1,1,1
+model_sar_authorization_code_type ,sar_fiscal_seq_user,access_sar_authorization_code_type_user,sar.authorization.code.type,1,1,0,0
+model_sar_authorization_code_type ,sar_fiscal_seq_manager,access_sar_authorization_code_type_manager,sar.authorization.code.type,1,1,1,1

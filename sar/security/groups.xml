@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sar_fiscal_seq_manager" model="res.groups">
+            <field name="name">Permiso facturación SAR Manager</field>
+        </record>
+
+        <record id="sar_fiscal_seq_user" model="res.groups">
+            <field name="name">Permiso facturación SAR restringido</field>
+        </record>
+    </data>
+</odoo>

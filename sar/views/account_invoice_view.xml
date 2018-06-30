@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<record model="ir.ui.view" id="account_invoice_form_view_sequence_inh">
+    <field name="name">account.invoice.sequence.form.view.inh</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form" />
+
+    <field name="arch" type="xml">
+        <field name="payment_term_id" position="after">
+	 <field name="fiscal_control" invisible="1"/>
+      
+            <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
+'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
+        </field>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="account_invoice_view_sequence_tree_view_inh">
+    <field name="name">invoice_fix.numero_factura</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_tree" />
+    <field name="arch" type="xml">
+        <field name="date_invoice" position="after">
+            <field name="internal_number"/>
+        </field>
+        <xpath expr="//field[@name='number']" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </xpath>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="view_invoice_search_cancelled">
+    <field name="name">Cancelled Invoices</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+    <field name="arch" type="xml">
+        <filter name="unpaid" position="after">
+            <filter string="Cancelled Invoices" domain="[('state','=','cancel')]" name="invoice_cancelled"/>
+        </filter>
+    </field>
+</record>
+</data>
+</odoo>
+
+

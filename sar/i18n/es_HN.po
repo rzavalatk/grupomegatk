@@ -1,0 +1,517 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vitt_fiscal_seq
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-11 20:57+0000\n"
+"PO-Revision-Date: 2017-01-11 15:48-0600\n"
+"Last-Translator: Dewin J. Garcia <garcia@bacgroup.net>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_HN\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_actived
+msgid "Active"
+msgstr "Activo"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_active
+msgid "Actived"
+msgstr "Activado"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.ir_sequence_vitt_config
+msgid "Alerts"
+msgstr "Alertas"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_account_journal_allow_multi_sequence
+msgid "Allow Multi Fiscal Sequence"
+msgstr "Permite Multi Secuencia Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.view_vitt_account_journal_form_config
+msgid "Allow Multi-Sequence"
+msgstr "Permite Multi-Secuencia"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_name
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_name
+msgid "Authorization code"
+msgstr "Código Autorización"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_authorization_code_id
+msgid "Authorization code id"
+msgstr "ID Código de autorización"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.view_invoice_search_cancelled
+msgid "Cancelled Invoices"
+msgstr "Facturas Canceladas"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_company_id
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_account_journal_allow_multi_sequence
+msgid "Create multi sequences for this journal"
+msgstr "Crear Múltiples Secuencias Para Este Diario"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_create_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_create_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_create_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_create_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_create_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_create_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: vitt_fiscal_seq
+#: selection:vitt_fiscal_seq.journal_settings,doc_type:0
+msgid "Credit Notes"
+msgstr "Notas de Crédito"
+
+#. module: vitt_fiscal_seq
+#: selection:vitt_fiscal_seq.journal_settings,doc_type:0
+msgid "Customer Invoices"
+msgstr "Facturas de Cliente"
+
+#. module: vitt_fiscal_seq
+#: selection:vitt_fiscal_seq.journal_settings,doc_type:0
+msgid "Debit Notes"
+msgstr "Notas de Débito"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_display_name
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_display_name
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_display_name
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_expiration_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_expiration_date
+msgid "Expiration Date"
+msgstr "Fecha de Expiración"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_account_invoice_sequence_ids
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_sequence_id
+msgid "Fiscal Number"
+msgstr "Numero Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.menu,name:vitt_fiscal_seq.fiscal_sequence
+msgid "Fiscal Numbers"
+msgstr "Numeraciones Fiscales"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.menu,name:vitt_fiscal_seq.tax_configuration
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.fiscal_sequence_regime_form_view
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.ir_sequence_vitt_config
+msgid "Fiscal Regime"
+msgstr "Regimen Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_sequence_id
+msgid "Fiscal Sequence"
+msgstr "Secuencia Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.actions.act_window,name:vitt_fiscal_seq.vitt_fiscal_seq_action_id
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.ir_sequence_vitt_config
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_code_authorization_form_view
+msgid "Fiscal Sequences"
+msgstr "Secuencias Fiscales"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_is_fiscal_sequence
+msgid "Fiscal sequence"
+msgstr "Secuencia Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_fiscal_sequence_regime_ids
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_fiscal_sequence_regime_ids
+msgid "Fiscal sequence regime ids"
+msgstr "IDs Numeración Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "For example 000-001-01-..."
+msgstr "Por Ejemplo 000-001-01-..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime__from
+msgid "From"
+msgstr "De"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_account_invoice
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_account_invoice_internal_number
+msgid "Invoice Number"
+msgstr "Número de Factura"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_new_sequence
+msgid "Is a new sequence"
+msgstr "Es una Nueva Secuencia"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_account_journal
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_journal_id
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_journal_id
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_vitt_fiscal_seq_journal_settings
+msgid "Journal Settings"
+msgstr "Configuración de Diarios"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/models/fiscal_sequence.py:30
+#, python-format
+msgid "Journal Settings and Fiscal Sequences"
+msgstr "Configuración de Diario Y Secuencias Fiscales"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Journal Settings and Users"
+msgstr "Configuración de Diario Y Usuarios"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code___last_update
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type___last_update
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime___last_update
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_write_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_write_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_write_uid
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_write_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_write_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_write_date
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/wizard/journal_settings.py:35
+#, python-format
+msgid "Max Value must be greater than Minimal Value."
+msgstr "Valor Máximo Debe Ser Mayor que el Valor Mínimo."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_vitt_max_value
+msgid "Max number"
+msgstr "Número Máximo"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_max_value
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_max_value
+msgid "Max value"
+msgstr "Valor Máximo"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_vitt_min_value
+msgid "Minimal number"
+msgstr "Número Mínimo"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_min_value
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_min_value
+msgid "Minimal value"
+msgstr "Valor Mínimo"
+
+#. module: vitt_fiscal_seq
+#: model:res.groups,name:vitt_fiscal_seq.vitt_fiscal_seq_manager
+msgid "Multi Fiscal Sequences Manager "
+msgstr "Administrador Multi Secuencias Fiscales "
+
+#. module: vitt_fiscal_seq
+#: model:res.groups,name:vitt_fiscal_seq.vitt_fiscal_seq_user
+msgid "Multi Fiscal Sequences User"
+msgstr "Usuario Multi Secuencias Fiscales"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_vitt_number_next_actual
+msgid "Next Number"
+msgstr "Próximo número"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_ir_sequence_vitt_number_next_actual
+msgid "Next number that will be used. This number can be incremented frequently so the displayed value might already be obsolete"
+msgstr "Próximo número que se utilizará. Este número puede incrementarse frecuentemente, por lo que el valor mostrado puede estar ya obsoleto."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_vitt_padding
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_vitt_padding
+msgid "Number padding"
+msgstr "Número de Relleno"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.view_invoice_search_cancelled
+msgid "Numbers of cancelled invoices"
+msgstr "Números de Facturas Canceladas"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_ir_sequence_vitt_padding
+msgid "Odoo will automatically adds some '0' on the left of the 'Next Number' to get the required padding size."
+msgstr "Odoo añadirá automáticamente algunos '0' a la izquierda del 'Próximo número' para obtener el tamaño de relleno necesario."
+
+#. module: vitt_fiscal_seq
+#: sql_constraint:vitt_fiscal_seq.authorization_code_type:0
+msgid "Only one authorization type is permitted!"
+msgstr "Solo se Permite un Tipo de Autorización!"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/wizard/journal_settings.py:33
+#, python-format
+msgid "Padding must be greater than zero."
+msgstr "Relleno debe ser Mayor que cero"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_vitt_prefix
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_vitt_prefix
+msgid "Prefix"
+msgstr "Prefijo"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_ir_sequence_vitt_prefix
+msgid "Prefix value of the record for the sequence"
+msgstr "Valor del prefijo del registro para la secuencia."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_code_authorization_form_view
+msgid "Select a company..."
+msgstr "Seleccione una Compañía..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_code_authorization_form_view
+msgid "Select a date..."
+msgstr "Seleccion una Fecha..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Select a document type..."
+msgstr "Seleccione un tipo de Documento..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Select a journal..."
+msgstr "Seleccion un Diario..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.account_invoice_form_view_sequence_inh
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Select a sequence..."
+msgstr "Seleccione una Secuencia..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Select users..."
+msgstr "Seleccione Usuarios..."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_doc_type
+msgid "Sequence Type"
+msgstr "Tipo de Secuencia"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_sequence_name
+msgid "Sequence name"
+msgstr "Nombre de Secuencia"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/wizard/journal_settings.py:38
+#, python-format
+msgid "Sequence name is empty."
+msgstr "El Nombre de la Secuencia Está Vacío."
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_code_authorization_form_view
+msgid "Sequence settings"
+msgstr "Configuración de Secuencia"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_account_journal_sequence_ids
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.view_vitt_account_journal_form_config
+msgid "Sequences"
+msgstr "Secuencias"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_start_date
+msgid "Start Date"
+msgstr "Fecha de Inicio"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/models/fiscal_sequence.py:24
+#, python-format
+msgid "Start date is greater than than expiration date"
+msgstr "La Fecha de Inicio es Mayor que la Fecha de Vencimiento"
+
+#. module: vitt_fiscal_seq
+#: selection:vitt_fiscal_seq.journal_settings,doc_type:0
+msgid "Supplier Invoice"
+msgstr "Factura Proveedor"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_code_authorization_form_view
+msgid "Tax Authorization Code"
+msgstr "Código de Autorización Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_code_type
+msgid "Tax regime code type"
+msgstr "Tipo Regimen Fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.vitt_authorization_code_type_form_view
+msgid "Tax regime type"
+msgstr "Type de Regimen Fiscal"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/models/account_invoice.py:48
+#, python-format
+msgid "The Expiration Date for this fiscal sequence is %s "
+msgstr "La Fecha de Vencimiento de Esta Secuencia fiscal es% s "
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/models/account_invoice.py:50
+#, python-format
+msgid "The range of sequence numbers is finished"
+msgstr "El Rango de Números de Secuencia ha Terminado"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/wizard/journal_settings.py:49
+#, python-format
+msgid "This authorization code is already in use "
+msgstr "Este Código de Autorización está en uso"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_account_invoice_internal_number
+msgid "Unique number of the invoice, computed automatically when the invoice is created."
+msgstr "Número único de la factura, calculado automáticamente cuando se crea la factura."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_user_ids
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime_user_ids
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_journal_settings_user_ids
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.ir_sequence_vitt_config
+msgid "Users"
+msgstr "Usuarios"
+
+#. module: vitt_fiscal_seq
+#: model:ir.ui.view,arch_db:vitt_fiscal_seq.journal_settings_view_form
+msgid "Validate"
+msgstr "Validar"
+
+#. module: vitt_fiscal_seq
+#: code:addons/vitt_fiscal_seq/wizard/journal_settings.py:59
+#, python-format
+msgid "You need select a sequence."
+msgstr "Necesita seleccionar una secuencia."
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_ir_sequence
+msgid "ir.sequence"
+msgstr "ir.sequence"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_percentage
+msgid "percentage"
+msgstr "porcentaje"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_ir_sequence_percentage_alert
+msgid "percentage alert"
+msgstr "alerta de porcentaje"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_start_date
+msgid "start date"
+msgstr "Fecha de Inicio"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_name
+msgid "tax regime type"
+msgstr "tipo de régimen fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_code_type
+msgid "tax regime type code"
+msgstr "código régimen fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,help:vitt_fiscal_seq.field_vitt_fiscal_seq_authorization_code_type_description
+msgid "tax regime type description"
+msgstr "descripción régimen fiscal"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model.fields,field_description:vitt_fiscal_seq.field_vitt_fiscal_seq_fiscal_sequence_regime__to
+msgid "to"
+msgstr "A"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_vitt_fiscal_seq_authorization_code
+msgid "vitt_fiscal_seq.authorization_code"
+msgstr "vitt_fiscal_seq.authorization_code"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_vitt_fiscal_seq_authorization_code_type
+msgid "vitt_fiscal_seq.authorization_code_type"
+msgstr "vitt_fiscal_seq.authorization_code_type"
+
+#. module: vitt_fiscal_seq
+#: model:ir.model,name:vitt_fiscal_seq.model_vitt_fiscal_seq_fiscal_sequence_regime
+msgid "vitt_fiscal_seq.fiscal_sequence_regime"
+msgstr "vitt_fiscal_seq.fiscal_sequence_regime"

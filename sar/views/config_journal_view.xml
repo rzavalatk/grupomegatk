@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+    <record model="ir.ui.view" id="view_vitt_account_journal_form_config">
+        <field name="name">account.journal.form.config</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/> 
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='default_debit_account_id']" position="after" string='Allow Multi-Sequence'>
+                <field name="allow_multi_sequence" readonly="True" attrs="{'invisible': [('type','not in',['sale','purchase','general'])]}"/>
+            </xpath>
+
+            <xpath expr="//page[@name='advanced_settings']" position="after">
+                <page string="Sequences" attrs="{'invisible': [('allow_multi_sequence','!=',True)]}" >
+                    <group >
+                        <separator  string="Sequences"/>        
+                        <field name="sequence_ids" options="{'no_create': True}" readonly="True">
+
+                            <tree>
+                                <field name="name" />
+                                <field name="prefix" />
+                                <field name="min_value" />
+                                <field name="max_value" />
+                                <field name="number_next_actual"/>
+                                <field name="expiration_date"/>
+                                <field name="code"/>
+                                <field name="user_ids" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</data>
+</odoo>
