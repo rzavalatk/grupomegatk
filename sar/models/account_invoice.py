@@ -125,7 +125,7 @@ class AccountInvoice(models.Model):
             )
         if mi_moneda != None:
             try:
-                moneda = filter(lambda x: x['currency'] == mi_moneda, MONEDAS).next()
+                moneda = filter(lambda x: x['currency'] == mi_moneda, MONEDAS)
                 if number < 2:
                     moneda = moneda['singular']
                 else:
