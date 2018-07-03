@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<record model="ir.ui.view" id="res_campo_megatk_view_inh">
+  		<field name="name">res.campomegatk.view</field>
+  		<field name="model">res.partner</field>
+  		<field name="inherit_id" ref="base.view_partner_form" />
+		<field name="arch" type="xml">
+			<data>
+  				<xpath expr="//field[@name='industry_id']" position="after">
+    				<field name="x_zonac"/>
+  				</xpath>
+			</data>
+		              
+		</field>
+   	</record>
+	</data>	
+</odoo>
+

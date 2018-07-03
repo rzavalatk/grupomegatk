@@ -123,17 +123,7 @@ class AccountInvoice(models.Model):
             {'country': u'Perú', 'currency': 'PEN', 'singular': u'NUEVO SOL', 'plural': u'NUEVOS SOLES', 'symbol': u'S/.'},
             {'country': u'Reino Unido', 'currency': 'GBP', 'singular': u'LIBRA', 'plural': u'LIBRAS', 'symbol': u'£'}
             )
-        if mi_moneda != None:
-            try:
-                moneda = filter(lambda x: x['currency'] == mi_moneda, MONEDAS).next()
-                if number < 2:
-                    moneda = moneda['singular']
-                else:
-                    moneda = moneda['plural']
-            except:
-                return "Tipo de moneda inválida"
-        else:
-            moneda = ""
+        
         converted = ''
         if not (0 < number < 999999999):
             return 'No es posible convertir el numero a letras'
@@ -162,7 +152,7 @@ class AccountInvoice(models.Model):
                 converted += '%s ' % self.convert_group(cientos)
         if(centavos)>0:
             converted+= "con %2i/100 "%centavos
-        converted += moneda
+        #converted += moneda
         return converted.title()
 
 
