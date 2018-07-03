@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<record model="ir.ui.view" id="purchase_order_campo_megatk_view_inh">
+  		<field name="name">purchase.order.campomegatk.view</field>
+  		<field name="model">purchase.order</field>
+  		<field name="inherit_id" ref="purchase.purchase_order_form" />
+		<field name="arch" type="xml">
+			<field name="company_id" position="after">
+					<field name="x_enviar"/>
+            </field>
+		              
+		</field>
+   	</record>
+	</data>	
+</odoo>
+
