@@ -164,7 +164,7 @@ class AccountInvoice(models.Model):
                 converted += '%s ' % self.convert_group(cientos)
         if(centavos)>0:
             converted+= "con %2i/100 "%centavos
-        #converted += moneda
+        converted += moneda
         return converted.title()
 
 
