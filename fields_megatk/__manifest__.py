@@ -7,13 +7,15 @@
     "depends": ["base",
         "crm",
        	"sale",
-       	"purchase"
+       	"purchase",
+        "helpdesk"
 	  ],
     "data": [
     	"views/sale_order_view.xml",
     	"views/purchase_order_view.xml",
     	"views/product_view.xml",
-    	"views/res_partner_view.xml"
+    	"views/res_partner_view.xml",
+        "views/helpdesk_view.xml"
        #"views/crm_lead_views.xml",
  		#'security/groups.xml',
         #'security/ir.model.access.csv',

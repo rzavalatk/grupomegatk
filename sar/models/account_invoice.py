@@ -288,6 +288,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def action_date_assign(self):
         res = super(AccountInvoice, self).action_date_assign()
+        if not self.date_invoice:
+            self.date_invoice=date.today()
         if self.sequence_ids:
             if not self.date_invoice:
                 raise Warning(_('No existe fecha establecida para esta factura'))
