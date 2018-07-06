@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
+from datetime import datetime, date
 #from itertools import ifilter
 # mapping invoice type to journal type
 TYPE2JOURNAL = {
