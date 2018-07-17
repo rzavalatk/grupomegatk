@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<record model="ir.ui.view" id="account_invoice_campo_megatk_view_inh">
+  		<field name="name">account.invoice.campomegatk.view</field>
+  		<field name="model">account.invoice</field>
+  		<field name="inherit_id" ref="account.invoice_form"	/>
+		<field name="arch" type="xml">
+			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[2]/field[@name='origin']" position="after">
+    			<field name="x_comision"/>
+  			</xpath>
+		</field>
+   	</record>
+	</data>	
+</odoo>
