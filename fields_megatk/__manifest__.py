@@ -16,7 +16,8 @@
     	"views/product_view.xml",
     	"views/res_partner_view.xml",
         "views/helpdesk_view.xml",
-        "views/account_invoice_view.xml"
+        "views/account_invoice_view.xml",
+        "views/stock_picking_view.xml"
        #"views/crm_lead_views.xml",
  		#'security/groups.xml',
         #'security/ir.model.access.csv',
