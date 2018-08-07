@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record model="ir.module.category" id="module_category_lista_precios_megatk">
+            <field name="name">Lista de precios Megatk</field>
+            <field name="description">Lista de precios Megatk</field>
+            <field name="sequence">4</field>
+		</record>
+        <record id="manager_lista_precio_megatk" model="res.groups">
+        	<field name="category_id" ref="module_category_lista_precios_megatk"/>
+            <field name="name">Manager de lista de precios Megatk</field>
+        </record>
+
+        <record id="usuario_lista_precio_megatk" model="res.groups">
+        	<field name="category_id" ref="module_category_lista_precios_megatk"/>
+            <field name="name">Usuario de lista de precios Megatk</field>
+        </record>
+    </data>
+</odoo>

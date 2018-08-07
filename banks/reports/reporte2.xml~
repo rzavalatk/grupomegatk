@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="write_checks_print">
+			<t t-call="report.html_container">
+
+				<t t-foreach="docs" t-as="o">	 			
+						<div class="page">
+
+<style>
+tr.box {
+    width: 300px;
+    padding: 25px;
+    border: 2px solid black;
+    margin: 25px;
+}
+
+.head {
+size : 40px;
+}
+</style>
+
+					
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+<tr>
+<td style="width:25%;"></td>
+<td style="width:25%;"></td>
+<td style="width:25%;"></td>
+<td style="width:25%;"><p class="text-right"><span t-field="o.date"/></p></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td colspan="1" > <div style="text-aling:justify"><p> Páguese a:</p></div></td>
+<td colspan="2"><p class="text-center">  <b><span t-field="o.partner_id.name"/> </b></p></td>
+<td> <p class="text-right"><b><span t-field="company.currency_id.symbol"/>.<span t-field="o.amount"/></b></p></td>
+</tr>
+
+<tr>
+<td>La suma de</td>
+<td colspan="3"><p> <span t-field="o.amounttext"/></p> </td>
+</tr>
+
+
+</tbody>
+</table>
+
+<br/><br/>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td colspan="4"><p class="text-justify"> <span t-field="o.name"/></p></td>
+
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+<br/>
+<br/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+
+<tr>
+<th style="width:70%;">Cuenta</th>
+<!--<th style="width:25%;">Detalle</th>-->
+<th style="width:15%;"><p class="text-right">Debe</p></th>
+<th style="width:15%;"><p class="text-right">Haber</p></th>
+</tr>
+<t t-foreach="o.move_ids" t-as="a">
+
+<tr>
+<td><span t-field="a.account_id.code"/>-<span t-field="a.account_id.name"/></td>
+<!--<td><span t-field="a.name"/></td>-->
+
+<td><p class="text-right"> <span t-field="a.debit"/></p></td>
+<td><p class="text-right"> <span t-field="a.credit"/></p></td>
+</tr>
+</t>
+
+
+<tr class="border-black">
+<td colspan="1"></td>
+
+<td><p class="text-right"><strong><span t-field="o.amount"/></strong></p></td>
+<td><p class="text-right"><strong><span t-field="o.amount"/></strong></p></td>
+</tr>
+</tbody>
+</table>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+
+
+<t t-if="o.line_dr_ids">
+<strong><p style="font-size:25px; " >Detalle</p></strong>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+
+<tr>
+<th style="width:45%;">Documento</th>
+<th style="width:25%;">Fecha</th>
+<th style="width:45%;">Saldo</th>
+<th style="width:15%;"><p class="text-right">Pago</p></th>
+</tr>
+<t t-foreach="o.line_dr_ids" t-as="ld">
+ 	<t t-if="ld.amount>0">
+		<tr>
+			<td><span t-field="ld.move_line_id"/>-<span t-field="ld.account_id.name"/></td>
+			<td><span t-field="ld.date_original"/></td>
+			<td><p class="text-justify"> <span t-field="ld.amount_unreconciled"/></p></td>
+			<td><p class="text-right"> <span t-field="ld.amount"/></p></td>
+		</tr>
+	</t>
+</t>
+
+<tr class="border-black">
+<td colspan="2"></td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+</t>
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+
+<t t-if="o.line_cr_ids">
+	<strong><p style="font-size:25px; " >Creditos</p></strong>
+	<table style="width:100%; font-size:20px; border:1px;"> 
+		<tbody>
+
+			<tr>
+				<th style="width:45%;">Cuenta</th>
+				<th style="width:25%;">Fecha Original</th>
+				<th style="width:45%;">Monto original</th>
+				<th style="width:15%;"><p class="text-right">Monto</p></th>
+				</tr>
+<t t-foreach="o.line_cr_ids" t-as="lc">
+	<t t-if="lc.amount>0">
+		<tr>
+			<td><span t-field="lc.account_id.code"/>-<span t-field="lc.account_id.name"/></td>
+			<td><span t-field="lc.date_original"/></td>
+			<td><p class="text-justify"> <span t-field="lc.amount_original"/></p></td>
+			<td><p class="text-right"> <span t-field="lc.amount"/></p></td>
+		</tr>
+	</t>
+</t>
+
+
+	<tr class="border-black">
+	<td colspan="2"></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+
+</tbody>
+</table>
+</t>
+
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<table style="width:100%; font-size:20px; border:1px;"> 
+<tbody>
+<tr>
+<td style="width:20%;"></td>
+<td style="width:20%;"></td>
+<td style="width:20%;" class="text-center"><table><tr class="border-black"><td ><p class="text-center">Firma Autorizada</p></td></tr></table></td>
+<td style="width:20%;"></td>
+<td style="width:20%;" ></td>
+</tr>
+</tbody>
+</table>
+						</div>
+    <div class="footer">
+
+<p class="text-left">CHEQUE # <span t-field="o.number"/></p>
+
+</div>
+
+
+
+
+
+
+
+
+</t>
+				
+</t>
+
+
+
+
+
+
+
+	</template>
+	</data>
+</openerp>
