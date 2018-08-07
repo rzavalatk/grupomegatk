@@ -61,7 +61,7 @@ class Vittbankstransferences(models.Model):
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
     move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
-    company_id = fields.Many2one("res.company", "Empresa", required=True)
+    company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
 
     @api.multi

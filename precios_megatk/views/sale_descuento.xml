@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<data>
+<record model="ir.ui.view" id="sale_precio_descuento_form_view">
+	<field name="name">sale.precio.descuento.megatk</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale.view_order_form"/>
+	<field name="arch" type="xml">
+		<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+	 		<field name="precio_id" domain='[("product_id","=",product_id)]' options="{'no_create': True}"/>
+		</xpath>
+  
+  	</field>
+</record>
+
+</data>
+</odoo>

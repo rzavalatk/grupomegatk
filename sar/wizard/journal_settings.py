@@ -27,7 +27,7 @@ class SequenceJournal(models.TransientModel):
     max_value = fields.Integer('Rango Final', required=True)
     number_next = fields.Integer('Siguiente número a usar', required=True)
     vitt_padding = fields.Integer('Número de relleno', required=True)
-    company_id = fields.Many2one('res.company', "Empresa")
+    company_id = fields.Many2one('res.company', "Empresa", default=lambda self: self.env.user.company_id)
     sequence_name = fields.Char("Nombre de secuencia")
     user_ids = fields.Many2many("res.users", string="Usuarios")
     new_sequence = fields.Boolean("Es una nueva secuencia")

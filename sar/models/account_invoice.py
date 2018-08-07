@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
     # Unique number of the invoice, computed automatically when the invoice is created
     internal_number = fields.Char(string='Número interno', readonly=True, default=False, help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
-                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','in',False),('user_ids','in', user_id)]")
+                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
 
     @api.one
     @api.depends('journal_id')
@@ -280,7 +280,6 @@ class AccountInvoice(models.Model):
                     vals["sequence_ids"] = self.env['ir.sequence'].search(domain).id
         invoice = super(AccountInvoice, self).create(vals)
         return invoice
-
     @api.onchange('journal_id')
     def _onchange_journal_inh(self):
         self.fiscal_control = self._default_fiscal_validated(self.company_id.id)

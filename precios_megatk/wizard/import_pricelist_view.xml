@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Import Inventory Wizard form -->
+        <record id="view_lista_precios_import_megatk" model="ir.ui.view">
+            <field name="name">lista.precios.import.megatk</field>
+            <field name="model">lista.precios.import.megatk</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Importar Lista de Precios">
+		    	
+				<group colspan="4">
+       <group cols="2">
+                   <label string="Seleccione un archivo para actualizar productos." colspan="2"/>       
+        </group>
+        <group cols="2">
+              <field name="data" filename="name" colspan="4" />
+           </group>
+       </group>
+
+
+                   <separator string="" colspan="4"/>
+                   <footer>
+                     <button name="action_import" string="Importar" type="object" class="oe_highlight"/>
+                       <button special="cancel" string="Cancelar"/>
+                   </footer>
+
+               </form>
+            </field>
+        </record>
+
+    <!--  Action of Import Product wizard -->
+    <record id="action_lista_precios_import_megatk" model="ir.actions.act_window">
+        <field name="name">Importar Prodcutos</field>
+        <field name="res_model">lista.precios.import.megatk</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+       <field name="view_id" ref="view_lista_precios_import_megatk"/>
+       <field name="target">new</field>
+    </record>
+
+    </data>
+</odoo>

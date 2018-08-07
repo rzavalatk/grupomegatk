@@ -10,7 +10,7 @@ class Authorization(models.Model):
     name = fields.Char('Código de autorización', help='Código de autorización', required=True)
     expiration_date = fields.Date('Fecha de expiración', required=True)
     start_date = fields.Date('Fecha de inicio', help='start date', required=True)
-    company_id = fields.Many2one('res.company', "Empresa", required=True)
+    company_id = fields.Many2one('res.company', "Empresa", default=lambda self: self.env.user.company_id, required=True)
     code_type = fields.Many2one('sar.authorization.code.type', string='Tipo', help='tax regime type code', required=True)
     active = fields.Boolean("Activo", default=True)
     fiscal_sequence_regime_ids = fields.One2many('sar.fiscal.sequence.regime', 'authorization_code_id')

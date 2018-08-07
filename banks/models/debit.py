@@ -115,7 +115,7 @@ class Debit(models.Model):
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     number = fields.Char("Número")
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
-    company_id = fields.Many2one("res.company", "Empresa", required=True)
+    company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
     total_debitos = fields.Float("Total débitos", compute=_compute_rest_credit)
     total_creditos = fields.Float("Total créditos", compute=_compute_rest_credit)
