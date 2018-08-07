@@ -26,3 +26,22 @@ class Saleorder(models.Model):
     # aplica_color = fields.Boolean("Apllica color")
 
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días')], string='Días Válidos', default='5')
+
+class SaleorderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, required=True, string='Responsable')
+    obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
+    
+
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        values = super(SaleorderLine, self)._prepare_invoice_line(qty)
+        values['x_user_id'] = self.x_user_id.id
+        return values
+
+    @api.multi
+    def _compute_amount(self):
+        super(SaleorderLine, self)._compute_amount()
+        self.x_user_id = self.obj_padre.id
+        

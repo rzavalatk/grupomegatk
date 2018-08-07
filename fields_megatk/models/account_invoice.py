@@ -8,8 +8,7 @@ class Account_invoice(models.Model):
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
 
 
-
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
+    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, required=True, string='Responsable')

@@ -28,19 +28,38 @@
   		<field name="inherit_id" ref="product.product_template_only_form_view" />
 		<field name="arch" type="xml">
 			<xpath expr="//form[@name='Product Template']/sheet[1]/notebook[1]" position="inside">
-			    <page name="x_importacion" string="Importación">
+			    <page name="x_importacion" string="Personalización">
 			      	<group name="x_datos">
-			        	<group name="x_datos_left">
+			        	<group name="x_datos_left" string="Importación">
 			        		<field name="x_arancel"/>
 		     	   			<field name="x_ponderacion"/>
 		     	   		</group>
-			        	<group name="x_datos_right">
-			        		
-		     	   		</group>
+			        	<group name="x_datos_right" string="Comisiones">
+			        		<field name="x_comisiones" string=''/>
+			        	</group>
 			      	</group>
 			    </page>
 			 </xpath>
 		</field>
    	</record>
+
+   	<record model="ir.ui.view" id="product_comision_page_megatk_view_inh">
+  		<field name="name">product.page.comision.campomegatk.view</field>
+  		<field name="model">product.template</field>
+  		<field name="inherit_id" ref="product.product_template_only_form_view" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='x_comisiones']" position="inside">
+			    <tree string="lista.precios.megatk.line">
+				    <field name="id" modifiers="{&quot;readonly&quot;: true}" attrs="{}" invisible="1" readonly="1"/>
+			    	<field name="obj_padre"/>
+			      	<field name="x_descuento"/>
+			      	<field name="comision_calle"/>
+			      	<field name="comision_tienda"/>
+			      	<field name="precio_descuento"/>
+			    </tree>
+			</xpath>
+		</field>
+   	</record>
 	</data>	
 </odoo>
+

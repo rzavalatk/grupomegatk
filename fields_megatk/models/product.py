@@ -16,5 +16,7 @@ class Product(models.Model):
     x_ingresotk = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
     	,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte'),('varios','Ingreso Varios')],string = 'Ingreso/Linea')
     x_ingresome = fields.Selection([('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
-    x_arancel=fields.Char(string='Arancel',store=True)
-    x_ponderacion=fields.Char(string='Ponderación',store=True)
+    x_arancel = fields.Char(string='Arancel',store=True)
+    x_ponderacion = fields.Char(string='Ponderación',store=True)
+    x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', readonly=True)
+    
