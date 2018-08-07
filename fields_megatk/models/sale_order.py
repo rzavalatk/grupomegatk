@@ -34,14 +34,14 @@ class SaleorderLine(models.Model):
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
     
 
-    # @api.multi
-    # def _prepare_invoice_line(self, qty):
-    #     values = super(SaleorderLine, self)._prepare_invoice_line(qty)
-    #     values['x_user_id'] = self.x_user_id.id
-    #     return values
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        values = super(SaleorderLine, self)._prepare_invoice_line(qty)
+        values['x_user_id'] = self.x_user_id.id
+        return values
 
-    # @api.multi
-    # def _compute_amount(self):
-    #     super(SaleorderLine, self)._compute_amount()
-    #     self.x_user_id = self.obj_padre.id
-        
+    @api.multi
+    @api.onchange('product_id')
+    def product_id_change1(self):
+        self.x_user_id = self.obj_padre.id
+        print("////////////////////////////////////////////////////////////////////////////////")
