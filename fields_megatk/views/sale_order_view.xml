@@ -17,7 +17,7 @@
 		</field>
    	</record>
 
-   	<record model="ir.ui.view" id="sale_order_line_campo_megatk_view_inh">
+   	<!-- <record model="ir.ui.view" id="sale_order_line_campo_megatk_view_inh">
 		<field name="name">sale.order.line.campomegatk.view</field>
 		<field name="model">sale.order</field>
 		<field name="inherit_id" ref="sale.view_order_form"/>
@@ -26,7 +26,7 @@
 		 		<field name="x_user_id"/>
 			</xpath>
 	  	</field>
-	</record>
+	</record> -->
 	</data>	
 </odoo>
 
