@@ -22,20 +22,21 @@ class AccountInvoiceLine(models.Model):
 
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
-        if self.product_id:
-            if self.price_unit < self.product_id.list_price:
-                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
-            if self.price_unit < self.precio_id.precio:
-                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+        if self.invoice_id.type in ('out_invoice', 'out_refund'):
+        	if self.product_id:
+	            if self.price_unit < self.product_id.list_price:
+	                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+	            if self.price_unit < self.precio_id.precio:
+	                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
 
     @api.model
     def create(self, values):
         line = super(AccountInvoiceLine, self).create(values)
-        if line.price_unit < line.product_id.list_price:
-            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista -- verifque este producto %s') % (line.product_id.name))
-        if line.price_unit < self.precio_id.precio:
-            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
-
+        if self.invoice_id.type in ('out_invoice', 'out_refund'):
+	        if line.price_unit < line.product_id.list_price:
+	            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista -- verifque este producto %s') % (line.product_id.name))
+	        if line.price_unit < self.precio_id.precio:
+	            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista -- verifque este producto %s') % (line.product_id.name))
         return line
 
 
