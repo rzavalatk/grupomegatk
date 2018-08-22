@@ -30,20 +30,22 @@ class Saleline(models.Model):
 
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
-        for line in self:
-            if line.product_id:
-                if line.price_unit < line.product_id.list_price:
-                    raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
-                if line.price_unit < self.precio_id.precio:
-                    raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+        if self.env.user.email not in ('rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+            for line in self:
+                if line.product_id:
+                    if line.price_unit < line.product_id.list_price:
+                        raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+                    if line.price_unit < self.precio_id.precio:
+                        raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
 
     @api.model
     def create(self, values):
         line = super(Saleline, self).create(values)
-        if line.price_unit < line.product_id.list_price:
-            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
-        if line.price_unit < self.precio_id.precio:
-            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+        if self.env.user.email not in ('rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+            if line.price_unit < line.product_id.list_price:
+                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+            if line.price_unit < self.precio_id.precio:
+                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
 
         return line
 
