@@ -30,15 +30,4 @@ class AccountInvoiceLine(models.Model):
     	            if self.price_unit < self.precio_id.precio:
     	                raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio mayorista'))
 
-    @api.model
-    def create(self, values):
-        line = super(AccountInvoiceLine, self).create(values)
-        if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
-            if self.invoice_id.type in ('out_invoice', 'out_refund'):
-    	        if line.price_unit < line.product_id.list_price:
-    	            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista -- verifque este producto %s') % (line.product_id.name))
-    	        if line.price_unit < self.precio_id.precio:
-    	            raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio mayorista. -- verifque este producto %s') % (line.product_id.name))
-        return line
-
 
