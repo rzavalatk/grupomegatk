@@ -32,16 +32,18 @@ class SaleorderLine(models.Model):
 
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
+    x_series = fields.Text("Series")
     
 
     @api.multi
     def _prepare_invoice_line(self, qty):
         values = super(SaleorderLine, self)._prepare_invoice_line(qty)
         values['x_user_id'] = self.x_user_id.id
+        values['x_series'] = self.x_series
         return values
 
     @api.multi
     @api.onchange('product_id')
     def product_id_change1(self):
         self.x_user_id = self.obj_padre.id
-        print("////////////////////////////////////////////////////////////////////////////////")
+        
