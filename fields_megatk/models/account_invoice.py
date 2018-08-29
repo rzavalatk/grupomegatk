@@ -13,6 +13,7 @@ class AccountInvoiceLine(models.Model):
 
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="invoice_id.user_id", string="ResponsableTem")
+    x_series = fields.Text("Series")
 
     @api.multi
     @api.onchange('product_id')

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<record model="ir.ui.view" id="credit_note_view_invoice">
+<field name="name">invoice.credit.note.customer</field>
+<field name="model">credit.note</field>
+<field name="arch" type="xml">
+ <form string="Credit Note">
+                    <group>
+                         <group>
+                             <field name="journal_id" widget='selection'/>
+			<field name="amount"/>
+			<field name="name"/>
+                         </group><group>
+                             <field name="date_note"/>
+                             <field name="period_id"/>
+			     <field name="invoice_number"/>
+                         </group>
+                    </group>
+                    <footer>
+                        <button string='Create Credit Note' name="invoice_credit_note" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+               </form>
+</field>
+</record>	
+	<record id="action_credit_note_customer" model="ir.actions.act_window">
+            <field name="name">Credit Note Customer</field>
+            <field name="res_model">credit.note</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="credit_note_view_invoice"/>
+		<field name="nodestroy">True</field>
+           <field name="target">new</field>
+        </record>
+</data>
+</openerp>

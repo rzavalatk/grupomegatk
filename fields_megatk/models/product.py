@@ -17,6 +17,7 @@ class Product(models.Model):
     	,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte'),('varios','Ingreso Varios')],string = 'Ingreso/Linea')
     x_ingresome = fields.Selection([('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
     x_arancel = fields.Char(string='Arancel',store=True)
+    x_costo_real = fields.Float(string='Costo Honduras',store=True)
     x_ponderacion = fields.Char(string='Ponderación',store=True)
     x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', readonly=True)
     

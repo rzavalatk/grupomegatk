@@ -34,6 +34,7 @@
 			    <page name="x_importacion" string="Personalización">
 			      	<group name="x_datos">
 			        	<group name="x_datos_left" string="Importación">
+			        		<field name="x_costo_real" widget="monetary"/>
 			        		<field name="x_arancel"/>
 		     	   			<field name="x_ponderacion"/>
 		     	   		</group>
