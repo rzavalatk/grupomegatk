@@ -8,3 +8,4 @@ class StockPickingLine(models.Model):
     x_arancelstock = fields.Char(related='product_id.x_arancel', string="Arancel")
     x_costo_realstock = fields.Float(related='product_id.x_costo_real', string="Costo Honduras")
     x_series = fields.Text("Series")
+    
