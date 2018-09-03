@@ -6,7 +6,9 @@ class Account_invoice(models.Model):
     _inherit = "account.invoice"
 
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
-
+    x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A");
+    x_registro_exonerado = fields.Char("Registro exonerado", default="N/A");
+    x_registro_sag = fields.Char("Registro del SAG", default="N/A");
 
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
