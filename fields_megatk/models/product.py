@@ -20,4 +20,10 @@ class Product(models.Model):
     x_costo_real = fields.Float(string='Costo Honduras',store=True)
     x_ponderacion = fields.Char(string='Ponderación',store=True)
     x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', readonly=True)
-    
+    marca_id = fields.Many2one('product.marca', string='Marca',)
+
+class ProductMarca(models.Model):
+    _name = 'product.marca'
+
+    name = fields.Char("Nombre")
+    company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)

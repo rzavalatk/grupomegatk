@@ -6,3 +6,4 @@ from . import product
 from . import res_partner
 from . import account_invoice
 from . import stock_picking
+from . import crm_lead

@@ -12,6 +12,7 @@
 		  	<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='general_information']/group[1]" position="after">
 		    	<group name="marca">
 		    	  	<group name="studio_group_iZx2r_left">
+		    	  		<field name="marca_id" domain="[('company_id', '=', company_id)]"/>
 		     	   		<field name="x_marcatk" attrs='{"invisible": [["company_id","!=",8]]}'/>
 		     	   		<field name="x_marcame" attrs='{"invisible": [["company_id","!=",9]]}'/>
 		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","!=",8]]}'/>
@@ -56,14 +57,21 @@
 			    <tree string="lista.precios.megatk.line">
 				    <field name="id" modifiers="{&quot;readonly&quot;: true}" attrs="{}" invisible="1" readonly="1"/>
 			    	<field name="obj_padre"/>
-			      	<field name="x_descuento"/>
-			      	<field name="comision_calle"/>
-			      	<field name="comision_tienda"/>
-			      	<field name="precio_descuento"/>
+		      	<field name="x_descuento"/>
+		      	<field name="comision_calle"/>
+		      	<field name="comision_tienda"/>
+		      	<field name="precio_descuento"/>
 			    </tree>
 			</xpath>
 		</field>
    	</record>
+   	<record model="ir.actions.act_window" id="action_product_template_marca">
+          <field name="name">Marca</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">product.marca</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Marca" id="import_product_template_marca_mega" sequence = "2" parent="stock.menu_stock_inventory_control" action = "action_product_template_marca"/>
 	</data>	
 </odoo>
 
