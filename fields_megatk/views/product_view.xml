@@ -13,8 +13,6 @@
 		    	<group name="marca">
 		    	  	<group name="studio_group_iZx2r_left">
 		    	  		<field name="marca_id" domain="[('company_id', '=', company_id)]"/>
-		     	   		<field name="x_marcatk" attrs='{"invisible": [["company_id","!=",8]]}'/>
-		     	   		<field name="x_marcame" attrs='{"invisible": [["company_id","!=",9]]}'/>
 		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","!=",8]]}'/>
 		     	   		<field name="x_ingresome" attrs='{"invisible": [["company_id","!=",9]]}'/>
 		    		</group>
