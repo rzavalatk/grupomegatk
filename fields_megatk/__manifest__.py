@@ -10,6 +10,7 @@
        	"purchase"
 	  ],
     "data": [
+        "security/ir.model.access.csv",
     	"views/sale_order_view.xml",
     	"views/purchase_order_view.xml",
     	"views/product_view.xml",

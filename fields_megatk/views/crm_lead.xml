@@ -5,43 +5,103 @@
 	  		<field name="name">crm.lead.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter" />
-			<field name="arch" type="xml">
-				<field name="lost_reason" position="after">
-					<field name="id" string='Ticket'/>
-	            </field>
-			</field>
+				<field name="arch" type="xml">
+					<field name="lost_reason" position="after">
+						<field name="id" string='Ticket'/>
+		      </field>
+				</field>
 	   	</record>
 	   	<record model="ir.ui.view" id="crm_kanban_campo_megatk_view_inh">
 	  		<field name="name">crm.kanban.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
-			<field name="arch" type="xml">
-				<field name="name" position="before">
-					<div>
-                    	<strong class="o_kanban_record_title">Ticket <field name="id"/></strong>
-					</div>
-	            </field>
-			</field>
+				<field name="arch" type="xml">
+					<field name="name" position="before">
+						<div>
+	            <strong class="o_kanban_record_title">Ticket <field name="id"/></strong>
+						</div>
+		      </field>
+				</field>
    		</record>
    		<record model="ir.ui.view" id="crm_lista_campo_megatk_view_inh">
 	  		<field name="name">crm.lista.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
-			<field name="arch" type="xml">
-				<field name="create_date" position="after">
-                	<field name="id" string="Ticket"/>
-	            </field>
+				<field name="arch" type="xml">
+					<field name="create_date" position="after">
+	          	<field name="id" string="Ticket"/>
+	        </field>
 			</field>
    		</record>
    		<record model="ir.ui.view" id="crm_form_campo_megatk_view_inh">
 	  		<field name="name">crm.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
-			<field name="arch" type="xml">
-				<field name="name" position="before">
-                	<h1>Ticket: <field name="id"/></h1>
-	            </field>
+				<field name="arch" type="xml">
+					<field name="name" position="before">
+		      	<h1>Ticket: <field name="id"/></h1>
+		      </field>
+		      <xpath expr="//form[1]/sheet[1]/div[4]/h1[1]/field[@name='name']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="readonly">1</attribute>
+				    <attribute name="required">1</attribute>
+				  </xpath>
+		      <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+				    <page name="soportetecnico" string="Soporte Tecnico">
+				      <group name="soporte">
+				        <group name="data1">
+				        	<field name="serie"/>
+				        	<field name="accesorio_ids" widget="many2many_tags"/>
+				        </group>	
+				        <group name="data2">
+				        	<field name="marca_id"/>
+				        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
+				        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
+				        </group>	
+				      </group>
+				    </page>
+				  </xpath>
 			</field>
-   		</record>
+ 		</record>
+ 		<record model="ir.ui.view" id="crm_form_simple_megatk_view_inh">
+	  		<field name="name">crm.simple.campomegatk.view</field>
+	  		<field name="model">crm.lead</field>
+	  		<field name="inherit_id" ref="crm.view_create_opportunity_simplified" />
+				<field name="arch" type="xml">
+					<xpath expr="//field[@name='name']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="invisible">1</attribute>
+				  </xpath>
+					<field name="partner_id" position="before">
+						<field name="tipo_id"/>
+		      </field>
+				</field>
+	   	</record>
+
+ 		<record model="ir.actions.act_window" id="action_crm_lead_marca">
+      <field name="name">Marcas</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">crm.lead.marca</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="action_crm_lead_categoria">
+      <field name="name">Categorias</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">crm.lead.categoria</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="action_crm_lead_modelo">
+      <field name="name">Modelos</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">crm.lead.modelo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Soporte Tecnico" id="crm_menu_soporte_taller" sequence = "10" parent="crm.crm_menu_root"/>
+    
+    <menuitem name="Marca" id="import_product_menu_marca" sequence = "1" parent="crm_menu_soporte_taller" action = "action_crm_lead_marca"/>
+    <menuitem name="Categoria" id="import_product_menu_category" sequence = "2" parent="crm_menu_soporte_taller" action = "action_crm_lead_categoria"/>
+    <menuitem name="Modelo" id="import_product_menu_modelo" sequence = "3" parent="crm_menu_soporte_taller" action = "action_crm_lead_modelo"/>
+
 	</data>	
 </odoo>
