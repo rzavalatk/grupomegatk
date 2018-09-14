@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <report
+        id="unconciliacion_print"
+        model="conicliacion.bancaria"
+        string="Movimiento sin conicliacion"
+        name="conciliacion_bancaria.unconciliacion_print_view"
+        file="conciliacion_bancaria.unconciliacion_print_view"
+        report_type="qweb-pdf" />
+</data>
+</odoo>
+

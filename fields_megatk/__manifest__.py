@@ -10,6 +10,10 @@
        	"purchase"
 	  ],
     "data": [
+        'reports/entrega_equipo_print_view.xml',
+        'reports/crm_entrega_equipo.xml',
+        'reports/orden_ingreso.xml',
+        'reports/ingreso_print_view.xml',
         "security/ir.model.access.csv",
     	"views/sale_order_view.xml",
     	"views/purchase_order_view.xml",

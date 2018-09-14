@@ -1,0 +1,5 @@
+model_id:id,group_id:id,id,name,perm_read,perm_write,perm_create,perm_unlink
+model_conicliacion_bancaria,conciliacion_bancaria_manager,access_conicliacion_bancaria_manager,conicliacion.bancaria,1,1,1,1
+model_conicliacion_bancaria,conciliacion_bancaria_user,access_conicliacion_bancaria_user,conicliacion.bancaria,1,0,0,0
+model_conicliacion_bancaria_line,conciliacion_bancaria_manager,access_conicliacion_bancaria_liner_manager,conicliacion.bancaria.line,1,1,1,1
+model_conicliacion_bancaria_line,conciliacion_bancaria_user,access_conicliacion_bancaria_line_user,conicliacion.bancaria.line,1,1,1,1

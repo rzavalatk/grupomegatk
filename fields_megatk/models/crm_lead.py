@@ -10,6 +10,8 @@ class CrmLead(models.Model):
     categoria_id = fields.Many2one('crm.lead.categoria', string='Categoria', domain=[('active', '=', True)])
     modelo_id = fields.Many2one('crm.lead.modelo', string='Modelo', domain=[('active', '=', True)])
     accesorio_ids = fields.Many2many('crm.lead.accesorios', string='Accesorios',)
+    fallas = fields.Text("Fallas")
+    informe_tecnico = fields.Text("Informe técnico")
     tipo_id = fields.Many2one('crm.lead.tipo', string='Título de oportunidad',)
 
     @api.onchange('marca_id')
@@ -27,34 +29,39 @@ class CrmLead(models.Model):
 
 class CrmLeadTipo(models.Model):
     _name = 'crm.lead.tipo'
+    _order = 'name asc'
 
     name = fields.Char(string='nombre',)
     active = fields.Boolean(string='Activo', default=True)
 
 class CrmLeadMarca(models.Model):
     _name = 'crm.lead.marca'
+    _order = 'name asc'
 
-    name = fields.Char(string='nombre',)
+    name = fields.Char(string='Nombre',)
     categoria_ids = fields.One2many('crm.lead.categoria', 'marca_id', string='categoria',)
     active = fields.Boolean(string='Activo', default=True)
 
 class CrmLeadCategoria(models.Model):
     _name = 'crm.lead.categoria'
+    _order = 'name asc'
 
-    name = fields.Char(string='nombre',)
+    name = fields.Char(string='Nombre',)
     marca_id = fields.Many2one('crm.lead.marca', string='Marca', ondelete='cascade')
     modelo_ids = fields.One2many('crm.lead.modelo', 'categoria_id',  string='Modelo',)
     active = fields.Boolean(string='Activo', default=True)
 
 class CrmLeadModelo(models.Model):
     _name = 'crm.lead.modelo'
+    _order = 'name asc'
     
-    name = fields.Char(string='nombre',)
+    name = fields.Char(string='Nombre',)
     categoria_id = fields.Many2one('crm.lead.categoria', string='Categoria', ondelete='cascade')
     active = fields.Boolean(string='Activo', default=True)
     
 class CrmLeadAccesorios(models.Model):
     _name = 'crm.lead.accesorios'
+    _order = 'name asc'
     
-    name = fields.Char(string='nombre',)
+    name = fields.Char(string='Nombre',)
     active = fields.Boolean(string='Activo', default=True)
