@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<record id="action_movimientos_concilidos" model="ir.actions.act_window">
+    <field name="name">Conciliación Bancaria</field>
+    <field name="res_model">account.move</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain"> [('conciliacion_id', '=', active_id)]</field>
+</record>
+
+<record model="ir.ui.view" id="conicliacion_bancaria_line_view_tree">
+    <field name="name">conicliacion.bancaria.line.tree</field>
+    <field name="model">conicliacion.bancaria.line</field>
+    <field name="arch" type="xml">
+    <tree string="Conciliaciones" create="0" delete="0">
+       <field name="move_id" />
+       <field name="name" />
+       <field name="date" />
+       <field name="partner_id" />
+       <!--<field name="analytic_id"/>-->
+       <field name="debe"  sum="Total"/>
+       <field name="haber"  sum="Total"/>
+       <field name="currency_id" />
+       <field name="importe_moneda" />
+       <field name="es_conciliado"/>
+    </tree>
+    </field>
+</record>
+
+<record id="action_no_conicliacion_bancaria_line" model="ir.actions.act_window">
+    <field name="name">No Conciliados</field>
+    <field name="res_model">conicliacion.bancaria.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree</field>
+    <field name="domain"> [('conciliacion_id', '=', active_id), ('es_conciliado', '=', False)]</field>
+</record>
+
+<record id="conicliacion_bancaria_form_view" model="ir.ui.view">
+    <field name="name">conicliacion.bancaria.form</field>
+    <field name="model">conicliacion.bancaria</field>
+    <field name="arch" type="xml">
+    <form string="Debits">
+    <header>
+        <button name="back_draft" type="object" string="Volver a borrador" states="anulated" class="oe_highlight"/>
+        <button name="get_movimientos" type="object" string="Obtener Movimientos" states="draft" class="oe_highlight"/>
+        <button name="action_validate" type="object" string="Conciliar Saldos" states="draft" class="oe_highlight"/>
+        <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
+        <button name="action_anulated" type="object" string="Anular Conciliación" 
+           confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+    </header>
+    <sheet>
+    <div class="oe_button_box" name="button_box">
+        <button class="oe_stat_button"
+            icon="fa-bars"
+            type="action" name="%(action_movimientos_concilidos)d"
+            string="Movimientos Conciliados">
+        </button>  
+         <button class="oe_stat_button"
+            icon="fa-list"
+            type="action" name="%(action_no_conicliacion_bancaria_line)d"
+            string="No Conciliados">
+        </button>  
+    </div>
+        <h1>
+            <field name="name"  class="oe_inline" placeholder="Descripción de conciliación" attrs="{'readonly': [('state','!=','draft')]}"/>
+        </h1>
+        <group colspan="4">
+        <group cols="2">
+            <field name="account_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="mes_name" attrs="{'readonly': [('state','!=','draft')]}"/>
+             <field name="saldo_inicial" attrs="{'readonly': [('state','!=','draft')]}"/>
+        </group>
+        <group cols="2">
+              <field name="company_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="saldo_final" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="difference" />
+            <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+        </group>
+        </group>
+        <notebook>
+        <page string="Detalle de Movimientos">
+            <field name="conciliacion_line" attrs="{'readonly': [('state','!=','draft')]}" >
+                <tree editable="top" create="0" delete="0" decoration-muted="es_conciliado == True" decoration-danger="es_conciliado == False" >
+                  <field name="move_id" readonly="1"/>
+                   <field name="name" readonly="1"/>
+                   <field name="date" readonly="1"/>
+                   <field name="partner_id" readonly="1"/>
+                   <!--<field name="analytic_id"/>-->
+                   <field name="debe" readonly="1" sum="Total"/>
+                   <field name="haber" readonly="1" sum="Total"/>
+                   <field name="currency_id" readonly="1"/>
+                   <field name="importe_moneda" readonly="1"/>
+                   <field name="es_conciliado"/>
+                </tree>
+            </field>
+        </page>
+        </notebook>
+    </sheet>
+    <div class="oe_chatter">
+          <field name="message_ids" widget="mail_thread"/>
+    </div>
+    </form>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="conicliacion_bancaria_view_tree">
+    <field name="name">conicliacion.bancaria.tree</field>
+    <field name="model">conicliacion.bancaria</field>
+    <field name="arch" type="xml">
+    <tree string="Conciliaciones">
+		<field name="account_id"/>
+        <field name="name" />
+        <field name="date" />
+        <field name="mes_name" />
+        <field name="name" />
+        <field name="saldo_final" sum="total"/>
+        <field name="currency_id"/>
+        <field name="state"/>
+    </tree>
+    </field>
+</record>
+
+<record id="action_conicliacion_bancaria" model="ir.actions.act_window">
+    <field name="name">Conciliación Bancaria</field>
+    <field name="res_model">conicliacion.bancaria</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to record a new conciliación
+    </p>
+    </field>
+</record>
+
+<menuitem  id="menu_banks_conciliation_main" name="Conciliación Bancaria" parent="banks.menu_banks" sequence="80"/>
+
+
+<menuitem action="action_conicliacion_bancaria" id="menu_management_conciliation_record" name="Conciliación Bancaria"
+          string="Conciliación Bancaria" parent="menu_banks_conciliation_main" sequence="20"/>
+
+
+</data>
+</odoo>

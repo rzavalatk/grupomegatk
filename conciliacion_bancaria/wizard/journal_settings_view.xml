@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="banks_journal_settings_view_form" model="ir.ui.view">
+            <field name="name">vittbanks_settings_form_view</field>
+            <field name="model">vitt.banks.journal.settings</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Transaction Type">
+		    	<sheet>
+  <separator string="Document Type"/>
+<group >
+  <field name="journal_id" invisible="1"/>
+  <field name="new_sequence"/>
+  <field name="doc_type" placeholder="Select a transaction type..."/>
+  <field name="sequence_name" attrs="{'invisible': [('new_sequence', '=', False)]}"/>
+<field name="sequence_id" placeholder="Select a Transaction..." attrs="{'invisible': [('new_sequence', '=', True)]}" options="{'no_create': True}"/>
+
+</group>
+<separator string="Settings"/>
+<group  colspan="4">
+  <group cols="2">      
+  <field name="vitt_prefix" placeholder="For example Check,ntransference, debit..."/>
+  <field name="vitt_padding" />
+  <field name="number_next"/>
+</group>
+  <group cols="2">
+			<field name="min_value" attrs="{'invisible': [('doc_type', 'not in','check')]}"/>
+  <field name="max_value" attrs="{'invisible': [('doc_type', 'not in','check')]}"/>	
+  </group>
+  
+</group>
+				 
+
+
+                   <footer>
+ <button name="fct_sequence_settings" string="Validate" type="object" class="oe_highlight"/>
+<button class="oe_highlight" special="cancel" string="Cancel"/>
+                       
+                   </footer>
+</sheet>
+               </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

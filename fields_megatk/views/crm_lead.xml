@@ -48,17 +48,21 @@
 				  </xpath>
 		      <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
 				    <page name="soportetecnico" string="Soporte Tecnico">
-				      <group name="soporte">
-				        <group name="data1">
-				        	<field name="serie"/>
-				        	<field name="accesorio_ids" widget="many2many_tags"/>
-				        </group>	
-				        <group name="data2">
-				        	<field name="marca_id"/>
-				        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
-				        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
-				        </group>	
-				      </group>
+					     <group name="soporte">
+					        <group name="data1">
+					        	<field name="serie"/>
+					        	<field name="accesorio_ids" widget="many2many_tags"/>
+					        </group>	
+					        <group name="data2">
+					        	<field name="marca_id"/>
+					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
+					        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
+					        </group>	
+					    </group>
+					    <group name="soporte_inform">
+					      	<field name="fallas"/>
+					      	<field name="informe_tecnico"/>
+					    </group>
 				    </page>
 				  </xpath>
 			</field>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="external_layout_standard_soporte">
+      <div class="header">
+          <div class="row" style="margin-top: -90px;">
+              <div class="col-xs-3 mb4">
+                  <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 350px;"/>
+              </div>
+          </div>
+          <div style="float: right; margin-top: -210px;">
+              <h3>Ticket # <span t-field="o.id"/></h3>                           
+          </div>
+      </div>
+      <div class="article o_report_layout_standard">
+          <t t-raw="0"/>
+      </div>
+      <div class="footer">
+          <div class="text-center" style="border-top: 1px solid rgb(13, 143, 210);">
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+              </ul>
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+              </ul>
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></li>
+                  <li t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></li>
+                  <li t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></li>
+                  <li t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></li>
+              </ul>
+              <div name="financial_infos">
+                  <span t-field="user.company_id.report_footer"/>
+              </div>
+              <div class="text-muted">
+                  Page: <span class="page"/> / <span class="topage"/>
+              </div>
+          </div>
+      </div>
+    </template>
+    <template id="ingreso_print_view">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="fields_megatk.ingreso_print_view_soporte" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+    <template id="ingreso_print_view_soporte">
+      <t t-call="fields_megatk.external_layout_standard_soporte">
+        <div class="page">
+          <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+              Orden de Ingreso                         
+          </div>
+          <br/>
+          <div style="float: right; margin-top: -30px;">
+              <h4>Fecha Ingreso: <span t-field="o.create_date" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></h4>                           
+          </div>
+          <table style="width:100%">
+            <tr>
+              <td colspan="4" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                Información del Cliente
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Cliente: <span t-if="o.partner_id"><t t-esc="o.partner_id.name"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Telefono: <span t-if="o.phone"><t t-esc="o.phone"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Email: <span t-if="o.email_from"><t t-esc="o.email_from"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Dirección: <span t-if="o.street"><t t-esc="o.street"/></span>
+              </td>
+            </tr>
+          </table>
+          <table style="width:100%">
+            <tr>
+              <td colspan="4" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                Datos del Equipo
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;# Serie: <span t-if="o.serie"><t t-esc="o.serie"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Marca: <span t-if="o.marca_id"><t t-esc="o.marca_id.name"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Categoría: <span t-if="o.categoria_id"><t t-esc="o.categoria_id.name"/></span>
+              </td>
+              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Modelo: <span t-if="o.modelo_id"><t t-esc="o.modelo_id.name"/></span>
+              </td>
+            </tr>
+          </table>
+          <br/>
+          
+          <table style="width:100%">
+            <tr>
+              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                Accesorios Incluidos
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                <span t-foreach="o.accesorio_ids" t-as="a">&amp;nbsp;<t t-esc="a.name"/>,&amp;nbsp;</span>
+              </td>
+            </tr>
+          </table>
+          <table style="width:100%">
+            <tr>
+              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                Estado del Equipo
+              </td>
+            </tr>
+            <tr>
+              <td style="width:50%; vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Situación: (Ninguna)
+              </td>
+              <td style="width:50%; vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Tarea: (Ninguna)
+              </td>
+            </tr>
+           
+          </table>
+          <table style="width:100%">
+           <tr>
+              <td style="width:10%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Fallas: 
+              </td>
+              <td style="width:90%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp; <span t-if="o.fallas"><t t-esc="o.fallas"/></span>
+              </td>
+            </tr>
+          </table>
+          <br></br>
+          <div style="width:100%; vertical-align:middle; font-family:'Arial'; font-size:11pt; ">
+            NOTA: La presente sirve como constancia de que nuestra empresa está a la disposición de brindar la revisión, diagnóstico y reparación del equipo ingresado a nuestro Departamento Técnico. El cobro establecido por diagnóstico, equipo sin garantía, compra ajena a nuestra empresa tendrá un costo de L. 800.00 más el impuesto sobre la venta. El tiempo de respuesta para los equipos es de tres días hábiles después de notificada la reparación del equipo se dará una prórroga de 30 días para retirarlo luego de este tiempo s cobrara el 5% del importe de la reparación. Pasada 90 días el equipo entrara en subasta. Este documento no es válido sin firma ni sello de la empresa. Para sugerencias o reclamos con atención al cliente Tel.(504) 2269 4416/20 o escribanos a: info@megatk.com.
+          </div>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <table style="width:100%">
+            <tr>
+              <td class="text-center" style="width:50%; vertical-align:middle;">
+                <div style="width:70%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Cliente
+                </div>
+              </td>
+              <td class="text-center" style="width:50%; vertical-align:middle;">
+                <div style="width:70%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Técnico
+                </div>
+              </td>
+            </tr> 
+          </table>
+        </div>  
+      </t>
+    </template>
+  </data>
+</odoo>
