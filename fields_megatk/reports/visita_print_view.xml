@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="external_layout_standard_visita">
+      <div class="header">
+          <div class="row" style="margin-top: -90px;">
+              <div class="col-xs-3 mb4">
+                  <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 350px;"/>
+              </div>
+          </div>
+          
+      </div>
+      <div class="article o_report_layout_standard">
+          <t t-raw="0"/>
+      </div>
+      <div class="footer">
+          <div class="text-center" style="border-top: 1px solid rgb(13, 143, 210);">
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+              </ul>
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+              </ul>
+              <ul class="list-inline mb4">
+                  <li t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></li>
+                  <li t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></li>
+                  <li t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></li>
+                  <li t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></li>
+              </ul>
+              <div name="financial_infos">
+                  <span t-field="user.company_id.report_footer"/>
+              </div>
+              <div class="text-muted">
+                  Page: <span class="page"/> / <span class="topage"/>
+              </div>
+          </div>
+      </div>
+    </template>
+    <template id="visita_print_view">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="fields_megatk.visita_print_view_soporte" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+    <template id="visita_print_view_soporte">
+      <t t-call="fields_megatk.external_layout_standard_visita">
+        <div class="page">
+          <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+              CONTROL DE VISITA
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <div style="float: left; margin-top: -30px;">
+              <h3>N. <span t-field="o.id"/></h3>                           
+          </div>
+          <div style="float: right; margin-top: -30px;">
+              <h4>Fecha: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/></h4>                           
+          </div>
+          <table style="table-layout: fixed; width:100%">
+            <tr>
+              <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid;vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Empresa: <span t-if="o.partner_id"><t t-esc="o.partner_id.name"/></span>
+              </td>
+              <td style="border-bottom: 1px solid; border-top: 1px solid;border-right: 1px solid; vertical-align:word-wrap: break-word; middle; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Telefono: <span t-if="o.repor_tel"><t t-esc="o.repor_tel"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid;border-right: 1px solid; border-left: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Persona que reporto: <span t-if="o.reporto"><t t-esc="o.reporto"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid;border-right: 1px solid; border-left: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:50px;">
+                &amp;nbsp;Proposito de la visita: <span t-if="o.proposito"><t t-esc="o.proposito"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid;border-right: 1px solid; border-left: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; ">
+                &amp;nbsp;Correo electrónico: <span t-if="o.repor_email"><t t-esc="o.repor_email"/></span>
+              </td>
+            </tr>
+          </table>
+          <br/>
+          <br/>
+          <br/>
+          <div style='margin-left: 17%;'>
+            <table style="width:74%">
+            <tr>
+              <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Cortesía&amp;nbsp;
+              </td>
+              <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                <span t-if="o.tipo_visita == 'cortesia'"><b>X</b></span>
+              </td>
+              <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Contado&amp;nbsp;
+              </td>
+              <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                <span t-if="o.tipo_visita == 'contado'"><b>X</b></span>
+              </td>
+              <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Garantía&amp;nbsp;
+              </td>
+              <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                <span t-if="o.tipo_visita == 'garantia'"><b>X</b></span>
+              </td>
+              <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Capacitación
+              </td>
+              <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                <span t-if="o.tipo_visita == 'capacitacion'"><b>X</b></span>
+              </td>
+             </tr>
+          </table>
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <table style="table-layout: fixed; width:100%">
+            <tr>
+              <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid; border-right: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:70px;">
+                &amp;nbsp;<b>Visita realizada por:</b> <span t-if="o.user_id"><t t-esc="o.user_id.name"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid; border-right: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:70px;">
+                &amp;nbsp;<b>Firma y sello del cliente:</b> 
+              </td>
+            </tr>
+          </table>
+          <br/>
+          <table style="table-layout: fixed; width:100%">
+            <tr>
+              <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid; border-right: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:70px;">
+                &amp;nbsp; <b>Obsevaciones:</b> <span t-if="o.partner_id"><t t-esc="o.partner_id.name"/></span>
+              </td>
+            </tr>
+          </table>
+        </div>  
+      </t>
+    </template>
+  </data>
+</odoo>

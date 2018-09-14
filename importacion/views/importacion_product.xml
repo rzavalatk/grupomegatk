@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Form View -->
+    <record model="ir.ui.view" id="import_product_mega_form_view">
+      <field name="name">import.product.mega.form.view</field>
+      <field name="model">import.product.mega</field>
+      <field name="arch" type="xml">
+        <form string = "Form Import">
+          <sheet>
+            <tree>
+              <field name="name"/>
+              <group name="x_datos0">
+                <group name="x_1">
+                  <field name="company_id"/>
+                  <field name="currency_id"/>
+                  <field name="stock_pick_ids" widget="many2many_tags"/>
+                </group>
+                <group name="x_2">
+                  <field name="descripcion"/>
+                </group>
+              </group>
+            </tree>
+              <field name="import_line_id">
+                <tree editable="bottom">
+                  <field name="product_id"/>
+                  <field name="name"/>
+                  <field name="quantity"/>
+                  <field name="price_unit"/>
+                  <field name="price_subtotal"/>
+                </tree>
+              </field>
+              <field name="import_gsto_id">
+                <tree editable="bottom">
+                  <field name="name"/>
+                  <field name="partner_id"/>
+                  <field name="amount"/>
+                </tree>
+              </field>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="import_product_mega_tree_view">
+      <field name="name">import.product.mega.tree.view</field>
+      <field name="model">import.product.mega</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="create_date"/>
+          <field name="company_id"/>
+        </tree>
+      </field>
+    </record>
+    <!-- Search View -->
+    <record id="import_product_mega_search_view" model="ir.ui.view">
+        <field name="name">import.product.mega.search.view</field>
+        <field name="model">import.product.mega</field>
+        <field name="arch" type="xml">
+            <search string="Importación Search View">
+                <field name="name" string="Nombre" />
+                <field name="descripcion" string="Descripcion" />
+                <filter string="Archivado" domain="[('active','=',0)]"/>
+            </search>
+        </field>
+    </record>
+    <!-- Action model view -->
+    <record model="ir.actions.act_window" id="action_import_product_mega">
+      <field name="name">Ponderación</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">import.product.mega</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <!-- menu categories -->
+    <menuitem name="Importación" id="import_menu_root" sequence = "1" web_icon="importacion,static/description/icon.png"/>    
+    <menuitem name="Ponderación" id="import_product_mega_menu_category" sequence = "1" parent="import_menu_root" action = "action_import_product_mega"/>
+    
+
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="grupomegatk/importacion.list">
+      <field name="name">grupomegatk/importacion list</field>
+      <field name="model">grupomegatk/importacion.grupomegatk/importacion</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="grupomegatk/importacion.action_window">
+      <field name="name">grupomegatk/importacion window</field>
+      <field name="res_model">grupomegatk/importacion.grupomegatk/importacion</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="grupomegatk/importacion.action_server">
+      <field name="name">grupomegatk/importacion server</field>
+      <field name="model_id" ref="model_grupomegatk/importacion_grupomegatk/importacion"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="grupomegatk/importacion" id="grupomegatk/importacion.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="grupomegatk/importacion.menu_1" parent="grupomegatk/importacion.menu_root"/>
+    <menuitem name="Menu 2" id="grupomegatk/importacion.menu_2" parent="grupomegatk/importacion.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="grupomegatk/importacion.menu_1_list" parent="grupomegatk/importacion.menu_1"
+              action="grupomegatk/importacion.action_window"/>
+    <menuitem name="Server to list" id="grupomegatk/importacion" parent="grupomegatk/importacion.menu_2"
+              action="grupomegatk/importacion.action_server"/>
+    -->
+  </data>
+</odoo>

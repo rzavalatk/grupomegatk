@@ -10,6 +10,8 @@
        	"purchase"
 	  ],
     "data": [
+        'reports/visita_tecnica.xml',
+        'reports/visita_print_view.xml',
         'reports/entrega_equipo_print_view.xml',
         'reports/crm_entrega_equipo.xml',
         'reports/orden_ingreso.xml',
