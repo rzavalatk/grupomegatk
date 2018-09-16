@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <report
+        id="crm_visita_tecnica"
+        model="crm.lead"
+        string="Visita Técnica"
+        name="fields_megatk.visita_print_view"
+        file="fields_megatk.visita_print_view"
+        report_type="qweb-pdf" />
+</data>
+</odoo>

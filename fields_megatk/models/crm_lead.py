@@ -13,11 +13,39 @@ class CrmLead(models.Model):
     fallas = fields.Text("Fallas")
     informe_tecnico = fields.Text("Informe técnico")
     tipo_id = fields.Many2one('crm.lead.tipo', string='Título de oportunidad',)
+    tipo_soporte = fields.Selection([('llamada','Llamada'),('visita','Visita'),('taller','Taller')], string='Tipo de Soporte', default='llamada')
+    estado_taller = fields.Selection([('sinrevision','Sin Revisión'),('enreparacion','En Reparación'),('diagnostico','Diagnóstico'),('pendaprov','Pend. Aprobación'),('rma','RMA'),('reparado','Reparado')], string='Estado del Equipo', default='sinrevision')
+    tipo_visita = fields.Selection([('cortesia','Cortesía'),('contado','Contado'),('garantia','Garantía'),('capacitacion','Capacitación')], string='Tipo de Visita')
+    reporto = fields.Char(string='Persona que reporto',)
+    repor_tel = fields.Char(string='Telefono',)
+    repor_email = fields.Char(string='Correo electrónico',)
+    proposito = fields.Char(string='Propósito de la visita',)
 
     @api.onchange('marca_id')
     def _onchange_marca_id(self):
         self.categoria_id=False
         self.modelo_id=False
+
+    @api.onchange('mail','email_from')
+    def _onchange_marca_id(self):
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
 
     @api.onchange('categoria_id')
     def _onchange_categoria_id(self):

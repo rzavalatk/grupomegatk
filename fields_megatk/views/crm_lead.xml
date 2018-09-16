@@ -50,18 +50,28 @@
 				    <page name="soportetecnico" string="Soporte Tecnico">
 					     <group name="soporte">
 					        <group name="data1">
-					        	<field name="serie"/>
-					        	<field name="accesorio_ids" widget="many2many_tags"/>
+					        	<field name="tipo_soporte"/>
+					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        </group>	
 					        <group name="data2">
+					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        </group>	
+					    </group>
+					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'>
+					        <group name="data3">
 					        	<field name="marca_id"/>
 					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
 					        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
 					        </group>	
-					    </group>
-					    <group name="soporte_inform">
-					      	<field name="fallas"/>
+					        <group name="data4">
+					        	<field name="fallas"/>
 					      	<field name="informe_tecnico"/>
+					        </group>	
 					    </group>
 				    </page>
 				  </xpath>

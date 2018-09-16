@@ -15,116 +15,108 @@
               Entrega de Equipo                         
           </div>
           <br/>
+          <br/>
+          <br/>
           <div style="float: right; margin-top: -30px;">
               <h4>Fecha Ingreso: <span t-field="o.create_date" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>&amp;nbsp;&amp;nbsp;                          
               Fecha Entrega: <span t-field="o.date_deadline" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></h4>                           
           </div>
-          <table style="width:100%">
+          <table style="table-layout: fixed; width:100%">
             <tr>
-              <td colspan="4" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+              <td colspan="3" style="vertical-align:middle;  border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
                 Información del Cliente
               </td>
             </tr>
             <tr>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td style="vertical-aliword-wrap: break-word; gn:middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Cliente: <span t-if="o.partner_id"><t t-esc="o.partner_id.name"/></span>
               </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+              <td style="vertical-align:word-wrap: break-word; middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt;">
                 &amp;nbsp;Telefono: <span t-if="o.phone"><t t-esc="o.phone"/></span>
               </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td style="vertical-align:word-wrap: break-word; middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Email: <span t-if="o.email_from"><t t-esc="o.email_from"/></span>
-              </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
-                &amp;nbsp;Dirección: <span t-if="o.street"><t t-esc="o.street"/></span>
               </td>
             </tr>
           </table>
-          <table style="width:100%">
+          <table style="table-layout: fixed; width:100%">
             <tr>
-              <td colspan="4" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+              <td colspan="4" style="vertical-align:middle;  border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
                 Datos del Equipo
               </td>
             </tr>
             <tr>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td style="vertical-aliword-wrap: break-word; gn:middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;# Serie: <span t-if="o.serie"><t t-esc="o.serie"/></span>
               </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+              <td style="vertical-align:word-wrap: break-word; middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt;">
                 &amp;nbsp;Marca: <span t-if="o.marca_id"><t t-esc="o.marca_id.name"/></span>
               </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td style="vertical-align:word-wrap: break-word; middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Categoría: <span t-if="o.categoria_id"><t t-esc="o.categoria_id.name"/></span>
               </td>
-              <td style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td style="vertical-align:word-wrap: break-word; middle;  border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Modelo: <span t-if="o.modelo_id"><t t-esc="o.modelo_id.name"/></span>
               </td>
             </tr>
           </table>
           <br/>
           
-          <table style="width:100%">
+          <table style="table-layout: fixed; width:100%">
             <tr>
-              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+              <td colspan="2" style="vertical-align:middle;  border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
                 Accesorios Incluidos
               </td>
             </tr>
             <tr>
-              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+              <td colspan="2" class="text-center" style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
                 <span t-foreach="o.accesorio_ids" t-as="a">&amp;nbsp;<t t-esc="a.name"/>,&amp;nbsp;</span>
+                <span t-if="not o.accesorio_ids">&amp;nbsp;(Ninguno)</span>
               </td>
             </tr>
           </table>
+          <table style="table-layout: fixed; width:100%">
+            
+          </table>
           <table style="width:100%">
             <tr>
-              <td colspan="2" style="vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+              <td colspan="2" style="vertical-align:middle;  border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
                 Estado del Equipo
               </td>
-            </tr>
+             </tr>
             <tr>
-              <td style="width:50%; vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
-                &amp;nbsp;Situación: (Ninguna)
-              </td>
-              <td style="width:50%; vertical-align:middle; height:40px; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
-                &amp;nbsp;Tarea: (Ninguna)
-              </td>
-            </tr>
-           
-          </table>
-          <table style="width:100%">
-           <tr>
-              <td style="width:10%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+              <td style="word-wrap: break-word; width:10%; vertical-align:middle;  border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Fallas: 
               </td>
-              <td style="width:90%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+              <td style="width:90%; vertical-align:middle;  border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp; <span t-if="o.fallas"><t t-esc="o.fallas"/></span>
               </td>
             </tr>
             <tr>
-              <td style="width:10%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+              <td style="word-wrap: break-word; width:10%; vertical-align:middle;  border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp;Informe Técnico: 
               </td>
-              <td style="width:90%; vertical-align:middle; height:40px; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+              <td style="width:90%; vertical-align:middle;  border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
                 &amp;nbsp; <span t-if="o.informe_tecnico"><t t-esc="o.informe_tecnico"/></span>
               </td>
             </tr>
           </table>
           <br></br>
-          <span t-if="o.user_id" style="font-family:'Arial'; font-size:14pt;">&amp;nbsp;&amp;nbsp;Equipo revisado por:&amp;nbsp;<t t-esc="o.user_id.name"/></span>
+          <span t-if="o.user_id" style="font-family:'Arial'; font-size:14pt;">&amp;nbsp;&amp;nbsp;Técnico Asignado:&amp;nbsp;<t t-esc="o.user_id.name"/></span>
           <br></br>
           <br></br>
           <br></br>
           <br></br>
           <br></br>
           <br></br>
-          <table style="width:100%">
+          <table style="table-layout: fixed; width:100%">
             <tr>
               <td class="text-center" style="width:50%; vertical-align:middle;">
-                <div style="width:90%; vertical-align:middle; height:40px; border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Cliente
+                <div style="width:90%; vertical-align:middle;  border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Cliente
                 </div>
               </td>
               <td class="text-center" style="width:50%; vertical-align:middle;">
-                <div style="width:90%; vertical-align:middle; height:40px; border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Técnico
+                <div style="width:90%; vertical-align:middle;  border-top: 2px solid; font-family:'Arial'; font-size:14pt; ">Firma del Técnico
                 </div>
               </td>
             </tr> 
