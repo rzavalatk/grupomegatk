@@ -20,32 +20,17 @@ class CrmLead(models.Model):
     repor_tel = fields.Char(string='Telefono',)
     repor_email = fields.Char(string='Correo electrónico',)
     proposito = fields.Char(string='Propósito de la visita',)
+    observacion_visita = fields.Html(string='Observaciones')
 
     @api.onchange('marca_id')
     def _onchange_marca_id(self):
         self.categoria_id=False
         self.modelo_id=False
 
-    @api.onchange('mail','email_from')
-    def _onchange_marca_id(self):
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
-        print("romelsdgugdfusygfydsgfuygsdfuy9888888888888888888888888888888888888888888888/////////////////////////")
+    @api.multi
+    def _message_post_after_hook(self, message):
+        self.observacion_visita = message.body
+        return super(CrmLead, self)._message_post_after_hook(message)
 
     @api.onchange('categoria_id')
     def _onchange_categoria_id(self):
@@ -54,6 +39,14 @@ class CrmLead(models.Model):
     @api.onchange('tipo_id')
     def _onchange_tipo_id(self):
         self.name=self.tipo_id.name
+
+    def imprimir_soporte(self):
+        self.ensure_one()
+        if self.tipo_soporte == 'taller':
+            return self.env.ref('fields_megatk.crm_orden_ingreso').report_action(self)
+        elif self.tipo_soporte == 'visita':
+            return self.env.ref('fields_megatk.crm_visita_tecnica').report_action(self)
+       
 
 class CrmLeadTipo(models.Model):
     _name = 'crm.lead.tipo'
