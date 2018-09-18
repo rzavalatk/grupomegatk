@@ -71,6 +71,7 @@
 					        <group name="data4">
 					        	<field name="fallas"/>
 					      	<field name="informe_tecnico"/>
+					      	<field name="observacion_visita" invisible='1'/>
 					        </group>	
 					    </group>
 				    </page>

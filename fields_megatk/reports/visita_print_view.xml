@@ -135,7 +135,7 @@
           <table style="table-layout: fixed; width:100%">
             <tr>
               <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid; border-right: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:70px;">
-                &amp;nbsp; <b>Obsevaciones:</b> <span t-if="o.partner_id"><t t-esc="o.partner_id.name"/></span>
+                &amp;nbsp; <b>Obsevaciones:</b> <span t-if="o.observacion_visita"><t t-raw="o.observacion_visita"/></span>
               </td>
             </tr>
           </table>
