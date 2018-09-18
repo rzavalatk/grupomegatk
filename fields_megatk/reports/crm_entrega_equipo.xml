@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<data>
+	<data>
     <report
         id="crm_entrega_equipo"
         model="crm.lead"
@@ -8,6 +8,7 @@
         name="fields_megatk.entrega_equipo_print_view"
         file="fields_megatk.entrega_equipo_print_view"
         report_type="qweb-pdf"
-        attachment_use="True" />
-</data>
+        attachment_use="True" 
+        paperformat="__export__.report_paperformat_8_0f21f71b" />
+	</data>
 </odoo>

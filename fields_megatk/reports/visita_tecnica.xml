@@ -7,6 +7,8 @@
         string="Visita Técnica"
         name="fields_megatk.visita_print_view"
         file="fields_megatk.visita_print_view"
-        report_type="qweb-pdf" />
+        report_type="qweb-pdf"
+        paperformat="__export__.report_paperformat_8_0f21f71b" />
 </data>
+
 </odoo>
