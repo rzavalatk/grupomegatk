@@ -13,7 +13,7 @@ class CrmLead(models.Model):
     fallas = fields.Text("Fallas")
     informe_tecnico = fields.Text("Informe técnico")
     tipo_id = fields.Many2one('crm.lead.tipo', string='Título de oportunidad',)
-    tipo_soporte = fields.Selection([('llamada','Llamada'),('visita','Visita'),('taller','Taller')], string='Tipo de Soporte', default='visita')
+    tipo_soporte = fields.Selection([('llamada','Llamada'),('visita','Visita'),('taller','Taller')], string='Tipo de Soporte', default='llamada')
     estado_taller = fields.Selection([('sinrevision','Sin Revisión'),('enreparacion','En Reparación'),('diagnostico','Diagnóstico'),('pendaprov','Pend. Aprobación'),('rma','RMA'),('reparado','Reparado')], string='Estado del Equipo', default='sinrevision')
     tipo_visita = fields.Selection([('cortesia','Cortesía'),('contado','Contado'),('garantia','Garantía'),('capacitacion','Capacitación')], string='Tipo de Visita')
     reporto = fields.Char(string='Persona que reporto',)
@@ -39,6 +39,14 @@ class CrmLead(models.Model):
     @api.onchange('tipo_id')
     def _onchange_tipo_id(self):
         self.name=self.tipo_id.name
+
+    def imprimir_soporte(self):
+        self.ensure_one()
+        if self.tipo_soporte == 'taller':
+            return self.env.ref('fields_megatk.crm_orden_ingreso').report_action(self)
+        elif self.tipo_soporte == 'visita':
+            return self.env.ref('fields_megatk.crm_visita_tecnica').report_action(self)
+       
 
 class CrmLeadTipo(models.Model):
     _name = 'crm.lead.tipo'

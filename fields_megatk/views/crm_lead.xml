@@ -38,6 +38,9 @@
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
 				<field name="arch" type="xml">
+					<header>
+        		<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" attrs='{"invisible": [["tipo_soporte","=","llamada"]]}'/>  
+        	</header>
 					<field name="name" position="before">
 		      	<h1>Ticket: <field name="id"/></h1>
 		      </field>
