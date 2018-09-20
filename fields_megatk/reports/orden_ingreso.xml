@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<data>
+	<data>
     <report
         id="crm_orden_ingreso"
         model="crm.lead"
@@ -9,5 +9,5 @@
         file="fields_megatk.ingreso_print_view"
         report_type="qweb-pdf" 
         paperformat="__export__.report_paperformat_8_0f21f71b" />
-</data>
+	</data>
 </odoo>

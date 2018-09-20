@@ -33,6 +33,51 @@
 	        </field>
 			</field>
    		</record>
+   		<record model="ir.ui.view" id="crm_case_form_campo_megatk_view_inh">
+	  		<field name="name">crm.case.form.campomegatk.view</field>
+	  		<field name="model">crm.lead</field>
+	  		<field name="inherit_id" ref="crm.crm_case_form_view_leads" />
+				<field name="arch" type="xml">
+					<field name="name" position="before">
+		      	<h1>Ticket: <field name="id"/></h1>
+		      </field>
+		      <xpath expr="//field[@name='name']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="readonly">1</attribute>
+				    <attribute name="required">1</attribute>
+				  </xpath>
+		      <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+				    <page name="soportetecnico" string="Soporte Tecnico">
+					     <group name="soporte">
+					        <group name="data1">
+					        	<field name="tipo_soporte"/>
+					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        </group>	
+					        <group name="data2">
+					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        </group>	
+					    </group>
+					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'>
+					        <group name="data3">
+					        	<field name="marca_id"/>
+					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
+					        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
+					        </group>	
+					        <group name="data4">
+					        	<field name="fallas"/>
+					      	<field name="informe_tecnico"/>
+					      	<field name="observacion_visita" invisible='1'/>
+					        </group>	
+					    </group>
+				    </page>
+				  </xpath>
+			</field>
+ 		</record>
    		<record model="ir.ui.view" id="crm_form_campo_megatk_view_inh">
 	  		<field name="name">crm.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
