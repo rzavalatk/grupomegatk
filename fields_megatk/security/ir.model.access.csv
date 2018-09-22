@@ -5,3 +5,5 @@ acces_fields_megatk.model_crm_lead_categoria,crm.lead.categoria,fields_megatk.mo
 acces_fields_megatk.model_crm_lead_modelo,crm.lead.modelo,fields_megatk.model_crm_lead_modelo,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_tipo,crm.lead.tipo,fields_megatk.model_crm_lead_tipo,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_accesorios,crm.lead.accesorios,fields_megatk.model_crm_lead_accesorios,sales_team.group_sale_manager,1,1,1,1
+acces_fields_megatk.model_hr_employee_equipo_metas,hr.employee.equipo.metas,fields_megatk.model_hr_employee_equipo_metas,base.group_user,1,1,1,1
+acces_fields_megatk.model_hr_employee_equipo_madrugador,hr.employee.equipo.madrugador,fields_megatk.model_hr_employee_equipo_madrugador,base.group_user,1,1,1,1

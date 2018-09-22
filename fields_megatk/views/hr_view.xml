@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="hr_marcacion_megatk_view_inh">
+	  		<field name="name">hr.employee.marcacion.campomegatk.view</field>
+	  		<field name="model">hr.employee</field>
+	  		<field name="inherit_id" ref="hr.view_employee_form" />
+				<field name="arch" type="xml">
+					<group name="active_group" position="after">
+						<group>
+							<field name="marcacion_id"/>
+							<field name="equipo_metas_id"/>
+							<field name="equipo_madrug_id"/>
+						</group>
+		      		</group>
+				</field>
+	   	</record>
+	</data>	
+</odoo>

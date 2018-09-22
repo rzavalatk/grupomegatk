@@ -28,3 +28,4 @@ class ProductMarca(models.Model):
 
     name = fields.Char("Nombre")
     company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
+    active = fields.Boolean(string='Activo', default=True)
