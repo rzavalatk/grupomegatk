@@ -18,7 +18,7 @@
 				                </group>
 	              			</group>
 	              			<group>
-	              				<field name="employe_ids" widget="many2many" domain="[('equipo_metas_id', '=', True)]"/>
+	              				<field name="employe_ids" widget="many2many" domain="[('equipo_metas_id', '=', False)]"/>
 	              			</group>
 	            		</tree>
 	          		</sheet>
@@ -63,7 +63,7 @@
 			<field name="view_mode">tree,form</field>
 	    </record>
 
-		<menuitem name="Equipos" id="hr_employe_equipos" sequence = "2" parent="hr.menu_hr_root"/>
+		<menuitem name="Equipos" id="hr_employe_equipos" sequence = "3" parent="hr.menu_hr_root"/>
 		<menuitem name="Metas" id="hr_employe_equipo_metas" sequence = "1" parent="hr_employe_equipos" action = "action_emplyee_equipo_metas"/>
 
 	</data>	

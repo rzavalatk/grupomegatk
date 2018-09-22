@@ -18,7 +18,7 @@
 				                </group>
 	              			</group>
 	              			<group>
-	              				<field name="employe_ids" widget="many2many" domain="[('equipo_metas_id', '=', True)]"/>
+	              				<field name="employe_ids" widget="many2many" domain="[('equipo_madrug_id','=',False)]"/>
 	              			</group>
 	            		</tree>
 	          		</sheet>
