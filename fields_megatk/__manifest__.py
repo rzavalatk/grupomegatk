@@ -7,6 +7,8 @@
     "depends": ["base",
         "crm",
        	"sale",
+        "hr",
+        "base_import",
        	"purchase"
 	  ],
     "data": [
@@ -24,6 +26,9 @@
         "views/account_invoice_view.xml",
         "views/stock_picking_view.xml",
         "views/crm_lead.xml",
+        "views/hr_view.xml",
+        "views/hr_employee_equipo_metas.xml",
+        "views/hr_employee_equipo_madrugador.xml",
        #"views/crm_lead_views.xml",
  		#'security/groups.xml',
         #'security/ir.model.access.csv',

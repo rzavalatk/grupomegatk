@@ -142,29 +142,29 @@
 	   	</record>
 
  		<record model="ir.actions.act_window" id="action_crm_lead_marca">
-      <field name="name">Marcas</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="res_model">crm.lead.marca</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-    <record model="ir.actions.act_window" id="action_crm_lead_categoria">
-      <field name="name">Categorias</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="res_model">crm.lead.categoria</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-    <record model="ir.actions.act_window" id="action_crm_lead_modelo">
-      <field name="name">Modelos</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="res_model">crm.lead.modelo</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+			<field name="name">Marcas</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">crm.lead.marca</field>
+			<field name="view_mode">tree,form</field>
+	    </record>
+    	<record model="ir.actions.act_window" id="action_crm_lead_categoria">
+			<field name="name">Categorias</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">crm.lead.categoria</field>
+			<field name="view_mode">tree,form</field>
+	    </record>
+	    <record model="ir.actions.act_window" id="action_crm_lead_modelo">
+			<field name="name">Modelos</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">crm.lead.modelo</field>
+			<field name="view_mode">tree,form</field>
+    	</record>
 
-    <menuitem name="Soporte Tecnico" id="crm_menu_soporte_taller" sequence = "10" parent="crm.crm_menu_root"/>
-    
-    <menuitem name="Marca" id="import_product_menu_marca" sequence = "1" parent="crm_menu_soporte_taller" action = "action_crm_lead_marca"/>
-    <menuitem name="Categoria" id="import_product_menu_category" sequence = "2" parent="crm_menu_soporte_taller" action = "action_crm_lead_categoria"/>
-    <menuitem name="Modelo" id="import_product_menu_modelo" sequence = "3" parent="crm_menu_soporte_taller" action = "action_crm_lead_modelo"/>
+	    <menuitem name="Soporte Tecnico" id="crm_menu_soporte_taller" sequence = "10" parent="crm.crm_menu_root"/>
+	    
+	    <menuitem name="Marca" id="import_product_menu_marca" sequence = "1" parent="crm_menu_soporte_taller" action = "action_crm_lead_marca"/>
+	    <menuitem name="Categoria" id="import_product_menu_category" sequence = "2" parent="crm_menu_soporte_taller" action = "action_crm_lead_categoria"/>
+	    <menuitem name="Modelo" id="import_product_menu_modelo" sequence = "3" parent="crm_menu_soporte_taller" action = "action_crm_lead_modelo"/>
 
 	</data>	
 </odoo>

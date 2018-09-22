@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	   	<!-- Form View -->
+	    <record model="ir.ui.view" id="hr_employe_madrugador_mega_form_view">
+	      	<field name="name">hr.employee.madrugador.rmega.form.view</field>
+	      	<field name="model">hr.employee.equipo.madrugador</field>
+	      	<field name="arch" type="xml">
+	        	<form string = "Form Import">
+	          		<sheet>
+	            		<tree>
+	              			<group name="x_datos0">
+				                <group name="x_1">
+				                  	<field name="name"/>
+				                </group>
+				                <group name="x_2">
+				                  	<field name="active"/>
+				                </group>
+	              			</group>
+	              			<group>
+	              				<field name="employe_ids" widget="many2many" domain="[('equipo_madrug_id','=',False)]"/>
+	              			</group>
+	            		</tree>
+	          		</sheet>
+	        	</form>
+	      	</field>
+	    </record>
+	    <!-- Tree View -->
+	    <record model="ir.ui.view" id="hr_employee_madrugador_mega_tree_view">
+	      	<field name="name">hr.employee.madrugador.tree.view</field>
+	      	<field name="model">hr.employee.equipo.madrugador</field>
+	      	<field name="arch" type="xml">
+		        <tree decoration-danger="active==False" decoration-info="active==True">
+		          	<field name="name"/>
+		          	<field name="active"/>
+		        </tree>
+	      	</field>
+	    </record>
+		<record model="ir.ui.view" id="hr_employee_madrugador_megatk_view_inh">
+			<field name="name">hr.employee.madrugador.campomegatk.view</field>
+			<field name="model">hr.employee.equipo.madrugador</field>
+			<field name="inherit_id" ref="hr_employe_madrugador_mega_form_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='employe_ids']" position="inside">
+					<tree string="Empleados" decoration-bf="message_needaction==True">
+						<field name="name" modifiers="{}"/>
+						<field name="work_phone" modifiers="{}" attrs="{}" invisible="1"/>
+						<field name="work_email" modifiers="{}" attrs="{}" invisible="1"/>
+						<field name="company_id" on_change="1" can_create="true" can_write="true" studio_groups="[{&quot;id&quot;: 5, &quot;name&quot;: &quot;Multicompa\u00f1\u00eda&quot;, &quot;display_name&quot;: &quot;Permisos extra / Multicompa\u00f1\u00eda&quot;}]" modifiers="{}"/>
+						<field name="department_id" on_change="1" can_create="true" can_write="true" modifiers="{}"/>
+						<field name="job_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
+						<field name="parent_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
+						<field name="coach_id" invisible="1" can_create="true" can_write="true" modifiers="{&quot;column_invisible&quot;: true}"/>
+						<field name="message_needaction" invisible="1" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
+					</tree>
+				</xpath>
+	        </field>
+	    </record>
+	   	
+	    <record model="ir.actions.act_window" id="action_emplyee_equipo_madrugador">
+			<field name="name">Madrugador</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hr.employee.equipo.madrugador</field>
+			<field name="view_mode">tree,form</field>
+	    </record>
+		
+		<menuitem name="Madrugador" id="hr_employe_equipo_madrugador" sequence = "2" parent="hr_employe_equipos" action = "action_emplyee_equipo_madrugador"/>
+
+	</data>	
+</odoo>

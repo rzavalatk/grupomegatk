@@ -31,7 +31,7 @@ class ConciliacionBancaria(models.Model):
             self.mes_name = varialble_string.strftime("%B")
 
 
-    company_id = fields.Many2one("res.company", "Compañia", required=True, default=lambda self: self.env.user.company_id, track_visibility='onchange')
+    company_id = fields.Many2one("res.company", "Compañia", required=True, track_visibility='onchange')
     #('reconcile', '=', True),
     account_id = fields.Many2one("account.account", "Banco", track_visibility='onchange', required=True, domain="[ ('user_type_id.type', '=', 'liquidity')]")
     currency_id = fields.Many2one("res.currency", "Moneda", track_visibility='onchange')
