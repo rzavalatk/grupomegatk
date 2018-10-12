@@ -45,6 +45,7 @@
         <button name="back_draft" type="object" string="Volver a borrador" states="anulated" class="oe_highlight"/>
         <button name="get_movimientos" type="object" string="Obtener Movimientos" states="draft" class="oe_highlight"/>
         <button name="action_validate" type="object" string="Conciliar Saldos" states="draft" class="oe_highlight"/>
+        <button name="%(action_wizard_generar_movimientos)d" type="action" string="Crear Movimientos" states="draft" class="oe_highlight"/>
         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
         <button name="action_anulated" type="object" string="Anular Conciliación" 
            confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>

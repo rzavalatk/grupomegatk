@@ -1,1 +1,1 @@
-import journal_settings
+from . import wizard_generar_movimiento
