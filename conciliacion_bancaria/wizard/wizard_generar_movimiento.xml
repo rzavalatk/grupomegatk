@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<record id="conciliacion_wizard_movimientos_view_form" model="ir.ui.view">
+<field name="name">conciliacion.wizard.movimientos.form_view</field>
+<field name="model">conciliacion.wizard.movimientos</field>
+<field name="type">form</field>
+<field name="arch" type="xml">
+<form string="Transaction Type">
+<sheet>
+      <separator string="Tipos de documentos"/>
+<group  colspan="4">
+    <group >
+        <field name="company_id" options="{'no_create': True}"/>
+        <field name="account_id" options="{'no_create': True}"/>
+        <field name="journal_id" options="{'no_create': True}"/>
+        <field name="doc_type" />
+        <field name="monto"/>
+    </group>
+    <group cols="2">      
+        <field name="fecha"/>
+        <field name="name"/>
+        
+        <field name="currency_id"/>
+        <field name="es_moneda_base" invisible="1"/>
+        <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
+    </group>
+</group>
+<notebook>
+<page string="Detalle de movimientos">
+  <group colspan="4">
+    <group cols="2">
+         <field name="total_debitos"/>
+    </group>
+    <group cols="2">
+        <field name="total_creditos"/>
+    </group>
+    </group>
+  <field name="wizard_ids">
+    <tree editable="top">
+      <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+      <field name="partner_id" options="{'no_create': True}"/>
+      <field name="analytic_id" options="{'no_create': True}"/>
+      <field name="name"/>
+      <field name="amount"/>
+      <field name="move_type"/>
+    </tree>
+  </field>
+</page>
+</notebook>
+<group class="oe_subtotal_footer oe_right">
+      <field name="rest_credit" widget="monetary" options="{'currency_field': 'currency_id'}"/>                      
+        </group>
+<footer>
+  <button name="generate_asiento" string="Validate" type="object" class="oe_highlight"/>
+  <button class="oe_highlight" special="cancel" string="Cancelar"/>       
+</footer>
+</sheet>
+</form>
+</field>
+</record>
+
+<record model="ir.actions.act_window" id="action_wizard_generar_movimientos">
+        <field name="name">Generar movimientos</field>
+        <field name="res_model">conciliacion.wizard.movimientos</field>
+        <field name="view_mode">form</field>
+         <field name="view_id" ref="conciliacion_wizard_movimientos_view_form"/>
+         <field name="target">new</field>
+</record>
+
+</data>
+</odoo>

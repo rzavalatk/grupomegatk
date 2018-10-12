@@ -14,6 +14,7 @@
     'data': [
         "security/groups.xml",
         "security/ir.model.access.csv",
+        "wizard/wizard_generar_movimiento.xml",
         "views/conciliacion_view.xml", 
         "reports/conciliacion_print.xml",
         "reports/conciliacion_print_view.xml",
