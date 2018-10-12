@@ -113,6 +113,12 @@
               <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
                 <span t-if="o.tipo_visita == 'capacitacion'"><b>X</b></span>
               </td>
+              <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                &amp;nbsp;Instalación
+              </td>
+              <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                <span t-if="o.tipo_visita == 'instalacion'"><b>X</b></span>
+              </td>
              </tr>
           </table>
           </div>
