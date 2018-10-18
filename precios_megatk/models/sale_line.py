@@ -11,7 +11,7 @@ class Saleline(models.Model):
     @api.model
     def _default_preciolista_ids(self):
         preciolista = self.env['lista.precios.producto']
-        preciodefaul = preciolista.search( [('id', '=', '1')]).id
+        preciodefaul = preciolista.search( [('name', '=', 'Mayorista')]).id
         preciodefaul = preciodefaul or False
         return preciodefaul
 
