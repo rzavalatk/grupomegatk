@@ -93,8 +93,7 @@ class ConciliacionBancaria(models.Model):
     def get_movimientos(self):
         obj_move_id = self.env["account.move.line"].search([('date', '<=', self.date), ('account_id', '=', self.account_id.id), 
             ('company_id', '=', self.company_id.id), ('es_conciliado', '=', False), ('move_id.state', '=', 'posted')])
-
-        obj_concil_last = self.env["conicliacion.bancaria"].search([('state', '=', 'validated')])
+        obj_concil_last = self.env["conicliacion.bancaria"].search([('state', '=', 'validated')],limit=1)
         for cooncil in obj_concil_last:
             self.saldo_inicial = cooncil.saldo_final
 

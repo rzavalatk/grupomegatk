@@ -6,6 +6,7 @@ from odoo.exceptions import Warning
 
 class ListaPrecios(models.Model):
     _name = "lista.precios.megatk"
+    _order = 'name asc'
 
     name = fields.Many2one("lista.precios.tipo.descuento", "Tipo de Precio", required=True)
     descuento = fields.Float(" Porcentaje %")
@@ -18,7 +19,6 @@ class ListaPrecios(models.Model):
     def onchangedescuento(self):
         if self.name:
             self.descuento = self.name.descuento
-            self.company_id = self.name.company_id
 
     @api.multi
     def back_draft(self):
