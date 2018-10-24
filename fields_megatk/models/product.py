@@ -19,7 +19,7 @@ class Product(models.Model):
     x_arancel = fields.Char(string='Arancel',store=True)
     x_costo_real = fields.Float(string='Costo Honduras',store=True)
     x_ponderacion = fields.Char(string='Ponderación',store=True)
-    x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', readonly=True)
+    x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', readonly=True, domain=[('obj_padre.state','=','valida')])
     marca_id = fields.Many2one('product.marca', string='Marca',)
 
     @api.onchange('list_price')

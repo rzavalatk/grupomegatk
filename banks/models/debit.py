@@ -119,8 +119,33 @@ class Debit(models.Model):
     es_moneda_base = fields.Boolean("Es moneda base")
     total_debitos = fields.Float("Total débitos", compute=_compute_rest_credit)
     total_creditos = fields.Float("Total créditos", compute=_compute_rest_credit)
+    plantilla_id = fields.Many2one("banks.template", "Plantilla")
 
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
+
+    @api.onchange("plantilla_id")
+    def onchangeplantilla(self):
+        if self.plantilla_id:
+            self.company_id = self.plantilla_id.company_id.id
+            self.journal_id = self.plantilla_id.journal_id.id
+            self.name = self.plantilla_id.pagar_a
+            self.total = self.plantilla_id.total
+            self.doc_type = self.plantilla_id.doc_type
+            self.currency_id = self.plantilla_id.currency_id.id
+            self.es_moneda_base = self.plantilla_id.es_moneda_base
+            lineas = []
+            for line in self.plantilla_id.detalle_lines:
+                lineas.append((0, 0, {
+                    'partner_id': line.partner_id.id,
+                    'account_id': line.account_id.id,
+                    'name': line.name,
+                    'amount': line.amount,
+                    'currency_id': line.currency_id.id,
+                    'analytic_id': line.analytic_id.id,
+                    'move_type': line.move_type,
+                    'debit_id': self.id,
+                }))
+            self.debit_line = lineas
 
     @api.onchange("journal_id")
     def onchangejournal(self):

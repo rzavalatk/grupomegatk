@@ -6,12 +6,12 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 class Saleline(models.Model):
     _inherit = 'sale.order.line'
 
-    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio", default=lambda self: self._default_preciolista_ids())
+    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio", default=lambda self: self._default_preciolista_ids(),required=True)
         
     @api.model
     def _default_preciolista_ids(self):
         preciolista = self.env['lista.precios.producto']
-        preciodefaul = preciolista.search( [('name', '=', 'Mayorista123')]).id
+        preciodefaul = preciolista.search( [('name', '=', 'Mayorista')]).id
         preciodefaul = preciodefaul or False
         return preciodefaul
 

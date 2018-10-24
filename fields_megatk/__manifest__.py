@@ -9,7 +9,8 @@
        	"sale",
         "hr",
         "base_import",
-       	"purchase"
+       	"purchase",
+        "precios_megatk"
 	  ],
     "data": [
         'reports/visita_tecnica.xml',
