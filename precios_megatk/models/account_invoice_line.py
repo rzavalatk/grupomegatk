@@ -6,7 +6,7 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
-    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio", default=lambda self: self._default_preciolista_ids(),required=True)
+    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio", required=True)
         
     @api.model
     def _default_preciolista_ids(self):
@@ -22,6 +22,12 @@ class AccountInvoiceLine(models.Model):
 
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
+        preciolista = self.env['lista.precios.producto']
+        preciodefaul = preciolista.search( [('name', '=', 'Mayorista')])
+        for x in preciodefaul:
+            for y in x.product_id:
+                if y.name == self.product_id.name:
+                    self.precio_id = x.id
         if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
             if self.invoice_id.type in ('out_invoice', 'out_refund'):
             	if self.product_id:
