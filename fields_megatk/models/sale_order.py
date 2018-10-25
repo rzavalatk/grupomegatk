@@ -25,7 +25,7 @@ class Saleorder(models.Model):
     # tiempo_mantenimiento = fields.Integer("Tiempo de mantenimiento")
     # aplica_color = fields.Boolean("Apllica color")
 
-    x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días')], string='Días Válidos', default='5')
+    x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días'),('nunca','Nunca')], string='Días Válidos', default='5')
 
 class SaleorderLine(models.Model):
     _inherit = "sale.order.line"

@@ -4,6 +4,7 @@ from odoo.exceptions import UserError
 from datetime import datetime
 from odoo.exceptions import Warning
 
+
 class BanksPayment(models.Model):
     _name = "banks.payment.invoices.custom"
     _order = 'effective_date asc'

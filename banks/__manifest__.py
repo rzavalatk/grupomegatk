@@ -14,6 +14,7 @@
     'data': [
         "security/groups.xml",
         "security/ir.model.access.csv",
+        "wizard/wizard_plantilla_view.xml",
         "views/factura_proveedor.xml",
         "views/main_menu_view.xml", 
         "wizard/journal_settings_view.xml",
@@ -25,6 +26,7 @@
         "views/payment_view.xml",
         "views/account_payment_view.xml",
         "views/banks_transferences_view.xml",
+        "views/plantilla_banks_view.xml",
         "reports/cheqck_paper_format.xml", 
         "reports/check_report.xml",
         "reports/check_print.xml",

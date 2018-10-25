@@ -44,15 +44,16 @@ class Check(models.Model):
     def get_msg_number(self):
         if self.journal_id and self.state == 'draft':
             flag = False
-            for seq in self.journal_id.secuencia_ids:
-                if seq.move_type == self.doc_type:
-                    self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
-                    flag = True
-            if not flag:
-                self.msg = "No existe numeración para este banco, verifique la configuración"
-                self.number_calc = ""
-            else:
-                self.msg = ""
+            if not self.cheque_anulado:
+                for seq in self.journal_id.secuencia_ids:
+                    if seq.move_type == self.doc_type:
+                        self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
+                        flag = True
+                    if not flag:
+                        self.msg = "No existe numeración para este banco, verifique la configuración"
+                        self.number_calc = ""
+                    else:
+                        self.msg = ""
 
     def get_char_seq(self, journal_id, doc_type):
         jr = self.env["account.journal"].search([('id', '=', journal_id)])
@@ -79,6 +80,33 @@ class Check(models.Model):
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
+    plantilla_id = fields.Many2one("banks.template", "Plantilla")
+    cheque_anulado = fields.Boolean("Cheque anulado")
+
+    @api.onchange("plantilla_id")
+    def onchangeplantilla(self):
+        if self.plantilla_id:
+            self.company_id = self.plantilla_id.company_id.id
+            self.journal_id = self.plantilla_id.journal_id.id
+            self.name = self.plantilla_id.pagar_a
+            self.memo = self.plantilla_id.memo
+            self.total = self.plantilla_id.total
+            self.doc_type = self.plantilla_id.doc_type
+            self.currency_id = self.plantilla_id.currency_id.id
+            self.es_moneda_base = self.plantilla_id.es_moneda_base
+            lineas = []
+            for line in self.plantilla_id.detalle_lines:
+                lineas.append((0, 0, {
+                    'partner_id': line.partner_id.id,
+                    'account_id': line.account_id.id,
+                    'name': line.name,
+                    'amount': line.amount,
+                    'currency_id': line.currency_id.id,
+                    'analytic_id': line.analytic_id.id,
+                    'move_type': line.move_type,
+                    'check_id': self.id,
+                }))
+            self.check_lines = lineas
 
 
     @api.model
@@ -119,11 +147,18 @@ class Check(models.Model):
             else:
                 self.currency_id = self.company_id.currency_id.id
 
+
+    @api.multi
+    def set_borrador(self):
+        self.write({'state': 'draft'})
+
     @api.multi
     def action_anulate(self):
         self.write({'state': 'anulated'})
-        self.update_seq()
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        self.cheque_anulado = True
+        if not self.cheque_anulado:
+            self.update_seq()
+            self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
     @api.multi
     def action_anulate_cheque(self):
@@ -131,19 +166,23 @@ class Check(models.Model):
             move.write({'state': 'draft'})
             move.unlink()
         self.write({'state': 'anulated'})
+        self.cheque_anulado = True
 
     @api.multi
     def action_validate(self):
-        if not self.number_calc:
-            raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
+        if not self.cheque_anulado:
+            if not self.number_calc:
+                 raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
         if not self.check_lines:
             raise Warning(_("No existen detalles de movimientos a registrar"))
         if self.total < 0:
             raise Warning(_("El total debe de ser mayor que cero"))
         if not round(self.difference, 2) == 0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
+
         self.write({'state': 'validated'})
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        if not self.cheque_anulado:
+            self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
         self.update_seq()
 

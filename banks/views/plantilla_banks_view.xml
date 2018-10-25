@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+<record id="plantillas_banco_form_view" model="ir.ui.view">
+<field name="name">Plantillas de bancos</field>
+<field name="model">banks.template</field>
+<field name="arch" type="xml">
+<form string="Plantilla de bancos">
+    <sheet>
+        <group colspan="4">
+        <group cols="2">
+        <field name="company_id" widget="selection"/>
+        <field name="journal_id"/>
+        <field name="total" />
+        </group>
+        <group cols="2">
+            <field name="currency_id" options="{'no_create': True}"/>
+            <field name="doc_type" invisible="1"/>
+            <field name="es_moneda_base" invisible="1"/>
+            <field name="currency_rate"  />
+             <field name="doc_type"  />
+        </group>
+        </group>
+        <group col="2" colspan="4">
+            <group cols="2">
+                <field name="pagar_a"  />
+            </group>
+            <group cols="2">
+                <field name="memo" placeholder="Descripción de Cheque Emitido" />
+            </group>
+        </group>
+        <notebook>
+        <page string="Detalle de Transacción">
+            <field name="detalle_lines">
+                <tree editable="top">
+                   <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+                   <field name="name"/>
+                   <field name="partner_id" options="{'no_create': True}" />
+                   <field name="analytic_id" options="{'no_create': True}"/>
+                   <field name="amount"/>
+                   <field name="move_type"/>
+                </tree>
+            </field>
+        </page>
+        </notebook>
+    </sheet>
+    </form>
+    </field>
+</record>
+
+
+<record model="ir.ui.view" id="banks_template_view_tree">
+    <field name="name">Plantillas de bancos</field>
+    <field name="model">banks.template</field>
+    <field name="arch" type="xml">
+    <tree >
+         <field name="doc_type" />
+        <field name="name" />
+        <field name="pagar_a" />
+        <field name="journal_id" />
+        <field name="total" sum="total"/>
+        <field name="currency_id"/>
+         <field name="company_id"/>
+    </tree>
+    </field>
+</record>
+
+<record id="action_plantilla_bancaria" model="ir.actions.act_window">
+    <field name="name">Plantillas Bancarias</field>
+    <field name="res_model">banks.template</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click para crear un nuevo registro.
+    </p>
+    </field>
+</record>    
+
+<menuitem action="action_plantilla_bancaria" id="menu_plantillas_bancos" parent="menu_banks_gestion" sequence="800"/>
+
+
+</data>
+</odoo>
