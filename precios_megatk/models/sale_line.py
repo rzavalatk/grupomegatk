@@ -6,7 +6,7 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 class Saleline(models.Model):
     _inherit = 'sale.order.line'
 
-    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio", required=True)
+    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
    
     @api.multi
     def _prepare_invoice_line(self, qty):
