@@ -24,7 +24,7 @@ class Saleorder(models.Model):
     # inicio_proyecto = fields.Integer("Inicio de proyecto")
     # tiempo_mantenimiento = fields.Integer("Tiempo de mantenimiento")
     # aplica_color = fields.Boolean("Apllica color")
-
+    pricelist_id = fields.Many2one(copy=False)
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días'),('nunca','Nunca')], string='Días Válidos', default='5')
 
 class SaleorderLine(models.Model):

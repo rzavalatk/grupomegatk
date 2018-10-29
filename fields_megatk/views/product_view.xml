@@ -31,15 +31,23 @@
 		<field name="arch" type="xml">
 			<xpath expr="//form[@name='Product Template']/sheet[1]/notebook[1]" position="inside">
 			    <page name="x_importacion" string="Personalización">
-			      	<group name="x_datos">
-			        	<group name="x_datos_left" string="Importación">
+			      	<group name="x_datos"  string="Importación">
+			        	<group name="x_datos_left">
 			        		<field name="x_costo_real" widget="monetary"/>
 			        		<field name="x_arancel"/>
-		     	   			<field name="x_ponderacion"/>
 		     	   		</group>
-			        	<group name="x_datos_right" string="Comisiones">
-			        		<field name="x_comisiones" string=''/>
-			        	</group>
+			        	<group name="x_datos_right">
+		        			<field name="x_ponderacion"/>
+		        		</group>
+			      	</group>
+			      	<group name="x_datos1" string="Comisiones">
+			        	<group name="x_datos_left1">
+			        		<field name="x_comisiones_a"/>
+		        			<field name="x_comisiones_m"/>
+		     	   		</group>
+			        	<group name="x_datos_right1">
+		        			<field name="x_comisiones" nolabel="1"/>
+		        		</group>
 			      	</group>
 			    </page>
 			 </xpath>
@@ -55,10 +63,8 @@
 			    <tree string="lista.precios.megatk.line">
 				    <field name="id" modifiers="{&quot;readonly&quot;: true}" attrs="{}" invisible="1" readonly="1"/>
 			    	<field name="obj_padre"/>
-		      	<field name="x_descuento"/>
-		      	<field name="comision_calle"/>
-		      	<field name="comision_tienda"/>
-		      	<field name="precio_descuento"/>
+			      	<field name="x_descuento"/>
+			      	<field name="precio_descuento"/>
 			    </tree>
 			</xpath>
 		</field>

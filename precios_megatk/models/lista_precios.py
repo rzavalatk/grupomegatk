@@ -8,13 +8,13 @@ class ListaPrecios(models.Model):
     _name = "lista.precios.megatk"
     _order = 'name asc'
 
-    name = fields.Many2one("lista.precios.tipo.descuento", "Tipo de Precio", required=True)
+    name = fields.Many2one("lista.precios.tipo.descuento", "Tipo de Precio", required=True, ondelete='cascade')
     descuento = fields.Float(" Porcentaje %")
     company_id = fields.Many2one('res.company', "Empresa", default=lambda self: self.env.user.company_id, required=True)
     detalle_ids = fields.One2many("lista.precios.megatk.line", "obj_padre", "Productos")
     state = fields.Selection([('borrador', 'Borrador'), ('valida', 'Validada'), ('anulada', 'Anulada')], string='Estado', readonly=True, default='borrador')
     precio_ids = fields.One2many("lista.precios.producto", "lista_id", "Precios por productos")
-
+    
     @api.onchange("name")
     def onchangedescuento(self):
         if self.name:
@@ -60,7 +60,6 @@ class ListaPrecios(models.Model):
 
 class ListaPreciosLine(models.Model):
     _name = "lista.precios.megatk.line"
-
 
     obj_padre = fields.Many2one("lista.precios.megatk", "Precio", ondelete='cascade')
     product_id = fields.Many2one("product.product", "Producto", required=True, )
