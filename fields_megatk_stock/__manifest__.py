@@ -9,7 +9,7 @@
 	  ],
     "data": [
         "views/stock_picking_view.xml",
-        "views/product_view"
+        "views/product_view.xml"
         ],
 	"auto_install": False,
 	"installable": True,
