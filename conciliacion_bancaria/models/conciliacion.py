@@ -42,11 +42,11 @@ class ConciliacionBancaria(models.Model):
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
     difference = fields.Float(string='Diferencia', compute='_compute_rest_credit')
     mes_name = fields.Char("Mes del Año", track_visibility='onchange')
-    saldo_inicial = fields.Float("Saldo Inicial")
+    saldo_inicial = fields.Float(string="Saldo Inicial")
 
 
     @api.one
-    @api.depends('conciliacion_line.debe', 'conciliacion_line.haber', 'saldo_final')
+    @api.depends('conciliacion_line.debe', 'conciliacion_line.haber', 'saldo_final', 'saldo_inicial')
     def _compute_rest_credit(self):
         for concil in self:
             debit_line = 0
@@ -58,7 +58,13 @@ class ConciliacionBancaria(models.Model):
                     if lines.haber > 0.0:
                         credit_line += lines.haber
 
-            concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line)
+            if concil.account_id.user_type_id.name == 'Tarjeta de Crédito':
+                concil.difference = concil.saldo_inicial - (debit_line - credit_line + concil.saldo_final)
+                print("romel")
+
+            if concil.account_id.user_type_id.name != 'Tarjeta de Crédito':
+                concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line)
+                print("leonel")
 
     def action_validate(self):
         if not self.conciliacion_line:
@@ -93,7 +99,7 @@ class ConciliacionBancaria(models.Model):
     def get_movimientos(self):
         obj_move_id = self.env["account.move.line"].search([('date', '<=', self.date), ('account_id', '=', self.account_id.id), 
             ('company_id', '=', self.company_id.id), ('es_conciliado', '=', False), ('move_id.state', '=', 'posted')])
-        obj_concil_last = self.env["conicliacion.bancaria"].search([('state', '=', 'validated')],limit=1)
+        obj_concil_last = self.env["conicliacion.bancaria"].search([('state', '=', 'validated'), ('account_id','=',self.account_id.id)],limit=1)
         for cooncil in obj_concil_last:
             self.saldo_inicial = cooncil.saldo_final
 

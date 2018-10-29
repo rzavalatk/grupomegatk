@@ -55,8 +55,6 @@
             <field name="detalle_ids" attrs="{'readonly': [('state','!=','borrador')]}">
                 <tree editable="bottom" colors="red:precio_publico == 0"> 
                     <field name="product_id" domain="[('company_id', '=', parent.company_id)]"/>
-                    <field name="comision_calle"/> 
-                    <field name="comision_tienda"/> 
                     <field name="precio_publico"/>
                     <field name="precio_descuento"/> 
                 </tree>

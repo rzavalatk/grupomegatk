@@ -20,15 +20,21 @@ class Saleline(models.Model):
         if self.precio_id:
             self.price_unit = self.precio_id.precio
 
-
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
         if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
             for line in self:
                 if line.product_id:
+                    # preciolista = self.env['lista.precios.producto']
+                    # preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+                    # for x in preciodefaul:
+                    #     for y in x.name:
+                    #         if y.name == self.order_id.pricelist_id.name:
+                    #             line.precio_id = x.id
+                                    
                     if line.price_unit < line.product_id.list_price:
-                        raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio mayorista'))
+                        line.price_unit = line.product_id.list_price
                     if line.price_unit < self.precio_id.precio:
-                        raise Warning(_('No esta permitido establecer precios de ventas por debajo del precio de lista'))
+                        line.price_unit = self.precio_id.precio
 
 
