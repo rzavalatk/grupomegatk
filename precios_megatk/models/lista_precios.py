@@ -66,8 +66,6 @@ class ListaPreciosLine(models.Model):
     precio_publico = fields.Float("Precio Base", readonly=True)
     precio_descuento = fields.Float("Precio de lista", readonly=True)
     costo = fields.Float("Costo")
-    comision_calle = fields.Float("Comisión Calle", required=True)
-    comision_tienda = fields.Float("Comisión Tienda", required=True)
     x_descuento = fields.Float(related='obj_padre.descuento', string=" % ")
     @api.onchange("product_id")
     def onchangeproducto(self):
