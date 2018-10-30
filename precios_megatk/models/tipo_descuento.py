@@ -12,3 +12,4 @@ class TipoDescuento(models.Model):
     active = fields.Boolean("Activo", default=True)
     descuento = fields.Float("Margen %")
     precio = fields.Float("Precio")
+    tipo_precio = fields.Selection([('a','A'),('m','M')], string='Precio')
