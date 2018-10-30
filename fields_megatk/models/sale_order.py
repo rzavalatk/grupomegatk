@@ -26,6 +26,7 @@ class Saleorder(models.Model):
     # aplica_color = fields.Boolean("Apllica color")
     pricelist_id = fields.Many2one(copy=False)
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días'),('nunca','Nunca')], string='Días Válidos', default='5')
+    x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
 
 class SaleorderLine(models.Model):
     _inherit = "sale.order.line"

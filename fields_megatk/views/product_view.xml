@@ -84,11 +84,23 @@
 		</field>
    	</record>
 
+	<record model="ir.ui.view" id="marca_product_mega_tree_view">
+		<field name="name">marca.product.mega.tree.view</field>
+		<field name="model">product.marca</field>
+		<field name="arch" type="xml">
+			<tree decoration-danger="active==False" decoration-info="active==True">
+				<field name="name"/>
+				<field name="company_id"/>
+				<field name="active"/>
+			</tree>
+		</field>
+    </record>
+
    	<record model="ir.actions.act_window" id="action_product_template_marca">
-          <field name="name">Marca</field>
-          <field name="type">ir.actions.act_window</field>
-          <field name="res_model">product.marca</field>
-          <field name="view_mode">tree,form</field>
+      	<field name="name">Marca</field>
+      	<field name="type">ir.actions.act_window</field>
+      	<field name="res_model">product.marca</field>
+      	<field name="view_mode">tree,form</field>
     </record>
     <menuitem name="Marca" id="import_product_template_marca_mega" sequence = "2" parent="stock.menu_stock_inventory_control" action = "action_product_template_marca"/>
 	</data>	

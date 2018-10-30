@@ -13,6 +13,9 @@
 					<field name="payment_term_id" position="after">
 							<field name="x_valido"/>
 		            </field>
+					<field name="analytic_account_id" position="after">
+							<field name="x_consignacion"/>
+		            </field>
 				    <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='analytic_tag_ids']" position="attributes">
 					    <attribute name="attrs">{}</attribute>
 					    <attribute name="invisible">1</attribute>
