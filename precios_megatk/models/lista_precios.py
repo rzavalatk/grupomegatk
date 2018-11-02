@@ -67,6 +67,7 @@ class ListaPreciosLine(models.Model):
     precio_descuento = fields.Float("Precio de lista", readonly=True)
     costo = fields.Float("Costo")
     x_descuento = fields.Float(related='obj_padre.descuento', string=" % ")
+
     @api.onchange("product_id")
     def onchangeproducto(self):
         if self.product_id:
