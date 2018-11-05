@@ -62,7 +62,7 @@ class ListaPreciosLine(models.Model):
     _name = "lista.precios.megatk.line"
 
     obj_padre = fields.Many2one("lista.precios.megatk", "Precio", ondelete='cascade')
-    product_id = fields.Many2one("product.product", "Producto", required=True, )
+    product_id = fields.Many2one("product.template", "Producto", required=True, )
     precio_publico = fields.Float("Precio Base", readonly=True)
     precio_descuento = fields.Float("Precio de lista", readonly=True)
     costo = fields.Float("Costo")

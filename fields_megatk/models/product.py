@@ -19,23 +19,9 @@ class Product(models.Model):
     x_arancel = fields.Char(string='Arancel',store=True)
     x_costo_real = fields.Float(string='Costo Honduras',store=True)
     x_ponderacion = fields.Char(string='Ponderación',store=True)
-    x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id', domain=[('obj_padre.state','=','valida')])
     marca_id = fields.Many2one('product.marca', string='Marca',)
     x_comisiones_a=fields.Integer(string='Comision A',store=True)
     x_comisiones_m=fields.Integer(string='Comision M',store=True)
-
-    @api.onchange('list_price')
-    def _onchange_precio_lista(self):
-        for list_precio in self.x_comisiones:
-            list_precio.write({'precio_publico': self.list_price, 'precio_descuento': self.list_price + ((self.list_price*list_precio.x_descuento)/100)})
-
-class ProductProduct(models.Model):
-    _inherit = "product.product"
-
-    @api.onchange('lst_price')
-    def _onchange_precio_lista(self):
-        for list_precio in self.product_tmpl_id.x_comisiones:
-            list_precio.write({'precio_publico': self.lst_price, 'precio_descuento': self.lst_price + ((self.lst_price*list_precio.x_descuento)/100)})
 
 
 class ProductMarca(models.Model):
