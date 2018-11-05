@@ -6,7 +6,7 @@ class Product(models.Model):
     _inherit = "product.template"
 
     # x_comisiones = fields.One2many('lista.precios.producto', 'product_id')
-    # x_comisiones1 = fields.One2many('lista.precios.megatk.line', 'product_id')
+    x_comisiones = fields.One2many('lista.precios.megatk.line', 'product_id')
 
     @api.onchange('list_price')
     def _onchange_precio_lista(self):
