@@ -15,13 +15,14 @@
     'maintainer': '',
     'contributors': '',
     'category': 'Extra Tools',
-    'depends': ['base', 'sale', "product"],
+    'depends': ['base', 'sale', "product", "fields_megatk"],
     'data': [
         "security/groups.xml",
         'security/ir.model.access.csv',
         "wizard/import_pricelist_view.xml",
         "views/lista_precios_view.xml",
         "views/sale_descuento.xml",
+        #"views/product_view.xml",
         "views/invoice_price_list.xml",
     ],
     'demo': [

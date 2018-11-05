@@ -9,7 +9,7 @@ class Precioproducto(models.Model):
     _order = 'name asc'
 
     name = fields.Many2one("lista.precios.tipo.descuento", "Margen", required=True,)
-    product_id = fields.Many2one("product.product", "Producto", required=True)
+    product_id = fields.Many2one("product.template", "Producto", required=True)
     lista_id = fields.Many2one("lista.precios.megatk", "Lista de precios",)
     descuento = fields.Float("Margen")
     precio = fields.Float("Precio")
