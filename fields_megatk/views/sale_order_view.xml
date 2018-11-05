@@ -28,7 +28,7 @@
 				<field name="model">sale.order</field>
 				<field name="inherit_id" ref="sale.view_order_form"/>
 				<field name="arch" type="xml">
-					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='precio_id']" position="before">
+					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='discount']" position="before">
 				 		<field name="x_user_id"/>
 					</xpath>
 					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
