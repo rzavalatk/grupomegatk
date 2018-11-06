@@ -19,7 +19,7 @@ class AccountInvoiceLine(models.Model):
             for line in self:
                 if line.product_id:
                     preciolista = self.env['lista.precios.producto']
-                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
                     
                     if self.currency_id.name == 'HNL':
                         if line.price_unit < line.product_id.list_price:
@@ -34,7 +34,7 @@ class AccountInvoiceLine(models.Model):
     def create(self, values):
         line = super(AccountInvoiceLine, self).create(values)
         preciolista = self.env['lista.precios.producto']
-        preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+        preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
         for lista in preciodefaul:
             porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
             porcentaje=round(porcentaje,2)
@@ -47,7 +47,7 @@ class AccountInvoiceLine(models.Model):
         super(AccountInvoiceLine, self).write(values)
         for line in self:
             preciolista = self.env['lista.precios.producto']
-            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
             for lista in preciodefaul:
                 porcentaje = 0
                 porcentaje = (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)

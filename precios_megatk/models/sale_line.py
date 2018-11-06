@@ -8,6 +8,7 @@ class Saleline(models.Model):
 
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
     pricelist_id = fields.Many2one(related='order_id.pricelist_id', string='Field Label', )
+    nombreproducto = fields.Char(related='product_id.name')
 
     @api.multi
     def _prepare_invoice_line(self, qty):
@@ -27,7 +28,7 @@ class Saleline(models.Model):
             for line in self:
                 if line.product_id:
                     preciolista = self.env['lista.precios.producto']
-                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
                     for x in preciodefaul:
                         for y in x.name:
                             if y.name == self.order_id.pricelist_id.name:
@@ -46,7 +47,7 @@ class Saleline(models.Model):
             for line in self:
                 if line.product_id:
                     preciolista = self.env['lista.precios.producto']
-                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
                     if self.pricelist_id.currency_id.name == 'HNL':
                         if line.price_unit < line.product_id.list_price:
                             line.price_unit = line.product_id.list_price
@@ -60,7 +61,7 @@ class Saleline(models.Model):
     def create(self, values):
         line = super(Saleline, self).create(values)
         preciolista = self.env['lista.precios.producto']
-        preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+        preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
         for lista in preciodefaul:
             porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
             porcentaje=round(porcentaje,2)
@@ -73,7 +74,7 @@ class Saleline(models.Model):
         super(Saleline, self).write(values)
         for line in self:
             preciolista = self.env['lista.precios.producto']
-            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.id)])
+            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
             for lista in preciodefaul:
                 porcentaje = 0
                 porcentaje = (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
