@@ -120,7 +120,7 @@ class Debit(models.Model):
     total_debitos = fields.Float("Total débitos", compute=_compute_rest_credit)
     total_creditos = fields.Float("Total créditos", compute=_compute_rest_credit)
     plantilla_id = fields.Many2one("banks.template", "Plantilla")
-
+    namea = fields.Char("Pagar a", )
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
     @api.onchange("plantilla_id")
