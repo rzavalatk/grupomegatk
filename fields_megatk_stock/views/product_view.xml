@@ -17,7 +17,7 @@
 						      		<field name="costo"  readonly="1"/>
 						    	</group>
 						    	<group name="derc">
-						    		<field name="product_id" />
+						    		<field name="product_id" domain="[('id','=',parent.product_tmpl_id)]"/>
 						    		<field name="precio_descuento"  readonly="1"/>
 						    		<field name="x_descuento"  readonly="1"/>
 						    	</group>
@@ -48,7 +48,7 @@
 						      		<field name="costo"  readonly="1"/>
 						    	</group>
 						    	<group name="derc">
-						    		<field name="product_id" />
+						    		<field name="product_id" domain="[('id','=',parent.id)]"/>
 						    		<field name="precio_descuento"  readonly="1"/>
 						    		<field name="x_descuento"  readonly="1"/>
 						    	</group>

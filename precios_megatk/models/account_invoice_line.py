@@ -7,7 +7,8 @@ class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
-
+    nombreproducto = fields.Char(related='product_id.name')
+    
     @api.onchange("precio_id")
     def onchangedescuento(self):
         if self.precio_id:

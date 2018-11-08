@@ -70,10 +70,12 @@ class ListaPreciosLine(models.Model):
 
     @api.onchange("product_id")
     def onchangeproducto(self):
+        print('//////////////////////////////////')
+        parent_model = self.env.context.get('parent_id')  
         if self.product_id:
             self.precio_publico = self.product_id.list_price
             self.precio_descuento = self.precio_publico * (1 + (self.obj_padre.descuento / 100))
             if self.precio_descuento < self.product_id.standard_price:
                 raise Warning(_('El precio con descuento no debe de ser menor que el precio de costo del producto '))
 
-
+        
