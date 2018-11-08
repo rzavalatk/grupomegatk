@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-		<record model="ir.ui.view" id="product_product_comision_page_megatk_view_inh">
-	  		<field name="name">product.product.page.comision.campomegatk.view</field>
+		
+	   	<record model="ir.ui.view" id="product_product_comision_page_megatk_form_inh">
+	  		<field name="name">product.product.page.comision.campomegatk.form</field>
 	  		<field name="model">product.product</field>
 	  		<field name="inherit_id" ref="product.product_normal_form_view"/>
 			<field name="arch" type="xml">
-				<xpath expr="//field[@name='x_comisiones']" position="inside">
-				    <tree string="lista.precios.megatk.line">
-					    <field name="id" modifiers="{&quot;readonly&quot;: true}" attrs="{}" invisible="1" readonly="1"/>
-				    	<field name="obj_padre"/>
-				      	<field name="x_descuento"/>
-				      	<field name="precio_descuento"/>
-				    </tree>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='x_importacion']/group[@name='x_datos1']/group[2]/field[@name='x_comisiones']/tree[1]" position="after">
+				    <form>
+				      <sheet string="lista.precios.megatk.line" name="studio_sheet_f2443b">
+				        	<group name="objpa">
+						    	<group name="izq">
+						      		<field name="obj_padre" domain="[('company_id','=',parent.company_id)]"/>
+						      		<field name="precio_publico"  readonly="1"/>
+						      		<field name="costo"  readonly="1"/>
+						    	</group>
+						    	<group name="derc">
+						    		<field name="product_id" domain="[('id','=',parent.product_tmpl_id)]"/>
+						    		<field name="precio_descuento"  readonly="1"/>
+						    		<field name="x_descuento"  readonly="1"/>
+						    	</group>
+					    	</group>
+					    	<separator/>
+				      	</sheet>
+				    </form>
+				  </xpath>
+			</field>
+	   	</record>
+
+
+
+
+
+		<record model="ir.ui.view" id="product_comision_page_megatk_form_inh">
+	  		<field name="name">product.page.comision.campomegatk.form</field>
+	  		<field name="model">product.template</field>
+	  		<field name="inherit_id" ref="product.product_template_only_form_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//form[@name='Product Template']/sheet[1]/notebook[1]/page[@name='x_importacion']/group[@name='x_datos1']/group[2]/field[@name='x_comisiones']/tree[1]" position="after">
+					<form>
+					  	<sheet string="lista.precios.megatk.line" name="studio_sheet_7475c2">
+							<group name="objpa">
+						    	<group name="izq">
+						      		<field name="obj_padre" domain="[('company_id','=',parent.company_id)]"/>
+						      		<field name="precio_publico"  readonly="1"/>
+						      		<field name="costo"  readonly="1"/>
+						    	</group>
+						    	<group name="derc">
+						    		<field name="product_id" domain="[('id','=',parent.id)]"/>
+						    		<field name="precio_descuento"  readonly="1"/>
+						    		<field name="x_descuento"  readonly="1"/>
+						    	</group>
+					    	</group>
+					    	<separator/>
+					  	</sheet>
+					</form>
 				</xpath>
 			</field>
 	   	</record>
 
-	   	<record model="ir.ui.view" id="product_comision_page_megatk_view_inh">
-	  		<field name="name">product.page.comision.campomegatk.view</field>
-	  		<field name="model">product.template</field>
-	  		<field name="inherit_id" ref="product.product_template_only_form_view" />
-			<field name="arch" type="xml">
-				<xpath expr="//field[@name='x_comisiones']" position="inside">
-				    <tree string="lista.precios.megatk.line">
-					    <field name="id" modifiers="{&quot;readonly&quot;: true}" attrs="{}" invisible="1" readonly="1"/>
-				    	<field name="obj_padre"/>
-				      	<field name="x_descuento"/>
-				      	<field name="precio_descuento"/>
-				    </tree>
-				</xpath>
-			</field>
-	   	</record>
+	   
 
 	</data>	
 </odoo>

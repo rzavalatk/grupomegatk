@@ -7,7 +7,8 @@
 	<field name="inherit_id" ref="account.invoice_form"/>
 	<field name="arch" type="xml">
 		<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="before">
-	 		<field name="precio_id" domain='[("product_id","=",product_id)]' options="{'no_create': True}"/>
+	 		<field name="nombreproducto" invisible="1"/>
+	 		<field name="precio_id" domain='[("product_id.name","=",nombreproducto)]' options="{'no_create': True}"/>
 		</xpath>
   
   	</field>

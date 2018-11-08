@@ -15,7 +15,7 @@
         <button name="action_anulate_debit" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
            confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
     </header>
-    <sheet>
+    <sheet>name
         
         <h1>
             <field name="number_calc"  class="oe_inline" readonly='1'/>
@@ -38,8 +38,13 @@
                 domain="[('doc_type', '=', doc_type)]"/>
         </group>
         </group>
-        <group col="2" colspan="4">
+        <group colspan="4">
+        <group col="2">
+            <field name="namea" attrs="{'readonly': [('state','!=','draft')]}"/>
+        </group>
+        <group col="2">
             <field name="name"  attrs="{'readonly': [('state','!=','draft')]}"/>
+        </group>
         </group>
         <notebook>
         <page string="Detalle de Transacción">

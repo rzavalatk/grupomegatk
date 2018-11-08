@@ -16,7 +16,6 @@ class Saleline(models.Model):
         values['precio_id'] = self.precio_id.id
         return values
 
-
     @api.onchange("precio_id")
     def onchangedescuento(self):
         if self.precio_id:
@@ -24,13 +23,14 @@ class Saleline(models.Model):
 
     @api.onchange("product_id")
     def validatepreciocosto(self):
-        if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+        if self.env.user.email not in ('jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
             for line in self:
                 if line.product_id:
                     preciolista = self.env['lista.precios.producto']
                     preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
                     for x in preciodefaul:
                         for y in x.name:
+                            print(y.name)
                             if y.name == self.order_id.pricelist_id.name:
                                 self.precio_id = x.id
                     if self.pricelist_id.currency_id.name == 'HNL':
@@ -41,6 +41,7 @@ class Saleline(models.Model):
                                 porcentaje = round(porcentaje,2)
                                 if porcentaje >= lista.descuento:
                                     line.precio_id = lista.id
+                                    
     @api.onchange("price_unit")
     def validatepreciounit(self):
         if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
