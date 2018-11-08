@@ -16,7 +16,6 @@ class Saleline(models.Model):
         values['precio_id'] = self.precio_id.id
         return values
 
-
     @api.onchange("precio_id")
     def onchangedescuento(self):
         if self.precio_id:
@@ -42,6 +41,7 @@ class Saleline(models.Model):
                                 porcentaje = round(porcentaje,2)
                                 if porcentaje >= lista.descuento:
                                     line.precio_id = lista.id
+                                    
     @api.onchange("price_unit")
     def validatepreciounit(self):
         if self.env.user.email not in ('rzavala@megatk.com','jmadrid@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):

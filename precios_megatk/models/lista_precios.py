@@ -15,6 +15,17 @@ class ListaPrecios(models.Model):
     state = fields.Selection([('borrador', 'Borrador'), ('valida', 'Validada'), ('anulada', 'Anulada')], string='Estado', readonly=True, default='borrador')
     precio_ids = fields.One2many("lista.precios.producto", "lista_id", "Precios por productos")
     
+    def defaulprecio(self):
+        lineas = self.env['sale.order.line'].search([])
+        for line in lineas:
+            preciolista = self.env['lista.precios.producto']
+            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
+            for lista in preciodefaul:
+                porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
+                porcentaje=round(porcentaje,2)
+                if porcentaje >= lista.descuento:
+                    line.write({'precio_id': lista.id})
+
     @api.onchange("name")
     def onchangedescuento(self):
         if self.name:
@@ -70,7 +81,6 @@ class ListaPreciosLine(models.Model):
 
     @api.onchange("product_id")
     def onchangeproducto(self):
-        print('//////////////////////////////////')
         parent_model = self.env.context.get('parent_id')  
         if self.product_id:
             self.precio_publico = self.product_id.list_price
