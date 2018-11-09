@@ -26,15 +26,15 @@ class ListaPrecios(models.Model):
     #             if porcentaje >= lista.descuento:
     #                 line.write({'precio_id': lista.id})
 
-        lineas = self.env['account.invoice.line'].search([])
-        for line in lineas:
-            preciolista = self.env['lista.precios.producto']
-            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
-            for lista in preciodefaul:
-                porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
-                porcentaje=round(porcentaje,2)
-                if porcentaje >= lista.descuento:
-                    line.write({'precio_id': lista.id})
+        # lineas = self.env['account.invoice.line'].search([])
+        # for line in lineas:
+        #     preciolista = self.env['lista.precios.producto']
+        #     preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
+        #     for lista in preciodefaul:
+        #         porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
+        #         porcentaje=round(porcentaje,2)
+        #         if porcentaje >= lista.descuento:
+        #             line.write({'precio_id': lista.id})
 
 
     @api.onchange("name")
