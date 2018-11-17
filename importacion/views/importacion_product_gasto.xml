@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Form View -->
+    <record model="ir.ui.view" id="import_gasto_product_mega_form_view">
+      <field name="name">import.gasto.mega.form.view</field>
+      <field name="model">import.gasto.mega</field>
+      <field name="arch" type="xml">
+        <form string = "Form Import">
+          <sheet>
+            <tree>
+              <group name="x_datos0">
+                <group name="x_1">
+                  <field name="name"/>
+                  <field name="active"/>
+                </group>
+                <group name="x_2">
+                  <field name="tipo_gasto"/>
+                  <field name="descripcion"/>
+                </group>               
+              </group>
+            </tree>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="import_gasto_product_mega_tree_view">
+      <field name="name">import.gasto.mega.tree.view</field>
+      <field name="model">import.gasto.mega</field>
+      <field name="arch" type="xml">
+        <tree decoration-danger="active==False" decoration-info="active==True">
+          <field name="name"/>
+          <field name="active" invisible='1'/>
+          <field name="descripcion"/>
+        </tree>
+      </field>
+    </record>
+    <!-- Search View 
+    <record id="import_gasto_product_mega_search_view" model="ir.ui.view">
+        <field name="name">import.gasto.mega.search.view</field>
+        <field name="model">import.gasto.mega</field>
+        <field name="arch" type="xml">
+            <search string="Importación Search View">
+                <field name="name" string="Nombre" />
+                <field name="descripcion" string="Descripcion" />
+                <filter string="Archivado" domain="[('active','=',0)]"/>
+            </search>
+        </field>
+    </record>-->
+    <!-- Action model view -->
+    <record model="ir.actions.act_window" id="action_import_gasto_product_mega">
+      <field name="name">Gastos de Importación</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">import.gasto.mega</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Gastos de Importación" id="import_product_gasto_mega_menu_category" sequence = "2" parent="import_menu_root" action = "action_import_gasto_product_mega"/>
+    
+</data>
+</odoo>
