@@ -206,7 +206,7 @@ class LinePurchaseImport(models.Model):
 	name = fields.Char('Descripción')
 	amount = fields.Monetary('Monto', required=True,)
 	amount_hnl = fields.Float('Monto')
-	currency_id = fields.Many2one('res.currency', 'Currency', required=True, default=lambda self: self.env.user.company_id.currency_id.id)
+	currency_id = fields.Many2one('res.currency', 'Moneda', required=True, default=lambda self: self.env.user.company_id.currency_id.id)
 	porcentaje = fields.Float(string='%') 
 		
 	@api.onchange('amount','currency_id')
