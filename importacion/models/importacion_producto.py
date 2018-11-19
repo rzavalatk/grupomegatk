@@ -137,7 +137,6 @@ class ImportacionProducto(models.Model):
 				subtotal = lineas.quantity_done * lineas.price_unit
 				tax = subtotal * lineas.tax_id.amount / 100
 				total = tax + subtotal
-				print(lineas.date)
 				vals = {
 						'import_product_id': self.id,
 						'product_id': lineas.product_id.product_tmpl_id.id,

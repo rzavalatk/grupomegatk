@@ -52,38 +52,54 @@
       <field name="arch" type="xml">
         <form string = "Form Import">
           <header> 
-            <button name="back_draft" type="object" string="Volver a borrador" states="cancelado" class="oe_highlight"/>
-            <button name="cancelar_impor" type="object" string="Cancelar" states="validado" class="oe_highlight" confirm='¿Está seguro de cancelar la ponderación validada?'/>
-            <button name="validar" type="object" string="Validar" states="draft" class="oe_highlight" confirm='¿Desea validar la ponderación?'/>
+            <button name="back_draft" type="object" string="Volver a borrador" 
+              states="cancelado" class="oe_highlight"/>
+            <button name="cancelar_impor" type="object" string="Cancelar" 
+              states="validado" class="oe_highlight" confirm='¿Está seguro de cancelar la ponderación validada?'/>
+            <button name="validar" type="object" string="Validar" states="draft" 
+              class="oe_highlight" confirm='¿Desea validar la ponderación?'/>
             <field name="state" widget="statusbar" nolabel="1"/>  
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box" states="validado">
               <button class="oe_stat_button"
-                    icon="fa-strikethrough"
-                    type="action" name="%(action_product_ponderacion)d"
-                    string="ponderaciones">
+                icon="fa-strikethrough"
+                type="action" name="%(action_product_ponderacion)d"
+                string="ponderaciones">
               </button>
             </div>
               <group name="x_datos">
-                <h2> <field name="name" nolabel="1" attrs="{'invisible': [('state','in',('draft'))], 'readonly': True}"/></h2>
+                <h2> <field name="name" nolabel="1" attrs="{'invisible':
+                 [('state','in',('draft'))], 'readonly': True}"/></h2>
               </group>
-              <group name="x_datos0">
+              <group name="x_datos0" col="3">
                 <group name="x_1">
-                  <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
-                  <field name="res_parner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="stock_pick_ids" widget="many2many_tags" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done'),('picking_type_code','=','incoming')]" options="{'no_create': True}"/>
-                  <field name="currency_id" invisible='0' options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="descripcion" attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="res_parner_id" options="{'no_create': True}" attrs="{'readonly': 
+                    [('state','!=','draft')]}"/>
+                  <field name="descripcion"
+                    attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="currency_id" invisible='0' options="{'no_create': True}"
+                   attrs="{'readonly': [('state','!=','draft')]}"/>
                 </group>
                 <group name="x_2">
-                  <field name="incoterms" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="transpor_medio" attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="incoterms" 
+                    attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="transpor_medio" attrs="
+                    {'readonly': [('state','!=','draft')]}"/>
                   <field name="puerto" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="res_country" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="res_country_state" domain="[('country_id','=',res_country)]" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  
                 </group>
+                <group name="x_3">
+                  <field name="res_country" 
+                    attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="res_country_state" domain="
+                    [('country_id','=',res_country)]" attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="company_id" groups="base.group_multi_company" attrs="
+                    {'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+                </group>
+              </group>
+              <group>
+                <field name="stock_pick_ids" widget="many2many_tags" attrs="
+                    {'readonly': [('state','!=','draft')]}" domain="                    [('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done'),('picking_type_code','=','incoming')]" options="{'no_create': True}"/>
               </group>
               <group>
                 <group>
@@ -93,7 +109,8 @@
                   <field name="amount_total_gasto" />
                 </group>
               </group>
-              <field name="import_gsto_id" attrs="{'readonly': [('state','!=','draft')]}">
+              <field name="import_gsto_id" 
+                attrs="{'readonly': [('state','!=','draft')]}">
                 <tree editable="bottom">
                   <field name="gasto_id"/>
                   <field name="name"/>
@@ -111,7 +128,8 @@
                   <field name="fecha_done" invisible='1'/>
                   <field name="quantity"/>
                   <field name="price_unit"/>
-                  <field name="taxes_id" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" widget="many2many_tags"/>
+                  <field name="taxes_id" domain="[('type_tax_use','=','purchase')]"
+                    context="{'default_type_tax_use': 'purchase'}" widget="many2many_tags"/>
                   <field name="price_subtotal"/>
                   <field name="price_total" invisible='1'/>
                 </tree>
@@ -130,9 +148,9 @@
       <field name="model">import.product.mega</field>
       <field name="arch" type="xml">
         <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
-          <field name="name"/>
-          <field name="create_date"/>
-          <field name="company_id" groups="base.group_multi_company"/>
+          <field name="name" string='Nombre'/>
+          <field name="res_parner_id"/>
+          <field name="company_id" groups="base.group_multi_company" string='Compañia'/>
           <field name="state"/>
         </tree>
       </field>
@@ -144,8 +162,9 @@
         <field name="arch" type="xml">
             <search string="Importación Search View">
                 <field name="name" string="Nombre" />
+                <field name="res_parner_id"/>
                 <field name="descripcion" string="Descripcion" />
-                <filter string="Archivado" domain="[('active','=',0)]"/>
+                <filter string="Estado" domain="[('state','=','validado')]"/>
             </search>
         </field>
     </record>
@@ -156,9 +175,21 @@
       <field name="res_model">import.product.mega</field>
       <field name="view_mode">tree,form</field>
     </record>
+<!-- Reglas de registro -->
+    <record id="precio_lista_rule" model="ir.rule">
+      <field name="name">Ponderación</field>
+      <field name="model_id" ref="model_import_product_mega"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
     <!-- menu categories -->
-    <menuitem name="Importación" id="import_menu_root" sequence = "1" web_icon="importacion,static/description/icon.png"/>    
-    <menuitem name="Ponderación" id="import_product_mega_menu_category" sequence = "1" parent="import_menu_root" action = "action_import_product_mega"/>
+    <menuitem name="Importación" id="import_menu_root" sequence = "1" 
+      web_icon="importacion,static/description/icon.png"/>    
+    <menuitem name="Ponderación" id="import_product_mega_menu_category" sequence = "1"
+      parent="import_menu_root" action = "action_import_product_mega"/>
     
 
     <!-- explicit list view definition -->
