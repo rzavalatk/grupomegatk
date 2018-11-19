@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="product_ponderacion_megatk_view_inh">
+	  		<field name="name">product.ponderacion.campomegatk.view</field>
+	  		<field name="model">product.template</field>
+	  		<field name="inherit_id" ref="fields_megatk.product_page_megatk_view_inh" />
+			<field name="arch" type="xml">
+				<group name="x_datos_left" position="after">
+					<group name="x_datos_right">
+			        	<field name="x_ponderaciones" nolabel="1" colspan="3"/>
+			        </group>
+			    </group>
+			</field>
+   		</record>
+
+   		<record model="ir.ui.view" id="product_product_ponderacion_megatk_view_inh">
+	  		<field name="name">product.product.ponderacion.campomegatk.view</field>
+	  		<field name="model">product.product</field>
+	  		<field name="inherit_id" ref="product.product_normal_form_view"/>
+			<field name="inherit_id" ref="fields_megatk.product_product_page_megatk_view_inh" />
+			<field name="arch" type="xml">
+				<group name="x_datos_left" position="after">
+					<group name="x_datos_right">
+			        	<field name="x_ponderaciones" nolabel="1" colspan="3"/>
+			        </group>
+			    </group>
+			</field>
+	   	</record>
+
+	   	<record model="ir.ui.view" id="product_product_ponderacion_page_megatk_view_inh">
+  		<field name="name">product.product.page.ponderacion.campomegatk.view</field>
+  		<field name="model">product.product</field>
+  		<field name="inherit_id" ref="product.product_normal_form_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='x_ponderaciones']" position="inside">
+			    <tree string="lista.precios.megatk.line" create="0" delete="0" limit="3">
+				    <field name="ponderacion_id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+				    <field name="fecha_recepcion"/>
+			    	<field name="product_id" invisible='1'/>
+			      	<field name="ponderacion"/>
+			      	<field name="costo_real"/>
+			    </tree>
+			</xpath>
+		</field>
+   	</record>
+	<record model="ir.ui.view" id="product_ponderacion_page_megatk_view_inh">
+		<field name="name">product.page.ponderacion.campomegatk.view</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_only_form_view" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='x_ponderaciones']" position="inside">
+			    <tree string="lista.precios.megatk.line" create="0" delete="0" limit="3">
+				    <field name="ponderacion_id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+				    <field name="fecha_recepcion"/>
+			    	<field name="product_id" invisible='1'/>
+			      	<field name="ponderacion"/>
+			      	<field name="costo_real"/>
+			    </tree>
+			</xpath>
+		</field>
+   	</record>
+	</data>
+</odoo>
