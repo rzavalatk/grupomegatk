@@ -27,7 +27,7 @@
         "views/stock_picking_view.xml",
         "views/crm_lead.xml",
         "views/hr_view.xml",
-        "views/hr_employee_equipo_metas.xml",
+        #"views/hr_employee_equipo_metas.xml",
         "views/hr_employee_equipo_madrugador.xml",
        #"views/crm_lead_views.xml",
  		#'security/groups.xml',

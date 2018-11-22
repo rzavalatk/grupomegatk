@@ -64,6 +64,7 @@
 			<field name="view_mode">tree,form</field>
 	    </record>
 		
+		<menuitem name="Equipos" id="hr_employe_equipos" sequence = "4" parent="hr.menu_hr_root"/>
 		<menuitem name="Madrugador" id="hr_employe_equipo_madrugador" sequence = "2" parent="hr_employe_equipos" action = "action_emplyee_equipo_madrugador"/>
 
 	</data>	
