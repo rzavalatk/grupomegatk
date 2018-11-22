@@ -17,6 +17,7 @@ class EmpleadoMetas(models.Model):
     name = fields.Char("Equipo")
     active = fields.Boolean(string='Activo', default=True)
     employe_ids = fields.One2many('hr.employee', 'equipo_metas_id', string='Empleados',)
+    employe_jefe_id = fields.Many2one('hr.employee', string='Jefe',)
 
 class EmpleadoMetas(models.Model):
     _name = 'hr.employee.equipo.madrugador'

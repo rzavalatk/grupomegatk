@@ -9,11 +9,14 @@
 	        	<form string = "Form Import">
 	          		<sheet>
 	            		<tree>
-	              			<group name="x_datos0">
+	              			<group name="x_datos0" col="3">
 				                <group name="x_1">
-				                  	<field name="name"/>
+		              				<field name="name"/>
 				                </group>
 				                <group name="x_2">
+				                  	<field name="employe_jefe_id"/>
+				                </group>
+				                <group name="x_3">
 				                  	<field name="active"/>
 				                </group>
 	              			</group>
@@ -32,10 +35,32 @@
 	      	<field name="arch" type="xml">
 		        <tree decoration-danger="active==False" decoration-info="active==True">
 		          	<field name="name"/>
+		          	<field name="employe_jefe_id"/>
 		          	<field name="active"/>
 		        </tree>
 	      	</field>
 	    </record>
+
+		<record id="hr_kanban_view_employees_equipo_metas" model="ir.ui.view">
+	        <field name="name">hr.employee.equipo.metas.kanban</field>
+	        <field name="model">hr.employee.equipo.metas</field>
+	        <field name="arch" type="xml">
+	            <kanban class="o_hr_employee_kanban center-block">
+	                <field name="name"/>
+	                <separator/>
+	                <field name="employe_jefe_id"/>
+	                <templates>
+	                	<t t-name="kanban-box">
+                			<div style="height:100px" class="oe_kanban_global_click">
+                            	<field name="name" bold="1" display="full"/>
+                            	Responsable: <field name="employe_jefe_id"/>
+                            </div>
+	                	</t>
+	                </templates>
+	            </kanban>
+	        </field>
+    	</record>
+
 		<record model="ir.ui.view" id="hr_employee_metas_megatk_view_inh">
 			<field name="name">hr.employee.metas.campomegatk.view</field>
 			<field name="model">hr.employee.equipo.metas</field>
@@ -60,7 +85,8 @@
 			<field name="name">Metas</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">hr.employee.equipo.metas</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
 	    </record>
 
 		<menuitem name="Equipos" id="hr_employe_equipos" sequence = "4" parent="hr.menu_hr_root"/>
