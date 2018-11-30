@@ -9,7 +9,6 @@
 					<group name="active_group" position="after">
 						<group>
 							<field name="marcacion_id"/>
-							<field name="equipo_metas_id"/>
 							<field name="equipo_madrug_id"/>
 						</group>
 		      		</group>

@@ -32,7 +32,12 @@ class Product(models.Model):
                     'product_id': self.id, 
                 }
                 obj_precio.create(valores)
-        
+        if "list_price" in values:
+            porecio_product = self.env['lista.precios.producto']
+            preciodefaul = porecio_product.search( [('product_id.id', '=', self.id)])
+            for precio in preciodefaul:
+                precio_nuevo = self.list_price + (precio.descuento * self.list_price)/100
+                precio.write({'precio': precio_nuevo})
 
 
 class ProductProduct(models.Model):
@@ -53,7 +58,7 @@ class ProductProduct(models.Model):
             for lista in preciodefaul:
                 lista.unlink()
             for list_precio in self.x_comisiones:
-                list_precio.write({'precio_publico': self.list_price, 'precio_descuento': self.list_price + ((self.list_price*list_precio.x_descuento)/100)})
+                list_precio.write({'precio_publico': self.lst_price, 'precio_descuento': self.lst_price + ((self.lst_price*list_precio.x_descuento)/100)})
                 obj_precio = self.env["lista.precios.producto"]
                 valores = {
                     'name': list_precio.obj_padre.name.id,
@@ -63,3 +68,10 @@ class ProductProduct(models.Model):
                     'product_id': self.product_tmpl_id.id, 
                 }
                 obj_precio.create(valores)
+
+        if "lst_price" in values:
+            porecio_product = self.env['lista.precios.producto']
+            preciodefaul = porecio_product.search( [('product_id.id', '=', self.product_tmpl_id.id)])
+            for precio in preciodefaul:
+                precio_nuevo = self.lst_price + (precio.descuento * self.lst_price)/100
+                precio.write({'precio': precio_nuevo})

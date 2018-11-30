@@ -30,7 +30,7 @@
   		<field name="inherit_id" ref="product.product_template_only_form_view" />
 		<field name="arch" type="xml">
 			<xpath expr="//form[@name='Product Template']/sheet[1]/notebook[1]" position="inside">
-			    <page name="x_importacion" string="Personalización">
+			    <page name="x_importacion" string="Personalización" groups="stock.group_stock_user">
 			      	<group name="x_datos"  string="Importación">
 			        	<group name="x_datos_left">
 			        		<field name="x_costo_real" widget="monetary"/>
@@ -54,7 +54,7 @@
   		<field name="inherit_id" ref="product.product_normal_form_view"/>
 		<field name="arch" type="xml">
 			<xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
-			    <page name="x_importacion" string="Personalización">
+			    <page name="x_importacion" string="Personalización" groups="stock.group_stock_user">
 			      	<group name="x_datos"  string="Importación">
 			        	<group name="x_datos_left">
 			        		<field name="x_costo_real" widget="monetary"/>

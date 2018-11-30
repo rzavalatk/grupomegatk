@@ -8,7 +8,7 @@ class Saleline(models.Model):
 
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
     pricelist_id = fields.Many2one(related='order_id.pricelist_id', string='Field Label', )
-    nombreproducto = fields.Char(related='product_id.name')
+    nombreproducto = fields.Integer(related='product_id.product_tmpl_id.id')
 
     @api.multi
     def _prepare_invoice_line(self, qty):
@@ -30,7 +30,6 @@ class Saleline(models.Model):
                     preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
                     for x in preciodefaul:
                         for y in x.name:
-                            print(y.name)
                             if y.name == self.order_id.pricelist_id.name:
                                 self.precio_id = x.id
                     if self.pricelist_id.currency_id.name == 'HNL':

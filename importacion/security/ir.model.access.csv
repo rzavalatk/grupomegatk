@@ -9,3 +9,4 @@ acces_importacion.model_import_product_mega_line_gasto_manager,import.product.me
 acces_importacion.model_import_product_mega_line_gasto_user,import.product.mega.line.gasto.user,importacion.model_import_product_mega_line_gasto,stock.group_stock_user,1,0,0,0
 acces_importacion.model_product_ponderacion_manager,product.ponderacion.manager,importacion.model_product_ponderacion,stock.group_stock_manager,1,1,1,1
 acces_importacion.model_product_ponderacion_user,product.ponderacion.user,importacion.model_product_ponderacion,stock.group_stock_user,1,0,0,0
+acces_importacion.model_product_ponderacion_sale,product.ponderacion.sale,importacion.model_product_ponderacion,sales_team.group_sale_manager,1,0,0,0
