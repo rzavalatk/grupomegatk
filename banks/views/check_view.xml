@@ -11,13 +11,14 @@
         <field name="name" filter_domain="[('name', 'ilike', self)]" string="Pagado a"/>
         <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>            
         <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
-         <group expand="0" string="Group By">
-               <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
-               <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
-               <filter string="Pagado a" domain="[]" context="{'group_by':'journal_id'}"/>
-               <filter string="Referencia" domain="[]" context="{'group_by':'name'}"/>
+        <filter string="Anulado" domain="[('state','=','anulated')]"/>
+        <filter string="Validado" domain="[('state','=','validated')]"/>
+        <group expand="0" string="Group By">
+           <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
+           <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
+           <filter string="Pagado a" domain="[]" context="{'group_by':'journal_id'}"/>
+           <filter string="Referencia" domain="[]" context="{'group_by':'name'}"/>
         </group>
-        
         </search>
     </field>
 </record>
@@ -105,7 +106,7 @@
     <field name="name">Gestion de Cheques</field>
     <field name="model">banks.check</field>
     <field name="arch" type="xml">
-    <tree string="Cheques a Terceros" colors="blue:state=='draft';black:state=='validated';red:state=='anulated'" create="true" default_order="state">
+    <tree string="Cheques a Terceros" decoration-muted="state=='anulated'" decoration-info="state=='draft'" create="true" default_order="state">
 		<field name="number"/>
         <field name="name" />
         <field name="date" />

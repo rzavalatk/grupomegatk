@@ -13,7 +13,7 @@
     <field name="name">conicliacion.bancaria.line.tree</field>
     <field name="model">conicliacion.bancaria.line</field>
     <field name="arch" type="xml">
-    <tree string="Conciliaciones" create="0" delete="0">
+    <tree string="Conciliaciones" create="0" delete="0" >
        <field name="move_id" />
        <field name="name" />
        <field name="date" />
@@ -110,7 +110,7 @@
     <field name="name">conicliacion.bancaria.tree</field>
     <field name="model">conicliacion.bancaria</field>
     <field name="arch" type="xml">
-    <tree string="Conciliaciones">
+    <tree string="Conciliaciones" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
 		<field name="account_id"/>
         <field name="name" />
         <field name="date" />
@@ -120,6 +120,24 @@
         <field name="currency_id"/>
         <field name="state"/>
     </tree>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="view_banks_debit_search">
+    <field name="name">conicliacion.bancaria.search</field>
+    <field name="model">conicliacion.bancaria</field>
+    <field name="arch" type="xml">
+    <search string = 'search'>
+        <field name="name" filter_domain="[('name', 'ilike', self)]" string="Nombre"/>
+        <field name="name" filter_domain="[('account_id', 'ilike', self)]" string="Banco"/>
+        <filter string="Borrador" domain="[('state','=','draft')]"/>
+        <filter string="Validado" domain="[('state','=','validated')]"/>
+        <group expand="0" string="Group By">
+           <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
+           <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
+           <filter string="Banco" domain="[]" context="{'group_by':'account_id'}"/>
+        </group>
+        </search>
     </field>
 </record>
 
