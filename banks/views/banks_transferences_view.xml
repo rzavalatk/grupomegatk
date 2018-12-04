@@ -51,13 +51,14 @@
     <field name="name">banks.transferences.tree</field>
     <field name="model">banks.transferences</field>
     <field name="arch" type="xml">
-        <tree string="Transferencia entre bancos" >
+        <tree string="Transferencia entre bancos" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
             <field name="number"/>
             <field name="journal_id_out"/>
             <field name="journal_id_in"/>
             <field name="total"/>
             <field name="date"/>
             <field name="currency_id"/>
+            <field name="state"/>
         </tree>
     </field>
  </record>
@@ -71,6 +72,7 @@
         <field name="journal_id_out"  string="De Banco"/>
         <field name="journal_id_in"  string="A Banco"/>
         <filter string="Anulado" domain="[('state','=','anulated')]"/>
+        <filter string="Borrador" domain="[('state','=','draft')]"/>
         <filter string="Validado" domain="[('state','=','validated')]"/>
         <group expand="0" string="Group By">
            <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
