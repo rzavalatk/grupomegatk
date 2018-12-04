@@ -52,6 +52,7 @@
     <field name="model">banks.transferences</field>
     <field name="arch" type="xml">
         <tree string="Transferencia entre bancos" >
+            <field name="number"/>
             <field name="journal_id_out"/>
             <field name="journal_id_in"/>
             <field name="total"/>
@@ -60,6 +61,25 @@
         </tree>
     </field>
  </record>
+
+<record model="ir.ui.view" id="view_banks_transferences_search">
+    <field name="name">transferences.search</field>
+    <field name="model">banks.transferences</field>
+    <field name="arch" type="xml">
+    <search string = 'search'>
+        <field name="number" string="Número"/>
+        <field name="journal_id_out"  string="De Banco"/>
+        <field name="journal_id_in"  string="A Banco"/>
+        <filter string="Anulado" domain="[('state','=','anulated')]"/>
+        <filter string="Validado" domain="[('state','=','validated')]"/>
+        <group expand="0" string="Group By">
+           <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
+           <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
+           <filter string="De Banco" domain="[]" context="{'group_by':'journal_id_out'}"/>
+        </group>
+        </search>
+    </field>
+</record>
 
  <record id="action_banks_trasferences" model="ir.actions.act_window">
         <field name="name">Transferencia entre Bancos</field>
