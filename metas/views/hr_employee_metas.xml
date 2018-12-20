@@ -2,26 +2,15 @@
 <odoo>
   <data>
       <!-- Form View -->
-      <record model="ir.ui.view" id="hr_employe_metas_mega_form_view">
-          <field name="name">hr.employee.metasmega.form.view</field>
-          <field name="model">hr.employee.equipo.metas</field>
+      <record model="ir.ui.view" id="hr_employe_metas_form_view">
+          <field name="name">hr.employee.metas.form.view</field>
+          <field name="model">hr.employee.metas</field>
           <field name="arch" type="xml">
             <form string = "Form Import">
                 <sheet>
                   <tree>
                       <group name="x_datos0" col="3">
-                        <group name="x_1">
-                          <field name="name"/>
-                        </group>
-                        <group name="x_2">
-                            <field name="employe_jefe_id"/>
-                        </group>
-                        <group name="x_3">
-                            <field name="active"/>
-                        </group>
-                      </group>
-                      <group>
-                        <field name="employe_ids" widget="many2many" domain="[('equipo_metas_id', '=', False)]"/>
+                        <field name="empleado_id"/>
                       </group>
                   </tree>
                 </sheet>
@@ -29,67 +18,35 @@
           </field>
       </record>
       <!-- Tree View -->
-      <record model="ir.ui.view" id="hr_employee_metas_mega_tree_view">
+      <record model="ir.ui.view" id="hr_employee_metas_tree_view">
           <field name="name">hr.employee.metas.tree.view</field>
-          <field name="model">hr.employee.equipo.metas</field>
+          <field name="model">hr.employee.metas</field>
           <field name="arch" type="xml">
-            <tree decoration-danger="active==False" decoration-info="active==True">
-                <field name="name"/>
-                <field name="employe_jefe_id"/>
-                <field name="active"/>
+            <tree >
+                <field name="empleado_id"/>
             </tree>
           </field>
       </record>
 
-    <record id="hr_kanban_view_employees_equipo_metas" model="ir.ui.view">
-          <field name="name">hr.employee.equipo.metas.kanban</field>
-          <field name="model">hr.employee.equipo.metas</field>
+    <record id="hr_kanban_view_employees_metas" model="ir.ui.view">
+          <field name="name">hr.employee.metas.kanban</field>
+          <field name="model">hr.employee.metas</field>
           <field name="arch" type="xml">
               <kanban class="o_hr_employee_kanban center-block">
-                  <field name="name"/>
+                  <field name="empleado_id"/>
                   <separator/>
-                  <field name="employe_jefe_id"/>
+                  <field name="empleado_id"/>
                   <templates>
                     <t t-name="kanban-box">
                       <div style="height:100px" class="oe_kanban_global_click">
-                              <field name="name" bold="1" display="full"/>
-                              Responsable: <field name="employe_jefe_id"/>
+                              <field name="empleado_id" bold="1" display="full"/>
+                              Responsable: <field name="empleado_id"/>
                             </div>
                     </t>
                   </templates>
               </kanban>
           </field>
       </record>
-
-    <record model="ir.ui.view" id="hr_employee_metas_megatk_view_inh">
-      <field name="name">hr.employee.metas.campomegatk.view</field>
-      <field name="model">hr.employee.equipo.metas</field>
-      <field name="inherit_id" ref="hr_employe_metas_mega_form_view" />
-      <field name="arch" type="xml">
-        <xpath expr="//field[@name='employe_ids']" position="inside">
-          <tree string="Empleados" decoration-bf="message_needaction==True">
-            <field name="name" modifiers="{}"/>
-            <field name="work_phone" modifiers="{}" attrs="{}" invisible="1"/>
-            <field name="work_email" modifiers="{}" attrs="{}" invisible="1"/>
-            <field name="company_id" on_change="1" can_create="true" can_write="true" studio_groups="[{&quot;id&quot;: 5, &quot;name&quot;: &quot;Multicompa\u00f1\u00eda&quot;, &quot;display_name&quot;: &quot;Permisos extra / Multicompa\u00f1\u00eda&quot;}]" modifiers="{}"/>
-            <field name="department_id" on_change="1" can_create="true" can_write="true" modifiers="{}"/>
-            <field name="job_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
-            <field name="parent_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
-            <field name="coach_id" invisible="1" can_create="true" can_write="true" modifiers="{&quot;column_invisible&quot;: true}"/>
-            <field name="message_needaction" invisible="1" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
-          </tree>
-        </xpath>
-          </field>
-      </record>
-      <record model="ir.actions.act_window" id="action_emplyee_equipo_metas">
-      <field name="name">Metas</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="res_model">hr.employee.equipo.metas</field>
-      <field name="view_type">form</field>
-      <field name="view_mode">kanban,tree,form</field>
-      </record>
-
-    <menuitem name="Metas" id="hr_employe_equipo_metas" sequence = "1" parent="fields_megatk.hr_employe_equipos" action = "action_emplyee_equipo_metas"/>
 
   </data> 
 </odoo>

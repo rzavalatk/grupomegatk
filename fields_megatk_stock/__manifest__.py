@@ -11,6 +11,7 @@
     "data": [
         "views/stock_picking_view.xml"
          ,"views/product_view.xml"
+         ,"views/res_users_view.xml"
         ],
 	"auto_install": False,
 	"installable": True,

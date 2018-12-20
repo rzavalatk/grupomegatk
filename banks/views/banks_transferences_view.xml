@@ -12,6 +12,8 @@
         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
         <button name="action_anulate_debit" type="object" string="Anular Registro" 
            confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+        <button name="action_draft" type="object" string="Cambiar a Borrador" 
+           states="anulated" class="oe_highlight"/>
     </header>
     <sheet>
         <h1>

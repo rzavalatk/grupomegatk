@@ -89,7 +89,7 @@
     <field name="name">banks.debit.tree</field>
     <field name="model">banks.debit</field>
     <field name="arch" type="xml">
-    <tree string="Debits and Credits" decoration-muted="state=='anulated'" decoration-info="state=='draft'" create="true" default_order="state">
+    <tree string="Debits and Credits" decoration-muted="state=='anulated'" decoration-info="state=='draft'" create="true">
 		<field name="number"/>
         <field name="name" />
         <field name="date" />
@@ -111,6 +111,7 @@
         <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>
         <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
         <filter string="Anulado" domain="[('state','=','anulated')]"/>
+        <filter string="Borrador" domain="[('state','=','draft')]"/>
         <filter string="Validado" domain="[('state','=','validated')]"/>
         <group expand="0" string="Group By">
            <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>

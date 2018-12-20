@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="res_industry_megatk_view_inh">
+	  		<field name="name">res_industry.marcacion.campomegatk.view</field>
+	  		<field name="model">res.partner.industry</field>
+	  		<field name="inherit_id" ref="base.res_partner_industry_view_form" />
+				<field name="arch" type="xml">
+					<field name="full_name" position="after">
+						<field name="company_id"/>
+		      		</field>
+				</field>
+	   	</record>
+	   	<record id="industria_rule" model="ir.rule">
+			<field name="name">Industria</field>
+			<field name="model_id" ref="model_res_partner_industry"/>
+			<field name="perm_read" eval="True"/>
+			<field name="perm_write" eval="True"/>
+			<field name="perm_create" eval="True"/>
+			<field name="perm_unlink" eval="True"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+	</data>	
+</odoo>

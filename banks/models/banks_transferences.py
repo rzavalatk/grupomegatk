@@ -6,6 +6,7 @@ class Vittbankstransferences(models.Model):
     _rec_name = "number"
     _inherit = ['mail.thread']
     _description = "Transferencias entre Bancos"
+    _order = 'date desc'
 
     def get_sequence(self):
         if self.journal_id_out:
@@ -79,6 +80,17 @@ class Vittbankstransferences(models.Model):
                 self.currency_id = self.journal_id_out.currency_id.id
             else:
                 self.currency_id = self.company_id.currency_id.id
+
+    @api.multi
+    def action_anulate_debit(self):
+        for move in self.move_id:
+            move.write({'state': 'draft'})
+            move.unlink()
+        self.write({'state': 'anulated'})
+
+    @api.multi
+    def action_draft(self):
+        self.write({'state': 'draft'})
 
     @api.multi
     def action_validate(self):

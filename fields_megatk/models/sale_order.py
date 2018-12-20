@@ -28,6 +28,7 @@ class Saleorder(models.Model):
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
 
+
 class SaleorderLine(models.Model):
     _inherit = "sale.order.line"
 
