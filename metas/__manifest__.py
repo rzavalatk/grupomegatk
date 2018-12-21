@@ -25,7 +25,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/hr_views.xml',
-        'views/hr_employee_metas.xml',
+        'views/hr_employee_equipo_metas.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -8,3 +8,4 @@ from . import account_invoice
 from . import stock_picking
 from . import crm_lead
 from . import hr
+from . import res_parnert_industry
