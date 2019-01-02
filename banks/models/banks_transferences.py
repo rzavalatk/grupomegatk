@@ -102,31 +102,37 @@ class Vittbankstransferences(models.Model):
         self.write({'state': 'validated'})
         self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
-        self.update_seq()
+        #self.update_seq()
 
     def generate_asiento(self):
         account_move = self.env['account.move']
         lineas = []
         vals_haber = {
             'debit': 0.0,
-            'credit': self.total,
+            'credit': self.total * self.currency_rate,
             'name': self.memo,
             'account_id': self.journal_id_out.default_credit_account_id.id,
             'date': self.date,
         }
-        if self.journal_id_out.currency_id:
-            vals_haber["currency_id"] = self.currency_id.id
-            vals_haber["amount_currency"] = self.total * -1
+        if self.currency_id:
+            if not self.company_id.currency_id == self.currency_id:
+                vals_haber["currency_id"] = self.currency_id.id
+                vals_haber["amount_currency"] = self.total * -1
+            else:
+                vals_haber["amount_currency"] = 0.0
         vals_debe = {
-            'debit': self.total,
+            'debit': self.total * self.currency_rate,
             'credit': 0.0,
             'name': self.memo,
             'account_id': self.journal_id_in.default_credit_account_id.id,
             'date': self.date,
         }
-        if self.journal_id_out.currency_id:
-            vals_debe["currency_id"] = self.currency_id.id
-            vals_debe["amount_currency"] = self.total
+        if self.currency_id:
+            if not self.company_id.currency_id == self.currency_id:
+                vals_debe["currency_id"] = self.currency_id.id
+                vals_debe["amount_currency"] = self.total 
+            else:
+                vals_debe["amount_currency"] = 0.0
         lineas.append((0, 0, vals_debe))
         lineas.append((0, 0, vals_haber))
         values = {

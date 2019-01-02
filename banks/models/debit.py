@@ -170,7 +170,7 @@ class Debit(models.Model):
         self.write({'state': 'validated'})
         self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
-        self.update_seq()
+        #self.update_seq()
 
     def generate_asiento(self):
         account_move = self.env['account.move']
@@ -183,7 +183,7 @@ class Debit(models.Model):
                 'account_id': self.journal_id.default_credit_account_id.id,
                 'date': self.date,
             }
-            if self.journal_id.currency_id:
+            if self.currency_id:
                 if not self.company_id.currency_id == self.currency_id:
                     vals_haber["currency_id"] = self.currency_id.id
                     vals_haber["amount_currency"] = self.total * -1
@@ -201,7 +201,7 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_debe["currency_id"] = self.currency_id.id
                             vals_debe["amount_currency"] = line.amount
@@ -218,7 +218,7 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_credit["currency_id"] = self.currency_id.id
                             vals_credit["amount_currency"] = line.amount * -1
@@ -234,7 +234,7 @@ class Debit(models.Model):
                 'account_id': self.journal_id.default_credit_account_id.id,
                 'date': self.date,
             }
-            if self.journal_id.currency_id:
+            if self.currency_id:
                 if not self.company_id.currency_id == self.currency_id:
                     vals_credit["currency_id"] = self.currency_id.id
                     vals_credit["amount_currency"] = self.total
@@ -252,10 +252,10 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_debe["currency_id"] = self.currency_id.id
-                            vals_debe["amount_currency"] = line.amount
+                            vals_debe["amount_currency"] = line.amount * -1
                         else:
                             vals_debe["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_debe))
@@ -270,10 +270,10 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_credit["currency_id"] = self.currency_id.id
-                            vals_credit["amount_currency"] = line.amount  * -1
+                            vals_credit["amount_currency"] = line.amount 
                         else:
                             vals_credit["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_credit))
@@ -303,7 +303,7 @@ class Debit(models.Model):
     @api.multi
     def action_anulate(self):
         self.write({'state': 'anulated'})
-        self.update_seq()
+        #self.update_seq()
         self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
 
