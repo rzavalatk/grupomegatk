@@ -8,7 +8,7 @@ class Debit(models.Model):
     _name = 'banks.debit'
     _inherit = ['mail.thread']
     _description = "Management Debits"
-    _order = 'date desc'
+    _order = 'date desc, number desc'
 
     def get_sequence(self):
         if self.journal_id:
@@ -55,11 +55,7 @@ class Debit(models.Model):
         for db in deb_obj:
             db.write({'number': n})
 
-    @api.model
-    def create(self, vals):
-        vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
-        debit = super(Debit, self).create(vals)
-        return debit
+
 
     @api.multi
     def unlink(self):
@@ -113,7 +109,7 @@ class Debit(models.Model):
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     rest_credit = fields.Float('Diferencia', compute=_compute_rest_credit)
     move_id = fields.Many2one('account.move', 'Apunte Contable')
-    number = fields.Char("Número")
+    number = fields.Char("Número", copy=False)
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
     company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
@@ -168,9 +164,10 @@ class Debit(models.Model):
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
         self.write({'state': 'validated'})
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        if not self.number:
+            self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
-        self.update_seq()
+        #self.update_seq()
 
     def generate_asiento(self):
         account_move = self.env['account.move']
@@ -183,7 +180,7 @@ class Debit(models.Model):
                 'account_id': self.journal_id.default_credit_account_id.id,
                 'date': self.date,
             }
-            if self.journal_id.currency_id:
+            if self.currency_id:
                 if not self.company_id.currency_id == self.currency_id:
                     vals_haber["currency_id"] = self.currency_id.id
                     vals_haber["amount_currency"] = self.total * -1
@@ -201,7 +198,7 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_debe["currency_id"] = self.currency_id.id
                             vals_debe["amount_currency"] = line.amount
@@ -218,7 +215,7 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_credit["currency_id"] = self.currency_id.id
                             vals_credit["amount_currency"] = line.amount * -1
@@ -234,7 +231,7 @@ class Debit(models.Model):
                 'account_id': self.journal_id.default_credit_account_id.id,
                 'date': self.date,
             }
-            if self.journal_id.currency_id:
+            if self.currency_id:
                 if not self.company_id.currency_id == self.currency_id:
                     vals_credit["currency_id"] = self.currency_id.id
                     vals_credit["amount_currency"] = self.total
@@ -252,10 +249,10 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_debe["currency_id"] = self.currency_id.id
-                            vals_debe["amount_currency"] = line.amount
+                            vals_debe["amount_currency"] = line.amount * -1
                         else:
                             vals_debe["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_debe))
@@ -270,10 +267,10 @@ class Debit(models.Model):
                         'partner_id': line.partner_id.id,
                         'analytic_account_id': line.analytic_id.id,
                     }
-                    if self.journal_id.currency_id:
+                    if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
                             vals_credit["currency_id"] = self.currency_id.id
-                            vals_credit["amount_currency"] = line.amount  * -1
+                            vals_credit["amount_currency"] = line.amount 
                         else:
                             vals_credit["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_credit))
@@ -303,8 +300,8 @@ class Debit(models.Model):
     @api.multi
     def action_anulate(self):
         self.write({'state': 'anulated'})
-        self.update_seq()
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        #self.update_seq()
+        #self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
 
 class Debitline(models.Model):

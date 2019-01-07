@@ -141,6 +141,17 @@
     </field>
 </record>
 
+<!-- Reglas de registro -->
+    <record id="rule_conciliacion_bancaria" model="ir.rule">
+      <field name="name">Conciliacion</field>
+      <field name="model_id" ref="model_conicliacion_bancaria"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
 <record id="action_conicliacion_bancaria" model="ir.actions.act_window">
     <field name="name">Conciliación Bancaria</field>
     <field name="res_model">conicliacion.bancaria</field>
