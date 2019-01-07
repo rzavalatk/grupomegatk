@@ -163,14 +163,11 @@ class Debit(models.Model):
         if not round(self.rest_credit, 2) == 0.0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
-        print(self.number)
         self.write({'state': 'validated'})
         if not self.number:
-            print('212121212121212')
             self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
         #self.update_seq()
-        print(self.number)
 
     def generate_asiento(self):
         account_move = self.env['account.move']
