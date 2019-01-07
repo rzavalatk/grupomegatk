@@ -121,6 +121,16 @@
         </search>
     </field>
 </record>
+<!-- Reglas de registro -->
+    <record id="rule_banco_debitos" model="ir.rule">
+      <field name="name">Debito</field>
+      <field name="model_id" ref="model_banks_debit"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
 
 <record id="action_debit_management" model="ir.actions.act_window">
     <field name="name">Débitos Bancarios</field>

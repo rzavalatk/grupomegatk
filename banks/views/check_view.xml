@@ -119,6 +119,16 @@
     </tree>
     </field>
 </record>
+<!-- Reglas de registro -->
+    <record id="rule_banco_cheque" model="ir.rule">
+      <field name="name">Cheque</field>
+      <field name="model_id" ref="model_banks_check"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
 
 <record id="action_check" model="ir.actions.act_window">
     <field name="name">Cheques a Terceros</field>

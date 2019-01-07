@@ -8,7 +8,7 @@ class Debit(models.Model):
     _name = 'banks.debit'
     _inherit = ['mail.thread']
     _description = "Management Debits"
-    _order = 'date desc'
+    _order = 'date desc, number desc'
 
     def get_sequence(self):
         if self.journal_id:
@@ -55,11 +55,7 @@ class Debit(models.Model):
         for db in deb_obj:
             db.write({'number': n})
 
-    @api.model
-    def create(self, vals):
-        vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
-        debit = super(Debit, self).create(vals)
-        return debit
+
 
     @api.multi
     def unlink(self):
@@ -113,7 +109,7 @@ class Debit(models.Model):
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     rest_credit = fields.Float('Diferencia', compute=_compute_rest_credit)
     move_id = fields.Many2one('account.move', 'Apunte Contable')
-    number = fields.Char("Número")
+    number = fields.Char("Número", copy=False)
     doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
     company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
@@ -167,10 +163,14 @@ class Debit(models.Model):
         if not round(self.rest_credit, 2) == 0.0:
             raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
+        print(self.number)
         self.write({'state': 'validated'})
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        if not self.number:
+            print('212121212121212')
+            self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
         #self.update_seq()
+        print(self.number)
 
     def generate_asiento(self):
         account_move = self.env['account.move']
@@ -304,7 +304,7 @@ class Debit(models.Model):
     def action_anulate(self):
         self.write({'state': 'anulated'})
         #self.update_seq()
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        #self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
 
 class Debitline(models.Model):

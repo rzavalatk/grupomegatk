@@ -8,7 +8,7 @@ from odoo.exceptions import Warning
 class Check(models.Model):
     _name = 'banks.check'
     _inherit = ['mail.thread']
-    _order = 'date desc'
+    _order = 'date desc, number desc'
 
     def get_sequence(self):
         if self.journal_id:
@@ -29,6 +29,7 @@ class Check(models.Model):
                 self.es_moneda_base = True
 
     def update_seq(self):
+        print('1254546545456454532')
         deb_obj = self.env["banks.check"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
         payment_obj = self.env["banks.payment.invoices.custom"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
         n = ""
@@ -65,7 +66,7 @@ class Check(models.Model):
     date = fields.Date(string="Fecha de Cheque ", required=True, default=fields.Date.context_today)
     total = fields.Float(string='Total', required=True)
     memo = fields.Text("Descripción", required=True)
-    number = fields.Char("Número de cheque")
+    number = fields.Char("Número de cheque", copy=False)
     anulation_date = fields.Date("Fecha de Anulación")
     sequence_id = fields.Many2one("ir.sequence", "Chequera")
     currency_id = fields.Many2one('res.currency', string='Moneda')
@@ -80,8 +81,8 @@ class Check(models.Model):
     move_id = fields.Many2one('account.move', 'Apunte Contable')
     company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
-    plantilla_id = fields.Many2one("banks.template", "Plantilla")
-    cheque_anulado = fields.Boolean("Cheque anulado")
+    plantilla_id = fields.Many2one("banks.template", "Plantilla",copy=False)
+    cheque_anulado = fields.Boolean("Cheque anulado", copy=False)
 
     @api.onchange("plantilla_id")
     def onchangeplantilla(self):
@@ -157,7 +158,7 @@ class Check(models.Model):
         self.write({'state': 'anulated'})
         self.cheque_anulado = True
         if not self.cheque_anulado:
-            self.update_seq()
+            #self.update_seq()
             self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
     @api.multi
@@ -184,6 +185,8 @@ class Check(models.Model):
         if not self.cheque_anulado:
             self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
+        #self.update_seq()
+        self.cheque_anulado = False
 
     def generate_asiento(self):
         account_move = self.env['account.move']
@@ -196,7 +199,7 @@ class Check(models.Model):
             'date': self.date,
             #'company_id': self.company_id.id,
         }
-        if self.currency_id:
+        if self.journal_id.currency_id:
             if not self.company_id.currency_id == self.currency_id:
                 vals_credit["currency_id"] = self.currency_id.id
                 vals_credit["amount_currency"] = self.total * -1
@@ -214,7 +217,7 @@ class Check(models.Model):
                     'partner_id': line.partner_id.id,
                     'analytic_account_id': line.analytic_id.id,
                 }
-                if self.currency_id:
+                if self.journal_id.currency_id:
                     if not self.company_id.currency_id == self.currency_id:
                         vals_debe["currency_id"] = self.currency_id.id
                         vals_debe["amount_currency"] = self.total
@@ -231,7 +234,7 @@ class Check(models.Model):
                     'partner_id': line.partner_id.id,
                     'analytic_account_id': line.analytic_id.id,
                 }
-                if self.currency_id:
+                if self.journal_id.currency_id:
                     if not self.company_id.currency_id == self.currency_id:
                         vals_credit_line["currency_id"] = self.currency_id.id
                         vals_credit_line["amount_currency"] = self.total * -1

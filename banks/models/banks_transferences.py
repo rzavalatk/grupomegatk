@@ -6,7 +6,7 @@ class Vittbankstransferences(models.Model):
     _rec_name = "number"
     _inherit = ['mail.thread']
     _description = "Transferencias entre Bancos"
-    _order = 'date desc'
+    _order = 'date desc, number desc'
 
     def get_sequence(self):
         if self.journal_id_out:
@@ -58,7 +58,7 @@ class Vittbankstransferences(models.Model):
     currency_id = fields.Many2one("res.currency", "Moneda", default=get_currency)
     state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
-    number = fields.Char("Número")
+    number = fields.Char("Número", copy=False)
     msg = fields.Char("Error de configuración", compute=get_msg_number)
     number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
     move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
