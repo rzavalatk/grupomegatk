@@ -18,7 +18,7 @@
     <sheet>
         
         <h1>
-            <field name="number_calc"  class="oe_inline" readonly='1'/>
+            <field name="number_calc" readonly='1' attrs="{'invisible': [('state','!=','draft')]}"/>
             <field name="number" readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
         </h1>
         <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>

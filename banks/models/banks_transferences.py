@@ -24,7 +24,7 @@ class Vittbankstransferences(models.Model):
             db.write({'number': n})
 
     def get_msg_number(self):
-        if self.journal_id_out and self.state == 'draft':
+        if self.journal_id_out and self.state == 'draft' and self.number == False:
             flag = False
             for seq in self.journal_id_out.secuencia_ids:
                 if seq.move_type == 'transference_banks':
@@ -35,6 +35,8 @@ class Vittbankstransferences(models.Model):
                 self.number_calc = ""
             else:
                 self.msg = ""
+        else:
+            self.number_calc = self.number
 
     def get_currency(self):
         return self.env.user.company_id.currency_id.id
@@ -100,7 +102,8 @@ class Vittbankstransferences(models.Model):
             raise Warning(_("El total debe de ser mayor que cero"))
 
         self.write({'state': 'validated'})
-        self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
+        if not self.number:
+            self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
         #self.update_seq()
 
