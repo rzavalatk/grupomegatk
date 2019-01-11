@@ -168,6 +168,7 @@ class Debit(models.Model):
         if not self.number:
             self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
         self.write({'move_id': self.generate_asiento()})
+        #self.line_analitc()
         #self.update_seq()
         
 
@@ -286,6 +287,8 @@ class Debit(models.Model):
         }
         id_move = account_move.create(values)
         id_move.write({'name': str(self.number)})
+        id_move.line_ids.create_analytic_lines()
+        
         return id_move.id
 
     @api.multi
