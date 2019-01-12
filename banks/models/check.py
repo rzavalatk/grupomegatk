@@ -29,7 +29,6 @@ class Check(models.Model):
                 self.es_moneda_base = True
 
     def update_seq(self):
-        print('1254546545456454532')
         deb_obj = self.env["banks.check"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
         payment_obj = self.env["banks.payment.invoices.custom"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
         n = ""
@@ -251,6 +250,8 @@ class Check(models.Model):
         }
         id_move = account_move.create(values)
         id_move.write({'name': str(self.number)})
+        id_move.line_ids.create_analytic_lines()
+        
         return id_move.id
 
 
