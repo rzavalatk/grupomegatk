@@ -6,13 +6,14 @@
     "category": "Sale",
     "depends": ["base",
         "fields_megatk",
-        "precios_megatk"
+        "precios_megatk",
+        "campos_referencia"
 	  ],
     "data": [
         "views/stock_picking_view.xml"
-         ,"views/product_view.xml"
-         ,"views/res_users_view.xml"
+        ,"views/product_view.xml"
+         
         ],
-	"auto_install": False,
+	"auto_install": True,
 	"installable": True,
 }

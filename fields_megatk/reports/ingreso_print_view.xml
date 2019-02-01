@@ -5,10 +5,10 @@
       <div class="header">
           <div class="row" style="margin-top: -90px;">
               <div class="col-xs-3 mb4">
-                  <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 350px;"/>
+                  <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 250px;"/>
               </div>
           </div>
-          <div style="float: right; margin-top: -210px;">
+          <div style="float: right; margin-top: -170px;">
               <h3>Ticket # <span t-field="o.id"/></h3>                           
           </div>
       </div>

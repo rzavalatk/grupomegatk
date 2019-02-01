@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="res_users_megatk_view_inh">
+	  		<field name="name">res.users.megatk.view</field>
+	  		<field name="model">res.users</field>
+	  		<field name="inherit_id" ref="base.view_users_form" />
+				<field name="arch" type="xml">
+					<field name="partner_id" position="after">
+						<field name="tipo_vendedor"/>
+						<field name="ubicacion_vendedor" />
+						<field name="empresa_pertenece" />
+					</field>
+				</field>
+	   	</record>
+	</data>	
+</odoo>
