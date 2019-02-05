@@ -5,12 +5,15 @@ from odoo.exceptions import UserError
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
+
+
     @api.multi
     def unlink(self):
     	for x in self:
-    		x.write({'state': 'confirmed'})
-    		Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
-    		Quant.write({'quantity': x.qty_done + Quant.quantity})
+            if x.move_id.picking_type_id.code == 'outgoing':
+                x.write({'state': 'confirmed'})
+                Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
+                Quant.write({'quantity': x.qty_done + Quant.quantity})
     	return super(StockMoveLine, self).unlink()
 
 
@@ -22,14 +25,16 @@ class StockPickingLine(models.Model):
     @api.multi
     def unlink(self):
     	for x in self:
-    		x.write({'state': 'confirmed'})
+            if x.state == 'done':
+                x.write({'state': 'confirmed'})
     	return super(StockPickingLine, self).unlink()
 
     @api.multi
     def _action_cancel(self):
     	for x in self:
-    		x.write({'state': 'confirmed'})
-    		x.sale_line_id.write({'qty_delivered': 0})
+            if x.state == 'done' and x.picking_type_id.code == 'outgoing':
+                x.write({'state': 'confirmed'})
+                x.sale_line_id.write({'qty_delivered': 0})
     	return super(StockPickingLine, self)._action_cancel()
 
 class Stock(models.Model):
