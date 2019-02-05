@@ -2,10 +2,18 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    @api.multi
+    def unlink(self):
+        if self.state == 'done':
+            raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
+        return super(StockPicking, self).unlink()
+
+
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
-
-
 
     @api.multi
     def unlink(self):
@@ -21,13 +29,6 @@ class StockPickingLine(models.Model):
     _inherit = "stock.move"
 
     x_series = fields.Text(related = 'sale_line_id.x_series', string = "Series" )
-    
-    @api.multi
-    def unlink(self):
-    	for x in self:
-            if x.state == 'done':
-                x.write({'state': 'confirmed'})
-    	return super(StockPickingLine, self).unlink()
 
     @api.multi
     def _action_cancel(self):
