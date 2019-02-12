@@ -16,17 +16,7 @@ class ListaPrecios(models.Model):
     precio_ids = fields.One2many("lista.precios.producto", "lista_id", "Precios por productos")
     
     def defaulprecio(self):
-        lineas = self.env['sale.order.line'].search([])
-        for line in lineas:
-            preciolista = self.env['lista.precios.producto']
-            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
-            for lista in preciodefaul:
-                porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
-                porcentaje=round(porcentaje,2)
-                if porcentaje >= lista.descuento:
-                    line.write({'precio_id': lista.id})
-
-        lineas = self.env['account.invoice.line'].search([])
+        lineas = self.env['account.invoice.line'].search([('precio_id','=',False)])
         for line in lineas:
             preciolista = self.env['lista.precios.producto']
             preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
