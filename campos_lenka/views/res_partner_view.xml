@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_campo_financiera_view_inh">
+            <field name="name">res.campo.financiera.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page name="financiera" string="Financiera">
+                        <group name="financiera_all">
+                            <group>
+                                <field name="cedula"/>
+                            </group>
+                            <group>
+                                <field name="int_morat"/>
+                                <field name="int_corrint"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+model_id:id,group_id:id,id,name,perm_read,perm_write,perm_create,perm_unlink
+model_banks_check,banks_check_manager,access_banks_check_manager,banks.check,1,1,1,1
+model_banks_check,banks_check_user,access_banks_check_user,banks.check,1,0,0,0
+model_banks_check_line,banks_check_manager,access_banks_check_line_manager_manager,banks.check.line,1,1,1,1
+model_banks_check_line,banks_check_user,access_banks_check_line_manager_user,banks.check.line,1,1,1,1
+model_banks_debit,banks_debit_credit_manager,access_banks_banks_debit_manager,banks.debit,1,1,1,1
+model_banks_debit,banks_debit_credit_user,access_banks_banks_debit_user,banks.debit,1,0,0,0
+model_banks_debit_line,banks_debit_credit_manager,access_banks_banks_debit_manager_manager,banks.debit.line,1,1,1,1
+model_banks_debit_line,banks_debit_credit_user,access_banks_banks_debit_manager_user,banks.debit.line,1,1,1,1
+model_banks_payment_invoices_custom,banks_supplier_payment_manager,access_banks_supplier_payment_manager,banks.payment.invoices.custom,1,1,1,1
+model_banks_payment_invoices_custom,banks_supplier_payment_user,access_banks_supplier_payment_user,banks.payment.invoices.custom,1,0,0,0
+model_banks_payment_line_custom,banks_supplier_payment_manager,access_banks_supplier_payment_manager_man,banks.payment.line.custom,1,1,1,1
+model_banks_payment_line_custom,banks_supplier_payment_manager,access_banks_supplier_payment_manager_user,banks.payment.line.custom,1,1,1,1
+model_banks_template,banks_check_manager,access_banks_template_manager,banks.template,1,1,1,1
+model_banks_template,banks_check_user,access_banks_template_user,banks.template,1,0,0,0
+model_banks_template_line,banks_check_manager,access_banks_template_line_manager,banks.template.line,1,1,1,1
+model_banks_template_line,banks_check_user,access_banks_template_line_user,banks.template.line,1,0,0,0
