@@ -18,7 +18,6 @@
     'depends': ['base', 'sale', "product", "fields_megatk"],
     'data': [
         "security/groups.xml",
-        
         'security/ir.model.access.csv',
         "wizard/import_pricelist_view.xml",
         "views/lista_precios_view.xml",

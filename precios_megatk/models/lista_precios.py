@@ -3,7 +3,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
 
-
 class ListaPrecios(models.Model):
     _name = "lista.precios.megatk"
     _order = 'name asc'
@@ -25,7 +24,6 @@ class ListaPrecios(models.Model):
                 porcentaje=round(porcentaje,2)
                 if porcentaje >= lista.descuento:
                     line.write({'precio_id': lista.id})
-
 
     @api.onchange("name")
     def onchangedescuento(self):
