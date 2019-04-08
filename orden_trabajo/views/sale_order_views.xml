@@ -1,0 +1,29 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="sale_order_printex_ot_view_inh">
+      <field name="name">sale.order.printex.ot.view</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+         <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+          <page name="orden_trabajo" string="Orden de Trabajo" groups="orden_trabajo.ot_printex">
+            <group name="ot_page">
+              <group name="ot_left">
+                <field name="ot_arte"/>
+                <field name="ot_insumos"/>
+                <field name="ot_oc"/>
+                <field name="ot_cort"/>
+              </group>
+              <group name="ot_right">
+                <field name="ot_arte_impresa"/>
+                <field name="ot_ojetes"/>
+                <field name="ot_instalacion"/>
+              </group>
+            </group>
+            <field name="ot_observaciones"/>
+          </page>
+        </xpath>
+      </field>      
+    </record>
+  </data>
+</odoo>

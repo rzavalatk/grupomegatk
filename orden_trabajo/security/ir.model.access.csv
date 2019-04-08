@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_grupomegatk/fields_printex_grupomegatk/fields_printex,grupomegatk/fields_printex.grupomegatk/fields_printex,model_grupomegatk/fields_printex_grupomegatk/fields_printex,ot_printex,1,0,0,0

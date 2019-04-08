@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="external_layout_standard_ot">
+            <div class="header">
+          <div class="row" style="margin-top: -170px;">
+            <div class="col-xs-3 mb4">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 450px;"/>
+                <div style="margin-top: -150px; color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:450px;">
+                  FACTURAR A: 
+                </div>
+                <div style="width: 150px !important;">
+                  <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+                    <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+                  
+                  </div>
+                </div>
+            </div>
+            
+          </div>
+          <div style="float: right; margin-top: -300px;">
+            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
+              <span>ORDEN DE TRABAJO</span>
+            </p>
+          </div>
+          <!--
+          <div t-if="o.type == 'out_invoice' " style="float: right; margin-top: -320px;">
+            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">FACTURA COMERCIAL</p>
+            <div t-if="o.number &lt; '00030000'" style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center;">
+              <p>CAI: BC886C-A80B11-A543B7-0FB13C-090636-01</p>
+              <p>Número Inicial: 000-001-01-00020001</p>
+              <p>Número Final: 000-001-01-00030000</p>
+              <p>Fecha Limite de Emisión: 26/04/2018</p>
+            </div>
+            
+          </div>-->
+          <div style="float: right; margin-top: -250px;">
+            <div style="float: right;">
+              <table style="text-align: center; width:330px">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold;">FECHA</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold;">NÚMERO</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                   
+                   <span t-field="o.date_order" t-field-options="{&quot;format&quot;: &quot;yyyy-MM-dd&quot;}" />
+                  </td>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
+                </tr>
+              </table>
+            </div>  
+            
+            <div style="margin-top:245px;">
+              <t t-if="o.x_consignacion == 'no'">
+                <table style="text-align: center;">
+                  <tr>
+                    <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:120px;">TERMINOS</td>
+                    <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold; width:120px;">VALIDO</td>
+                    <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:120px;">VENDEDOR</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                      <span t-field="o.payment_term_id"/>
+                    </td>
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                      <span t-field="o.x_valido"/>
+                    </td>
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                      <span t-field="o.user_id"/>
+                    </td>
+                  </tr>
+                </table>
+              </t>
+            </div>
+          </div>
+            
+          </div>
+        <div class="article o_report_layout_standard">
+          <t t-raw="0"/>
+        </div>
+        </template>
+    </data>
+</odoo>

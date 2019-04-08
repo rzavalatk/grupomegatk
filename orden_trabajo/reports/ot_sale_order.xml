@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    <report
+        id="sale_orden_ot"
+        model="sale.order"
+        string="Orden de Trabajo"
+        name="orden_trabajo.orden_trabajo_print_view"
+        file="orden_trabajo.orden_trabajo_print_view"
+        report_type="qweb-pdf"
+        attachment_use="True" 
+        />
+	</data>
+</odoo>
