@@ -55,7 +55,7 @@ class LiquidacionGastos(models.Model):
     fecha_aprobacion = fields.Date("Fecha de Aprobación", readonly=True, track_visibility='onchange')
     empleado_solicitud = fields.Many2one("res.partner", "Solicitante", required=True, track_visibility='onchange')
     #line_ids = fields.One2many("stock.requisition.line", "obj_parent", "Lineas")
-    state = fields.Selection( [('draft', 'Borrador'),  ('pendiente', 'Pendiente de aprobacíón'), ('aprobado', 'Apraboda'), ('desembolso', 'Desembolsado'),
+    state = fields.Selection( [('draft', 'Borrador'),  ('pendiente', 'Pendiente de aprobacíón'), ('aprobado', 'Aprobado'), ('desembolso', 'Desembolsado'),
         ('liquidado', 'Liquidado'), ('rechazado', 'Rechazado')], string="Estado", default='draft')
     tipo_gasto = fields.Selection([('viatico', 'Viatico'), ('otro', 'Otros')], string="Tipo de gasto", required=True)
 

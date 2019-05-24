@@ -66,7 +66,8 @@
 		<field name="comentarios" placeholder="Comentarios de gastos"/>
     </sheet>
      <div class="oe_chatter">
-            <field name="message_ids" widget="mail_thread"/>
+        <field name="message_ids" widget="mail_thread"/>
+        <field name="activity_ids" widget="mail_activity"/>
     </div>
 	</form>
 	</field>
