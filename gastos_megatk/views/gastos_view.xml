@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<data>
+
+<record id="action_check_gastos_personal" model="ir.actions.act_window">
+    <field name="name">Cheques a Terceros</field>
+    <field name="res_model">banks.check</field>
+    <field name="view_mode">form</field>
+    <field name="domain">[('doc_type','=','check')]</field>
+    <field name="context">{'default_doc_type':'check', 'default_cheque_liquidacion': 1}</field>
+    <field name="view_id" ref="banks.check_form_view"/>
+    <field name="target">new</field>
+</record> 
+
+<record model="ir.ui.view" id="gastos_megatk_form_view">
+	<field name="name">gastos.megatk.form</field>
+	<field name="model">gastos.megatk</field>
+	<field name="arch" type="xml">
+	<form string="Requisicioń de Materiales">
+	<header> 
+		<button name="solicitar_aprobacion" type="object" string="Solicitar Aprobación" states="draft" class="oe_highlight"/>
+		<button name="back_draft" type="object" string="Volver a borrador" states="pendiente,rechazado" class="oe_highlight"/>
+		<button name="aprobar_gastos" type="object" string="Aprobar" states="pendiente" class="oe_highlight" 
+			groups="gastos_megatk.grupo_gastos_personal_aprobar"/>
+		<button name="rechazar_gastos" type="object" string="Rechazar" states="pendiente" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_rechazar"/>
+		<button name="liquidar_gastos" type="object" string="Liquidar Gastos" states="desembolso" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>
+		<button name="cancelar_liquidados" type="object" string="Cancelar Liquidación" states="liquidado" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>		
+		<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Crear cheque/transferencia" states="aprobado" class="oe_highlight"/>
+		<field name="state" widget="statusbar" nolabel="1"/>	
+	</header>
+	<sheet>
+	<h2>
+		<field name="name" placeholder="Descripción de gasto ..." class="oe_inline" attrs="{'readonly': [('state','!=','draft')]}"/>
+	</h2>
+	<group colspan="4">
+	<group cols="2">
+		<field name="company_id" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+		<field name="empleado_solicitud" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id', '=' , company_id), ('es_empleado', '=', True)]"/>
+		<field name="tipo_gasto" attrs="{'readonly': [('state','!=','draft')]}"/>
+		<field name="total_solicitado"/>
+		
+	</group>
+	<group cols="2">
+		<field name="fecha_inicio" attrs="{'readonly': [('state','!=','draft')]}"/>
+		<field name="fecha_final" attrs="{'readonly': [('state','!=','draft')]}"/>
+		<field name="banco_id" options="{'no_create': True}" readonly="1" domain="[('company_id', '=', company_id), ('state', '=', 'validated')]" attrs="{
+			'required': [('state', '=', 'desembolso')], 'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))]}"/>
+		<field name="monto_anticipo" attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))], 'readonly': [('state','in',('liquidado', 'desembolso'))]}"/>
+		<field name="total_gastos" attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))]}"/>
+	</group>
+	</group>
+	<notebook colspan="4">
+	<page string="Detalle de gastos">		
+		<field name="detalle_gastos_ids"  >
+			<tree string="Detalle" editable="bottom">
+				<field name="estado_parent" invisible="1"/>
+				<field name="gasto_id" attrs="{'readonly': [('estado_parent','=',True)]}"/>
+				<field name="name" attrs="{'readonly': [('estado_parent','=',True)]}"/>
+				<field name="monto" sum="Total" attrs="{'readonly': [('estado_parent','=',True)]}"/>
+				<!--<field name="comprobante"  attrs="{'readonly': [('estado_parent','=',False)]}"/>-->
+				<field name="monto_comprobante" sum="Total" attrs="{'readonly': [('estado_parent','=',False)]}"/>
+
+			</tree>
+		</field>
+	</page>	
+	<page string="Liquidación de gastos">
+	<group colspan="4">
+		<group cols="2">
+			<field name="fecha_aprobacion" attrs="{'readonly': [('state','!=','draft')],'invisible': [('state','=','draft')]}"/>
+			<field name="cuenta_anticipo_id" options="{'no_create': True}"  domain="[('company_id', '=' , company_id)]"
+				attrs="{'readonly': [('state','=','liquidado')]}"/>
+		</group>
+		<group cols="2">
+			<field name="total_diferencia" attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))]}"/>
+			<stron>
+				<p attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))]}">(+) A favor de empleado. (-) Empleado CXC.</p>
+			</stron>
+		</group>	
+	</group>
+	<separator string="Liquidación"/>
+	<group colspan="4">
+		<group cols="2">
+			<field name="activar_cuenta_cxc" invisible="1"/>
+			<field name="activar_caja" invisible="1"/>
+			<field name="activar_cuenta_gasto" invisible="1"/>
+
+			<field name="cuenta_gasto_id" options="{'no_create': True}"  domain="[('company_id', '=' , company_id)]"  
+				attrs="{'invisible': [('activar_cuenta_gasto','=', False)], 'readonly': [('state','=','liquidado')]}"/>
+			<field name="cuenta_cxc_id" domain="[('company_id', '=' , company_id)]" options="{'no_create': True}"
+				attrs="{'invisible': [('activar_cuenta_cxc','=', False)], 'readonly': [('state','=','liquidado')]}"/>
+			<field name="analytic_id"/>
+		</group>
+		<group cols="2">
+			<field name="fecha_liquidacion" attrs="{'readonly': [('state', '=', 'liquidado')]}"/>
+			<field name="journal_id" attrs="{'readonly': [('state', '=', 'liquidado')]}" options="{'no_create': True}"/>
+			<field name="cuenta_caja_id" domain="[('company_id', '=' , company_id)]" options="{'no_create': True}"
+				attrs="{'invisible': [('activar_caja','=', False)], 'readonly': [('state','=','liquidado')]}"/>
+			<field name="move_id" options="{'no_create': True}"
+				attrs="{'invisible': [('state','!=', 'liquidado')]}"/>
+		</group>	
+	</group>
+	</page>
+	</notebook>
+		<field name="comentarios" placeholder="Comentarios de gastos"/>
+    </sheet>
+     <div class="oe_chatter">
+        <field name="message_ids" widget="mail_thread"/>
+        <field name="activity_ids" widget="mail_activity"/>
+    </div>
+	</form>
+	</field>
+</record>
+ <record id="rule_gastos_megatk" model="ir.rule">
+  <field name="name">Gastos Megatk</field>
+  <field name="model_id" ref="model_gastos_megatk"/>
+  <field name="perm_read" eval="True"/>
+  <field name="perm_write" eval="True"/>
+  <field name="perm_create" eval="True"/>
+  <field name="perm_unlink" eval="True"/>
+  <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+</record>
+
+<record model="ir.ui.view" id="gastos_megatk_tree_view">
+<field name="name">gastos.megatk.tree</field>
+<field name="model">gastos.megatk</field>
+<field name="arch" type="xml">
+	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-muted="state == 'aprobado'" decoration-success="state == 'liquidado'" decoration-warning="state == 'desembolso'" decoration-danger="state == 'rechazado'">
+		<field name="company_id"/>
+		<field name="fecha_inicio" />
+		<field name="fecha_final"/>	
+		<field name="fecha_aprobacion"/>	
+		<field name="empleado_solicitud"/>
+		<field name="monto_anticipo"/>
+		<field name="state" />
+	</tree>
+</field> 
+</record>
+   <!--  Accion para Lista de Precios -->
+<record model="ir.actions.act_window" id="gastos_megatk_action">
+<field name="name">Gestión de gastos de personal</field>
+<field name="res_model">gastos.megatk</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+ <field name="context">{'default_tipo_gasto':'viatico'}</field>
+</record>
+
+<record model="ir.actions.act_window" id="gastos_megatk_liquidados_action">
+<field name="name">Gestión Liquidados</field>
+<field name="res_model">gastos.megatk</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="domain">[('state', '=', 'liquidado')]</field>
+</record>
+
+<record model="ir.actions.act_window" id="gastos_megatk_rechazado_action">
+<field name="name">Gestión Rechazados</field>
+<field name="res_model">gastos.megatk</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="domain">[('state', '=', 'rechazado')]</field>
+</record>
+   <!-- Fin de Action de Contratos -->
+     <!--  Menu Principal de contratos-->
+
+<menuitem id="menu_principal_gastos" name="Gastos" string="Gastos" web_icon="gastos_megatk,static/description/icon.png"/>
+
+<menuitem  id="submenu_gastos" name="Gastos de Personal" parent="menu_principal_gastos" sequence="1"/>
+
+<menuitem  id="menu_gestion_gastos" name="Solicitud de gastos" action="gastos_megatk_action" 
+parent="submenu_gastos"  sequence="10"/>
+
+<menuitem  id="menu_gestion_gastos_liquidados" name="Gastos liquidados" action="gastos_megatk_liquidados_action" 
+parent="submenu_gastos"  sequence="20"/>
+
+<menuitem  id="menu_gestion_gastos_rechazados" name="Gastos rechazados" action="gastos_megatk_rechazado_action" 
+parent="submenu_gastos"  sequence="30"/>
+
+
+ </data>
+</odoo>

@@ -1,0 +1,11 @@
+model_id:id,group_id:id,id,name,perm_read,perm_write,perm_create,perm_unlink
+model_gastos_megatk,grupo_gastos_personal_manager,access_gastos_megatk_manager,gastos.megatk,1,1,1,1
+model_gastos_megatk,grupo_gastos_personal_user,access_gastos_megatk_user,gastos.megatk,1,0,0,0
+model_gastos_lineas_megatk,grupo_gastos_personal_manager,access_gastos_megatk_manager_line,gastos.lineas.megatk,1,1,1,1
+model_gastos_lineas_megatk,grupo_gastos_personal_user,access_gastos_megatk_user_line,gastos.lineas.megatk,1,1,1,1
+model_gastos_megatk_conceptos,grupo_gastos_personal_manager,access_gastos_conceptos_manager,gastos.megatk.conceptos,1,1,1,1
+model_gastos_megatk_conceptos,grupo_gastos_personal_user,access_gastos_conceptos_user,gastos.megatk.conceptos,1,0,0,0
+model_gastos_tarjeta_megatk,grupo_gastos_tarjeta_manager,access_gastos_tarjeta_manager,gastos.tarjeta.megatk,1,1,1,1
+model_gastos_tarjeta_lineas_megatk,grupo_gastos_tarjeta_manager,access_gastos_tarjeta_linea_manager,gastos.tarjeta.lineas.megatk,1,1,1,1
+model_gastos_tarjeta_megatk,grupo_gastos_tarjeta_user,access_gastos_tarjeta_user,gastos.tarjeta.megatk,1,0,0,0
+model_gastos_tarjeta_lineas_megatk,grupo_gastos_tarjeta_user,access_gastos_tarjeta_linea_user,gastos.tarjeta.lineas.megatk,1,0,0,0

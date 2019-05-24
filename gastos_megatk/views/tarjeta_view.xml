@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<data>
+
+<record model="ir.ui.view" id="gastos_tarjeta_megatk_form_view">
+	<field name="name">gastos.tarjeta.megatk.form</field>
+	<field name="model">gastos.tarjeta.megatk</field>
+	<field name="arch" type="xml">
+	<form string="Requisicioń de Materiales">
+	<header> 
+		<button name="solicitar_aprobacion" type="object" string="Registrar Compra" states="draft" class="oe_highlight"/>
+		<button name="back_draft" type="object" string="Volver a borrador" states="pendiente,rechazado" class="oe_highlight"/>
+		<button name="rechazar_gastos" type="object" string="Rechazar" states="pendiente" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_rechazar"/>
+		<button name="liquidar_gastos" type="object" string="Validar" states="pendiente" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>	
+		<field name="state" widget="statusbar" nolabel="1"/>	
+	</header>
+	<sheet>
+	<h2>
+		<field name="name" placeholder="Descripción de gasto ..." class="oe_inline" attrs="{'readonly': [('state','!=','draft')]}"/>
+	</h2>
+	<group colspan="4">
+	<group cols="2">
+		<field name="company_id" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+		<field name="empleado_solicitud" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id', '=' , company_id), ('es_empleado', '=', True)]"/>
+	</group>
+	<group cols="2">
+		<field name="fecha_inicio" attrs="{'readonly': [('state','!=','draft')]}"/>
+		<field name="currency_id" />
+		<field name="currency_rate" />
+		<field name="total_gastos" />
+	</group>
+	</group>
+	<notebook colspan="4">
+	<page string="Detalle de gastos">		
+		<field name="detalle_gastos_ids"  attrs="{'readonly': [('state', '=', 'liquidado')]}">
+			<tree string="Detalle" editable="bottom">
+				<field name="account_id" options="{'no_create': True}" required="1"/>
+				<field name="name"/>
+				<field name="partner_id" domain="[('customer','=',True)]" options="{'no_create': True}" />
+				<field name="analytic_id" options="{'no_create': True}"/>
+				<field name="monto" sum="Total"/>
+			</tree>
+		</field>
+	</page>	
+	<page string="Liquidación de tarjeta">
+	<group colspan="4">
+		<group cols="2">
+			<field name="fecha_liquidacion" attrs="{'readonly': [('state','!=','draft')],'invisible': [('state','=','draft')]}"/>
+			<field name="fecha_aprobacion" attrs="{'readonly': [('state','!=','draft')],'invisible': [('state','=','draft')]}"/>
+		</group>
+		<group cols="2">
+			<field name="journal_id" options="{'no_create': True}" domain="[('company_id', '=', company_id), ('type', '=', 'bank')]" attrs="{'readonly': [('state', '=', 'liquidado')]}"/>
+		</group>	
+	</group>
+	
+	<group colspan="4">
+		<group cols="2">
+			<field name="debito_id" options="{'no_create': True}"/>
+		</group>
+		<group cols="2">
+			
+		</group>	
+	</group>
+	</page>
+	</notebook>
+		<field name="comentarios" placeholder="Comentarios de gastos"/>
+    </sheet>
+     <div class="oe_chatter">
+            <field name="message_ids" widget="mail_thread"/>
+    </div>
+	</form>
+	</field>
+</record>
+
+ <record id="rule_tarjeta_compras" model="ir.rule">
+      <field name="name">Tarjetas</field>
+      <field name="model_id" ref="model_gastos_tarjeta_megatk"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+<record model="ir.ui.view" id="gastos_tarjeta_megatk_tree_view">
+<field name="name">gastos.tarjeta.megatk.tree</field>
+<field name="model">gastos.tarjeta.megatk</field>
+<field name="arch" type="xml">
+	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-muted="state == 'aprobado'" decoration-success="state == 'liquidado'"  decoration-danger="state == 'rechazado'">
+		<field name="company_id"/>
+		<field name="fecha_inicio" />
+		<field name="fecha_aprobacion"/>	
+		<field name="empleado_solicitud"/>
+		<field name="state" />
+	</tree>
+</field> 
+</record>
+   <!--  Accion para Lista de Precios -->
+<record model="ir.actions.act_window" id="gastos_tarjeta_megatk_action">
+<field name="name">Liquidación de tarjetas</field>
+<field name="res_model">gastos.tarjeta.megatk</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+</record>
+
+   <!-- Fin de Action de Contratos -->
+     <!--  Menu Principal de contratos-->
+
+<menuitem  id="submenu_gastos_tarjeta" name="Liquidación de Tarjetas" parent="menu_principal_gastos" sequence="1"/>
+
+<menuitem  id="menu_gestion_liquidacion_tarjeta" name="Liquidación" action="gastos_tarjeta_megatk_action" 
+parent="submenu_gastos_tarjeta"  sequence="10"/>
+
+
+
+ </data>
+</odoo>

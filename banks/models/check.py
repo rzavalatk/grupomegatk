@@ -198,7 +198,7 @@ class Check(models.Model):
             'date': self.date,
             #'company_id': self.company_id.id,
         }
-        if self.journal_id.currency_id:
+        if self.currency_id:
             if not self.company_id.currency_id == self.currency_id:
                 vals_credit["currency_id"] = self.currency_id.id
                 vals_credit["amount_currency"] = self.total * -1
@@ -216,7 +216,7 @@ class Check(models.Model):
                     'partner_id': line.partner_id.id,
                     'analytic_account_id': line.analytic_id.id,
                 }
-                if self.journal_id.currency_id:
+                if self.currency_id:
                     if not self.company_id.currency_id == self.currency_id:
                         vals_debe["currency_id"] = self.currency_id.id
                         vals_debe["amount_currency"] = self.total
@@ -233,7 +233,7 @@ class Check(models.Model):
                     'partner_id': line.partner_id.id,
                     'analytic_account_id': line.analytic_id.id,
                 }
-                if self.journal_id.currency_id:
+                if self.currency_id:
                     if not self.company_id.currency_id == self.currency_id:
                         vals_credit_line["currency_id"] = self.currency_id.id
                         vals_credit_line["amount_currency"] = self.total * -1
