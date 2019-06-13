@@ -16,6 +16,7 @@ class CrmLead(models.Model):
     tipo_soporte = fields.Selection([('llamada','Llamada'),('interno','Interno'),('visita','Visita'),('taller','Taller')], string='Tipo de Soporte', default='llamada')
     estado_taller = fields.Selection([('sinrevision','Sin Revisión'),('enreparacion','En Reparación'),('diagnostico','Diagnóstico'),('pendaprov','Pend. Aprobación'),('rma','RMA'),('reparado','Reparado'),('entregado','Entregado')], string='Estado del Equipo', default='sinrevision')
     tipo_visita = fields.Selection([('cortesia','Cortesía'),('contado','Contado'),('garantia','Garantía'),('capacitacion','Capacitación'),('instalacion','Instalación')], string='Tipo de Visita')
+    tipo_venta = fields.Selection([('llamada','Llamada'),('visitac','Visita Calle'),('visitat','Visita Tienda')], string='Venta', default='llamada')
     reporto = fields.Char(string='Persona que reporto',)
     repor_tel = fields.Char(string='Telefono',)
     repor_email = fields.Char(string='Correo electrónico',)

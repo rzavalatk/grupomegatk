@@ -9,3 +9,4 @@ from . import account_payment
 from . import payment_wizard
 from . import banks_transferences
 from . import plantillas_banks
+from . import account

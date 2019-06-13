@@ -80,6 +80,7 @@ class LiquidacionGastos(models.Model):
     cuenta_cxc_id = fields.Many2one("account.account", "Cuenta por cobrar")
     cuenta_caja_id = fields.Many2one("account.account", "Cuenta de caja/bancos")
     fecha_liquidacion = fields.Date("Fecha de liquidación")
+    cotizaciones_ids = fields.Many2many(comodel_name="sale.order",relation="gastos_sale_order",column1="gastos_ids",column2="sale_order_ids",string="Cotización")
 
     @api.onchange("fecha_final")
     def onchangefechafinal(self):
@@ -255,3 +256,4 @@ class LineaGastos(models.Model):
         if self.obj_parent.state == 'pendiente' or self.obj_parent.state == 'aprobado' or self.obj_parent.state == 'desembolso' or self.obj_parent.state =='liquidado':
             raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
         return super(LineaGastos, self).unlink()
+

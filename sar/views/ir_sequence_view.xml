@@ -26,6 +26,7 @@
                             <field name="vitt_number_next_actual"/>
                         </group>
                         <group>
+                            <field name="cai"/>
                             <field name="vitt_prefix"/>
                             <field name="vitt_padding"/>
                             <spearator string="Alerts" colspan="2"/>
