@@ -10,8 +10,9 @@ class Sequence(models.Model):
 
     fiscal_sequence_regime_ids = fields.One2many("sar.fiscal.sequence.regime", "sequence_id")
     expiration_date = fields.Date('Expiration Date')
-    vitt_min_value = fields.Char('Minimal number', readonly=True)
-    vitt_max_value = fields.Char('Max number', readonly=True)
+    vitt_min_value = fields.Char('Minimal number', )
+    vitt_max_value = fields.Char('Max number', )
+    cai = fields.Char('CAI', )
     percentage_alert = fields.Float('percentage alert', default=80)
     percentage = fields.Float('percentage', compute='compute_percentage')
     vitt_prefix = fields.Char('Prefix', related='prefix')

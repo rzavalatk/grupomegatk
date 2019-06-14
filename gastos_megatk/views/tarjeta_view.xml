@@ -62,6 +62,9 @@
 		</group>	
 	</group>
 	</page>
+	<page string="Cotización">
+		<field name="cotizaciones_ids"/>
+	</page>
 	</notebook>
 		<field name="comentarios" placeholder="Comentarios de gastos"/>
     </sheet>

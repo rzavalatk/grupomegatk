@@ -50,6 +50,7 @@ class LiquidacionTarjetas(models.Model):
 
     es_moneda_base = fields.Boolean("Es moneda base")
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
+    cotizaciones_ids = fields.Many2many(comodel_name="sale.order",relation="gastos_tarjetas_sale_order",column1="tarjetas_ids",column2="sale_order_ids",string="Cotización")
 
     @api.multi
     def solicitar_aprobacion(self):

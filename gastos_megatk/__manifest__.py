@@ -9,6 +9,7 @@
         "account",
         'banks',
         "analytic",
+        "sale",
     ],
     "data": [
         "security/groups.xml",
