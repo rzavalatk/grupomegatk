@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_campany_tax_view_inh">
+            <field name="name">res.company.tax.view</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form" />
+            <field name="arch" type="xml">
+                <field name="country_id" position="after">
+                    <field name="account_sale_tax_id" string="Sale tax"/>
+                    <field name="account_purchase_tax_id" string="purchase tax"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
