@@ -192,7 +192,7 @@ class Debit(models.Model):
             for line in self.debit_line:
                 # LINEA DE DEBITO
                 if line.move_type == 'debit':
-                    vals_debe = {
+                    vals_debit = {
                         'debit': line.amount * self.currency_rate,
                         'credit': 0.0,
                         'name': line.name or self.name,
@@ -203,11 +203,11 @@ class Debit(models.Model):
                     }
                     if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
-                            vals_debe["currency_id"] = self.currency_id.id
-                            vals_debe["amount_currency"] = line.amount
+                            vals_debit["currency_id"] = self.currency_id.id
+                            vals_debit["amount_currency"] = line.amount
                         else:
-                            vals_debe["amount_currency"] = 0.0
-                    lineas.append((0, 0, vals_debe))
+                            vals_debit["amount_currency"] = 0.0
+                    lineas.append((0, 0, vals_debit))
                 if line.move_type == 'credit':
                     vals_credit = {
                         'debit': 0.0,
@@ -227,7 +227,7 @@ class Debit(models.Model):
                     lineas.append((0, 0, vals_credit))
             lineas.append((0, 0, vals_haber))
         else:
-            vals_credit = {
+            vals_debe = {
                 'debit': self.total * self.currency_rate,
                 'credit': 0.0,
                 'name': self.name,
@@ -236,13 +236,13 @@ class Debit(models.Model):
             }
             if self.currency_id:
                 if not self.company_id.currency_id == self.currency_id:
-                    vals_credit["currency_id"] = self.currency_id.id
-                    vals_credit["amount_currency"] = self.total
+                    vals_debe["currency_id"] = self.currency_id.id
+                    vals_debe["amount_currency"] = self.total
                 else:
-                    vals_credit["amount_currency"] = 0.0
+                    vals_debe["amount_currency"] = 0.0
             for line in self.debit_line:
                 if line.move_type == 'credit':
-                    vals_debe = {
+                    vals_debit = {
                         'debit': 0.0,
                         'credit': line.amount * self.currency_rate,
                         'amount_currency': 0.0,
@@ -254,11 +254,11 @@ class Debit(models.Model):
                     }
                     if self.currency_id:
                         if not self.company_id.currency_id == self.currency_id:
-                            vals_debe["currency_id"] = self.currency_id.id
-                            vals_debe["amount_currency"] = line.amount * -1
+                            vals_debit["currency_id"] = self.currency_id.id
+                            vals_debit["amount_currency"] = line.amount * -1
                         else:
-                            vals_debe["amount_currency"] = 0.0
-                    lineas.append((0, 0, vals_debe))
+                            vals_debit["amount_currency"] = 0.0
+                    lineas.append((0, 0, vals_debit))
                 if line.move_type == 'debit':
                     vals_credit = {
                         'debit': line.amount * self.currency_rate,
@@ -277,7 +277,7 @@ class Debit(models.Model):
                         else:
                             vals_credit["amount_currency"] = 0.0
                     lineas.append((0, 0, vals_credit))
-            lineas.append((0, 0, vals_credit))
+            lineas.append((0, 0, vals_debe))
         values = {
             'journal_id': self.journal_id.id,
             'date': self.date,
@@ -285,6 +285,7 @@ class Debit(models.Model):
             'line_ids': lineas,
             'state': 'posted',
         }
+        
         id_move = account_move.create(values)
         id_move.write({'name': str(self.number)})
         id_move.line_ids.create_analytic_lines()

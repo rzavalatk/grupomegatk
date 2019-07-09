@@ -75,8 +75,8 @@
                 <tree editable="top">
                    <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
                    <field name="name"/>
-                   <field name="partner_id" domain="[('customer','=',True)]" options="{'no_create': True}" />
-                   <field name="analytic_id" options="{'no_create': True}"/>
+                   <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}" />
+                   <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
                    <field name="amount"/>
                    <field name="move_type"/>
                 </tree>

@@ -48,20 +48,12 @@
         </group>
         <notebook>
         <page string="Detalle de Transacción">
-        <group colspan="4">
-        <group cols="2">
-             <field name="total_debitos"/>
-        </group>
-        <group cols="2">
-            <field name="total_creditos"/>
-        </group>
-        </group>
         <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
             <tree editable="bottom">
-               <field name="account_id" options="{'no_create': True}"/>
+               <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]" options="{'no_create': True}"/>
                <field name="name"/>
-               <field name="partner_id" domain="[('customer','=',True)]" options="{'no_create': True}"/>
-               <field name="analytic_id" options="{'no_create': True}"/>
+               <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+               <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
                <field name="amount"/>
                <field name="move_type"/>
             </tree>
