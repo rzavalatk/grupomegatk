@@ -155,19 +155,6 @@
         </tree>
       </field>
     </record>
-    <!-- Search View -->
-    <record id="import_product_mega_search_view" model="ir.ui.view">
-        <field name="name">import.product.mega.search.view</field>
-        <field name="model">import.product.mega</field>
-        <field name="arch" type="xml">
-            <search string="Importación Search View">
-                <field name="name" string="Nombre" />
-                <field name="res_parner_id"/>
-                <field name="descripcion" string="Descripcion" />
-                <filter string="Estado" domain="[('state','=','validado')]"/>
-            </search>
-        </field>
-    </record>
     <!-- Action model view -->
     <record model="ir.actions.act_window" id="action_import_product_mega">
       <field name="name">Ponderación</field>
@@ -184,6 +171,19 @@
       <field name="perm_create" eval="True"/>
       <field name="perm_unlink" eval="True"/>
       <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+    <!-- Search View -->
+    <record id="import_product_mega_search_view" model="ir.ui.view">
+        <field name="name">import.product.mega.search.view</field>
+        <field name="model">import.product.mega</field>
+        <field name="arch" type="xml">
+            <search string="Importación Search View">
+                <field name="name" string="Nombre" />
+                <field name="res_parner_id"/>
+                <field name="descripcion" string="Descripcion" />
+                <filter string="Estado" name='esato_import' domain="[('state','=','validado')]"/>
+            </search>
+        </field>
     </record>
     <!-- menu categories -->
     <menuitem name="Importación" id="import_menu_root" sequence = "1" 

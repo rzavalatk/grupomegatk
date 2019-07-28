@@ -102,13 +102,13 @@
         <field name="name" filter_domain="[('namea', 'ilike', self)]" string="Pagado a"/>
         <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>
         <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
-        <filter string="Anulado" domain="[('state','=','anulated')]"/>
-        <filter string="Borrador" domain="[('state','=','draft')]"/>
-        <filter string="Validado" domain="[('state','=','validated')]"/>
+        <filter string="Anulado" name="anulado_back" domain="[('state','=','anulated')]"/>
+        <filter string="Borrador" name="borrador_back" domain="[('state','=','draft')]"/>
+        <filter string="Validado" name="validado_back" domain="[('state','=','validated')]"/>
         <group expand="0" string="Group By">
-           <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
-           <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
-           <filter string="Banco" domain="[]" context="{'group_by':'journal_id'}"/>
+           <filter string="Mes" name="mes_back" domain="[]" context="{'group_by':'date'}"/>
+           <filter string="Estado" name="estado_back" domain="[]" context="{'group_by':'state'}"/>
+           <filter string="Banco" name="banco_back" domain="[]" context="{'group_by':'journal_id'}"/>
         </group>
         </search>
     </field>

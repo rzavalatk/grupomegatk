@@ -12,6 +12,7 @@
        	"purchase"
 	  ],
     "data": [
+        'reports/formato_papel.xml',
         'reports/visita_tecnica.xml',
         'reports/visita_print_view.xml',
         'reports/entrega_equipo_print_view.xml',

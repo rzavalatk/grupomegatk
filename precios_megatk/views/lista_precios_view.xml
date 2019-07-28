@@ -51,7 +51,6 @@
                 <button name="back_draft" type="object" string="Volver a borrador" states="valida" class="oe_highlight"/>  
                 <button name="validar_lista" type="object" string="Validar Lista de precios" states="borrador" class="oe_highlight"/>
                 <button name="defaulprecio" type="object" string="Activar cotizacion" class="oe_highlight"/>
-                <button name="%(action_lista_precios_import_megatk)d" type="action" string="Carga Archivo" states="borrador" class="oe_highlight"/>
                 <field name="state" widget="statusbar" nolabel="1"/>
             </header>  
             <sheet>

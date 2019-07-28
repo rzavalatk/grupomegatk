@@ -73,13 +73,13 @@
         <field name="number" string="Número"/>
         <field name="journal_id_out"  string="De Banco"/>
         <field name="journal_id_in"  string="A Banco"/>
-        <filter string="Anulado" domain="[('state','=','anulated')]"/>
-        <filter string="Borrador" domain="[('state','=','draft')]"/>
-        <filter string="Validado" domain="[('state','=','validated')]"/>
+        <filter string="Anulado" name="anulado_back" domain="[('state','=','anulated')]"/>
+        <filter string="Borrador"  name="borrador_back" domain="[('state','=','draft')]"/>
+        <filter string="Validado" name="validado_back" domain="[('state','=','validated')]"/>
         <group expand="0" string="Group By">
-           <filter string="Mes"  domain="[]" context="{'group_by':'date'}"/>
-           <filter string="Estado" domain="[]" context="{'group_by':'state'}"/>
-           <filter string="De Banco" domain="[]" context="{'group_by':'journal_id_out'}"/>
+           <filter string="Mes" name="mes_back" domain="[]" context="{'group_by':'date'}"/>
+           <filter string="Estado" name="estado_back" domain="[]" context="{'group_by':'state'}"/>
+           <filter string="De Banco" name="de_banco_back" domain="[]" context="{'group_by':'journal_id_out'}"/>
         </group>
         </search>
     </field>

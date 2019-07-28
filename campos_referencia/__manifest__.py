@@ -26,4 +26,7 @@
         "views/res_users_view.xml"
     ],
     # only loaded in demonstration mode
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }
