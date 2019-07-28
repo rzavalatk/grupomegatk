@@ -12,6 +12,7 @@
 				</xpath>
 			</field>
 	   	</record>
+		
 <!-- 
 	   	odoo 11
 	   	<record model="ir.ui.view" id="stock_picking_campo_megatk_stock_view_inh">
