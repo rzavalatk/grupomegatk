@@ -15,7 +15,6 @@
 		              
 		</field>
    	</record>
-	
 	<!-- odoo 11
    	<record model="ir.ui.view" id="stock_picking_campo_megatk_view_inh">
   		<field name="name">stock.picking.campomegatk.view</field>
