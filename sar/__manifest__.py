@@ -26,8 +26,6 @@
         "views/ir_sequence_view.xml",
         "views/account_invoice_view.xml",
     ],
-    'demo': [
-    ],
     'installable': True,
     'application': True,
     'auto_install': False,
