@@ -67,6 +67,7 @@ class LiquidacionGastos(models.Model):
     total_diferencia = fields.Float("Diferencia", compute=get_totalgastos, track_visibility='onchange')
     monto_anticipo = fields.Float("Monto de anticipo", track_visibility='onchange')
     banco_id = fields.Many2one("banks.check", "Cheque/Transferencia", track_visibility='onchange')
+    banco_debit_id = fields.Many2one("banks.debit", "Debito", track_visibility='onchange')
     journal_id = fields.Many2one("account.journal", "Diario", domain=[('type','=','general')])
     move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
 
@@ -93,6 +94,11 @@ class LiquidacionGastos(models.Model):
         if self.banco_id:
             self.monto_anticipo = self.banco_id.total
 
+    @api.onchange("banco_debit_id")
+    def onchangebanco(self):
+        if self.banco_debit_id:
+            self.monto_anticipo = self.banco_debit_id.total
+
     @api.multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
@@ -106,7 +112,7 @@ class LiquidacionGastos(models.Model):
     @api.multi
     def aprobar_gastos(self):
         self.write({'state': 'aprobado'})
-        self.fecha_aprobacion = datetime.now()
+        self.fecha_aprobacion = datetime.now().date()
 
 
     @api.multi
@@ -227,7 +233,7 @@ class LiquidacionGastos(models.Model):
 
     @api.multi
     def desembolsar_gasto(self):
-        if not self.banco_id:
+        if not self.banco_id or self.banco_debit_id:
             raise Warning(_('No se ha asignado cheque o transferencia a esta solicitud de gastos'))
         for line in self.detalle_gastos_ids:
             line.estado_parent = True

@@ -24,7 +24,8 @@
         <field name="fecha"/>
         <field name="doc_type"/>
         <field name="currency_id"/>
-        <field name="currency_rate"/>
+        <field name="es_moneda_base" invisible="1"/>
+        <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
     </group>
 </group>
 <footer>
@@ -40,8 +41,8 @@
         <field name="name">Crear anticipo</field>
         <field name="res_model">gastos.megatk.wizard.cheque</field>
         <field name="view_mode">form</field>
-         <field name="view_id" ref="gastos_megatk_wizard_cheque_view_form"/>
-         <field name="target">new</field>
+        <field name="view_id" ref="gastos_megatk_wizard_cheque_view_form"/>
+        <field name="target">new</field>
 </record>
 
 </data>
