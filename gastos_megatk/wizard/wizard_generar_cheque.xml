@@ -9,7 +9,7 @@
 <field name="arch" type="xml">
 <form string="Transaction Type">
 <sheet>
-<separator string="Generar Cheque/Transferencia"/>
+<separator string="Crear Desembolso"/>
 <group  colspan="4">
     <group >
         <field name="company_id" options="{'no_create': True}"/>

@@ -25,7 +25,7 @@
 		<button name="rechazar_gastos" type="object" string="Rechazar" states="pendiente" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_rechazar"/>
 		<button name="liquidar_gastos" type="object" string="Liquidar Gastos" states="desembolso" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>
 		<button name="cancelar_liquidados" type="object" string="Cancelar Liquidación" states="liquidado" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>		
-		<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Crear cheque/transferencia" states="aprobado" class="oe_highlight"/>
+		<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Desembolso" states="aprobado" class="oe_highlight"/>
 		<field name="state" widget="statusbar" nolabel="1"/>	
 	</header>
 	<sheet>
