@@ -2,7 +2,7 @@
 {
     "name": "Modulo de campos personalizados Stock",
     "author": "Romel Zavala",
-    "description": "Campos megatk ",
+    "description": "Campos megatk, no facturar cero ni negativos(Cotización, Facturación)",
     "category": "Sale",
     "depends": ["base",
         "fields_megatk",
@@ -17,3 +17,5 @@
 	"auto_install": True,
 	"installable": True,
 }
+
+
