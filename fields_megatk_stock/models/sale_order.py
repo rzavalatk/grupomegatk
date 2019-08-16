@@ -22,24 +22,25 @@ class SaleOrder(models.Model):
 
 	@api.multi
 	def action_confirm(self):
-		if self.env.user.email not in ('kromero@megatk.com','fvasquez@megatk.com','msauceda@megatk.com'):
-			message=''
-			for line in self.order_line:
-				if line.product_id.type == 'product':
-					stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.warehouse_id.lot_stock_id.id)])
-					if stock_quant:
-						if stock_quant.quantity < line.product_uom_qty:
-							if stock_quant.quantity > 0:
-								message +=  _('\nPlanea vender %s Unidad(es) de %s pero solo tiene %s Unidad(es) disponible(s) en el almacén %s.') % \
-	                            	(line.product_uom_qty, line.product_id.name, stock_quant.quantity, self.warehouse_id.name)
-							if stock_quant.quantity <= 0:
-								message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-	                            	(line.product_uom_qty, line.product_id.name, self.warehouse_id.name)
-					else:
-						message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-	                            (line.product_uom_qty, line.product_id.name, self.warehouse_id.name)
-			if message != '':
-				raise UserError(_(message))
+		if self.env.user.company_id.id != 10:
+			if self.env.user.email not in ('kromero@megatk.com','fvasquez@megatk.com','msauceda@megatk.com'):
+				message=''
+				for line in self.order_line:
+					if line.product_id.type == 'product':
+						stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.warehouse_id.lot_stock_id.id)])
+						if stock_quant:
+							if stock_quant.quantity < line.product_uom_qty:
+								if stock_quant.quantity > 0:
+									message +=  _('\nPlanea vender %s Unidad(es) de %s pero solo tiene %s Unidad(es) disponible(s) en el almacén %s.') % \
+		                            	(line.product_uom_qty, line.product_id.name, stock_quant.quantity, self.warehouse_id.name)
+								if stock_quant.quantity <= 0:
+									message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
+		                            	(line.product_uom_qty, line.product_id.name, self.warehouse_id.name)
+						else:
+							message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
+		                            (line.product_uom_qty, line.product_id.name, self.warehouse_id.name)
+				if message != '':
+					raise UserError(_(message))
 
 		return super(SaleOrder, self).action_confirm()
 
