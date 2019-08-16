@@ -11,6 +11,28 @@ class StockPicking(models.Model):
             raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
         return super(StockPicking, self).unlink()
 
+    @api.multi
+    def button_validate(self):
+        message=''
+        if self.picking_type_id.code == 'internal':
+            for move in self.move_lines:
+                for line in move.move_line_ids:
+                    stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.location_id.id)])
+                    if stock_quant:
+                        if stock_quant.quantity < line.qty_done:
+                            if stock_quant.quantity > 0:
+                                message +=  _('\nPlanea vender %s Unidad(es) de %s pero solo tiene %s Unidad(es) disponible(s) en el almacén %s.') % \
+                                    (line.qty_done, line.product_id.name, stock_quant.quantity, self.location_id.name)
+                            if stock_quant.quantity <= 0:
+                                message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
+                                    (line.qty_done, line.product_id.name, self.location_id.name)
+                    else:
+                        message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
+                                (line.qty_done, line.product_id.name, self.location_id.name)
+            if message != '':
+                raise UserError(_(message))
+        return super(StockPicking, self).button_validate()
+
 
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
