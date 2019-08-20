@@ -7,8 +7,7 @@
         string="Movimiento sin conicliacion"
         name="conciliacion_bancaria.unconciliacion_print_view"
         file="conciliacion_bancaria.unconciliacion_print_view"
-        report_type="qweb-pdf" 
-        paperformat="fields_megatk.report_paperformat_8_0f21f71b" />
+        report_type="qweb-pdf"  />
 </data>
 </odoo>
 
