@@ -14,7 +14,7 @@ class AccountInvoice(models.Model):
 	@api.model
 	def create(self,values):
 		account = self.env['account.account'].browse(values['account_id'])
-		if (account.user_type_id.id == 16 or account.user_type_id.id == 17) and self.env.user.id!=1:
+		if account.user_type_id.id == 16 or account.user_type_id.id == 17:
 			if not 'analytic_account_id' in values:
 				values['analytic_account_id']=account.analytic_id.id
 			if not values['analytic_account_id']:
