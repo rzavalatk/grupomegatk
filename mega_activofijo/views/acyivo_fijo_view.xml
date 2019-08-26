@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="mega_activo_fijo_form_view">
+      <field name="name">megatk.activo.fijo</field>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+      <field name="arch" type="xml">
+        <field name="date" position="after">
+          <field name="employee_id"/>
+          <field name="departamento"/>
+        </field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="mega_activo_fijo_tree_view">
+      <field name="name">megatk.activo.fijo.tree</field>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_purchase_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='date']" position="after">
+          <field name="employee_id"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="mega_activo_fijo_info_view">
+      <field name="name">megatk.activo.fijo.info</field>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+          <page name="info_adicional" string="Información Adicional">
+            <group name="info">
+              <group name="info_left">
+                <field name="marca"/>
+                <field name="modelo"/>
+                <field name="serie"/>
+              </group>
+              <group name="info_right">
+                <field name="descripcion"/>
+              </group>
+            </group>
+          </page>
+        </xpath>
+      </field>
+    </record>   
+
+  </data>
+</odoo>
