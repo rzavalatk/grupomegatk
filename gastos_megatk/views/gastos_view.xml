@@ -43,8 +43,8 @@
 	<group cols="2">
 		<field name="fecha_inicio" attrs="{'readonly': [('state','!=','draft')]}"/>
 		<field name="fecha_final" attrs="{'readonly': [('state','!=','draft')]}"/>
-		<field name="banco_id" options="{'no_create': True}" readonly="1" domain="[('company_id', '=', company_id), ('state', '=', 'validated')]" attrs='{"invisible": ["|",["state","in",["draft","pendiente","rechazado"]],["banco_debit_id","!=",False]], "required": ["&amp;",["state","=","desembolso"],["banco_debit_id","=",False]]}'/>
-		<field name="banco_debit_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": ["|",["state","in",["draft","pendiente","rechazado"]],["banco_id","!=",False]], "required": ["&amp;",["state","=","desembolso"],["banco_id","=",False]]}'/>
+		<field name="banco_id" options="{'no_create': True}" readonly="1" domain="[('company_id', '=', company_id), ('state', '=', 'validated')]" attrs='{"invisible": ["|",["state","in",["draft","pendiente","rechazado"]],["banco_debit_id","!=",False]], "required": [["state","=","desembolso"]]}'/>
+		<field name="banco_debit_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": ["|",["state","in",["draft","pendiente","rechazado"]],["banco_id","!=",False]], "required": [["state","=","desembolso"]]}'/>
 		<field name="monto_anticipo" attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))], 'readonly': [('state','in',('liquidado', 'desembolso'))]}"/>
 		<field name="total_gastos" attrs="{'invisible': [('state','in',('draft', 'pendiente', 'rechazado'))]}"/>
 	</group>
