@@ -14,6 +14,7 @@
         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
         <button name="action_anulate_debit" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
            confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+        <button name="prueba" type="object" string="prueba" class="oe_highlight"/>
     </header>
     <sheet>
         

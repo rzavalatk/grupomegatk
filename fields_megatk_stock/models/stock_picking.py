@@ -33,7 +33,6 @@ class StockPicking(models.Model):
                 raise UserError(_(message))
         return super(StockPicking, self).button_validate()
 
-
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
