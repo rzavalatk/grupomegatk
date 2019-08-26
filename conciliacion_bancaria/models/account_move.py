@@ -18,5 +18,5 @@ class AccountMove(models.Model):
     @api.multi
     def unlink(self):
     	if self.es_conciliado:
-    		raise Warning(_('Desconciliar la concilacion %s') % (self.conciliacion_id.name))
+    		raise Warning(_('Desconciliar la concilacion: %s') % (self.conciliacion_id.name))
     
