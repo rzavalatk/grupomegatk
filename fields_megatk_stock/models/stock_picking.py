@@ -14,7 +14,7 @@ class StockPicking(models.Model):
     @api.multi
     def button_validate(self):
         message=''
-        if self.picking_type_id.code == 'internal':
+        if self.picking_type_id.code == 'internal' or self.picking_type_id.code == 'outgoing':
             for move in self.move_lines:
                 for line in move.move_line_ids:
                     stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.location_id.id)])
