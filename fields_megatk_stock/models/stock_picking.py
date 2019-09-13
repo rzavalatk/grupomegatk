@@ -42,7 +42,18 @@ class StockMoveLine(models.Model):
             if x.move_id.picking_type_id.code == 'outgoing':
                 x.write({'state': 'confirmed'})
                 Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
-                Quant.write({'quantity': x.qty_done + Quant.quantity})
+                if Quant:
+                    Quant.write({'quantity': x.qty_done + Quant.quantity})
+                else:
+                    valores = {
+                        'product_id': x.product_id.id,
+                        'product_tmpl_id': x.product_id.product_tmpl_id.id,
+                        'location_id': x.location_id.id,
+                        'quantity': x.qty_done,
+                        'reserved_quantity': 0,
+                        'company_id': self.env.user.company_id.id,
+                        }
+                    Quant.create(valores)
     	return super(StockMoveLine, self).unlink()
 
 
