@@ -46,6 +46,9 @@
 					<attribute name="confirm">¿Está seguro de cancelar la transferencia validada?
 					</attribute>
 				</button>
+				<field name="has_packages" position="before">
+					<button name="button_borrador" attrs="{'invisible': [('state', 'in', ('cancel','done','draft'))]}" string="Borrador" type="object"  groups="base.group_user"/>
+				</field>
 			</field>
 	   	</record>
 	</data>	
