@@ -7,10 +7,14 @@
 	  		<field name="inherit_id" ref="base.view_users_form" />
 			<field name="arch" type="xml">
 				<field name="company_id" position="after">
-					<group name="studio_group_0IoKR">
-						<field name="tipo_vendedor"/>
-						<field name="ubicacion_vendedor" />
-						<field name="empresa_pertenece" />
+					<group>
+						<group name="studio_group_0IoKR">
+							<field name="tipo_vendedor"/>
+							<field name="ubicacion_vendedor" />
+						</group>
+						<group name="studio_group_DR">
+							<field name="empresa_pertenece" />
+						</group>
 					</group>
 				</field>
 			</field>

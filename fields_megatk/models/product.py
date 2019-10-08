@@ -22,6 +22,9 @@ class Product(models.Model):
     marca_id = fields.Many2one('product.marca', string='Marca',)
     x_comisiones_a=fields.Integer(string='Comision A',store=True)
     x_comisiones_m=fields.Integer(string='Comision M',store=True)
+    x_ingresonic = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
+        ,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte')
+        ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
 
 
 class ProductMarca(models.Model):

@@ -15,6 +15,7 @@
 		    	  		<field name="marca_id" domain="[('company_id', '=', company_id)]"/>
 		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","not in",8]]}'/>
 		     	   		<field name="x_ingresome" attrs='{"invisible": [["company_id","not in",9]]}'/>
+		     	   		<field name="x_ingresonic" attrs='{"invisible": [["company_id","not in",12]]}'/>
 		    		</group>
 		    	  	<group name="tipo">
 		        		<field name="x_tipo" attrs='{"invisible": [["company_id","not in",8]]}'/>
