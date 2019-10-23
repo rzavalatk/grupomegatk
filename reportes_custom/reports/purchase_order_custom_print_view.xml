@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    <template id="purchase_order_custom_print_view">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="reportes_custom.purchase_order_odoo_custom" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+
+    <template id="external_layout_purchase_order_custom">
+      <div class="header">
+        <div class="row" style="margin-top: -140px;">
+            <div class="col-xs-3 mb4">
+                <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 400px;"/>
+            </div>
+            
+          </div>
+          <div style="float: right; margin-top: -270px;">
+            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE COMPRA</p>
+          </div>
+          
+          <div style="float: right; margin-top: -230px;">
+            <div style="float: right;">
+              <table style="text-align: center; width:330px">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold;">FECHA</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold;">O. C. No.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.date_order"/>
+                  </td>
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
+                </tr>
+              </table>
+            </div>  
+          </div>
+          
+          <div>
+            <div style="float: left;">
+              <div style="margin-top: -138px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
+                PROVEEDOR: 
+              </div>
+              <div style="width: 150px !important;">
+                <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 400px; height: 120px;'>
+                  <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                  <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+                </div>
+              </div>
+            </div>
+            <div style="float: right;">
+              <div style="margin-top: -138px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
+                ENVIAR A: 
+              </div>
+              <div style="width: 150px !important;">
+                <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 400px; height: 120px;'>
+                  <address t-field="o.x_enviar"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="float: right; margin-top: 11px;">
+            
+              <table style="text-align: center;">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">TERMINOS</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold; min-width:180px;">FECHA VENC.</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">LLEGA HON.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.payment_term_id"/>
+                  </td>
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <div t-if="o.origin" >
+                      <!--<span t-field="o.origin"/>-->
+                    </div>
+                  </td>
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                      <span t-field="o.date_planned"/>
+                  </td>
+                  
+                </tr>
+              </table>
+           
+          </div>
+        </div>
+
+      <div class="article o_report_layout_standard">
+        <t t-raw="0"/>
+      </div>
+      
+      <div class="footer" style='font-size:10pt !important;'>
+        <div style="border-top: 1px solid rgb(13, 143, 210);">
+          <ul style="text-align: center;" class="list-inline mb4">
+            <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+          </ul>
+          <ul style="text-align: center;" class="list-inline mb4">
+            <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+          </ul>
+          <ul style="text-align: center;" class="list-inline mb4">
+            <li>
+              <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
+              <t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></t>
+              <t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></t>
+              <t t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+            </li>
+          </ul>
+          <div class="text-muted">
+            Pag. <span class="page"/> / <span class="topage"/>
+          </div>
+
+          <div name="financial_infos">
+            <span t-field="user.company_id.report_footer"/>
+          </div>
+
+        </div>
+      </div>
+    </template>
+
+    <template id="purchase_order_odoo_custom">
+  		<t t-call="reportes_custom.external_layout_purchase_order_custom">
+        <div class="page">
+          <div class="oe_structure"/>
+          <table class="table table-sm o_main_table">
+            <thead>
+              <tr>
+                <th style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">CÓDIGO</th>
+                <th style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">DESCRIPCIÓN</th>
+                <th class="text-right" style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">CANTIDAD</th>
+                <th class="text-right" style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">P.U.</th>
+                <th class="text-right" style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">ISV</th>
+                <th class="text-right" style="font-family:'Arial'; padding: 2px; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);">MONTO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="o.order_line" t-as="line">
+                <td style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="line.x_codigo"/>
+                </td>
+                <td style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="line.name"/>
+                </td>
+                
+                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="line.product_qty"/>
+                    <span t-field="line.product_uom.name" groups="product.group_uom"/>
+                </td>
+                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="line.price_unit"/>
+                </td>
+                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-esc="', '.join(map(lambda x: x.name, line.taxes_id))"/>
+                </td>
+                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                </td>
+            </tr>
+            <tr t-foreach="range(max(4-len(o.order_line),0))" t-as="l">
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
+              <td class="hidden-top" style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+              <td class="hidden-top" style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+            </tr>
+            <tr>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
+              <td class="hidden-top" style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              <td class="hidden-top" style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              <td style="padding: 2px; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+            </tr>
+            </tbody>
+          </table>
+        </div> 
+        <div class="clearfix">
+          <div class="row" style='float:right !important;'>
+            <div class="col-6">
+              <table style='width:300px;'>
+                <tr class="border-black1">
+                  <td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>Subtotal</strong></td>
+                  <td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
+                      <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:'Arial'; font-size:14pt;  font-weight: bold;">Taxes</td>
+                  <td class="text-right" style="font-family:'Arial'; font-size:14pt;">
+                      <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                  </td>
+                </tr>
+                <tr class="border-black1">
+                  <td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>Total</strong></td>
+                  <td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;">
+                      <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <p t-field="o.notes"/>
+        <div class="oe_structure"/> 
+  		</t>
+  	</template>
+	</data>
+</odoo>

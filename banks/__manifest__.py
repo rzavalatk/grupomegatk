@@ -32,6 +32,8 @@
         "reports/check_report.xml",
         "reports/check_print.xml",
     ],
+    'demo': [
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,
