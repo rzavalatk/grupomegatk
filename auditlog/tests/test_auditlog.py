@@ -1,9 +1,9 @@
-# Copyright 2015 Therp BV <https://therp.nl>
+# © 2015 Therp BV <https://therp.nl>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo.tests.common import TransactionCase
 
 
-class AuditlogCommon(object):
+class TestAuditlog(object):
 
     def test_LogCreation(self):
         """First test, caching some data."""
@@ -81,7 +81,7 @@ class AuditlogCommon(object):
         ]).ensure_one())
 
 
-class TestAuditlogFull(TransactionCase, AuditlogCommon):
+class TestAuditlogFull(TransactionCase, TestAuditlog):
 
     def setUp(self):
         super(TestAuditlogFull, self).setUp()
@@ -101,7 +101,7 @@ class TestAuditlogFull(TransactionCase, AuditlogCommon):
         super(TestAuditlogFull, self).tearDown()
 
 
-class TestAuditlogFast(TransactionCase, AuditlogCommon):
+class TestAuditlogFast(TransactionCase, TestAuditlog):
 
     def setUp(self):
         super(TestAuditlogFast, self).setUp()
