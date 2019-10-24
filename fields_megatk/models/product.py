@@ -27,7 +27,6 @@ class Product(models.Model):
         ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
 
 
-
 class ProductMarca(models.Model):
     _name = 'product.marca'
     _order = 'name asc'
