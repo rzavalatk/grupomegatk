@@ -2,10 +2,10 @@
 from odoo import api, fields, models, _
 
 class AccountInvoice(models.Model):
-	_inherit = "account.invoice"
+    _inherit = "account.invoice"
 
-	numero_factura = fields.Char('Número de factura', help='Número de factura')
-	cai_proveedor = fields.Char("Cai Proveedor")
+    numero_factura = fields.Char('Número de factura', help='Número de factura')
+    cai_proveedor = fields.Char("Cai Proveedor")
 
 #     @api.model
 #     def invoice_line_move_line_get(self):
@@ -22,39 +22,39 @@ class AccountInvoice(models.Model):
 #             analytic_tag_ids = [(4, analytic_tag.id, None) for analytic_tag in line.analytic_tag_ids]
 
 #             if line.partner_line_id:
-#               move_line_dict = {
-#                   'invl_id': line.id,
-#                   'type': 'src',
-#                   'name': line.name.split('\n')[0][:64],
-#                   'price_unit': line.price_unit,
-#                   'quantity': line.quantity,
-#                   'price': line.price_subtotal,
-#                   'account_id': line.account_id.id,
-#                   'product_id': line.product_id.id,
-#                   'uom_id': line.uom_id.id,
-#                   'account_analytic_id': line.account_analytic_id.id,
-#                   'tax_ids': tax_ids,
-#                   'invoice_id': self.id,
-#                   'analytic_tag_ids': analytic_tag_ids
-#               }
+#             	move_line_dict = {
+# 	                'invl_id': line.id,
+# 	                'type': 'src',
+# 	                'name': line.name.split('\n')[0][:64],
+# 	                'price_unit': line.price_unit,
+# 	                'quantity': line.quantity,
+# 	                'price': line.price_subtotal,
+# 	                'account_id': line.account_id.id,
+# 	                'product_id': line.product_id.id,
+# 	                'uom_id': line.uom_id.id,
+# 	                'account_analytic_id': line.account_analytic_id.id,
+# 	                'tax_ids': tax_ids,
+# 	                'invoice_id': self.id,
+# 	                'analytic_tag_ids': analytic_tag_ids
+# 	            }
 #             else:
-#               move_line_dict = {
-#                   'invl_id': line.id,
-#                   'type': 'src',
-#                   'name': line.name.split('\n')[0][:64],
-#                   'price_unit': line.price_unit,
-#                   'quantity': line.quantity,
-#                   'price': line.price_subtotal,
-#                   'account_id': line.account_id.id,
-#                   'product_id': line.product_id.id,
-#                   'uom_id': line.uom_id.id,
-#                   'account_analytic_id': line.account_analytic_id.id,
-#                   'tax_ids': tax_ids,
-#                   'invoice_id': self.id,
-#                   'analytic_tag_ids': analytic_tag_ids
-#               }
-			  
-	  
+#             	move_line_dict = {
+# 	                'invl_id': line.id,
+# 	                'type': 'src',
+# 	                'name': line.name.split('\n')[0][:64],
+# 	                'price_unit': line.price_unit,
+# 	                'quantity': line.quantity,
+# 	                'price': line.price_subtotal,
+# 	                'account_id': line.account_id.id,
+# 	                'product_id': line.product_id.id,
+# 	                'uom_id': line.uom_id.id,
+# 	                'account_analytic_id': line.account_analytic_id.id,
+# 	                'tax_ids': tax_ids,
+# 	                'invoice_id': self.id,
+# 	                'analytic_tag_ids': analytic_tag_ids
+# 	            }
+            	
+			
 
 #             res.append(move_line_dict)
 #         return res
@@ -125,7 +125,7 @@ class AccountInvoice(models.Model):
 #                     'currency_id': diff_currency and inv.currency_id.id,
 #                     'invoice_id': inv.id
 #                 })
-			
+            
 #             line = []
 #             for l in iml:
 #                 if 'invl_id' in l:
@@ -177,6 +177,6 @@ class AccountInvoice(models.Model):
 #     _inherit = "account.invoice.line"
 
 #     partner_line_id = fields.Many2one('res.partner', 'Empresa', domain="[('company_id', '=', parent.company_id)]")
-	
+    
 
 #            
