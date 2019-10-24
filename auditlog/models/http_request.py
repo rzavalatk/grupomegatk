@@ -1,4 +1,4 @@
-# Copyright 2015 ABF OSIELL <https://osiell.com>
+# © 2015 ABF OSIELL <https://osiell.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from psycopg2.extensions import AsIs

@@ -11,7 +11,9 @@
     <template id="orden_de_trabajo_view">
       <t t-call="orden_trabajo.external_layout_ot">
         <div class="page">
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
           <t t-set="display_discount" t-value="any([l.discount for l in o.order_line])"/>
+          <t t-foreach="o.order_lines_layouted()" t-as="page">
             <table class="table table-condensed">
               <thead>
                 <tr>
@@ -20,8 +22,16 @@
                 </tr>
               </thead>
               <tbody class="sale_tbody">
+                <t t-foreach="page" t-as="layout_category">
+                  <t t-if="layout_category_size &gt; 1 or page_size &gt; 1" groups="sale.group_sale_layout">
+                    <tr class="active">
+                        <td colspan="7" style="vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">&amp;bull;
+                            <t t-esc="layout_category['name']"/>
+                        </td>
+                    </tr>
+                  </t>
                   <!-- Lines associated -->
-                  <t t-foreach="o.order_line" t-as="l">
+                  <t t-foreach="layout_category['lines']" t-as="l">
                     <tr>
                       <td style="vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
                         <span t-field="l.name"/>
@@ -41,8 +51,10 @@
                     <td style="border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
                     <td class="hidden-top" style="border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
                   </tr>
+                </t>
               </tbody>
             </table>
+          </t>
           <br/>
           <style>
             .ot {

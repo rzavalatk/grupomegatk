@@ -11,50 +11,31 @@ class Debit(models.Model):
     _order = 'date desc, number desc'
 
     def prueba(self):
-        sale_order = self.env["account.invoice"].search([('company_id','=',self.env.user.company_id.id)])
-        plazo = self.env["account.payment.term"].search([('company_id','=',self.env.user.company_id.id)])
-        for x in sale_order:
-            if x.payment_term_id.company_id.id:
-                if x.payment_term_id.company_id.id != self.env.user.company_id.id:
-                    for x in plazo:
-                        if x.name == x.payment_term_id.name:
-                            sale_order.write({'payment_term_id': x})
-                            print('///////////////////')
-                        else:
-                            print('*************************')
-                else:
-                    print('-------------------------------------')
-
-
-
-
-
-
-        # move_line=self.env["account.move.line"].search([('company_id','=',self.env.user.company_id.id),('analytic_account_id','=',False),'|','|','|',('account_id.user_type_id.id','=',13),('account_id.user_type_id.id','=',14),('account_id.user_type_id.id','=',16),('account_id.user_type_id.id','=',17)],limit=20000)
-        # cant=0
-        # for move in move_line:
+        move_line=self.env["account.move.line"].search([('company_id','=',self.env.user.company_id.id),('analytic_account_id','=',False),'|','|','|',('account_id.user_type_id.id','=',13),('account_id.user_type_id.id','=',14),('account_id.user_type_id.id','=',16),('account_id.user_type_id.id','=',17)],limit=20000)
+        cant=0
+        for move in move_line:
             
-        #     if move.company_id == self.env.user.company_id:
-        #         cant=cant+1
-        #         print(move.id,' ',cant)
-        #         amount = (move.credit or 0.0) - (move.debit or 0.0)
-        #         default_name = move.name or (move.ref or '/' + ' -- ' + (move.partner_id and move.partner_id.name or '/'))
-        #         vals_line = {
-        #             'name': default_name,
-        #             'date': move.date,
-        #             'account_id': move.account_id.analytic_id.id,
-        #             'tag_ids': [(6, 0, move.analytic_tag_ids.ids)],
-        #             'unit_amount': move.quantity,
-        #             'product_id': move.product_id and move.product_id.id or False,
-        #             'product_uom_id': move.product_uom_id and move.product_uom_id.id or False,
-        #             'amount': move.company_currency_id.with_context(date=move.date or fields.Date.context_today(move)).compute(amount, move.analytic_account_id.currency_id) if move.analytic_account_id.currency_id else amount,
-        #             'general_account_id': move.account_id.id,
-        #             'ref': move.ref,
-        #             'move_id': move.id,
-        #             'user_id': move.invoice_id.user_id.id or move._uid,
-        #         }
-        #         self.env['account.analytic.line'].create(vals_line)
-        #         move.write({'analytic_account_id': move.account_id.analytic_id.id})
+            if move.company_id == self.env.user.company_id:
+                cant=cant+1
+                print(move.id,' ',cant)
+                amount = (move.credit or 0.0) - (move.debit or 0.0)
+                default_name = move.name or (move.ref or '/' + ' -- ' + (move.partner_id and move.partner_id.name or '/'))
+                vals_line = {
+                    'name': default_name,
+                    'date': move.date,
+                    'account_id': move.account_id.analytic_id.id,
+                    'tag_ids': [(6, 0, move.analytic_tag_ids.ids)],
+                    'unit_amount': move.quantity,
+                    'product_id': move.product_id and move.product_id.id or False,
+                    'product_uom_id': move.product_uom_id and move.product_uom_id.id or False,
+                    'amount': move.company_currency_id.with_context(date=move.date or fields.Date.context_today(move)).compute(amount, move.analytic_account_id.currency_id) if move.analytic_account_id.currency_id else amount,
+                    'general_account_id': move.account_id.id,
+                    'ref': move.ref,
+                    'move_id': move.id,
+                    'user_id': move.invoice_id.user_id.id or move._uid,
+                }
+                self.env['account.analytic.line'].create(vals_line)
+                move.write({'analytic_account_id': move.account_id.analytic_id.id})
 
        
 

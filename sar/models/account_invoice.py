@@ -50,7 +50,8 @@ class AccountInvoice(models.Model):
     fiscal_control = fields.Boolean('Fiscal Control', help='If is a Fiscal Document')
     amount_total_text = fields.Char("Amount Total", compute = 'get_totalt', default='Cero')
     # Unique number of the invoice, computed automatically when the invoice is created
-    internal_number = fields.Char(string='Número interno', readonly=True, default=False, help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
+    #internal_number = fields.Char(string='Número interno', readonly=True, default=False, help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
+    internal_number = fields.Char(string='Número interno', help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
                                    domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
 
