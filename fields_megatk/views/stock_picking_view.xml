@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+<data>
 	<record model="ir.ui.view" id="stock_picking_campo_megatk_view_inh">
   		<field name="name">stock.picking.campomegatk.view</field>
   		<field name="model">stock.picking</field>
@@ -13,5 +13,5 @@
 			</data>
 		</field>
    	</record>
-	</data>	
+</data>	
 </odoo>
