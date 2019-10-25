@@ -128,7 +128,7 @@
 				  </xpath>
 			</field>
  		</record>
- 		<!--odoo 12	
+ 		
  		<record model="ir.ui.view" id="crm_form_simple_megatk_view_inh">
 	  		<field name="name">crm.simple.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
@@ -144,22 +144,6 @@
 			</field>
 	   	</record>
 	   	
-	   	odoo 11-->
-	   	<record model="ir.ui.view" id="crm_form_simple_megatk_view_inh">
-	  		<field name="name">crm.simple.campomegatk.view</field>
-	  		<field name="model">crm.lead</field>
-	  		<field name="inherit_id" ref="crm.view_create_opportunity_simplified" />
-			<field name="arch" type="xml">
-				<xpath expr="//field[@name='name']" position="attributes">
-			    	<attribute name="attrs">{}</attribute>
-			    	<attribute name="invisible">1</attribute>
-			  	</xpath>
-				<field name="partner_id" position="before">
-					<field name="tipo_id"/>
-	      		</field>
-			</field>
-	   	</record> 
-
  		<record model="ir.actions.act_window" id="action_crm_lead_marca">
 			<field name="name">Marcas</field>
 			<field name="type">ir.actions.act_window</field>
