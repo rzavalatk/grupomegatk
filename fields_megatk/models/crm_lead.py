@@ -29,9 +29,9 @@ class CrmLead(models.Model):
         self.modelo_id=False
 
     @api.multi
-    def _message_post_after_hook(self, message):
+    def _message_post_after_hook(self, message, *args, **kwargs):
         self.observacion_visita = message.body
-        return super(CrmLead, self)._message_post_after_hook(message)
+        return super(CrmLead, self)._message_post_after_hook(message,*args, **kwargs)
 
     @api.onchange('categoria_id')
     def _onchange_categoria_id(self):
