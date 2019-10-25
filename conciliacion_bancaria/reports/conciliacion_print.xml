@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+<data>
     <report
         id="conciliacion_print"
         model="conicliacion.bancaria"
         string="Conciliación Bancaria"
         name="conciliacion_bancaria.conciliacion_print_view"
         file="conciliacion_bancaria.conciliacion_print_view"
-        report_type="qweb-pdf" 
-        attachment_use="True" 
-        paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
-	</data>
+        report_type="qweb-pdf" />
+</data>
 </odoo>
 
