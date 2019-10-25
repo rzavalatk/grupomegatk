@@ -2,10 +2,8 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
-from datetime import datetime
 from datetime import *
 import time
-from datetime import datetime, timedelta
 
 
 class ConciliacionBancaria(models.Model):
@@ -27,8 +25,7 @@ class ConciliacionBancaria(models.Model):
     @api.onchange("date")
     def onchangefecha(self):         
         if self.date:
-            varialble_string = datetime.strptime(self.date, '%Y-%m-%d')
-            self.mes_name = varialble_string.strftime("%B")
+            self.mes_name = self.date.strftime("%B")
 
 
     company_id = fields.Many2one("res.company", "Compañia", required=True, track_visibility='onchange', default=lambda self: self.env.user.company_id)
