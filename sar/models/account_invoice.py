@@ -288,15 +288,16 @@ class AccountInvoice(models.Model):
     @api.multi
     def action_date_assign(self):
         res = super(AccountInvoice, self).action_date_assign()
-        if not self.date_invoice:
-            self.date_invoice=date.today()
-        if self.sequence_ids:
+        if self.state:
             if not self.date_invoice:
-                raise Warning(_('No existe fecha establecida para esta factura'))
-            if self.date_invoice > self.sequence_ids.expiration_date:
-                raise Warning(_('The Expiration Date for this fiscal sequence is %s ') % (self.sequence_ids.expiration_date))
-            if self.sequence_ids.vitt_number_next_actual > self.sequence_ids.max_value:
-                raise Warning(_('The range of sequence numbers is finished'))
+                self.date_invoice=date.today()
+            if self.sequence_ids:
+                if not self.date_invoice:
+                    raise Warning(_('No existe fecha establecida para esta factura'))
+                if self.date_invoice > self.sequence_ids.expiration_date:
+                    raise Warning(_('The Expiration Date for this fiscal sequence is %s ') % (self.sequence_ids.expiration_date))
+                if self.sequence_ids.vitt_number_next_actual > self.sequence_ids.max_value:
+                    raise Warning(_('The range of sequence numbers is finished'))
         return res
 
     @api.onchange("company_id")
