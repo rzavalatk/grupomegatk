@@ -48,7 +48,6 @@ class StockMoveLine(models.Model):
             if x.move_id.picking_type_id.code == 'outgoing' and x.product_id.type=='product':
                 x.write({'state': 'confirmed'})
                 Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
-                print('/////////////////////////////')
                 if Quant:
                     Quant.write({'quantity': x.qty_done + Quant.quantity})
                 else:

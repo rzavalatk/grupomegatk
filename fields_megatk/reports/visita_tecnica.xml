@@ -8,6 +8,6 @@
         name="fields_megatk.visita_print_view"
         file="fields_megatk.visita_print_view"
         report_type="qweb-pdf"
-        paperformat="fields_megatk.report_paperformat_8_0f21f71b" />
+        paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
 	</data>
 </odoo>
