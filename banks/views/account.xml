@@ -1,14 +1,14 @@
 <odoo>
-    <data>
-        <record model="ir.ui.view" id="account_analytic_view_inh">
-            <field name="name">account_analytic.view</field>
-            <field name="model">account.account</field>
-            <field name="inherit_id" ref="account.view_account_form" />
-            <field name="arch" type="xml">
-                <field name="user_type_id" position="after">
-                    <field name="analytic_id"  domain="[('company_id', '=', company_id)]"/>
-                </field>
-            </field>
-        </record>
-    </data>
+  <data>
+    <record model="ir.ui.view" id="account_analytic_view_inh">
+      <field name="name">account_analytic.view</field>
+      <field name="model">account.account</field>
+      <field name="inherit_id" ref="account.view_account_form" />
+      <field name="arch" type="xml">
+        <field name="user_type_id" position="after">
+          <field name="analytic_id" domain="[('company_id', '=', company_id)]" />
+        </field>
+      </field>
+    </record>
+  </data>
 </odoo>
