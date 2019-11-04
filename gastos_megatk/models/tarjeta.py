@@ -68,7 +68,7 @@ class LiquidacionTarjetas(models.Model):
             #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
 
         if not self.fecha_liquidacion:
-            self.fecha_liquidacion = datetime.now()
+            self.fecha_liquidacion = datetime.now().date()
         if not self.journal_id:
             raise Warning(_('No ha seleccionado una tarjeta para generar la liquidación.'))
 
