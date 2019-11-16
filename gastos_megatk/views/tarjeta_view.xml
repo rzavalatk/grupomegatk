@@ -90,7 +90,7 @@
 <field name="name">gastos.tarjeta.megatk.tree</field>
 <field name="model">gastos.tarjeta.megatk</field>
 <field name="arch" type="xml">
-	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-muted="state == 'aprobado'" decoration-success="state == 'liquidado'"  decoration-danger="state == 'rechazado'">
+	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-info="state == 'pendiente'"  decoration-danger="state == 'rechazado'">
 		<field name="company_id"/>
 		<field name="fecha_inicio" />
 		<field name="fecha_aprobacion"/>	
@@ -107,6 +107,19 @@
 <field name="view_mode">tree,form</field>
 </record>
 
+<record id="tarjeta_mega_search_view" model="ir.ui.view">
+  <field name="name">tarjeta.mega.search.view</field>
+  <field name="model">gastos.tarjeta.megatk</field>
+  <field name="arch" type="xml">
+    <search string="Gastos Search View">
+    	<field string="Solicitante" name='empleado_solicitud'/>
+      <filter string="Validado" name='liq_gastos' domain="[('state','=','liquidado')]"/>
+      <filter string="Pendiente" name='pend_gastos' domain="[('state','=','pendiente')]"/>
+      <filter string="Solicitante" name='group_solic_gastos' context="{'group_by':'empleado_solicitud'}"/>
+      <filter string="Estado" name='group_sta_gastos' context="{'group_by':'state'}"/>
+    </search>
+  </field>
+</record>
    <!-- Fin de Action de Contratos -->
      <!--  Menu Principal de contratos-->
 

@@ -39,6 +39,9 @@ class SaleOrder(models.Model):
 						else:
 							message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
 		                            (line.product_uom_qty, line.product_id.name, self.warehouse_id.name)
+					elif line.product_id.type == 'consu':
+						message += ('\nEl producto %s no esta disponible para la venta') % \
+                          (line.product_id.name)
 				if message != '':
 					raise UserError(_(message))
 

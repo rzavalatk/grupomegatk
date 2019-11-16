@@ -8,6 +8,8 @@ from odoo.exceptions import Warning
 class LiquidacionGastos(models.Model):
     _name = "gastos.megatk"
     _inherit = ['mail.thread','mail.activity.mixin']
+    _order = 'create_date desc'
+
 
 
     @api.multi

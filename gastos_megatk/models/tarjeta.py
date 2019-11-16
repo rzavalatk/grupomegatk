@@ -8,6 +8,8 @@ from odoo.exceptions import Warning
 class LiquidacionTarjetas(models.Model):
     _name = "gastos.tarjeta.megatk"
     _inherit = ['mail.thread','mail.activity.mixin']
+    _order = 'create_date desc'
+    
 
     @api.onchange("currency_id")
     def onchangecurrency(self):
