@@ -80,11 +80,11 @@ class StockPickingLine(models.Model):
 
     @api.multi
     def _action_cancel(self):
-    	for x in self:
+        for x in self:
             if x.state == 'done' and x.picking_type_id.code != 'internal':
                 x.write({'state': 'confirmed'})
                 x.sale_line_id.write({'qty_delivered': 0})
-    	return super(StockPickingLine, self)._action_cancel()
+        return super(StockPickingLine, self)._action_cancel()
 
 class Stock(models.Model):
     _inherit = "stock.warehouse"
