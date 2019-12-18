@@ -39,38 +39,38 @@ class StockPicking(models.Model):
         for move in self.move_lines:
              move.write({'state': 'draft'})
 
-class StockMoveLine(models.Model):
-    _inherit = "stock.move.line"
-
-    @api.multi
-    def unlink(self):
-    	for x in self:
-            if x.move_id.picking_type_id.code == 'outgoing' and x.product_id.type=='product':
-                x.write({'state': 'confirmed'})
-                Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
-                if Quant:
-                    Quant.write({'quantity': x.qty_done + Quant.quantity})
-                else:
-                    valores = {
-                        'product_id': x.product_id.id,
-                        'product_tmpl_id': x.product_id.product_tmpl_id.id,
-                        'location_id': x.location_id.id,
-                        'quantity': x.qty_done,
-                        'reserved_quantity': 0,
-                        'company_id': self.env.user.company_id.id,
-                        }
-                    Quant.create(valores)
-            elif x.move_id.picking_type_id.code == 'incoming' and x.product_id.type=='product':
-                x.write({'state': 'confirmed'})
-                Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_dest_id.id)])
-                if Quant:
-                    if Quant.quantity < x.qty_done:
-                        message = ('El item %s resultaría negativo') % \
-                            (x.product_id.name)
-                        raise UserError(_(message))
-                    if Quant.quantity > 0:
-                        Quant.write({'quantity': Quant.quantity - x.qty_done })
-    	return super(StockMoveLine, self).unlink()
+#class StockMoveLine(models.Model):
+ #   _inherit = "stock.move.line"
+#
+ #   @api.multi
+  #  def unlink(self):
+   # 	for x in self:
+    #        if x.move_id.picking_type_id.code == 'outgoing' and x.product_id.type=='product':
+     #           x.write({'state': 'confirmed'})
+      #          Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_id.id)])
+       #         if Quant:
+        #            Quant.write({'quantity': x.qty_done + Quant.quantity})
+         #       else:
+          #          valores = {
+           #             'product_id': x.product_id.id,
+            #            'product_tmpl_id': x.product_id.product_tmpl_id.id,
+             #           'location_id': x.location_id.id,
+              #          'quantity': x.qty_done,
+               #         'reserved_quantity': 0,
+                #        'company_id': self.env.user.company_id.id,
+                 #       }
+                  #  Quant.create(valores)
+            #elif x.move_id.picking_type_id.code == 'incoming' and x.product_id.type=='product':
+             #   x.write({'state': 'confirmed'})
+              #  Quant = self.env['stock.quant'].search([('product_id','=',x.product_id.id),('location_id','=',x.location_dest_id.id)])
+               # if Quant:
+                #    if Quant.quantity < x.qty_done:
+                 #       message = ('El item %s resultaría negativo') % \
+                  #          (x.product_id.name)
+                   #     raise UserError(_(message))
+                    #if Quant.quantity > 0:
+                     #   Quant.write({'quantity': Quant.quantity - x.qty_done })
+    	#return super(StockMoveLine, self).unlink()
 
 
 class StockPickingLine(models.Model):
@@ -78,13 +78,13 @@ class StockPickingLine(models.Model):
 
     x_series = fields.Text(related = 'sale_line_id.x_series', string = "Series" )
 
-    @api.multi
-    def _action_cancel(self):
-        for x in self:
-            if x.state == 'done' and x.picking_type_id.code != 'internal':
-                x.write({'state': 'confirmed'})
-                x.sale_line_id.write({'qty_delivered': 0})
-        return super(StockPickingLine, self)._action_cancel()
+    #@api.multi
+    #def _action_cancel(self):
+     #   for x in self:
+      #      if x.state == 'done' and x.picking_type_id.code != 'internal':
+       #         x.write({'state': 'confirmed'})
+        #        x.sale_line_id.write({'qty_delivered': 0})
+        #return super(StockPickingLine, self)._action_cancel()
 
 class Stock(models.Model):
     _inherit = "stock.warehouse"
