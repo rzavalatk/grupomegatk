@@ -199,7 +199,7 @@
 					 	<tbody class="sale_tbody">
 							<!-- Lines associated -->
 							<t t-foreach="o.order_line" t-as="l">
-								<tr>
+								<tr t-if="l.product_uom_qty > 0">
 									<td style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid #165843;border-right: 1px solid #165843;">
 										<span t-field="l.name"/>
 										<p t-if="l.x_series"><span t-esc="l.x_series"/></p>
