@@ -22,6 +22,10 @@ class CrmLead(models.Model):
     repor_email = fields.Char(string='Correo electrónico',)
     proposito = fields.Char(string='Propósito de la visita',)
     observacion_visita = fields.Html(string='Observaciones')
+    producto1 = fields.Char(string='Producto',)
+    producto2 = fields.Char(string='Producto',)
+    producto3 = fields.Char(string='Producto',)
+
 
     @api.onchange('marca_id')
     def _onchange_marca_id(self):

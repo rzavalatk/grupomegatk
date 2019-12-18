@@ -126,6 +126,23 @@
 					    </group>
 				    </page>
 				  </xpath>
+				  <xpath expr="//field[@name='campaign_id']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="invisible">1</attribute>
+				  </xpath>
+				  <xpath expr="//field[@name='medium_id']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="invisible">1</attribute>
+				  </xpath>
+				  <xpath expr="//field[@name='source_id']" position="attributes">
+				    <attribute name="attrs">{}</attribute>
+				    <attribute name="invisible">1</attribute>
+				  </xpath>
+				  <xpath expr="//field[@name='source_id']" position="after">
+    				<field name="producto1"/>
+    				<field name="producto2"/>
+    				<field name="producto3"/>
+  				</xpath>
 			</field>
  		</record>
  		
