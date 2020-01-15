@@ -10,25 +10,6 @@ class Debit(models.Model):
 	_description = "Management Debits"
 	_order = 'date desc, number desc'
 
-	def prueba(self):
-		sale_order = self.env["account.invoice"].search([('company_id','=',self.env.user.company_id.id)])
-		plazo = self.env["account.payment.term"].search([('company_id','=',self.env.user.company_id.id)])
-		print(plazo)
-		for x in sale_order:
-			print(x.payment_term_id.name, x.id)		
-
-			if x.payment_term_id.company_id.id:
-				if x.payment_term_id.company_id.id != self.env.user.company_id.id:
-					for p in plazo:
-						print(p.name)
-						if p.name == x.payment_term_id.name:
-							x.payment_term_id= p.id
-							print(x.id)
-							print('///////////////////')
-						else:
-							print('*************************')
-				else:
-					print('-------------------------------------')
 		# move_line=self.env["account.move.line"].search([('company_id','=',self.env.user.company_id.id),('analytic_account_id','=',False),'|','|','|',('account_id.user_type_id.id','=',13),('account_id.user_type_id.id','=',14),('account_id.user_type_id.id','=',16),('account_id.user_type_id.id','=',17)],limit=20000)
 		# cant=0
 		# for move in move_line:
@@ -153,7 +134,7 @@ class Debit(models.Model):
 	number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
 	msg = fields.Char("Error de configuración", compute=get_msg_number)
 	rest_credit = fields.Float('Diferencia', compute=_compute_rest_credit)
-	move_id = fields.Many2one('account.move', 'Apunte Contable')
+	move_id = fields.Many2one('account.move', 'Apunte Contable', copy=False)
 	number = fields.Char("Número", copy=False)
 	doc_type = fields.Selection([('debit', 'Débito'), ('credit','Crédito'), ('deposit','Depósito')], string='Tipo', required=True)
 	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
@@ -217,9 +198,33 @@ class Debit(models.Model):
 		
 	def generate_asiento(self):
 		if self.doc_type == 'debit':
-			return self.debito()
+			values = self.debito()
+			if self.move_id:
+				moveline = self.env['account.move.line']
+				line = moveline.search( [('move_id', '=', self.move_id.id)])
+				line.unlink()
+				self.move_id.write(values)
+				self.move_id.line_ids.create_analytic_lines()
+				return self.move_id.id
+			else:
+				id_move = account_move.create(values)
+				id_move.write({'name': str(self.number)})
+				id_move.line_ids.create_analytic_lines()
+				return id_move.id
 		else:
-			return self.credito()
+			values = self.credito()
+			if self.move_id:
+				moveline = self.env['account.move.line']
+				line = moveline.search( [('move_id', '=', self.move_id.id)])
+				line.unlink()
+				self.move_id.write(values)
+				self.move_id.line_ids.create_analytic_lines()
+				return self.move_id.id
+			else:
+				id_move = account_move.create(values)
+				id_move.write({'name': str(self.number)})
+				id_move.line_ids.create_analytic_lines()
+				return id_move.id
 
 	def debito(self):
 		account_move = self.env['account.move']
@@ -327,12 +332,7 @@ class Debit(models.Model):
 			'line_ids': lineas,
 			'state': 'posted',
 		}
-
-		id_move = account_move.create(values)
-		id_move.write({'name': str(self.number)})
-		id_move.line_ids.create_analytic_lines()
-		
-		return id_move.id
+		return values
 
 	def credito(self):
 		account_move = self.env['account.move']
@@ -441,12 +441,7 @@ class Debit(models.Model):
 			'line_ids': lineas,
 			'state': 'posted',
 		}
-		
-		id_move = account_move.create(values)
-		id_move.write({'name': str(self.number)})
-		id_move.line_ids.create_analytic_lines()
-		
-		return id_move.id
+		return values
 
 	@api.multi
 	def action_anulate_debit(self):

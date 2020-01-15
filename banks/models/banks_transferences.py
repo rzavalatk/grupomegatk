@@ -63,7 +63,7 @@ class Vittbankstransferences(models.Model):
 	number = fields.Char("Número", copy=False)
 	msg = fields.Char("Error de configuración", compute=get_msg_number)
 	number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
-	move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
+	move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True, copy=False)
 	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
 
@@ -175,8 +175,15 @@ class Vittbankstransferences(models.Model):
 			'line_ids': lineas,
 			'state': 'posted',
 		}
-		id_move = account_move.create(values)
-		id_move.write({'name': str(self.number)})
-		id_move.line_ids.create_analytic_lines()
-		
-		return id_move.id
+		if self.move_id:
+			moveline = self.env['account.move.line']
+			line = moveline.search( [('move_id', '=', self.move_id.id)])
+			line.unlink()
+			self.move_id.write(values)
+			self.move_id.line_ids.create_analytic_lines()
+			return self.move_id.id
+		else:
+			id_move = account_move.create(values)
+			id_move.write({'name': str(self.number)})
+			id_move.line_ids.create_analytic_lines()
+			return id_move.id
