@@ -197,6 +197,7 @@ class Debit(models.Model):
 		#self.update_seq()
 		
 	def generate_asiento(self):
+		account_move = self.env['account.move']
 		if self.doc_type == 'debit':
 			values = self.debito()
 			if self.move_id:
@@ -227,7 +228,6 @@ class Debit(models.Model):
 				return id_move.id
 
 	def debito(self):
-		account_move = self.env['account.move']
 		lineas = []
 		vals_haber = {
 			'debit': 0.0,
@@ -335,7 +335,6 @@ class Debit(models.Model):
 		return values
 
 	def credito(self):
-		account_move = self.env['account.move']
 		lineas = []
 		vals_debe = {
 			'debit': self.total * self.currency_rate,
