@@ -122,7 +122,7 @@
               </field>
 
               <field name="import_line_id" >
-                <tree editable="bottom" create="0" delete="0">
+                <tree editable="bottom" create="0">
                   <field name="product_id"/>
                   <field name="name"/>
                   <field name="fecha_done" invisible='1'/>

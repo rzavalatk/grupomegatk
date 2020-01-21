@@ -7,27 +7,6 @@ class Account(models.Model):
 	
 	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica",)
 
-class AccountPayment(models.Model):
-	_inherit = 'account.payment'
-
-	@api.multi
-	def cancel(self):
-		if not self.invoice_ids:
-			super(AccountPayment, self).cancel()
-			for rec in self:
-				for move in rec.move_line_ids.mapped('move_id'):
-					moveline = self.env['account.move.line']
-					line = moveline.search( [('move_id', '=', move.id)])
-					line.unlink()
-		else:
-			message='Pago aplicado a Factura(s):'
-			for x in self.invoice_ids:
-				message +=  _(' %s, ') % \
-        	(x.number)
-			raise UserError(_(message))
-			
-		
-
 class AccountInvoice(models.Model):
 	_inherit = "account.move.line"
 

@@ -8,14 +8,6 @@ class AccountInvoice(models.Model):
 	numero_factura = fields.Char('Número de factura', help='Número de factura')
 	cai_proveedor = fields.Char("Cai Proveedor")
 
-	@api.multi
-	def action_cancel(self):
-		if self.payment_ids:
-			raise Warning(_('Debe desconciliar el pago aplicado'))
-
-		return super(AccountInvoice, self).action_cancel()
-
-
 #     @api.model
 #     def invoice_line_move_line_get(self):
 #         res = []
