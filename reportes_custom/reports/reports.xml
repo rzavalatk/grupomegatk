@@ -11,6 +11,16 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
+			<report
+			id="account_factura_custom_printex"
+			model="account.invoice"
+			string="Factura printex"
+			name="reportes_custom.factura_custom_printe_view"
+			file="reportes_custom.factura_custom_printe_view"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+
 		<report
 			id="account_factura_pos_custom"
 			model="account.invoice"
