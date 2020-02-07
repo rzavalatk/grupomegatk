@@ -16,20 +16,21 @@ class AccountInvoiceLine(models.Model):
 
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
-        if self.env.user.email not in ('lvilleda@printexhn.net','rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
-            for line in self:
-                if line.product_id:
-                    preciolista = self.env['lista.precios.producto']
-                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
-                    
-                    if self.currency_id.name == 'HNL':
-                        if line.price_unit < line.product_id.list_price:
-                            line.price_unit = line.product_id.list_price
-                            for lista in preciodefaul:
-                                porcentaje = (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
-                                porcentaje = round(porcentaje,2)
-                                if porcentaje >= lista.descuento:
-                                    line.precio_id = lista.id
+        if self.invoice_type == 'out_invoice':
+            if self.env.user.email not in ('lvilleda@printexhn.net','rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+                for line in self:
+                    if line.product_id:
+                        preciolista = self.env['lista.precios.producto']
+                        preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
+                        
+                        if self.currency_id.name == 'HNL':
+                            if line.price_unit < line.product_id.list_price:
+                                line.price_unit = line.product_id.list_price
+                                for lista in preciodefaul:
+                                    porcentaje = (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
+                                    porcentaje = round(porcentaje,2)
+                                    if porcentaje >= lista.descuento:
+                                        line.precio_id = lista.id
 
     @api.model
     def create(self, values):
