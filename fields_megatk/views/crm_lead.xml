@@ -40,6 +40,7 @@
 				<field name="arch" type="xml">
 					<field name="name" position="before">
 		      	<h1>Ticket: <field name="id"/></h1>
+		      	<field name="fecha_movimiento" invisible='1'/>
 		      </field>
 		      <xpath expr="//field[@name='name']" position="attributes">
 				    <attribute name="attrs">{}</attribute>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from datetime import datetime
 from odoo.exceptions import UserError
 
 class CrmLead(models.Model):
@@ -25,12 +26,21 @@ class CrmLead(models.Model):
     producto1 = fields.Char(string='Producto',)
     producto2 = fields.Char(string='Producto',)
     producto3 = fields.Char(string='Producto',)
+    fecha_movimiento = fields.Datetime(string='Fecha primer movimiento',)
 
 
     @api.onchange('marca_id')
     def _onchange_marca_id(self):
         self.categoria_id=False
         self.modelo_id=False
+
+    @api.multi
+    def write(self, values):
+        if not self.fecha_movimiento:
+            if self.create_uid.id != self.env.user.id:
+                #self.fecha_movimiento = datetime.now()  
+                values['fecha_movimiento'] = datetime.now()
+        return super(CrmLead, self).write(values)
 
     @api.multi
     def _message_post_after_hook(self, message, *args, **kwargs):
