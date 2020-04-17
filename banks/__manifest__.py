@@ -31,6 +31,7 @@
         "reports/cheqck_paper_format.xml", 
         "reports/check_report.xml",
         "reports/check_print.xml",
+        "reports/voucher_print.xml",
     ],
     'demo': [
     ],

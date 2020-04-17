@@ -30,8 +30,8 @@
 <field name="arch" type="xml">
 <form string="Debits">
 <header>
+    <button name="print_chek" type="object" string="Imprimir cheque" states="validated" class="oe_highlight"/>
     <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
-    <button name="%(action_wizard_crear_plantilla)d" type="action" string="Definir Plantilla" states="validated" class="oe_highlight"/>
     <button name="action_anulate" type="object" string="Anular Registro" states="draft" class="oe_highlight"/>
      <button name="set_borrador" type="object" string="Volver a borrador" states="anulated" class="oe_highlight"/>
     <button name="action_anulate_cheque" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
@@ -57,7 +57,7 @@
             <field name="doc_type" invisible="1"/>
             <field name="es_moneda_base" invisible="1"/>
             <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}" />
-            <field name="plantilla_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"  
+           <field name="plantilla_id" invisible="1" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"  
                 domain="[('doc_type', '=', doc_type)]"/>
         </group>
         </group>

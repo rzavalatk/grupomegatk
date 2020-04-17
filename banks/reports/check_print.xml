@@ -1,151 +1,45 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<openerp>
-<data>
-<template id="check_print">
-<t t-call="report.html_container">			
-<t t-foreach="docs" t-as="o">
-				
-<div class="page">
-<div class="oe_structure"/>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="check_print">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="banks.chek_report_banks" />
+        </t>
+      </t>
+    </template>
 
- <div class="row">
-  	<p><h2> <strong>
-     <span t-if="o.state == 'draft'">BORRADOR: </span>
-		<span t-field="o.number"/></strong>
-	 </h2>
-   </p>
-         
-    <table style="width:100%;">
-      	<tr >
-		<td style="width:25%;"><strong>Pagado a:</strong>
-		</td>
-		<td class="text-left" style="width:25%;">
-	 		<span t-field="o.name" />
-		</td>
-		<td style="width:25%;"><strong>Fecha de Cheque:</strong>
-			</td>
-			<td class="text-left" style="width:25%;">
-	 			<span t-field="o.date"/>
-			</td>
-		</tr>
-		<tr >
-		<td style="width:25%;"><strong>Monto de Cheque:</strong>
-		</td>
-		<td class="text-left" style="width:25%;">
-	 		<span t-field="o.total"  t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-		</td>
-		<td style="width:25%;"><strong>Banco Emisor:</strong>
-			</td>
-			<td class="text-left" style="width:25%;">
-	 			<span t-field="o.journal_id.name" />
-			</td>
-		</tr>
-      <tr >
-    <td style="width:25%;"><strong></strong>
-    </td>
-    <td class="text-left" style="width:25%;">
+    <template id="chek_report_banks">
+        <div style="display: block; height: 100%;width: 100%; margin-left:-116px; margin-top: -20px">
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>          
+          <div style="font-family: Arial; font-size: 20px; font-weight: bold; height: 400px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
+            <div style ='width: 60%; float:right; padding: 20px;'>
+              <br/>
+              Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
+            </div>
+           <br/>
+            <br/><br/>
+            <div style="margin-left: -80px;">
+              <table style="width: 100%;">
+                <tr>
+                  <td style="text-align: center; width: 65%; padding: 30px; font-family: Arial; font-size: 20px; font-weight: bold; text-transform:uppercase;">
+                    <span t-field="o.name" />
+                  </td>
+                  <td style="text-align: center; width: 35%; font-family: Arial; font-size: 20px; font-weight: bold;">
+                    <span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="margin-left:-10px;font-family: Arial; font-size: 18px; font-weight: bold;">
+                    <span t-field="o.amount_total_text" />
+                  </td>
+                </tr>
+                
+              </table>
+            </div>
+          </div>
+        </div>  
+    </template>
+  </data>
+</odoo>
 
-    </td>
-    <td style="width:25%;"><strong>Cuenta Bancaria #: </strong>
-      </td>
-      <td class="text-left" style="width:25%;">
-        <span t-field="o.journal_id.bank_acc_number" />
-      </td>
-    </tr>
-		<hr/>
-    </table>
-	
-<hr/>
-
-<table class="table table-condensed" style="width:100%;font-size:12px;">
-      <thead>
-      <tr>
-						<th class="text-left" style="width:15%;"><strong>Número de Cuenta</strong></th>
-						<th class="text-center" style="width:20%;"><strong>Nombre de Cuenta</strong></th>
-						<th class="text-center" style="width:20%;"><strong>Descripción</strong></th>
-						<th class="text-center" style="width:20%;"><strong>Debe</strong></th>
-						<th class="text-center" style="width:20%;"><strong>Haber</strong></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr t-foreach="o.check_lines" t-as="line">
-						<td class="text-left" style="width:15%;">
-                            <span t-field="line.account_id.code" />
-                        </td>
-
-						<td class="text-center" style="width:20%;">
-                            <span t-field="line.account_id.name"/>
-                        </td>
-							
-						<td class="text-center" style="width:20%;">
-                            <span t-field="line.name"/>
-                        </td>
-					
-						<td class="text-center" style="width:20%;">
-                            <span t-field="line.amount"/>
-                        </td>
-
-						 <td class="text-center" style="width:20%;">
-                           0.00
-                        </td>						
-                      
-        </tr>
-        <tr>
-          <td class="text-left" style="width:15%;">
-                            <span t-field="o.journal_id.default_credit_account_id.code" />
-                        </td>
-
-            <td class="text-center" style="width:20%;">
-                            <span t-field="o.journal_id.default_credit_account_id.name"/>
-                        </td>
-              
-            <td class="text-center" style="width:20%;">
-                            <span t-field="o.memo"/>
-                        </td>
-          
-            <td class="text-center" style="width:20%;">
-                           0.00
-                        </td>
-
-             <td class="text-center" style="width:20%;">
-                            <span t-field="o.total"/>
-                        </td> 
-        </tr>
-        </tbody>
-    </table>
-    <hr/>
-    <br/>
-    <br/>
-    <br/>
-    <br/><br/>
-    <br/>
-    <table style="width:100%; font-size:14px; padding:25px 25px 25px 25px;"> 
-        <tbody>
-                    <tr>
-                        <td width="30%" style="border-bottom: 1px solid #000000;"><u><p class="text-center"><br/><span t-field="o.name"/></p></u></td>
-                        <td width="3%"><p class="text-center"><br/></p></td>
-                        <td width="30%" style="border-bottom: 1px solid #000000;"><p class="text-center"><br/>Mario Matamoros</p></td>
-                        <td width="3%"><p class="text-center"><br/></p></td>
-                        <td width="34%" style="border-bottom: 1px solid #000000;"><p class="text-center"><br/></p></td>
-                    </tr>
-                    <tr>
-                        <td style="width:30%; padding:5px 10px 10px 10px;"><p class="text-center">Elaborador Por</p> </td>
-                        <td style="width:3%;"></td>
-                        <td style="width:30%; padding:5px 10px 10px 10px;"><p class="text-center">Autorizado Por</p> </td>
-                        <td style="width:3%;"></td>
-                        <td style="width:34%; padding:5px 10px 10px 10px;"><p class="text-center">Recibido Por</p></td>
-                    </tr>
-        </tbody>
-      </table>
-</div>
-
-						
-</div>
-					
-				</t>
-			</t>
-	
-
-		</template>
-	</data>
-</openerp>

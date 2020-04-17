@@ -6,6 +6,9 @@
 			<field name="model">account.journal</field>
 			<field name="inherit_id" ref="account.view_account_journal_form"/> 
 			<field name="arch" type="xml">
+				<xpath expr="//form[1]/sheet[1]/div[not(@name)][1]" position="after">
+				    <field name="logo" class="oe_avatar" widget="image"/>
+			  	</xpath>
 				<xpath expr="//field[@name='default_credit_account_id']" position="after" string='Allow Multi-Sequence'>
 					<field name="multi_seq_banks" attrs="{'invisible': [('type','not in',['bank','cash'])]}"/>
 				</xpath>

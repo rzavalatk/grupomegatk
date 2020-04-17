@@ -10,12 +10,195 @@ class Check(models.Model):
 	_inherit = ['mail.thread']
 	_order = 'date desc, number desc'
 
+	@api.multi
+	def print_chek(self):
+		if not self.princhek:
+			self.princhek = True
+			print = self.env.ref('banks.banks_check_print')\
+				.with_context(discard_logo_check=True).report_action(self)
+		else:
+			print = self.env.ref('banks.banks_vaucher_print')\
+				.with_context(discard_logo_check=True).report_action(self)
+		return print
+
+	def get_totalt(self):
+		self.amount_total_text=''
+
+		if self.currency_id:
+			self.amount_total_text=self.to_word(self.total)
+		else:
+			self.amount_total_text =self.to_word(self.total)
+		return True
+
+	def to_word(self,number):
+		valor = number
+		number = int(number)
+		centavos = int((round(valor-number,2)) * 100)
+		UNIDADES = (
+			'',
+			'UN ',
+			'DOS ',
+			'TRES ',
+			'CUATRO ',
+			'CINCO ',
+			'SEIS ',
+			'SIETE ',
+			'OCHO ',
+			'NUEVE ',
+			'DIEZ ',
+			'ONCE ',
+			'DOCE ',
+			'TRECE ',
+			'CATORCE ',
+			'QUINCE ',
+			'DIECISEIS ',
+			'DIECISIETE ',
+			'DIECIOCHO ',
+			'DIECINUEVE ',
+			'VEINTE '
+		)
+
+		DECENAS = (
+			'VENTI',
+			'TREINTA ',
+			'CUARENTA ',
+			'CINCUENTA ',
+			'SESENTA ',
+			'SETENTA ',
+			'OCHENTA ',
+			'NOVENTA ',
+			'CIEN ')
+
+		CENTENAS = (
+			'CIENTO ',
+			'DOSCIENTOS ',
+			'TRESCIENTOS ',
+			'CUATROCIENTOS ',
+			'QUINIENTOS ',
+			'SEISCIENTOS ',
+			'SETECIENTOS ',
+			'OCHOCIENTOS ',
+			'NOVECIENTOS '
+		)
+		MONEDAS = (
+			{'country': u'Colombia', 'currency': 'COP', 'singular': u'PESO COLOMBIANO', 'plural': u'PESOS COLOMBIANOS', 'symbol': u'$'},
+			{'country': u'Honduras', 'currency': 'HNL', 'singular': u'Lempira', 'plural': u'Lempiras', 'symbol': u'L'},
+			{'country': u'Estados Unidos', 'currency': 'USD', 'singular': u'DÓLAR', 'plural': u'DÓLARES', 'symbol': u'US$'},
+			{'country': u'Europa', 'currency': 'EUR', 'singular': u'EURO', 'plural': u'EUROS', 'symbol': u'€'},
+			{'country': u'México', 'currency': 'MXN', 'singular': u'PESO MEXICANO', 'plural': u'PESOS MEXICANOS', 'symbol': u'$'},
+			{'country': u'Perú', 'currency': 'PEN', 'singular': u'NUEVO SOL', 'plural': u'NUEVOS SOLES', 'symbol': u'S/.'},
+			{'country': u'Reino Unido', 'currency': 'GBP', 'singular': u'LIBRA', 'plural': u'LIBRAS', 'symbol': u'£'}
+			)
+				
+		converted = ''
+		if not (0 < number < 999999999):
+			return 'No es posible convertir el numero a letras'
+
+		number_str = str(number).zfill(9)
+		millones = number_str[:3]
+		miles = number_str[3:6]
+		cientos = number_str[6:]
+
+		if(millones):
+			if(millones == '001'):
+				converted += 'UN MILLON '
+			elif(int(millones) > 0):
+				converted += '%sMILLONES ' % self.convert_group(millones)
+
+		if(miles):
+			if(miles == '001'):
+				converted += 'MIL '
+			elif(int(miles) > 0):
+				converted += '%sMIL ' % self.convert_group(miles)
+
+		if(cientos):
+			if(cientos == '001'):
+				converted += 'UN '
+			elif(int(cientos) > 0):
+				converted += '%s ' % self.convert_group(cientos)
+		if(centavos)>0:
+			converted+= "con %2i/100 "%centavos
+		return converted.upper()
+
+	def convert_group(self,n):
+		UNIDADES = (
+			'',
+			'UN ',
+			'DOS ',
+			'TRES ',
+			'CUATRO ',
+			'CINCO ',
+			'SEIS ',
+			'SIETE ',
+			'OCHO ',
+			'NUEVE ',
+			'DIEZ ',
+			'ONCE ',
+			'DOCE ',
+			'TRECE ',
+			'CATORCE ',
+			'QUINCE ',
+			'DIECISEIS ',
+			'DIECISIETE ',
+			'DIECIOCHO ',
+			'DIECINUEVE ',
+			'VEINTE '
+		)
+		DECENAS = (
+			'VEINTI',
+			'TREINTA ',
+			'CUARENTA ',
+			'CINCUENTA ',
+			'SESENTA ',
+			'SETENTA ',
+			'OCHENTA ',
+			'NOVENTA ',
+			'CIEN '
+		)
+
+		CENTENAS = (
+			'CIENTO ',
+			'DOSCIENTOS ',
+			'TRESCIENTOS ',
+			'CUATROCIENTOS ',
+			'QUINIENTOS ',
+			'SEISCIENTOS ',
+			'SETECIENTOS ',
+			'OCHOCIENTOS ',
+			'NOVECIENTOS '
+		)
+		MONEDAS = (
+			{'country': u'Colombia', 'currency': 'COP', 'singular': u'PESO COLOMBIANO', 'plural': u'PESOS COLOMBIANOS', 'symbol': u'$'},
+			{'country': u'Honduras', 'currency': 'HNL', 'singular': u'Lempira', 'plural': u'Lempiras', 'symbol': u'L'},
+			{'country': u'Estados Unidos', 'currency': 'USD', 'singular': u'DÓLAR', 'plural': u'DÓLARES', 'symbol': u'US$'},
+			{'country': u'Europa', 'currency': 'EUR', 'singular': u'EURO', 'plural': u'EUROS', 'symbol': u'€'},
+			{'country': u'México', 'currency': 'MXN', 'singular': u'PESO MEXICANO', 'plural': u'PESOS MEXICANOS', 'symbol': u'$'},
+			{'country': u'Perú', 'currency': 'PEN', 'singular': u'NUEVO SOL', 'plural': u'NUEVOS SOLES', 'symbol': u'S/.'},
+			{'country': u'Reino Unido', 'currency': 'GBP', 'singular': u'LIBRA', 'plural': u'LIBRAS', 'symbol': u'£'}
+		)
+		output = ''
+
+		if(n == '100'):
+			output = "CIEN "
+		elif(n[0] != '0'):
+			output = CENTENAS[int(n[0]) - 1]
+
+		k = int(n[1:])
+		if(k <= 20):
+			output += UNIDADES[k]
+		else:
+			if((k > 30) & (n[2] != '0')):
+				output += '%sY %s' % (DECENAS[int(n[1]) - 2], UNIDADES[int(n[2])])
+			else:
+				output += '%s%s' % (DECENAS[int(n[1]) - 2], UNIDADES[int(n[2])])
+
+		return output
+
 	def get_sequence(self):
 		if self.journal_id:
 			for seq in self.journal_id.secuencia_ids:
 				if seq.move_type == self.doc_type:
 					return seq.id
-
 
 	@api.onchange("currency_id")
 	def onchangecurrency(self):
@@ -40,6 +223,16 @@ class Check(models.Model):
 		for db in deb_obj:
 			db.write({'number': n})
 
+	def get_fecha(self):
+		self.fecha_string=self.date.strftime("%d de %B, del %Y")
+
+	def get_number(self):
+		indixe = len(self.number)
+		indixe = indixe - 8
+		numer = self.number
+		self.numero_chek = numer[indixe:indixe+8]
+
+		
 	@api.one
 	def get_msg_number(self):
 		if self.journal_id and self.state == 'draft':
@@ -82,6 +275,10 @@ class Check(models.Model):
 	es_moneda_base = fields.Boolean("Es moneda base")
 	plantilla_id = fields.Many2one("banks.template", "Plantilla",copy=False)
 	cheque_anulado = fields.Boolean("Cheque anulado", copy=False)
+	fecha_string = fields.Char(compute = "get_fecha", readonly=True, )
+	amount_total_text = fields.Char("Amount Total", compute = 'get_totalt', default='Cero')
+	numero_chek = fields.Char(compute = "get_number", readonly=True, )
+	princhek = fields.Boolean(copy=False, default=False)
 
 	@api.onchange("plantilla_id")
 	def onchangeplantilla(self):
