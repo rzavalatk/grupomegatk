@@ -118,16 +118,20 @@
             <table class="table table-sm o_main_table mt48"> <!--t-if="not o.move_line_ids"-->
               <thead>
                 <tr>
+                  <th style='padding: 2px;'><strong>CODIGO</strong></th>
                   <th style='padding: 2px;'><strong>PRODUCTO</strong></th>
                   <th style='padding: 2px;'><strong>CANTIDAD</strong></th>
                 </tr>
               </thead>
               <tbody>
                 <tr t-foreach="o.move_lines" t-as="move">
+                   <td style='padding: 2px;'>
+                    <span t-field="move.x_codigo"/>
+                  </td>
                   <td style='padding: 2px;'>
                     <span t-field="move.product_id"/>
                     <p t-if="move.x_series"><span t-esc="move.x_series"/></p>
-                    </td>
+                  </td>
                   <td style='padding: 2px;'>
                     <span t-field="move.product_uom_qty"/>
                     <span t-field="move.product_uom"/>

@@ -77,6 +77,7 @@ class StockPickingLine(models.Model):
     _inherit = "stock.move"
 
     x_series = fields.Text(related = 'sale_line_id.x_series', string = "Series" )
+    x_codigo = fields.Char(related='product_id.barcode', string="Codigo")
 
     #@api.multi
     #def _action_cancel(self):
