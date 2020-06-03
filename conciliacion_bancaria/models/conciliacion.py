@@ -57,11 +57,9 @@ class ConciliacionBancaria(models.Model):
 
             if concil.account_id.user_type_id.name == 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_inicial - (debit_line - credit_line + concil.saldo_final)
-                print("romel")
 
             if concil.account_id.user_type_id.name != 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line)
-                print("leonel")
 
     def action_validate(self):
         if not self.conciliacion_line:
@@ -70,7 +68,10 @@ class ConciliacionBancaria(models.Model):
         if not round(self.difference, 2) == 0.0:
             raise Warning(_('Existe diferencia en la conicliación, debe de revisar todos los movimientos a conciliar') )
 
-        for mov_conciliar in self.conciliacion_line:
+        if self.validar():
+            raise Warning(_('hay movimientos cancelados, debe de revisar todos los movimientos a conciliar') )
+
+        for mov_conciliar in self.conciliacion_line:            
             if mov_conciliar.es_conciliado:
                 mov_conciliar.move_id.es_conciliado = True
                 mov_conciliar.move_line_id.es_conciliado = True
@@ -78,6 +79,18 @@ class ConciliacionBancaria(models.Model):
                 mov_conciliar.move_id.conciliacion_id = self.id
 
         self.write({'state': 'validated'})
+
+    def validar(self):
+        for mov_conciliar in self.conciliacion_line:
+            if not mov_conciliar.move_id and mov_conciliar.es_conciliado or mov_conciliar.move_id.state=='draft':
+                return True
+
+        return False
+
+    def quitar_null(self):
+        for mov_conciliar in self.conciliacion_line:            
+            if not mov_conciliar.move_id and not mov_conciliar.move_id.es_conciliado:
+                mov_conciliar.unlink()
 
     def action_anulated(self):
         for mov_conciliar in self.conciliacion_line:
