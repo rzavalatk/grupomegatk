@@ -12,7 +12,7 @@
     <template id="chek_report_banks">
         <div style="display: block; height: 100%;width: 100%; margin-left:-116px; margin-top: -20px;">
           <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>          
-          <div style="font-family: Arial; font-size: 20px; font-weight: bold; height: 390px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
+          <div style="font-family: Arial; font-size: 20px; font-weight: bold; height: 370px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
             <div style ='width: 60%; float:right; padding: 20px;text-align: right;'>
               <br/>
               Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
@@ -26,12 +26,12 @@
                     <span t-field="o.name" />
                   </td>
                   <td style="text-align: center; width: 35%; font-family: Arial; font-size: 20px; font-weight: bold;">
-                    &amp;nbsp;&amp;nbsp;<span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
+                    &amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" style="margin-left:-10px;font-family: Arial; font-size: 18px; font-weight: bold;">
-                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.amount_total_text" />
+                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.amount_total_text" />
                   </td>
                 </tr>
                 
