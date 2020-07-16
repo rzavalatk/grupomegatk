@@ -224,7 +224,11 @@ class Check(models.Model):
 			db.write({'number': n})
 
 	def get_fecha(self):
-		self.fecha_string=self.date.strftime("%d de %B, del %Y")
+		mes = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+		year = self.date.strftime("%Y")
+		month = self.date.strftime("%m")
+		day = self.date.strftime("%d")
+		self.fecha_string = str(day)+' de '+str(mes[int(month)-1])+', del '+str(year)
 
 	def get_number(self):
 		indixe = len(self.number)
