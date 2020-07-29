@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="prestamo_account_megatk_view_inh">
+            <field name="name">prestamo.account.campomegatk.view</field>
+            <field name="model">account.account</field>
+      		<field name="inherit_id" ref="account.view_account_form" />
+            <field name="arch" type="xml">
+               <field name="deprecated" position="after">
+          			<field name="desembolso" groups="prestamos.prestamo_manager" />
+        		</field> 
+            </field>
+        </record>
+    </data>
+</odoo>

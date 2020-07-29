@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="prestamos_cuota_wizard_cheque_view_form" model="ir.ui.view">
+			<field name="name">prestamos.cuota.wizard.cheque.form_view</field>
+			<field name="model">prestamos.cuota.wizard.cheque</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Transaction Type">
+					<sheet>
+						<separator string="Registrar pago"/>
+						<group  colspan="4">
+        					<field name="monto"/>
+						</group>
+						<footer>
+						  	<button name="ingresar_pago" string="Ingresar" type="object" class="oe_highlight"/>
+						  	<button class="oe_highlight" special="cancel" string="Cancelar"/>       
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_wizard_prestamos_cuota_wizard_cheque">
+	        <field name="name">Crear</field>
+	        <field name="res_model">prestamos.cuota.wizard.cheque</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="prestamos_cuota_wizard_cheque_view_form"/>
+	        <field name="target">new</field>
+		</record>
+	</data>
+</odoo>

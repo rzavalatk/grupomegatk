@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+	<record model="ir.module.category" id="module_category_prestamo">
+            <field name="name">Gestión de Prestamos</field>
+            <field name="description">Gestión de Prestamos</field>
+            <field name="sequence">4</field>
+	</record>
+	
+    <record id="prestamo_manager" model="res.groups">
+		<field name="category_id" ref="module_category_prestamo"/>
+        <field name="name">Prestamo Responsable</field>
+    </record>
+
+    <record id="prestamo_user" model="res.groups">
+        <field name="category_id" ref="module_category_prestamo"/>
+        <field name="name">Prestamo Usuario</field>
+    </record>
+
+    <record id="cuotas_manager" model="res.groups">
+        <field name="category_id" ref="module_category_prestamo"/>
+        <field name="name">Cuotas Responsable</field>
+    </record>
+</data>
+</odoo>

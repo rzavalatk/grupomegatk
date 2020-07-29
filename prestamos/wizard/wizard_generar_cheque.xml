@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<record id="prestamos_wizard_cheque_view_form" model="ir.ui.view">
+<field name="name">prestamos.wizard.cheque.form_view</field>
+<field name="model">prestamos.wizard.cheque</field>
+<field name="type">form</field>
+<field name="arch" type="xml">
+<form string="Transaction Type">
+<sheet>
+<separator string="Crear Desembolso"/>
+<group  colspan="4">
+    <group >
+        <field name="company_id" options="{'no_create': True}"/>
+        <field name="banco_id" options="{'no_create': True}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+        <field name="name" />
+        <field name="monto"/>
+        
+        <!--<field name="doc_type" />-->
+    </group>
+    <group cols="2">
+        <!--<field name="doc_type" /> -->
+        <field name="fecha"/>
+        <field name="doc_type"/>
+        <field name="currency_id"/>
+        <field name="es_moneda_base" invisible="1"/>
+        <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
+    </group>
+</group>
+<footer>
+  <button name="generate_cheque" string="Generar" type="object" class="oe_highlight"/>
+  <button class="oe_highlight" special="cancel" string="Cancelar"/>       
+</footer>
+</sheet>
+</form>
+</field>
+</record>
+
+<record model="ir.actions.act_window" id="action_wizard_prestamos_wizard_cheque">
+        <field name="name">Crear</field>
+        <field name="res_model">prestamos.wizard.cheque</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="prestamos_wizard_cheque_view_form"/>
+        <field name="target">new</field>
+</record>
+
+</data>
+</odoo>
