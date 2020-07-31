@@ -140,30 +140,30 @@ class Prestamos(models.Model):
 	def validar(self):
 		if self.monto_cxc < 0:
 			raise Warning(_('No se puede procesar el prestamo'))
-			
-		prestamos = self.env["prestamos"].search([('company_id','=',self.company_id.id)])
-		for prestamo in prestamos:
-			if not prestamo.sequence_id.id:
-				obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Prestamos')])
-				if not obj_sequence.id:
-					values = {'name': 'Prestamos',
-						'prefix': 'PRES. ',
-						'company_id': self.company_id.id,
-						'padding':6,}
-					sequence_id = obj_sequence.create(values)
+		if not self.name:
+			prestamos = self.env["prestamos"].search([('company_id','=',self.company_id.id)])
+			for prestamo in prestamos:
+				if not prestamo.sequence_id.id:
+					obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Prestamos')])
+					if not obj_sequence.id:
+						values = {'name': 'Prestamos',
+							'prefix': 'PRES. ',
+							'company_id': self.company_id.id,
+							'padding':6,}
+						sequence_id = obj_sequence.create(values)
+					else:
+						sequence_id = obj_sequence  
+					self.write({'sequence_id': sequence_id.id})
+
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
+
+					break
 				else:
-					sequence_id = obj_sequence  
-				self.write({'sequence_id': sequence_id.id})
-
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
-
-				break
-			else:
-				self.write({'sequence_id': prestamo.sequence_id.id})
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
-				break
+					self.write({'sequence_id': prestamo.sequence_id.id})
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
+					break
 
 		monto = self.monto_cxc or self.monto_cxp
 		tasa = self.tasa/100
