@@ -141,7 +141,7 @@
 								<field name="tasa" attrs="{'required':[('tipo_prestamo', '=', 'personal')]}"/> <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
 							</group>
 							<group>
-								<field name="cuota_prestamo" widget='monetary' readonly="1"/>
+								<field name="cuota_prestamo" widget='monetary' />
                                 <field name="cuota_inicial" widget='monetary' readonly="1"/>
 								<field name="currency_id"/>
 							</group>

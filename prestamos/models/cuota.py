@@ -115,8 +115,6 @@ class PrestamosCuotas(models.Model):
 				cuota = self.cuota_prestamo - self.gastos
 				self.cuotas_prestamo_id._cuotas(saldo,tasa,cuota,0)
 
-			
-
 	def action_view_invoice(self):
 		invoices = self.mapped('invoice_id')
 		action = self.env.ref('account.action_invoice_tree1').read()[0]
