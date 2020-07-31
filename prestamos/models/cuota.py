@@ -22,6 +22,7 @@ class PrestamosCuotas(models.Model):
 	saldo = fields.Float(string='Saldo',readonly=True,copy=False)
 	gastos = fields.Float(string='Gastos',copy=False)
 	pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
+	factura_interes = fields.Boolean(string='Crear pago',default=True)
 	
 	invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
 
@@ -91,7 +92,7 @@ class PrestamosCuotas(models.Model):
 		}
 		self.cuotas_prestamo_id.write(vals) 
 		capital = self.pago - (self.cuota_interes + self.gastos)
-		if capital > 0:
+		if capital > 0 and self.factura_interes:
 			val_payment1 = {
 				'payment_type': 'inbound',
 				'company_id': company_id,

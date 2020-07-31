@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
+from odoo.addons import decimal_precision as dp
 import math
 
 class Prestamos(models.Model):
@@ -67,7 +68,7 @@ class Prestamos(models.Model):
 	cuota_prestamo = fields.Float(string='Cuota', copy=False,)
 	cuota_inicial = fields.Float(string='Cuota inicial', copy=False,)
 
-	tasa = fields.Float(string='Tasa',readonly=True, states={'draft': [('readonly', False)]},)
+	tasa = fields.Float(string='Tasa', digits=dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]},)
 	
 	payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago', required=True,readonly=True, states={'draft': [('readonly', False)]},)
 	meses_cred = fields.Integer(string='Mes', required=True,readonly=True, states={'draft': [('readonly', False)]})
@@ -169,8 +170,9 @@ class Prestamos(models.Model):
 		cuotas = self.meses_cred
 		cuota = monto * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)) if tasa > 0 else monto / cuotas
 		estado = 'validado'
-		if self.tipo_prestamo == 'financiamiento':
+		if self.tasa == 0:
 			cuota = math.ceil(cuota)
+		if self.tipo_prestamo == 'financiamiento':
 			estado = 'desembolso'
 		
 		gasto = self.gasto_prestamo
@@ -205,8 +207,15 @@ class Prestamos(models.Model):
 			if mes==13: 
 				mes = 1
 				year = year + 1
+			if self.comprobar_fecha(year, mes, dia):
+				fecha_pago = str(year) +'/'+ str(mes) +'/'+ str(dia)
+			elif self.comprobar_fecha(year, mes, dia-1):
+				fecha_pago = str(year) +'/'+ str(mes) +'/'+ str(dia-1)
+			elif self.comprobar_fecha(year, mes, dia-2):
+				fecha_pago = str(year) +'/'+ str(mes) +'/'+ str(dia-2)
+			else:
+				fecha_pago = str(year) +'/'+ str(mes) +'/'+ str(dia-3)
 
-			fecha_pago = str(year) +'/'+ str(mes) +'/'+ str(dia)
 			valores = {
 				'name': 'Cuota ' + str(x) ,
 				'cuotas_prestamo_id': self.id,
@@ -222,6 +231,30 @@ class Prestamos(models.Model):
 			monto = saldo
 			gasto = 0
 			x = x + 1
+
+	def comprobar_fecha(self,a, m, d):
+ 
+	    #Array que almacenara los dias que tiene cada mes (si el ano es bisiesto, sumaremos +1 al febrero)
+	    dias_mes = [31, 28, 31, 30,31, 30, 31, 31, 30, 31, 30, 31]
+	 
+
+	 
+	    #Comprobar si el ano es bisiesto y anadir dia en febrero en caso afirmativo
+	    if((a%4 == 0 and a%100 != 0) or a%400 == 0):
+	        dias_mes[1] += 1
+	 
+	    #Comprobar que el mes sea valido
+	    if(m < 1 or m > 12):
+	        return False
+	     
+	    #Comprobar que el dia sea valido
+	    m -= 1
+	    if(d <= 0 or d > dias_mes[m]):
+	        return False
+	 
+	    #Si ha pasado todas estas condiciones, la fecha es valida
+	    return True
+ 
 		
 	def cancelar(self):
 		cuotas = self.env["prestamos.cuotas"].search([('cuotas_prestamo_id','=',self.id)])

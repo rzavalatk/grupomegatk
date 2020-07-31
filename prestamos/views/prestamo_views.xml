@@ -123,7 +123,7 @@
 								<field name="res_partner_id" />
 								<field name="monto_cxc" widget='monetary' attrs="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
 								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
-								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')],'readonly': [('tipo_prestamo', '=', 'financiamiento')],}"/>
+								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>  <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
 								<field name="monto_restante" widget='monetary' invisible='1'/>
 							</group>
 							<group name="datos_pres">
@@ -137,7 +137,7 @@
 							<group>
 								<field name="payment_term_id" />
 								<field name="meses_cred" />
-								<field name="tasa" attrs="{'readonly': [('tipo_prestamo', '=', 'financiamiento')], 'required':[('tipo_prestamo', '=', 'personal')]}"/>
+								<field name="tasa" attrs="{'required':[('tipo_prestamo', '=', 'personal')]}"/> <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
 							</group>
 							<group>
 								<field name="cuota_prestamo" widget='monetary' readonly="1"/>
