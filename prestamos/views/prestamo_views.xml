@@ -32,7 +32,7 @@
 					<header> 
 						<button name="back_draft" type="object" string="Volver a borrador" 
 							states="cancelado" class="oe_highlight"/>
-						<button name="validar" type="object" string="Recibir pago" 
+						<button name="validar" type="object" string="Crear factura" 
 							states="validado" class="oe_highlight" confirm='¿Desea validar la cuota?'/>
 						<button name="%(action_wizard_prestamos_cuota_wizard_cheque)d" type="action" string="Validar" 
 							states="draft" class="oe_highlight"/>
@@ -62,6 +62,7 @@
 								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
 								<field name="saldo" />
 								<field name="fecha_pago"  required="1"/>
+								<field name="pago_interes" required="1"/>
  								<field name="cuotas_prestamo_id"  attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
 							</group>
 						</group>

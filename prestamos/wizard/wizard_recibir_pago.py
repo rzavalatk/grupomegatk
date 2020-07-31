@@ -8,13 +8,14 @@ class WizardGenerarCuota(models.TransientModel):
 	_name = 'prestamos.cuota.wizard.cheque'
 
 	monto = fields.Float("Total del pago",  required=True)
+	pago_interes = fields.Boolean(string='Crear pago',default=True)
 
 	@api.multi
 	def ingresar_pago(self):
 		ctx = self._context
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 
-		if self.monto < (obj_prestamo.cuota_interes + obj_prestamo.gastos):
+		if self.monto < (obj_prestamo.cuota_interes + obj_prestamo.gastos) and self.pago_interes:
 			raise Warning(_('El monto del pago debe de ser mayor a la cuota del interes.'))
 
 		if self.monto > (obj_prestamo.saldo +  obj_prestamo.cuota_prestamo):
@@ -23,5 +24,7 @@ class WizardGenerarCuota(models.TransientModel):
 		if obj_prestamo.cuotas_prestamo_id.state != 'proceso':
 			raise Warning(_('El pago no se puede procesar porque el prestamo no es valido.'))
 		
-		obj_prestamo.pago = self.monto
+		obj_prestamo.pago = self.monto if self.pago_interes else obj_prestamo.cuota_interes
 		obj_prestamo.state = 'validado'
+		obj_prestamo.pago_interes = self.pago_interes
+

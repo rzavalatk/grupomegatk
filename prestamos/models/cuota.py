@@ -22,7 +22,7 @@ class PrestamosCuotas(models.Model):
 	saldo = fields.Float(string='Saldo',readonly=True,copy=False)
 	gastos = fields.Float(string='Gastos',copy=False)
 	pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
-	factura_interes = fields.Boolean(string='Crear pago',default=True)
+	pago_interes = fields.Boolean(string='Crear pago',default=True)
 	
 	invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
 
@@ -65,49 +65,40 @@ class PrestamosCuotas(models.Model):
 			'invoice_line_ids': lineas,
 		}
 		account_invoice_id = obj_factura.create(val_encabezado)
-
-		obj_paymet_id = self.env["account.payment"]
-		val_payment = {
-			'payment_type': 'inbound',
-			'company_id': company_id,
-			'partner_type': 'customer',
-			'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
-			'amount': self.cuota_interes,
-			'currency_id': self.cuotas_prestamo_id.currency_id.id,
-			'journal_id': self.cuotas_prestamo_id.recibir_pagos.id,
-			'payment_date': self.fecha_pago,
-			'communication': self.cuotas_prestamo_id.name + ' ' + self.name,
-			'payment_method_id': 1
-		}
-		paymet_id = obj_paymet_id.create(val_payment)
-		paymet_id.post()
-		#id_move.action_validate()
+		
 		self.write({
 			'invoice_id' : account_invoice_id.id,
 			'state': 'hecho'
 			})
-		vals= {
-			'invoice_ids': [(4, account_invoice_id.id, 0)],
-			'payment_ids': [(4, paymet_id.id, 0)]
-		}
-		self.cuotas_prestamo_id.write(vals) 
+		
 		capital = self.pago - (self.cuota_interes + self.gastos)
-		if capital > 0 and self.factura_interes:
-			val_payment1 = {
+		if self.pago_interes:
+			obj_paymet_id = self.env["account.payment"]
+			val_payment = {
 				'payment_type': 'inbound',
 				'company_id': company_id,
 				'partner_type': 'customer',
 				'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
-				'amount': capital,
+				'amount': self.cuota_interes + capital,
 				'currency_id': self.cuotas_prestamo_id.currency_id.id,
 				'journal_id': self.cuotas_prestamo_id.recibir_pagos.id,
 				'payment_date': self.fecha_pago,
-				'communication': self.cuotas_prestamo_id.name + ' ' + self.name + ' a capital',
+				'communication': self.cuotas_prestamo_id.name + ' ' + self.name,
 				'payment_method_id': 1
 			}
-			paymet_c_id = obj_paymet_id.create(val_payment1)
-			paymet_c_id.post()
+			paymet_id = obj_paymet_id.create(val_payment)
+			paymet_id.post()
+			vals= {
+				'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
+				'payment_ids': [(4, paymet_id.id, 0)]
+			}
+		else:
+			vals= {
+					'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
+				}	
+		self.cuotas_prestamo_id.write(vals) 
 
+		if capital > 0:
 			if self.pago == self.cuota_prestamo:
 				saldo = self.saldo
 			elif self.pago < self.cuota_prestamo:
@@ -117,7 +108,6 @@ class PrestamosCuotas(models.Model):
 
 			vals_c= {
 				'monto_restante': saldo,
-				'payment_ids': [(4, paymet_c_id.id, 0)]
 			}
 			self.cuotas_prestamo_id.write(vals_c)
 			if self.saldo > 0 and abs(self.pago - self.cuota_prestamo) > 0.01:

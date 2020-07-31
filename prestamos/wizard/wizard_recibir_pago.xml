@@ -11,6 +11,7 @@
 						<separator string="Registrar pago"/>
 						<group  colspan="4">
         					<field name="monto"/>
+        					<field name="pago_interes"/>
 						</group>
 						<footer>
 						  	<button name="ingresar_pago" string="Ingresar" type="object" class="oe_highlight"/>
