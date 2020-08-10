@@ -168,7 +168,7 @@ class Prestamos(models.Model):
 		monto = self.monto_cxc or self.monto_cxp
 		tasa = self.tasa/100
 		cuotas = self.meses_cred
-		cuota = self.cuota_prestamo or monto * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)) if tasa > 0 else monto / cuotas
+		cuota = self.cuota_prestamo or (monto * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)) if tasa > 0 else monto / cuotas)
 		estado = 'validado'
 		if self.tasa == 0:
 			cuota = math.ceil(cuota)
