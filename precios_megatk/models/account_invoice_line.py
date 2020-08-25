@@ -17,7 +17,7 @@ class AccountInvoiceLine(models.Model):
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):
         if self.invoice_type == 'out_invoice':
-            if self.env.user.email not in ('lvilleda@printexhn.net','rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','fvasquez@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+            if self.env.user.email not in ('lvilleda@printexhn.net','rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','eduron@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
                 for line in self:
                     if line.product_id:
                         preciolista = self.env['lista.precios.producto']

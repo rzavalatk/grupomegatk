@@ -27,7 +27,10 @@
           </div>
         </div>
         <div style="float: right; margin-top: -320px;">
-          <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">FACTURA COMERCIAL</p>
+          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.type == 'out_refund'">NOTA DE CREDITO</span>
+          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.type == 'in_refund'">Vendor Credit Note</span>
+          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.type == 'in_invoice'">FACTURA PROVEEDOR</span>
+          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.type == 'out_invoice'">FACTURA COMERCIAL</span>
           <div t-if="o.type == 'out_invoice'">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
