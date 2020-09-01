@@ -11,27 +11,27 @@
 
     <template id="chek_report_banks">
         <div style="display: block; height: 100%;width: 100%; margin-left:-116px; margin-top: -20px;">
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>          
-          <div style="font-family: Arial; font-size: 20px; font-weight: bold; height: 370px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
-            <div style ='width: 60%; float:right; padding: 20px;text-align: right;'>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>         
+          <div style="height: 370px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
+            <div style ='text-align:right; font-family: Helvetica; font-size: 16px; width: 75%; float:right; padding-top: 107px; padding-bottom: 20px; letter-spacing: 2pt; font-weight: bold;'>
               <br/>
               Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
             </div>
            <br/>
             <br/><br/>
-            <div style="margin-left: -80px;">
+            <div style="margin-left: -8px;">
               <table style="width: 100%;">
                 <tr>
-                  <td style="text-align: center; width: 65%; padding: 30px; font-family: Arial; font-size: 20px; font-weight: bold; text-transform:uppercase;">
+                  <td style="width: 80%; padding-top: 30px; padding-bottom: 30px; letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold; text-transform:capitalize;">
                     <span t-field="o.name" />
                   </td>
-                  <td style="text-align: center; width: 35%; font-family: Arial; font-size: 20px; font-weight: bold;">
-                    &amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
+                  <td style="width: 20%; letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold;">
+                    <span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="2" style="margin-left:-10px;font-family: Arial; font-size: 18px; font-weight: bold;">
-                    &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.amount_total_text" />
+                  <td colspan="2" style="letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold; text-transform:initial;">
+                    **<span t-field="o.amount_total_text"/>**
                   </td>
                 </tr>
                 
@@ -42,4 +42,3 @@
     </template>
   </data>
 </odoo>
-

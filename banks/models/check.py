@@ -118,7 +118,7 @@ class Check(models.Model):
 				converted += '%s ' % self.convert_group(cientos)
 		if(centavos)>0:
 			converted+= "con %2i/100 "%centavos
-		return converted.upper()
+		return converted.capitalize()
 
 	def convert_group(self,n):
 		UNIDADES = (
