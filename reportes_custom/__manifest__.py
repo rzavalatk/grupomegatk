@@ -27,5 +27,6 @@
         'reports/cotizacion_custom_print_view_printex.xml',
         'reports/purchase_order_custom_print_view.xml',
         'reports/stock_picking_custom_print_view.xml',
+        'reports/stock_picking_custom_print_view_pos.xml',
     ],
 }

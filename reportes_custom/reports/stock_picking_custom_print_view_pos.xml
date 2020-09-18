@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    <template id="stock_picking_custom_print_view_pos">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="reportes_custom.stock_picking_odoo_custom_pos" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+		
+		<template id="external_layout_stock_picking_custom_pos">
+      <div class="header1">
+          <div class="row">
+            <div class="col-xs-3 mb4">
+                <div style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:100%;">
+                  CLIENTE: 
+                </div>
+                <div style="width: 100% !important;">
+                  <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+                    <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+                  
+                  </div>
+                </div>
+            </div>
+            
+          </div>
+            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
+            <div style="float: right;">
+              <table style="text-align: center; width:90%">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold;">FECHA</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold;">Numero</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.scheduled_date"/>
+                  </td>
+              <!--
+                    <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
+                    <td t-if="o.number &gt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td>-->
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
+                </tr>
+              </table>
+            </div>  
+              <table style="text-align: center;">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:120px;">UBICACIÓN</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold; width:120px;">FUENTE</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.location_id"/>
+                  </td>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <div t-if="o.origin" >
+                      <span t-field="o.origin"/>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+          </div>
+        <div class="article o_report_layout_standard">
+          <t t-raw="0"/>
+        </div>
+    </template>
+
+		<template id="stock_picking_odoo_custom_pos">
+  		<t t-call="reportes_custom.external_layout_stock_picking_custom_pos">
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+        <div class="page" style='margin-left:-15; '>
+            <p style="font-family:'Arial'; font-size:72pt;  font-weight: bold;text-align: center;"><span t-field="o.company_id.name"/></p>
+              <div style="font-size:40pt; font-family:'Arial'; line-height: 0.9; text-align: center;">
+                  <p><strong>ORDEN DE ENTREGA</strong></p>
+              </div>
+              <br/>
+              <div style="font-size:38pt; font-family:'Arial'; line-height: 0.9;">
+                <p t-if="o.partner_id.name"><b>Cliente:</b> <span t-field="o.partner_id.name"/></p>
+              </div>
+              <div style="font-size:36pt; font-family:'Arial'; line-height: 0.7;">
+                <p t-if="o.name"><b>Numero: </b><span t-field="o.name"/></p>
+                <p t-if="o.scheduled_date"><b>Fecha: </b> <span t-field="o.scheduled_date"/></p>
+                <p t-if="o.location_id"><b>Ubicaión: </b><span t-field="o.location_id"/></p>
+                <p t-if="o.origin"><b>Origen: </b><span t-field="o.origin"/></p>
+              </div>
+            <!--Is there a discount on at least one line? -->
+            <br/>
+            <table  name="invoice_line_table" style="width:100%; font-size:34pt; font-family:'Arial';">
+              <thead style="text-align: center;">
+                  <tr>
+                      <th>COD.</th>
+                      <th>PRODUCTO</th>
+                      <th>CAN.</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr t-foreach="o.move_ids_without_package" t-as="l">
+                  <td>
+                    <span t-field="l.x_codigo"/>
+                  </td>
+                  <td style='max-width:140px; overflow-wrap: break-word;'>
+                    <span t-esc="l.name[0:70] + '...'"/>
+                    <p t-if="l.x_series"><span t-esc="l.x_series"/></p>
+                  </td>
+                  <td style="text-align:right">
+                      <span t-field="l.product_uom_qty"/>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+			</t>    
+  	</template>
+	</data>
+</odoo>
