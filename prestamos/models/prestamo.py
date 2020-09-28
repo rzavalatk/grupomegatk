@@ -106,7 +106,7 @@ class Prestamos(models.Model):
 	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, required=True,readonly=True, states={'draft': [('readonly', False)]},)
 
 	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', default = desembolso_cuenta, required=True, readonly=True, states={'draft': [('readonly', False)]},)
-	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', readonly=True, states={'draft': [('readonly', False)]},)
+	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', default = redescuento, readonly=True, states={'draft': [('readonly', False)]},)
 	
 	user_id = fields.Many2one('res.users', string='Responsable', index=True,  default=lambda self: self.env.user,readonly=True, states={'draft': [('readonly', False)]},)
 	
