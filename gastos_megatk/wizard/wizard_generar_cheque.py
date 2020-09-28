@@ -39,13 +39,18 @@ class WizardGenerarCheque(models.TransientModel):
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
     @api.multi
-    def generate_cheque(self):
+    def generate_cheque(self):           
         if self.monto <= 0:
             raise Warning(_('El monto del cheque/transferencia debe de ser mayor que cero.'))
         if self.doc_type != 'debit':
             ctx = self._context
             obj_gasto = self.env[ctx["active_model"]].browse(ctx['active_id'])
             obj_check = self.env["banks.check"]
+            pagar_a = obj_gasto.empleado_solicitud.name.split('/')
+            if len(pagar_a) > 1:
+                pagar_a = pagar_a[1]
+            else:
+                pagar_a = pagar_a[0]
             lineas = []
             val_lineas = {
                 'account_id': obj_gasto.cuenta_anticipo_id.id,
@@ -65,7 +70,7 @@ class WizardGenerarCheque(models.TransientModel):
                 'currency_rate': self.currency_rate,
                 'currency_id': self.currency_id.id,
                 'doc_type': self.doc_type,
-                'name': obj_gasto.empleado_solicitud.name,
+                'name': pagar_a,
                 'check_lines': lineas,
             }
             
@@ -99,7 +104,7 @@ class WizardGenerarCheque(models.TransientModel):
                 'currency_rate': self.currency_rate,
                 'currency_id': self.currency_id.id,
                 'doc_type': self.doc_type,
-                'name': obj_gasto.empleado_solicitud.name,
+                'name': pagar_a,
                 'debit_line': lineas,
             }
             
