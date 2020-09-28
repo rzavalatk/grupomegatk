@@ -25,6 +25,11 @@ class Prestamos(models.Model):
 		return cuenta.id
 
 	@api.model
+	def redescuento(self):
+		cuenta = self.env['account.account'].search([('redescuento', '=', '1')])
+		return cuenta.id
+
+	@api.model
 	def product_gasto(self):
 		product = self.env['product.product'].search([('gasto', '=', '1')])
 		return product.id
@@ -37,8 +42,13 @@ class Prestamos(models.Model):
 	def _get_invoiced(self):
 		w = len(set(self.cuotas_id.ids))
 		y = len(set(self.payment_ids.ids))
-		x = len(set(self.invoice_cxc_ids.ids))
-		z = len(set(self.invoice_cxp_ids.ids))
+		x = 0
+		z = 0
+		for invoice in self.invoice_cxc_ids:
+			if(invoice.type == 'in_invoice'):
+				z = z + 1
+			else:
+				x = x + 1
 		self.invoice_count_cxp = z
 		self.invoice_count_cxc = x
 		self.payment_count = y
@@ -65,10 +75,10 @@ class Prestamos(models.Model):
 	monto_restante = fields.Float(string='Capital restante', copy=False,)
 	gasto_prestamo = fields.Float(string='Gasto', default=0,readonly=True, states={'draft': [('readonly', False)]},copy=False,)
 
-	cuota_prestamo = fields.Float(string='Cuota', copy=False,)
-	cuota_inicial = fields.Float(string='Cuota inicial', copy=False,)
+	cuota_prestamo = fields.Float(string='Cuota', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
+	cuota_inicial = fields.Float(string='Cuota inicial', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 
-	tasa = fields.Float(string='Tasa', digits=dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]},)
+	tasa = fields.Float(string='Tasa', digits=dp.get_precision('Product Price'), copy=False, readonly=True, required=True, states={'draft': [('readonly', False)]},)
 	
 	payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago', required=True,readonly=True, states={'draft': [('readonly', False)]},)
 	meses_cred = fields.Integer(string='Mes', required=True,readonly=True, states={'draft': [('readonly', False)]})
@@ -77,7 +87,9 @@ class Prestamos(models.Model):
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,readonly=True, states={'draft': [('readonly', False)]},)
 	company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id,readonly=True, states={'draft': [('readonly', False)]},)
 	
-	res_partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('customer','=',True), ], required=True,readonly=True, states={'draft': [('readonly', False)]},)
+	res_partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('customer','=',True), ], required=True, readonly=True, states={'draft': [('readonly', False)]},)
+	res_partner_prov_id = fields.Many2one('res.partner', string='Proveedor', domain=[('supplier','=',True), ],)
+	
 	state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'),('validado', 'Validado'),('desembolso', 'Desembolsado'),('proceso', 'En proceso'),('finalizado', 'Finalizado')], string="Estado", default='draft',copy=False, track_visibility='onchange', )
 	sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
 	
@@ -85,7 +97,6 @@ class Prestamos(models.Model):
 	banco_id = fields.Many2one("banks.check", "Cheque/Transferencia", copy=False,)
 
 	invoice_cxc_ids = fields.Many2many("account.invoice", string='Facturas cxc', readonly=True, copy=False)
-	invoice_cxp_ids = fields.Many2many("account.invoice", string='Facturas cxp', readonly=True, copy=False)
 
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 	
@@ -94,7 +105,9 @@ class Prestamos(models.Model):
 	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain=[('sale_ok', '=', True)], default = product_gasto, required=True,readonly=True, states={'draft': [('readonly', False)]},)
 	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, required=True,readonly=True, states={'draft': [('readonly', False)]},)
 
-	account_id = fields.Many2one('account.account', 'Cuenta de Desembolso', default = desembolso_cuenta, required=True,readonly=True, states={'draft': [('readonly', False)]},)
+	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', default = desembolso_cuenta, required=True, readonly=True, states={'draft': [('readonly', False)]},)
+	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', readonly=True, states={'draft': [('readonly', False)]},)
+	
 	user_id = fields.Many2one('res.users', string='Responsable', index=True,  default=lambda self: self.env.user,readonly=True, states={'draft': [('readonly', False)]},)
 	
 	invoice_count_cxc = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
@@ -106,6 +119,7 @@ class Prestamos(models.Model):
 	def _onchange_monto_cxc(self):
 		self.monto_restante = self.monto_cxc
 
+	@api.one
 	@api.depends('precio_a','prima')
 	def _onchange_precioa_prima(self):
 		if self.precio_a != 0 and self.prima != 0:
@@ -164,17 +178,48 @@ class Prestamos(models.Model):
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
 					break
+		if (self.tipo_prestamo == 'financiamiento'):
+			self._financiamiento()
+		else:
+			self._personal()
 
+		
+	def _financiamiento(self):
+		monto = self.monto_cxc or self.monto_cxp
+
+		monto_efectivo = self.precio_m - self.prima
+		tasa = self.tasa/100
+		cuotas = self.meses_cred
+		cuota_ini = (monto_efectivo * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)))
+
+
+		cuota_ini = math.ceil(cuota_ini)
+		monto_final = cuotas * cuota_ini
+		tasa_aprox = ((monto_final / monto)-1) / cuotas
+		cuota_efec = (monto * ((tasa_aprox*((1+tasa_aprox)**cuotas))/(((1+tasa_aprox)**cuotas)-1)))
+		while cuota_ini != cuota_efec:
+			tasa_aprox = tasa_aprox + 0.0000001
+			cuota_efec = (monto * ((tasa_aprox*((1+tasa_aprox)**cuotas))/(((1+tasa_aprox)**cuotas)-1)))
+			if cuota_efec > cuota_ini:
+				break
+
+		estado = 'desembolso'
+		gasto = self.gasto_prestamo
+
+		self._cuotas(monto,tasa_aprox,cuota_ini,gasto)
+
+		self.write({'state': estado,
+					'cuota_prestamo': cuota_ini,
+					'cuota_inicial': cuota_ini + self.gasto_prestamo,
+					'tasa': tasa_aprox * 100
+					})
+
+	def _personal(self):
 		monto = self.monto_cxc or self.monto_cxp
 		tasa = self.tasa/100
 		cuotas = self.meses_cred
-		cuota = self.cuota_prestamo or (monto * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)) if tasa > 0 else monto / cuotas)
+		cuota = (monto * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)))
 		estado = 'validado'
-		if self.tasa == 0:
-			cuota = math.ceil(cuota)
-		if self.tipo_prestamo == 'financiamiento':
-			estado = 'desembolso'
-		
 		gasto = self.gasto_prestamo
 
 		self._cuotas(monto,tasa,cuota,gasto)
@@ -260,7 +305,7 @@ class Prestamos(models.Model):
 		cuotas = self.env["prestamos.cuotas"].search([('cuotas_prestamo_id','=',self.id)])
 		if cuotas:
 			for cuota in cuotas:
-				if cuota.state != 'draft' or self.invoice_cxc_ids  or self.banco_id:
+				if cuota.state != 'draft':
 					raise Warning(_('No se puede eliminar o cancelar un prestamo en estado de '+ self.state))
 				cuota.sudo().unlink()
 		self.write({'state': 'cancelado',
@@ -272,14 +317,18 @@ class Prestamos(models.Model):
 		self.write({'state': 'draft'})
 
 	def unlink(self):
-
 		for prestamo in self:
 			if prestamo.state != 'draft':
 				raise Warning(_('No se puede eliminar o cancelar una prestamo en estado '+ prestamo.state))
 		return super(Prestamos, self).unlink()
 
-
 	def crear_factura(self):
+		if not self.invoice_cxc_ids:
+			self.crear_factura_cxc()
+			if (self.tipo_prestamo == 'financiamiento'):
+				self.crear_factura_cxp()
+
+	def crear_factura_cxc(self):
 		obj_factura = self.env["account.invoice"]
 
 		# product = self.product_id.with_context(force_company=self.company_id.id)
@@ -333,14 +382,66 @@ class Prestamos(models.Model):
 	def crear_factura_cxp(self):
 		obj_factura = self.env["account.invoice"]
 
+		# product = self.product_id.with_context(force_company=self.company_id.id)
+  		# account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
+
+		lineas = []
+		val_lineas = {
+			'name': 'Capital prestado',
+			'account_id': self.account_id.id,
+			'price_unit': self.monto_cxc,
+			'quantity': 1,
+			'product_id': False,
+		}
+		lineas.append((0, 0, val_lineas))
+		if self.monto_cxp != self.monto_cxc:
+			val_lineas1 = {
+				'name': 'Redescuento',
+				'account_id': self.account_redes_id.id,
+				'price_unit': (self.monto_cxc - self.monto_cxp) * -1,
+				'quantity': 1,
+				'product_id': False
+			}
+			lineas.append((0, 0, val_lineas1))
+		company_id = self.company_id.id
+		val_encabezado = {
+			'name': '',
+			'type': 'in_invoice',
+			'account_id': self.res_partner_prov_id.property_account_payable_id.id,
+			'partner_id': self.res_partner_prov_id.id,
+			'currency_id': self.currency_id.id,
+			'payment_term_id': self.payment_term_id.id,
+			'company_id': company_id,
+			'user_id': self.user_id and self.user_id.id,
+			'invoice_line_ids': lineas,
+		}
+		
+		account_invoice_id = obj_factura.create(val_encabezado)
+		#id_move.action_validate()
+		self.write({
+			'invoice_cxc_ids' : [(4,account_invoice_id.id,0)],
+			'state': 'proceso'
+		})
 
 	def action_view_invoice(self):
 		invoices = self.mapped('invoice_cxc_ids')
 		action = self.env.ref('account.action_invoice_tree1').read()[0]
 		if len(invoices) > 1:
-			action['domain'] = [('id', 'in', invoices.ids)]
+			action['domain'] = [('id', 'in', invoices.ids),('type','=','out_invoice')]
 		elif len(invoices) == 1:
 			action['views'] = [(self.env.ref('account.invoice_form').id, 'form')]
+			action['res_id'] = invoices.ids[0]
+		else:
+			action = {'type': 'ir.actions.act_window_close'}
+		return action
+
+	def action_view_invoice_cxp(self):
+		invoices = self.mapped('invoice_cxc_ids')
+		action = self.env.ref('account.action_invoice_tree1').read()[0]
+		if len(invoices) > 1:
+			action['domain'] = [('id', 'in', invoices.ids),('type','=','in_invoice')]
+		elif len(invoices) == 1:
+			action['views'] = [(self.env.ref('account.invoice_supplier_form').id, 'form')]
 			action['res_id'] = invoices.ids[0]
 		else:
 			action = {'type': 'ir.actions.act_window_close'}

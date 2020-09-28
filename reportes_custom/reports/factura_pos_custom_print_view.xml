@@ -294,7 +294,10 @@
                 <span t-field="o.fiscal_position_id.note"/>
             </p>
             <br/>
-          <br/>
+            <p t-if="o.comment" style="text-align: center; font-size: 30pt;">
+                  <br></br><span t-field="o.comment"/>
+                </p> 
+          <br/><br/>
             <div style="border-top: 1px solid rgb(13, 143, 210); text-align: center; font-weight: normal;font-size: 32pt;">
                 <ul style="text-align: center;" class="list-inline mb4">
                     <li t-if="o.company_id.street"><span t-field="o.company_id.street"/></li>

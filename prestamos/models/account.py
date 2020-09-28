@@ -6,3 +6,4 @@ class Account(models.Model):
 	_inherit = 'account.account'
 
 	desembolso = fields.Boolean(string='Desembolso',)
+	redescuento = fields.Boolean(string='Redescuento',)

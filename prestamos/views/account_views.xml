@@ -6,7 +6,8 @@
       		<field name="inherit_id" ref="account.view_account_form" />
             <field name="arch" type="xml">
                <field name="deprecated" position="after">
-          			<field name="desembolso" groups="prestamos.prestamo_manager" />
+                <field name="desembolso" groups="prestamos.prestamo_manager" />
+          			<field name="redescuento" groups="prestamos.prestamo_manager" />
         		</field> 
             </field>
         </record>

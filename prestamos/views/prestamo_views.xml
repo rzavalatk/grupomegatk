@@ -87,28 +87,36 @@
 						<button name="%(action_wizard_prestamos_wizard_cheque)d" type="action" string="Desembolso" 
 							attrs="{'invisible': ['|',('state','!=','validado'),('tipo_prestamo','=','financiamiento')]}" class="oe_highlight" />
 						<button name="cancelar" type="object" string="Cancelar" 
-							states="validado,desembolso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
+							states="validado,desembolso,proceso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
 						<field name="state" widget="statusbar" nolabel="1"/>  
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice_cxp"
+	                            type="object"
+	                            class="oe_stat_button"
+	                            icon="fa-pencil-square-o"
+	                            attrs="{'invisible': [('invoice_count_cxp', '=', 0)]}">
+	                            <field name="invoice_count_cxp" widget="statinfo" string="Facturas cxp"/>
+	                        </button>
 							<button name="action_view_invoice"
 	                            type="object"
 	                            class="oe_stat_button"
 	                            icon="fa-pencil-square-o"
 	                            attrs="{'invisible': [('invoice_count_cxc', '=', 0)]}">
-	                            <field name="invoice_count_cxc" widget="statinfo" string="Facturas CXC"/>
+	                            <field name="invoice_count_cxc" widget="statinfo" string="Facturas cxc"/>
 	                        </button>
 	                        <button name="action_view_payment"
 	                            type="object"
 	                            class="oe_stat_button"
 	                            icon="fa-money"
 	                            attrs="{'invisible': [('payment_count', '=', 0)]}">
-	                            <field name="payment_count" widget="statinfo" string="Pagos"/>
+	                            <field name="payment_count" widget="statinfo" string="Pagos cliente"/>
 	                        </button>
 							<button class="oe_stat_button"
 								icon="fa-bank"
-								type="action" name="%(action_prestamo_cuotas)d"
+								type="action" 
+								name="%(action_prestamo_cuotas)d"
 	                            attrs="{'invisible': [('cuotas_count', '=', 0)]}">
 	                            <field name="cuotas_count" widget="statinfo" string="Cuotas"/>
 							</button>
@@ -120,7 +128,6 @@
 						<group name='prestamo' string='Datos del prestamo'>
 							<group name="client">
 								<field name="tipo_prestamo" />
-	                            <field name="invoice_count_cxc" widget="statinfo" string="Invoices" invisible='1'/>
 								<field name="res_partner_id" />
 								<field name="monto_cxc" widget='monetary' attrs="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
 								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
@@ -138,11 +145,11 @@
 							<group>
 								<field name="payment_term_id" />
 								<field name="meses_cred" />
-								<field name="tasa" attrs="{'required':[('tipo_prestamo', '=', 'personal')]}"/> <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
+								<field name="tasa" /> 
 							</group>
 							<group>
 								<field name="cuota_prestamo" widget='monetary' />
-                                <field name="cuota_inicial" widget='monetary' readonly="1"/>
+                                <field name="cuota_inicial" widget='monetary' />
 								<field name="currency_id"/>
 							</group>
 						</group>
@@ -155,6 +162,7 @@
 							<page string="Producto">
 								<group string='Producto a financiar' attrs="{'invisible': [('tipo_prestamo', '=', 'personal')]}">
 									<group>
+										<field name="res_partner_prov_id" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/> <!-- ,'readonly':[('res_partner_prov_id','!=',False)] -->
 										<field name="equipo" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
 										<field name="precio_a" widget='monetary' attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
 										<field name="precio_m" widget='monetary' attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
@@ -172,9 +180,10 @@
 										<field name="producto_gasto_id"/>
 										<field name="producto_interes_id"/>
 										<field name="account_id"/>
-										<field name="recibir_pagos" attrs="{'required':[('state', '!=', 'draft')]}"/>
+										<field name="account_redes_id" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')],'invisible':[('tipo_prestamo', '!=', 'financiamiento')]}"/>
 									</group>
 									<group name="cuentas">
+										<field name="recibir_pagos" attrs="{'required':[('state', '!=', 'draft')]}"/>
 										<field name="company_id"/>
 										<field name="user_id"/>
 										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": [["state","in",["draft","cancelado"]]]}'/>

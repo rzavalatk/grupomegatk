@@ -15,7 +15,7 @@
           <div style="height: 370px; width: 750px; -ms-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg); -o-transform: rotate(90deg);">
             <div style ='text-align:right; font-family: Helvetica; font-size: 16px; width: 75%; float:right; padding-top: 107px; padding-bottom: 20px; letter-spacing: 2pt; font-weight: bold;'>
               <br/>
-              Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
+              Tegucigalpa M.D.C. <span t-field="o.date" />
             </div>
            <br/>
             <br/><br/>
@@ -23,15 +23,15 @@
               <table style="width: 100%;">
                 <tr>
                   <td style="width: 80%; padding-top: 30px; padding-bottom: 30px; letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold; text-transform:capitalize;">
-                    <span t-field="o.name" />
+                    ** <span t-field="o.name" /> **
                   </td>
-                  <td style="width: 20%; letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold;">
+                  <td style="text-align:right; width: 20%; letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold;">
                     <span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' />
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" style="letter-spacing: 2pt; font-family: Arial; font-size: 18px; font-weight: bold; text-transform:initial;">
-                    **<span t-field="o.amount_total_text"/>**
+                    ** <span t-field="o.amount_total_text"/> **
                   </td>
                 </tr>
                 

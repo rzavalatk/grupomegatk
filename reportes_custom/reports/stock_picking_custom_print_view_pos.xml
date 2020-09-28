@@ -70,22 +70,27 @@
   		<t t-call="reportes_custom.external_layout_stock_picking_custom_pos">
         <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
         <div class="page" style='margin-left:-15; '>
-            <p style="font-family:'Arial'; font-size:72pt;  font-weight: bold;text-align: center;"><span t-field="o.company_id.name"/></p>
-              <div style="font-size:40pt; font-family:'Arial'; line-height: 0.9; text-align: center;">
+           <p style="font-family:'Arial'; font-size:72pt;  font-weight: bold;text-align: center;"><span t-field="o.company_id.name"/></p>
+              <div style="font-size:50pt; font-family:'Arial'; line-height: 0.9; text-align: center;">
                   <p><strong>ORDEN DE ENTREGA</strong></p>
               </div>
               <br/>
-              <div style="font-size:38pt; font-family:'Arial'; line-height: 0.9;">
-                <p t-if="o.partner_id.name"><b>Cliente:</b> <span t-field="o.partner_id.name"/></p>
+              <div style="font-size:45pt; font-family:'Arial'; line-height: 0.9;">
+                <p t-if="o.partner_id.name"><b>Cliente:</b></p>
+                <p t-if="o.partner_id.name"><b><span t-field="o.partner_id.name"/></b></p>
               </div>
+              <br/>              <br/>
+              <div style="font-size:40pt; font-family:'Arial'; line-height: 0.7;">
+                <p t-if="o.name"><b>Numero: <span t-field="o.name"/></b></p>
+                <p t-if="o.origin"><b>Origen: <span t-field="o.origin"/></b></p>
+              </div>
+              <br/>              <br/>
               <div style="font-size:36pt; font-family:'Arial'; line-height: 0.7;">
-                <p t-if="o.name"><b>Numero: </b><span t-field="o.name"/></p>
                 <p t-if="o.scheduled_date"><b>Fecha: </b> <span t-field="o.scheduled_date"/></p>
                 <p t-if="o.location_id"><b>Ubicaión: </b><span t-field="o.location_id"/></p>
-                <p t-if="o.origin"><b>Origen: </b><span t-field="o.origin"/></p>
               </div>
             <!--Is there a discount on at least one line? -->
-            <br/>
+            <br/>              <br/>
             <table  name="invoice_line_table" style="width:100%; font-size:34pt; font-family:'Arial';">
               <thead style="text-align: center;">
                   <tr>
@@ -109,6 +114,8 @@
                 </tr>
               </tbody>
             </table>
+            <br/>  <br/>  <br/>  <br/>  <br/> <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  
+            <div style="text-align:center; font-size:34pt; font-family:'Arial';"> Firma </div>    
         </div>
 			</t>    
   	</template>
