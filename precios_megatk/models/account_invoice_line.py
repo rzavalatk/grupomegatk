@@ -8,11 +8,13 @@ class AccountInvoiceLine(models.Model):
 
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
     nombreproducto = fields.Char(related='product_id.name')
+    lista_precio = fields.Char("Lista de Precio", readonly=True,)
     
     @api.onchange("precio_id")
     def onchangedescuento(self):
         if self.precio_id:
             self.price_unit = self.precio_id.precio
+            self.lista_precio = self.precio_id.name.name
 
     @api.onchange("price_unit", "product_id")
     def validatepreciocosto(self):

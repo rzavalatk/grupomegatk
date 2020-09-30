@@ -9,6 +9,7 @@
 		<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
 			<field name="nombreproducto" invisible="1"/>
 	 		<field name="precio_id" domain='[("product_id.id","=",nombreproducto)]' options="{'no_create': True}"/>
+			<field name="lista_precio" invisible="1"/>
 		</xpath>
   
   	</field>

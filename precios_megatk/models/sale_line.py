@@ -9,17 +9,20 @@ class Saleline(models.Model):
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
     pricelist_id = fields.Many2one(related='order_id.pricelist_id', string='Field Label', )
     nombreproducto = fields.Integer(related='product_id.product_tmpl_id.id')
+    lista_precio = fields.Char("Lista de Precio",)
 
     @api.multi
     def _prepare_invoice_line(self, qty):
         values = super(Saleline, self)._prepare_invoice_line(qty)
         values['precio_id'] = self.precio_id.id
+        values['lista_precio'] = self.lista_precio
         return values
 
     @api.onchange("precio_id")
     def onchangedescuento(self):
         if self.precio_id:
             self.price_unit = self.precio_id.precio
+            self.lista_precio = self.precio_id.name.name
 
     @api.onchange("product_id")
     def validatepreciocosto(self):
