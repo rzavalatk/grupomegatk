@@ -437,7 +437,7 @@ class Prestamos(models.Model):
 
 	def action_view_invoice_cxp(self):
 		invoices = self.mapped('invoice_cxc_ids')
-		action = self.env.ref('account.action_invoice_tree1').read()[0]
+		action = self.env.ref('account.action_vendor_bill_template').read()[0]
 		if len(invoices) > 1:
 			action['domain'] = [('id', 'in', invoices.ids),('type','=','in_invoice')]
 		elif len(invoices) == 1:
