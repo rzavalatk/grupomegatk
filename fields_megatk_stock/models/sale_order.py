@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
 	@api.multi
 	def action_confirm(self):
 		if self.env.user.company_id.id != 10:
-			if self.env.user.email not in ('kromero@megatk.com','eduron@megatk.com','msauceda@megatk.com'):
+			if self.env.user.email not in ('kromero@megatk.com','imolina@megatk.com','eduron@megatk.com','msauceda@megatk.com'):
 				message=''
 				for line in self.order_line:
 					if line.product_id.type == 'product':
