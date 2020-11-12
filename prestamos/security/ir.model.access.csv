@@ -3,3 +3,5 @@ access_prestamo_manager,prestamo,model_prestamos,prestamo_manager,1,1,1,1
 access_prestamo_user,prestamo,model_prestamos,prestamo_user,1,0,0,0
 access_prestamo_cuotas_manager,prestamo_cuotas,model_prestamos_cuotas,cuotas_manager,1,1,1,1
 access_prestamo_cuotas_user,prestamo_cuotas,model_prestamos_cuotas,prestamo_manager,1,1,1,0
+access_prestamo_afiliados_manager,prestamo_afiliados ,model_prestamos_afiliados,prestamo_manager,1,1,1,1
+access_prestamo_afiliados_user,prestamo_afiliados ,model_prestamos_afiliados,prestamo_user,1,0,0,0

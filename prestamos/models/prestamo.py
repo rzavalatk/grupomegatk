@@ -4,6 +4,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import Warning
 from odoo.addons import decimal_precision as dp
 import math
+import logging
+_logger = logging.getLogger(__name__)
 
 class Prestamos(models.Model):
 	_name = 'prestamos'
@@ -192,16 +194,24 @@ class Prestamos(models.Model):
 		cuotas = self.meses_cred
 		cuota_ini = (monto_efectivo * ((tasa*((1+tasa)**cuotas))/(((1+tasa)**cuotas)-1)))
 
+		cuotaf5 = (self.precio_a - self.prima) / cuotas
+		montoa = (cuotaf5 * cuotas) + self.prima
+		montob = (cuota_ini * cuotas) + self.prima
+		if montob < montoa:
+			cuota_ini = cuotaf5
 
 		cuota_ini = math.ceil(cuota_ini)
 		monto_final = cuotas * cuota_ini
 		tasa_aprox = ((monto_final / monto)-1) / cuotas
-		cuota_efec = (monto * ((tasa_aprox*((1+tasa_aprox)**cuotas))/(((1+tasa_aprox)**cuotas)-1)))
-		while cuota_ini != cuota_efec:
-			tasa_aprox = tasa_aprox + 0.0000001
+
+		if tasa_aprox != 0:
 			cuota_efec = (monto * ((tasa_aprox*((1+tasa_aprox)**cuotas))/(((1+tasa_aprox)**cuotas)-1)))
-			if cuota_efec > cuota_ini:
-				break
+			#_logger.info("//////////////////////////////////////////")
+			while cuota_ini != cuota_efec:
+				tasa_aprox = tasa_aprox + 0.0000001
+				cuota_efec = (monto * ((tasa_aprox*((1+tasa_aprox)**cuotas))/(((1+tasa_aprox)**cuotas)-1)))
+				if cuota_efec > cuota_ini:
+					break
 
 		estado = 'desembolso'
 		gasto = self.gasto_prestamo

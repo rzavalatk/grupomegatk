@@ -1,0 +1,81 @@
+<odoo>
+	<data>
+		<!-- Form View -->
+		<record model="ir.ui.view" id="prestamos_afiliados_form_view">
+			<field name="name">prestamos.afiliados.form.view</field>
+			<field name="model">prestamos.afiliados</field>
+			<field name="arch" type="xml">
+				<form string = "Form Import">
+					<header> 
+						<button name="back_draft" type="object" string="Volver a borrador" 
+							class="oe_highlight"/>
+					</header>
+					<sheet>
+						<group>
+							<field name="name" string='Numero'/>
+							<field name="payment_type" />
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers" />
+			            <field name="message_ids" widget="mail_thread"/>
+		        		<field name="activity_ids" widget="mail_activity"/>
+			        </div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Tree View -->
+		<record model="ir.ui.view" id="prestamos_afiliados_tree_view">
+			<field name="name">prestamos.afiliados.tree.view</field>
+			<field name="model">prestamos.afiliados</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" string='Numero'/>
+					<field name="payment_type" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action model view -->
+		<record model="ir.actions.act_window" id="action_prestamos_afiliados">
+			<field name="name">Afiliados</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">prestamos.afiliados</field>
+			<field name="view_mode">tree,form,activity</field>
+            <field name="context">{'default_payment_type': 'debit'}</field>
+		</record>
+
+		<!-- Reglas de registro 
+		<record id="prestamos_rule" model="ir.rule">
+			<field name="name">Prestamos</field>
+			<field name="model_id" ref="model_prestamos"/>
+			<field name="perm_read" eval="True"/>
+			<field name="perm_write" eval="True"/>
+			<field name="perm_create" eval="True"/>
+			<field name="perm_unlink" eval="True"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+-->
+		 <!-- Search View 
+		<record id="prestamos_search_view" model="ir.ui.view">
+			<field name="name">prestamos.search.view</field>
+			<field name="model">prestamos</field>
+			<field name="arch" type="xml">
+				<search string="Prestamos Search View">
+					<field name="name" string="Numero" />
+					<field name="res_partner_id"/>
+					<filter string="Validado" name='esato_import_v' domain="[('state','=','validado')]"/>
+					<filter string="Desembolso" name='esato_import_d' domain="[('state','=','desembolso')]"/>
+					<filter string="En proceso" name='esato_import_p' domain="[('state','=','proceso')]"/>
+					<filter string="Estado" name='group_sta' context="{'group_by':'state'}"/>
+					<filter string="Prestamos" name='group_type' context="{'group_by':'tipo_prestamo'}"/>
+				</search>
+			</field>
+		</record>
+-->
+			<!-- menu categories -->
+		<menuitem name="Afiliados" id="afiliados_menu_category" sequence = "1" parent="prestamos_menu_root"/>
+		<menuitem name="Afiliados" id="afiliaciones_menu_category" sequence = "10" parent="afiliados_menu_category" action = "action_prestamos_afiliados"/>
+	</data>
+</odoo>

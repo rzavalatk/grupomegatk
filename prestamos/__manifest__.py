@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Prestamos",
+    'name': "Financiera",
 
     'description': """
         calculo de prestamos y financiamiento
@@ -26,6 +26,7 @@
         "wizard/wizard_recibir_pago.xml",
         'views/prestamo_views.xml',
         'views/account_views.xml',
+        'views/afiliados_views.xml',
         'views/product_template_views.xml',
 
         #'views/templates.xml',

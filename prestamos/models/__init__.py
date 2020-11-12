@@ -4,3 +4,4 @@ from . import prestamo
 from . import cuota
 from . import product_template
 from . import account
+from . import afiliados
