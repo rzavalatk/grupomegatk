@@ -22,8 +22,8 @@
     'data': [
         "security/groups.xml",
         'security/ir.model.access.csv',
-        "wizard/wizard_generar_cheque.xml",
         "wizard/wizard_recibir_pago.xml",
+        "wizard/wizard_generar_cheque.xml",
         'views/prestamo_views.xml',
         'views/account_views.xml',
         'views/afiliados_views.xml',

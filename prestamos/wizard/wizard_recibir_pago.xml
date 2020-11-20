@@ -9,9 +9,15 @@
 				<form string="Transaction Type">
 					<sheet>
 						<separator string="Registrar pago"/>
-						<group  colspan="4">
-        					<field name="monto"/>
-        					<field name="pago_interes"/>
+						<group>
+							<group >
+	        					<field name="monto"/>
+	        					<field name="pago_interes"/>
+							</group>
+							<group >
+	        					<field name="fecha_pagado"/>
+	        					<field name="moratorio"/>
+							</group>
 						</group>
 						<footer>
 						  	<button name="ingresar_pago" string="Ingresar" type="object" class="oe_highlight"/>

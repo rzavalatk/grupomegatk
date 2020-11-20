@@ -216,7 +216,7 @@ class Prestamos(models.Model):
 		estado = 'desembolso'
 		gasto = self.gasto_prestamo
 
-		self._cuotas(monto,tasa_aprox,cuota_ini,gasto)
+		self._cuotas(monto,tasa_aprox,cuota_ini,gasto,0)
 
 		self.write({'state': estado,
 					'cuota_prestamo': cuota_ini,
@@ -232,15 +232,16 @@ class Prestamos(models.Model):
 		estado = 'validado'
 		gasto = self.gasto_prestamo
 
-		self._cuotas(monto,tasa,cuota,gasto)
+		self._cuotas(monto,tasa,cuota,gasto,0)
 
 		self.write({'state': estado,
 					'cuota_prestamo': cuota,
 					'cuota_inicial': cuota + self.gasto_prestamo
 					})
 
-	def _cuotas(self,monto,tasa,cuota,gasto):
+	def _cuotas(self,monto,tasa,cuota,gasto,monto_atrasado):
 		cuotas_ids = self.env["prestamos.cuotas"].search([('cuotas_prestamo_id','=',self.id)])
+		monto_atrasado1 = monto_atrasado
 		x = 1
 		if cuotas_ids:
 			for cuotas in cuotas_ids:
@@ -274,14 +275,16 @@ class Prestamos(models.Model):
 			valores = {
 				'name': 'Cuota ' + str(x) ,
 				'cuotas_prestamo_id': self.id,
-				'cuota_prestamo': (cuota + gasto) if (monto + interes) > cuota else (monto + interes), 
+				'cuota_prestamo': (cuota + gasto + monto_atrasado1) if (monto + interes) > cuota else (monto + interes + monto_atrasado1), 
 				'cuota_interes': interes, 
 				'cuota_capital': monto, 
 				'saldo': saldo if saldo >= 0 else 0, 
+				'monto_atrasado': monto_atrasado1, 
 				'gastos': gasto, 
 				'fecha_pago': fecha_pago,  
 				'res_partner_id': self.res_partner_id.id,
 			}
+			monto_atrasado1= monto_atrasado1 - monto_atrasado1
 			id_precio = obj_precio.create(valores)
 			monto = saldo
 			gasto = 0

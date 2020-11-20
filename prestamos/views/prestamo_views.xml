@@ -9,6 +9,7 @@
 					<field name="fecha_pago"/>
 					<field name="cuota_capital"/>
 					<field name="cuota_interes"/>
+					<field name="monto_atrasado"/>
 					<field name="cuota_prestamo"/>
 					<field name="pago"/>
 					<field name="saldo"/>
@@ -54,16 +55,20 @@
 						<group name="x_datos0">
 							<group name="x_1">
 								<field name="cuota_capital" attrs='{"readonly": [["cuota_capital","!=",False]]}'/>
+								<field name="saldo" invisible="1" />
 								<field name="gastos"  attrs='{"readonly": [["gastos","!=",False]]}'/>
 								<field name="cuota_interes"  attrs='{"readonly": [["cuota_interes","!=",False]]}'/>
 								<field name="cuota_prestamo"  attrs='{"readonly": [["cuota_prestamo","!=",False]]}'/>
 							</group>
 							<group name="x_2">
-								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
-								<field name="saldo" />
 								<field name="fecha_pago"  required="1"/>
-								<field name="pago_interes" required="1"/>
+								<field name="pago_interes" required="1" invisible="1" />
  								<field name="cuotas_prestamo_id"  attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
+								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
+								<field name="fecha_pagado" />
+								<field name="monto_atrasado_actual"  attrs='{"invisible": [["monto_atrasado_actual","=",0]]}'/>
+								<field name="monto_atrasado"  attrs='{"invisible": [["monto_atrasado","=",0]]}'/>
+								<field name="interes_moratorio"  attrs='{"invisible": [["interes_moratorio","=",0]]}'/>
 							</group>
 						</group>
 					</sheet>
