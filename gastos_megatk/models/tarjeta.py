@@ -42,7 +42,7 @@ class LiquidacionTarjetas(models.Model):
     #relacion de unos a muchos
     detalle_gastos_ids = fields.One2many("gastos.tarjeta.lineas.megatk", "obj_parent", "Detalle de gastos")
     comentarios = fields.Text("Comentarios")
-    total_gastos = fields.Float("Total gastos", track_visibility='onchange', compute=get_totalgastos)
+    total_gastos = fields.Float("Total gastos", store=True, track_visibility='onchange', compute=get_totalgastos)
     journal_id = fields.Many2one("account.journal", "Tarjeta", required=True, domain=[('type','=','bank')])
     debito_id = fields.Many2one('banks.debit', 'Apunte Contable', readonly=True)
     

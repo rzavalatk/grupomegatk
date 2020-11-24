@@ -113,6 +113,7 @@
   <field name="arch" type="xml">
     <search string="Gastos Search View">
     	<field string="Solicitante" name='empleado_solicitud'/>
+    	<field string="Total" name='total_gastos'/>
       <filter string="Validado" name='liq_gastos' domain="[('state','=','liquidado')]"/>
       <filter string="Pendiente" name='pend_gastos' domain="[('state','=','pendiente')]"/>
       <filter string="Solicitante" name='group_solic_gastos' context="{'group_by':'empleado_solicitud'}"/>
