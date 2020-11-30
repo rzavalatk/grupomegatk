@@ -9,7 +9,7 @@
 					<field name="fecha_pago"/>
 					<field name="cuota_capital"/>
 					<field name="cuota_interes"/>
-					<field name="monto_atrasado"/>
+					<field name="interes_moratorio"/>
 					<field name="cuota_prestamo"/>
 					<field name="pago"/>
 					<field name="saldo"/>
@@ -62,12 +62,9 @@
 							</group>
 							<group name="x_2">
 								<field name="fecha_pago"  required="1"/>
-								<field name="pago_interes" required="1" invisible="1" />
  								<field name="cuotas_prestamo_id"  attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
 								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
 								<field name="fecha_pagado" />
-								<field name="monto_atrasado_actual"  attrs='{"invisible": [["monto_atrasado_actual","=",0]]}'/>
-								<field name="monto_atrasado"  attrs='{"invisible": [["monto_atrasado","=",0]]}'/>
 								<field name="interes_moratorio"  attrs='{"invisible": [["interes_moratorio","=",0]]}'/>
 							</group>
 						</group>
@@ -137,7 +134,7 @@
 								<field name="monto_cxc" widget='monetary' attrs="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
 								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
 								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>  <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
-								<field name="monto_restante" widget='monetary' invisible='1'/>
+								<field name="monto_restante" widget='monetary' readonly="1" />
 							</group>
 							<group name="datos_pres">
 								<field name="gasto_prestamo" widget='monetary'/>
@@ -153,8 +150,8 @@
 								<field name="tasa" /> 
 							</group>
 							<group>
-								<field name="cuota_prestamo" widget='monetary' />
-                                <field name="cuota_inicial" widget='monetary' />
+								<field name="cuota_prestamo" widget='monetary' readonly="1"/>
+                                <field name="cuota_inicial" widget='monetary' readonly="1"/>
 								<field name="currency_id"/>
 							</group>
 						</group>

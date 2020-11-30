@@ -80,7 +80,7 @@ class Prestamos(models.Model):
 	cuota_prestamo = fields.Float(string='Cuota', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 	cuota_inicial = fields.Float(string='Cuota inicial', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 
-	tasa = fields.Float(string='Tasa', digits=dp.get_precision('Product Price'), copy=False, readonly=True, required=True, states={'draft': [('readonly', False)]},)
+	tasa = fields.Float(string='Tasa', digits=dp.get_precision('Product Price'), copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 	
 	payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago', required=True,readonly=True, states={'draft': [('readonly', False)]},)
 	meses_cred = fields.Integer(string='Mes', required=True,readonly=True, states={'draft': [('readonly', False)]})
@@ -157,13 +157,12 @@ class Prestamos(models.Model):
 		if self.monto_cxc < 0:
 			raise Warning(_('No se puede procesar el prestamo'))
 		if not self.name:
-			prestamos = self.env["prestamos"].search([('company_id','=',self.company_id.id)])
-			for prestamo in prestamos:
-				if not prestamo.sequence_id.id:
-					obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Prestamos')])
+			if self.tipo_prestamo == 'financiamiento':
+				if not self.sequence_id.id:
+					obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Financiamiento')])
 					if not obj_sequence.id:
-						values = {'name': 'Prestamos',
-							'prefix': 'PRES. ',
+						values = {'name': 'Financiamiento',
+							'prefix': 'FINAN. ',
 							'company_id': self.company_id.id,
 							'padding':6,}
 						sequence_id = obj_sequence.create(values)
@@ -173,22 +172,40 @@ class Prestamos(models.Model):
 
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
-
-					break
 				else:
-					self.write({'sequence_id': prestamo.sequence_id.id})
+					self.write({'sequence_id': self.sequence_id.id})
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
-					break
-		if (self.tipo_prestamo == 'financiamiento'):
-			self._financiamiento()
-		else:
-			self._personal()
+				self._financiamiento()
+			else:
+				if not self.sequence_id.id:
+					obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Prestamos')])
+					if not obj_sequence.id:
+						values = {'name': 'Prestamos',
+							'prefix': 'PER. ',
+							'company_id': self.company_id.id,
+							'padding':6,}
+						sequence_id = obj_sequence.create(values)
+					else:
+						sequence_id = obj_sequence  
+					self.write({'sequence_id': sequence_id.id})
 
-		
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
+				else:
+					self.write({'sequence_id': self.sequence_id.id})
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
+				self._personal()
+		else:
+			if self.tipo_prestamo == 'financiamiento':
+				self._financiamiento()
+			else:
+				self._personal()
+
+
 	def _financiamiento(self):
 		monto = self.monto_cxc or self.monto_cxp
-
 		monto_efectivo = self.precio_m - self.prima
 		tasa = self.tasa/100
 		cuotas = self.meses_cred
@@ -258,7 +275,7 @@ class Prestamos(models.Model):
 		year = fecha_inicial.year
 		while saldo > 0.1:
 			interes = monto * tasa
-			saldo = monto - (cuota - interes)
+			saldo = monto + interes - cuota - monto_atrasado1
 			mes = mes + 1
 			if mes==13: 
 				mes = 1
@@ -279,7 +296,7 @@ class Prestamos(models.Model):
 				'cuota_interes': interes, 
 				'cuota_capital': monto, 
 				'saldo': saldo if saldo >= 0 else 0, 
-				'monto_atrasado': monto_atrasado1, 
+				'interes_moratorio': monto_atrasado1, 
 				'gastos': gasto, 
 				'fecha_pago': fecha_pago,  
 				'res_partner_id': self.res_partner_id.id,
@@ -343,10 +360,6 @@ class Prestamos(models.Model):
 
 	def crear_factura_cxc(self):
 		obj_factura = self.env["account.invoice"]
-
-		# product = self.product_id.with_context(force_company=self.company_id.id)
-  #       account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
-
 		lineas = []
 		val_lineas = {
 			'name': 'Capital prestado',
