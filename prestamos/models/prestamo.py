@@ -271,8 +271,11 @@ class Prestamos(models.Model):
 		saldo = 1
 		fecha_inicial = self.fecha_inicio or fields.Date.context_today(self)
 		dia = fecha_inicial.day
-		mes = fecha_inicial.month
+		mes = fecha_inicial.month + x - 1 if x > 1 else fecha_inicial.month
 		year = fecha_inicial.year
+		if mes==13: 
+			mes = 1
+			year = year + 1
 		while saldo > 0.1:
 			interes = monto * tasa
 			saldo = monto + interes - cuota - monto_atrasado1

@@ -134,7 +134,7 @@
 								<field name="monto_cxc" widget='monetary' attrs="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
 								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
 								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>  <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
-								<field name="monto_restante" widget='monetary' readonly="1" />
+								<field name="monto_restante" widget='monetary' readonly="1" attrs="{'invisible': [('state', '!=', 'proceso')]}"/>
 							</group>
 							<group name="datos_pres">
 								<field name="gasto_prestamo" widget='monetary'/>
