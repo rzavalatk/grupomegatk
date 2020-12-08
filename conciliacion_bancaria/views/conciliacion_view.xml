@@ -86,7 +86,7 @@
         <page string="Detalle de Movimientos">
             <field name="conciliacion_line" attrs="{'readonly': [('state','!=','draft')]}" >
                 <tree editable="top" create="0" delete="0" decoration-muted="es_conciliado == True" decoration-danger="es_conciliado == False" >
-                  <field name="move_id" readonly="1"/>
+                   <field name="move_id" readonly="1"/>
                    <field name="name" readonly="1"/>
                    <field name="date" readonly="1"/>
                    <field name="partner_id" readonly="1"/>

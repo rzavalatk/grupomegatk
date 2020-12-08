@@ -116,7 +116,7 @@ class ConciliacionBancaria(models.Model):
         for movimiento in obj_move_id:
             obj_line = self.env["conicliacion.bancaria.line"]
             for obj_line_concil_delete in self.conciliacion_line:
-                if obj_line_concil_delete.move_id.state == 'draft':
+                if obj_line_concil_delete.move_id.state == 'draft' or not obj_line_concil_delete.move_id:
                     obj_line_concil_delete.unlink()
 
             obj_line_concil_line = self.env["conicliacion.bancaria.line"].search([('conciliacion_id', '=', self.id), ('move_line_id', '=', movimiento.id)])
@@ -140,6 +140,7 @@ class ConciliacionBancaria(models.Model):
                     vals["haber"] = movimiento.credit
 
                 line_id =  obj_line.create(vals)
+
 
 class Debitline(models.Model):
     _name = 'conicliacion.bancaria.line'

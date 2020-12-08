@@ -3,6 +3,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
 from odoo.addons import decimal_precision as dp
+from datetime import date
 
 class ImportacionProducto(models.Model):
 	_name='import.product.mega'
@@ -34,6 +35,9 @@ class ImportacionProducto(models.Model):
 	transpor_medio = fields.Selection( [('aereo', 'Aéreo'), ('courier', 'Courier Express'), ('maritimo', 'Marítimo')], string="Transporte",)
 	puerto = fields.Selection( [('hodumares', 'Hondumares'),('puertocortes','Puerto Cortés'), ('swissport', 'Swissport'), ('san_lorenzo', 'San Lorenzo')], string="Puerto",)
 	incoterms = fields.Selection( [('exw','EXW'),('fca','FCA'),('fas','FAS'),('fob','FOB'),('cfr','CFR'),('cif','CIF'),('cpt','CPT'),('cip','CIP'),('dat','DAT'),('dap','DAP'),('ddp','DDP')], string='Incoterms')
+
+	date = fields.Date(string="Fecha", help="Fecha de ponderación", required=True,)
+
 
 	@api.multi
 	def unlink(self):
@@ -75,9 +79,9 @@ class ImportacionProducto(models.Model):
 				obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Ponderacion')])
 				if not obj_sequence.id:
 					values = {'name': 'Ponderacion',
-                  		'prefix': 'POND. ',
-                  		'company_id': self.company_id.id,
-                  		'padding':8,}
+						'prefix': 'POND. ',
+						'company_id': self.company_id.id,
+						'padding':8,}
 					sequence_id = obj_sequence.create(values)
 				else:
 					sequence_id = obj_sequence	
@@ -113,16 +117,16 @@ class ImportacionProducto(models.Model):
 				})
 			obj_precio = self.env["product.ponderacion"]
 			valores = {
-            	'product_id': producto.id,
-            	'ponderacion_id': self.id,
-            	'fecha_recepcion': product.fecha_done,
-            	'ponderacion': ponderacion_producto,
-            	'costo_real': costo_real,
-            }
+				'product_id': producto.id,
+				'ponderacion_id': self.id,
+				'fecha_recepcion': product.fecha_done,
+				'ponderacion': ponderacion_producto,
+				'costo_real': costo_real,
+			}
 			id_precio = obj_precio.create(valores)
-		self.write({'state': 'validado'})
-
-
+		self.write({'state': 'validado',
+					'date': date.today()
+					})
 
 	@api.multi
 	@api.onchange('stock_pick_ids')

@@ -76,10 +76,10 @@
                 <group name="x_1">
                   <field name="res_parner_id" options="{'no_create': True}" attrs="{'readonly': 
                     [('state','!=','draft')]}"/>
-                  <field name="descripcion"
+                  <field name="date"
+                    attrs="{'invisible': [('state','==','draft')]}"/>
+                    <field name="descripcion"
                     attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="currency_id" invisible='0' options="{'no_create': True}"
-                   attrs="{'readonly': [('state','!=','draft')]}"/>
                 </group>
                 <group name="x_2">
                   <field name="incoterms" 
@@ -95,6 +95,8 @@
                     [('country_id','=',res_country)]" attrs="{'readonly': [('state','!=','draft')]}"/>
                   <field name="company_id" groups="base.group_multi_company" attrs="
                     {'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+                  <field name="currency_id" invisible='0' options="{'no_create': True}"
+                   attrs="{'readonly': [('state','!=','draft')]}"/>
                 </group>
               </group>
               <group>
@@ -149,6 +151,7 @@
       <field name="arch" type="xml">
         <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
           <field name="name" string='Nombre'/>
+          <field name="date" />
           <field name="res_parner_id"/>
           <field name="company_id" groups="base.group_multi_company" string='Compañia'/>
           <field name="state"/>
@@ -179,6 +182,7 @@
         <field name="arch" type="xml">
             <search string="Importación Search View">
                 <field name="name" string="Nombre" />
+                <field name="date"/>
                 <field name="res_parner_id"/>
                 <field name="descripcion" string="Descripcion" />
                 <filter string="Estado" name='esato_import' domain="[('state','=','validado')]"/>
