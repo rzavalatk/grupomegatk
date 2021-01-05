@@ -23,23 +23,25 @@ class Prestamos(models.Model):
 
 	@api.model
 	def desembolso_cuenta(self):
-		cuenta = self.env['account.account'].search([('desembolso', '=', '1')])
-		return cuenta.id
-
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.account_id') or False
+		
 	@api.model
 	def redescuento(self):
-		cuenta = self.env['account.account'].search([('redescuento', '=', '1')])
-		return cuenta.id
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.account_redes_id') or False
 
 	@api.model
 	def product_gasto(self):
-		product = self.env['product.product'].search([('gasto', '=', '1')])
-		return product.id
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_gasto_id') or False
+		
 
 	@api.model
 	def product_interes(self):
-		product = self.env['product.product'].search([('interes', '=', '1')])
-		return product.id
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False
+	
+	@api.model
+	def recibir_pagos(self):
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
+
 
 	def _get_invoiced(self):
 		w = len(set(self.cuotas_id.ids))
@@ -84,7 +86,7 @@ class Prestamos(models.Model):
 	
 	payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago', required=True,readonly=True, states={'draft': [('readonly', False)]},)
 	meses_cred = fields.Integer(string='Mes', required=True,readonly=True, states={'draft': [('readonly', False)]})
-	tipo_prestamo = fields.Selection( [('financiamiento', 'Financiamiento'),('personal', 'Personal')], default='financiamiento', required=True,readonly=True, states={'draft': [('readonly', False)]},)
+	tipo_prestamo = fields.Selection( [('financiamiento', 'Financiamiento'),('personal', 'Personal')], default='financiamiento', )
 
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,readonly=True, states={'draft': [('readonly', False)]},)
 	company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id,readonly=True, states={'draft': [('readonly', False)]},)
@@ -102,10 +104,10 @@ class Prestamos(models.Model):
 
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 	
-	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank'), ])
+	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], default = recibir_pagos, )
 	
-	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain=[('sale_ok', '=', True)], default = product_gasto, required=True,readonly=True, states={'draft': [('readonly', False)]},)
-	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, required=True,readonly=True, states={'draft': [('readonly', False)]},)
+	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain=[('sale_ok', '=', True)], default = product_gasto, )
+	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, )
 
 	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', default = desembolso_cuenta, required=True, readonly=True, states={'draft': [('readonly', False)]},)
 	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', default = redescuento, readonly=True, states={'draft': [('readonly', False)]},)
@@ -202,7 +204,6 @@ class Prestamos(models.Model):
 				self._financiamiento()
 			else:
 				self._personal()
-
 
 	def _financiamiento(self):
 		monto = self.monto_cxc or self.monto_cxp
@@ -311,29 +312,25 @@ class Prestamos(models.Model):
 			x = x + 1
 
 	def comprobar_fecha(self,a, m, d):
+		#Array que almacenara los dias que tiene cada mes (si el ano es bisiesto, sumaremos +1 al febrero)
+		dias_mes = [31, 28, 31, 30,31, 30, 31, 31, 30, 31, 30, 31]
+	 
+		#Comprobar si el ano es bisiesto y anadir dia en febrero en caso afirmativo
+		if((a%4 == 0 and a%100 != 0) or a%400 == 0):
+			dias_mes[1] += 1
+	 
+		#Comprobar que el mes sea valido
+		if(m < 1 or m > 12):
+			return False
+		 
+		#Comprobar que el dia sea valido
+		m -= 1
+		if(d <= 0 or d > dias_mes[m]):
+			return False
+	 
+		#Si ha pasado todas estas condiciones, la fecha es valida
+		return True
  
-	    #Array que almacenara los dias que tiene cada mes (si el ano es bisiesto, sumaremos +1 al febrero)
-	    dias_mes = [31, 28, 31, 30,31, 30, 31, 31, 30, 31, 30, 31]
-	 
-
-	 
-	    #Comprobar si el ano es bisiesto y anadir dia en febrero en caso afirmativo
-	    if((a%4 == 0 and a%100 != 0) or a%400 == 0):
-	        dias_mes[1] += 1
-	 
-	    #Comprobar que el mes sea valido
-	    if(m < 1 or m > 12):
-	        return False
-	     
-	    #Comprobar que el dia sea valido
-	    m -= 1
-	    if(d <= 0 or d > dias_mes[m]):
-	        return False
-	 
-	    #Si ha pasado todas estas condiciones, la fecha es valida
-	    return True
- 
-		
 	def cancelar(self):
 		cuotas = self.env["prestamos.cuotas"].search([('cuotas_prestamo_id','=',self.id)])
 		if cuotas:
@@ -412,7 +409,7 @@ class Prestamos(models.Model):
 		obj_factura = self.env["account.invoice"]
 
 		# product = self.product_id.with_context(force_company=self.company_id.id)
-  		# account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
+		# account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
 
 		lineas = []
 		val_lineas = {
@@ -439,7 +436,6 @@ class Prestamos(models.Model):
 			'account_id': self.res_partner_prov_id.property_account_payable_id.id,
 			'partner_id': self.res_partner_prov_id.id,
 			'currency_id': self.currency_id.id,
-			'payment_term_id': self.payment_term_id.id,
 			'company_id': company_id,
 			'user_id': self.user_id and self.user_id.id,
 			'invoice_line_ids': lineas,

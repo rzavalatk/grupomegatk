@@ -24,5 +24,5 @@ class WizardGenerarCuota(models.TransientModel):
 		
 		obj_prestamo.pago = self.monto if self.monto > 0 else 0
 		obj_prestamo.state = 'validado'
-		obj_prestamo.interes_moratorio = (obj_prestamo.cuota_capital * (2/100)) if (self.moratorio and self.fecha_pagado > obj_prestamo.fecha_pago) or self.monto == 0 else 0
+		obj_prestamo.interes_generado = (obj_prestamo.cuota_capital * (2/100)) if (self.moratorio and self.fecha_pagado > obj_prestamo.fecha_pago) or self.monto == 0 else 0
 		obj_prestamo.fecha_pagado = self.fecha_pagado

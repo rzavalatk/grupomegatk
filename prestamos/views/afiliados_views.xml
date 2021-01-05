@@ -8,19 +8,79 @@
 				<form string = "Form Import">
 					<header> 
 						<button name="back_draft" type="object" string="Volver a borrador" 
-							class="oe_highlight"/>
+							class="oe_highlight" states="cancelado"/>
+						<button name="%(action_wizard_prestamos_deposito_wizard_filiado)d" type="action" string="Validar" 
+							states="draft" class="oe_highlight"/>
+						<button name="%(action_wizard_prestamos_deposito_wizard_filiado)d" type="action" string="Depósito" 
+							class="oe_highlight" states="validado"/>
+						<button name="%(action_wizard_prestamos_afiliados_wizard_cheque)d" type="action" string="Retiro" 
+							class="oe_highlight" states="validado"/>
+							<button name="%(action_wizard_prestamos_interes_wizard_filiado)d" type="action" string="Interés" 
+							class="oe_highlight" states="validado"/>
+						<button name="actualizar" type="object" string="Actualizar" 
+							class="oe_highlight" states="validado"/>
+						<field name="state" widget="statusbar" nolabel="1"/>  
 					</header>
 					<sheet>
-						<group>
-							<field name="name" string='Numero'/>
-							<field name="payment_type" />
-						</group>
+						<div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice_cxp"
+                  type="object"
+                  class="oe_stat_button"
+                  icon="fa-pencil-square-o"
+                  attrs="{'invisible': [('invoice_count_cxp', '=', 0)]}">
+                  <field name="invoice_count_cxp" widget="statinfo" string="Facturas cxp"/>
+              </button>
+            	<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+              	<field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+            	</button>
+        		</div>
+						<field name="imagen" widget='image' class="oe_avatar"/>
+						<div class="oe_title">
+              <label class="oe_edit_only" for="res_partner_prov_id" string="Afiliado"/>
+              <h2><field name="res_partner_prov_id" widget="res_partner_many2one" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0, 'show_vat': True}" domain="[('supplier','=',True)]"
+                    placeholder="Name, TIN, Email, or Reference"/></h2>
+              <label class="oe_edit_only" for="cuenta" string="Número de cuenta"/>
+                <field name="cuenta"/>
+         		</div>
+						<notebook>
+							<page string="Información">
+								<group>
+									<group>
+										<field name="name_mostrar" invisible="1"/>
+										<field name="saldo_inicial" attrs="{'readonly': True}" />
+										<field name="saldo_real" />
+										<field name="user_id" />
+									</group>
+									<group>
+										<field name="fecha_apertura" />
+										<field name="currency_id"/>
+										<field name="company_id"/>
+									</group>
+								</group>
+							</page>
+							<page string="Detalle de Movimientos">
+		            <field name="movimientos_line" attrs="{'readonly': [('state','!=','draft')]}" >
+	                <tree editable="top"  >
+										<field name="move_id" />
+										<field name="name" />
+										<field name="date" />
+										<field name="partner_id" />
+										<!--<field name="analytic_id"/>-->
+										<field name="currency_id" />
+										<field name="debe"  sum="Total"/>
+										<field name="haber"  sum="Total"/>
+										<field name="importe_moneda" />
+										<field name="impreso" invisible="1"/>
+	                </tree>
+		            </field>
+		        	</page>
+						</notebook>
 					</sheet>
 					<div class="oe_chatter">
-			            <field name="message_follower_ids" widget="mail_followers" />
-			            <field name="message_ids" widget="mail_thread"/>
-		        		<field name="activity_ids" widget="mail_activity"/>
-			        </div>
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread"/>
+        		<field name="activity_ids" widget="mail_activity"/>
+	        </div>
 				</form>
 			</field>
 		</record>
@@ -31,50 +91,79 @@
 			<field name="model">prestamos.afiliados</field>
 			<field name="arch" type="xml">
 				<tree>
-					<field name="name" string='Numero'/>
-					<field name="payment_type" />
+					<field name="name_mostrar"/>
 				</tree>
 			</field>
 		</record>
+
+		<!-- Kanba View -->
+		<record id="prestamos_kanban_view_afiliados" model="ir.ui.view">
+			<field name="name">prestamos.afiliados.kanban</field>
+			<field name="model">prestamos.afiliados</field>
+			<field name="arch" type="xml">
+      	<kanban class="o_hr_employee_kanban center-block">
+					<field name="id"/>
+					<field name="imagen"/>
+					<field name="name_mostrar"/>
+					<field name="cuenta"/>
+					<separator/>
+					<templates>
+			      <t t-name="kanban-box">
+			      	<div style="height:100px" class="oe_kanban_global_click">
+					 		<img class="o_kanban_image" t-att-src="kanban_image('prestamos.afiliados', 'imagen', record.id.raw_value)" t-att-alt="record.name"/>
+	              	<b>Nombre: </b> <field name="name_mostrar"/>
+		             	<br/>
+	              	<b>Cuenta: </b> <field name="cuenta"/>
+	              	<div style="text-align:right;">
+		              		<b>Saldo: </b> <field name="saldo_real"/>
+		            	</div>
+		            </div>
+		          </t>
+		      </templates>
+        </kanban>
+      </field>
+    </record>
+
 
 		<!-- Action model view -->
 		<record model="ir.actions.act_window" id="action_prestamos_afiliados">
 			<field name="name">Afiliados</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">prestamos.afiliados</field>
-			<field name="view_mode">tree,form,activity</field>
-            <field name="context">{'default_payment_type': 'debit'}</field>
+			<field name="view_mode">kanban,tree,form,activity</field>
 		</record>
 
-		<!-- Reglas de registro 
-		<record id="prestamos_rule" model="ir.rule">
-			<field name="name">Prestamos</field>
-			<field name="model_id" ref="model_prestamos"/>
+		<!-- Reglas de registro -->
+		<record id="prestamos_afiliado_rule" model="ir.rule">
+			<field name="name">Afiliados</field>
+			<field name="model_id" ref="model_prestamos_afiliados"/>
 			<field name="perm_read" eval="True"/>
 			<field name="perm_write" eval="True"/>
 			<field name="perm_create" eval="True"/>
 			<field name="perm_unlink" eval="True"/>
 			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
 		</record>
--->
-		 <!-- Search View 
-		<record id="prestamos_search_view" model="ir.ui.view">
-			<field name="name">prestamos.search.view</field>
-			<field name="model">prestamos</field>
+
+		 <!-- Search View -->
+		<record id="prestamos_afiliados_search_view" model="ir.ui.view">
+			<field name="name">prestamos.afiliados.search.view</field>
+			<field name="model">prestamos.afiliados</field>
 			<field name="arch" type="xml">
 				<search string="Prestamos Search View">
-					<field name="name" string="Numero" />
-					<field name="res_partner_id"/>
-					<filter string="Validado" name='esato_import_v' domain="[('state','=','validado')]"/>
+					<field name="name_mostrar" />
+					<field name="cuenta"/>
+					<filter string="Archivado" name='esato_import_v' domain="[('active','=',False)]"/>
+					<filter string="Validado" name='esato_import_c' domain="[('state','=','validado')]"/>
 					<filter string="Desembolso" name='esato_import_d' domain="[('state','=','desembolso')]"/>
 					<filter string="En proceso" name='esato_import_p' domain="[('state','=','proceso')]"/>
 					<filter string="Estado" name='group_sta' context="{'group_by':'state'}"/>
-					<filter string="Prestamos" name='group_type' context="{'group_by':'tipo_prestamo'}"/>
 				</search>
 			</field>
 		</record>
--->
+
 			<!-- menu categories -->
+			<menuitem name="Financiera" id="prestamos_menu_root" sequence = "1" 
+			web_icon="prestamos,static/description/icon.png" action = "action_prestamos_afiliados"/> 
 		<menuitem name="Afiliados" id="afiliados_menu_category" sequence = "1" parent="prestamos_menu_root"/>
 		<menuitem name="Afiliados" id="afiliaciones_menu_category" sequence = "10" parent="afiliados_menu_category" action = "action_prestamos_afiliados"/>
 	</data>

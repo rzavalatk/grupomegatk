@@ -65,6 +65,7 @@
  								<field name="cuotas_prestamo_id"  attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
 								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
 								<field name="fecha_pagado" />
+								<field name="interes_generado"  attrs='{"invisible": [["interes_generado","=",0]]}'/>
 								<field name="interes_moratorio"  attrs='{"invisible": [["interes_moratorio","=",0]]}'/>
 							</group>
 						</group>
@@ -119,8 +120,8 @@
 								icon="fa-bank"
 								type="action" 
 								name="%(action_prestamo_cuotas)d"
-	                            attrs="{'invisible': [('cuotas_count', '=', 0)]}">
-	                            <field name="cuotas_count" widget="statinfo" string="Cuotas"/>
+                attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
+                <field name="cuotas_count" widget="statinfo" string="Cuotas"/>
 							</button>
 						</div>
 	                        
@@ -151,7 +152,7 @@
 							</group>
 							<group>
 								<field name="cuota_prestamo" widget='monetary' readonly="1"/>
-                                <field name="cuota_inicial" widget='monetary' readonly="1"/>
+                <field name="cuota_inicial" widget='monetary' readonly="1"/>
 								<field name="currency_id"/>
 							</group>
 						</group>
@@ -179,16 +180,12 @@
 							<page string="Cuentas">
 								<group>
 									<group name="productos">
-										<field name="producto_gasto_id"/>
-										<field name="producto_interes_id"/>
-										<field name="account_id"/>
-										<field name="account_redes_id" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')],'invisible':[('tipo_prestamo', '!=', 'financiamiento')]}"/>
-									</group>
-									<group name="cuentas">
-										<field name="recibir_pagos" attrs="{'required':[('state', '!=', 'draft')]}"/>
 										<field name="company_id"/>
 										<field name="user_id"/>
 										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": [["state","in",["draft","cancelado"]]]}'/>
+									</group>
+									<group name="cuentas">
+										
 									</group>
 								</group>
 							</page>
@@ -266,11 +263,13 @@
 		</record>
 
 			<!-- menu categories -->
-		<menuitem name="Financiera" id="prestamos_menu_root" sequence = "1" 
-			web_icon="prestamos,static/description/icon.png" action = "action_prestamos_financiamiento"/> 
-		<menuitem name="Prestamos" id="prestamos_menu_category" sequence = "1" parent="prestamos_menu_root"/>
+		
+		<menuitem name="Prestamos" id="prestamos_menu_category" sequence = "2" parent="prestamos_menu_root"/>
 
 		<menuitem name="Personales" id="prestamos_personales_menu_category" sequence = "1"		parent="prestamos_menu_category" action = "action_prestamos"/>
 		<menuitem name="Financiamiento" id="prestamos_financiamiento_menu_category" sequence = "2"    parent="prestamos_menu_category" action = "action_prestamos_financiamiento"/>
+
+		<menuitem name="Configuración" id="config_menu_category" sequence = "3" parent="prestamos_menu_root"/>
+		<menuitem name="Configuración" id="config_config_menu_category" sequence = "10" parent="config_menu_category" action = "prestamo_config_settings_action"/>
 	</data>
 </odoo>
