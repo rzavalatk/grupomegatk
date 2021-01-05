@@ -13,6 +13,14 @@ class PrestamosCuotas(models.Model):
     _description = "Cuotas de los prestamos"
     _order = "id"
 
+    @api.model
+    def product_interes(self):
+        return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False
+
+    @api.model
+    def recibir_pagos(self):
+        return self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
+
     name = fields.Char('Numero',copy=False,required=True)
     description = fields.Text(copy=False)
     # currency_id = fields.Many2one('res.currency', 'Moneda',)
@@ -25,10 +33,13 @@ class PrestamosCuotas(models.Model):
     cuota_prestamo = fields.Float(string='Cuota',copy=False)
     cuota_capital = fields.Float(string='Capital',copy=False)
     cuota_interes = fields.Float(string='Interes',copy=False, digits=dp.get_precision('Product Unit of Measure'))
-    interes_moratorio = fields.Float(string='Interes Moratorio',copy=False, default=0,)
+    interes_generado = fields.Float(string='Interes generado',copy=False, default=0,)
+    interes_moratorio = fields.Float(string='Interes moratorio',copy=False, default=0,)
     saldo = fields.Float(string='Saldo',readonly=True,copy=False)
     gastos = fields.Float(string='Gastos',copy=False)
     pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
+    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, )
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], default = recibir_pagos, )
     
     invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
 
@@ -42,10 +53,10 @@ class PrestamosCuotas(models.Model):
         if self.cuota_interes > 0:
             val_lineas = {
             'name': 'Cobro de interes mensual de ' + str(self.cuotas_prestamo_id.tasa) + '%',
-            'account_id': self.cuotas_prestamo_id.producto_interes_id.property_account_income_id.id or self.cuotas_prestamo_id.producto_interes_id.categ_id.property_account_income_categ_id.id,
+            'account_id': self.producto_interes_id.property_account_income_id.id or self.producto_interes_id.categ_id.property_account_income_categ_id.id,
             'price_unit': self.cuota_interes,
             'quantity': 1,
-            'product_id': self.cuotas_prestamo_id.producto_interes_id.id or False,
+            'product_id': self.producto_interes_id.id or False,
             'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas))
@@ -53,10 +64,10 @@ class PrestamosCuotas(models.Model):
         if self.interes_moratorio > 0:
             val_lineas1 = {
                 'name': 'Interes moratorios por incumplimiento de pago',
-                'account_id': self.cuotas_prestamo_id.producto_interes_id.property_account_income_id.id or self.cuotas_prestamo_id.producto_interes_id.categ_id.property_account_income_categ_id.id,
+                'account_id': self.producto_interes_id.property_account_income_id.id or self.producto_interes_id.categ_id.property_account_income_categ_id.id,
                 'price_unit': self.interes_moratorio,
                 'quantity': 1,
-                'product_id': self.cuotas_prestamo_id.producto_interes_id.id or False,
+                'product_id': self.producto_interes_id.id or False,
                 'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas1))
@@ -91,7 +102,7 @@ class PrestamosCuotas(models.Model):
                 'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
                 'amount': self.cuota_interes + capital,
                 'currency_id': self.cuotas_prestamo_id.currency_id.id,
-                'journal_id': self.cuotas_prestamo_id.recibir_pagos.id,
+                'journal_id': self.recibir_pagos.id,
                 'payment_date': self.fecha_pago,
                 'communication': self.cuotas_prestamo_id.name + ' ' + self.name,
                 'payment_method_id': 1
@@ -125,11 +136,10 @@ class PrestamosCuotas(models.Model):
             if self.saldo > 0 and abs(self.pago - self.cuota_prestamo) > 0.01:
                 tasa = self.cuotas_prestamo_id.tasa / 100
                 cuota = self.cuota_prestamo - self.gastos
-                self.cuotas_prestamo_id._cuotas(saldo,tasa,cuota,0,self.interes_moratorio)
+                self.cuotas_prestamo_id._cuotas(saldo,tasa,cuota,0,self.interes_generado)
         self.write({
             'invoice_id' : account_invoice_id.id,
             'state': 'hecho',
-            'interes_moratorio': 0
             })
 
     def action_view_invoice(self):

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="prestamos_deposito_wizard_filiado_view_form" model="ir.ui.view">
+			<field name="name">prestamos.deposito.wizard.filiado.form_view</field>
+			<field name="model">prestamos.afiliados.wizard.deposito</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Transaction Type">
+					<sheet>
+						<separator string="Depósito"/>
+						<group>
+							<group >
+	        					<field name="monto"/>
+	        					<field name="description"/>
+	        					<field name="currency_id"/>
+							</group>
+							<group >
+	        					<field name="pagos"/>
+	        					<field name="fecha"/>
+	        					<field name="fechavence"/>
+							</group>
+						</group>
+						<footer>
+						  	<button name="deposito" string="Validar" type="object" class="oe_highlight"/>
+						  	<button class="oe_highlight" special="cancel" string="Cancelar"/>       
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_wizard_prestamos_deposito_wizard_filiado">
+	        <field name="name">Crear</field>
+	        <field name="res_model">prestamos.afiliados.wizard.deposito</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="prestamos_deposito_wizard_filiado_view_form"/>
+	        <field name="target">new</field>
+		</record>
+	</data>
+</odoo>

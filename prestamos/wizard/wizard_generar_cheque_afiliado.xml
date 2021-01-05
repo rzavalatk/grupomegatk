@@ -2,9 +2,9 @@
 <odoo>
 <data>
 
-<record id="prestamos_wizard_cheque_view_form" model="ir.ui.view">
-<field name="name">prestamos.wizard.cheque.form_view</field>
-<field name="model">prestamos.wizard.cheque</field>
+<record id="prestamos_afiliados_wizard_cheque_view_form" model="ir.ui.view">
+<field name="name">prestamos.afiliados.wizard.cheque.form_view</field>
+<field name="model">prestamos.afiliados.wizard.cheque</field>
 <field name="type">form</field>
 <field name="arch" type="xml">
 <form string="Transaction Type">
@@ -37,11 +37,11 @@
 </field>
 </record>
 
-<record model="ir.actions.act_window" id="action_wizard_prestamos_wizard_cheque">
+<record model="ir.actions.act_window" id="action_wizard_prestamos_afiliados_wizard_cheque">
         <field name="name">Crear</field>
-        <field name="res_model">prestamos.wizard.cheque</field>
+        <field name="res_model">prestamos.afiliados.wizard.cheque</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="prestamos_wizard_cheque_view_form"/>
+        <field name="view_id" ref="prestamos_afiliados_wizard_cheque_view_form"/>
         <field name="target">new</field>
 </record>
 

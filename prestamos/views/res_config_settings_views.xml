@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<!-- Form View -->
+	<record id="res_config_settings_view_form" model="ir.ui.view">
+    <field name="name">res.config.settings.view.form.inherit.prestamos</field>
+    <field name="model">res.config.settings</field>
+    <field name="priority" eval="5"/>
+    <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[hasclass('settings')]" position="inside">
+        <div class="app_settings_block" data-string="Financiera" string="Financiera" data-key="prestamos" groups="prestamos.prestamo_manager">
+          <h2>Financiera</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane"/>
+
+              <div class="o_setting_right_pane">
+                <span class="o_form_label">Prestamos</span>
+                <div class="text-muted">
+                    Parametros de cuenta 
+                </div>
+                <div class="content-group">
+                  <div class="row mt16">
+                    <label string="Cuenta de gasto" for="producto_gasto_id" class="col-lg-3 o_light_label"/>
+                    <field name="producto_gasto_id" />
+                  </div>
+                  <div class="row">
+                    <label string="Cuenta de interes" for="producto_interes_id" class="col-lg-3 o_light_label"/>
+                    <field name="producto_interes_id" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane"/>
+
+              <div class="o_setting_right_pane">
+                <span class="o_form_label">Prestamos</span>
+                <div class="text-muted">
+                    Parametros de cuenta 
+                </div>
+                <div class="content-group">
+                  <div class="row mt16">
+                    <label string="Cuenta de desembolso" for="account_id" class="col-lg-3 o_light_label"/>
+                    <field name="account_id" />
+                  </div>
+                  <div class="row">
+                    <label string="Cuenta de redescuento" for="account_redes_id" class="col-lg-3 o_light_label"/>
+                    <field name="account_redes_id" />
+                  </div>
+                  <div class="row">
+                    <label string="Recibir pagos" for="recibir_pagos" class="col-lg-3 o_light_label"/>
+                    <field name="recibir_pagos" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+             <div class="col-12 col-lg-6 o_setting_box">
+              <div class="o_setting_left_pane"/>
+
+              <div class="o_setting_right_pane">
+                <span class="o_form_label">Afiliados</span>
+                <div class="text-muted">
+                    Parametro de la cuenta de interes 
+                </div>
+                <div class="content-group">
+                  <div class="row mt16">
+                    <label string="Cuenta de interes" for="interes_id" class="col-lg-3 o_light_label"/>
+                    <field name="interes_id" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </xpath>
+    </field>
+	</record>
+
+  <record id="prestamo_config_settings_action" model="ir.actions.act_window">
+    <field name="name">Settings</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">res.config.settings</field>
+    <field name="view_id" ref="res_config_settings_view_form"/>
+    <field name="view_mode">form</field>
+    <field name="target">inline</field>
+    <field name="context">{'module' : 'prestamos'}</field>
+  </record>
+
+</odoo>
