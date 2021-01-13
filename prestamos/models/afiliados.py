@@ -28,8 +28,9 @@ class Afiliados(models.Model):
 				z = z + 1
 		self.invoice_count_cxp = z
 		
+	@api.model
 	def desembolso_cuenta(self):
-		self.write({'pagos_id': self.env['ir.config_parameter'].sudo().get_param('prestamos.interes_id') or False})
+		return self.env['ir.config_parameter'].sudo().get_param('prestamos.interes_id') or False
 		
 	name_mostrar = fields.Char('Nombre', copy=False)
 	res_partner_prov_id = fields.Many2one('res.partner', string='Afiliado', readonly=True, states={'draft': [('readonly', False)]},)
@@ -51,7 +52,7 @@ class Afiliados(models.Model):
 	invoice_count_cxp = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 
-	pagos_id = fields.Many2one("account.account", "Recibir depósito",)
+	pagos_id = fields.Many2one("account.account", "Recibir depósito", default = desembolso_cuenta,)
 
 	def back_draft(self):
 		self.write({'state': 'draft'})

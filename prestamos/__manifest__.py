@@ -27,7 +27,6 @@
         "wizard/wizard_generar_cheque_afiliado.xml",
         'wizard/wizard_generar_deposito.xml',
         'wizard/wizard_generar_interes.xml',
-        'wizard/wizard_generar_interes_prestamo.xml',
         'views/res_config_settings_views.xml',
         'views/prestamo_views.xml',
         'views/afiliados_views.xml',

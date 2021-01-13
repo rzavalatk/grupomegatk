@@ -14,15 +14,12 @@ class PrestamosCuotas(models.Model):
     _order = "id"
 
     @api.model
-    def cuentas(self):
-        self.write({'producto_interes_id': self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False,
-            'recibir_pagos': self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
-            })
+    def product_interes(self):
+        return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False
 
     @api.model
-    def tipo(self):
-        if self.cuotas_prestamo_id:
-            return self.cuotas_prestamo_id.tipo_prestamo
+    def recibir_pagos(self):
+        return self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
 
     name = fields.Char('Numero',copy=False,required=True)
     description = fields.Text(copy=False)
@@ -31,7 +28,6 @@ class PrestamosCuotas(models.Model):
     res_partner_id = fields.Many2one('res.partner', string='Cliente',domain=[('customer','=',True), ],copy=False)
     state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'),('hecho', 'Hecho')], string="Estado", default='draft')
     cuotas_prestamo_id = fields.Many2one('prestamos', 'Prestamo',copy=False)
-    tipo = fields.Char(string='Tipo', default=tipo)
     fecha_pago = fields.Date(string='Fecha limite',copy=False,)
     fecha_pagado = fields.Date(string='Fecha de pago',copy=False,)
     cuota_prestamo = fields.Float(string='Cuota',copy=False)
@@ -42,8 +38,8 @@ class PrestamosCuotas(models.Model):
     saldo = fields.Float(string='Saldo',readonly=True,copy=False)
     gastos = fields.Float(string='Gastos',copy=False)
     pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
-    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)],)
-    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
+    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, )
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], default = recibir_pagos, )
     
     invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
 
@@ -52,7 +48,6 @@ class PrestamosCuotas(models.Model):
     #   self.currency_id = self.cuotas_prestamo_id.currency_id.id
 
     def validar(self):
-        self.cuentas();
         obj_factura = self.env["account.invoice"]
         lineas = []
         if self.cuota_interes > 0:

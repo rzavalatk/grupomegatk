@@ -52,7 +52,6 @@ class WizardGenerarCheque(models.TransientModel):
 		ctx = self._context
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 		obj_check = self.env["banks.check"]
-		obj_prestamo.cuentas()
 		lineas = []
 		val_lineas = {
 			'account_id': obj_prestamo.account_id.id,

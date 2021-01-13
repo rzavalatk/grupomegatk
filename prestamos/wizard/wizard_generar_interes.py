@@ -33,7 +33,6 @@ class WizardGenerarDeposito(models.TransientModel):
 		obj_factura = self.env["account.invoice"]
 		ctx = self._context
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
-		obj_prestamo.desembolso_cuenta()
 		if obj_prestamo.pagos_id:
 			lineas = []
 			val_lineas = {

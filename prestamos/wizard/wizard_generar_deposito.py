@@ -20,12 +20,14 @@ class WizardGenerarDeposito(models.TransientModel):
 	fechavence = fields.Date(string='Vence', required=True,)
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=_get_moneda,)
 
+
 	@api.multi
 	def deposito(self):
 		if self.monto > 0:
 			self.crear_factura_cxp()
 		else:
 			raise Warning(_('El monto debe ser mayor que cero.'))
+
 
 	def crear_factura_cxp(self):
 		obj_factura = self.env["account.invoice"]
