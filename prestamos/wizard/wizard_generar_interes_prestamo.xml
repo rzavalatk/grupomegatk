@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="prestamos_interes_wizard_personal_view_form" model="ir.ui.view">
+			<field name="name">prestamos.interes.wizard.personal.form_view</field>
+			<field name="model">prestamos.personal.wizard.interes</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Transaction Type">
+					<sheet>
+						<group>
+							<group >
+        					<field name="interes"/>
+        					<field name="pago"/>
+							</group>
+							<group >
+      					<field name="fecha_pago"/>
+							</group>
+						</group>
+						<footer>
+						  	<button name="factu_interes" string="Aceptar" type="object" class="oe_highlight"/>
+						  	<button class="oe_highlight" special="cancel" string="Cancelar"/>       
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_wizard_prestamos_interes_wizard_personal">
+	        <field name="name">Crear</field>
+	        <field name="res_model">prestamos.personal.wizard.interes</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="prestamos_interes_wizard_personal_view_form"/>
+	        <field name="target">new</field>
+		</record>
+	</data>
+</odoo>
