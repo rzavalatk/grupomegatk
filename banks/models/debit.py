@@ -6,6 +6,7 @@ from odoo.exceptions import Warning
 
 class Debit(models.Model):
 	_name = 'banks.debit'
+	_rec_name = 'number_calc'
 	_inherit = ['mail.thread']
 	_description = "Management Debits"
 	_order = 'date desc, number desc'

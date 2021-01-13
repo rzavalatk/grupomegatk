@@ -10,12 +10,12 @@ class ResConfigSettings(models.TransientModel):
 	#_order = "name_mostrar desc"
 	#_inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True, )
-	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, )
-	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  required=True, domain=[('type','=','bank'), ])
-	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)],)
-	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True,  domain=[('sale_ok', '=', True)],)
-	interes_id = fields.Many2one("account.account", "Recibir depósito", required=True, domain="[ ('user_type_id.type', '=', 'other')]")
+	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', domain="[('company_id', '=', company_id)]", related='company_id.account_id',readonly=False,)
+	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', domain="[('company_id', '=', company_id)]", related='company_id.account_redes_id',readonly=False,)
+	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain="[('type','=','bank'), ('company_id', '=', company_id)]", related='company_id.recibir_pagos',readonly=False,)
+	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain="[('sale_ok', '=', True), ('company_id', '=', company_id)]", related='company_id.producto_gasto_id',readonly=False,)
+	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes',  domain="[('sale_ok', '=', True), ('company_id', '=', company_id)]", related='company_id.producto_interes_id',readonly=False,)
+	interes_id = fields.Many2one("account.account", "Recibir depósito", domain="[ ('user_type_id.type', '=', 'other'), ('company_id', '=', company_id)]", related='company_id.interes_id',readonly=False,)
 
 
 

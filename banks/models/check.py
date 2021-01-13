@@ -7,6 +7,7 @@ from odoo.exceptions import Warning
 
 class Check(models.Model):
 	_name = 'banks.check'
+	_rec_name = 'number'
 	_inherit = ['mail.thread']
 	_order = 'date desc, number desc'
 
