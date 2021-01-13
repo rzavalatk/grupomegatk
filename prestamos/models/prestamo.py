@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class Prestamos(models.Model):
 	_name = 'prestamos'
 	_description = "Prestamos"
-	_order = "name desc"
+	_order = "id desc"
 	_inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
 	@api.onchange("payment_term_id")
@@ -21,28 +21,14 @@ class Prestamos(models.Model):
 				pass
 			self.meses_cred = meses[0] 
 
-	@api.model
-	def desembolso_cuenta(self):
-		return self.env['ir.config_parameter'].sudo().get_param('prestamos.account_id') or False
+	def cuentas(self):
+		self.write({'account_id':self.env['ir.config_parameter'].sudo().get_param('prestamos.account_id') or False,
+			'account_redes_id':self.env['ir.config_parameter'].sudo().get_param('prestamos.account_redes_id') or False,
+			'producto_gasto_id':self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_gasto_id') or False,
+			'producto_interes_id':self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False,
+			'recibir_pagos':self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
+			})
 		
-	@api.model
-	def redescuento(self):
-		return self.env['ir.config_parameter'].sudo().get_param('prestamos.account_redes_id') or False
-
-	@api.model
-	def product_gasto(self):
-		return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_gasto_id') or False
-		
-
-	@api.model
-	def product_interes(self):
-		return self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False
-	
-	@api.model
-	def recibir_pagos(self):
-		return self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
-
-
 	def _get_invoiced(self):
 		w = len(set(self.cuotas_id.ids))
 		y = len(set(self.payment_ids.ids))
@@ -104,13 +90,13 @@ class Prestamos(models.Model):
 
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 	
-	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], default = recibir_pagos, )
+	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], )
 	
-	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain=[('sale_ok', '=', True)], default = product_gasto, )
-	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], default = product_interes, )
+	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain=[('sale_ok', '=', True)],)
+	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)], )
 
-	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', default = desembolso_cuenta, required=True, readonly=True, states={'draft': [('readonly', False)]},)
-	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', default = redescuento, readonly=True, states={'draft': [('readonly', False)]},)
+	account_id = fields.Many2one('account.account', 'Cuenta de desembolso', )
+	account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', readonly=True, states={'draft': [('readonly', False)]},)
 	
 	user_id = fields.Many2one('res.users', string='Responsable', index=True,  default=lambda self: self.env.user,readonly=True, states={'draft': [('readonly', False)]},)
 	
@@ -338,6 +324,10 @@ class Prestamos(models.Model):
 				if cuota.state != 'draft':
 					raise Warning(_('No se puede eliminar o cancelar un prestamo en estado de '+ self.state))
 				cuota.sudo().unlink()
+
+		if self.invoice_count_cxc > 1:
+			raise Warning(_('No se puede eliminar o cancelar un prestamo en estado de '+ self.state))
+
 		self.write({'state': 'cancelado',
 					'cuota_prestamo': 0,
 					'cuota_inicial': 0
@@ -353,10 +343,14 @@ class Prestamos(models.Model):
 		return super(Prestamos, self).unlink()
 
 	def crear_factura(self):
+		self.cuentas()
 		if not self.invoice_cxc_ids:
 			self.crear_factura_cxc()
 			if (self.tipo_prestamo == 'financiamiento'):
 				self.crear_factura_cxp()
+			self.write({
+				'monto_restante': self.monto_cxc
+			})
 
 	def crear_factura_cxc(self):
 		obj_factura = self.env["account.invoice"]
