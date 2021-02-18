@@ -109,7 +109,7 @@ class WizardGenerarCheque(models.TransientModel):
                 'currency_rate': self.currency_rate,
                 'currency_id': self.currency_id.id,
                 'doc_type': self.doc_type,
-                'name': pagar_a,
+                'name': self.name,
                 'debit_line': lineas,
             }
             
