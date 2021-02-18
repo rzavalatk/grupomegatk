@@ -85,6 +85,11 @@ class WizardGenerarCheque(models.TransientModel):
             ctx = self._context
             obj_gasto = self.env[ctx["active_model"]].browse(ctx['active_id'])
             obj_debit = self.env["banks.debit"]
+            pagar_a = obj_gasto.empleado_solicitud.name.split('/')
+            if len(pagar_a) > 1:
+                pagar_a = pagar_a[1]
+            else:
+                pagar_a = pagar_a[0]
             lineas = []
             val_lineas = {
                 'account_id': obj_gasto.cuenta_anticipo_id.id,
