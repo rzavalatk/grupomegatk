@@ -1,0 +1,379 @@
+.ks-header-3 {
+    position: relative;
+
+    > .border-bottom {
+        position: relative;
+        z-index: 1030;
+    }
+
+    > .container-lg {
+        position: relative;
+        z-index: 1020;
+
+        @media (max-width: 990px) {
+            padding: 0;
+        }
+    }
+    + .o_affix_disabled,
+    +  .o_affix_enabled {
+        z-index: 1010;
+    }
+
+    .ks_mycart {
+        position: relative;
+        z-index: 10;
+    }
+
+    .search_container {
+        .easy-autocomplete {
+            width: auto !important;
+        }
+
+        input {
+            width: 350px;
+            height: 45px;
+            background: #f7f7f7;
+            max-width: 100%;
+
+            @media (max-width: 540px) {
+                width: 280px;
+            }
+        }
+
+        button.btn.oe_search_button {
+            position: absolute;
+            font-size: 24px;
+            right: 12px;
+            background: transparent;
+            padding: 0;
+            line-height: 1;
+            top: 8px;
+            z-index: 101;
+
+            @media (max-width: 540px) {
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 575px) {
+           padding-right: 0 !important;
+        }
+    }
+
+    #my_cart_2 {
+        .ml-4 {
+            margin-left: 0 !important;
+            font-size: 24px;
+        }
+    }
+
+    .badge {
+        top: -4px;
+        right: -12px;
+    }
+
+
+    #my_wish {
+        margin: 0 40px;
+
+        .nav-link {
+            position: relative;
+            padding: 0;
+        }
+    }
+
+    .top__links {
+        min-height: 35px;
+        > a {
+            color: $black !important;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+        }
+
+        > .js_language_selector {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &-main {
+        position: relative;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15);
+        margin-top: 0;
+        z-index: 2;
+
+        #my_cart {
+            display: none;
+        }
+
+        #top_menu {
+            @media (min-width: 990px) {
+                >li.nav-item {
+                    >  a{
+                        position: relative;
+                        padding-left: 15px;
+                        padding-right: 15px;
+                        transition: color ease-in-out 0.3s;
+                        span{
+                            position: relative;
+                            z-index: 1;
+                        }
+                        &::before{
+                            content: '';
+                            width: 0%;
+                            height: 100%;
+                            background: $primary;
+                            border-radius: 4px;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;
+                            transition: width ease-in-out 0.3s;
+                        }
+                        &.active{
+                            color: #fff;
+                            transition: color ease-in-out 0.3s;
+                            &::before{
+                                width: 100%;
+                            }
+                        }
+                        .dropdown-toggle::after{
+                            position: relative;
+                            z-index: 2;
+                        }
+                    }
+                    &:hover {
+                       > a {
+                            color: #fff;
+                            transition: color ease-in-out 0.3s;
+                            &::before{
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        .navbar-collapse {
+            @media (max-width: 990px) {
+                #top_menu {
+                    flex-direction: column;
+                    text-align: left !important;
+                    background: $white;
+                    padding: 10px 0 0;
+                }
+            }
+        }
+
+        #top_menu_collapse,
+        #top_menu_collapse_clone {
+            #top_menu {
+                @media (min-width: 768px) {
+                    margin: auto !important;
+                    min-width: 100%;
+                    justify-content: space-between;
+                }
+                @media (min-width: 991px) {
+                    .ks_not_mega_menu {
+                        margin-left: -8px;
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 990px) {
+            padding: 0 20px 10px 20px !important;
+        }
+
+        @media (max-width: 575px) {
+            padding: 0 10px 10px 20px !important;
+        }
+    }
+
+    &-search {
+        @media (max-width: 768px) {
+            input {
+                width: 300px;
+                transform: scaleX(0);
+                transition: 0.3s ease;
+                transform-origin: right;
+                position: relative;
+                z-index: 100;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .ks-adjust-on-mobile {
+                 margin-right: -10px;
+
+            }
+        }
+    }
+
+    .col-xl-4.col-md-6 {
+        padding: 0;
+    }
+
+    .js_usermenu {
+        margin-left: -25px !important;
+        z-index: 1000;
+    }
+
+    .ks_top_menu {
+        a.dropdown-toggle {
+            color: $black !important;
+        }
+    }
+
+    &-topmost {
+        > .container-lg {
+
+            @media (max-width: 990px) {
+                padding: 0 20px;
+            }
+
+        }
+
+        .ks_mycart {
+            @media (max-width: 575px) {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.ks-header-3-main {
+
+    #top_menu_collapse,
+    #top_menu_collapse_clone {
+        .nav-item .dropdown-menu {
+            .submenu__inner {
+                margin-top: -17px;
+            }
+
+            @media (max-width: 990px) {
+                .mega_submenu {
+                    overflow: hidden;
+                }
+
+                .submenu__inner {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+
+    .navbar-toggler {
+        margin-top: 0;
+    }
+}
+
+.ks-header-3-menu-inside {
+    #top_menu {
+       justify-content: center !important;
+
+       > .nav-item {
+          margin: 0 10px;
+
+          @media (max-width: 990px) {
+            margin: 0 2px;
+          }
+       }
+    }
+
+    .navbar-brand {
+        img {
+            height: 50px !important;
+        }
+    }
+
+     #top_menu_collapse .nav-item .dropdown-menu.ks_not_mega_menu,
+     #top_menu_collapse_clone .nav-item .dropdown-menu.ks_not_mega_menu {
+        @media (min-width: 991px) {
+            box-shadow: none !important;
+            padding: 0px 7px !important;
+            background: transparent;
+            top: 0 !important;
+
+            li {
+                background: white;
+                box-shadow: 0px 13px 12px 1px rgba(0, 0, 0, 0.45);
+
+                &:first-child {
+                   margin-top: 26px;
+                   padding-top: 10px;
+                }
+
+                &:last-child {
+                    padding-bottom: 10px;
+                }
+            }
+        }
+    }
+
+    .container {
+        padding: 0;
+    }
+}
+
+//fixed header
+header.o_header_affix.affix.affixed {
+    
+    .ks-header-3-main {
+        background: $white;
+        padding-top: 10px !important;
+
+        @media (min-width: 991px) {
+            .nav-item {
+                margin-bottom: 6px;
+            }    
+        }
+    }
+}
+
+.ks-header-3-topmost {
+    + .o_affix_disabled,
+    + .o_affix_enabled {
+        .container {
+            @media (max-width: 1200px) {
+                max-width: 90%;
+            }
+
+            @media (max-width: 990px) {
+                max-width: 100%;
+            }
+
+            @media (max-width: 575px) {
+                max-width: 100%;
+            }
+        }
+    }
+
+    label.dropdown-toggle {
+        color: $black;
+    }
+}
+
+@media (max-width: 575px) {
+    .ks-header-3-topmost {
+        > .border-bottom {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .ks-header-3-topmost {
+        > .border-bottom {
+            display: none;
+        }
+    }
+}
+

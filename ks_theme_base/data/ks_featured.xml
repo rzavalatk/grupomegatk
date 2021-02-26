@@ -1,0 +1,17 @@
+<odoo>
+    <!--Predefined tags-->
+    <data noupdate="1">
+        <record model="ks_theme.tags" id="ks_products_tags_new_arrival">
+            <field name="name">New Arrivals</field>
+        </record>
+        <record model="ks_theme.tags" id="ks_products_tags_trendy">
+            <field name="name">Top Trendings</field>
+        </record>
+        <record model="ks_theme.tags" id="ks_products_tags_Most_popular">
+            <field name="name">Most Popular</field>
+        </record>
+        <record model="ks_theme.tags" id="ks_products_tags_Classics">
+            <field name="name">Classics</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,2268 @@
+<odoo>
+    <data>
+
+        <template id="ks_theme_watch" name="Kinetik Watch Shop" >
+            <t t-call="website.layout">
+                <div class="oe_structure oe_empty">
+                    <!--    Banner    -->
+                    <section class="ks-watch position-relative" >
+                        <img class="img-fluid" src="/ks_theme_kinetik/static/src/landing-pages-images/watch/w-1.jpg" />
+                        <div class="position-absolute ks-watch-banner-text mainTransparent" >
+                            <h1 class="font-weight-bold display-4" >You can Watch This <br/>All Day</h1>
+                            <button class="btn btn-primary mt-sm-5 mt-3">What's the Time <i class="ml-2 fa fa-clock-o" /></button>
+                        </div>
+                    </section>
+                    <!--      Section Banner Small              -->
+                    <section>
+                        <div class="row" >
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <img src="" />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <template id="ks_theme_about_us" name="Kinetik About Us" >
+            <t t-call="website.layout">
+                <div class="oe_structure oe_empty">
+                    <!--   About Us                 -->
+                    <section class="wraper ks-spa-about ks-page-about">
+                        <div class="about-container container">
+                            <div class="row no-gutters py-5 ks-about-info">
+                                <h4 class="theme__heading mb-sm-5 mb-3 w-100">ABOUT US</h4>
+                                <div class="col-lg-6 col-md-4 order-0 no-animation ks-side-right">
+                                    <div class="row image-panel h-100">
+                                        <div class="img-iten m-lg-auto">
+                                            <img src="/ks_theme_kinetik/static/src/images/about-us-page/ab-1.jpg"
+                                                 alt="" class="image-fluid"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-8 d-flex align-items-center mt-4 pl-md-5 order-0 no-animation ks-side-left">
+                                    <div class="ks-pr-xxl-4 ks-pr-3">
+                                        <h1 class="font-36 mb-4">Our Dedicated Work </h1>
+                                        <p class="font-16 b-500">Typical ad agency clients include businesses and
+                                            corporations,
+                                            non-profit organizations and private agencies.
+                                        </p>
+                                        <p class="font-16 text-gray">Lorem ipsum dolor s it amet, consectetur adipisicing
+                                            elit,
+                                            sed do
+                                            eiusmod tempor incididunt ut labore et dolore magna ipsum dolor sit amet,
+                                            consectetur elit
+                                            adipisicing elitLorem ipsum dolor s it ametr
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-8 d-flex align-items-center mt-4 pr-md-5 order-2 order-md-1 no-animation ks-side-right">
+                                    <div class="ks-pr-xxl-4 ks-pr-3">
+                                        <h1 class="font-36 mb-4">Our Focus Towards Customer Comfort</h1>
+                                        <p class="font-16 b-500">Typical ad agency clients include businesses and
+                                            corporations,
+                                            non-profit organizations and private agencies.
+                                        </p>
+                                        <p class="font-16 text-gray">Lorem ipsum dolor s it amet, consectetur adipisicing
+                                            elit,
+                                            sed do
+                                            eiusmod tempor incididunt ut labore et dolore magna ipsum dolor sit amet,
+                                            consectetur elit
+                                            adipisicing elitLorem ipsum dolor s it ametr
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-4 order-1 order-md-2 no-animation ks-side-left">
+                                    <div class="row image-panel h-100">
+                                        <div class="img-iten m-lg-auto">
+                                            <img src="/ks_theme_kinetik/static/src/images/about-us-page/ab-2.jpg"
+                                                 alt="" class="image-fluid"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-container-gallery pb-5 ks-page-gallery container-lg py-3 py-lg-5">
+                        <div class="row no-gutters">
+                            <h2 class="theme__heading w-100 text-center mb-4">Modern Work</h2>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/static-snippet-images/collections/img-g-2.png"
+                                         alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Living Room</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/static-snippet-images/collections/img-g-3.png"
+                                         alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Lobby Decoration</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/static-snippet-images/collections/img-g-6.png"
+                                         alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Stylish Sofas</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/images/about-us-page/g-4.jpg" alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Comfortable Sitting</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/images/about-us-page/g-5.jpg" alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Guest Hall</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 no-animation">
+                                <div class="hovereffect">
+                                    <img src="/ks_theme_kinetik/static/src/images/about-us-page/g-6.jpg" alt=""
+                                         class="image-fluid"/>
+                                    <div class="overlay">
+                                        <h3>Room Desks</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="container ks-testimonial py-5">
+                        <div class="row">
+                            <div class="col-md-8 col-center m-auto text-center">
+                                <h4 class="theme__heading mb-5">Our Happy Clients</h4>
+                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                    <!-- Wrapper for carousel items -->
+                                    <div class="carousel-inner ">
+                                        <div class="item carousel-item active">
+                                            <div class="img-box">
+                                                <img src="/ks_theme_kinetik/static/src/static-snippet-images/testinomial_images/face-1.jpg"
+                                                     alt="" />
+                                            </div>
+                                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                                                eu
+                                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius
+                                                nibh
+                                                non aliquet.
+                                            </p>
+                                            <p class="overview"><b>Chris Evans</b>, Colesman Sofas Distributor
+                                            </p>
+                                        </div>
+                                        <div class="item carousel-item">
+                                            <div class="img-box">
+                                                <img src="/ks_theme_kinetik/static/src/static-snippet-images/testinomial_images/face-2.jpg"
+                                                     alt="" />
+                                            </div>
+                                            <p class="testimonial mt-5">Vestibulum quis quam ut magna consequat faucibus.
+                                                Pellentesque
+                                                eget nisi a mi suscipit tincidunt. Utmtc tempus dictum risus. Pellentesque viverra
+                                                sagittis quam at mattis. Suspendisse potenti. Aliquam sit amet gravida nibh,
+                                                facilisis
+                                                gravida odio.
+                                            </p>
+                                            <p class="overview"><b>Mickey Reevs</b>, Ashly Showrooms
+                                            </p>
+                                        </div>
+                                        <div class="item carousel-item">
+                                            <div class="img-box">
+                                                <img src="/ks_theme_kinetik/static/src/static-snippet-images/testinomial_images/face-3.jpg"
+                                                     alt="" />
+                                            </div>
+                                            <p class="testimonial mt-5">Phasellus vitae suscipit justo. Mauris pharetra feugiat ante
+                                                id
+                                                lacinia. Etiam faucibus mauris id tempor egestas. Duis luctus turpis at accumsan
+                                                tincidunt. Phasellus risus risus, volutpat vel tellus ac, tincidunt fringilla massa.
+                                                Etiam hendrerit dolor eget rutrum.
+                                            </p>
+                                            <p class="overview"><b>Nina Koko</b>, Sofaab Showroom Manger
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Carousel controls -->
+                                    <a class="carousel-control left carousel-control-prev" href="#myCarousel" data-slide="prev">
+                                        <i class="fa fa-angle-left" />
+                                    </a>
+                                    <a class="carousel-control right carousel-control-next" href="#myCarousel" data-slide="next">
+                                        <i class="fa fa-angle-right" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="our-team team-v3 font-14">
+                        <div class="container pb-sm-5 pb-3">
+                            <div class="py-4">
+                                <h4 class="theme__heading">Our  Team</h4>
+                            </div>
+                            <div class="row no-gutters mb-4 ks-about-team ">
+                                <div class="col-12 col-md-6 mh-100 no-animation ks-side-right ">
+                                    <div class="row team-list p-0 no-gutters bg-dark text-white h-100">
+                                        <div class="col-12 col-md-5">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-1.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-7 px-4">
+                                            <div class="team-title py-3">
+                                                <h5 class="text-white">Nick Fury</h5>
+                                                <span class="text-white">Founder and CEO</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#" class="text-white"><i class="fa fa-facebook" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-twitter" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 no-animation ks-side-left">
+                                    <div class="row team-list p-0 no-gutters bg-light h-100">
+                                        <div class="col-12 col-md-5">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-2.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-7 px-4">
+                                            <div class="team-title py-3">
+                                                <h5>Bucky Barnes</h5>
+                                                <span>Manger</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 no-animation ks-side-left">
+                                    <div class="row team-list p-0 no-gutters bg-light h-100">
+                                        <div class="col-12 col-md-7 px-4 order-2 order-sm-1">
+                                            <div class="team-title py-3">
+                                                <h5>Peggy Carter</h5>
+                                                <span >Designer</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 order-1 order-sm-2">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-3.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 no-animation ks-side-right">
+                                    <div class="row team-list p-0 no-gutters bg-dark text-white h-100">
+                                        <div class="col-12 col-md-7 px-4 order-2 order-sm-1">
+                                            <div class="team-title py-3">
+                                                <h5 class="text-white">Tom Holland</h5>
+                                                <span class="text-white">Sales Executive</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#" class="text-white"><i class="fa fa-facebook" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-twitter" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 order-1 order-sm-2">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-4.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                            </div>
+
+                        </div>
+                    </section>
+                    <section class="ks-hepl-panel d-flex align-items-center ks-service-dark">
+                        <div class="row w-100 container-lg mx-auto">
+                            <div class="col-lg-3 col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-lg-baseline  my-3 pannel-item-center">
+                                <div class="align-items-center flex-nowrap">
+                                    <div class="icon-container mr-3">
+                                        <img src="/ks_theme_kinetik/static/src/static-snippet-images/services/w-ion-cash---Ionicons.png"
+                                             alt="cash Ionicons" class="w-100"/>
+                                    </div>
+                                    <div class="text-center">
+                                        <h5 class="mb-0">MONEY BACK</h5>
+                                        <p class="mb-0 ">GUARANTEE</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-lg-baseline  my-3 pannel-item-center">
+                                <div class="align-items-center flex-nowrap">
+                                    <div class="d-flex icon-container mr-3">
+                                        <img src="/ks_theme_kinetik/static/src/static-snippet-images/services/w-ion-plane---Ionicons.png"
+                                             alt="plan Ionicons" class="w-100"/>
+                                    </div>
+                                    <div class="text-center">
+                                        <h5 class="mb-0">FREE SHIPPING</h5>
+                                        <p class="mb-0 ">ON ORDER OVER $500</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-lg-baseline  my-3 pannel-item-center">
+                                <div class="align-items-center flex-nowrap">
+                                    <div class="icon-container mr-3">
+                                        <img src="/ks_theme_kinetik/static/src/static-snippet-images/services/w-ion-android-call---Ionicons.png"
+                                             alt="call Ionicons" class="w-100"/>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-column text-center">
+                                        <h5 class="mb-0">SUPPORT 24X7</h5>
+                                        <p class="mb-0 ">CALL US: 012-345-678</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-lg-baseline  my-3 pannel-item-center">
+                                <div class="align-items-center flex-nowrap">
+                                    <div class="icon-container mr-3">
+                                        <img src="/ks_theme_kinetik/static/src/static-snippet-images/services/w-ion-ios-pricetags---Ionicons.png"
+                                             alt="pricetags Ionicons" class="w-100"/>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-column text-center">
+                                        <h5 class="mb-0">DISCOUNT</h5>
+                                        <p class="mb-0 ">10% ON OVER $2000</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <template id="ks_theme_team" name="Kinetik Team" >
+            <t t-call="website.layout">
+                <div class="oe_structure oe_empty py-5">
+                    <section class="our-team team-v3 font-14">
+                        <div class="container pb-sm-5 pb-3">
+                            <div class="py-4">
+                                <h4 class="theme__heading">Our  Team</h4>
+                            </div>
+                            <div class="row no-gutters mb-4">
+                                <div class="col-12 col-md-6 mh-100 ">
+                                    <div class="row team-list p-0 no-gutters bg-dark text-white h-100">
+                                        <div class="col-12 col-md-5">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-1.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-7 px-4">
+                                            <div class="team-title py-3">
+                                                <h5 class="text-white">Nick Fury</h5>
+                                                <span class="text-white">Founder and CEO</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#" class="text-white"><i class="fa fa-facebook" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-twitter" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 ">
+                                    <div class="row team-list p-0 no-gutters bg-light h-100">
+                                        <div class="col-12 col-md-5">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-2.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-7 px-4">
+                                            <div class="team-title py-3">
+                                                <h5>Bucky Barnes</h5>
+                                                <span>Manger</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#" ><i class="fa fa-facebook" /></a>
+                                                <a href="#" ><i class="fa fa-twitter" /></a>
+                                                <a href="#" ><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 ">
+                                    <div class="row team-list p-0 no-gutters bg-light h-100">
+                                        <div class="col-12 col-md-7 px-4 order-2 order-sm-1">
+                                            <div class="team-title py-3">
+                                                <h5>Peggy Carter</h5>
+                                                <span >Designer</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 order-1 order-sm-2">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-3.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6 mh-100 ">
+                                    <div class="row team-list p-0 no-gutters bg-dark text-white h-100">
+                                        <div class="col-12 col-md-7 px-4 order-2 order-sm-1">
+                                            <div class="team-title py-3">
+                                                <h5 class="text-white">Tom Holland</h5>
+                                                <span class="text-white">Sales Executive</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                            <div class="pb-3 social-media-link">
+                                                <a href="#" class="text-white"><i class="fa fa-facebook" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-twitter" /></a>
+                                                <a href="#" class="text-white"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 order-1 order-sm-2">
+                                            <div class="thum-img h-100">
+                                                <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-4.jpg" alt="" class="object-fit" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                            </div>
+
+                        </div>
+                    </section>
+                    <section class="ks-food-team py-sm-5 container">
+                        <h4 class="theme__heading mb-sm-5" > Our Chef Team </h4>
+                        <ul class="nine">
+                            <li class="transition">
+                                <div class="wrapper"> <span class="transition">
+                                    <img class="transition" src="/ks_theme_kinetik/static/src/landing-pages-images/food/f-7.png" />
+                                </span>
+                                    <h3 class="transition">Jo Hua <em>Sushi Specialist</em></h3>
+                                    <div class="trigger"> <i class="transition fa fa-cutlery" />  </div>
+                                    <ul class="social transition">
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/fb.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="transition">
+                                <div class="wrapper"> <span class="transition">
+                                    <img class="transition" src="/ks_theme_kinetik/static/src/landing-pages-images/food/f-8.png" />
+                                </span>
+                                    <h3 class="transition">So Hua <em>Fast Food Specialist</em></h3>
+                                    <div class="trigger"> <i class="transition fa fa-cutlery" /> </div>
+                                    <ul class="social transition">
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/fb.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="transition">
+                                <div class="wrapper"> <span class="transition">
+                                    <img class="transition" src="/ks_theme_kinetik/static/src/landing-pages-images/food/f-9.png" />
+                                </span>
+                                    <h3 class="transition">Uncle Grinch <em>Sweets Specialist</em></h3>
+                                    <div class="trigger"> <i class="transition fa fa-cutlery" /> </div>
+                                    <ul class="social transition">
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/fb.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="transition">
+                                <div class="wrapper"> <span class="transition">
+                                    <img class="transition" src="/ks_theme_kinetik/static/src/landing-pages-images/food/f-10.png" />
+                                </span>
+                                    <h3 class="transition">Rotalish Kova <em>Chicken Specialist</em></h3>
+                                    <div class="trigger"> <i class="transition fa fa-cutlery " /></div>
+                                    <ul class="social transition">
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/fb.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                        <li class="transition"><a href="#"><img src="/ks_theme_kinetik/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="our-team team-v1 pt-5 pb-3">
+                        <div class="container">
+                            <div class="text-center py-3">
+                                <h4 class="theme__heading mb-4">Our Trainers </h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-5.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a Weight Loosing Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Bradley Cooper</h5>
+                                        <span>Weight Loosing Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-6.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi there ! </h4>
+                                                <p>I love to introduce myself as a Weight Gaining Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Chris Evans</h5>
+                                        <span>Weight Gaining Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-7.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a Yoga Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Natasha Romonoff</h5>
+                                        <span>Yoga Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-8.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a Cardio Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Paul Rudd</h5>
+                                        <span>Cardio Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-9.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a Fitness Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Brien Lawrance</h5>
+                                        <span>Fitness Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-10.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a Weight Lifting Trainer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook" /></a>
+                                                <a href="#"><i class="fa fa-twitter" /></a>
+                                                <a href="#"><i class="fa fa-google-plus" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Mark Rufflo</h5>
+                                        <span>Weight Lifting Trainer</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                            </div>
+                            <!-- team-member row / end -->
+                        </div>
+                    </section>
+                    <section class="container-lg m-auto">
+                        <div class="ks-team ks-spa-team">
+                            <div class="m-4 text-center">
+                                <h4 class="theme__heading text-center font-weight-normal mb-3">Meet Our Professionals
+                                </h4>
+                                <p class="w-60 mx-auto">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                    eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                                </p>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-lg-3 col-md-6 my-3 ks-team-member">
+                                    <div class="image-info">
+                                        <div class="image-container">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/beauty-img/t-1.jpg"
+                                                 class="custon-img-fluid"/>
+                                        </div>
+                                    </div>
+                                    <div class="image-text p-3 d-flex align-items-center justify-content-center flex-wrap">
+                                        <h5 class="w-100 text-center">Lorem ipsum dolor</h5>
+                                        <p>Lorem ipsum dolor</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 my-3 ks-team-member">
+                                    <div class="image-info">
+                                        <div class="image-container">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/beauty-img/t-2.jpg"
+                                                 class="custon-img-fluid"/>
+                                        </div>
+                                    </div>
+                                    <div class="image-text p-3 d-flex align-items-center justify-content-center">
+                                        <h5 class="w-100 text-center">Lorem ipsum dolor</h5>
+                                        <p>Lorem ipsum dolor</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 my-3 ks-team-member">
+                                    <div class="image-info">
+                                        <div class="image-container">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/beauty-img/t-3.jpg"
+                                                 class="custon-img-fluid"/>
+                                        </div>
+                                    </div>
+                                    <div class="image-text p-3 d-flex align-items-center justify-content-center">
+                                        <h5 class="w-100 text-center">Lorem ipsum dolor</h5>
+                                        <p>Lorem ipsum dolor</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 my-3 ks-team-member">
+                                    <div class="image-info">
+                                        <div class="image-container">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/beauty-img/t-4.jpg"
+                                                 class="custon-img-fluid"/>
+                                        </div>
+                                    </div>
+                                    <div class="image-text p-3 d-flex align-items-center justify-content-center">
+                                        <h5 class="w-100 text-center">Lorem ipsum dolor</h5>
+                                        <p>Lorem ipsum dolor</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="container-lg m-auto py-4">
+                        <div class="ks-team-2">
+                            <div class="m-4 text-center">
+                                <div class="position-relative pb-2 mb-3">
+                                    <h4 class="theme__heading mb-4">Our Health Expert</h4>
+                                </div>
+                                <p class="w-70 mx-auto">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                    eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                                </p>
+                            </div>
+                            <div class="team-panel W-90 mx-auto">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-6 my-3">
+                                        <div class="panel-iten pt-5 hover-fffect">
+                                            <section class="image-item mx-auto">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/hospital/team-4.png"
+                                                     alt="our-team" class="img-bg"/>
+                                            </section>
+                                            <div class="button-info pt-3">
+                                                <button class="custom-btn">
+                                                    <p class="mb-0 font-18 b-600">Lorem ipsum</p>
+                                                    <p class="mb-0 font-14">magna aliqua</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-info">
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/facebook-letter-logo.png"
+                                                         alt="facebook"/>
+                                                </a>
+                                            </section>
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/linkedin-logo.png"
+                                                         alt="linkedin-logo"/>
+                                                </a>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 my-3">
+                                        <div class="panel-iten pt-5 hover-fffect">
+                                            <section class="image-item mx-auto">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/hospital/team-2.png"
+                                                     alt="our-team" class="img-bg"/>
+                                            </section>
+                                            <div class="button-info pt-3">
+                                                <button class="custom-btn">
+                                                    <p class="mb-0 font-18 b-600">Lorem ipsum</p>
+                                                    <p class="mb-0 font-14">magna aliqua</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-info">
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/facebook-letter-logo.png"
+                                                         alt="facebook"/>
+                                                </a>
+                                            </section>
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/linkedin-logo.png"
+                                                         alt="linkedin-logo"/>
+                                                </a>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 my-3">
+                                        <div class="panel-iten pt-5 hover-fffect">
+                                            <section class="image-item mx-auto">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/hospital/team-3.png"
+                                                     alt="our-team" class="img-bg"/>
+                                            </section>
+                                            <div class="button-info pt-3">
+                                                <button class="custom-btn">
+                                                    <p class="mb-0 font-18 b-600">Lorem ipsum</p>
+                                                    <p class="mb-0 font-14">magna aliqua</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-info">
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/facebook-letter-logo.png"
+                                                         alt="facebook"/>
+                                                </a>
+                                            </section>
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/linkedin-logo.png"
+                                                         alt="linkedin-logo"/>
+                                                </a>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 my-3">
+                                        <div class="panel-iten pt-5 hover-fffect">
+                                            <section class="image-item mx-auto">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/hospital/team-1.png"
+                                                     alt="our-team" class="img-bg"/>
+
+                                            </section>
+                                            <div class="button-info pt-3">
+                                                <button class="custom-btn">
+                                                    <p class="mb-0 font-18 b-600">Lorem ipsum</p>
+                                                    <p class="mb-0 font-14">magna aliqua</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-info">
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/facebook-letter-logo.png"
+                                                         alt="facebook"/>
+                                                </a>
+                                            </section>
+                                            <section class="d-inline">
+                                                <a href="" class="media-item">
+                                                    <img src="ks_theme_kinetik/static/src/static-snippet-images/team-v2/linkedin-logo.png"
+                                                         alt="linkedin-logo"/>
+                                                </a>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="our-team team-v2 py-5">
+                        <div class="container">
+                            <div class="text-center py-4">
+                                <h4 class="theme__heading mb-4">Our Team </h4>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/static-snippet-images/team-v1/img-1.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Clark Kent</h5>
+                                        <span>News Reporter</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="https://image.freepik.com/free-photo/man-standing-with-a-black-t-shirt_1187-1045.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Bruce Wane</h5>
+                                        <span>Investor</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/static-snippet-images/team-v1/img-3.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Berry Allan</h5>
+                                        <span>Detective</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/static-snippet-images/team-v1/img-4.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Arthur Curry</h5>
+                                        <span>Light House Keeper</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/landing-pages-images/beauty-img/t-1.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Diana Amazonian</h5>
+                                        <span>Manager</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="team-member position-relative">
+                                        <div class="team-img position-relative">
+                                            <img src="/ks_theme_kinetik/static/src/images/about-us-page/t-4.jpg" alt="team member" class="img-fluid" />
+                                        </div>
+                                        <div class="team-hover">
+                                            <div class="desk">
+                                                <h4>Hi There !</h4>
+                                                <p>I love to introduce myself as a hardcore Web Designer.</p>
+                                            </div>
+                                            <div class="s-link">
+                                                <a href="#"><i class="fa fa-facebook text-white" /></a>
+                                                <a href="#"><i class="fa fa-twitter text-white" /></a>
+                                                <a href="#"><i class="fa fa-google-plus text-white" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="team-title py-4">
+                                        <h5>Billy Bateson</h5>
+                                        <span>Courier delevery</span>
+                                    </div>
+                                </div>
+                                <!--  team-member col list / end -->
+                            </div>
+                            <!-- team-member row / end -->
+                        </div>
+                    </section>
+                    <section class="our-team team-v3 team-v7 font-14">
+                        <div class="container">
+                            <div class="py-4">
+                                <h4 class="theme__heading mb-4">Our  Team</h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="row mb-4 team-list cursor-pointer">
+                                        <div class="col-12 col-lg-3">
+                                            <div class="thum-img rounded">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-5.jpg" alt="" class="rounded img-fluid" />
+                                            </div>
+                                            <div class="py-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook"/></a>
+                                                <a href="#"><i class="fa fa-twitter"/></a>
+                                                <a href="#"><i class="fa fa-google-plus"/></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-9">
+                                            <div class="team-title pb-2">
+                                                <i class="title-bar" />
+                                                <h5>Ricky Ponting</h5>
+                                                <span>Captain</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6">
+                                    <div class="row mb-4 team-list cursor-pointer">
+                                        <div class="col-12 col-lg-3">
+                                            <div class="thum-img rounded">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-6.jpg" alt="" class="rounded img-fluid" />
+                                            </div>
+                                            <div class="py-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook"/></a>
+                                                <a href="#"><i class="fa fa-twitter"/></a>
+                                                <a href="#"><i class="fa fa-google-plus"/></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-9">
+                                            <div class="team-title pb-2">
+                                                <i class="title-bar" />
+                                                <h5>Andrew Simondes</h5>
+                                                <span>Middle Order</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6">
+                                    <div class="row mb-4 team-list cursor-pointer">
+                                        <div class="col-12 col-lg-3">
+                                            <div class="thum-img rounded">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-8.jpg" alt="" class="rounded img-fluid" />
+                                            </div>
+                                            <div class="py-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook"/></a>
+                                                <a href="#"><i class="fa fa-twitter"/></a>
+                                                <a href="#"><i class="fa fa-google-plus"/></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-9">
+                                            <div class="team-title pb-2">
+                                                <i class="title-bar"/>
+                                                <h5>Gill Chirst</h5>
+                                                <span>Wicket Keeper</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                                <div class="col-12 col-md-6">
+                                    <div class="row mb-4 team-list cursor-pointer">
+                                        <div class="col-12 col-lg-3">
+                                            <div class="thum-img rounded">
+                                                <img src="/ks_theme_kinetik/static/src/landing-pages-images/gym/g-10.jpg" alt="" class="rounded img-fluid" />
+                                            </div>
+                                            <div class="py-3 social-media-link">
+                                                <a href="#"><i class="fa fa-facebook"/></a>
+                                                <a href="#"><i class="fa fa-twitter"/></a>
+                                                <a href="#"><i class="fa fa-google-plus"/></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-9">
+                                            <div class="team-title pb-2">
+                                                <i class="title-bar"/>
+                                                <h5>Mattew hayden</h5>
+                                                <span>Opener</span>
+                                            </div>
+                                            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                consequat. </p>
+                                        </div>
+                                    </div>
+                                </div><!-- team col list -->
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <template id="ks_theme_pricing" name="Kinetik Pricing" >
+            <t t-call="website.layout">
+                <div class="oe_structure oe_empty py-5 container-lg m-auto">
+                    <section class="ks-pricing-5">
+                        <div class="py-sm-5">
+                            <h4 class="theme__heading mb-4">Never Before Plans</h4>
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <div class="price-value">
+                                                <span class="amount">$10</span>
+                                                <span class="month">monthly plan</span>
+                                            </div>
+                                        </div>
+                                        <div class="icon"><i class="fa fa-bicycle" /></div>
+                                        <div class="pricing-content">
+                                            <h3 class="title">Standard</h3>
+                                            <ul>
+                                                <li>50GB Disk Space</li>
+                                                <li>50 Email Accounts</li>
+                                                <li>50GB Bandwidth</li>
+                                                <li>15 Subdomains</li>
+                                                <li>20 Domains</li>
+                                            </ul>
+                                            <a href="#" class="pricingTable-signup">Sign Up</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="pricingTable blue">
+                                        <div class="pricingTable-header">
+                                            <div class="price-value">
+                                                <span class="amount">$20</span>
+                                                <span class="month">monthly plan</span>
+                                            </div>
+                                        </div>
+                                        <div class="icon"><i class="fa fa-car" /></div>
+                                        <div class="pricing-content">
+                                            <h3 class="title">Business</h3>
+                                            <ul>
+                                                <li>50GB Disk Space</li>
+                                                <li>50 Email Accounts</li>
+                                                <li>50GB Bandwidth</li>
+                                                <li>15 Subdomains</li>
+                                                <li>20 Domains</li>
+                                            </ul>
+                                            <a href="#" class="pricingTable-signup">Sign Up</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="pricingTable green">
+                                        <div class="pricingTable-header">
+                                            <div class="price-value">
+                                                <span class="amount">$30</span>
+                                                <span class="month">monthly plan</span>
+                                            </div>
+                                        </div>
+                                        <div class="icon"><i class="fa fa-train" /></div>
+                                        <div class="pricing-content">
+                                            <h3 class="title">Premium</h3>
+                                            <ul>
+                                                <li>50GB Disk Space</li>
+                                                <li>50 Email Accounts</li>
+                                                <li>50GB Bandwidth</li>
+                                                <li>15 Subdomains</li>
+                                                <li>20 Domains</li>
+                                            </ul>
+                                            <a href="#" class="pricingTable-signup">Sign Up</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="pricingTable purple">
+                                        <div class="pricingTable-header">
+                                            <div class="price-value">
+                                                <span class="amount">$40</span>
+                                                <span class="month">monthly plan</span>
+                                            </div>
+                                        </div>
+                                        <div class="icon"><i class="fa fa-rocket" /></div>
+                                        <div class="pricing-content">
+                                            <h3 class="title">Extra</h3>
+                                            <ul>
+                                                <li>50GB Disk Space</li>
+                                                <li>50 Email Accounts</li>
+                                                <li>50GB Bandwidth</li>
+                                                <li>15 Subdomains</li>
+                                                <li>20 Domains</li>
+                                            </ul>
+                                            <a href="#" class="pricingTable-signup">Sign Up</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-pricing-4 py-5">
+                        <div class="pricing-table">
+                            <div>
+                                <div class="block-heading">
+                                    <h4 class="theme__heading mb-4">Pricing Table</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <div class="item">
+                                            <div class="heading">
+                                                <h3>Free</h3>
+                                            </div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                            <div class="features">
+                                                <h4><span class="feature">Full Support</span> : <span class="value">No</span></h4>
+                                                <h4><span class="feature">Duration</span> : <span class="value">10 Days</span></h4>
+                                                <h4><span class="feature">Storage</span> : <span class="value">1GB</span></h4>
+                                            </div>
+                                            <div class="price">
+                                                <h4>$0</h4>
+                                            </div>
+                                            <button class="btn btn-block btn-secondary" type="submit">BUY NOW</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <div class="item">
+                                            <div class="heading">
+                                                <h3>BASIC</h3>
+                                            </div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                            <div class="features">
+                                                <h4><span class="feature">Full Support</span> : <span class="value">No</span></h4>
+                                                <h4><span class="feature">Duration</span> : <span class="value">30 Days</span></h4>
+                                                <h4><span class="feature">Storage</span> : <span class="value">10GB</span></h4>
+                                            </div>
+                                            <div class="price">
+                                                <h4>$25</h4>
+                                            </div>
+                                            <button class="btn btn-block btn-secondary" type="submit">BUY NOW</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <div class="item">
+                                            <div class="ribbon">Best Value</div>
+                                            <div class="heading">
+                                                <h3>PRO</h3>
+                                            </div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                            <div class="features">
+                                                <h4><span class="feature">Full Support</span> : <span class="value">Yes</span></h4>
+                                                <h4><span class="feature">Duration</span> : <span class="value">60 Days</span></h4>
+                                                <h4><span class="feature">Storage</span> : <span class="value">50GB</span></h4>
+                                            </div>
+                                            <div class="price">
+                                                <h4>$50</h4>
+                                            </div>
+                                            <button class="btn btn-block btn-primary" type="submit">BUY NOW</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <div class="item">
+                                            <div class="heading">
+                                                <h3>PREMIUM</h3>
+                                            </div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                            <div class="features">
+                                                <h4><span class="feature">Full Support</span> : <span class="value">Yes</span></h4>
+                                                <h4><span class="feature">Duration</span> : <span class="value">120 Days</span></h4>
+                                                <h4><span class="feature">Storage</span> : <span class="value">150GB</span></h4>
+                                            </div>
+                                            <div class="price">
+                                                <h4>$150</h4>
+                                            </div>
+                                            <button class="btn btn-block btn-secondary" type="submit">BUY NOW</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div class="ks-pricing-v1 px-lg-5 px-3 py-4">
+                            <div class="text-center">
+                                <h2 class="mb-3 theme__heading">Unbelievable Pricing</h2>
+                            </div>
+                            <div class="row mx-0">
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card-v2 box__shadow__hover">
+                                            <section class="ks-pricing-img ks-pricing-img-individual text-center">
+                                            </section>
+                                            <div class="ks-pricing-card-inner-v2 p-4">
+                                                <div class="ks-pricing-value-v2 text-primary text-center">
+                                                    <h4>Individual</h4>
+                                                </div>
+                                                <h5 class="mb-3 text-muted text-center ks-pricing-text-v2">Free</h5>
+                                                <div class="ks-pricing-list text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 1 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 2 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 3 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 4 available
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="ks-pricing-btn text-center">
+                                                    <button class="btn ks-btn-theme">Explore</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card-v2 box__shadow__hover">
+                                            <section class="ks-pricing-img ks-pricing-img-team text-center">
+                                            </section>
+                                            <div class="ks-pricing-card-inner-v2 p-4">
+                                                <div class="ks-pricing-value-v2 text-primary text-center">
+                                                    <h4>Team</h4>
+                                                </div>
+                                                <h5 class="mb-3 text-muted text-center ks-pricing-text-v2">$45</h5>
+                                                <div class="ks-pricing-list text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 1 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 2 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 3 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 4 available
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="ks-pricing-btn text-center">
+                                                    <button class="btn ks-btn-theme">Explore</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card-v2 box__shadow__hover">
+                                            <section class="ks-pricing-img ks-pricing-img-enterprise text-center">
+                                            </section>
+                                            <div class="ks-pricing-card-inner-v2 p-4">
+                                                <div class="ks-pricing-value-v2 text-primary text-center">
+                                                    <h4>Enterprise</h4>
+                                                </div>
+                                                <h5 class="mb-3 text-muted text-center ks-pricing-text-v2">$100</h5>
+                                                <div class="ks-pricing-list text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 1 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-success">
+                                                                <i class="fa fa-check" />
+                                                            </span>
+                                                            Feature 2 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 3 available
+                                                        </li>
+                                                        <li class="mb-2 align-items-center">
+                                                            <span class="ks-pricing-list-icon text-danger">
+                                                                <i class="fa fa-times" />
+                                                            </span>
+                                                            Feature 4 available
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="ks-pricing-btn text-center">
+                                                    <button class="btn ks-btn-theme">Explore</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section class="py-4" >
+                        <div class="ks-pricing-v1 px-lg-5 px-3">
+                            <div class="text-center mb-4">
+                                <h4 class="theme__heading">Pricing Guide</h4>
+                            </div>
+                            <div class="row mx-0">
+                                <div class="col-lg-3 col-sm-6 mb-3">
+                                    <div class="ks-pricing-plan ks-pricing-plan-v3 text-light">
+                                        <section class="ks-pricing-card card-bg-color-1 box__shadow p-4">
+                                            <h4 class="text-center mb-3">Free</h4>
+                                            <div class="ks-pricing-value justify-content-center">
+                                                <span class="ks-pricing-small font-weight-bold">$</span>
+                                                <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">0</h2>
+                                            </div>
+                                            <div class="ks-pricing-offer-text mb-3 text-center">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing elit.
+                                            </div>
+                                            <div class="ks-pricing-list text-center">
+                                                <ul class="list-unstyled d-inline-block pr-4">
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 1 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 2 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 3 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 4 available
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary">
+                                                    <a href="#" class="text-light font-14">Buy Free</a>
+                                                </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-3">
+                                    <div class="ks-pricing-plan ks-pricing-plan-v3 text-light">
+                                        <section class="ks-pricing-card card-bg-color-2 box__shadow p-4">
+                                            <h4 class="text-center mb-3">Standard</h4>
+                                            <div class="ks-pricing-value justify-content-center">
+                                                <span class="ks-pricing-small font-weight-bold">$</span>
+                                                <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">25</h2>
+                                            </div>
+                                            <div class="ks-pricing-offer-text mb-3 text-center">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing elit.
+                                            </div>
+                                            <div class="ks-pricing-list text-center">
+                                                <ul class="list-unstyled d-inline-block pr-4">
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 1 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 2 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 3 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 4 available
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary">
+                                                    <a href="#" class="text-light font-14">Buy Standard</a>
+                                                </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-3">
+                                    <div class="ks-pricing-plan ks-pricing-plan-v3 text-light">
+                                        <section class="ks-pricing-card card-bg-color-3 box__shadow p-4">
+                                            <h4 class="text-center mb-3">Plus</h4>
+                                            <div class="ks-pricing-value justify-content-center">
+                                                <span class="ks-pricing-small font-weight-bold">$</span>
+                                                <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">50</h2>
+                                            </div>
+                                            <div class="ks-pricing-offer-text mb-3 text-center">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing elit.
+                                            </div>
+                                            <div class="ks-pricing-list text-center">
+                                                <ul class="list-unstyled d-inline-block pr-4">
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 1 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 2 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 3 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 4 available
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary">
+                                                    <a href="#" class="text-light font-14">Buy Plus</a>
+                                                </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-3">
+                                    <div class="ks-pricing-plan ks-pricing-plan-v3 text-light">
+                                        <section class="ks-pricing-card card-bg-color-4 box__shadow p-4">
+                                            <h4 class="text-center mb-3">Pro</h4>
+                                            <div class="ks-pricing-value justify-content-center">
+                                                <span class="ks-pricing-small font-weight-bold">$</span>
+                                                <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">75</h2>
+                                            </div>
+                                            <div class="ks-pricing-offer-text mb-3 text-center">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing elit.
+                                            </div>
+                                            <div class="ks-pricing-list text-center">
+                                                <ul class="list-unstyled d-inline-block pr-4">
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 1 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-success">
+                                                            <i class="fa fa-check" />
+                                                        </span>
+                                                        Feature 2 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 3 available
+                                                    </li>
+                                                    <li class="mb-2 align-items-center">
+                                                        <span class="ks-pricing-list-icon text-danger">
+                                                            <i class="fa fa-times" />
+                                                        </span>
+                                                        Feature 4 available
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary">
+                                                    <a href="#" class="text-light font-14">Buy Pro</a>
+                                                </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section>
+                        <div class="ks-pricing-v1 px-lg-5 px-3 py-4">
+                            <div class="text-center">
+                                <h4 class="theme__heading mb-4">Awesome Pricing</h4>
+                            </div>
+                            <div class="row mx-0">
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card ks-pricing-card-border box__shadow">
+                                            <div class="ks-pricing-card-inner p-4 ks-price-3">
+                                                <h4 class="text-center mb-3">Startup</h4>
+                                                <div class="ks-pricing-value justify-content-center">
+                                                    <span class="ks-pricing-small font-weight-bold">$</span>
+                                                    <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">25</h2>
+                                                </div>
+                                                <div class="ks-pricing-offer-text mb-3 text-muted text-center">Lorem ipsum dolor sit
+                                                    amet consectetur adipisicing elit.
+                                                </div>
+                                                <div class="ks-pricing-list mb-3 text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 1 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 2 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-danger">
+                                                                    <i class="fa fa-times" />
+                                                                </span>
+                                                                Feature 3 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-danger">
+                                                                    <i class="fa fa-times" />
+                                                                </span>
+                                                                Feature 4 available
+                                                            </section>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <section class="ks-pricing-btn text-center py-3">
+                                                    <button class="btn ks-btn-theme">Take Now</button>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card ks-pricing-card-border box__shadow">
+                                            <div class="ks-pricing-card-inner p-4 ks-price-3">
+                                                <h4 class="text-center mb-3">Medium</h4>
+                                                <div class="ks-pricing-value justify-content-center">
+                                                    <span class="ks-pricing-small font-weight-bold">$</span>
+                                                    <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">50</h2>
+                                                </div>
+                                                <div class="ks-pricing-offer-text mb-3 text-muted text-center">Lorem ipsum dolor sit
+                                                    amet consectetur adipisicing elit.
+                                                </div>
+                                                <div class="ks-pricing-list mb-3 text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 1 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 2 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 3 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-danger">
+                                                                    <i class="fa fa-times" />
+                                                                </span>
+                                                                Feature 4 available
+                                                            </section>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <section class="ks-pricing-btn text-center py-3">
+                                                    <button class="btn ks-btn-theme">Take Now</button>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mb-3">
+                                    <div class="ks-pricing-plan">
+                                        <div class="ks-pricing-card ks-pricing-card-border box__shadow">
+                                            <div class="ks-pricing-card-inner p-4 ks-price-3">
+                                                <h4 class="text-center mb-3">Pro</h4>
+                                                <div class="ks-pricing-value justify-content-center">
+                                                    <span class="ks-pricing-small font-weight-bold">$</span>
+                                                    <h2 class="ks-pricing-large font-weight-bold display-4 mb-3">75</h2>
+                                                </div>
+                                                <div class="ks-pricing-offer-text mb-3 text-muted text-center">Lorem ipsum dolor sit
+                                                    amet consectetur adipisicing elit.
+                                                </div>
+                                                <div class="ks-pricing-list mb-3 text-center">
+                                                    <ul class="list-unstyled d-inline-block pr-4">
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 1 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 2 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 3 available
+                                                            </section>
+                                                        </li>
+                                                        <li>
+                                                            <section class="mb-2 align-items-center">
+                                                                <span class="ks-pricing-list-icon text-success">
+                                                                    <i class="fa fa-check" />
+                                                                </span>
+                                                                Feature 4 available
+                                                            </section>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <section class="ks-pricing-btn text-center py-3">
+                                                    <button class="btn ks-btn-theme">Take Now</button>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <template id="ks_theme_services" name="Kinetik Services" >
+            <t t-call="website.layout">
+                <div class="oe_structure oe_empty">
+                    <section>
+                        <div class="container ks-services-v3 py-5">
+                            <div class="row">
+                                <div class="col-md-12 col-md-offset-2 col-sm-12 text-center">
+                                    <h4 class="theme__heading">Service and Awesome skills</h4>
+                                </div>
+                                <!-- end .col-sm-10  -->
+                            </div>
+                            <!--  end .row  -->
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Project Planing</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s1.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Branding</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s2.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Decide Process</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s3.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Build Form</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s4.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <!-- end row  -->
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Design Workflow</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s5.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Go Live</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s6.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <!-- end row  -->
+                        </div>
+                    </section>
+                    <section>
+                        <div class="ks-services-v2 py-sm-5 py-3">
+                            <div class="container">
+                                <h4 class="theme__heading mb-4">Services and Awesome skills</h4>
+                                <div>
+                                    <ul class="row list-unstyled">
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s7.svg"  alt="services" />
+                                                <h3>Project Planing</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s8.svg"  alt="services" />
+                                                <h3>Branding</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s9.svg"  alt="services" />
+                                                <h3>Decide Process</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s10.svg"  alt="services" />
+                                                <h3>Build Form</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s11.svg"  alt="services" />
+                                                <h3>Design Workflow</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="col-lg-4 col-md-6 col-sm-12 serv-box">
+                                            <div class="inner">
+                                                <img src="/ks_theme_kinetik/static/src/images/services-icons/s12.svg"  alt="services" />
+                                                <h3>Go Live</h3>
+                                                <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                    incididunt.
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="td_services" class="ks-services py-5">
+                        <div class="container">
+                            <h4 class="mb-4 theme__heading">Service and Awesome skills</h4>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Project Planing -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s1.svg" alt="services" />
+                                        <h3 class="mb-20">Project Planing</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Branding -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s2.svg" alt="services" />
+                                        <h3 class="mb-20">Branding</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Decide Process -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s3.svg" alt="services" />
+                                        <h3 class="mb-20">Decide Process</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Build Form -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s4.svg" alt="services" />
+                                        <h3 class="mb-20">Build Form</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Design Workflow -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s5.svg" alt="services" />
+                                        <h3 class="mb-20">Design Workflow</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <!-- Go Live -->
+                                    <div class="serv-box text-center mb-30">
+                                        <img src="/ks_theme_kinetik/static/src/images/services-icons/s6.svg" alt="services" />
+                                        <h3 class="mb-20">Go Live</h3>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod
+                                            tempor incididunt.
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-services-5 py-5 container">
+                        <h4 class="theme__heading mb-4" > Services and Skills </h4>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="serviceBox">
+                                    <div class="service-icon">
+                                        <span><i class="fa fa-globe" /></span>
+                                    </div>
+                                    <h3 class="title">Web Design</h3>
+                                    <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="serviceBox yellow">
+                                    <div class="service-icon">
+                                        <span><i class="fa fa-rocket" /></span>
+                                    </div>
+                                    <h3 class="title">Web Development</h3>
+                                    <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="serviceBox magenta">
+                                    <div class="service-icon">
+                                        <span><i class="fa fa-briefcase" /></span>
+                                    </div>
+                                    <h3 class="title">Brand Building</h3>
+                                    <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="serviceBox gray">
+                                    <div class="service-icon">
+                                        <span><i class="fa fa-mobile" /></span>
+                                    </div>
+                                    <h3 class="title">Responsive Design</h3>
+                                    <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-skills-dark">
+                        <div class="container ks-services-v3 py-5">
+                            <div class="row">
+                                <div class="col-md-12 col-md-offset-2 col-sm-12 text-center">
+                                    <h4 class="theme__heading">Service and Awesome skills</h4>
+                                </div>
+                                <!-- end .col-sm-10  -->
+                            </div>
+                            <!--  end .row  -->
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2 >Project Planing</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s7.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Branding</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s8.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Decide Process</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s9.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Build Form</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s10.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <!-- end row  -->
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Design Workflow</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s11.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="serv-box-bg">
+                                        <article class="serv-box">
+                                            <h2>Go Live</h2>
+                                            <img src="/ks_theme_kinetik/static/src/images/services-icons/s12.svg" class="file-icon float-right" alt="services" />
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipicing elit, sed do eiusmod tempor
+                                                incididunt.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                                <!--  end col-sm-6  -->
+                            </div>
+                            <!-- end row  -->
+                        </div>
+                    </section>
+                    <section class="py-5 ks-services-7">
+                        <div class="container">
+                            <div class="row text-center mt-3 mb-4">
+                                <h4 class="mb-4 theme__heading">Services and Skills</h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="serviceBox">
+                                        <div class="service-icon">
+                                            <span><i class="fa fa-globe" /></span>
+                                        </div>
+                                        <h3 class="title">Web Design</h3>
+                                        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="serviceBox">
+                                        <div class="service-icon">
+                                            <span><i class="fa fa-rocket" /></span>
+                                        </div>
+                                        <h3 class="title">Web Development</h3>
+                                        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="serviceBox">
+                                        <div class="service-icon">
+                                            <span><i class="fa fa-briefcase" /></span>
+                                        </div>
+                                        <h3 class="title">Brand Building</h3>
+                                        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="serviceBox">
+                                        <div class="service-icon">
+                                            <span><i class="fa fa-mobile" /></span>
+                                        </div>
+                                        <h3 class="title">Responsive Design</h3>
+                                        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quaerat fugit quas veniam perferendis repudiandae sequi, dolore quisquam illum.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

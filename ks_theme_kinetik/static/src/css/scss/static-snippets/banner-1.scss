@@ -1,0 +1,38 @@
+.ks-banner {
+    &-full {
+        min-height: 80vh;
+        background-size: cover;
+        background-position: right;
+        background-repeat: no-repeat;
+
+        @media (min-width: 1025px) {
+            background-attachment: fixed;
+        }
+
+        @media (max-width: 1024px) {
+            background-color: rgba(255, 255, 255, 0.34);
+            background-blend-mode: color;
+        }
+    }
+
+    &-heading {
+        font-weight: $weight-semi-bold;
+        font-size: 56px;
+
+        @media (max-width: 768px) {
+            font-size: 40px;
+        }
+
+        @media (max-width: 540px) {
+            font-size: 36px;
+        }
+    }
+
+    &-text-container {
+        width: 50%;
+
+        @media (max-width: 1024px) {
+             width: 100%;
+        }
+    }
+}

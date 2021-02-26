@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ks_new_blogPage_design" inherit_id="website_blog.latest_blogs">
+        <xpath expr="//section[2]" position="replace"/>
+        <xpath expr="//section[2]" position="replace">
+            <div class="container-fluid ks-list-block-container px-lg-3 px-md-3 px-sm-2 px-1">
+                  <div class="row my-4">
+                        <div class="col-lg-12 text-center">
+                            <h4 class="theme__heading">Latest Posts</h4>
+                        </div>
+                    </div>
+                <div class="ks-list-block">
+                    <div class="row no-gutters">
+                        <t t-set="count" t-value="0"/>
+                        <t t-foreach="posts" t-as="post">
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-12 px-lg-2 px-md-2 px-sm-2 px-1 px-lg-3 px-md-3 px-sm-3 py-lg-3 py-md-3 py-sm-3 py-2">
+                                <div class="ks-list-block-item m-0">
+                                    <div class="row no-gutters ks-block-top">
+                                        <div class="col d-flex align-items-center">
+                                            <div class="ks-blogs-user-image">
+                                                <img t-att-src="'/web/image/blog.post/' + str(post.id) + '/author_avatar'"
+                                                     alt="user image" class="image-fluid"/>
+                                            </div>
+                                            <div class="ks-blogs-user-name d-none">
+                                                <h3 class="m-0">
+                                                    <t t-esc="post.blog_id.name"/>
+                                                </h3>
+                                            </div>
+                                            <h5 class="ks-ks-user-name pl-2">
+                                                <t t-if="not request.uid==4">
+                                                <t t-esc="post.author_id.name"/>
+                                                </t>
+                                            </h5>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <div class="current-month">
+                                                <t t-esc="post.post_date.strftime('%B  %d  %Y')"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ks-blogs-middle">
+                                        <a t-attf-href="#{blog_url('', ['blog', 'post'], blog=post.blog_id, post=post)}">
+                                            <t t-if="json.loads(post.cover_properties).get('background-image')!='none'">
+                                                <img t-att-src="json.loads(post.cover_properties)['background-image'].split('(')[1].split(')')[0]" alt="user image" class="image-fluid"/>
+                                            </t>
+                                        </a>
+                                    </div>
+                                    <div class="ks-blogs-bottom">
+                                        <h5 class="ks-ks-user-name">
+                                            <t t-esc="post.name"/>
+                                        </h5>
+                                        <div class="ks-blog-info mt-1">
+                                            <t t-esc="post.teaser"/>
+                                        </div>
+                                        <div class="ks-blog-button mt-1 text-right">
+                                            <div class="text-muted">
+                                                <span t-if="editable or post.tag_ids" class="fa fa-tags" role="img"
+                                                      aria-label="Tags" title="Tags"/>
+                                                <t t-foreach="post.tag_ids" t-as="one_tag">
+<!--                                                    <a class="badge badge-primary mr8"-->
+<!--                                                       t-attf-href="#{blog_url('', ['blog', 'post'], blog=post.blog_id, tag=one_tag.id)}"-->
+<!--                                                       t-esc="one_tag.name"/>-->
+                                                      <a class="badge badge-primary mr8"
+                                                               t-attf-href="#{blog_url('', ['blog', 'post'], blog=post.blog_id, tag=one_tag)}"
+                                                               t-esc="one_tag.name"/>
+                                                </t>
+                                                <span t-if="editable and not post.tag_ids" class="badge badge-danger">
+                                                    No tags defined!
+                                                </span>
+                                            </div>
+                                            <div class="text-muted" t-if="len(post.message_ids) &gt; 0">
+                                                <span class="fa fa-comment-o"/>
+                                                <a t-attf-href="#{blog_url('', ['blogpost'], blogpost=post)}#comments">
+                                                    <t t-if="len(post.message_ids) &lt;= 1">
+                                                        <t t-esc="len(post.message_ids)"/>
+                                                        comment
+                                                    </t>
+                                                    <t t-if="len(post.message_ids) > 1">
+                                                        <t t-esc="len(post.message_ids)"/>
+                                                        comments
+                                                    </t>
+                                                </a>
+                                            </div>
+                                            <div class="ks-blog-button mt-1 text-right">
+                                                <a t-attf-href="#{blog_url('', ['blog', 'post'], blog=post.blog_id, post=post)}"
+                                                   class="btn theme-blog-btn ks-blog-read">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

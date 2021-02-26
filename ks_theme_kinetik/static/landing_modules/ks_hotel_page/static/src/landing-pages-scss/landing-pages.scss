@@ -1,0 +1,378 @@
+
+//for Hotel
+
+.ks-hotel-about-pic2 {
+    max-width: 300px;
+    margin-left: auto;
+    z-index: 1;
+    position: relative;
+    border: 12px solid #fff;
+
+    @media (min-width: 576px) {
+        margin-top: -20%;
+    }
+}
+
+.ks-hotel-about {
+    line-height: 1.5;
+}
+
+.bg-light-gray {
+    background-color: #f4f4f4;
+}
+
+.ks-heading-large {
+    font-size: 40px;
+}
+
+.ks-hotel-room {
+    overflow: hidden;
+    cursor: pointer;
+
+    &-overlay {
+        background-image: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 74%);
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        padding: 20px;
+        color: $white;
+        transition: 0.5s ease-in-out;
+    }
+
+    img {
+        transition: 1s ease-in-out;
+    }
+
+    &:hover {
+        img {
+            transform: scale(1.1);
+        }
+
+        .ks-hotel-room {
+            background-image: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 0%);
+        }
+    }
+
+}
+
+.tag-primary {
+    background: $primary;
+    color: $theme-text-color;
+    padding: 5px;
+}
+
+.ks-hotel-parallax {
+    &.ks-banner-left-text .ks-text-pannel-left .heading-text-info {
+        font-size: 70px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+        text-transform: inherit;
+        color: #fff;
+
+        @media (max-width: 575px) {
+          font-size: 40px;
+        }
+    }
+}
+
+.bg-primary {
+    background: $primary !important;
+    color: $theme-text-color !important;
+}
+
+.ks-hotel-menu {
+    background: #e2e2e2;
+
+    nav {
+        border-bottom: 1px solid #000;
+    }
+    .nav-link {
+        color: rgba(0,0,0,0.6);
+        font-size: 20px;
+        font-weight: 600;
+         @media(max-width: 767px){
+            font-size: 13px;
+            font-weight: 500;
+         }
+        padding: 0;
+
+        span {
+             padding: 8px 24px;
+             @media(max-width: 767px){
+                padding: 8px 14px;
+             }
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: #000;
+            border-radius: 4px;
+            transition: 0.3s ease-in-out;
+        }
+
+        &.active,
+        &:hover {
+            background: transparent;
+            border: none;
+            color: #000;
+            position: relative;
+
+            &:after {
+                width: 100%;
+            }
+        }
+    }
+
+    .nav-tabs {
+       padding: 0 20px 5px;
+       @media(max-width: 767px){
+           padding: 0 0px 5px;
+       }
+       border-width: 2px;
+       justify-content: center;
+    }
+
+    .fade {
+        transition-duration: 0.4s;
+    }
+}
+
+.ks-food-dining-img {
+    border-radius: 50%;
+
+    img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+}
+@media(max-width: 767px){
+    .ks-food-dining-set{
+        text-align: center;
+        .ks-food-dining-img{
+            width: 80px;
+        }
+         .ks-food-dining-name.h2{
+            font-size: 1.4rem;
+         }
+         .ks-food-dining-info.ml-3{
+            margin-left: 20px !important;
+            text-align: left;
+            width: calc(100% - 100px)
+         }
+         .ks-food-dining-price{
+            margin: 0 auto;
+         }
+    }
+}
+
+@media(max-width: 375px){
+    .ks-food-dining-set{
+        text-align: center;
+        .ks-food-dining-img {
+           margin: 0 auto 10px auto;
+           width: 100%;
+         }
+         .ks-food-dining-name.h2{
+            font-size: 1.4rem;
+         }
+         .ks-food-dining-info.ml-3{
+            margin-left: 0px !important;
+            text-align: center;
+            width: 100%;
+         }
+         .ks-food-dining-price{
+            margin: 10px auto 0 auto;
+            width: 100%;
+         }
+    }
+}
+
+
+.ks-food-bredcrumb {
+    letter-spacing: 1px;
+}
+
+.ks-hotel-dining-slides.d-lg-block {
+    .carousel,
+    .carousel-inner,
+    .carousel-item,
+    .carousel-item div{
+       height: 100% !important;
+    }
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.custom-theme-header {
+    img {
+        max-height: 60px;
+    }
+}
+
+.ks-hotel-img {
+    max-width: 150px;
+}
+
+.ks-hotel-gallery {
+    .owl-nav {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        margin-top: 0;
+        z-index: -1;
+
+        i {
+            font-size: 100px;
+            color: #868686;
+        }
+
+        button {
+            position: absolute;
+            top: calc(50% - 75px);
+
+            &:hover {
+                background: transparent !important;
+
+                i {
+                    color: #000;
+                }
+            }
+        }
+        .owl-prev {
+            left: -80px;
+        }
+        .owl-next {
+            right: -80px;
+        }
+    }
+}
+
+.ks-show-indicators.carousel-indicators {
+    li {
+        width: 30px;
+        height: 3px;
+    }
+}
+
+.ks-room-info.bg-white .text-muted {
+    color: #6c757d !important;
+}
+
+.ks-hotel-card-effect {
+    overflow: hidden;
+
+    img {
+       transition: 0.6s ease-in-out;
+    }
+
+    &:hover {
+        color: white;
+        cursor: pointer;
+
+        .text-muted {
+            color: white !important;
+        }
+
+        img {
+            box-shadow: 0 0 10px 400px rgb(56, 56, 56);
+        }
+    }
+}
+
+.ks-youtube-content {
+    background: transparent;
+    border-color: transparent;
+    margin-top: -100px;
+
+    .close {
+        opacity: 1;
+    }
+}
+
+.ks-hotel-hero {
+    min-height: 80vh;
+
+    video {
+        @media (max-width: 1024px)  {
+            height: 100%;
+            width: auto;
+        }
+    }
+
+
+    .ks-hotel-hero-heading {
+        animation: slide_left 1s ease-in-out;
+    }
+
+    h1 {
+        opacity: 0;
+        animation: slide_right 1s ease-in-out forwards;
+    }
+
+    .ks-hotel-hero-multi-heading {
+        div {
+            animation: moveupfull 0.6s ease-in-out;
+
+            &:nth-child(1) {
+                animation-delay:1s;
+            }
+            &:nth-child(2) {
+                animation-delay: 1.6s;
+            }
+            &:nth-child(3) {
+                animation-delay: 2.2s;
+            }
+        }
+    }
+
+    .bounce-effect {
+        animation: bounceIn 0.6s ease-in-out 2.8s ;
+    }
+}
+
+.animate-opacity-1,
+.ks-hotel-hero-heading,
+.ks-hotel-hero .bounce-effect,
+.ks-hotel-hero-multi-heading div {
+    opacity: 0;
+    animation-fill-mode: forwards !important;
+}
+
+.youtube-modal-video {
+    iframe {
+        @media (max-width: 575px) {
+            height: auto;
+            width: 400px;
+        }
+
+        @media (max-width: 450px) {
+            width: 350px;
+        }
+
+        @media (max-width: 400px) {
+            width: 300px;
+        }
+
+        @media (max-width: 350px) {
+            height: auto;
+            width: 250px;
+        }
+    }
+}
+
+.ks-food-dining-price {
+    align-self: flex-end;
+    font-size: 24px;
+    font-weight: 600 !important;
+}

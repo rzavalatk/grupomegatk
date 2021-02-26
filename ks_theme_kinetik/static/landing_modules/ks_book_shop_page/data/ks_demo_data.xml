@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+           <record id="books_page" model="website.page">
+                 <field name="url">/books</field>
+                 <field name="view_id" ref="ks_book_shop_page.ks_theme_books"/>
+           </record>
+
+     </data>
+</odoo>

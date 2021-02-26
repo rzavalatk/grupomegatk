@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_font_layout_1" name="Hind" customize_show="True" active="False"
+              inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_1.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_2" name="Work Sans" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_2.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_3" name="Nunito" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_3.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_4" name="Lato" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_4.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_5" name="Josefin Sans" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_5.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_6" name="Slabo" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_6.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_7" name="Oswald" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_7.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_8" name="Source Sans Pro" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_8.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_9" name="Concert One" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_9.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_10" name="Prompt" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_10.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_11" name="Poppins" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_11.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_12" name="Proza Libre" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_12.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_13" name="Noto Sans TC" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_13.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_14" name="Open Sans" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_14.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_15" name="Roboto" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_15.scss"
+            />
+        </xpath>
+    </template>
+    <template id="custom_font_layout_16" name="Raleway" customize_show="True"
+              inherit_id="web.assets_frontend" active="False">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/fonts/font_16.scss"
+            />
+        </xpath>
+    </template>
+</odoo>

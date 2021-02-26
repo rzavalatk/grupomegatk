@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+           <record id="pet_shop_page" model="website.page">
+            <field name="url">/pet</field>
+            <field name="view_id" ref="ks_pet_shop_page.ks_theme_pet"/>
+        </record>
+
+     </data>
+</odoo>

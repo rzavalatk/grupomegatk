@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ks_theme_kinetik.product" name="Product">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <t t-set="first_possible_combination" t-value="product._get_first_possible_combination()"/>
+        <t t-set="combination_info"
+           t-value="product._get_combination_info(first_possible_combination, add_qty=add_qty or 1, pricelist=pricelist)"/>
+        <t t-set="product_variant" t-value="product.env['product.product'].browse(combination_info['product_id'])"/>
+        <t>
+            <t t-set="additional_title" t-value="product.name"/>
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" id="wrap" class="js_sale">
+                <section
+                        t-attf-class="container py-2 oe_website_sale #{'discount' if combination_info['has_discounted_price'] else ''}"
+                        id="product_detail">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-inline justify-content-end">
+                                <t>
+                                    <t t-set="_classes">ml-2</t>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ks_product_quick_preview">
+                            <t t-if="request.website.viewref('ks_theme_kinetik.ks_multiimage_layout').active">
+                                <t t-call="ks_theme_kinetik.ks_product_image_slider">
+                                    <t t-set="ks_allow_zoom" t-value="False"/>
+                                    <t t-set="div_01_class" t-value="'carousel-outer ks_vert_slide'"/>
+                                    <t t-set="ol_class" t-value="'ks_vs_slide'"/>
+                                    <t t-set="ol_div_class" t-value="'ks_vert_slider owl-carousel ks_thumb owl-theme'"/>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <t t-call="ks_theme_kinetik.ks_product_image_slider">
+                                    <t t-set="ks_allow_zoom" t-value="False"/>
+                                    <t t-set="div_01_class" t-value="'carousel-outer'"/>
+                                    <t t-set="ol_class" t-value="'carousel-indicators'"/>
+                                    <t t-set="ol_div_class"
+                                       t-value="'ks_multi_image_horizontal owl-carousel ks_thumb owl-theme'"/>
+                                </t>
+                            </t>
+                        </div>
+                        <div class="col-md-6 ks_quick_prev_prod_detail" id="product_details">
+                            <h1 itemprop="name" t-field="product.name">Product Name</h1>
+                            <span itemprop="url" style="display:none;"
+                                  t-esc="'%sshop/product/%s' % (request.httprequest.url_root, slug(product))"/>
+                            <form t-if="product._is_add_to_cart_possible()" t-attf-class="ks_prod_form #{'ks_optional' if product.optional_product_ids else ''}"
+                                  action="/shop/cart/update" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="js_product js_main_product">
+                                    <t t-call="website_sale.product_price"/>
+                                    <t t-placeholder="select">
+                                        <input type="hidden" class="product_id" name="product_id"
+                                               t-att-value="product_variant.id"/>
+                                        <input type="hidden" class="product_template_id" name="product_template_id"
+                                               t-att-value="product.id"/>
+                                        <t t-if="first_possible_combination" t-call="sale.variants">
+                                            <t t-set="ul_class" t-value="'flex-column'"/>
+                                            <t t-set="parent_combination" t-value="None"/>
+                                        </t>
+                                        <t t-else="">
+                                            <ul class="d-none js_add_cart_variants"
+                                                t-att-data-attribute_exclusions="{'exclusions: []'}"/>
+                                        </t>
+                                    </t>
+                                    <p t-if="True" class="css_not_available_msg alert alert-warning">This combination
+                                        does not exist.
+                                    </p>
+                                    <div class="ks_action_buttons d-flex align-items-center">
+                                        <input type="hidden" class="product_id product_quick_view" name="product_id"
+                                               t-att-value="product_variant.id"/>
+                                        <t t-set="cart_product" t-value="request.env['product.product'].sudo().browse(product_variant.id)"/>
+                                        <t t-set="available" t-value="cart_product.virtual_available - int(cart_product.cart_qty)"/>
+                                        <t t-if="available &lt;= 0 and cart_product.type == 'product' and  cart_product.inventory_availability in ['always', 'threshold']">
+                                            <a role="button" id="add_to_cart" class="btn disabled btn-primary ks-btn-theme" href="#">
+                                                <span class="fa fa-shopping-cart"></span>
+                                                Add to Cart
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                             <a role="button" id="add_to_cart" class="btn btn-primary ks-btn-theme" href="#">
+                                                <span class="fa fa-shopping-cart"></span>
+                                                Add to Cart
+                                            </a>
+                                        </t>
+                                    </div>
+                                    <div class="d-none modal_pop_up alert alert-success">
+                                        Added Successfully
+                                    </div>
+                                </div>
+                            </form>
+                            <p t-elif="not product.active" class="alert alert-warning">This product is no longer
+                                available.
+                            </p>
+                            <p t-else="" class="alert alert-warning">This product has no valid combination.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+
+</odoo>

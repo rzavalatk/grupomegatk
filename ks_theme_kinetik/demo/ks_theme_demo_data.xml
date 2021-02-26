@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--This is demo data for brands-->
+    <data>
+        <record model="ks_product_manager.ks_brand" id="ks_brand_1">
+            <field name="name">Ashley</field>
+            <field name="ks_is_published">True</field>
+            <field name="ks_brand_logo" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/brands/ashley.png"/>
+            <field name="ks_image" type="base64" file="ks_theme_kinetik/static/src/img-ui/brands/ash_1.png"/>
+            <field name="website_id" ref="website.default_website" />
+        </record>
+        <record model="ks_product_manager.ks_brand" id="ks_brand_2">
+            <field name="name">HomeStretch</field>
+            <field name="ks_is_published">True</field>
+            <field name="ks_brand_logo" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/brands/homestr.jpeg"/>
+            <field name="ks_image" type="base64" file="ks_theme_kinetik/static/src/img-ui/brands/homstr_1.jpeg"/>
+            <field name="website_id" ref="website.default_website" />
+        </record>
+        <record model="ks_product_manager.ks_brand" id="ks_brand_3">
+            <field name="name">FlexSteel</field>
+            <field name="ks_is_published">True</field>
+            <field name="ks_brand_logo" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/brands/flex.jpeg"/>
+            <field name="ks_image" type="base64" file="ks_theme_kinetik/static/src/img-ui/brands/flex_1.jpg"/>
+            <field name="website_id" ref="website.default_website" />
+        </record>
+        <record model="ks_product_manager.ks_brand" id="ks_brand_4">
+            <field name="name">Koinor</field>
+            <field name="ks_is_published">True</field>
+            <field name="ks_brand_logo" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/brands/koinor.png"/>
+            <field name="ks_image" type="base64" file="ks_theme_kinetik/static/src/img-ui/brands/koinor_1.jpeg"/>
+            <field name="website_id" ref="website.default_website" />
+        </record>
+        <record model="ks_product_manager.ks_brand" id="ks_brand_5">
+            <field name="name">Becker</field>
+            <field name="ks_is_published">True</field>
+            <field name="ks_brand_logo" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/brands/becker.png"/>
+            <field name="ks_image" type="base64" file="ks_theme_kinetik/static/src/img-ui/brands/Becker_1.jpg"/>
+        </record>
+    </data>
+
+    <!--This is demo data for categories-->
+    <data>
+        <record model="product.public.category" id="ks_categ_1">
+            <field name="name">Contemporary Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-1.jpg"/>
+            <field name="ks_product_category_slogan">Fashion for Men</field>
+            <field name="ks_categ_tag">True</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_2">
+            <field name="name">Sectional</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-2.jpg"/>
+            <field name="ks_product_category_slogan">Feels Free in This Summer</field>
+            <field name="ks_categ_tag">True</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_3">
+            <field name="name">Loveseat</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-3.jpg"/>
+            <field name="ks_product_category_slogan">Today's Generation Trend for Girls</field>
+            <field name="ks_categ_tag">True</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_4">
+            <field name="name">Lawson-style </field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-4.jpg"/>
+            <field name="ks_product_category_slogan">Feel Comfortable Feel Awesome</field>
+            <field name="ks_categ_tag">True</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_5">
+            <field name="name">Rolled Arm</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-5.jpg"/>
+            <field name="ks_product_category_slogan">This Winter Be Relaxed</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_6">
+            <field name="name">Rocking Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-6.jpg"/>
+            <field name="ks_product_category_slogan">Care Yourself and Love Yourself</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_7">
+            <field name="name">Arm Rest</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-7.jpg"/>
+            <field name="ks_product_category_slogan">Comfortable and Cool</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_8">
+            <field name="name">Office Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-8.jpg"/>
+            <field name="ks_product_category_slogan">Look Professional and Smart</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_9">
+            <field name="name">Club Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-9.jpg"/>
+            <field name="ks_product_category_slogan">For Independent Women</field>
+        </record>
+        <record model="product.public.category" id="ks_categ_10">
+            <field name="name">Hard Wood</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_trendy/tss-10.jpg"/>
+            <field name="ks_product_category_slogan">Special and Unique</field>
+        </record>
+    </data>
+
+    <!--This is demo data for Products-->
+    <data>
+        <record model="product.template" id="ks_product_2">
+            <field name="name">DimGray Field Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item1.jpg"/>
+            <field name="list_price">20</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_7'), ref('ks_categ_9')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_3">
+            <field name="name">MistyRose Lounge Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item2.jpg"/>
+            <field name="list_price">25</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_7'), ref('ks_categ_9')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_4">
+            <field name="name">Spacious Brown Wooden Box</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item3.jpg"/>
+            <field name="list_price">12</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_10')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_5">
+            <field name="name">LavenderBlush 2 Seater Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item4.jpg"/>
+            <field name="list_price">19</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_3'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_6">
+            <field name="name">LightGray 2 Seater Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item5.jpg"/>
+            <field name="list_price">200</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_3'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_7">
+            <field name="name">MultiColour chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item6.jpg"/>
+            <field name="list_price">50</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_8">
+            <field name="name">DarkGrey Spring Base chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item7.jpg"/>
+            <field name="list_price">100</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_7'), ref('ks_categ_9')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_9">
+            <field name="name">2 Seater White Comfy Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item8.jpg"/>
+            <field name="list_price">29</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_3'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_10">
+            <field name="name">Indigo Field Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item9.jpg"/>
+            <field name="list_price">44</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_5'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_11">
+            <field name="name">2 Seater Gray sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item10.jpg"/>
+            <field name="list_price">60</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_5'), ref('ks_categ_3')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_12">
+            <field name="name">4 seater LightSlateGray Corner Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item11.jpg"/>
+            <field name="list_price">28</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_2')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_13">
+            <field name="name">2 seater LightSlateGray Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item12.jpg"/>
+            <field name="list_price">257</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_3'),ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_14">
+            <field name="name">Angelic 2 Seater sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item13.jpg"/>
+            <field name="list_price">235</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_4'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_15">
+            <field name="name">Steel leg 2 seater sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item14.jpg"/>
+            <field name="list_price">225</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_1'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_16">
+            <field name="name">Bisque 2 Seater Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item15.jpg"/>
+            <field name="list_price">215</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_4'), ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_17">
+            <field name="name">Stylish Wooden Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item16.jpg"/>
+            <field name="list_price">65</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_10')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_18">
+            <field name="name">3 Seater Gainsboro Corner Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item17.jpg"/>
+            <field name="list_price">233</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_2')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_19">
+            <field name="name">Wooden Leg Rocking Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item18.jpg"/>
+            <field name="list_price">77</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_6'), ref('ks_categ_10')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_20">
+            <field name="name">White Tub Moving Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item19.jpg"/>
+            <field name="list_price">80</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_9'), ref('ks_categ_8')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_21">
+            <field name="name"> 2 Seater Yellow Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item20.jpg"/>
+            <field name="list_price">223</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_4'), ref('ks_categ_7'),ref('ks_categ_9')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_22">
+            <field name="name">Charming Red 2 Seater Sofa</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item21.jpg"/>
+            <field name="list_price">238</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_3'), ref('ks_categ_7'),ref('ks_categ_9')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_23">
+            <field name="name">Black Leather Office Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item22.jpg"/>
+            <field name="list_price">110</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_8'),ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_24">
+            <field name="name">Black Net Office Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item23.jpg"/>
+            <field name="list_price">99</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_8'),ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+        <record model="product.template" id="ks_product_25">
+            <field name="name">Brown Leather Office Chair</field>
+            <field name="image_medium" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/ks_products/item24.jpg"/>
+            <field name="list_price">150</field>
+            <field name="website_published">True</field>
+            <field name="public_categ_ids" eval="[(6, 0, [ref('ks_categ_8'),ref('ks_categ_7')])]"/>
+            <field name="description_sale">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                took a galley of type and scrambled it to make a type specimen book.
+            </field>
+        </record>
+    </data>
+
+
+
+    <!--This is demo data for Main Slider Snippet-->
+    <data>
+        <record model="ks_product_main.slider" id="ks_banner_1">
+            <field name="name">Image 1</field>
+            <field name="ks_main_slider_img" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/view/banner1.jpg"/>
+            <field name="ks_main_slider_link">#</field>
+        </record>
+        <record model="ks_product_main.slider" id="ks_banner_2">
+            <field name="name">Image 2</field>
+            <field name="ks_main_slider_img" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/view/banner2.jpg"/>
+            <field name="ks_main_slider_link">#</field>
+        </record>
+        <record model="ks_product_main.slider" id="ks_banner_3">
+            <field name="name">Image 3</field>
+            <field name="ks_main_slider_img" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/view/banner3.jpg"/>
+            <field name="ks_main_slider_link">#</field>
+        </record>
+        <record model="ks_product_main.slider" id="ks_banner_4">
+            <field name="name">Image 4</field>
+            <field name="ks_main_slider_img" type="base64"
+                   file="ks_theme_kinetik/static/src/img-ui/view/banner4.jpg"/>
+            <field name="ks_main_slider_link">#</field>
+        </record>
+    </data>
+
+    <!--This is used to create blogs demo data for the theme-->
+    <data>
+        <record id="ks_blog_blog_1" model="blog.blog">
+            <field name="name">Kinetik</field>
+            <field name="subtitle">Interesting and Informative</field>
+        </record>
+    </data>
+    <data>
+        <record id="ks_blog_tag_1" model="blog.tag">
+            <field name="name">Service</field>
+        </record>
+        <record id="ks_blog_tag_2" model="blog.tag">
+            <field name="name">Product</field>
+        </record>
+        <record id="ks_blog_tag_3" model="blog.tag">
+            <field name="name">User</field>
+        </record>
+        <record id="ks_blog_tag_4" model="blog.tag">
+            <field name="name">Admin</field>
+        </record>
+    </data>
+    <data>
+        <record id="ks_blog_post_1" model="blog.post">
+            <field name="name">Ksolves India Pvt. Ltd.</field>
+            <field name="subtitle">Odoo Technology</field>
+            <field name="blog_id" ref="ks_blog_blog_1"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('ks_blog_tag_1')])]"/>
+            <field name="website_published" eval="True"/>
+            <field name="published_date" eval="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="website_meta_keywords">Odoo, email</field>
+            <field name="website_meta_description">Ideas behind the Odoo communication tools.</field>
+            <field name="cover_properties">{"background-image": "url(/web/image/website_blog.blog_post_cover_01)",
+                "resize_class": "cover container cover_narrow", "background-color": "oe_black", "opacity": "0.0"}
+            </field>
+            <field name="content"><![CDATA[
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    Emails are broken.
+                                </p><p>
+                                    Emails make me waste my time. But I need them.
+                                    Given the importance that emails have in our lives,
+                                    it's incredible it's still one of the only software
+                                    areas that did not evolve in the past 20 years!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    At Odoo, we build tools to bring productivity to
+                                    enterprises. As emails and information flows are one of
+                                    the biggest wastes of time in companies, we have to fix
+                                    this.
+                                </p><p>
+                                    To disrupt emails, you need more than just another user
+                                    interface. We need to rethink the whole communication flow.
+                                </p>
+                                <h3>The Communication Mechanism of Odoo</h3>
+                                <p>
+                                    Here are the ideas behind the Odoo communication tools:
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ]]>
+            </field>
+        </record>
+        <record id="ks_blog_post_2" model="blog.post">
+            <field name="name">Ksolves India Pvt. Ltd.</field>
+            <field name="subtitle">Ruby on Rails</field>
+            <field name="blog_id" ref="ks_blog_blog_1"/>
+            <field name="website_published" eval="True"/>
+            <field name="published_date" eval="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('ks_blog_tag_1'), ref('ks_blog_tag_2')])]"/>
+            <field name="cover_properties">{"background-image": "url(/web/image/website_blog.blog_post_cover_02)",
+                "resize_class": "cover container-fluid cover_full", "background-color": "oe_black", "opacity": "0.0"}
+            </field>
+            <field name="content"><![CDATA[
+                <section class="s_image_text">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 mt16">
+                                <h3>New Features Launched</h3>
+                                <p data-chatter-id="counter_0/section/div/div/div">To add to an already comprehensive set of Odoo
+                                features, a website content management system (CMS or WMS) has been developed and a beta release is
+                                available from today, 31st January 2014.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    Odoo claims to be 'the Open Source software that makes
+                                    building your company's website and selling your products
+                                    online easy'. So how true is this statement?
+                                </p>
+                                <blockquote>
+                                    <p>
+                                        "Finally, the leading edge is being brought to the masses.
+                                        It will now be the turn of the big players to catch up to
+                                        the superior technologies of the SME."
+                                    </p>
+                                </blockquote>
+                                <p>
+                                    "This is another clever and highly disruptive move by
+                                    Odoo,which will force other technology providers to
+                                    take another look at the value they are providing to ensure
+                                    that their 'solutions' can still compete."
+                                </p>
+                                <h4>Adding to industry leading technology</h4>
+                                <p>
+                                    Like many modern website editors, with Odoo you can edit
+                                    content in-line, enabling you to see exactly what you are
+                                    changing and ensure your changes suit the context.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ]]>
+            </field>
+        </record>
+        <record id="ks_blog_post_3" model="blog.post">
+            <field name="name">Ksolves India Pvt. Ltd.</field>
+            <field name="subtitle">Nodejs</field>
+            <field name="blog_id" ref="ks_blog_blog_1"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('ks_blog_tag_3')])]"/>
+            <field name="website_published" eval="True"/>
+            <field name="published_date" eval="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="website_meta_keywords">Odoo, email</field>
+            <field name="website_meta_description">Ideas behind the Odoo communication tools.</field>
+            <field name="cover_properties">{"background-image": "url(/web/image/website_blog.blog_post_cover_01)",
+                "resize_class": "cover container cover_narrow", "background-color": "oe_black", "opacity": "0.0"}
+            </field>
+            <field name="content"><![CDATA[
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    Emails are broken.
+                                </p><p>
+                                    Emails make me waste my time. But I need them.
+                                    Given the importance that emails have in our lives,
+                                    it's incredible it's still one of the only software
+                                    areas that did not evolve in the past 20 years!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    At Odoo, we build tools to bring productivity to
+                                    enterprises. As emails and information flows are one of
+                                    the biggest wastes of time in companies, we have to fix
+                                    this.
+                                </p><p>
+                                    To disrupt emails, you need more than just another user
+                                    interface. We need to rethink the whole communication flow.
+                                </p>
+                                <h3>The Communication Mechanism of Odoo</h3>
+                                <p>
+                                    Here are the ideas behind the Odoo communication tools:
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ]]>
+            </field>
+        </record>
+        <record id="ks_blog_post_4" model="blog.post">
+            <field name="name">Ksolves India Pvt. Ltd.</field>
+            <field name="subtitle">Angular</field>
+            <field name="blog_id" ref="ks_blog_blog_1"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('ks_blog_tag_4')])]"/>
+            <field name="website_published" eval="True"/>
+            <field name="published_date" eval="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="website_meta_keywords">Odoo, email</field>
+            <field name="website_meta_description">Ideas behind the Odoo communication tools.</field>
+            <field name="cover_properties">{"background-image": "url(/web/image/website_blog.blog_post_cover_01)",
+                "resize_class": "cover container cover_narrow", "background-color": "oe_black", "opacity": "0.0"}
+            </field>
+            <field name="content"><![CDATA[
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    Emails are broken.
+                                </p><p>
+                                    Emails make me waste my time. But I need them.
+                                    Given the importance that emails have in our lives,
+                                    it's incredible it's still one of the only software
+                                    areas that did not evolve in the past 20 years!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2 mb16 mt16">
+                                <p>
+                                    At Odoo, we build tools to bring productivity to
+                                    enterprises. As emails and information flows are one of
+                                    the biggest wastes of time in companies, we have to fix
+                                    this.
+                                </p><p>
+                                    To disrupt emails, you need more than just another user
+                                    interface. We need to rethink the whole communication flow.
+                                </p>
+                                <h3>The Communication Mechanism of Odoo</h3>
+                                <p>
+                                    Here are the ideas behind the Odoo communication tools:
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ]]>
+            </field>
+        </record>
+    </data>
+
+    <!--This is for Product Grid Snippets Data-->
+    <data>
+        <record model="ks_product.grid" id="ks_product_grid_data_1">
+            <field name="name">Summer Products</field>
+            <field name="ks_product_template_grid"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_5'),ref('ks_theme_kinetik.ks_product_6'),ref('ks_theme_kinetik.ks_product_7'),ref('ks_theme_kinetik.ks_product_8'),ref('ks_theme_kinetik.ks_product_10'),ref('ks_theme_kinetik.ks_product_11'),ref('ks_theme_kinetik.ks_product_12'),ref('ks_theme_kinetik.ks_product_2')])]"/>
+        </record>
+    </data>
+
+    <!--This is for Featured Snippets Data-->
+    <data>
+        <record model="ks_theme.tags">
+            <field name="id" ref="ks_theme_base.ks_products_tags_new_arrival"/>
+            <field name="ks_product_ids"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_10'),ref('ks_theme_kinetik.ks_product_2'),ref('ks_theme_kinetik.ks_product_3'),ref('ks_theme_kinetik.ks_product_4')])]"/>
+        </record>
+        <record model="ks_theme.tags">
+            <field name="id" ref="ks_theme_base.ks_products_tags_trendy"/>
+            <field name="ks_product_ids"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_8'),ref('ks_theme_kinetik.ks_product_7'),ref('ks_theme_kinetik.ks_product_6'),ref('ks_theme_kinetik.ks_product_5')])]"/>
+        </record>
+        <record model="ks_theme.tags">
+            <field name="id" ref="ks_theme_base.ks_products_tags_Most_popular"/>
+            <field name="ks_product_ids"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_9'),ref('ks_theme_kinetik.ks_product_10'),ref('ks_theme_kinetik.ks_product_11'),ref('ks_theme_kinetik.ks_product_12')])]"/>
+        </record>
+        <record model="ks_theme.tags">
+            <field name="id" ref="ks_theme_base.ks_products_tags_Classics"/>
+            <field name="ks_product_ids"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_2'),ref('ks_theme_kinetik.ks_product_5'),ref('ks_theme_kinetik.ks_product_8'),ref('ks_theme_kinetik.ks_product_11')])]"/>
+        </record>
+    </data>
+
+    <!--This is for blogs snippets data -->
+    <!--<data>-->
+    <!--<record model="ks_theme_base.ks_blog_slider" id="ks_blog_data">-->
+    <!--<field name="name">Top Blogs</field>-->
+    <!--<field name="ks_loop">True</field>-->
+    <!--<field name="ks_blogs_selector"-->
+    <!--eval="[(6,0,[ ref('ks_theme_kinetik.ks_blog_post_1'),ref('ks_theme_kinetik.ks_blog_post_2'),ref('ks_theme_kinetik.ks_blog_post_3'),ref('ks_theme_kinetik.ks_blog_post_4')])]"/>-->
+    <!--</record>-->
+    <!--</data>-->
+
+    <!--This is for trendy style snippet 1-->
+    <!--<data>-->
+    <!--<record model="ks_theme_base.ks_trending_category" id="ks_category_data_1">-->
+    <!--<field name="name">Trending Styles</field>-->
+    <!--<field name="ks_loop">True</field>-->
+    <!--<field name="ks_selected_category"-->
+    <!--eval="[(6,0,[ ref('ks_theme_kinetik.ks_categ_10'),ref('ks_theme_kinetik.ks_categ_9'),ref('ks_theme_kinetik.ks_categ_8'),ref('ks_theme_kinetik.ks_categ_7'),ref('ks_theme_kinetik.ks_categ_5'),ref('ks_theme_kinetik.ks_categ_6')])]"/>-->
+    <!--</record>-->
+    <!--</data>-->
+
+    <!--&lt;!&ndash;This is for trendy style snippet 2&ndash;&gt;-->
+    <!--<data>-->
+    <!--<record model="ks_theme_base.ks_trending_category" id="ks_category_data_2">-->
+    <!--<field name="name">Western Trends</field>-->
+    <!--<field name="ks_loop">True</field>-->
+    <!--<field name="ks_selected_category"-->
+    <!--eval="[(6,0,[ ref('ks_theme_kinetik.ks_categ_1'),ref('ks_theme_kinetik.ks_categ_2'),ref('ks_theme_kinetik.ks_categ_3'),ref('ks_theme_kinetik.ks_categ_4'),ref('ks_theme_kinetik.ks_categ_5'),ref('ks_theme_kinetik.ks_categ_6')])]"/>-->
+    <!--</record>-->
+    <!--</data>-->
+
+    <!--This is for product multi slider 1-->
+    <data>
+        <record model="ks_product.slider" id="ks_product_slider_1">
+            <field name="name">Top Products</field>
+            <field name="ks_loop">True</field>
+            <field name="ks_product_template_slider"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_2'),ref('ks_theme_kinetik.ks_product_3'),ref('ks_theme_kinetik.ks_product_4'),ref('ks_theme_kinetik.ks_product_5'),ref('ks_theme_kinetik.ks_product_6')])]"/>
+        </record>
+    </data>
+
+    <!--This is for product multi slider 2-->
+    <data>
+        <record model="ks_product.slider" id="ks_product_slider_2">
+            <field name="name">Special Products</field>
+            <field name="ks_loop">True</field>
+            <field name="ks_product_template_slider"
+                   eval="[(6,0,[ ref('ks_theme_kinetik.ks_product_7'),ref('ks_theme_kinetik.ks_product_8'),ref('ks_theme_kinetik.ks_product_9'),ref('ks_theme_kinetik.ks_product_10'),ref('ks_theme_kinetik.ks_product_11'),ref('ks_theme_kinetik.ks_product_12')])]"/>
+        </record>
+    </data>
+</odoo>

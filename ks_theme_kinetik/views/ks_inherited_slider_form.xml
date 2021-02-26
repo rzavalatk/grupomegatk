@@ -1,0 +1,30 @@
+<?xml  version="1.0"?>
+<odoo>
+    <!--    this record is used to place full width slider option in all slider form-->
+    <record id="inherits_ks_product_slider_form_view" model="ir.ui.view">
+        <field name="name">ks_product.slider.form</field>
+        <field name="model">ks_product.slider</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="ks_theme_base.ks_slider_multi_form"/>
+        <field name="arch" type="xml">
+            <field name="ks_Speed" position="after">
+                <field name="ks_is_full_width"/>
+            </field>
+            <xpath expr="/form/sheet/group/group[1]" position="replace">
+                <group>
+                    <field name="name"/>
+                    <field name="ks_item_selection_method"/>
+                    <field name="ks_items_per_slide" attrs="{'invisible':['|',('ks_item_selection_method','=','brands'),('ks_item_selection_method','=','blogs')]}"/>
+                    <field name="ks_items_per_slide_for_brands" attrs="{'invisible':[('ks_item_selection_method','!=','brands')]}"/>
+                    <field name="ks_template_type" attrs="{'invisible':[('ks_item_selection_method','!=','brands')]}"/>
+                    <field name="ks_is_animation" attrs="{'invisible':[('ks_item_selection_method','!=','brands')]}"/>
+                    <field name="ks_blog_template" attrs="{'invisible':[('ks_item_selection_method','!=','blogs')]}"/>
+                    <field name="ks_items_per_slide_for_blogs" attrs="{'invisible':[('ks_item_selection_method','!=','blogs')]}"/>
+                </group>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page" position="attributes">
+                <attribute name="string">Items</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

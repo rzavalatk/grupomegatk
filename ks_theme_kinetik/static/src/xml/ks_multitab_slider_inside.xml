@@ -1,0 +1,324 @@
+<templates>
+    <t t-name="snippet_multi_tab">
+        <section class="py-lg-5 py-3">
+            <div id="product_btn_group" class="text-center" contenteditable="false">
+                <ul class="nav nav-tabs d-flex justify-content-center" role="tablist">
+                    <t t-foreach="products.tab_names" t-as="tab">
+                        <li t-att-class="'tabs-li nav-item '+'ks_tab_list'+products.slider_id">
+                            <input t-att-class="tab[3]+products.slider_id+'slider_id'" t-att-value="products.slider_id"
+                                   type="hidden"/>
+                            <a t-att-href="tab[2]+products.slider_id"
+                               data-toggle="tab"
+                               t-att-class="'ks_'+tab[3]+products.slider_id">
+                                <button id="new_arrivals"
+                                        class="theme__btn-2 mt-lg-4 mt-2  mx-2 featured_btn">
+                                    <t t-esc="tab[1]"/>
+                                </button>
+                            </a>
+                        </li>
+                    </t>
+                </ul>
+            </div>
+            <div class="tab-content mt-4 mt-md-5" contenteditable="false">
+                <t t-foreach="products.tab_names" t-as="tab">
+                    <t t-if="tab_index==0">
+                        <div t-att-id="tab[3]+products.slider_id"
+                             t-att-class=" 'ks_multitab-'+products.slider_id + ' tab-pane row no-gutters active ' +tab[3]+products.slider_id">
+                            <div id="tabs-product-owl-id"
+                                 class="owl-carousel tabs-product-owl products-carousel owl-theme">
+                                <t t-foreach="tab[0]" t-as="prods">
+                                    <div class="product-card oe_product oe_product_cart mt-2">
+                                        <t t-if='prods.product_tags'>
+                                            <div class="ribbon-wrapper">
+                                                <a href="javascript:void(0)" role="button" class="ribbon btn btn-danger">
+                                                    <t t-esc="prods.product_tags"/>
+                                                </a>
+                                            </div>
+                                         </t>
+                                        <div class="fp__img position-relative text-center">
+                                            <a itemprop="url" class="wishlist-select">
+                                                <t t-if="is_ks_wishlist">
+                                                    <button type="button" role="button"
+                                                            class="btn btn-secondary btn-sm o_add_wishlist"
+                                                            t-att-disabled='prods.in_wish or None' title="Add To Wishlist"
+                                                            t-att-data-product-template-id="prods.prod_id"
+                                                            t-att-data-product-product-id="prods.ks_product_var_id"
+                                                            data-action="o_wishlist">
+                                                        <span class="fa fa-heart-o show-wishlist"
+                                                              aria-label="Add To Wishlist"/>
+                                                        <span class="fa fa-heart show-hover"
+                                                              aria-label="Add To Wishlist"/>
+                                                    </button>
+                                                </t>
+                                            </a>
+                                            <a t-att-href="prods.prod_url" id="fp-1"
+                                               class="featured__product">
+                                                <img t-att-src="prods.product_img"/>
+                                            </a>
+                                        </div>
+                                        <div class="fp__info py-3 px-3">
+                                            <a t-att-href="prods.prod_url" id="fp-1" class="featured__product">
+                                                <div class="row no-gutters">
+                                                    <div class="col-12">
+                                                        <t t-if='prods.brand_name'>
+                                                            <div class="fp__brand">
+                                                                <t t-esc="prods.brand_name"/>
+                                                            </div>
+                                                        </t>
+                                                        <div class="fp__name text-truncate text-left">
+                                                            <t t-esc="prods.product_name"/>
+                                                        </div>
+                                                        <t t-if="prods.is_rating">
+                                                            <div class="o_rating_star_card">
+                                                                <t t-set="val_integer" t-value="Math.floor(prods.rating_avg)"/>
+                                                                <t t-set="val_decimal" t-value="prods.rating_avg - val_integer"/>
+                                                                <t t-set="empty_star" t-value="5 - (val_integer + Math.ceil(val_decimal))"/>
+
+                                                                <div class="o_website_rating_static" t-att-style="inline_mode and 'display:inline'">
+                                                                <t t-foreach="_.range(0, val_integer)" t-as="num">
+                                                                    <i class="fa fa-star" role="img"
+                                                                       aria-label="One star" title="One star"></i>
+                                                                </t>
+                                                                <t t-if="val_decimal">
+                                                                    <i class="fa fa-star-half-o" role="img"
+                                                                       aria-label="Half a star" title="Half a star"></i>
+                                                                </t>
+                                                                <t t-foreach="_.range(0, empty_star)" t-as="num"
+                                                                   role="img">
+                                                                    <i class="fa fa-star-o text-black-25"></i>
+                                                                </t>
+                                                                (<t t-esc="rating_count"/>)
+                                                            </div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                    <div class="fp__price ks_price_info d-flex justify-content-center align-items-center">
+                                                    <div class="fp__current_price d-flex">
+                                                        <span t-esc="prods.website_price"/>
+                                                    </div>
+                                                    <t t-if="prods.percentage_discount>0">
+                                                        <del class="ks_public_price"
+                                                             style="white-space: nowrap;">
+                                                            <span t-esc="prods.website_public_price"/>
+                                                        </del>
+                                                    </t>
+                                                        <t t-if="prods.percen_show">
+                                                            <t class="text-danger"
+                                                               t-if="prods.percentage_discount>0">
+                                                                <div class="ks_snippet_percentage_discount_2">
+                                                                    <div class="Percentage-offer">
+                                                                        <span>(</span>
+                                                                        <t t-esc="prods.percentage_discount"/>%
+                                                                        <span class="ks_percentage_info">off)</span>
+                                                                    </div>
+                                                                </div>
+                                                            </t>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="wishlist_and_comparision row no-gutters">
+                                                <t t-set="product_variant_id" t-value='prods.ks_product_var_id'/>
+                                                <t t-if="is_ks_cart">
+                                                    <div class="col">
+                                                        <form action="/ks_shop/cart/update" method="post"
+                                                              class="text-center ks_shop">
+                                                            <input name="product_id"
+                                                                   t-att-value="prods.ks_product_var_id"
+                                                                   type="hidden"/>
+                                                            <a href="#" role="button"
+                                                               class="ks_add_to_cart_dynamic btn btn-secondary ks_add_to_cart"
+                                                               aria-label="Add To Cart" title="Shopping cart">
+                                                                <input name="product_product_id"
+                                                                       t-att-value="prods.ks_product_var_id"
+                                                                       type="hidden"/>
+                                                                <span class="fa fa-shopping-cart"/>
+                                                                <span class="ks_add_to_cart_text d-block d-md-none">Add To Cart</span>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </t>
+                                                <t t-if="is_ks_product_det">
+                                                    <div class="col ks_custom_d_none_info">
+                                                        <a class="btn btn-secondary btn-sm o_quick_view"
+                                                           data-toggle="modal"
+                                                           data-target="#product_quick_preview_Modal"
+                                                           title="Quick Preview"
+                                                           t-att-data-product-product-id="prods.ks_product_var_id"
+                                                           t-att-data-product-template-id="prods.prod_id">
+                                                            <span class="fa fa-info-circle" role="img"
+                                                                  aria-label="Product Information"/>
+                                                        </a>
+                                                    </div>
+                                                </t>
+                                                <t t-if="is_ks_compare">
+                                                    <div class="col ks_custom_d_none">
+                                                        <button type="button" role="button"
+                                                                class="d-none d-md-inline-block btn btn-secondary btn-sm o_add_compare"
+                                                                title="Compare" aria-label="Compare"
+                                                                t-att-data-product-template-id="prods.prod_id"
+                                                                t-att-data-product-product-id="prods.ks_product_var_id"
+                                                                data-action="o_comparelist">
+                                                            <span class="fa fa-exchange"/>
+                                                        </button>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div t-att-id="tab[3]+products.slider_id"
+                             t-att-class=" 'ks_multitab-'+products.slider_id + ' tab-pane row no-gutters ' +tab[3]+products.slider_id">
+                            <div id="tabs-product-owl-id"
+                                 class="owl-carousel tabs-product-owl products-carousel owl-theme">
+                                <t t-foreach="tab[0]" t-as="prods">
+                                    <div class="product-card oe_product oe_product_cart mt-2">
+                                         <t t-if='prods.product_tags'>
+                                            <div class="ribbon-wrapper">
+                                                <a href="javascript:void(0)" role="button" class="ribbon btn btn-danger">
+                                                    <t t-esc="prods.product_tags"/>
+                                                </a>
+                                            </div>
+                                         </t>
+                                        <div class="fp__img position-relative text-center">
+                                            <a itemprop="url" class="wishlist-select">
+                                                <t t-if="is_ks_wishlist">
+                                                    <button type="button" role="button"
+                                                            class="btn btn-secondary btn-sm o_add_wishlist"
+                                                            t-att-disabled='prods.in_wish or None' title="Add To Wishlist"
+                                                            t-att-data-product-template-id="prods.prod_id"
+                                                            t-att-data-product-product-id="prods.ks_product_var_id"
+                                                            data-action="o_wishlist">
+                                                        <span class="fa fa-heart-o show-wishlist"
+                                                              aria-label="Add To Wishlist"/>
+                                                        <span class="fa fa-heart show-hover"
+                                                              aria-label="Add To Wishlist"/>
+                                                    </button>
+                                                </t>
+                                            </a>
+                                            <a t-att-href="prods.prod_url" id="fp-1"
+                                               class="featured__product">
+                                                <img t-att-src="prods.product_img"/>
+                                            </a>
+                                        </div>
+                                        <div class="fp__info py-3 px-3">
+                                            <a t-att-href="prods.prod_url" id="fp-1" class="featured__product">
+                                                <div class="row no-gutters">
+                                                    <div class="col-12">
+                                                        <t t-if='prods.brand_name'>
+                                                            <div class="fp__brand">
+                                                                <t t-esc="prods.brand_name"/>
+                                                            </div>
+                                                        </t>
+                                                        <div class="fp__name text-truncate text-left">
+                                                            <t t-esc="prods.product_name"/>
+                                                        </div>
+                                                        <t t-if="prods.is_rating">
+                                                            <div class="o_rating_star_card">
+                                                                <t t-set="val_integer" t-value="Math.floor(prods.rating_avg)"/>
+                                                                <t t-set="val_decimal" t-value="prods.rating_avg - val_integer"/>
+                                                                <t t-set="empty_star" t-value="5 - (val_integer+Math.ceil(val_decimal))"/>
+
+                                                                <div class="o_website_rating_static" t-att-style="inline_mode and 'display:inline'">
+                                                                <t t-foreach="_.range(0, val_integer)" t-as="num">
+                                                                    <i class="fa fa-star" role="img"
+                                                                       aria-label="One star" title="One star"></i>
+                                                                </t>
+                                                                <t t-if="val_decimal">
+                                                                    <i class="fa fa-star-half-o" role="img"
+                                                                       aria-label="Half a star" title="Half a star"></i>
+                                                                </t>
+                                                                <t t-foreach="_.range(0, empty_star)" t-as="num"
+                                                                   role="img">
+                                                                    <i class="fa fa-star-o text-black-25"></i>
+                                                                </t>
+                                                                (<t t-esc="rating_count"/>)
+                                                            </div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                    <div class="fp__price ks_price_info d-flex justify-content-center align-items-center">
+                                                    <div class="fp__current_price d-flex">
+                                                        <span t-esc="prods.website_price"/>
+                                                    </div>
+                                                    <t t-if="prods.percentage_discount>0">
+                                                        <del class="ks_public_price"
+                                                             style="white-space: nowrap;">
+                                                            <span t-esc="prods.website_public_price"/>
+                                                        </del>
+                                                    </t>
+                                                        <t t-if="prods.percen_show">
+                                                            <t class="text-danger"
+                                                               t-if="prods.percentage_discount>0">
+                                                                <div class="ks_snippet_percentage_discount_2">
+                                                                    <div class="Percentage-offer">
+                                                                        <span>(</span>
+                                                                        <t t-esc="prods.percentage_discount"/>%
+                                                                        <span class="ks_percentage_info">off)</span>
+                                                                    </div>
+                                                                </div>
+                                                            </t>
+                                                        </t>
+                                                </div>
+                                                </div>
+                                            </a>
+                                            <div class="wishlist_and_comparision row no-gutters">
+                                            <t t-set="product_variant_id" t-value='prods.ks_product_var_id'/>
+                                            <t t-if="is_ks_cart">
+                                                <div class="col">
+                                                    <form action="/ks_shop/cart/update" method="post"
+                                                          class="text-center ks_shop">
+                                                        <input name="product_id" t-att-value="prods.ks_product_var_id"
+                                                               type="hidden"/>
+                                                        <a href="#" role="button"
+                                                           class="ks_add_to_cart_dynamic btn btn-secondary ks_add_to_cart"
+                                                           aria-label="Add To Cart" title="Shopping cart">
+                                                            <input name="product_product_id"
+                                                                   t-att-value="prods.ks_product_var_id" type="hidden"/>
+                                                            <span class="fa fa-shopping-cart"/>
+                                                            <span class="ks_add_to_cart_text d-block d-md-none">Add To Cart</span>
+                                                        </a>
+                                                    </form>
+                                                </div>
+                                            </t>
+                                            <t t-if="is_ks_product_det">
+                                                <div class="col ks_custom_d_none_info">
+                                                    <a class="btn btn-secondary btn-sm o_quick_view" data-toggle="modal"
+                                                       data-target="#product_quick_preview_Modal" title="Quick Preview"
+                                                       t-att-data-product-product-id="prods.ks_product_var_id"
+                                                       t-att-data-product-template-id="prods.prod_id">
+                                                        <span class="fa fa-info-circle" role="img"
+                                                              aria-label="Product Information"/>
+                                                    </a>
+                                                </div>
+                                            </t>
+                                            <t t-if="is_ks_compare">
+                                                <div class="col ks_custom_d_none">
+                                                    <button type="button" role="button"
+                                                            class="d-none d-md-inline-block btn btn-secondary btn-sm o_add_compare"
+                                                            title="Compare" aria-label="Compare"
+                                                            t-att-data-product-template-id="prods.prod_id"
+                                                            t-att-data-product-product-id="prods.ks_product_var_id"
+                                                            data-action="o_comparelist">
+                                                        <span class="fa fa-exchange"/>
+                                                    </button>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </div>
+        </section>
+    </t>
+</templates>
+
+

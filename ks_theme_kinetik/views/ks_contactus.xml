@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="contactus_form" name="Contact Form" inherit_id="website.contactus" customize_show="True">
+         <xpath expr="//div[hasclass('container', 'mt-2')]" position="attributes">
+             <attribute name="class">ks_contact_container</attribute>
+          </xpath>
+          <xpath expr="//section[hasclass('s_text_block')]//div[1]" position="replace">
+              <section>
+                  <div class="ks-contact ks-contact-page">
+                      <div class="oe_structure oe_empty o_editable">
+                          <section class="d-flex align-items-center justify-content-center ks-contact-cover"
+                                   style="background-image:url(/ks_theme_kinetik/static/src/images/contact-us-page/contact-us-1.jpg)">
+                              <div class="container-lg">
+                                  <h4 class="theme__heading">Contact Us</h4>
+                              </div>
+                          </section>
+                      </div>
+<!--                      <div class="oe_structure oe_empty o_editable">-->
+                          <div class="container py-sm-5 py-3">
+                              <div class="row ks-contact-form-container">
+                                  <div class="col-lg-8 col-md-12 col-12 ks-contact-form p-sm-5 p-4">
+                                      <div name="mail_button">
+                                          <img src="/ks_theme_kinetik/static/src/images/about-us-page/g-4.jpg" alt=""
+                                               class="image-fluid mb-4"/>
+                                          <div class="text-center">
+                                              <a role="button" t-attf-href="mailto:{{ res_company.email }}"
+                                                 class="btn btn-primary"
+                                                 id="o_contact_mail">
+                                                  <i class="fa fa-paper-plane mr-2"/>
+                                                  Submit
+                                              </a>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-lg-4 col-md-12 col-12 pl-md-5 ks-contact-social p-sm-5 p-4">
+                                      <div class="row">
+                                          <div class="ks-contact-info-box d-flex">
+                                              <div class="ks-contact-icon">
+                                                  <img src="/ks_theme_kinetik/static/src/images/contact-us-page/placeholder.svg"
+                                                       class="ks-contact-icon-img"/>
+                                              </div>
+                                              <div class="ks-contact-info">
+                                                  <div class="ks-contact-info-title">Location</div>
+                                                  <div class="ks-contact-details">
+                                                      <address itemscope="itemscope"
+                                                               itemtype="http://schema.org/Organization">
+                                                          <div t-field="res_company.partner_id" t-options='{
+                                                                "widget": "contact",
+                                                                "fields": ["address"]}'/>
+                                                      </address>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="ks-contact-info-box d-flex">
+                                              <div class="ks-contact-icon">
+                                                  <img src="/ks_theme_kinetik/static/src/images/contact-us-page/smartphone-ringing.svg"
+                                                       class="ks-contact-icon-img"/>
+                                              </div>
+                                              <div class="ks-contact-info">
+                                                  <div class="ks-contact-info-title">Call Us</div>
+                                                  <div class="ks-contact-details">
+                                                      <span t-field="res_company.phone"/>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="ks-contact-info-box d-flex">
+                                              <div class="ks-contact-icon">
+                                                  <img src="/ks_theme_kinetik/static/src/images/contact-us-page/mail-send.svg"
+                                                       class="ks-contact-icon-img"/>
+                                              </div>
+                                              <div class="ks-contact-info">
+                                                  <div class="ks-contact-info-title">Email</div>
+                                                  <div class="ks-contact-details">
+                                                      <span t-field="res_company.email"/>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h4 class="my-3 text-center">Follow us on</h4>
+                                      <section class="flex ks-form-social-list justify-content-center">
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_facebook"
+                                                 t-att-href="res_company.social_facebook">
+                                                  <i class="fa fa-facebook rounded-circle mr-2"></i>
+                                              </a>
+                                          </section>
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_twitter"
+                                                 t-att-href="res_company.social_twitter">
+                                                  <i class="fa fa-twitter rounded-circle mr-2"></i>
+                                              </a>
+                                          </section>
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_linkedin"
+                                                 t-att-href="res_company.social_linkedin">
+                                                  <i class="fa fa-linkedin rounded-circle mr-2"></i>
+                                              </a>
+                                          </section>
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_youtube"
+                                                 t-att-href="res_company.social_youtube">
+                                                  <i class="fa fa-youtube rounded-circle mr-2"></i>
+                                              </a>
+                                          </section>
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_github"
+                                                 t-att-href="res_company.social_github">
+                                                  <i id="git_hub" class="fa fa-github rounded-circle mr-2"/>
+                                              </a>
+                                          </section>
+                                          <section class="mb-3">
+                                              <a t-if="res_company.social_instagram"
+                                                 t-att-href="res_company.social_instagram">
+                                                  <i id="insta" class="fa fa-instagram rounded-circle mr-2"/>
+                                              </a>
+                                          </section>
+                                      </section>
+                                  </div>
+                              </div>
+                          </div>
+<!--                      </div>-->
+                  </div>
+              </section>
+          </xpath>
+		  <xpath expr="//div[hasclass('oe_structure')]" position="attributes">
+				<attribute name="class">d-none oe_structure</attribute>
+		  </xpath>
+
+    </template>
+</odoo>
+<!--position="attributes">odoo-->
+<!--                <attribute name="readonly">1</attribute>-->

@@ -1,0 +1,115 @@
+.ks-card-design-3 {
+    .oe_product {
+        section {
+            position: initial !important;
+        }
+
+        .ks_hover_data {
+            transform: translateY(-100%);
+            height: calc(100% - 65px);
+            background: transparent;
+
+            .product_price {
+                flex-direction: column;
+                height: 100%;
+                padding-right: 10px;
+                align-items: flex-end;
+
+                .btn-secondary {
+                    transform: translateX(calc(100% + 16px));
+                    transition: 0.2s ease-in-out;
+                }
+            }
+
+           @media (max-width: 1024px) {
+               z-index: 1000 !important;
+               background: transparent !important;
+
+               .btn-secondary {
+                    transform: translateX(0) !important;
+               }
+           }
+        }
+    }
+
+    .oe_product_cart {
+        box-shadow: none !important;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0 1px 12px 4px rgba(0, 0, 0, 0.32) !important;
+        }
+    }
+    .oe_product.oe_grid {
+
+        .ks_name_price {
+            text-align: center;
+        }
+
+        &:hover {
+            .ks_hover_data {
+                z-index: 1000;
+
+                .btn-secondary {
+                    transform: translateX(0);
+                }
+            }
+        }
+    }
+
+    //on filter select products
+
+    .product-card {
+        box-shadow: none !important;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0 1px 12px 4px rgba(0, 0, 0, 0.32) !important;
+
+            .btn-secondary {
+                transform: translateX(0);
+            }
+        }
+
+        .col.ks_custom_d_none {
+            display: flex;
+        }
+
+        &:hover {
+           .wishlist_and_comparision {
+                background: rgba(234, 234, 234, 0.5) !important;
+            }
+
+            .btn-secondary {
+                transform: translateX(0);
+            }
+        }
+    }
+    .wishlist_and_comparision {
+        bottom: 0 !important;
+        height: 100%;
+        flex-direction: column;
+        background: transparent !important;
+
+        .btn-secondary {
+            margin: initial !important;
+            margin-left: auto !important;
+            transition: 0.2s ease-in-out;
+            transform: translateX(calc(100% + 16px));
+
+            @media (max-width: 1024px) {
+                transform: translateX(0);
+            }
+        }
+    }
+
+    .fp__name.text-truncate.text-left {
+        text-align: center !important;
+    }
+
+    .fp__price {
+        margin: auto;
+    }
+}

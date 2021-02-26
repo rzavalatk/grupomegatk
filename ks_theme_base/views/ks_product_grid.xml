@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <!--tree view of grid-->
+        <record model="ir.ui.view" id="ks_product_grid_tree">
+            <field name="name">Product Grid</field>
+            <field name="model">ks_product.grid</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--form view of grid-->
+        <record model="ir.ui.view" id="ks_product_grid_form">
+            <field name="name">Product Grid</field>
+            <field name="model">ks_product.grid</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                         <notebook>
+                           <page string="Product Grid">
+                           <field name="ks_product_template_grid" widget="many2many"/>
+                         </page>
+                      </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ks_product_grid_action_window_id">
+            <field name="name">Product Grid</field>
+            <field name="res_model">ks_product.grid</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--This menu item is placed in sale model by defining their parent -->
+        <menuitem name="Product Grid" parent="ks_theme_base.ks_theme_customization_menu" id="ks_product_grid_id"
+                  action="ks_product_grid_action_window_id"/>
+    </data>
+</odoo>

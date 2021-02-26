@@ -1,0 +1,65 @@
+<odoo>
+    <t t-name="ks_theme_kinetik.products_modal"
+              name="product_quick_view">
+
+            <!-- Product quick view popup-->
+            <div class="modal fade" id="product_quick_preview_Modal" tabindex="-1" role="dialog"
+                 aria-labelledby="product_quick_preview_ModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" >
+                            <h5 class="modal-title" id="product_quick_preview_ModalLabel">Product Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" tabindex="-1">×</button>
+                        </div>
+                        <div class="modal-body oe_website_sale">
+                            <p id="product_modal">Product Details</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close"
+                                    data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </t>
+
+        <t t-name="ks_theme_kinetik.ks_recently_product_views" name="recentaly_product_view">
+        <div class="product_image">
+            <div class="owl-carousel ks_recent_carusols owl-theme">
+                <t t-foreach="products.prods" t-as="prods">
+                    <a target="_blank" class="ks-recently-viewed-product" t-att-href="prods.prod_url">
+                        <img t-att-src="prods.prod_image"/>
+                        <div class="ks-recently-viewed-content">
+                            <div><t t-esc="prods.product_name"/></div>
+                            <div class="fp__price ks_price_info d-flex justify-content-center align-items-center">
+                            <div class="fp__current_price d-flex">
+                                <span class="mx-1" t-esc="prods.website_price"/>
+                            </div>
+                            <t t-if="prods.percentage_discount>0">
+                                <del class="ks_public_price"
+                                     style="white-space: nowrap;">
+                                    <span t-esc="prods.prod_price" />
+                                </del>
+                            </t>
+                            <t t-if="prods.percen_show">
+                                <t class="text-danger"
+                                   t-if="prods.percentage_discount>0">
+                                    <div class="ks_snippet_percentage_discount_2">
+                                        <div class="Percentage-offer">
+                                            <span>(</span>
+                                            <t t-esc="prods.percentage_discount"/>%
+                                            <span class="ks_percentage_info">oFF)</span>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                        </div>
+                    </a>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</odoo>

@@ -1,0 +1,71 @@
+.ks-services-v3 {
+  .section-heading {
+    position: relative;
+    font-size: 32px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    display: inline-block;
+    color: $black;
+  }
+  .serv-box-bg {
+    overflow: hidden;
+    padding: 6px;
+    border: 1px solid $color_celeste;
+    margin-top: 42px;
+    background: $concrete;
+    transition: all 0.3s ease-out;
+    &:hover {
+      background: lighten($primary,30%);
+    }
+  }
+  .serv-box {
+    text-align: left;
+    background: $white_90;
+    position: relative;
+    padding: 24px;
+    h2 {
+      font-size: 24px;
+      color: $black;
+      letter-spacing: 0.01em;
+      font-weight: 500;
+      text-transform: uppercase;
+      position: relative;
+      margin: 0 0 16px 0;
+      &:after {
+        transition: all 0.5s ease-out;
+        position: absolute;
+        content: '';
+        bottom: -12px;
+        left: 0;
+        display: block;
+        width: 24px;
+        height: 2px;
+        margin-left: 0;
+        background: $color_outrageous_orange_70;
+      }
+    }
+    &:hover {
+      .file-icon {
+        color: darken($primary, 10%);
+      }
+      h2:after {
+        background: $primary;
+        width: 60px;
+        height: 2px;
+      }
+    }
+    p {
+      margin-top: 24px;
+      margin-right: 55px;
+    }
+    .file-icon {
+      color: $dark;
+      font-size: 50px;
+      padding-bottom: 10px;
+      transition: all 0.7s ease-out;
+      text-shadow: 14px -4px 9px rgba(0, 0, 0, 0.34);
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.ks-blog-view-2 {
+    .blog__card {
+        padding: 0 !important;
+        overflow: hidden;
+
+        &:hover {
+            box-shadow: 0px 12px 10px 3px rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    .blog-m-h {
+        position: relative;
+    }
+    .blog_date {
+        position: absolute;
+        background: $white;
+        padding: 5px 10px;
+        color: #57585d;
+        bottom: 0;
+        right: 0;
+        font-weight: 400;
+        border-top-left-radius: 15px;
+        font-size: 14px;
+    }
+
+    .pr-sm-4 {
+       padding: 10px 20px !important;
+    }
+
+    .read_blog {
+        margin-bottom: 10px;
+        color: #4a4a4a !important;
+        font-size: 16px;
+    }
+
+    .blog_heading {
+        font-size: 18px;
+    }
+}
+
+.ks-blog {
+    @media (max-width: 990px) {
+        padding: 0 15px;
+    }
+}

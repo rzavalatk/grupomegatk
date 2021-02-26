@@ -1,0 +1,74 @@
+<?xml  version="1.0"?>
+<odoo>
+
+    <!--    this record is used to place brand selection option in sale at product creation time-->
+    <record id="inherits_product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Brand info">
+                        <group>
+                            <field name="ks_product_brand_id"/>
+                            <field name="ks_discounted_price"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Tags">
+                        <group>
+                            <field name="ks_product_tags" widget="many2many_tags" options="{'no_create':True}"/>
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <!--    This record is used to create a custom GroupBy on based on brands-->
+    <record id="view_product_template_search_brand" model="ir.ui.view">
+        <field name="name">product.template.search.brand</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='consumable']" position="after">
+                <filter string="Brand" name="group_by_brand" context="{'group_by' : 'ks_product_brand_id'}"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    here we set our created GroupBy as a default value -->
+    <record id="ks_brand_filter_view" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="search_view_id" ref="view_product_template_search_brand"/>
+        <field name="context">{"search_default_group_by_brand":1}</field>
+    </record>
+
+    <!--    These menu items is dependent on sale root menu-->
+    <menuitem id="ks_theme_customization_menu"
+              name="Ksolves's Theme Configuration"
+              groups="base.group_system"
+              action="sale.product_template_action"
+              parent="website.menu_website_configuration"
+              sequence="100"/>
+    <menuitem id="ks_brands_and_products"
+              name="Brands with Product"
+              parent="ks_theme_base.ks_theme_customization_menu"
+              action="ks_brand_filter_view"/>
+    <menuitem id="ks_rating_menu"
+              name="Rating and Review"
+              parent="ks_theme_base.ks_theme_customization_menu"
+              action="rating.action_view_rating"/>
+</odoo>
+
+
+

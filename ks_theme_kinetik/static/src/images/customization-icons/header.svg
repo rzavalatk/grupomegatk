@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="470px" height="470px" viewBox="0 0 470 470" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56 (81588) - https://sketch.com -->
+    <title>footer</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="7.20088966%" y1="47.1433722%" x2="93.5956872%" y2="53.1861033%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="21.985855%" y1="46.0181507%" x2="78.0152237%" y2="54.4232994%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="-7.51012649%" y1="23.185564%" x2="107.51044%" y2="76.8231313%" id="linearGradient-3">
+            <stop stop-color="#FFFFFF" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="footer" fill-rule="nonzero">
+            <path d="M426.667,0 L42.667,0 C19.135,0 0,19.135 0,42.667 L0,426.667 C0,450.198 19.135,469.334 42.667,469.334 L426.667,469.334 C450.198,469.334 469.334,450.199 469.334,426.667 L469.334,42.667 C469.334,19.135 450.198,0 426.667,0 Z" id="Path" fill="#303C42"></path>
+            <path d="M42.667,21.333 L426.667,21.333 C438.427,21.333 448,30.906 448,42.666 L448,85.333 L21.333,85.333 L21.333,42.667 C21.333,30.906 30.906,21.333 42.667,21.333 Z" id="SVGCleanerId_0" fill="#5C6671"></path>
+            <path d="M42.667,21.333 L426.667,21.333 C438.427,21.333 448,30.906 448,42.666 L448,85.333 L21.333,85.333 L21.333,42.667 C21.333,30.906 30.906,21.333 42.667,21.333 Z" id="SVGCleanerId_0_1_" fill="url(#linearGradient-1)"></path>
+            <path d="M42.667,21.333 L426.667,21.333 C438.427,21.333 448,30.906 448,42.666 L448,85.333 L21.333,85.333 L21.333,42.667 C21.333,30.906 30.906,21.333 42.667,21.333 Z" id="SVGCleanerId_0_2_" fill="url(#linearGradient-2)"></path>
+            <path d="M426.667,448 L42.667,448 C30.907,448 21.334,438.427 21.334,426.667 L21.334,106.667 L448,106.667 L448,426.667 C448,438.427 438.427,448 426.667,448 Z" id="Path" fill="#FFFFFF"></path>
+            <g id="Group" transform="translate(10.000000, 42.000000)" fill="#303C42">
+                <circle id="Oval" cx="43.333" cy="11.333" r="10.667"></circle>
+                <circle id="Oval" cx="86" cy="11.333" r="10.667"></circle>
+                <circle id="Oval" cx="128.667" cy="11.333" r="10.667"></circle>
+            </g>
+            <path d="M426.667,0 L42.667,0 C19.135,0 0,19.135 0,42.667 L0,426.667 C0,450.198 19.135,469.334 42.667,469.334 L426.667,469.334 C450.198,469.334 469.334,450.199 469.334,426.667 L469.334,42.667 C469.334,19.135 450.198,0 426.667,0 Z" id="Path" fill="url(#linearGradient-3)"></path>
+        </g>
+    </g>
+</svg>

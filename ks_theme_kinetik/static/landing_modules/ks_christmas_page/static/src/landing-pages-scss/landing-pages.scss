@@ -1,0 +1,678 @@
+//for chritmas
+.ks-hero-bg {
+    background-color: #3f0d12;
+    background-image: linear-gradient(185deg, #6f232b 0%, #a71d31 74%);
+}
+.ks-xmas-bg {
+    background-color: #ff3348;
+    background-image: linear-gradient(185deg, #ff3348 0%, #ca0b27 74%);
+}
+
+.view-height {
+    min-height: 90vh;
+
+    @media (max-width: 1024px) {
+        min-height: 70vh;
+    }
+}
+
+.font-600 {
+    font-weight: 600;
+}
+
+.parallax-trees {
+    bottom: -90px;
+
+    @media (max-width: 330px) {
+        bottom: -100px;
+    }
+}
+
+.ks-white-trees {
+    height: 250px;
+    z-index: 2;
+
+    @media (max-width: 575px) {
+        height: 170px;
+    }
+}
+
+.ks-red-trees {
+    height: 150px;
+    z-index: 1;
+    bottom: 70px;
+
+    @media (max-width: 330px) {
+        bottom: 40px;
+    }
+}
+
+#snow-fall {
+    position:absolute;
+    top:0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.z-index-10 {
+    z-index: 10;
+}
+
+.ks-bell-image {
+    min-width: 100px;
+    max-width: 100px;
+    height: 100px;
+
+    @media (max-width: 575px) {
+        min-width: 60px;
+        max-width: 60px;
+        height: 60px;
+    }
+}
+
+.ks-latto-images {
+    width: 150px;
+}
+
+.btn-red-white {
+    border-radius: 0;
+    color: #ca0b27;
+    background: white;
+    @extend .btn-hover-effect;
+}
+
+.btn-hover-effect {
+    transition: 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.cube {
+    position: absolute;
+    top: 80%;
+    left: 45%;
+    width: 10px;
+    height: 10px;
+    border: solid 1px #e28390;
+    transform-origin: top left;
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    animation: cube 4s ease-in forwards infinite;
+}
+.cube:nth-child(2) {
+    animation-delay: 2s;
+    left: 25%;
+    top: 40%;
+}
+.cube:nth-child(3) {
+    animation-delay: 4s;
+    left: 75%;
+    top: 50%;
+}
+.cube:nth-child(4) {
+    animation-delay: 6s;
+    left: 90%;
+    top: 10%;
+}
+.cube:nth-child(5) {
+    animation-delay: 8s;
+    left: 10%;
+    top: 85%;
+}
+.cube:nth-child(6) {
+    animation-delay: 10s;
+    left: 90%;
+    top: 90%;
+}
+
+@keyframes cube {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: scale(10) rotate(960deg) translate(-50%, -50%);
+        opacity: 0.5;
+    }
+}
+
+.ks-ev-decorator {
+    min-width: calc(100% + 1px);
+    max-width: calc(100% + 1px);
+    bottom: -1px;
+    left: 0;
+}
+
+.ks-ev-date {
+    width: 100px;
+    height: 100px;
+    margin-top: -70px;
+}
+
+.btn.ks-xmas-bg,
+.btn.ks-xmas-bg-black {
+    border-radius: 0;
+    @extend .btn-hover-effect;
+}
+
+.ks-xmas-bg-black {
+    background-color: #000;
+}
+
+.ks-xmas-client {
+    box-shadow: #dfdfdf -1px 5px 51px;
+
+    &-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    &-quotes {
+        width: 60px;
+        padding: 5px;
+        height: 70px;
+        border-radius: 5px;
+        top: -20px;
+
+        img {
+            margin-top: 5px;
+        }
+    }
+}
+
+.ks-xmas-pricing {
+    &-head {
+        &.head-black {
+            background-color: #000000;
+        }
+    }
+
+    &:hover {
+       .ks-card-wave-layer {
+           &.layer-1 {
+                transform: translate3d(15px, 0, 0);
+           }
+
+           &.layer-2 {
+                transform: translate3d(-15px, 0, 0);
+           }
+
+           &.layer-3 {
+                transform: translate3d(-15px, 0, 0);
+            }
+       }
+    }
+}
+
+.ks-card-wave {
+    position: absolute;
+    bottom: -70px;
+    left: 0;
+    width: 100%;
+    height: 160px;
+
+    &-layer {
+        transition: transform 0.5s;
+    }
+}
+
+.santa-flying {
+    animation: flywithme 4s ease-in-out;
+     margin-top: -100px;
+
+    @media (max-width: 1024px) {
+        margin-top: -50px;
+    }
+
+     @media (max-width: 575px) {
+        margin-top: 15px;
+    }
+}
+
+@keyframes flywithme {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes flywithmeAlternate {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.ks-xmas-moon {
+    width: 400px;
+    top: 230px;
+    opacity: 0;
+
+    animation: moonZoom 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 3s forwards;
+
+    @media (max-width: 768px) {
+        top: 340px;
+        width: 350px;
+    }
+
+    @media (max-width: 575px) {
+        top: 230px;
+        width: 200px;
+    }
+}
+
+@keyframes moonZoom {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.ks-xmas-pass-info {
+    li {
+        font-size: 20px;
+        border-bottom: 1px solid rgba(204, 204, 204, 0.38);
+        padding: 10px 0;
+        width: 80%;
+        margin: auto;
+    }
+}
+
+.ks-xmas-accordian {
+   .btn-link {
+       color: #d11a1c;
+       font-size: 24px;
+       text-align: left;
+
+       &:hover,
+       &:focus {
+           text-decoration: none;
+       }
+
+       .fa {
+           transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+       }
+
+       &[aria-expanded="true"] {
+           .fa {
+            transform: rotate(135deg);
+           }
+       }
+   }
+
+   .ks-accordian-toggler {
+        width: 40px;
+        height: 40px;
+        left: 0;
+        top: 0;
+        font-size: 18px;
+   }
+
+   .card-header {
+       background-color: #f4f4f4;
+
+       @media (max-width: 575px) {
+            padding: 0;
+       }
+   }
+
+   .collapse {
+        box-shadow: #dfdfdf -1px 5px 51px;
+   }
+}
+
+.ks-footer-card {
+    box-shadow: #dfdfdf -1px 5px 51px;
+
+    &-img {
+       width: 100px;
+    }
+}
+
+.md-m-auto {
+    @media (max-width: 991px) {
+        margin: auto;
+    }
+}
+
+.ks-xmas-play-btn {
+    width: 150px;
+}
+
+//for chritmas
+.ks-hero-bg {
+    background-color: #3f0d12;
+    background-image: linear-gradient(185deg, #6f232b 0%, #a71d31 74%);
+}
+.ks-xmas-bg {
+    background-color: #ff3348;
+    background-image: linear-gradient(185deg, #ff3348 0%, #ca0b27 74%);
+}
+
+.view-height {
+    min-height: 90vh;
+
+    @media (max-width: 1024px) {
+        min-height: 70vh;
+    }
+}
+
+.font-600 {
+    font-weight: 600;
+}
+
+.parallax-trees {
+    bottom: -90px;
+
+    @media (max-width: 330px) {
+        bottom: -100px;
+    }
+}
+
+.ks-white-trees {
+    height: 250px;
+    z-index: 2;
+
+    @media (max-width: 575px) {
+        height: 170px;
+    }
+}
+
+.ks-red-trees {
+    height: 150px;
+    z-index: 1;
+    bottom: 70px;
+
+    @media (max-width: 330px) {
+        bottom: 40px;
+    }
+}
+
+#snow-fall {
+    position:absolute;
+    top:0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.z-index-10 {
+    z-index: 10;
+}
+
+.ks-bell-image {
+    min-width: 100px;
+    max-width: 100px;
+    height: 100px;
+
+    @media (max-width: 575px) {
+        min-width: 60px;
+        max-width: 60px;
+        height: 60px;
+    }
+}
+
+.ks-latto-images {
+    width: 150px;
+}
+
+.btn-red-white {
+    border-radius: 0;
+    color: #ca0b27;
+    background: white;
+    @extend .btn-hover-effect;
+}
+
+.btn-hover-effect {
+    transition: 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.cube {
+    position: absolute;
+    top: 80%;
+    left: 45%;
+    width: 10px;
+    height: 10px;
+    border: solid 1px #e28390;
+    transform-origin: top left;
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    animation: cube 4s ease-in forwards infinite;
+}
+.cube:nth-child(2) {
+    animation-delay: 2s;
+    left: 25%;
+    top: 40%;
+}
+.cube:nth-child(3) {
+    animation-delay: 4s;
+    left: 75%;
+    top: 50%;
+}
+.cube:nth-child(4) {
+    animation-delay: 6s;
+    left: 90%;
+    top: 10%;
+}
+.cube:nth-child(5) {
+    animation-delay: 8s;
+    left: 10%;
+    top: 85%;
+}
+.cube:nth-child(6) {
+    animation-delay: 10s;
+    left: 90%;
+    top: 90%;
+}
+
+@keyframes cube {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: scale(10) rotate(960deg) translate(-50%, -50%);
+        opacity: 0.5;
+    }
+}
+
+.ks-ev-decorator {
+    min-width: calc(100% + 1px);
+    max-width: calc(100% + 1px);
+    bottom: -1px;
+    left: 0;
+}
+
+.ks-ev-date {
+    width: 100px;
+    height: 100px;
+    margin-top: -70px;
+}
+
+.btn.ks-xmas-bg,
+.btn.ks-xmas-bg-black {
+    border-radius: 0;
+    @extend .btn-hover-effect;
+}
+
+.ks-xmas-bg-black {
+    background-color: #000;
+}
+
+.ks-xmas-client {
+    box-shadow: #dfdfdf -1px 5px 51px;
+
+    &-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    &-quotes {
+        width: 60px;
+        padding: 5px;
+        height: 70px;
+        border-radius: 5px;
+        top: -20px;
+
+        img {
+            margin-top: 5px;
+        }
+    }
+}
+
+.ks-xmas-pricing {
+    &-head {
+        &.head-black {
+            background-color: #000000;
+        }
+    }
+
+    &:hover {
+       .ks-card-wave-layer {
+           &.layer-1 {
+                transform: translate3d(15px, 0, 0);
+           }
+
+           &.layer-2 {
+                transform: translate3d(-15px, 0, 0);
+           }
+
+           &.layer-3 {
+                transform: translate3d(-15px, 0, 0);
+            }
+       }
+    }
+}
+
+.ks-card-wave {
+    position: absolute;
+    bottom: -70px;
+    left: 0;
+    width: 100%;
+    height: 160px;
+
+    &-layer {
+        transition: transform 0.5s;
+    }
+}
+
+.santa-flying {
+    animation: flywithme 4s ease-in-out;
+}
+
+@keyframes flywithme {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+
+@keyframes moonZoom {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.ks-xmas-pass-info {
+    li {
+        font-size: 20px;
+        border-bottom: 1px solid rgba(204, 204, 204, 0.38);
+        padding: 10px 0;
+        width: 80%;
+        margin: auto;
+    }
+}
+
+.ks-xmas-accordian {
+   .btn-link {
+       color: #d11a1c;
+       font-size: 24px;
+       text-align: left;
+       white-space: normal;
+
+       &:hover,
+       &:focus {
+           text-decoration: none;
+       }
+
+       .fa {
+           transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+       }
+
+       &[aria-expanded="true"] {
+           .fa {
+            transform: rotate(135deg);
+           }
+       }
+   }
+
+   .ks-accordian-toggler {
+        width: 40px;
+        height: 40px;
+        left: 0;
+        top: 0;
+        font-size: 18px;
+   }
+
+   .card-header {
+       background-color: #f4f4f4;
+
+       @media (max-width: 575px) {
+            padding: 0;
+       }
+   }
+
+   .collapse {
+        box-shadow: #dfdfdf -1px 5px 51px;
+   }
+}
+
+.ks-footer-card {
+    box-shadow: #dfdfdf -1px 5px 51px;
+
+    &-img {
+       width: 100px;
+    }
+}
+
+.md-m-auto {
+    @media (max-width: 991px) {
+        margin: auto;
+    }
+}
+
+.ks-xmas-play-btn {
+    width: 150px;
+}
+
+.ks-adjust-font {
+    @media (max-width: 575px) {
+        .display-2,
+        .display-3 {
+            font-size: 40px;
+        }
+      }
+}

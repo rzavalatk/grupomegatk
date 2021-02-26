@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+          <record id="corporate_page" model="website.page">
+               <field name="url">/corporate</field>
+               <field name="view_id" ref="ks_corporate_page.ks_theme_corporate"/>
+          </record>
+
+     </data>
+</odoo>

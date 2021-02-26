@@ -1,0 +1,45 @@
+.ks-contact {
+
+  .ks-contact-head {
+    height: 280px;
+    background-size: cover;
+
+    @media (min-width: 1025px) {
+        background-attachment: fixed;
+    }
+
+    .ks-bg-color {
+      background-color: $black-rgb;
+      height: 100%;
+      .header-text-info {
+        text-transform: uppercase;
+      }
+    }
+  }
+  .ks-form-info {
+    margin-bottom: 25px;
+    align-items: center;
+    .custom-input {
+      width: 100%;
+      height:35px;
+      border: none;
+      border-bottom: 1px solid;
+      background: transparent;
+    }
+    .custom-textarea {
+      width: 100%;
+      height:100px;
+      border: none;
+      border-bottom: 1px solid;
+    }
+    .max-width{
+      max-width: 121px;
+      @media screen and (max-width: 991px){
+        max-width: 99px;
+      }
+      @media screen and (max-width: 767px){
+        max-width: 121px;
+      }
+    }
+  }
+}

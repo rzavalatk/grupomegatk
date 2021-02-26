@@ -1,0 +1,38 @@
+<template>
+    <t t-name="ks_product_offer_snippets">
+        <section class="ks-deal-sales ks_ks ks-furniture-deal" id="ks_deals_of_the_day">
+            <div class="row h-100">
+                <div class="col-md-6 ml-auto d-flex justify-content-center align-items-center flex-wrap">
+                    <div class="right-panel">
+                        <div class="ks-deal-counter justify-content-center">
+                            <div class="ks-time-container">
+                                <div id="days">
+                                    <t t-if="days" t-esc="days"/>
+                                </div>
+                                <span>Days</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="hours">
+                                    <t t-if="hours" t-esc="hours"/>
+                                </div>
+                                <span>hrs</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="minutes">
+                                    <t t-if="minutes" t-esc="minutes"/>
+                                </div>
+                                <span>min</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="seconds">
+                                    <t t-if="seconds" t-esc="seconds"/>
+                                </div>
+                                <span>sec</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</template>

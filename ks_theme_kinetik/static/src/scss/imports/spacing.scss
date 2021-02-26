@@ -1,0 +1,16 @@
+.ks {
+    &-pr {
+
+        &-3 {
+            padding-right: 16px;
+        }
+
+        @media (min-width: 1500px) {
+            &-xxl {
+                &-4 {
+                    padding-right: 24px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+<templates>
+    <t t-name="ks_snippet_product_multi_grid">
+        <section>
+            <select class="product_grid_dropdwon">
+            </select>
+        </section>
+    </t>
+</templates>

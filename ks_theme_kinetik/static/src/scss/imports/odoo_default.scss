@@ -1,0 +1,19 @@
+.navbar-expand-md {
+
+    #top_menu_collapse {
+        .nav-item.dropdown {
+            position: relative !important;
+        }
+
+        #my_cart {
+            margin-top: -2px;
+        }
+    }
+
+}
+
+.s_text_block {
+    span[data-oe-field="email"] {
+        word-break: break-all;
+    }
+}

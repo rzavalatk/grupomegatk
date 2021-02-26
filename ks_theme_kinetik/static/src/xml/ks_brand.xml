@@ -1,0 +1,22 @@
+<template>
+    <t t-name="ks_snippet_product_brand">
+        <section class="row no-gutters brands__row justify-content-center w-100">
+            <t t-foreach="record" t-as="record">
+                <t t-set="aos_delay" t-value="aos_delay + 50"/>
+                <div data-aos='fade-left' data-aos-duration='500' data-aos-easing='ease-in-out' t-att-data-aos-delay= "aos_delay"
+                 data-aos-once='true' class='col_2 p-2 mt-lg-5 mt-2'>
+                <a t-att-href="'/shop?filter=brand_' + record.brand_name" class='text-center'>
+                    <div class='flex-column justify-content-center'>
+                        <div class='brand__img rounded-circle m-auto'>
+                            <img t-att-src="'/web/image/ks_product_manager.ks_brand/' + record.brand_id + '/ks_image/250x250'"/>
+                        </div>
+                    </div>
+                </a>
+                <div class='brand__logo position-relative bg-white flex-center m-auto'>
+                    <img t-att-src="'/web/image/ks_product_manager.ks_brand/'+ record.brand_id +'/ks_brand_logo/250x250'" class="w-100"/>
+                </div>
+            </div>
+            </t>
+        </section>
+    </t>
+</template>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+          <record id="fitness_page" model="website.page">
+            <field name="url">/fitness</field>
+            <field name="view_id" ref="ks_fitness_page.ks_theme_gym"/>
+        </record>
+
+     </data>
+</odoo>

@@ -1,0 +1,27 @@
+.ks-offers {
+  background-color: #f7f1f1;
+  .left-panel {
+    .image-text {
+      position: absolute;
+      top: 18px;
+      left: 28px;
+    }
+    .image-fluid {
+      width: 100%;
+      height: 100%;
+      min-height: 474px;
+        object-fit: contain;
+        background: rgba(150, 150, 220, 0.3);
+    }
+  }
+  .right-panel {
+    .offer-container{
+      margin: 17px 0;
+      .icon {
+        font-size: 28px;
+        transform: rotate(-181deg);
+        color: $orange;
+      }
+    }
+  }
+}

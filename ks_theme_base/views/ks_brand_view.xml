@@ -1,0 +1,100 @@
+<odoo>
+    <data>
+        <!--        list view of brand -->
+        <record model="ir.ui.view" id="ks_brand_list">
+            <field name="name">ks_product_manager_ks_brand list</field>
+            <field name="model">ks_product_manager.ks_brand</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="ks_image"/>
+                    <field name="ks_products_count"/>
+                    <field name="ks_is_published"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        form view of brands-->
+        <record model="ir.ui.view" id="ks_brand_form">
+            <field name="name">ks_product_manager_ks_brand form</field>
+            <field name="model">ks_product_manager.ks_brand</field>
+            <field name="arch" type="xml">
+                <form>
+                   <sheet>
+                    <group col="2" colspan="3">
+                        <group>
+                           <field name="ks_brand_logo" widget="image" class="oe_avatar"/>
+                            <field name="name"/>
+                            <field name="ks_is_published"/>
+                            <field name="ks_brand_description"/>
+                        </group>
+                        <group>
+                            <field name="ks_image" widget="image" class="oe_avatar"/>
+                        </group>
+                    </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--        kanban view of brand related to product-->
+        <record id="view_ks_product_manager_ks_brand_kanban" model="ir.ui.view">
+            <field name="name">ks_product_manager.ks_brand.kanban</field>
+            <field name="model">ks_product_manager.ks_brand</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="id"/>
+                    <field name="ks_image"/>
+                    <field name="ks_products_count"/>
+                    <field name="ks_brand_discount"/>
+                    <field name="ks_brand_logo"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('ks_product_manager.ks_brand', 'ks_image', record.id.raw_value)"
+                                         alt="Brand"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                        <div name="tags"/>
+                                        <span>No. of product:</span>
+                                        <field name="ks_products_count"/>
+                                        <div name="tags"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_image">
+                                    <b>Logo</b>
+                                    <img t-att-src="kanban_image('ks_product_manager.ks_brand', 'ks_brand_logo', record.id.raw_value)"
+                                         alt="Brand"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ks_brand_action_window">
+            <field name="name">Brand</field>
+            <field name="res_model">ks_product_manager.ks_brand</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+        <!--        This menu item is placed in website model by defining their parent -->
+        <menuitem sequence="0" name="Only Brands" parent="ks_theme_base.ks_theme_customization_menu" id="ks_brand_menu"
+                  action="ks_theme_base.ks_brand_action_window"/>
+        <menuitem sequence="1" name="Product Category" parent="ks_theme_base.ks_theme_customization_menu"
+                  id="ks_category_menu" action="website_sale.product_public_category_action"/>
+
+
+    </data>
+</odoo>
+
+
+
+
+
+

@@ -1,0 +1,64 @@
+<odoo>
+ <data>
+        <record model="ir.ui.view" id="ks_breadcumb_list">
+            <field name="name">Shop Page Breadcumb Image</field>
+            <field name="model">ks_theme_kinetik.ks_breadcumb</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false">
+                     <field name="name"/>
+                    <field name="breadcumb_image"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="ks_breadcumb_form">
+            <field name="name">Shop Page Breadcumb Image</field>
+            <field name="model">ks_theme_kinetik.ks_breadcumb</field>
+            <field name="arch" type="xml">
+                <form create="false" delete="false">
+                    <group>
+                         <field name="name"/>
+                        <field name="breadcumb_image" widget="image"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="ks_breadcumb_action_window">
+            <field name="name">Shop Page Breadcumb Image</field>
+            <field name="res_model">ks_theme_kinetik.ks_breadcumb</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Breadcumb Image Settings" parent="website.menu_website_global_configuration" id="ks_breadcumbs_menu_root"
+                  action="ks_breadcumb_action_window"/>
+
+     <record model="ir.ui.view" id="ks_kinetik_setting_list">
+         <field name="name">Kinetik Settings</field>
+         <field name="model">ks_theme_kinetik.ks_settings</field>
+         <field name="arch" type="xml">
+             <tree create="false" delete="false">
+                 <field name="name"/>
+                 <field name="default_order_by"/>
+             </tree>
+         </field>
+     </record>
+     <record model="ir.ui.view" id="ks_kinetik_setting_form">
+         <field name="name">Kinetik Settings</field>
+         <field name="model">ks_theme_kinetik.ks_settings</field>
+         <field name="arch" type="xml">
+             <form create="false" delete="false">
+                 <group>
+                     <field name="name"/>
+                     <field name="default_order_by"/>
+                 </group>
+             </form>
+         </field>
+     </record>
+     <record model="ir.actions.act_window" id="ks_kinetik_setting_action_window">
+         <field name="name">Kinetik Settings</field>
+         <field name="res_model">ks_theme_kinetik.ks_settings</field>
+         <field name="view_mode">tree,form</field>
+     </record>
+     <menuitem name="Kinetik Settings" parent="ks_theme_base.ks_theme_customization_menu"
+               id="ks_kinetik_setting_menu_root"
+               action="ks_kinetik_setting_action_window"/>
+    </data>
+</odoo>

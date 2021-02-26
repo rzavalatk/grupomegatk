@@ -1,0 +1,2307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_header_offer_price" inherit_id="website.layout" name="offer Price On Header"
+              customize_show="True" active="False">
+        <xpath expr="//div[@id='wrapwrap']" position="before">
+            <div data-oe-model="model" data-oe-type="html" class="oe_structure oe_empty o_editable"></div>
+        </xpath>
+    </template>
+    <template id="ks_theme_kinetik.percent_discount" customize_show="True" active="False" inherit_id="website.layout"
+              name="Discount Percentage On Product"/>
+    <template id="ks_theme_kinetik.loader" customize_show="True" active="False" inherit_id="website.layout"
+              name="Display Loader"/>
+    <template id="ks_theme_kinetik.shop_img_slider" customize_show="True" active="False" inherit_id="website.layout"
+              name="Shop Page Image Slider"/>
+    <template id="ks_theme_kinetik.call_us" customize_show="True" active="False" inherit_id="website.layout"
+              name="Call us button"/>
+    <template id="ks_theme_kinetik.cart_popover" customize_show="True" active="False" inherit_id="website.layout"
+              name="Add To Cart Popover"/>
+    <template id="ks_theme_kinetik.detail_page_animation" customize_show="True" active="False" inherit_id="website.layout"
+              name="Animation On Detail Page"/>
+    <template id="ks_theme_kinetik.shop_page_animation" customize_show="True" active="False" inherit_id="website.layout"
+              name="Animation On Shop Page"/>
+    <template id="ks_theme_kinetik.add_to_cart_popover_animation" customize_show="True" active="False" inherit_id="website.layout"
+              name="Animation For Add To Cart Popover"/>
+    <template id="ks_theme_kinetik.automatic_load_more" customize_show="True" active="False" inherit_id="website.layout"
+          name="Automatic Infinite Product Loader"/>
+    <template id="default_header" inherit_id="website_sale.header">
+        <xpath expr="//li[@id='my_cart']" position="attributes">
+            <attribute name="t-attf-class">nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ''}</attribute>
+        </xpath>
+        <xpath expr="//li[@id='my_cart']/a" position="replace">
+            <a href="/shop/cart" class="nav-link">
+                <i class="fa fa-shopping-cart"></i>
+                My Cart <sup t-attf-class="my_cart_quantity badge badge-primary" t-esc="website_sale_order and website_sale_order.cart_quantity or '0'" t-att-data-order-id="website_sale_order and website_sale_order.id or ''"/>
+            </a>
+        </xpath>
+    </template>
+    <!--Header 2-->
+    <template id="custom_header_layout_2" inherit_id="website.layout" name="Header 2" customize_show="True"
+              active="False">
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+        <xpath expr="//header" position="before">
+            <div class="ks-header-2 ks-header-2-topmost">
+                <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_2" t-js="false"/>-->
+                <div class="ks-header-2-top">
+                    <div class="row container-lg m-auto justify-content-between align-items-center">
+                    <ul id="top-nav" class="list-unstyled row mx-0 justify-content-center mb-0 ks_top_menu">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links text-sm-center  mr-0">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="ks-price-list" >
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+                    </ul>
+                    <ul class="list-unstyled m-auto m-sm-1 ks-header-2-top-social">
+                        <a t-if="res_company.social_facebook"
+                           t-att-href="res_company.social_facebook">
+                            <i class="fa fa-facebook mx-3"/>
+                        </a>
+                        <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                            <i class="fa fa-twitter mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_linkedin"
+                           t-att-href="res_company.social_linkedin">
+                            <i class="fa fa-linkedin mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                            <i class="fa fa-youtube mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                            <i class="fa fa-github mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_instagram"
+                           t-att-href="res_company.social_instagram">
+                            <i class="fa fa-instagram"/>
+                        </a>
+                    </ul>
+                </div>
+                </div>
+                <div class="row container-lg m-auto">
+                    <div class="col-xl-4 col-lg-3 col-6">
+                        <t t-if="request.website.viewref('website.layout_logo_show').active">
+                             <t t-if="website.logo">
+                                    <a href="/" class="navbar-brand logo">
+                                    <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                                    </a>
+                                </t>
+                                <t t-elif="res_company.logo and not website.logo">
+                                    <a href="/" class="navbar-brand logo ks_custom_logo">
+                                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </t>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                    </div>
+                    <div class="search_container ks-search-position ks-search-container-2 col-lg-4 col-6 align-items-center justify-content-lg-center justify-content-end  py-1">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-12 ks_mycart align-items-center  ks-header-2-menu-icon no-gutters">
+                        <div class="col-lg-12 col-sm-10 col-11 align-items-center justify-content-lg-end justify-content-between">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart ml-1"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+                                <t>
+                                    <div class="nav-item divider" groups="base.group_public"/>
+                                    <div groups="base.group_public" class="nav-item ks">
+                                        <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                        <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                            <a t-attf-href="/web/login" class="ks-custom-login">
+                                                <b>Sign in</b>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </t>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item"
+                                           t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main border-top border-bottom
+            </attribute>
+        </xpath>
+        <!--This is replacing singn in option-->
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--        This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!--Header 3-->
+    <template id="custom_header_layout_3" priority="110" inherit_id="website.layout" name="Header 3"
+              customize_show="True"
+              active="False">
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_3" t-js="false"/>-->
+            <div class="row ks-header-3 align-items-center no-gutters ks-header-3-topmost">
+                <div class="col-12 border-bottom">
+                    <ul id="top-nav" class="list-unstyled row container-lg ks_top_menu m-auto">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links mr-0">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="ks-price-list" >
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+
+                    </ul>
+                </div>
+                <div class="row container-lg m-auto align-items-center no-gutters" >
+                    <div class="col-sm-6 col-10">
+                        <div class="row ks_mycart align-items-center">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity badge o_animate_blink badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ks-header-3-wishlist">
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+
+                                <div class="nav-item divider" groups="base.group_public"/>
+                                <div groups="base.group_public" class="nav-item ks">
+                                    <t t-set="website_sign_in"
+                                       t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),'|',('active','=',True) ,('active','=',False)],limit=1)"/>
+                                    <t t-if="website_sign_in.active if website_sign_in else True">
+                                        <a t-attf-href="/web/login" class="ks-custom-login">
+                                            <b>Sign in</b>
+                                        </a>
+                                    </t>
+                                </div>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-2 justify-content-end py-2 search_container ks-header-3-search">
+                        <form action="/shop" method="get" class="ks-adjust-on-mobile" >
+                            <div class="input-group justify-content-end">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg ks-header-3-main ks-header-3-menu-inside </attribute>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+             <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+            </t>
+            <t t-else="">
+                 <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+            </t>
+        </xpath>
+
+
+    </template>
+
+    <!--This is header 4  created using css class only-->
+    <template id="custom_header_layout_4" inherit_id="website.layout" name="Header 4" customize_show="True"
+              active="False">
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_4" t-js="false"/>-->
+            <div class="ks-header-2 ks-header-4 ks-header-4-topmost">
+                <div class="ks-header-2-top ">
+                    <div class="row m-auto container-lg justify-content-between align-items-center no-gutters" >
+                        <ul id="top-nav" class="list-unstyled row m-auto mx-sm-2 py-2  mx-2 ks_top_menu justify-content-center">
+                            <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                <li class="lang_dropdown top__links text-sm-center mr-0">
+                                    <div class="js_language_selector" id="lang"
+                                         t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                        <label data-toggle="dropdown" type="button" data-caret="true"
+                                               class="dropdown-toggle">
+                                            <t t-foreach="languages" t-as="lgs">
+                                                <t t-if="request.lang and request.lang==lgs[0]">
+                                                    <t t-esc="lgs[1].split('/').pop()"/>
+                                                </t>
+                                            </t>
+                                        </label>
+                                        <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                            <t t-foreach="languages" t-as="lg">
+                                                <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                    <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                       t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                        <t t-esc="lg[1].split('/').pop()"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                            <li groups="website.group_website_publisher">
+                                                <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                    <i class="fa fa-plus mr-2"/>
+                                                    Add New
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </t>
+                            <t t-set="website_sale_pricelists"
+                               t-value="website.get_pricelist_available(show_visible=True)"/>
+                            <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                                <li class="ks-price-list " >
+                                    <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                        <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li t-foreach="website_sale_pricelists" t-as="pl">
+                                                <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                    <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                          t-esc="pl.name"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </t>
+                        </ul>
+                        <ul class="list-unstyled m-auto m-sm-0 ks-header-2-top-social py-1 py-sm-0">
+                            <a t-if="res_company.social_facebook"
+                               t-att-href="res_company.social_facebook">
+                                <i class="fa fa-facebook mx-3"/>
+                            </a>
+                            <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                                <i class="fa fa-twitter mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_linkedin"
+                               t-att-href="res_company.social_linkedin">
+                                <i class="fa fa-linkedin mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                                <i class="fa fa-youtube mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                                <i class="fa fa-github mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_instagram"
+                               t-att-href="res_company.social_instagram">
+                                <i class="fa fa-instagram"/>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row container-lg m-auto">
+                    <div class="col-xl-4 col-lg-3 col-6 ">
+                         <t t-if="request.website.viewref('website.layout_logo_show').active">
+                             <t t-if="website.logo">
+                                    <a href="/" class="navbar-brand logo">
+                                    <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                                    </a>
+                                </t>
+                                <t t-elif="res_company.logo and not website.logo">
+                                    <a href="/" class="navbar-brand logo ks_custom_logo">
+                                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </t>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                    </div>
+                    <div class="search_container ks-search-container-2 col-lg-4 col-6 align-items-center justify-content-end py-1">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-12 ks_mycart align-items-center  ks-header-2-menu-icon">
+                        <div class="col-lg-12 col-sm-10 col-11 align-items-center justify-content-lg-end justify-content-between">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart ml-1"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+
+                                <div class="nav-item divider" groups="base.group_public"/>
+                                <div groups="base.group_public" class="nav-item ks">
+                                       <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                        <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                        <a t-attf-href="/web/login" class="ks-custom-login">
+                                            <b>Sign in</b>
+                                        </a>
+                                    </t>
+                                </div>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item"
+                                           t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main ks-header-4-main ks-header-4-main-inside
+            </attribute>
+        </xpath>
+
+        <!--        This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+
+        <!--        This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!--This is header 5  created using css class only-->
+    <template id="custom_header_layout_5" inherit_id="website.layout" name="Header 5" customize_show="True"
+              active="False">
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_5" t-js="false"/>-->
+            <div class="ks-header-3 ks-header-5-top ks-header-5-topmost" >
+                <div class="row align-items-center container-lg m-auto no-gutters position-relative">
+                    <div class="col-sm-6">
+                        <ul id="top-nav" class="list-unstyled row mb-0 ks_top_menu">
+                            <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                <li class="lang_dropdown top__links text-sm-center mr-0">
+                                    <div class="js_language_selector" id="lang"
+                                         t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                        <label data-toggle="dropdown" type="button" data-caret="true"
+                                               class="dropdown-toggle">
+                                            <t t-foreach="languages" t-as="lgs">
+                                                <t t-if="request.lang and request.lang==lgs[0]">
+                                                    <t t-esc="lgs[1].split('/').pop()"/>
+                                                </t>
+                                            </t>
+                                        </label>
+                                        <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                            <t t-foreach="languages" t-as="lg">
+                                                <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                    <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                       t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                        <t t-esc="lg[1].split('/').pop()"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                            <li groups="website.group_website_publisher">
+                                                <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                    <i class="fa fa-plus mr-2"/>
+                                                    Add New
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </t>
+                            <t t-set="website_sale_pricelists"
+                               t-value="website.get_pricelist_available(show_visible=True)"/>
+                            <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                                <li class="ks-price-list" >
+                                    <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                        <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li t-foreach="website_sale_pricelists" t-as="pl">
+                                                <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                    <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                          t-esc="pl.name"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </t>
+
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row ks_mycart py-2 align-items-center justify-content-md-end justify-content-between">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity badge o_animate_blink badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ks-header-3-wishlist">
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+
+                                <div class="nav-item divider" groups="base.group_public"/>
+                                <div groups="base.group_public" class="nav-item ks">
+                                    <t t-set="website_sign_in"
+                                       t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),'|',('active','=',True) ,('active','=',False)],limit=1)"/>
+                                    <t t-if="website_sign_in.active if website_sign_in else True">
+                                        <a t-attf-href="/web/login" class="ks-custom-login">
+                                            <b>Sign in</b>
+                                        </a>
+                                    </t>
+                                </div>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-2 search_container ks-header-3-search ks-header-5-search">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box mr-0"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <!--&lt;!&ndash;This is replacing singn in option&ndash;&gt;-->
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+
+        <!--This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar navbar-expand-lg navbar-light bg-light ks-header-5
+            </attribute>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+             <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+            </t>
+            <t t-else="">
+                 <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+            </t>
+        </xpath>
+
+
+    </template>
+
+    <!--This is header 10  created using css class only-->
+    <template id="custom_header_layout_10" inherit_id="website.layout" name="Header 10" customize_show="True"
+              active="False">
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light oe_structure oe_empty</attribute>
+        </xpath>
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_10" t-js="false"/>-->
+            <div class="ks-header-2 ks-header-4 ks-header-5-before container-lg m-auto ks-header-10">
+                <div class="row ks-header-2-top justify-content-between align-items-center d-none">
+                    <ul id="top-nav"
+                        class="list-unstyled row mx-0  m-auto mx-2 ks_top_menu justify-content-center">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links text-sm-center mb-lg-0 mb-2 mr-2">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="top__links" >
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col ks-header-price' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+                    </ul>
+                    <ul class="list-unstyled m-auto m-sm-0 ks-header-2-top-social py-1 py-sm-0">
+                        <a t-if="res_company.social_facebook"
+                           t-att-href="res_company.social_facebook">
+                            <i class="fa fa-facebook mx-3"/>
+                        </a>
+                        <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                            <i class="fa fa-twitter mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_linkedin"
+                           t-att-href="res_company.social_linkedin">
+                            <i class="fa fa-linkedin mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                            <i class="fa fa-youtube mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                            <i class="fa fa-github mr-3"/>
+                        </a>
+                        <a t-if="res_company.social_instagram"
+                           t-att-href="res_company.social_instagram">
+                            <i class="fa fa-instagram"/>
+                        </a>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-3 col-6 oe_structure oe_empty">
+                         <t t-if="request.website.viewref('website.layout_logo_show').active">
+                             <t t-if="website.logo">
+                                    <a href="/" class="navbar-brand logo">
+                                    <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                                    </a>
+                                </t>
+                                <t t-elif="res_company.logo and not website.logo">
+                                    <a href="/" class="navbar-brand logo ks_custom_logo">
+                                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </t>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                    </div>
+                    <div class="search_container ks-search-container-2 col-lg-4 col-6 align-items-center justify-content-end  justify-content-lg-center py-1">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-12 ks_mycart align-items-center  ks-header-2-menu-icon">
+                        <div class="col-lg-12 col-sm-10 col-11 align-items-center justify-content-lg-end justify-content-between">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart ml-1"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+
+                                <div class="nav-item divider" groups="base.group_public"/>
+                                <div groups="base.group_public" class="nav-item ks">
+                                  <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                        <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                              <a t-attf-href="/web/login" class="ks-custom-login">
+                                            <b>Sign in</b>
+                                        </a>
+                                    </t>
+                                </div>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item"
+                                           t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main ks-header-4-main ks-header-5-main ks-header-10
+            </attribute>
+        </xpath>
+
+        <!--        This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+
+        <!--        This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!-- Header 6   -->
+    <template id="custom_header_layout_6" inherit_id="website.layout" name="Header 6" customize_show="True"
+              active="False">
+        <xpath expr="//header" position="attributes">
+            <attribute name="t-attf-class" add="#{'row ks-header-6 container-lg align-items-center'}" separator=" "/>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+
+        <xpath expr="//header[1]//nav[1]" position="before">
+            <div class="ks-header-2-top">
+                <div class="row container-lg m-auto justify-content-between align-items-center">
+                    <ul id="top-nav" class="list-unstyled row mx-0 justify-content-center mb-0 ks_top_menu">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links text-sm-center mr-0">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="ks-price-list">
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 ks-header-6-logo  col-6">
+               <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+                </t>
+                <t t-else="">
+                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                </t>
+                </div>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main col-lg-7 ks-header-6-main px-0 col-6
+            </attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="after">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_6" t-js="false"/>-->
+            <div class="col-lg-3  col-12 ks_mycart align-items-center  ks-header-2-menu-icon justify-content-lg-end ks-header-6-items">
+                <div class="d-flex flex-nowrap align-items-center justify-content-lg-end justify-content-between">
+                    <div class="nav-item dropdown remove_after_content">
+                        <t>
+                            <div class="nav-item divider" groups="base.group_public"/>
+                            <div groups="base.group_public" class="nav-item ks">
+                                   <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                    <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                         <a t-attf-href="/web/login" class="ks-custom-login">
+                                        <b>Sign in</b>
+                                    </a>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                <b>
+                                    <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                </b>
+                            </a>
+                            <div class="dropdown-menu js_usermenu" role="menu">
+                                <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                   role="menuitem">My Account
+                                </a>
+                                <a id="o_logout" class="dropdown-item"
+                                   t-attf-href="/web/session/logout?redirect=/"
+                                   role="menuitem">Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="top_menu">
+                        <div id="custom_cart">
+                            <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                            <div class="nav-item divider d-none"/>
+                            <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                            <div id="my_cart_2"
+                                 t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                    <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                    <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                         t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ks-header-6-wish">
+                        <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                            <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                            <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                <a href="/shop/wishlist" class="nav-link ks_kk">
+                                    <i class="fa fa-heart ml-1"/>
+                                    <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                        <t t-esc='wishcount'/>
+                                    </sup>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                    <div>
+                        <i class="fa fa-search ks-search-trigger" />
+                    </div>
+                    <div class="search_container ks-header-6-search">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+
+
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--        This is used to replace wishlist option for the header-->
+
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!--Header 7-->
+    <template id="custom_header_layout_7" inherit_id="website.layout" name="Header 7" customize_show="True"
+              active="False">
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_7" t-js="false"/>-->
+            <div class="ks-header-2 ks-header-7-topmost">
+                <div class="ks-header-2-top" >
+                    <div class="row  justify-content-sm-between justify-content-center align-items-center container-lg m-auto">
+                        <ul id="top-nav" class="list-unstyled row mx-0 justify-content-center mb-0 ks-mh-35  ks_top_menu">
+                            <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                <li class="lang_dropdown top__links mr-0">
+                                    <div class="js_language_selector" id="lang"
+                                         t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                        <label data-toggle="dropdown" type="button" data-caret="true"
+                                               class="dropdown-toggle">
+                                            <t t-foreach="languages" t-as="lgs">
+                                                <t t-if="request.lang and request.lang==lgs[0]">
+                                                    <t t-esc="lgs[1].split('/').pop()"/>
+                                                </t>
+                                            </t>
+                                        </label>
+                                        <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                            <t t-foreach="languages" t-as="lg">
+                                                <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                    <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                       t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                        <t t-esc="lg[1].split('/').pop()"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                            <li groups="website.group_website_publisher">
+                                                <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                    <i class="fa fa-plus mr-2"/>
+                                                    Add New
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </t>
+                            <t t-set="website_sale_pricelists"
+                               t-value="website.get_pricelist_available(show_visible=True)"/>
+                            <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                                <li class="ks-price-list"  >
+                                    <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                        <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li t-foreach="website_sale_pricelists" t-as="pl">
+                                                <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                    <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                          t-esc="pl.name"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </t>
+                        </ul>
+                        <ul class="list-unstyled m-auto m-sm-1 ks-header-2-top-social">
+                            <a t-if="res_company.social_facebook"
+                               t-att-href="res_company.social_facebook">
+                                <i class="fa fa-facebook mx-3"/>
+                            </a>
+                            <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                                <i class="fa fa-twitter mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_linkedin"
+                               t-att-href="res_company.social_linkedin">
+                                <i class="fa fa-linkedin mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                                <i class="fa fa-youtube mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                                <i class="fa fa-github mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_instagram"
+                               t-att-href="res_company.social_instagram">
+                                <i class="fa fa-instagram"/>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row container-lg m-auto">
+                    <div class="col-xl-4 col-lg-3 col-12">
+                         <t t-if="request.website.viewref('website.layout_logo_show').active">
+                             <t t-if="website.logo">
+                                    <a href="/" class="navbar-brand logo">
+                                    <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                                    </a>
+                                </t>
+                                <t t-elif="res_company.logo and not website.logo">
+                                    <a href="/" class="navbar-brand logo ks_custom_logo">
+                                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </t>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                    </div>
+                    <div class="col-xl-8 col-lg-9 col-12 ks_mycart align-items-center justify-content-lg-end justify-content-center  ks-header-2-menu-icon ks-header-7-menu-icon">
+                        <div class="search_container align-items-center justify-content-center py-1 w-100-md search-container-7 mr-md-4">
+                            <form action="/shop" method="get">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="search-query form-control oe_search_box"
+                                           placeholder="Search..."  t-att-value="search" required="True" />
+                                    <button type="submit" class="btn oe_search_button">
+                                        <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="align-items-center justify-content-lg-end justify-content-between w-100-md ks-header-7-menus-inside">
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                  <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart ml-1"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                  </t>
+                            </div>
+                            <div class="nav-item dropdown remove_after_content">
+                                <t>
+                                    <div class="nav-item divider" groups="base.group_public"/>
+                                    <div groups="base.group_public" class="nav-item ks">
+                                        <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                            <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                              <a t-attf-href="/web/login" class="ks-custom-login">
+                                                    <b>Sign in</b>
+                                                </a>
+                                        </t>
+                                    </div>
+                                </t>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item"
+                                           t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main border-top border-bottom ks-header-7
+            </attribute>
+        </xpath>
+        <!--This is replacing singn in option-->
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--        This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!--This is header 8  created using css class only-->
+    <template id="custom_header_layout_8" inherit_id="website.layout" name="Header 8" customize_show="True"
+              active="False">
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_8" t-js="false"/>-->
+            <div class="ks-header-2 ks-header-4 ks-header-8-topmost">
+                <div class="ks-header-2-top" >
+                    <div class="row container-lg m-auto justify-content-between align-items-center">
+                        <ul id="top-nav"
+                            class="list-unstyled row mx-0  m-auto mx-sm-0 py-2 py-sm-0  ks_top_menu justify-content-center ks-mh-35">
+
+                            <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                <li class="lang_dropdown top__links mr-0 ">
+                                    <div class="js_language_selector" id="lang"
+                                         t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                        <label data-toggle="dropdown" type="button" data-caret="true"
+                                               class="dropdown-toggle">
+                                            <t t-foreach="languages" t-as="lgs">
+                                                <t t-if="request.lang and request.lang==lgs[0]">
+                                                    <t t-esc="lgs[1].split('/').pop()"/>
+                                                </t>
+                                            </t>
+                                        </label>
+                                        <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                            <t t-foreach="languages" t-as="lg">
+                                                <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                    <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                       t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                        <t t-esc="lg[1].split('/').pop()"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                            <li groups="website.group_website_publisher">
+                                                <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                    <i class="fa fa-plus mr-2"/>
+                                                    Add New
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </t>
+                            <t t-set="website_sale_pricelists"
+                               t-value="website.get_pricelist_available(show_visible=True)"/>
+                            <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                                <li class="ks-price-list">
+                                    <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                        <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li t-foreach="website_sale_pricelists" t-as="pl">
+                                                <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                    <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                          t-esc="pl.name"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </t>
+                        </ul>
+                        <ul class="list-unstyled m-auto m-sm-0 ks-header-2-top-social py-1 py-sm-0 order-2 pr-3">
+                            <a t-if="res_company.social_facebook"
+                               t-att-href="res_company.social_facebook">
+                                <i class="fa fa-facebook mx-3"/>
+                            </a>
+                            <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                                <i class="fa fa-twitter mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_linkedin"
+                               t-att-href="res_company.social_linkedin">
+                                <i class="fa fa-linkedin mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                                <i class="fa fa-youtube mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                                <i class="fa fa-github mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_instagram"
+                               t-att-href="res_company.social_instagram">
+                                <i class="fa fa-instagram"/>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row container-lg m-auto no-gutters">
+                    <div class="col-xl-4 col-lg-3 col-6 order-xl-2">
+                         <t t-if="request.website.viewref('website.layout_logo_show').active">
+                             <t t-if="website.logo">
+                                    <a href="/" class="navbar-brand logo">
+                                    <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                                    </a>
+                                </t>
+                                <t t-elif="res_company.logo and not website.logo">
+                                    <a href="/" class="navbar-brand logo ks_custom_logo">
+                                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </t>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                    </div>
+                    <div class="search_container ks-search-container-7 ks-search-container-2 ks-search-container-7 col-lg-4 col-6 align-items-center justify-content-end py-1 order-lg-3">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-12 ks_mycart align-items-center  ks-header-2-menu-icon order-xl-1">
+                        <div class="col-lg-12 col-sm-10 col-11 align-items-center">
+                            <div class="nav-item dropdown remove_after_content">
+                                <div class="nav-item divider" groups="base.group_public"/>
+                                <div groups="base.group_public" class="nav-item ks">
+                                    <t t-set="website_sign_in"
+                                       t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),'|',('active','=',True) ,('active','=',False)],limit=1)"/>
+                                    <t t-if="website_sign_in.active if website_sign_in else True">
+                                        <a t-attf-href="/web/login" class="ks-custom-login">
+                                            <b>Sign in</b>
+                                        </a>
+                                    </t>
+                                </div>
+                                <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        <b>
+                                            <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                        </b>
+                                    </a>
+                                    <div class="dropdown-menu js_usermenu" role="menu">
+                                        <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                           role="menuitem">My Account
+                                        </a>
+                                        <a id="o_logout" class="dropdown-item"
+                                           t-attf-href="/web/session/logout?redirect=/"
+                                           role="menuitem">Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                    <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                    <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                        <a href="/shop/wishlist" class="nav-link ks_kk">
+                                            <i class="fa fa-heart ml-1"/>
+                                            <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                                <t t-esc='wishcount'/>
+                                            </sup>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                            <div id="top_menu">
+                                <div id="custom_cart">
+                                    <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                    <div class="nav-item divider d-none"/>
+                                    <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                    <div id="my_cart_2"
+                                         t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                        <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                            <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                            <sup t-attf-class="my_cart_quantity badge o_animate_blink badge-primary cart__info cart__count"
+                                                 t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">
+            <attribute name="class">list-unstyled d-flex</attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main ks-header-4-main ks-header-8
+            </attribute>
+        </xpath>
+
+        <!--        This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+
+        <!--        This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+    </template>
+
+    <!--This is header 9 created using css class only-->
+    <template id="custom_header_layout_9" inherit_id="website.layout" name="Header 9" customize_show="True"
+              active="False">
+
+        <xpath expr="//header" position="before">
+            <div class="row ks-header-3 align-items-center container-lg m-auto no-gutters ks-header-9-topmost">
+                <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_9" t-js="false"/>-->
+                <div class="col-sm-7 order-sm-2">
+                    <ul id="top-nav" class="list-unstyled row mx-0 mb-0 ml-2 ks_top_menu justify-content-sm-end justify-content-center">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links text-sm-center mr-0">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="ks-price-list">
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+                <div class="col-sm-5 py-2">
+                    <div class="row ks_mycart align-items-center justify-content-between justify-content-sm-start">
+                        <div id="top_menu">
+                            <div id="custom_cart">
+                                <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                <div class="nav-item divider d-none"/>
+                                <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                <div id="my_cart_2"
+                                     t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                    <a href="/shop/cart" class="nav-link ks_kkkk p-0">
+                                        <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                        <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                             t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ks-header-3-wishlist">
+                            <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                    <a href="/shop/wishlist" class="nav-link ks_kk">
+                                        <i class="fa fa-heart"/>
+                                        <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                            <t t-esc='wishcount'/>
+                                        </sup>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="nav-item dropdown remove_after_content">
+
+                            <div class="nav-item divider" groups="base.group_public"/>
+                            <div groups="base.group_public" class="nav-item ks">
+                                 <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                    <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                    <a t-attf-href="/web/login" class="ks-custom-login">
+                                        <b>Sign in</b>
+                                    </a>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    <b>
+                                        <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                    </b>
+                                </a>
+                                <div class="dropdown-menu js_usermenu" role="menu">
+                                    <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                       role="menuitem">My Account
+                                    </a>
+                                    <a id="o_logout" class="dropdown-item" t-attf-href="/web/session/logout?redirect=/"
+                                       role="menuitem">Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-2 search_container ks-header-3-search ks-header-5-search ks-header-9-search">
+                    <form action="/shop" method="get">
+                        <div class="input-group">
+                            <input type="text" name="search" class="search-query form-control oe_search_box"
+                                   placeholder="Search..."  t-att-value="search" required="True" />
+                            <button type="submit" class="btn oe_search_button">
+                                <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </xpath>
+
+        <!--&lt;!&ndash;This is replacing singn in option&ndash;&gt;-->
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+
+        <!--This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar navbar-expand-lg navbar-light bg-light ks-header-5 ks-header-9
+            </attribute>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+             <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+            </t>
+            <t t-else="">
+                 <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+            </t>
+        </xpath>
+
+
+    </template>
+
+    <!--Header 1-->
+    <template id="custom_header_layout_1" inherit_id="website.layout" name="Header 1" customize_show="True"
+              active="False">
+        <xpath expr="//header" position="before">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_1" t-js="false"/>-->
+            <div class="row ks-header-3 align-items-center ks-header-1-topmost container-lg m-auto">
+                <div class="col-sm-6 col-10">
+                    <div class="row ks_mycart align-items-center">
+                        <div id="top_menu">
+                            <div id="custom_cart">
+                                <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                                <div class="nav-item divider d-none"/>
+                                <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                                <div id="my_cart_2"
+                                     t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                    <a href="/shop/cart" class="nav-link ks_kkkk p-0">
+                                        <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                        <sup t-attf-class="my_cart_quantity badge o_animate_blink badge-primary cart__info cart__count"
+                                             t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ks-header-3-wishlist">
+                             <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                                <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                                <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                    <a href="/shop/wishlist" class="nav-link ks_kk">
+                                        <i class="fa fa-heart"/>
+                                        <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                            <t t-esc='wishcount'/>
+                                        </sup>
+                                    </a>
+                                </div>
+                             </t>
+                        </div>
+                        <div class="nav-item dropdown remove_after_content">
+
+                            <div class="nav-item divider" groups="base.group_public"/>
+                            <div groups="base.group_public" class="nav-item ks">
+                                <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','!=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                    <a t-attf-href="/web/login" class="ks-custom-login">
+                                        <b>Sign in</b>
+                                    </a>
+                                </t>
+                            </div>
+                            <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    <b>
+                                        <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                    </b>
+                                </a>
+                                <div class="dropdown-menu js_usermenu" role="menu">
+                                    <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                       role="menuitem">My Account
+                                    </a>
+                                    <a id="o_logout" class="dropdown-item" t-attf-href="/web/session/logout?redirect=/"
+                                       role="menuitem">Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-2 justify-content-end py-1 search_container ks-header-3-search">
+                    <form action="/shop" method="get">
+                        <div class="input-group justify-content-end">
+                            <input type="text" name="search" class="search-query form-control oe_search_box"
+                                   placeholder="Search..."  t-att-value="search" required="True" />
+                            <button type="submit" class="btn oe_search_button">
+                                <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </xpath>
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--This is used to replace wishlist option for the header-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg ks-header-3-main ks-header-1 ks-header-1-container</attribute>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+            </t>
+            <t t-else="">
+                 <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+            </t>
+        </xpath>
+    </template>
+
+<!--    header 11 (transparent header)-->
+     <template id="custom_header_layout_11" inherit_id="website.layout" name="Header 11" customize_show="True"
+              active="False">
+        <xpath expr="//header" position="attributes">
+            <attribute name="t-attf-class" add="#{'row ks-header-6 ks-header-11 container-lg align-items-center'}" separator=" "/>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+
+        <xpath expr="//header[1]//nav[1]" position="before">
+            <div class="col-lg-2 ks-header-6-logo  col-6">
+            <t t-if="request.website.viewref('website.layout_logo_show').active">
+                 <t t-if="website.logo">
+                        <a href="/" class="navbar-brand logo">
+                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                        </a>
+                    </t>
+                    <t t-elif="res_company.logo and not website.logo">
+                        <a href="/" class="navbar-brand logo ks_custom_logo">
+                            <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                  t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                        </a>
+                    </t>
+                    <t t-else="">
+                         <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                    </t>
+            </t>
+            <t t-else="">
+                 <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+            </t>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main col-lg-7 ks-header-6-main px-0 col-6
+            </attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="after">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_6" t-js="false"/>-->
+            <div class="col-lg-3  col-12 ks_mycart align-items-center  ks-header-2-menu-icon justify-content-lg-end ks-header-6-items">
+                <div class="d-flex flex-nowrap align-items-center justify-content-lg-end justify-content-between">
+                    <div class="nav-item dropdown remove_after_content">
+                        <t>
+                            <div class="nav-item divider" groups="base.group_public"/>
+                            <div groups="base.group_public" class="nav-item ks">
+                                   <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                    <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                         <a t-attf-href="/web/login" class="ks-custom-login">
+                                        <b>Sign in</b>
+                                    </a>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                <b>
+                                    <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                </b>
+                            </a>
+                            <div class="dropdown-menu js_usermenu" role="menu">
+                                <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                   role="menuitem">My Account
+                                </a>
+                                <a id="o_logout" class="dropdown-item"
+                                   t-attf-href="/web/session/logout?redirect=/"
+                                   role="menuitem">Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="top_menu">
+                        <div id="custom_cart">
+                            <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                            <div class="nav-item divider d-none"/>
+                            <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                            <div id="my_cart_2"
+                                 t-attf-class="nav-item#{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                    <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                    <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                         t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ks-header-6-wish">
+                        <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                            <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                            <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                <a href="/shop/wishlist" class="nav-link ks_kk">
+                                    <i class="fa fa-heart ml-1"/>
+                                    <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                        <t t-esc='wishcount'/>
+                                    </sup>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                    <div>
+                        <i class="fa fa-search ks-search-trigger" />
+                    </div>
+                    <div class="search_container ks-header-6-search">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+            </div>
+        </xpath>
+<!--        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">-->
+<!--            <attribute name="class">list-unstyled d-flex</attribute>-->
+<!--        </xpath>-->
+
+
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--        This is used to replace wishlist option for the header-->
+
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+    </template>
+
+<!--    header 12-->
+    <template id="custom_header_layout_12" inherit_id="website.layout" name="Header 12" customize_show="True"
+              active="False">
+        <xpath expr="//header" position="attributes">
+            <attribute name="t-attf-class" add="#{'row ks-header-6 ks-header-11 ks-header-12 container-lg align-items-center'}" separator=" "/>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">navbar navbar-expand-lg navbar-light bg-light</attribute>
+        </xpath>
+
+        <xpath expr="//header[1]//nav[1]" position="before">
+            <div class="ks-header-2-top">
+                <div class="row container-lg m-auto justify-content-between align-items-center">
+                    <ul id="top-nav" class="list-unstyled row mx-0 justify-content-center mb-0 ks_top_menu">
+                        <t t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                            <li class="lang_dropdown top__links text-sm-center mr-0">
+                                <div class="js_language_selector" id="lang"
+                                     t-if="(request.is_frontend_multilang and len(languages) &gt; 1) or editable">
+                                    <label data-toggle="dropdown" type="button" data-caret="true"
+                                           class="dropdown-toggle">
+                                        <t t-foreach="languages" t-as="lgs">
+                                            <t t-if="request.lang and request.lang==lgs[0]">
+                                                <t t-esc="lgs[1].split('/').pop()"/>
+                                            </t>
+                                        </t>
+                                    </label>
+                                    <ul role="menu" class="dropdown-menu dropdown-menu-right js_language_selector">
+                                        <t t-foreach="languages" t-as="lg">
+                                            <li t-attf-class="js_change_lang #{'active' if request.lang== lg[0] else None}">
+                                                <a class="dropdown-item" t-att-data-lang="lg[0]"
+                                                   t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang=lg[0])">
+                                                    <t t-esc="lg[1].split('/').pop()"/>
+                                                </a>
+                                            </li>
+                                        </t>
+                                        <li groups="website.group_website_publisher">
+                                            <t t-set="url_return" t-value="url_for('', '[lang]') + '?' + keep_query()"/>
+                                            <a class="dropdown-item"
+                                               t-attf-href="/web#action=base.action_view_base_language_install&amp;website_id=#{website.id}&amp;url_return=#{url_return}">
+                                                <i class="fa fa-plus mr-2"/>
+                                                Add New
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </t>
+                        <t t-set="website_sale_pricelists"
+                           t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-if="website_sale_pricelists and len(website_sale_pricelists)>1">
+                            <li class="ks-price-list">
+                                <div t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)>1 and 'col' or 'd-none col'}">
+                                    <t t-set="curr_pl" t-value="website.get_current_pricelist()"/>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <t t-esc="curr_pl and curr_pl.name or ' - '"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a class="dropdown-item" t-att-href="'/shop/change_pricelist/%s' % pl.id">
+                                                <span class='switcher_pricelist' t-att-data-pl_id="pl.id"
+                                                      t-esc="pl.name"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                        </t>
+                    </ul>
+                        <ul class="list-unstyled m-auto m-sm-1 ks-header-2-top-social">
+                            <a t-if="res_company.social_facebook"
+                               t-att-href="res_company.social_facebook">
+                                <i class="fa fa-facebook mx-3"/>
+                            </a>
+                            <a t-if="res_company.social_twitter" t-att-href="res_company.social_twitter">
+                                <i class="fa fa-twitter mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_linkedin"
+                               t-att-href="res_company.social_linkedin">
+                                <i class="fa fa-linkedin mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_youtube" t-att-href="res_company.social_youtube">
+                                <i class="fa fa-youtube mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_github" t-att-href="res_company.social_github">
+                                <i class="fa fa-github mr-3"/>
+                            </a>
+                            <a t-if="res_company.social_instagram"
+                               t-att-href="res_company.social_instagram">
+                                <i class="fa fa-instagram"/>
+                            </a>
+                        </ul>
+                    </div>
+            </div>
+            <div class="col-lg-2 ks-header-6-logo  col-6">
+                 <t t-if="request.website.viewref('website.layout_logo_show').active">
+                     <t t-if="website.logo">
+                            <a href="/" class="navbar-brand logo">
+                            <span t-field="website.logo" t-options="{'widget': 'image'}" role="img" t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>
+                            </a>
+                        </t>
+                        <t t-elif="res_company.logo and not website.logo">
+                            <a href="/" class="navbar-brand logo ks_custom_logo">
+                                <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"
+                                      t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                            </a>
+                        </t>
+                        <t t-else="">
+                             <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                        </t>
+                </t>
+                <t t-else="">
+                     <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                </t>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="attributes">
+            <attribute name="class">
+                navbar-expand-lg ks_header_2 ks-header-2-main col-lg-7 ks-header-6-main px-0 col-6
+            </attribute>
+        </xpath>
+        <xpath expr="//header[1]//nav[1]" position="after">
+            <!--<t t-call-assets="ks_theme_kinetik.assets_header_css_6" t-js="false"/>-->
+            <div class="col-lg-3  col-12 ks_mycart align-items-center  ks-header-2-menu-icon justify-content-lg-end ks-header-6-items">
+                <div class="d-flex flex-nowrap align-items-center justify-content-lg-end justify-content-between">
+                    <div class="nav-item dropdown remove_after_content">
+                        <t>
+                            <div class="nav-item divider" groups="base.group_public"/>
+                            <div groups="base.group_public" class="nav-item ks">
+                                   <t t-set="ks_is_sign_in" t-value="request.env['ir.ui.view'].search([('key','=','portal.portal_show_sign_in'),('website_id','=',request.website.id),('active','=',False) or ('active','=',True)],limit=1)"/>
+                                    <t t-if="ks_is_sign_in.active if ks_is_sign_in else True">
+                                         <a t-attf-href="/web/login" class="ks-custom-login">
+                                        <b>Sign in</b>
+                                    </a>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="nav-item dropdown" t-ignore="true" t-if="not user_id._is_public()">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                <b>
+                                    <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                                </b>
+                            </a>
+                            <div class="dropdown-menu js_usermenu" role="menu">
+                                <a id="o_logout" class="dropdown-item" t-attf-href="/my/home"
+                                   role="menuitem">My Account
+                                </a>
+                                <a id="o_logout" class="dropdown-item"
+                                   t-attf-href="/web/session/logout?redirect=/"
+                                   role="menuitem">Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="top_menu">
+                        <div id="custom_cart">
+                            <t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+                            <div class="nav-item divider d-none"/>
+                            <!-- Make sure the cart and related menus are not folded (see autohideMenu) -->
+                            <div id="my_cart_2"
+                                 t-attf-class="nav-item o_wsale_my_cart #{'' if website_sale_order and website_sale_order.cart_quantity else ' d-none'}">
+                                <a href="/shop/cart" class="nav-link ks_kkkk align-items-center p-0">
+                                    <i class="fa fa-shopping-cart nav__icons ml-4 position-relative" />
+                                    <sup t-attf-class="my_cart_quantity o_animate_blink badge badge-primary cart__info cart__count"
+                                         t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ks-header-6-wish">
+                        <t t-if="request.env.ref('website_sale_wishlist.add_to_wishlist').active">
+                            <t t-set='wishcount' t-value="len(request.env['product.wishlist'].current())"/>
+                            <div id="my_wish" class="nav-item" t-att-style="not wishcount and 'display:none;'">
+                                <a href="/shop/wishlist" class="nav-link ks_kk">
+                                    <i class="fa fa-heart ml-1"/>
+                                    <sup t-attf-class="my_wish_quantity o_animate_blink badge badge-primary">
+                                        <t t-esc='wishcount'/>
+                                    </sup>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                    <div>
+                        <i class="fa fa-search ks-search-trigger" />
+                    </div>
+                    <div class="search_container ks-header-6-search">
+                        <form action="/shop" method="get">
+                            <div class="input-group">
+                                <input type="text" name="search" class="search-query form-control oe_search_box"
+                                       placeholder="Search..."  t-att-value="search" required="True" />
+                                <button type="submit" class="btn oe_search_button d-none d-lg-block">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                                <button type="submit" class="btn oe_search_button mobile-toggle-button d-block d-lg-none">
+                                    <i class="fa fa-search nav__search_icon hydrated" id="search-btn" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//header[1]//div[hasclass('container')]//a[1]" position="replace">
+            <div class="ks_removed_a">
+            </div>
+        </xpath>
+<!--        <xpath expr="//header[1]//div[hasclass('container')]//ul[@id='top_menu']" position="attributes">-->
+<!--            <attribute name="class">list-unstyled d-flex</attribute>-->
+<!--        </xpath>-->
+
+
+        <!--This is used to replace login info after login-->
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[hasclass('nav-item','dropdown')]" position="replace"/>
+        <!--        This is used to replace wishlist option for the header-->
+
+        <xpath expr="//header//div[@id='top_menu_collapse']//li[@id='my_wish']" position="replace"/>
+    </template>
+
+    <template id="website.affix_top_menu" inherit_id="website.layout" customize_show="True" name="Affix Top Menu">
+        <xpath expr="//header" position="attributes">
+            <attribute name="t-attf-class" add="#{'o_affix_enabled'}" separator=" "/>
+        </xpath>
+
+    </template>
+
+    <template id="header_customizations" inherit_id="website.layout" name="Header Customizations"
+              active="True">
+    </template>
+
+    <template id="portal.portal_show_sign_in" inherit_id="portal.frontend_layout" name="Show Sign In">
+        <xpath expr="//ul[@id='top_menu']" position="inside">
+            <li class="nav-item divider" groups="base.group_public"/>
+            <li groups="base.group_public" class="nav-item ks-default-login">
+                <a t-attf-href="/web/login" class="nav-link">
+                    <b>Sign in</b>
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+
+<!--    <template id="website.layout_logo_show" inherit_id="website.layout" customize_show="True" name="Show Logo">-->
+<!--        <xpath expr="//a[hasclass('navbar-brand')]" position="replace">-->
+<!--            <t t-if="request.website.viewref('website.layout_logo_show').active">-->
+<!--                <t t-if="website.logo">-->
+<!--                    <a href="/" class="navbar-brand logo">-->
+<!--                        <span t-field="website.logo" t-options="{'widget': 'image'}" role="img"-->
+<!--                              t-attf-aria-label="'Logo of %s' % website.name" t-att-title="website.name"/>-->
+<!--                    </a>-->
+<!--                </t>-->
+<!--                <t t-else="">-->
+<!--                    <a href="/" class="navbar-brand logo ks_custom_logo">-->
+<!--                        <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img"-->
+<!--                              t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>-->
+<!--                    </a>-->
+<!--                </t>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--    </template>-->
+</odoo>

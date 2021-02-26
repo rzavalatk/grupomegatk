@@ -1,0 +1,77 @@
+.ks-page-about {
+    .img-iten {
+        &,
+        img {
+            border-radius: 0 !important;
+        }
+    }
+
+    @media (max-width: 768px) and (min-width: 576px){
+        .image-panel {
+            position: absolute;
+
+            img {
+                min-height: 100%
+            }
+        }
+    }
+}
+
+.ks-page-gallery {
+    .overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h3 {
+           font-size: 28px;
+        }
+    }
+
+    .hovereffect {
+        padding: 10px;
+    }
+
+    .col-md-4 {
+        animation: moveup 0.6s ease-in-out forwards;
+        opacity: 0;
+
+        &:nth-child(2),
+        &:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        &:nth-child(3n) {
+            animation-delay: 0.8s;
+        }
+    }
+}
+
+.ks-testimonial {
+    .carousel-item {
+        @media (max-width: 768px) {
+            min-height: auto !important;
+        }
+    }
+}
+
+.our-team.team-v3:not(.team-v7) {
+    .thum-img {
+        @media (max-width: 768px) and (min-width: 576px) {
+            position: absolute;
+        }
+    }
+}
+
+.ks-about-info,
+.ks-about-team {
+   .ks-side-right {
+        animation: moveright 0.6s ease-in-out forwards;
+        opacity: 0;
+    }
+
+    .ks-side-left {
+        animation: moveleft 0.6s ease-in-out forwards;
+        opacity: 0;
+    }
+}

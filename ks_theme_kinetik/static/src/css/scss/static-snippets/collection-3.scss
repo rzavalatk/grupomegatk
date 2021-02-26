@@ -1,0 +1,104 @@
+.ks-collection {
+    &-item-3 {
+        width: calc(25% - 16px);
+        height: 450px !important;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+
+        &:hover {
+            background-image: none !important;
+
+            .ks-collection-offer {
+                bottom: calc(50% - 40px);
+                overflow: visible;
+
+                &-btn {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+        }
+
+        @media (max-width: 1024px) {
+            width: calc(50% - 16px);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 540px) {
+            width: 100%;
+        }
+    }
+
+    &-header {
+        h5 {
+            letter-spacing: 1px;
+        }
+    }
+
+    &-large-text {
+        font-size: 60px;
+        font-weight: $weight-bold;
+    }
+
+    &-small-text {
+        writing-mode: tb;
+        text-orientation: upright;
+        letter-spacing: -5px;
+    }
+
+    &-offer {
+        bottom: 0;
+        overflow: hidden;
+        height: 90px;
+        transition: 0.36s ease-in-out;
+
+        &-btn {
+            transition: 0.3s ease-in-out;
+            transition-delay: 0.2s;
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+    }
+}
+
+.ks-collection-item-color-1 {
+    .ks-collection-header {
+        background: $collection-item-1-color;
+    }
+
+    &:hover {
+        background: rgba($collection-item-1-color, 0.5);
+    }
+}
+
+.ks-collection-item-color-2 {
+    .ks-collection-header {
+        background: $collection-item-2-color;
+    }
+
+    &:hover {
+        background: rgba($collection-item-2-color, 0.5);
+    }
+}
+
+.ks-collection-item-color-3 {
+    .ks-collection-header {
+        background: $collection-item-3-color;
+    }
+
+    &:hover {
+        background: rgba($collection-item-3-color, 0.5);
+    }
+}
+
+.ks-collection-item-color-4 {
+    .ks-collection-header {
+        background: $collection-item-4-color;
+    }
+
+    &:hover {
+        background: rgba($collection-item-4-color, 0.5);
+    }
+}

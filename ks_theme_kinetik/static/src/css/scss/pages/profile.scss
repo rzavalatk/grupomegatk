@@ -1,0 +1,61 @@
+.ks-profile-account {
+    position: relative;
+    z-index: 1;
+
+    .nav-tabs {
+        .nav-link {
+            font-size: 16px;
+
+            &.active {
+                background-color: transparent;
+                border-color: transparent;
+                border-bottom: 2px solid $primary;
+            }
+
+            &:not(.active) {
+                &:hover {
+                    border-color: transparent;
+                }
+            }
+
+        }
+    }
+
+    .ks-profile-user {
+        label {
+            font-weight: $weight-semi-bold;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-group {
+            label {
+                text-align: left;
+                padding-left: 0;
+            }
+        }
+    }
+}
+
+.o_portal_details {
+    .clearfix {
+        .btn-primary {
+            margin-left: 16px;
+            float: none !important;
+        }
+    }
+
+}
+
+@media (max-width: 1200px) {
+    .o_portal_my_home,
+    .portal_edit_profile_icon {
+        width: auto;
+    }
+
+    .ks-profile-user {
+        display: flex;
+        flex-direction: column;
+    }
+
+}

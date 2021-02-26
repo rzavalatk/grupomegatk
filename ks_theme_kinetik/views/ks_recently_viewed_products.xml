@@ -1,0 +1,10 @@
+<odoo>
+    <!--home page brands snippet after header -->
+    <template id="snippet_recently_viewed_products" name="Recently Viewed Products">
+        <section class="website_sale_recently_viewed_products ks_dyn_snip">
+            <div class="recently_viewed_products">
+            </div>
+        </section>
+    </template>
+</odoo>
+

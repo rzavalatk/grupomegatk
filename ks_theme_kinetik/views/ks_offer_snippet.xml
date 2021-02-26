@@ -1,0 +1,59 @@
+<odoo>
+    <template id="snippet_offer_timer" name="Offer Timer">
+        <section class="snippet_offer_timer">
+            <div class="ks_container_2 m-auto ks_offer_timer_class" >
+            </div>
+        </section>
+    </template>
+
+     <template id="ks_offer_timer_animation_options" name="Product Offer Timer Snippet animation Options" inherit_id="website.snippet_options">
+        <xpath expr="." position="inside">
+            <div data-selector=".snippet_offer_timer">
+                <div class="dropdown-submenu">
+                    <a tabindex="-1" href="#" class="dropdown-item"><i class="fa fa-spinner fa-pulse"/>Animation</a>
+                    <div class="dropdown-menu" role="menu">
+                         <div>
+                        <label>Animation Options
+                        <a href="#" class="dropdown-item" data-select-class="animated flash">flash</a>
+                        <a href="#" class="dropdown-item" data-select-class="animated bounce">bounce</a>
+                        <a href="#" class="dropdown-item" data-select-class="animated pulse">pulse</a>
+                        </label>
+                        </div>
+
+                        <div>
+                        <label>Fading Entrances
+                            <a href="#" class="dropdown-item" data-select-class="animated fadeIn">fadeIn</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated fadeInDown">fadeInDown</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated fadeInLeft">fadeInLeft</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated fadeInUp">fadeInUp</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated fadeInRight">fadeInRight</a>
+
+                        </label>
+
+                        </div>
+                        <div>
+                        <label>Sliding Entrances
+                            <a href="#" class="dropdown-item" data-select-class="animated slideInDown">slideInDown</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated slideInLeft">slideInLeft</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated slideInUp">slideInUp</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated slideInRight">slideInRight</a>
+
+                        </label>
+                        </div>
+                        <div>
+                        <label>Zooming Entrances
+                            <a href="#" class="dropdown-item" data-select-class="animated zoomIn">zoomIn</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated zoomInDown">zoomInDown</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated zoomInLeft">zoomInLeft</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated zoomInUp">zoomInUp</a>
+                            <a href="#" class="dropdown-item" data-select-class="animated zoomInRight">zoomInRight</a>
+
+                        </label>
+                        </div>
+                            <a href='#' class='dropdown-item' data-select-class="">None</a>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

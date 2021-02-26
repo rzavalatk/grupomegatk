@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website_menus_form_view_inherited_1" model="ir.ui.view">
+        <field name="model">website.menu</field>
+        <field name="inherit_id" ref="website.website_menus_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="ks_is_mega_menu"/>
+            </field>
+            <xpath expr="/form/sheet/label" position="attributes">
+                <attribute name="string"> </attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="website_menus_form_view_inherited_2" model="ir.ui.view">
+        <field name="model">website.menu</field>
+        <field name="inherit_id" ref="website.website_menus_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/label" position="after">
+                <notebook colspan="4" position="inside">
+                    <page string="Child Menus">
+                        <field name="child_id">
+                            <tree>
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="url"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Mega Menu Setup" attrs="{'invisible':[('ks_is_mega_menu','=',False)]}">
+                        <group>
+                            <group>
+                                <field name="ks_item_selection_method"
+                                       attrs="{'invisible':[('ks_is_mega_menu','=',False)]}"/>
+                                <field colspan="4" name="ks_products_ids"
+                                       widget="many2many"
+                                       attrs="{'invisible':['|',('ks_item_selection_method','!=','products'),
+                                       ('ks_is_mega_menu','=',False)]}"/>
+
+                                <field name="ks_product_brand_ids"
+                                       widget="many2many_tags"
+                                       attrs="{'invisible':['|',('ks_item_selection_method','!=','brands'),
+                                       ('ks_is_mega_menu','=',False)]}"/>
+                               <field name="ks_current_categories" widget="many2many_tags" force_save="1" invisible="1"/>
+                                <field name="ks_categories" widget="many2many_tags"
+                                       domain="[('id', 'in', ks_current_categories),('parent_id', '=', False)]"
+                                       attrs="{'invisible':['|',('ks_item_selection_method','!=','Cats'),
+                                       ('ks_is_mega_menu','=',False)]}"/>
+                                <field name="ks_set_number_of_columns"
+                                       attrs="{'invisible':[('ks_is_mega_menu','=',False)]}"/>
+                            </group>
+                            <group>
+                                <field name="ks_display_img"
+                                       attrs="{'invisible':[('ks_item_selection_method','!=','Cats')]}"/>
+                                <field name="ks_is_category_tab_layout"
+                                       attrs="{'invisible':[('ks_item_selection_method','!=','Cats')]}"/>
+                                <field name="ks_show_sub_categories"
+                                       attrs="{'invisible':[('ks_item_selection_method','!=','Cats')]}"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Mega Menu Advance" attrs="{'invisible':[('ks_is_mega_menu','=',False)]}">
+                        <group>
+                            <field name="ks_is_background_image"
+                                   attrs="{'invisible':[('ks_is_mega_menu','=',False)]}"/>
+                            <field name="ks_background_image" widget="image" col="4" row="4"
+                                   attrs="{'invisible':['|',('ks_is_mega_menu','=',False),('ks_is_background_image','=',False)],'required': [('ks_is_background_image','=',True)]}"/>
+                            <field name="ks_is_font_color_set"
+                                   attrs="{'invisible':[('ks_is_mega_menu','=',False)]}"/>
+                            <field name="ks_font_color_main_cat" widget="color"
+                                   attrs="{'invisible':['|',('ks_is_mega_menu','=',False),('ks_is_font_color_set','=',False)]}"/>
+                            <field name="ks_font_color_sub_cat" widget="color"
+                                   attrs="{'invisible':['|',('ks_is_mega_menu','=',False),('ks_is_font_color_set','=',False)]}"/>
+                        </group>
+                    </page>
+                    <page string="Add Slider/Image In Mega Menu"  attrs="{'invisible':[('ks_is_mega_menu','=',False)]}">
+                        <group>
+                            <group>
+                                <field name="ks_is_slider"
+                                       attrs="{'invisible':[('ks_is_mega_menu','=',False)]}"/>
+
+                                <field name="ks_slider_title"
+                                       attrs="{'invisible':[('ks_is_slider','=',False)]}"/>
+
+                                <field name="ks_side_image_link"
+                                       attrs="{'invisible':[('ks_is_slider','!=','image')]}"/>
+                                <field name="ks_side_image_description"
+                                       attrs="{'invisible':[('ks_is_slider','!=','image')]}"/>
+
+                                <field name="ks_slider_position"
+                                       attrs="{'invisible':[('ks_is_slider','=',False)]}"/>
+
+                                <field name="ks_slider_Speed"
+                                       attrs="{'invisible':[('ks_is_slider','=',False)]}"/>
+                            </group>
+                             <group>
+                                <field name="ks_side_image" widget="image" col="4" row="4"
+                                       attrs="{'invisible':[('ks_is_slider','!=','image')]}"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="ks_item_slider_selection_method"
+                                           attrs="{'invisible':[('ks_is_slider','=','image')]}"/>
+
+                                    <field name="ks_slider_products_ids"
+                                           widget="many2many"
+                                           attrs="{'invisible':['|','|',('ks_item_slider_selection_method','!=','products'),
+                                       ('ks_is_slider','=',False),('ks_is_slider','=','image')]}"/>
+
+                                    <field name="ks_slider_product_brand_ids"
+                                           widget="many2many_tags"
+                                           attrs="{'invisible':['|','|',('ks_item_slider_selection_method','!=','brands'),
+                                       ('ks_is_slider','=','image'),('ks_is_slider','=',False)]}"/>
+
+                                    <field name="ks_slider_categories" widget="many2many_tags"
+                                           attrs="{'invisible':['|',('ks_item_slider_selection_method','!=','cats'),
+                                       ('ks_is_slider','=',False)]}"/>
+                                </group>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+      <record id="website_menus_form_view_inherited_3" model="ir.ui.view">
+        <field name="model">website.menu</field>
+        <field name="inherit_id" ref="website.website_menus_form_view"/>
+        <field name="arch" type="xml">
+             <xpath expr="/form/sheet/field[@name='child_id']" position="replace">
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_category_1" model="ir.ui.view" >
+         <field name="name">product.public.category.form</field>
+        <field name="model">product.public.category</field>
+        <field name="type">form</field>
+         <field name="inherit_id" ref="ks_theme_base.inherits_product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ks_categ_tag']" position="after">
+               <field name="ks_product_category_slogan"/>
+            </xpath>
+        </field>
+    </record>
+     <record id="product_brand_1" model="ir.ui.view">
+        <field name="name">ks_product_manager_ks_brand form</field>
+        <field name="model">ks_product_manager.ks_brand</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="ks_theme_base.ks_brand_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ks_brand_description']" position="after">
+                <field name="website_id" options="{'no_create': True}" groups="website.group_multi_website"/>
+            </xpath>
+        </field>
+    </record>
+    <!-- view specific to product.template -->
+    <record id="product_template_only_form_view_2" model="ir.ui.view">
+        <field name="name">product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="size_chart_name" invisible="1"/>
+                <field name="size_chart" filename="size_chart_name" widget="binary"/>
+            </field>
+        </field>
+    </record>
+    <record id="product_video_1" model="ir.ui.view" >
+         <field name="name">product.image.view.form</field>
+        <field name="model">product.image</field>
+        <field name="type">form</field>
+         <field name="inherit_id" ref="website_sale.view_product_image_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_tmpl_id']" position="after">
+                <label for="video" string="UPLOAD VIDEO"/>
+                <field name="product_video"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ks_product_template_form_view_01" model="ir.ui.view">
+        <field name="name">product.template.product.website.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='extra_images']" position="attributes">
+                <attribute name="string">Extra Product Media</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

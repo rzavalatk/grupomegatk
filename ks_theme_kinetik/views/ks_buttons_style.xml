@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="ks_button_style_layout_1" name="Button 1" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110" >
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-1.scss"
+            />
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_2" name="Button 2" customize_show="True"
+              inherit_id="web.assets_frontend" active="False"  priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-2.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_3" name="Button 3" customize_show="True"
+              inherit_id="web.assets_frontend" active="False"  priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-3.scss"
+            />
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_4" name="Button 4" customize_show="True"
+              inherit_id="web.assets_frontend" active="False"  priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-4.scss"
+            />
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_5" name="Button 5" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-5.scss"
+            />
+        </xpath>
+    </template>
+
+
+    <template id="ks_button_style_layout_6" name="Button 6" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-6.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_7" name="Button 7" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-7.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_8" name="Button 8" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-8.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_9" name="Button 9" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-9.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_10" name="Button 10" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-10.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_11" name="Button 11" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-11.scss"/>
+        </xpath>
+    </template>
+
+
+
+    <template id="ks_button_style_layout_6" name="Button 6" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-6.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_7" name="Button 7" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-7.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_8" name="Button 8" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-8.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_9" name="Button 9" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-9.scss"/>
+        </xpath>
+    </template>
+
+    <template id="ks_button_style_layout_10" name="Button 10" customize_show="True"
+              inherit_id="web.assets_frontend" active="False" priority="110">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="/ks_theme_kinetik/static/src/scss/buttons/style-10.scss"/>
+        </xpath>
+    </template>
+
+
+
+</odoo>

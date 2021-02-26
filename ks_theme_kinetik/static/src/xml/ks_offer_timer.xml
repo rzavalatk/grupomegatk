@@ -1,0 +1,54 @@
+<templates>
+    <t t-name="ks_dynamic_offer_snippets">
+        <section class="ks-deal-sales ks_ks ks-furniture-deal" id="ks_deals_of_the_day"
+                 style="background: url('/ks_theme_kinetik/static/src/static-snippet-images/deal-of-the-day/bg-deal.jpg');">
+            <div class="row h-100">
+                <div class="col-md-6 ml-auto d-flex justify-content-center align-items-center flex-wrap">
+                    <div class="right-panel">
+                        <div class="heading-container text-center w-100">
+                            <h3 class="heading font-50 b-600" >Offer Timer</h3>
+                            <t t-esc="ks_timer_data"/>
+                        </div>
+                        <div class="text-container text-center w-100">
+                            <p class="text font-30 mt-4">Exciting offers on Home Accessories</p>
+                        </div>
+                        <div class="ks-deal-counter justify-content-center">
+                            <div class="ks-time-container">
+                                <div id="days">
+                                    <t t-if="days" t-esc="days"/>
+                                </div>
+                                <span>Days</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="hours">
+                                    <t t-if="hours" t-esc="hours"/>
+                                </div>
+                                <span>hrs</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="minutes">
+                                      <t t-if="minutes" t-esc="minutes"/>
+                                </div>
+                                <span>min</span>
+                            </div>
+                            <div class="ks-time-container">
+                                <div id="seconds">
+                                      <t t-if="seconds" t-esc="seconds"/>
+                                </div>
+                                <span>sec</span>
+                            </div>
+                        </div>
+                        <section class="d-flex justify-content-center align-items-center w-100">
+                            <form action="/shop" method="get" class="text-center">
+                                <input name="id" value="offer_timer"
+                                       type="hidden"/>
+                                 <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> <span>+ Shop Now +</span>
+                                 </a>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

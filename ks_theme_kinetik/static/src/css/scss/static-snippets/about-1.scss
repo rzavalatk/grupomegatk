@@ -1,0 +1,124 @@
+.about-container {
+	.custom-btn{
+			width: 150px;
+	    height: 45px;
+	    border: none;
+	    font-weight: 500;
+	    text-transform: uppercase;
+	    &:focus {
+	    	outline: none;
+	    }
+		}
+	.about-btn {
+		width: 100%;
+	}
+	.about-heading {
+	}
+	.image-container{
+		height: 450px;
+    width: 450px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    background-size: contain;
+    background-attachment: fixed;
+    background-position: right;
+    @media screen and (max-width: 767px){
+    	height: 350px;
+      width: 350px;
+      margin-top: 20px;
+    }
+    @media screen and (max-width: 500px){
+    	height: 250px;
+      width: 250px;
+    }
+    @media screen and (max-width: 425px){
+    	height: 250px;
+      width: 250px;
+    }
+	}
+	.ks-skills-holder {
+		text-align: center;
+    position: relative;
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+    .list {
+    	list-style-type: none;
+    	display: flex;
+    	.list-items {
+		    width: 20px;
+    		height: 230px;
+		    background-color: lighten($primary,50%);
+		    margin: 0px 20px;
+    		position: relative;
+    		border-radius: 50px;
+    		@media screen and (max-width: 568px){
+    			margin: 0px 15px;
+    			width: 14px;
+    		}
+    		@media screen and (max-width: 392px){
+    			margin: 0px 10px;
+    		}
+		    &:before {
+			    content: '';
+			    left: 0px;
+			    bottom: 0px;
+    			width: 100%;
+			    background: $primary;
+			    z-index: 1;
+			    position: absolute;
+			    border-radius: 0px 0px 50px 50px;
+			    color: $white;
+
+				}
+				.list-text {
+					left: 50%;
+                    transform: translateX(-50%);
+                    bottom: -31px;
+                    color: #000000;
+                    position: absolute;
+                    @media screen and (max-width: 568px){
+                        font-size: 13px;
+                    }
+                    @media screen and (max-width: 392px){
+                        font-size: 10px;
+                    }
+				}
+    	}
+    }
+    .progress-value {
+    	li:nth-child(1):before {
+				height: $skill-1;
+			}
+			li:nth-child(2):before {
+				height: $skill-2;
+			}
+			li:nth-child(3):before {
+				height: $skill-3;
+			}
+			li:nth-child(4):before {
+				height: $skill-4;
+			}
+			li:nth-child(5):before {
+				height: $skill-5;
+			}
+			li:nth-child(6):before {
+				height: $skill-6;
+			}
+			li:nth-child(7):before {
+				height: $skill-7;
+			}
+			li:nth-child(8):before {
+				height: $skill-8;
+			}
+			li {
+				&:before {
+					animation: fillEffect 1.5s ease-in-out 2s forwards;
+					transform-origin: bottom;
+					opacity: 0;
+				}
+			}
+    }
+	}
+}

@@ -1,0 +1,82 @@
+.ks-team-2 {
+  .heading-line {
+    &:after {
+      position: absolute;
+      content: '';
+      width: 142px;
+      height: 5px;
+      background-color: red;
+      background-image: linear-gradient(to right, #49c8d7 , #6877c8);
+      bottom: 0;
+      right: 0;
+      left: 0;
+      margin: auto;
+    }
+  }
+  .team-panel,
+   .oe_website_sale {
+    .panel-iten {
+      height: 345px;
+      background-color: lighten($primary,30%);
+      border-radius: 5px;
+      .image-item {
+        width: 132px;
+        height: 132px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: linear-gradient(lighten($primary,30%), darken($primary,30%));
+        margin-bottom: 14px;
+        padding: 5px;
+        .img-bg {
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
+          filter: grayscale(100);
+          transition: 0.3s ease-in-out;
+          &:hover {
+            filter: grayscale(0);
+          }
+        }
+      }
+      .button-info {
+        width: 80%;
+        margin: 0 auto;
+        .custom-btn {
+          width: 100%;
+          background-color: $white;
+          border: none;
+          padding: 10px 0;
+        }
+      }
+    }
+    .hover-fffect {
+      &:hover {
+        .custom-btn {
+            background: linear-gradient(darken($primary,30%), lighten($primary,30%));
+            color: $white;
+          }
+          .img-bg {
+            filter: grayscale(0);
+          }
+      }
+    }
+    .media-info {
+      display: flex;
+      justify-content: center;
+      margin-top: -19px;
+      .media-item {
+        height: 35px;
+        width: 35px;
+        background-color: darken($primary,30%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 10px;
+        border-radius: 50%;
+        &:hover {
+          color: $white;
+        }
+      }
+    }
+  }
+}

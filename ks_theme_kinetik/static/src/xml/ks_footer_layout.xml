@@ -1,0 +1,95 @@
+<templates>
+    <t t-name="ks_footer_layout_1">
+        <footer class="ks_container_2 m-auto footer_1 pt-5">
+            <div class="row mx-0 px-lg-0 px-sm-4 px-3">
+                <div class="col_2">
+                    <div class="footer-links-list">
+                        <span class="footer_link_heading pb-2">Policy</span>
+                        <ul class="list-unstyled mt-3">
+                            <t t-foreach="policy_links" t-as="policy_link">
+                                <li class="footer_link">
+                                    <t t-if="policy_link.ks_link_address">
+                                        <a t-att-href="policy_link.ks_link_address" class="mb-2">
+                                            <t t-esc="policy_link.name"/>
+                                        </a>
+                                    </t>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col_2">
+                    <div class="footer-links-list">
+                        <span class="footer_link_heading pb-2">Shopping</span>
+                        <ul class="list-unstyled mt-3">
+                            <t t-foreach="categories" t-as="cat">
+                                <li class="footer_link">
+                                    <a t-att-href="cat.category_url" class="mb-2">
+                                        <t t-esc="cat.name"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col_2">
+                    <div class="footer-links-list">
+                        <span class="footer_link_heading pb-2">Office Address</span>
+                        <ul class="list-unstyled mt-3">
+                            <t t-foreach="office_address" t-as="off_add">
+                                <li class="footer_link">
+                                    <a href="javascript:void(0)" class="mb-2">
+                                        <t t-esc="off_add"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col_2">
+                    <div class="footer-links-list">
+                        <span class="footer_link_heading pb-2">Keep in touch</span>
+                        <ul class="list-unstyled d-flex mt-3 social_list">
+                            <t t-foreach="usefull_links" t-as="link">
+                                <li class="mr-3">
+                                    <a t-att-href="link.ks_link_address" class="fb-icon">
+                                        <img t-att-src="link.link_img" alt="social"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col_2 services-list">
+                    <div class="d-flex">
+                        <div class="services_img text-center">
+                            <!--<img src="assets/images/icons/shipping.svg" alt=""/>-->
+                        </div>
+                        <div class="service_info mx-2 mb-3">
+                            <div class="service_main_txt">Free Shipping</div>
+                            <div class="service_secondry_txt">On Order over $500</div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="services_img text-center">
+                            <!--<img src="assets/images/icons/dollar.svg" alt=""/>-->
+                        </div>
+                        <div class="service_info mx-2 mb-3">
+                            <div class="service_main_txt">Money back Gurantee</div>
+                            <div class="service_secondry_txt">No questions asked</div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="services_img text-center">
+                            <!--<img src="assets/images/icons/tag.svg" alt=""/>-->
+                        </div>
+                        <div class="service_info mx-2 mb-3">
+                            <div class="service_main_txt">discount 10%</div>
+                            <div class="service_secondry_txt">On purchases over $2000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </t>
+</templates>

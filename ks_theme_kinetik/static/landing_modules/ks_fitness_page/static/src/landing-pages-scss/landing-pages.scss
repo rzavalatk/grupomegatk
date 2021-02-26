@@ -1,0 +1,21 @@
+
+//for Pricing - Fitness
+
+.ks-gym {
+    &-pricing {
+        .ks-pricing-img-individual {
+            width: 60%;
+            background-image: url('/ks_fitness_page/static/src/landing-pages-images/gym/plan-1.svg');
+        }
+
+        .ks-pricing-img-team {
+            width: 60%;
+            background-image: url('/ks_fitness_page/static/src/landing-pages-images/gym/plan-2.svg');
+        }
+
+        .ks-pricing-img-enterprise {
+            width: 60%;
+            background-image: url('/ks_fitness_page/static/src/landing-pages-images/gym/plan-3.svg');
+        }
+    }
+}

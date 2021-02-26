@@ -1,0 +1,537 @@
+
+//for New Year
+
+.btn-hover-effect {
+    transition: 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.ks-ny-parallax {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.ks-ny-hero {
+    position: relative;
+    margin-left: -1px;
+
+    img {
+        width: 100%;
+        position: relative;
+        margin-top: -80px;
+        object-fit: cover;
+        min-height: 100vh;
+
+         @media (max-width: 1024px) {
+            min-height: 80vh;
+
+        }
+
+        @media (max-height: 700px) {
+            min-height: 100vh;
+
+        }
+    }
+
+    &-text {
+        color: #ffff;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 150px;
+        text-shadow: 3px 4px 5px black;
+        z-index: 1;
+        padding: 0 20px;
+
+        @media (max-width: 1024px) and (min-width: 576px) {
+             margin-top: 200px;
+        }
+
+        &-sub {
+            font-size: 35px;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: -50px;
+        }
+        &-main {
+            font-size: 200px;
+            justify-content: center;
+            word-break: break-all;
+
+            @media (max-width: 1200px) {
+                font-size: 160px;
+            }
+
+            @media (max-width: 1024px) {
+                font-size: 120px;
+            }
+
+            @media (max-width: 575px) {
+                font-size: 60px;
+                margin-top: 30px;
+            }
+        }
+    }
+}
+
+.ks-ny-dark {
+    background-color: #010101;;
+    color: #fff;
+
+    .ks-ny-heading-txt {
+       color: #fff;
+    }
+}
+
+.parallax-after {
+    position: relative;
+    z-index: 1;
+}
+
+.parallax-1 {
+    z-index: 1;
+}
+
+.ks-ny-heading {
+    &-txt {
+        font-size: 60px;
+        color: black;
+        @media (max-width: 575px) {
+            line-height: 1;
+            font-size: 40px;
+        }
+
+        &.heading-anim {
+            text-shadow: 0 0 4px black, 0 0 9px white;
+            animation: textShadow 2s step-end infinite;
+        }
+    }
+
+    img {
+        max-height: 50px;
+    }
+}
+
+@keyframes textShadow {
+    0% {
+        text-shadow: 0 0 4px black, 0 0 19px white;
+    }
+
+    20% {
+        text-shadow: 0 0 4px black, 0 0 19px #e70045;
+    }
+    40% {
+        text-shadow: 0 0 4px black, 0 0 19px #003781;
+    }
+    60% {
+        text-shadow: 0 0 4px black, 0 0 19px #27c6b3;
+    }
+    80% {
+        text-shadow: 0 0 4px black, 0 0 19px #fd9583;
+    }
+    100% {
+        text-shadow: 0 0 4px black, 0 0 19px #003973;
+    }
+}
+
+.ks-ny-about {
+    &-pic {
+        max-height: 700px;
+        object-fit: contain;
+    }
+    &-txt {
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+}
+
+.card-container {
+    cursor: pointer;
+    height: 400px;
+    perspective: 1000px;
+    position: relative;
+    width: 100%;
+
+    &:hover {
+        .ks-card {
+            transform: rotateY(180deg);
+        }
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+  .ks-card {
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: all 1s ease-in-out;
+    width: 100%;
+    box-shadow: 0 20px 70px -20px rgba(0, 0, 0, 0.34);
+  }
+
+  .ks-card .side {
+    backface-visibility: hidden;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    transform: translateZ(50px);
+    padding: 30px;
+    -webkit-backface-visibility: hidden;
+
+    p {
+        color: $black;
+    }
+  }
+
+  .ks-card .back {
+    color: #ffffff;
+    line-height: 2;
+    text-align: center;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-blend-mode: color;
+    font-weight: 700;
+    perspective: 100px;
+  }
+
+  .ks-ny-img-size {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      max-width: 100%;
+  }
+
+.event-time {
+    width: 110px;
+    height: 110px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background: white;
+    z-index: 100;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+    @media (max-width: 768px) {
+        top: 0px;
+    }
+
+    @media (max-width: 575px) {
+        width: 90px;
+        height: 90px;
+    }
+
+}
+
+.ks-ny-event {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    border-radius: 20px;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+
+    .event-heading ,
+    .font-weight-normal ,
+    .text-right {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-dark {
+        border-radius: 0;
+        transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .divDecorator {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        overflow: hidden;
+
+        &:before {
+            content: '';
+                width: 300px;
+                height: 500px;
+                transform: rotate(45deg);
+                background: rgba(14, 14, 14, 0.1);
+                position: absolute;
+                top: 70px;
+                left: -40px;
+                z-index: 1;
+                border-radius: 50%;
+                transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+    }
+
+    &:hover {
+        transform: scale(1.1) ;
+        cursor: pointer;
+    }
+
+    &.ks-event-1 {
+        background: #f8ab37;
+    }
+     &.ks-event-2 {
+        background-color: #20b3df;
+        background-color: #d6d6d6;
+    }
+     &.ks-event-3 {
+        background: #ceda2a;
+    }
+}
+
+.back-anim {
+    animation: imgPos 15s ease-in-out infinite;
+}
+
+@keyframes imgPos {
+    0%,100% {
+        background-position: right;
+    }
+    25% {
+        background-position: top;
+    }
+
+    50% {
+        background-position: bottom;
+    }
+    75% {
+        background-position: left;
+    }
+}
+
+.ks-confetti  {
+    position: absolute;
+    width: 250px;
+    top: 0;
+
+    &.left {
+        left: 0;
+    }
+
+    &.right {
+        right: 0;
+    }
+}
+
+.radius-0 {
+    border-radius: 0;
+
+    &.btn-dark  {
+        @extend .btn-hover-effect;
+    }
+}
+
+.ks-ny-highlight {
+    display: flex;
+    width: 33%;
+    align-items: center;
+
+    @media (min-width: 769px) {
+        justify-content: center;
+
+        &:first-child {
+            justify-content: flex-start;
+        }
+    }
+   img {
+       width: 40px;
+
+       &.singer-svg {
+           width: 50px;
+       }
+       @media (max-width: 768px) {
+           height: 50px;
+       }
+   }
+
+   @media (max-width: 768px) {
+       display: flex;
+        width: 33%;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+   }
+}
+
+.btn-lg-xl {
+    min-width: 200px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 14px;
+
+    .fa {
+        margin-top: -8px;
+        margin-right: 8px;
+    }
+}
+
+.adjust-text-position {
+    margin-bottom: -100px;
+    position: relative;
+
+    @media (max-width: 575px) {
+        margin-bottom: -30px;
+    }
+}
+.ks-ny-client {
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.38);
+    background-blend-mode: color;
+
+    .ks-xmas-client {
+        box-shadow: #252323 -1px 5px 51px;
+        background: white;
+        cursor: pointer;
+
+        &-quotes {
+            transition: 0.5s ease-in-out;
+        }
+
+        &:hover {
+            .ks-xmas-client-quotes {
+                transform: rotate(360deg);
+            }
+        }
+    }
+
+    .ks-xmas-bg {
+        background-image: linear-gradient(185deg, #484848 0%, #1b1b1b 74%);
+    }
+}
+
+.font-sm-40 {
+    @media (max-width: 575px) {
+        font-size: 40px;
+    }
+}
+
+.border-right-md-0 {
+    @media (max-width: 768px) {
+        border-right: none !important;
+    }
+}
+
+.w-100-on-md {
+    @media (max-width: 1024px) {
+        width: 100%;
+    }
+}
+
+.ks-ny-event-highlight-effects {
+    .rounded-circle.overflow-hidden {
+        img {
+           transform: scale(1.1);
+           transition: 0.3s ease-in-out;
+        }
+    }
+
+    .col-lg-2.col-sm-4.col-9.mx-auto:hover {
+        cursor: pointer;
+
+        .rounded-circle.overflow-hidden {
+            img {
+               transform: scale(1) rotate(10deg);
+            }
+        }
+    }
+
+    .ks-ny-highlight {
+        img {
+            animation: imgFilter 2s ease-in-out infinite;
+        }
+
+        &:nth-child(2) {
+           img {
+                animation-duration: 4s ;
+            }
+        }
+
+        &:nth-child(3) {
+           img {
+                animation-duration: 6s ;
+            }
+        }
+    }
+}
+
+@keyframes imgFilter {
+    0% {
+       filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+.ks-ny-page {
+    h1, h2, h3, h4, h5, h6 {
+        color: black;
+    }
+}
+
+.ks-ny-arrangements,
+.w-100-on-md {
+      .row {
+        justify-content: center;
+      }
+
+      .col-lg-3 {
+
+        @media (max-width: 1200px) {
+            min-width: 300px;
+        }
+
+        @media (max-width: 575px) {
+            min-width: 300px;
+        }
+      }
+}
+
+#web_editor-top-edit {
+    ~ #wrapwrap .ks-ny-hero img {
+        margin-top: 0 !important;
+    }
+}
+
+.ks-hotel-parallax {
+    &.ks-banner-left-text .ks-text-pannel-left .heading-text-info {
+        font-size: 70px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+        text-transform: inherit;
+        color: #fff;
+
+        @media (max-width: 575px) {
+          font-size: 40px;
+        }
+    }
+}

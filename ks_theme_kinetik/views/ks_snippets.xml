@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="snippet_options" inherit_id="website.snippets">
+        <xpath expr="//div[@id='snippet_options']" position="inside">
+            <div data-selector="img">
+                <li data-toggle-class="s"
+                    data-no-preview="true"
+                    title="Disable lazy loading for this image">
+                    <a>
+                        Disable Lazy loading
+                    </a>
+                </li>
+            </div>
+        </xpath>
+    </template>
+
+
+    <template id="place_into_bar" inherit_id="website.snippets" name="Place into bar">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div class="o_panel_header">
+                <i class="fa fa-th-large"/>
+                <b>Kinetik Snippets</b>
+            </div>
+
+            <div class="o_panel_header">
+                <i class="fa fa-star"/>
+                Dynamic Snippets
+            </div>
+            <div class="o_panel_body">
+                <t t-snippet="ks_theme_kinetik.snippet_blogs_home_page"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/blogs.png"/>
+                <t t-snippet="ks_theme_kinetik.snippet_brands_home_page"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/brands.png"/>
+                <t t-snippet="ks_theme_kinetik.snippet_featured_home_page"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/featured.png"/>
+                <t t-snippet="ks_theme_kinetik.snippet_product_grid"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/product_grid.png"/>
+                <t t-snippet="ks_theme_kinetik.ks_trendy_style_static"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/trendy.png"/>
+                <t t-snippet="ks_theme_kinetik.snippet_recently_viewed_products"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/offer-snippet.png"/>
+                <t t-snippet="ks_theme_kinetik.ks_offer_header"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/header_001.png"/>
+                <t t-snippet="ks_theme_kinetik.ks_video_static"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/video.png"/>
+                <t t-snippet="ks_theme_kinetik.ks_deal_of_the_day_base"
+                   t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/deal.png"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="place_into_bar_new" inherit_id="website.snippets" name="New Snippets">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Custom Snippets
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.ks_new_snippets"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/create_new_snippet.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id = "various_sliders" inherit_id="website.snippets" name="custom sliders">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Sliders
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.ks_main_slider_snippet"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/main_slider.png"/>
+                    <t t-snippet="ks_theme_kinetik.ks_product_slider_multiple"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/product_slider.png"/>
+                    <t t-snippet="ks_theme_kinetik.ks_product_slider_multab"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/offer-snippet.png"/>
+                    <t t-snippet="ks_theme_kinetik.slider_001"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Slider-Image-1.png"/>
+                    <t t-snippet="ks_theme_kinetik.slider_002"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Slider-2-Image-.png"/>
+                    <t t-snippet="ks_theme_kinetik.slider_003"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/right_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.slider_004"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Slider-Image-1.png"/>
+                    <t t-snippet="ks_theme_kinetik.slider_005"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Slider-Image-1.png"/>
+<!--                                        <t t-snippet="ks_theme_kinetik.ks_product_slider_multab"-->
+                    <!--                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/offer-snippet.png"/>-->
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id="custom_colllections" inherit_id="website.snippets" name="Our Collections">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Collection Snippets
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.collections_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/collections_1.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/collections_2.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/collection_4.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/collections_3.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/full-hori.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_7"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/layout7.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_8"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/layout8.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_9"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/layout9.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_10"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Modern-Work.png"/>
+                    <t t-snippet="ks_theme_kinetik.collection_11"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/bluebannerbook.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_image_gallery" inherit_id="website.snippets" name="Image Galleries">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Image Gallery
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.image_gallery_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/gallery_1.png"/>
+                    <t t-snippet="ks_theme_kinetik.image_gallery_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/gallery_2.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id="custom_banners" inherit_id="website.snippets" name="Image Banners">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Full Height Banners
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.banner_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/full-height-text-left-fixed-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/right_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/center_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/right_s_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/left_s_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/center_s_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_7"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_left_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_8"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_right_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_9"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_center_f_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_10"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_center_s_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_11"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_left_s_full.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_12"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_right_s_full.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_banners_half" inherit_id="website.snippets" name="Image Banners Half">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Half Height Banners
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.banner_13"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-left--one-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_14"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-right-one-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_15"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-center-one-button.png"/>
+                     <t t-snippet="ks_theme_kinetik.banner_16"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-left-two-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_17"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-right-two-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_18"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-center-two-button.png"/>
+                    <t t-snippet="ks_theme_kinetik.banner_19"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-left-two-button-fixed-Image.png"/>
+                     <t t-snippet="ks_theme_kinetik.banner_21"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-center-two-button-fixed-Image.png"/>
+                     <t t-snippet="ks_theme_kinetik.banner_22"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-left--one-button-fixed-Image.png"/>
+                     <t t-snippet="ks_theme_kinetik.banner_23"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-right-one-button-fixed-image.png"/>
+                     <t t-snippet="ks_theme_kinetik.banner_24"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Half-height-text-center-one-button-fixed-Image.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_about_us" inherit_id="website.snippets" name="About Us">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    About Us
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.about_us_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/About-us-with-two-Sections.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Why-Us.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/About-us-corporate.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/16.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/15.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_7"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/11.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_8"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/12.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_11"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/about-us-with-two-section.png"/>
+                    <t t-snippet="ks_theme_kinetik.about_us_12"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/About-us-with-two-Sections-alternate.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_our_team" inherit_id="website.snippets" name="Our Team">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Our Team
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.our_team_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/4member.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/multi-members.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Our-team-1.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Our-Chef-Team.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Our-Team.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Our-Team.png"/>
+                    <t t-snippet="ks_theme_kinetik.our_team_7"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Our-Team-3.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+
+    <template id="custom_testinomial" inherit_id="website.snippets" name="Testinomial">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Testimonial
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.testinomial_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_cntr_light.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_cntr_drk.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_lft_light.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_lft_drk.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_right_light.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/img_right_drk.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/ligh-with-image.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Dark-with-image.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/ligh-without-image.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Dark-without-image.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/BLOGbanner.png"/>
+                    <t t-snippet="ks_theme_kinetik.testinomial_static_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/banner1.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_acordian" inherit_id="website.snippets" name="Faq-Acordian">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Accordion
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.Acordian_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/acordian_light.png"/>
+                    <t t-snippet="ks_theme_kinetik.Acordian_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/acordian_dark.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="custom_pricing" inherit_id="website.snippets" name="Pricing">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Pricing
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.pricing_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/pricing_01.png"/>
+                    <t t-snippet="ks_theme_kinetik.pricing_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/pricing_2.png"/>
+                    <t t-snippet="ks_theme_kinetik.pricing_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/awesome-Pricing.png"/>
+                    <t t-snippet="ks_theme_kinetik.pricing_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Never-befor-Plans.png"/>
+                    <t t-snippet="ks_theme_kinetik.pricing_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Pricing-Table.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="deal_ot_day" inherit_id="website.snippets" name="Pricing">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Deal Of The Day
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.deal_of_the_day_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/deal_of_the_day_2.png"/>
+                    <t t-snippet="ks_theme_kinetik.deal_of_the_day_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Deal-of-the-day-Layout-3.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="special_deal" inherit_id="website.snippets" name="Exclusive Offer">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Special Deal
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.special_deal_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/special_deal_1.png"/>
+                    <t t-snippet="ks_theme_kinetik.special_deal_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/special_deal_2.png"/>
+                    <t t-snippet="ks_theme_kinetik.special_deal_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Special-Deal-Layout-3.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="c_t_a" inherit_id="website.snippets" name="CTA">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Call To Action With Info
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.call_to_action_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/cta-dark-left.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/cta-dark-right.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_info_light.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/2_info_light_rightbutton.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/static_buttonleft_info..png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/static_buttonright_info.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_7"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/fix_buttonleft_info.png"/>
+                    <t t-snippet="ks_theme_kinetik.call_to_action_8"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/fix_buttonright_info.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="sliding_product" inherit_id="website.snippets" name="Sliding Product">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Sliding Product
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.sliding_product_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/slide-start-lefy.png"/>
+                    <t t-snippet="ks_theme_kinetik.sliding_product_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/slide-start-right.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="services" inherit_id="website.snippets" name="Services">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Services
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.services_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Srvice-bg-light.png"/>
+                    <t t-snippet="ks_theme_kinetik.services_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Srvice-bg-dark-fixed-img.png"/>
+                    <t t-snippet="ks_theme_kinetik.services_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Srvice-bg-light-fixed-img.png"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="service_and_skills" inherit_id="website.snippets" name="Service and Skills">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="custom_snippets_new" class="o_panel">
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Service and Skills
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_1"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/service_and_skills_1.png"/>
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_2"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/s_s1.png"/>
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_3"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/s_s2.png"/>
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_4"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Service-awesome-Skills.png"/>
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_5"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Services-1-skills-2.png"/>
+                    <t t-snippet="ks_theme_kinetik.service_and_skill_6"
+                       t-thumbnail="/ks_theme_kinetik/static/src/img-ui/snippets_icons/Services-skills.png"/>
+                </div>
+                <div class="o_panel_header">
+                    <i class="fa fa-th-large"/>
+                    Landing Pages
+                </div>
+                <div class="o_panel_body">
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

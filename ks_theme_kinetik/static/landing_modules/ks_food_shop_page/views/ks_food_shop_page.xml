@@ -1,0 +1,277 @@
+<odoo>
+    <template id="ks_landing_food" name="Food Shop">
+        <section>
+            <div class="oe_structure oe_empty">
+                <!--  Hero Section   -->
+                <section class="ks_food_hero" >
+                    <div class="ks_food_overlay text-center mainTransparent">
+                        <h1>Good Food</h1>
+                        <h2>Good Health</h2>
+                        <h4>On your Doorsteps </h4>
+                        <button class="btn btn-primary mt-sm-4 mt-2" >Order Now <i class="fa fa-cutlery ml-2" /> </button>
+                    </div>
+                    <div class="ks-food-color-overlay" />
+                    <video autoplay="true" loop="infinite" muted="true" >
+                        <source src="/ks_food_shop_page/static/src/landing-pages-images/food/food.mp4" type="video/mp4" />
+                        <source src="view.webm" type="video/webm" />
+                    </video>
+                </section>
+                <!--   About US     -->
+                <section class="wraper ks-spa-about">
+                    <div class="about-container container">
+                        <div class="row no-gutters py-5 ">
+                            <h4 class="theme__heading mb-sm-5 mb-3 w-100">ABOUT US</h4>
+                            <div class="col-lg-6">
+                                <div class="row image-panel h-100">
+                                    <div class="img-iten m-auto">
+                                        <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-1.jpg"
+                                             alt="" class="image-fluid"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center mt-4 pl-md-5">
+                                <div class="ks-pr-xxl-4 ks-pr-3">
+                                    <h1 class="font-36 mb-4">We Cook Tasty Food</h1>
+                                    <p class="font-16 b-500">Typical ad agency clients include businesses and
+                                        corporations,
+                                        non-profit organizations and private agencies.
+                                    </p>
+                                    <p class="font-16 text-gray">Lorem ipsum dolor s it amet, consectetur adipisicing
+                                        elit,
+                                        sed do
+                                        eiusmod tempor incididunt ut labore et dolore magna ipsum dolor sit amet,
+                                        consectetur elit
+                                        adipisicing elitLorem ipsum dolor s it ametr
+                                    </p>
+                                    <div class="mt-lg-5 d-flex">
+                                        <button class="btn btn-primary mt-lg-4 mr-4" >Know More <i class="fa fa-cutlery ml-2" /> </button>
+                                        <button class="btn btn-primary mt-lg-4" >Order Now <i class="fa fa-cutlery ml-2" /> </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--    Our Specials    -->
+                <section class="py-5 px-md-5 px-3 conatiner ks-static-testimonial container">
+                    <h2 class="theme__heading mb-5 text-center">Special Recipies </h2>
+                    <div class="row mx-0">
+                        <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                            <div class="img-box pb-4">
+                                <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-3.png"
+                                     alt=""></img>
+                            </div>
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <h4 class="overview"><b>Soft Fish</b>
+                            </h4>
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                            <div class="img-box pb-4">
+                                <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-4.png"
+                                     alt=""></img>
+                            </div>
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <h4 class="overview"><b>The Fruit Cocktails</b>
+                            </h4>
+                        </div>
+                        <div class="col-lg-4  text-center">
+                            <div class="img-box pb-4">
+                                <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-5.png"
+                                     alt=""></img>
+                            </div>
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <h4 class="overview"><b>The Mixed Veg</b>
+                            </h4>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!--  Half Height Banner  -->
+                <section class="ks-banner-left-text img-attachment-fixed bp-right"
+                         style="background-image: url('/ks_food_shop_page/static/src/landing-pages-images/food/f-2.jpg');">
+                    <div class="row h-100 no-gutters container m-auto">
+                        <div class="col-md-7 col-sm-12 col-12 h-100 d-flex align-items-center justify-content-center">
+                            <div class="ks-text-pannel-left">
+                                <h2 class="heading-text-info text-white">The best Taste<br/>with best Quality
+                                </h2>
+                                <p class="font-14 text-color text-white">It is a long established fact that a reader will be distracted.
+                                </p>
+                                <div class="btn-container">
+                                    <button class="btn btn-primary mt-4" >Hurry Up <i class="fa fa-cutlery ml-2" ></i> </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--  Sweet Shop      -->
+                <section>
+                    <div class="ks-offers py-5 bg-white container">
+                        <h3 class="theme__heading mt-3 mb-4">From Sweet Shop</h3>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-lg-8">
+                                <div class="right-panel pl-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex" >
+                                                <div class="mr-3" >
+                                                    <img src="/ks_food_shop_page/static/src/landing-pages-images/food/muffin-decorated-with-a-chocolate-heart.svg" class="ks-food-icon" />
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Muffins</h4>
+                                                    <p >Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex" >
+                                                <div class="mr-3" >
+                                                    <img src="/ks_food_shop_page/static/src/landing-pages-images/food/cake.svg" class="ks-food-icon" />
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Cake</h4>
+                                                    <p >Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex" >
+                                                <div class="mr-3" >
+                                                    <img src="/ks_food_shop_page/static/src/landing-pages-images/food/ice-cream.svg" class="ks-food-icon" />
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Ice Cream</h4>
+                                                    <p >Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex" >
+                                                <div class="mr-3" >
+                                                    <img src="/ks_food_shop_page/static/src/landing-pages-images/food/lollipop-spiral.svg" class="ks-food-icon" />
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Lollipop Spiral</h4>
+                                                    <p >Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="left-panel pl-3">
+                                    <section class="position-relative ks-food-sweet text-center">
+                                        <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-6.png"
+                                             alt="fooer-image"/>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--    Out Team    -->
+                <section class="ks-food-team py-sm-5 container">
+                    <h4 class="theme__heading mb-sm-5" > Our Chef Team </h4>
+                    <ul class="nine">
+                        <li class="transition">
+                            <div class="wrapper"> <span class="transition">
+                                <img class="transition" src="/ks_food_shop_page/static/src/landing-pages-images/food/f-7.png" />
+                            </span>
+                                <h3 class="transition">Jo Hua <em>Sushi Specialist</em></h3>
+                                <div class="trigger"> <i class="transition fa fa-cutlery" />  </div>
+                                <ul class="social transition">
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/fb.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="transition">
+                            <div class="wrapper"> <span class="transition">
+                                <img class="transition" src="/ks_food_shop_page/static/src/landing-pages-images/food/f-8.png" />
+                            </span>
+                                <h3 class="transition">So Hua <em>Fast Food Specialist</em></h3>
+                                <div class="trigger"> <i class="transition fa fa-cutlery" /> </div>
+                                <ul class="social transition">
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/fb.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="transition">
+                            <div class="wrapper"> <span class="transition">
+                                <img class="transition" src="/ks_food_shop_page/static/src/landing-pages-images/food/f-9.png" />
+                            </span>
+                                <h3 class="transition">Uncle Grinch <em>Sweets Specialist</em></h3>
+                                <div class="trigger"> <i class="transition fa fa-cutlery" /> </div>
+                                <ul class="social transition">
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/fb.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="transition">
+                            <div class="wrapper"> <span class="transition">
+                                <img class="transition" src="/ks_food_shop_page/static/src/landing-pages-images/food/f-10.png" />
+                            </span>
+                                <h3 class="transition">Rotalish Kova <em>Chicken Specialist</em></h3>
+                                <div class="trigger"> <i class="transition fa fa-cutlery " /></div>
+                                <ul class="social transition">
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/fb.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/instagram.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/twitter.svg" /></a></li>
+                                    <li class="transition"><a href="#"><img src="/ks_food_shop_page/static/src/img-ui/icons/youtube.svg" /></a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <!--  Decorator  -->
+                <section class="ks-bottom-decorator">
+                    <div class="text-center mt-lg-5" >
+                        <h1 class="display-4 font-weight-bold font-xs-40" >Good Food <br/> Good Health </h1>
+                    </div>
+                    <div class="text-center" >
+                        <img src="/ks_food_shop_page/static/src/landing-pages-images/food/f-11.png" alt="food" />
+                    </div>
+                </section>
+            </div>
+        </section>
+    </template>
+
+    <template id="ks_theme_food" name="Kinetik Food Shop">
+            <t t-call="website.layout">
+                <t t-call="ks_food_shop_page.ks_landing_food"/>
+            </t>
+    </template>
+
+</odoo>

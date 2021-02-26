@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,300i,400,700,700i');
+
+
+/*Font*/
+$ks-font-main:'Lato', sans-serif;
+
+body {
+    font-family:$ks-font-main;
+    }
+html *:not(.fa){
+    font-family:$ks-font-main;
+}

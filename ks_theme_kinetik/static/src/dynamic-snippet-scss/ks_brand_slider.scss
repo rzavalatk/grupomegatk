@@ -1,0 +1,195 @@
+.ks-our-partners-v2 {
+    padding: 18px 0;
+    .ks-partners-box {
+        .owl-stage-outer {
+            padding: 45px 0px;
+            position: relative;
+            z-index: 10;
+        }
+        .owl-item {
+            justify-content: center;
+            display: flex;
+        }
+        .owl-nav {
+            .owl-prev {
+                @media (max-width: 610px) {
+                    margin-left: 6px;
+                }
+                & i {
+                    left: -2px;
+                    position: relative;
+                }
+            }
+            .owl-next {
+                @media (max-width: 610px) {
+                    margin-right: 6px;
+                }
+                & i {
+                    left: 2px;
+                    position: relative;
+                }
+            }
+            .owl-prev ,
+            .owl-next {
+                overflow: hidden;
+                color: #212529;
+                transition: all 0.5s;
+                position: relative;
+                border-radius: 50%;
+                position: absolute;
+                top: 45%;
+                transform: translateY(-50%);
+                z-index: 10;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                @media (max-width: 610px) {
+                    background-color: #228399;
+                    color: #fff;
+                    border: 1px solid #228399;
+                }
+                &:hover {
+                    background-color: #228399;
+                    color: #fff;
+                    border: 1px solid #228399;
+                }
+                &:focus {
+                    outline: none;
+                }
+                & i {
+                    margin-top: 0;
+                }
+            }
+        }
+
+        // for squre 1
+        .ks-partners-items {
+            height: 110px;
+            width: 99%;
+            background: #fff;
+            padding: 10px;
+            transition: all 0.5s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.1);
+            filter: grayscale(1);
+            position: relative;
+            @media(max-width: 767px){
+                width: calc(100% - 20px);
+                margin: 0 10px;
+            }
+            @media (max-width: 410px) {
+                height: 80px;
+            }
+            &:hover {
+                filter: grayscale(0);
+                box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.08);
+            }
+            .ks-partners-top {
+                max-width: 180px;
+                margin: auto;
+                height: 100%;
+            }
+        }
+        .ks-partners-items {
+            &.box-animation {
+                width: calc(100% - 17px);
+                border: 1px dashed #228399;
+                .shape-angle {
+                        display: block;
+                        width: 12px;
+                        height: 12px;
+                        background-color: #228399;
+                        position: absolute;
+                        left: -11px;
+                        top: 50%;
+                        transform: rotate(45deg) translateY(-50%);
+                        transition: all 0.5s;
+                }
+                &:hover {
+                        .shape-angle {
+                            animation-name: boxrotation;
+                            animation-duration: 1s;
+                        }
+                }
+                @keyframes boxrotation {
+                    10%   {left:-11px; top:-2px;}
+                    30%  {left:calc(100% - 10px); top:-2px;}
+                    50%  {left:calc(100% - 10px); top:calc(100% - 2px)}
+                    70%  {left:-11px; top:calc(100% - 2px)}
+                    80%,100% {left:-11px; top:50%;}
+                }
+            }
+        }
+        // for circle
+        .ks-partners-items-circle {
+            max-width: 140px;
+            width: 100%;
+            background: #fff;
+            border-radius: 50%;
+            
+            box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.23);
+            transition: all 0.5s;
+            position: relative;
+            
+            filter: grayscale(1);
+
+            @media (max-width: 420px) {
+                max-width: 100px;
+            }
+            .ks-partners-top {
+                height: 140px;
+                padding: 4px;
+                max-width: 140px;
+                overflow: hidden;
+                border-radius: 50%;
+                width: 100%;
+                padding: 10px;
+                margin: auto;
+
+                @media (max-width: 420px) {
+                    height: 100px;
+                }
+            }
+            &:hover {
+                box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.08);
+                transform: scale(1.1);
+                filter: grayscale(0);
+                .rotate-box {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+        .ks-partners-items-circle.box-animation {
+            .rotate-box  {
+                border: 1px dashed #228399;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                border-radius: 50%;
+                transition: all 0.7s;
+            }
+            .shape-angle {
+                display: block;
+                width: 12px;
+                height: 12px;
+                background-color: #228399;
+                position: absolute;
+                left: -11px;
+                top: 50%;
+                transform: rotate(45deg) translateY(-50%);
+                transition: all 0.5s;
+            }
+            &:hover {
+                .rotate-box {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+    }
+    .image-fluid {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}

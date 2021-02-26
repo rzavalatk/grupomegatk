@@ -1,0 +1,29 @@
+.contact__form {
+
+    input,
+    textarea {
+        border-radius: $theme-radius;
+        width: 400px;
+        border: 1px solid #ccc;
+        height: 45px;
+
+        @media (max-width: 540px) {
+            width: 300px;
+        }
+    }
+
+    textarea {
+        height: 150px;
+    }
+
+    label {
+        font-size: $font16;
+        font-weight: $weight-medium;
+    }
+
+    .submit-button {
+        border: none;
+        padding: 5px 25px;
+    }
+
+}

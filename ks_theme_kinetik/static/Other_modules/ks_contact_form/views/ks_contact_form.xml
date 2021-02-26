@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <template id="website_crm.contactus_form" name="Contact Form" inherit_id="ks_theme_kinetik.contactus_form" customize_show="True">
+            <xpath expr="//div[@name='mail_button']" position="replace">
+                <form action="/website_form/" method="post" data-model_name="crm.lead" data-success_page="/contactus-thank-you" class="s_website_form container-fluid" enctype="multipart/form-data" data-editable-form="false">
+                        <h4 class="mb-5 text-center" >Need help? Feel Free to Ping us</h4>
+                        <div class="form-group row form-field o_website_form_required_custom ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <input type="text" class="form-control o_website_form_input custom-input" placeholder="Your Name" name="contact_name" t-att-value="request.params.get('contact_name', '')" required=""/>
+                                <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="contact_name"><span class="max-width">Your Name</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <input type="text" class="form-control o_website_form_input custom-input" placeholder="Phone Number" name="phone" t-att-value="request.params.get('phone', '')" />
+                                 <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="phone">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field o_website_form_required_custom ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <input type="text" class="form-control o_website_form_input custom-input" placeholder="Email" name="email_from" required="" t-att-value="request.params.get('email_from', '')" />
+                                 <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="email_from">Email</label>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field o_website_form_required_custom ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <input type="text" class="form-control o_website_form_input custom-input" placeholder="Your Company" name="partner_name" required="" t-att-value="request.params.get('partner_name', '')" />
+                                <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="partner_name">Your Company</label>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field o_website_form_required ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <input type="text" class="form-control o_website_form_input custom-input" placeholder="Subject"  name="name" required="" t-att-value="request.params.get('name', '')" />
+                                <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="name">Subject</label>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field o_website_form_required_custom ks-form-info">
+                            <div class="col-lg-7 col-md-8 ks-col-full">
+                                <textarea class="form-control o_website_form_input custom-input" placeholder="Your Question" name="description" required=""><t t-esc="request.params.get('description', '')"/></textarea>
+                                <label class="col-lg-3 col-md-4 col-form-label ks-col-full" for="description">Your Question</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-0">
+                            <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7 m-auto text-center">
+                                <a href="#" role="button" class="btn btn-primary btn-lg o_website_form_send"><i class="fa fa-paper-plane mr-2" />Send</a>
+                                <span id="o_website_form_result" />
+                            </div>
+                        </div>
+                    </form>
+			</xpath>
+		</template>
+    </data>
+</odoo>

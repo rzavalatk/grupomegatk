@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template priority="100" id="ks_fitness_page_assets_backend_1" name="theme_assets" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet"
+                  type="text/scss"
+                  href="/ks_fitness_page/static/src/landing-pages-scss/landing-pages.scss"
+            />
+        </xpath>
+    </template>
+</odoo>

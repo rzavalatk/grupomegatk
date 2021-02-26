@@ -1,0 +1,50 @@
+.gallery-bg {
+
+  .ks-image-gallery {
+    width: 95%;
+    margin: 0 auto;
+    .panel-heading{
+    }
+    .image-panel{
+      .panel-hover{
+        overflow: hidden;
+        .image-item {
+          transform: scale(1);
+          transition: all 0.3s ease;
+
+          @media (max-width: 575px) {
+            text-align: center;
+          }
+
+          img {
+            width: 100%;
+          }
+        }
+        .text-position {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: all 0.3s ease;
+          -webkit-transition: all 0.3s ease;
+        }
+        &:hover {
+          .image-item {
+            transform: scale(1.1);
+          }
+          .text-position {
+            // background: $light-gray;
+          }
+        }
+      }
+    }
+  }
+
+  .oe_website_sale {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

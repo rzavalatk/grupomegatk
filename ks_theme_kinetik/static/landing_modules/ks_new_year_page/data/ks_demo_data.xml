@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+         <record id="new_year_page" model="website.page">
+            <field name="url">/newyear</field>
+            <field name="view_id" ref="ks_new_year_page.ks_theme_new_year"/>
+         </record>
+     </data>
+</odoo>

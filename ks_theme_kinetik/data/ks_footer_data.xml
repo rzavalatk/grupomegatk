@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="theme.footer" id="ks_theme_footer_data">
+            <field name="name">Footer Setup</field>
+            <field name="ks_office_address">Some Where</field>
+        </record>
+    </data>
+</odoo>

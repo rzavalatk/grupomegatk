@@ -1,0 +1,19 @@
+<templates>
+    <t t-name="ks_main_slider">
+        <div id="mainCarouselIndicator" class="mainCarouselIndicator">
+            <div id="owl-main-carousel" class="owl-carousel owl-theme owl-loaded owl-drag">
+                <t t-foreach="slides" t-as="slide">
+                    <a t-att-href="slide.ks_main_slider_link">
+                        <div class="owl-slider-main item">
+                            <img t-attf-src="/web/image/ks_product_main.slider/#{slide.id}/ks_main_slider_img" />
+                        </div>
+                    </a>
+                </t>
+            </div>
+        </div>
+    </t>
+    <t t-name="ks_shop_new">
+        <img class="ks_shop_product"
+             t-att-src="'/web/image/product.template/'+ product_id +'/image/330x330'"/>
+    </t>
+</templates>

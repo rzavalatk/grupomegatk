@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="ks_products_tags_list">
+            <field name="name">Product Tags Tree</field>
+            <field name="model">ks_theme.tags</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="ks_products_tags_form">
+            <field name="name">Tags form</field>
+            <field name="model">ks_theme.tags</field>
+            <field name="arch" type="xml">
+                <form create="false" delete="false">
+                    <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <notebook>
+                        <page string="Products Tags">
+                         <field name="ks_product_ids" widget="many2many"/>
+                        </page>
+                      </notebook>
+                      </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="ks_products_tags_action_window">
+            <field name="name">Product Tags</field>
+            <field name="res_model">ks_theme.tags</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Product Tags" parent="ks_theme_base.ks_theme_customization_menu" id="ks_products_tags_menu_root"
+                  action="ks_products_tags_action_window"/>
+    </data>
+</odoo>

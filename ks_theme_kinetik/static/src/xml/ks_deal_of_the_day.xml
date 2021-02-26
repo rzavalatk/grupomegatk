@@ -1,0 +1,56 @@
+<templates>
+    <t t-name="ks_dynamic_offer_snippets">
+
+        <section class="ks-deal">
+            <div class="ks-deal-counter justify-content-center">
+                <div class="ks-time-container">
+                    <div class="ks_clock d-none"></div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center w-100">
+                <t t-if="data_msg['button_message']">
+                    <a t-att-href="data_msg['button_url']"
+                       class="btn ks-btn-theme btn-lg mt-sm-4 mt-2 ks_button_name_v">
+                        <span class="ks_video_button2">
+                            <t t-esc="data_msg['button_message']"/>
+                        </span>
+                    </a>
+                </t>
+            </div>
+        </section>
+    </t>
+    <t t-name="ks_theme_kinetik.ks_deal_of_the_day_selection">
+        <section class="p-2">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="DateStart">Date Start :</label>
+                        <input type="date" class="ks_start_date mt-2 form-control" name="Start Date" placeholder="Start Date"
+                               required=""/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                   <div class="form-group">
+                       <label for="DateEnd">Date End :</label>
+                       <input type="date" class="ks_end_date form-control mt-2" name="End Date" placeholder="End Date"
+                               required=""/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="buttonMessage">Button message :</label>
+                        <input type="text" class="ks_message_button form-control mt-2" name="Button message" placeholder="Button message"
+                               required=""/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="buttonurl">Button url :</label>
+                        <input type="text" class="ks_url_button form-control mt-2" name="Button url" placeholder="Button Action"
+                               required=""/>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

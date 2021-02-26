@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="ks_new_blog_detail" inherit_id="website_blog.blog_post_complete">
+        <xpath expr="//div[hasclass('o_sharing_links')]" position="replace"/>
+        <xpath expr="//div[hasclass('blog_title')]" position="replace">
+            <div class="blog_title">
+                <h1 t-field="blog_post.name" id="blog_post_name" t-att-data-blog-id="blog_post.id"
+                    placeholder="Blog Post Title"/>
+                <h2 t-field="blog_post.subtitle" placeholder="Subtitle"/>
+                <p class="post-meta text-muted text-center" name="blog_post_data"/>
+                <div class="ks-banner-bottom d-flex align-items-center justify-content-center flex-wrap">
+                    <div class="ks-bottom-item mb-2 mg-sm-0 px-2">
+                        <i class="fa fa-calendar"></i>
+                        <span t-field="blog_post.post_date" id="blog_post_date" t-att-data-blog-id="blog_post.id"
+                                placeholder="Blog Post Time and Date">
+                        </span>
+                    </div>
+                    <div class="ks-bottom-item px-2">
+                        <t t-if="blog_post.author_avatar">
+                            <div t-field="blog_post.author_avatar" class="o_not_editable" style="display:inline"
+                                 t-options='{"widget": "image", "class": "rounded-circle o_author_avatar_little "}'/>
+                        </t>
+                        <span t-field="blog_post.author_id" id="blog_post_user" t-att-data-blog-id="blog_post.id"
+                                placeholder="Blog Post User">
+                        </span>
+                    </div>
+                    <div class="ks-bottom-item px-2">
+                        <i class="fa fa-comment"></i>
+                        <span>
+                            <t t-if="len(blog_post.message_ids) &lt;= 1">
+                                <t t-esc="len(blog_post.message_ids)"/>
+                                comment
+                            </t>
+                            <t t-if="len(blog_post.message_ids) > 1">
+                                <t t-esc="len(blog_post.message_ids)"/>
+                                comments
+                            </t>
+                        </span>
+                    </div>
+                </div>
+                <div t-if="'cover_full' in blog_post_cover_properties.get('resize_class', '')" id="blog_angle_down">
+                    <strong>
+                        <a href="#blog_content" class="fa fa-angle-down fa-3x fa-inverse mt4"
+                           aria-label="To blog content" title="To blog content"/>
+                    </strong>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('blog_content')]" position="replace">
+            <div class="ks-blog-detail" id="blog_content">
+                <t t-set="cover_properties" t-value="blog_post_cover_properties"/>
+                <div class="container pt-lg-5 pt-4">
+                    <div class="row">
+                        <div class="col-12 col-md-8 mx-auto">
+                            <div class="ks-blog-detail-left">
+                                <div class="ks-blog-box">
+                                    <div class="ks-blog-info text-justify">
+                                        <span t-field="blog_post.content" id="blog_post_content"
+                                                t-att-data-blog-id="blog_post.id" placeholder="Blog Post Content">
+                                        </span>
+                                    </div>
+                                    <div class="row no-gutters align-items-center ks-tags-box py-2 my-3">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 ">
+                                                <div class="ks-blog-button"  t-if="len(blog_post.tag_ids)">
+                                                    <div class="text-muted mr-auto">
+                                                        <div class="ks-tag-chip mr8">
+                                                            Tags:
+                                                        </div>
+                                                        <t t-foreach="blog_post.tag_ids" t-as="one_tag">
+                                                            <a class="badge badge-primary mr8"
+                                                               t-attf-href="#{blog_url(tag=one_tag.id)}"
+                                                               t-esc="one_tag.name"/>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
+                                                <div class="css_share_on_social_media d-flex">
+                                                   <ul class="ml-auto social-icons mb-0 row no-gutters">
+                                                       <li>
+                                                           <a href="#" class="ks-socal-item"><i class="fa fa-facebook"></i></a>
+                                                       </li>
+                                                        <li>
+                                                           <a href="#" class="ks-socal-item"><i class="fa fa-google-plus"></i></a>
+                                                       </li>
+                                                       <li>
+                                                           <a href="#" class="ks-socal-item"><i class="fa fa-twitter"></i></a>
+                                                       </li>
+                                                        <li>
+                                                           <a href="#" class="ks-socal-item"><i class="fa fa-pinterest-p"></i></a>
+                                                       </li>
+                                                       <li>
+                                                           <a href="#" class="ks-socal-item"> <i class="fa fa-linkedin"></i></a>
+                                                       </li>
+                                                   </ul>
+                                               </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

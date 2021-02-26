@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website.submenu" name="Submenu">
+        <t t-set="has_visible_submenu" t-value="submenu.child_id.filtered(lambda menu: menu.is_visible)"/>
+        <t t-if="submenu.website_id.id == request.website.id or not submenu.website_id">
+            <li t-if="submenu.is_visible and not has_visible_submenu" t-attf-class="#{item_class or ''}">
+                <a t-att-href="submenu.clean_url()"
+                   t-attf-class="#{link_class or ''} #{'active' if submenu.clean_url() and unslug_url(request.httprequest.path) == unslug_url(submenu.clean_url()) else ''}"
+                   role="menuitem"
+                   t-ignore="true"
+                   t-att-target="'_blank' if submenu.new_window else None">
+                    <span t-attf-class="ks_menu #{'ks_menu_href' if submenu.url else ''}" t-field="submenu.name"/>
+                </a>
+            </li>
+        </t>
+        <t t-set="has_mega_menu" t-value="submenu.child_id.filtered(lambda menu: menu.ks_is_mega_menu)"/>
+        <t t-if="submenu.website_id.id == request.website.id or not submenu.website_id">
+            <li t-if="has_visible_submenu" t-attf-class="#{'' if has_mega_menu else 'ks_landing_menu' } #{item_class or ''} dropdown #{
+            (submenu.clean_url() and submenu.clean_url() != '/' and any([request.httprequest.path == child.url for child in submenu.child_id if child.url]) or
+             (submenu.clean_url() and request.httprequest.path == submenu.clean_url())) and 'active'}">
+                <a t-attf-class="#{link_class or ''} dropdown-toggle" data-toggle="dropdown" t-att-href="submenu.url">
+                    <span t-attf-class="ks_menu #{'ks_menu_href' if submenu.url else ''}" t-field="submenu.name"/>
+                </a>
+                <t t-if="has_mega_menu">
+                    <ul class="dropdown-menu " role="menu">
+                        <t t-foreach="submenu.child_id" t-as="submenu">
+                            <t t-if="submenu.ks_is_mega_menu">
+                                <t t-call="ks_theme_kinetik.ks_mega_menu_template"/>
+                            </t>
+                            <t t-else="">
+                                <t t-call="website.submenu">
+                                    <t t-set="item_class" t-value="None"/>
+                                    <t t-set="link_class" t-value="'dropdown-item'"/>
+                                </t>
+                            </t>
+                        </t>
+                    </ul>
+                </t>
+                <t t-else="">
+                    <ul class="dropdown-menu ks_not_mega_menu" role="menu">
+                        <t t-foreach="submenu.child_id" t-as="submenu">
+                            <t t-if="submenu.ks_is_mega_menu">
+                                <t t-call="ks_theme_kinetik.ks_mega_menu_template"/>
+                            </t>
+                            <t t-else="">
+                                <t t-call="website.submenu">
+                                    <t t-set="item_class" t-value="None"/>
+                                    <t t-set="link_class" t-value="'dropdown-item'"/>
+                                </t>
+                            </t>
+                        </t>
+                    </ul>
+                </t>
+            </li>
+        </t>
+    </template>
+    <template id="ks_mega_menu_template" name="Website Mega Menu Template">
+        <li class="mega_submenu pl-lg-0 pl-3">
+            <div class="row no-gutters submenu__inner bg-white flex-lg-nowrap"
+                 t-att-style="'background-image:url(' + submenu.ks_get_image_url() + ')'">
+                <div class="submenu_main_links p-lg-4 order-lg-1 order-0">
+                    <ul t-att-class="'list-unstyled row mx-0 divide-'+(submenu.ks_set_number_of_columns)">
+                        <t t-if="submenu.ks_item_selection_method=='Cats'">
+                            <t t-if="submenu.ks_is_category_tab_layout">
+                                <div class="ks_vertical_tabs w-100">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <t t-foreach="submenu.ks_categories" t-as="cats">
+                                            <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                                <li class="nav-item">
+                                                    <a t-att-class="'nav-link active' if cats_index==0 else 'nav-link'"
+                                                       t-att-href="'#cat_tab'+str(cats.id)"
+                                                       data-toggle="tab" role="tab"
+                                                       aria-controls="home">
+                                                        <t t-esc="cats.name"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                        </t>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <t t-foreach="submenu.ks_categories" t-as="cats">
+                                            <div t-att-class="'tab-pane row w-100 ks_cat_menu active cat_tab'+str(cats.id) if cats_index==0 else 'tab-pane row w-100 ks_cat_menu cat_tab'+str(cats.id)"
+                                                 t-att-id="'cat_tab'+str(cats.id)"
+                                                 role="tabpanel">
+                                                <t t-foreach="cats.child_id" t-as="cats">
+                                                    <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                                        <ul class="list-unstyled submenu_inside">
+                                                            <a t-att-href="'/shop/category/%s' % slug(cats)"
+                                                               t-att-style="'color:'+str(submenu.ks_font_color_sub_cat)">
+                                                                <t t-esc="cats.name"/>
+                                                            </a>
+                                                            <t t-foreach="cats.child_id" t-as="cats">
+                                                                <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                                                    <li class="mb-2">
+                                                                        <a t-att-href="'/shop/category/%s' % slug(cats)"
+                                                                           t-att-style="'color:'+str(submenu.ks_font_color_sub_cat)">
+                                                                            <t t-esc="cats.name"/>
+                                                                        </a>
+                                                                    </li>
+                                                                </t>
+                                                            </t>
+                                                        </ul>
+                                                    </t>
+                                                </t>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <t t-foreach="submenu.ks_categories" t-as="cats">
+                                    <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                        <li data-submenu-opened="false" open_submenu="true" class="submenu_lvl_1">
+                                            <a t-att-href="'/shop/category/%s' % slug(cats)"
+                                               class="position-relative submenu_link_item ks_filp_hover_effect">
+                                                <t t-if="submenu.ks_display_img">
+                                                    <img class="ks_filp_hover_element" t-attf-src="/web/image/product.public.category/#{cats.id}/image/330x330"/>
+                                                </t>
+                                                <span class="ks_text_line"><t t-esc="cats.name"/></span>
+                                            </a>
+                                            <t t-if="submenu.ks_show_sub_categories">
+                                                <ul class="list-unstyled submenu_inside">
+                                                    <t t-foreach="cats.child_id" t-as="cats">
+                                                        <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                                            <li class="mb-2">
+                                                                <a t-att-href="'/shop/category/%s' % slug(cats)"
+                                                                   t-att-style="'color:'+str(submenu.ks_font_color_sub_cat)">
+                                                                    <span class="ks_text_line">
+                                                                        <t t-esc="cats.name"/>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        </t>
+                                                    </t>
+                                                </ul>
+                                            </t>
+                                        </li>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="submenu.ks_item_selection_method=='products'">
+                            <t t-foreach="submenu.ks_products_ids" t-as="prods">
+                                <t t-if="prods.website_id.id == request.website.id or not prods.website_id">
+                                    <li data-submenu-opened="false" open_submenu="true" class="submenu_lvl_1">
+                                        <t t-foreach="prods" t-as="prods">
+                                            <t t-if="prods.website_id.id == request.website.id or not prods.website_id">
+                                                <a class="position-relative submenu_link_item ks_filp_hover_effect"
+                                                   t-att-href="'/shop/product/%s' % slug(prods)">
+                                                    <img class="ks_filp_hover_element" t-attf-src="/web/image/product.template/#{prods.id}/image/150x150"/>
+                                                    <span class="ks_text_line"><t t-esc="prods.name"/></span>
+                                                </a>
+                                            </t>
+                                        </t>
+                                    </li>
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="submenu.ks_item_selection_method=='brands'">
+                            <t t-foreach="submenu.ks_product_brand_ids" t-as="brands">
+                                <t t-if="brands.website_id.id == request.website.id or not brands.website_id">
+                                    <li data-submenu-opened="false" open_submenu="true" class="submenu_lvl_1">
+                                        <t t-foreach="brands" t-as="brand">
+                                            <t t-if="brand.website_id.id == request.website.id or not brand.website_id">
+                                                <a class="position-relative submenu_link_item ks_filp_hover_effect"
+                                                   t-att-href="'/shop?filter=brand_'+str(brand.name)">
+                                                    <img class="ks_filp_hover_element"
+                                                         t-attf-src="/web/image/ks_product_manager.ks_brand/#{brand.id}/ks_image/150x150"/>
+                                                    <span class="ks_text_line">
+                                                        <t t-esc="brand.name"/>
+                                                    </span>
+                                                </a>
+                                            </t>
+                                        </t>
+                                    </li>
+                                </t>
+                            </t>
+                        </t>
+                    </ul>
+                </div>
+                <t t-if="submenu.ks_is_slider=='slider'">
+                    <div t-att-class="'submenu_img px-lg-4 px-3 pb-lg-4 pb-3 pt-lg-4 order-lg-2 menu-slider m-auto ks_right_float text-center' if submenu.ks_slider_position=='left' else 'submenu_img px-lg-4 px-3 pb-lg-4 pb-3 pt-lg-4 order-lg-2 menu-slider m-auto text-center'">
+                       <span class="theme__heading ks_menu_heading mb-4 d-block"> <t t-esc="submenu.ks_slider_title"/></span>
+                        <t t-if="submenu.ks_item_slider_selection_method=='cats'">
+                            <div id="slider_carousel_cats" class="carousel slide" data-ride="carousel" t-att-data-interval="submenu.ks_slider_Speed">
+                                <div class="carousel-inner">
+                                    <t t-set="flag" t-value="0"/>
+                                    <t t-foreach="submenu.ks_categories" t-as="cats">
+                                        <t t-if="cats.website_id.id == request.website.id or not cats.website_id">
+                                            <div t-att-class=" 'carousel-item active' if flag == 0 else 'carousel-item' ">
+                                            <a t-att-href="submenu.env['ir.config_parameter'].sudo().get_param('web.base.url')+'/shop/category/%s' % slug(cats)"
+                                               id="fp-1"
+                                               class="featured__product">
+                                                <div class="fp__img position-relative text-center">
+                                                    <img t-attf-src="/web/image/product.public.category/#{cats.id}/image/330x330"
+                                                         alt=""/>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <t t-set="flag" t-value="1"/>
+                                        </t>
+                                    </t>
+                                    <a class="carousel-control-prev" data-target="#slider_carousel_cats" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" data-target="#slider_carousel_cats" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="submenu.ks_item_slider_selection_method=='products'">
+                            <div id="slider_carousel_products" class="carousel slide" data-ride="carousel" t-att-data-interval="submenu.ks_slider_Speed">
+                                <div class="carousel-inner">
+                                    <t t-foreach="submenu.ks_products_ids" t-as="prods">
+                                        <t t-if="prods.website_id.id == request.website.id or not prods.website_id">
+                                            <div t-att-class=" 'carousel-item active' if prods_index == 0 else 'carousel-item' ">
+                                            <a t-att-href="'/shop/product/%s' % slug(prods)" id="fp-1"
+                                               class="featured__product">
+                                                <div class="fp__img position-relative text-center">
+                                                    <img t-attf-src="/web/image/product.template/#{prods.id}/image/330x330"/>
+                                                   <div class="text-truncate">
+                                                        <t t-esc="prods.name"/>
+                                                   </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        </t>
+                                    </t>
+                                    <a class="carousel-control-prev" data-target="#slider_carousel_products" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" data-target="#slider_carousel_products" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="submenu.ks_item_slider_selection_method=='brands'">
+                            <div id="slider_carousel_brands" class="carousel slide" data-ride="carousel ks-custom-slid"
+                                 t-att-data-interval="submenu.ks_slider_Speed">
+                                <div class="carousel-inner">
+                                    <t t-set="flag" t-value="0"/>
+                                    <t t-foreach="submenu.ks_product_brand_ids" t-as="brands">
+                                        <t t-if="brands.website_id.id == request.website.id or not brands.website_id">
+                                            <div t-att-class=" 'carousel-item active' if flag == 0 else 'carousel-item' ">
+                                            <a t-att-href="'/shop?filter=brand_'+str(brands.name)" id="fp-1"
+                                               class="featured__product">
+                                                <div class="fp__img position-relative text-center ks-inner-container">
+                                                    <img t-attf-src="/web/image/ks_product_manager.ks_brand/#{brands.id}/ks_image/330x330"
+                                                         class="ks-slid-image"/>
+                                                    <div class="text-truncate">
+                                                         <t t-esc="brands.name"/>
+                                                   </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <t t-set="flag" t-value="1"/>
+                                        </t>
+                                    </t>
+                                    <a class="carousel-control-prev" data-target="#slider_carousel_brands" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" data-target="#slider_carousel_brands" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-if="submenu.ks_is_slider=='image'">
+                    <t t-if="not submenu.ks_is_category_tab_layout">
+                        <div t-att-class="'px-lg-4 px-3 pb-lg-4 pb-3 pt-lg-4 order-lg-2 menu-slider m-auto ks_right_float' if submenu.ks_slider_position=='left' else 'px-lg-4 px-3 pb-lg-4 pb-3 pt-lg-4 order-lg-2 menu-slider m-auto'">
+                            <div class="w-100 justify-content-center">
+                                <h5 class="mb-4">
+                                    <t t-if="submenu.ks_slider_title">
+                                        <span class="theme__heading ks_menu_heading justify-content-center">
+                                            <t t-esc="submenu.ks_slider_title"/>
+                                        </span>
+                                    </t>
+                                </h5>
+                            </div>
+                            <div>
+                                <a t-att-href="submenu.ks_side_image_link if submenu.ks_side_image_link else '#'">
+                                    <img class="ks_image_hover_transition" t-att-src="submenu.ks_get_side_image_url()"/>
+                                </a>
+                            </div>
+                            <div class="w-100 text-center">
+                                <t t-esc="submenu.ks_side_image_description"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </div>
+        </li>
+    </template>
+</odoo>

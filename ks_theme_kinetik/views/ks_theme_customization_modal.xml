@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Customize - Customize Theme -->
+
+    <template priority="100" id="demo_customize_modal" inherit_id="website.theme_customize" name="Customize Modal">
+        <xpath expr="//div" position="replace">
+            <div>
+                <div class="row h-100 p-0">
+                    <!-- Nav pills -->
+                    <ul class="nav nav-pills d-block" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="pill" href="#home"><i class="fa fa-thumb-tack"></i>Theme Color</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#menufont"><i class="fa fa-font-awesome"></i>Fonts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#menu1"><i class="fa fa-header"></i>Header Layouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#menu2"><i class="fa fa-font-awesome"></i>Footer Layouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#ksbuttontypes"><i class="fa fa-link"></i>Button Effects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#ksbuttonstyles"><i class="fa fa-chain-broken"></i>Button Styles</a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content tab-content-scroll col pr-0">
+                        <div id="home" class="container tab-pane active">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/button.svg"
+                                     class="mr-3 ks-customize-icon"/>
+                                <h3 class="mb-0 font-18">Theme Color</h3>
+                            </div>
+                            <hr/>
+                            <div class="pb-4">
+                                <div id="theme_color" class="container tab-pane active">
+                                    <div class="row">
+                                        <div class="align-items-center mb-4">
+                                            <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                 class="mr-3 ks-customize-icon"/>
+                                            <h3 class="mb-0 font-14 b-400">Theme Color</h3>
+                                        </div>
+                                        <input type='text' id="change_color_theme" value='red'/>
+                                    </div>
+                                 </div>
+                                <div id="theme_text_color" class="container tab-pane active">
+                                    <div class="row">
+                                        <div class="align-items-center flex-nowrap mb-4">
+                                            <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                 class="mr-3 ks-customize-icon"/>
+                                            <h3 class="mb-0 font-14 b-400">Theme Text Color</h3>
+                                        </div>
+                                        <input type='text' id="change_textcolor_theme" value='red'/>
+                                    </div>
+                                </div>
+                             </div>
+                            <div class="justify-content-around">
+                                 <p>For apply all changes click on apply button or reload the page</p>
+                                <hr/>
+                                <div class="row">
+                                    <button type="button" id="reset_theme_color" class="btn btn-secondary col mr-1">Reset</button>
+                                    <button type="button" id="save_theme_color" class="btn btn-secondary col ml-1">Apply</button>
+                                 </div>
+                            </div>
+                        </div>
+                        <div id="menufont" class="container tab-pane fade">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/fonts-folder.svg"
+                                     class="mr-3 ks-customize-icon"/>
+                                <h2 class="mb-0 font-18">Pre-Loaded Fonts</h2>
+                            </div>
+                             <hr/>
+                             <div class="header_font_selection"> </div>
+                             <hr/>
+                             <div class="row justify-content-center">
+                                 <button type="button" id="save_footer" class="btn btn-secondary col-6">Apply</button>
+                             </div>
+                             <hr/>
+                            <div class="google_font_options pb-4">
+                                <h3 class="mb-1 font-14 b-400">Google Fonts</h3>
+                                 <p>Add Google Web Fonts Like Below Url.</p>
+                                <p>https://fonts.googleapis.com/css?family=Open+Sans</p>
+                                <p>Replace The Open+Sans Parameter Value With Your Font Name</p>
+                                <form class="myForm" onsubmit="return false">
+                                    <label for="input_url">Enter The Font Url</label>
+                                    <input type="url" name="Font_Url" class="input_url w-100 mb-2"/>
+                                    <input type="submit" value="Download the Font" class="dynamic_font_url btn btn-secondary"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="menu1" class="container tab-pane fade">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/header.svg"
+                                     class="mr-3 ks-customize-icon"/>
+                                <h3 class="mb-0 font-18">Header Layouts</h3>
+                            </div>
+                            <hr/>
+                            <div class="header_layout_selection"></div>
+                            <hr/>
+                            <div class="row justify-content-center pb-4">
+                                <button type="button" id="ks_reset_header" class="btn btn-secondary col-4">Reset</button>
+                                <button type="button" id="save_footer" class="btn btn-secondary col-4">Apply</button>
+                            </div>
+                        </div>
+                        <div id="menu2" class="container tab-pane fade ">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/footer.svg"
+                                     class="mr-3 ks-customize-icon"/>
+                                <h3 class="mb-0 font-18">Footer Layouts</h3>
+                            </div>
+                             <hr/>
+                            <div class="header_footer_selection"> </div>
+                            <hr/>
+                             <div class="row justify-content-center pb-4">
+                                 <button type="button" id="ks_reset_footer" class="btn btn-secondary col-4">Reset</button>
+                                 <button type="button" id="save_footer" class="btn btn-secondary col-4">Apply</button>
+                            </div>
+                        </div>
+                        <div id="ksbuttontypes" class="container tab-pane fade ">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/button.svg"
+                                     class="mr-3 ks-customize-icon btn-icon"/>
+                                <h3 class="mb-0 font-18">Button Effects</h3>
+                            </div>
+                             <hr/>
+                            <div class="ks_button_selection"></div>
+                             <hr/>
+                             <div class="row justify-content-center pb-4">
+                                 <button type="button" id="save_footer" class="btn btn-secondary col-6">Apply</button>
+                            </div>
+                        </div>
+                        <div id="ksbuttonstyles" class="container tab-pane fade">
+                            <div class="align-items-center flex-nowrap mt-3">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/button.svg"
+                                     class="mr-3 ks-customize-icon btn-icon"/>
+                                <h3 class="mb-0 font-18">Button Styles</h3>
+                            </div>
+                            <hr/>
+                            <div class="ks_button_style_selection">
+                            </div>
+                            <div class="pb-4">
+                                <div id="Button" class="container tab-pane active">
+                                    <div class="align-items-center flex-nowrap mb-4">
+                                        <div class="tab-content">
+                                            <div id="bgcolor" class="container tab-pane active">
+                                                <div class="row">
+                                                    <div class="align-items-center mb-4">
+                                                        <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                             class="mr-3 ks-customize-icon"/>
+                                                        <h3 class="mb-0 font-14 b-400">Background Color</h3>
+                                                    </div>
+                                                    <input type='text' id="change_bgcolor" value='red'/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="textcolor" class="container tab-pane active">
+                                            <div class="row">
+                                                <div class="align-items-center flex-nowrap mb-4">
+                                                    <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                         class="mr-3 ks-customize-icon"/>
+                                                    <h3 class="mb-0  font-14 b-400">Text Color</h3>
+                                                </div>
+                                                <input type='text' id="change_textcolor" value='red'/>
+                                            </div>
+                                        </div>
+
+                                         <div id="bordercolor" class="container tab-pane active">
+                                             <div class="row">
+                                                <div class="align-items-center flex-nowrap mb-4">
+                                                    <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                         class="mr-3 ks-customize-icon"/>
+                                                    <h3 class="mb-0 font-14 b-400">Border Color</h3>
+                                                </div>
+                                                <input type='text' id="change_bordercolor" value='red'/>
+                                             </div>
+                                         </div>
+                                        <hr/>
+                                        <div id="radius" class="container tab-pane active">
+
+                                                <div class="align-items-center flex-nowrap mb-4">
+                                                    <img src="/ks_theme_kinetik/static/src/images/customization-icons/button.svg"
+                                                         class="mr-3 ks-customize-icon"/>
+                                                    <h3 class="mb-0">Button Radius</h3>
+                                                </div>
+                                             <div class="row">
+                                                <input type='text' class="col mr-2" id="change_radius" value="0"/>
+                                                <button type="button" id="saveradius" class="btn btn-secondary" >Save</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="align-items-center flex-nowrap mb-4">
+                                <img src="/ks_theme_kinetik/static/src/images/customization-icons/button.svg"
+                                     class="mr-3 ks-customize-icon btn-icon"/>
+                                <h3 class="mb-0 font-18">Hover Styles</h3>
+                            </div>
+                            <hr/>
+                            <div class="ks_button_style_selection">
+                            </div>
+                             <div id="Hover" class="container tab-pane active">
+                                        <div class="align-items-center flex-nowrap mb-4">
+                                            <div class="tab-content">
+                                                <div id="hoverbgcolor" class="container tab-pane active">
+                                                    <div class="row">
+                                                        <div class="align-items-center mb-4">
+                                                            <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                                 class="mr-3 ks-customize-icon"/>
+                                                            <h3 class="mb-0 font-14 b-400">Background Color</h3>
+                                                        </div>
+                                                        <input type='text' id="change_hoverbgcolor" value='red'/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="Hovertextcolor" class="container tab-pane active">
+                                                <div class="row">
+                                                    <div class="align-items-center flex-nowrap mb-4">
+                                                        <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                             class="mr-3 ks-customize-icon"/>
+                                                        <h3 class="mb-0 font-14 b-400">Text Color</h3>
+                                                    </div>
+                                                    <input type='text' id="change_hovertextcolor" value='red'/>
+                                                </div>
+                                            </div>
+
+                                             <div id="Hoverbordercolor" class="container tab-pane active">
+                                                 <div class="row">
+                                                    <div class="align-items-center flex-nowrap mb-4">
+                                                        <img src="/ks_theme_kinetik/static/src/images/customization-icons/color-wheel.svg"
+                                                             class="mr-3 ks-customize-icon"/>
+                                                        <h3 class="mb-0 font-14 b-400">Hover Border Color</h3>
+                                                    </div>
+                                                    <input type='text' id="change_hoverbordercolor" value='red'/>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <hr/>
+                            <div class="justify-content-around pb-4">
+                                <p>For apply all changes click on apply button or reload the page</p>
+                                <div class="row">
+                                    <button type="button" id="reset_all" class="btn btn-secondary col mr-1">Reset</button>
+                                    <button type="button" id="save_color" class="btn btn-secondary col ml-1">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

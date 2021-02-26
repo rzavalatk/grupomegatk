@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+          <record id="christmas_page" model="website.page">
+            <field name="url">/christmas</field>
+            <field name="view_id" ref="ks_christmas_page.ks_theme_christmas"/>
+        </record>
+
+     </data>
+</odoo>

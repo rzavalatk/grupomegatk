@@ -1,0 +1,67 @@
+.ks-full-banner {
+  min-height: 80vh;
+
+  background-size: cover;
+  background-position: left;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  .ks-banner-text-container {
+    width: 50%;
+    background: $full-banner-bg;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+
+    @media (max-width: 768px) {
+        width: 75%;
+    }
+
+    .top-animation{
+      animation-name: now;
+      animation-duration: 1s;
+      animation-timing-function: ease-out;
+      position: relative;
+    }
+    .ks-banner-heading {
+      font-weight: 600;
+      font-size: 60px;
+      text-shadow: 3px 2px 5px rgba(0, 0, 0, 0.32);
+      animation-name: collection;
+      animation-duration: 1s;
+      animation-timing-function: ease-out;
+
+      @media (max-width: 768px) {
+        font-size: 40px;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 24px;
+      }
+
+    }
+    .ks-banner-btn {
+      .btn-shadow-outlined {
+        border: 1px solid $white;
+        color: $white;
+        background: transparent;
+        width: fit-content;
+      }
+      .btn-shadow-grow {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        &:hover {
+          box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+          transform: scale(1.1);
+        }
+      }
+      .btn-shadow {
+        background: transparent;
+        color: $white;
+        border-radius: 35px;
+        transform: perspective(1px) translateZ(0);
+      }
+      .btn {
+        transition: 0.3s ease-in-out;
+      }
+    }
+  }
+}

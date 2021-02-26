@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_blog_template" inherit_id="website_blog.blog_post_short" name="Blogs">
+        <xpath expr="//div[hasclass('o_sharing_links')]" position="replace">
+            <div class="o_sharing_links">
+                <a class="fa fa-twitter " aria-label="Twitter" title="Twitter" />
+                <a class="fa fa-facebook " aria-label="Facebook" title="Facebook" />
+                <a class="fa fa-linkedin " aria-label="LinkedIn" title="LinkedIn" />
+                <a class="fa fa-google-plus" aria-label="Google Plus" title="Google Plus" />
+            </div>
+        </xpath>
+    </template>
+</odoo>

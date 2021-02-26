@@ -1,0 +1,376 @@
+@mixin btn-1-style {
+    color: $text-color;
+    background: $btn-primary;
+    font-weight: $btn-weight;
+    border-radius: $btn-radius;
+    border-color: $btn-border-color;
+    transform: perspective(1px) translateZ(0);
+    position: relative;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    transition: 0.3s ease-in-out;
+    text-transform: capitalize;
+
+    &:before {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        top: 100%;
+        left: 5%;
+        height: 10px;
+        width: 90%;
+        opacity: 0;
+        background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+        transition: 0.3s ease-in-out;
+    }
+
+    &:hover,
+    &:focus {
+        transform: translateY(-5px);
+        color: $hover-text-color;
+        background: $hover-background;
+        border-color: $hover-border-color;
+
+        &:before {
+            transform: translateY(5px);
+            opacity: 1;
+        }
+    }
+}
+
+@mixin btn-2-style {
+    background: $btn-primary;
+    border-color: $btn-border-color;
+    color: $text-color;
+    border-radius: $btn-radius;
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+        transform: scale(1.1);
+        background: $hover-background;
+        color: $hover-text-color;
+        border-color: $hover-border-color;
+    }
+}
+
+@mixin btn-3-style {
+    color: $text-color;
+    border-radius: $btn-radius;
+    border: 1px solid $btn-border-color;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $btn-primary;
+        transition: 0.3s ease-in-out;
+        transform-origin: bottom;
+    }
+
+    &:hover {
+        border: 1px solid $hover-border-color;
+        color: $hover-text-color;
+        background: $hover-background;
+
+        &:before {
+            transform: scaleY(0);
+        }
+    }
+}
+
+@mixin btn-4-style {
+    color: $text-color;
+    border-radius: $btn-radius;
+    border: 1px solid $btn-border-color;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $btn-primary;
+        transition: 0.3s ease-in-out;
+        transform-origin: left;
+    }
+
+    &:hover {
+        border: 1px solid $hover-border-color;
+        color: $hover-text-color;
+        background: $hover-background;
+
+        &:before {
+            transform: scaleX(0);
+        }
+    }
+}
+
+@mixin btn-5-style {
+    color: $text-color;
+    border-radius: $btn-radius;
+    border: 1px solid $btn-border-color;;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $btn-primary;
+        transition: 0.3s ease-in-out;
+        transform-origin: right;
+    }
+
+    &:hover {
+        border: 1px solid $hover-border-color;;
+        color: $hover-text-color;
+        background: $hover-background;
+
+        &:before {
+            transform: scaleX(0);
+        }
+    }
+}
+
+@mixin btn-6-style {
+    color: $text-color;
+    border-radius: $btn-radius;
+    border: 1px solid $btn-border-color;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $btn-primary;
+        transition: 0.3s ease-in-out;
+        transform-origin: top;
+    }
+
+    &:hover {
+        border: 1px solid $hover-border-color;
+        color: $hover-text-color;
+        background: $hover-background;
+
+        &:before {
+            transform: scaleY(0);
+        }
+    }
+}
+
+@mixin btn-7-style {
+    position: relative;
+    border: 2px solid $btn-border-color;;
+    color: $text-color;
+    border-radius: $btn-radius;
+    background: transparent;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $hover-background;
+        transition: 0.3s ease-in-out;
+        transform-origin: top;
+        transform: scaleY(0);
+    }
+
+    &:hover {
+        border: 2px solid $hover-border-color;;
+        color: $hover-text-color;
+       // background: $hover-background;
+
+        &:before {
+            transform: scaleY(1);
+        }
+    }
+}
+
+@mixin btn-8-style {
+    position: relative;
+    border: 2px solid $btn-border-color;;
+    color: $text-color;
+    border-radius: $btn-radius;
+    background: transparent;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $hover-background;
+        transition: 0.3s ease-in-out;
+        transform-origin: left;
+        transform: scaleX(0);
+    }
+
+    &:hover {
+        border: 2px solid $hover-border-color;;
+        color: $hover-text-color;
+    //    background: $hover-background;
+
+        &:before {
+            transform: scaleX(1);
+        }
+    }
+}
+
+@mixin btn-9-style {
+    position: relative;
+    border: 2px solid $btn-border-color;;
+    color: $text-color;
+    border-radius: $btn-radius;
+    background: transparent;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $hover-background;
+        transition: 0.3s ease-in-out;
+        transform-origin: bottom;
+        transform: scaleY(0);
+    }
+
+    &:hover {
+        border: 2px solid $hover-border-color;;
+        color: $hover-text-color;
+      //  background: $hover-background;
+
+        &:before {
+            transform: scaleY(1);
+        }
+    }
+}
+
+@mixin btn-10-style {
+    position: relative;
+    border: 2px solid $btn-border-color;
+    color: $text-color;
+    border-radius: $btn-radius;
+    background: transparent;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: $hover-background;
+        transition: 0.3s ease-in-out;
+        transform-origin: right;
+        transform: scaleX(0);
+    }
+
+    &:hover {
+        border: 2px solid $hover-border-color;
+        color: $hover-text-color;
+       // background: $hover-background;
+
+        &:before {
+            transform: scaleX(1);
+        }
+    }
+}
+
+@mixin btn-11-style {
+    font-size: 1rem;
+    background: transparent;
+    position: relative;
+    color: rgba($primary, 0.8);
+    border-radius: $btn-radius;
+    z-index: 10;
+    padding: 8px 20px;
+    font-weight: 500;
+    border: none;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        border: 2px solid rgba($primary, 0.8);
+        transition: all 0.3s;
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        background-color: rgba($primary, 0.8);
+        transition: all 0.3s;
+        transform: scale(0.5,0.5);
+        z-index: -1;
+        margin-left: 0px;
+    }
+
+    &:hover {
+        color: $white;
+
+        &:before {
+            opacity: 0;
+            transform: scale(1.2,1.2);
+        }
+        &:after {
+            opacity: 1;
+            transform: scale(1.1,1.1);
+        }
+    }
+}

@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+        <record id="inherits_product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.product.form</field>
+            <field name="model">product.template</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//notebook" position="inside">
+                        <page string="Alternate Products">
+                            <group>
+                                <field name="alternative_product_ids" widget="many2many_tags"/>
+                                <field name="ks_is_alternate_slider"/>
+                                <field name="ks_alternate_repeat_product"/>
+                                <field name="ks_alternate_slider_speed"/>
+                                <field name="ka_alternate_automitic_slider"/>
+                                <field name="ks_alternate_navigation"/>
+                            </group>
+                        </page>
+                    </xpath>
+                    <xpath expr="//notebook" position="inside">
+                        <page string="Accessories">
+                            <group>
+                                <field name="accessory_product_ids" widget="many2many_tags"/>
+                                <field name="ks_is_accessories_slider"/>
+                                <field name="ks_accessories_repeat_product"/>
+                                <field name="ks_accessories_slider_speed"/>
+                                <field name="ka_accessories_automitic_slider"/>
+                                <field name="ks_accessories_navigation"/>
+                            </group>
+                        </page>
+                    </xpath>
+                    <xpath expr="//group[@name='description']" position="after">
+                        <group name="show_description" string="Product Description">
+                            <field name="ks_description" nolabel="1"/>
+                        </group>
+                 </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="inherits_product_grid_form_view" model="ir.ui.view">
+            <field name="name">ks_product.grid.form</field>
+            <field name="model">ks_product.grid</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="ks_theme_base.ks_product_grid_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//sheet/group/group" position="inside">
+                        <field name="ks_template_selection" widget="selection"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

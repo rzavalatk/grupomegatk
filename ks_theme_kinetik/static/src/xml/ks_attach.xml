@@ -1,0 +1,45 @@
+<templates>
+    <t t-name="ks_video_data">
+        <section class="ks_food_hero editable">
+            <div class="ks_food_overlay text-center">
+                <h1><span class="ks_video_msg2"><t t-esc="msg_data['video_message']"/></span></h1>
+                <t t-if="msg_data['button_message']">
+                    <a t-att-href="msg_data['button_url']">
+                        <button class="btn btn-primary mt-sm-4 mt-2 ks_button_name_v">
+                            <span class="ks_video_button2">
+                                <t t-esc="msg_data['button_message']"/>
+                            </span>
+                        </button>
+                    </a>
+                </t>
+            </div>
+            <div class="ks-food-color-overlay"/>
+            <video autoplay="true" loop="infinite" muted="true">
+                <source t-att-src="'/web/content/' + attachment['id']" type="video/mp4"/>
+            </video>
+        </section>
+    </t>
+    <t t-name="ks_theme_kinetik.ks_video_selection">
+        <section>
+            <div>
+                <form class="ks_video_form">
+                    <input type="file" class="ks_chatter_input" multiple="multiple"/>
+                </form>
+            </div>
+            <div class="col-lg-7 col-md-8 pl-0">
+                <div>
+                    <input type="text" class="ks_message_video mt-2" name="Video message" placeholder="Video message"
+                           required=""/>
+                </div>
+                <div>
+                    <input type="text" class="ks_message_button mt-2" name="Button message" placeholder="Button message"
+                           required=""/>
+                </div>
+                <div>
+                    <input type="text" class="ks_url_button mt-2" name="Button url" placeholder="Button Action"
+                           required=""/>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

@@ -1,0 +1,127 @@
+.ks-card-design-2 {
+    .oe_product_cart {
+        box-shadow: none !important;
+        border-bottom: 2px solid #dadada;
+        padding-bottom: 12px;
+
+        &:hover {
+            box-shadow: none !important;
+        }
+    }
+
+
+
+    .oe_grid.oe_product {
+        outline-offset: -10px;
+        transition: 0.2s ease-in-out;
+
+        section {
+            display: flex;
+            flex-wrap: wrap;
+
+            .ks_hover_data {
+                position: relative;
+                background: transparent;
+
+                @media (max-width: 1024px) {
+                    transform: translateY(0);
+                }
+            }
+
+            .ks_name_price {
+                order: -1;
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        .oe_product_image {
+            overflow: hidden;
+
+            img {
+                transition: 0.3s ease-in-out;
+            }
+        }
+
+        &:hover {
+            outline: 2px solid #dadada;
+            outline-offset: -10px;
+
+            .oe_product_cart {
+                border-bottom-color: transparent;
+            }
+            .ks_hover_data {
+                transform: translateY(0) !important;;
+            }
+             .oe_product_image {
+                img {
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+
+    //for cards render on filter
+    .product-card {
+        margin-bottom: 40px !important;
+        box-shadow: none !important;
+        outline-offset: 12px;
+        border-bottom: 2px solid #dadada;
+
+        .wishlist_and_comparision  {
+            position: relative !important;
+            background: transparent !important;
+            bottom: -60px !important;
+
+            @media screen and (max-width: 1024px) {
+                bottom: -60px !important;
+            }
+
+        }
+
+        .fp__img.position-relative.text-center {
+            overflow: visible !important;
+
+        }
+
+        .fp__info {
+            transform: translateY(-46px);
+        }
+
+        .fp__name,
+        .fp__brand {
+            text-align: left !important;
+        }
+
+        .fp__price {
+            margin: auto;
+        }
+
+        .featured__product {
+            overflow: hidden;
+
+            img {
+                transition: 0.3s ease-in-out;
+            }
+        }
+        &:hover {
+            animation: outSet 0.2s ease-in-out forwards;
+            border-bottom-color: transparent;
+          img {
+            transform :scale(1.1);
+          }
+        }
+    }
+
+}
+
+@keyframes outSet {
+    0% {
+        outline: 2px solid #dadada;
+        outline-offset: 10px;
+    }
+    100% {
+        outline: 2px solid #dadada;
+        outline-offset: 0px;
+    }
+}

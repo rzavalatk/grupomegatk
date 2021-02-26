@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="ks_footer_form">
+            <field name="name">Footer Setup</field>
+            <field name="model">theme.footer</field>
+            <field name="arch" type="xml">
+                <form create="false">
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="ks_links" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="ks_office_address"
+                               placeholder="Please separate Address with comma for a new line"/>
+                    </group>
+                    <group>
+                        <field name="ks_shopping_links" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="ks_policy" widget="many2many_tags"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="ks_footer_tree">
+            <field name="name">Footer Setup</field>
+            <field name="model">theme.footer</field>
+            <field name="arch" type="xml">
+                <tree create="false" import="false">
+                    <field name="name"/>
+                    <field name="ks_links" widget="many2many_tags"/>
+                    <field name="ks_office_address" placeholder="Please separate Address with comma for a new line"/>
+                    <field name="ks_shopping_links" widget="many2many_tags"/>
+                    <field name="ks_policy" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ks_footer_action_window">
+            <field name="name">Footer Set Up</field>
+            <field name="res_model">theme.footer</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!--        <menuitem name="Footer Setup" parent="ks_theme_base.ks_theme_customization_menu" id="ks_footer" action="ks_footer_action_window"/>-->
+    </data>
+</odoo>

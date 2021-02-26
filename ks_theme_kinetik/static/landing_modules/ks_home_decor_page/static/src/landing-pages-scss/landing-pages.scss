@@ -1,0 +1,466 @@
+
+//for Home Decor
+
+.ks-decor {
+    overflow-x: hidden;
+
+    .bg-light {
+        background-color: #f1f1f1 !important;
+    }
+
+    &-heading {
+        text-transform: uppercase;
+        position: relative;
+
+        > span {
+            color: $primary;
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: 40px;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            width: 50px;
+            border: 2px solid #f49a0c;
+
+        }
+    }
+
+    &-text {
+        font-size: 18px;
+        font-weight: 300;
+        color: #757575;
+    }
+
+    &-about {
+        &-img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: 0.2s ease-in-out;
+
+            @media (max-width: 575px) {
+                width: 200px;
+                height: 200px;
+            }
+
+            &:hover {
+                box-shadow: 1px -11px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.22);
+            }
+        }
+    }
+
+    &-bg-decorator {
+        position: absolute;
+        width: 100%;
+        height: 80%;
+        -webkit-clip-path: polygon(100% 0, 0 0, 0 100%);
+        clip-path: polygon(100% 0, 0 0, 0 100%);
+        margin: 0 0 0 -24px;
+        z-index: -1;
+        top: -10px;
+    }
+
+    &-service-outer {
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+    }
+
+    &-team {
+        &-img {
+            height: 350px;
+            object-fit: cover;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            transition: 0.2s ease-in-out;
+        }
+
+        &-set {
+            @media (max-width: 575px) {
+                display: flex;
+                flex-direction: column;
+
+                img {
+                    order: -1;
+                    margin-bottom: 24px
+                }
+            }
+        }
+
+        .ks-shine-effect {
+            &:hover {
+                img {
+                    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+                }
+            }
+        }
+    }
+
+
+    &-project {
+        overflow: hidden;
+
+        &-img {
+            height: 420px;
+            object-fit: cover;
+            cursor: pointer;
+            width: 100%;
+
+            @media (max-width: 768px) {
+                height: 360px;
+            }
+
+            &:hover {
+                ~ .ks-decor-project-overlay {
+                    transform: translateY(0);
+                }
+            }
+        }
+
+        &-text {
+           bottom: 0;
+           font-size: 20px;
+           background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) -7%, rgba(0, 0, 0, 0.82) 100%);
+        }
+
+        &-overlay {
+            background-color: rgba($primary,0.9);
+            color: $theme-text-color;
+            top: 0;
+            transform:translateY(100%);
+            transition: 0.3s ease-in-out;
+
+            &:hover {
+                transform:translateY(0);
+            }
+
+            a {
+                &:hover {
+                    color: $theme-text-color !important;
+                }
+            }
+
+            p {
+               font-weight: 300;
+               font-size: 18px;
+            }
+        }
+    }
+
+    &-sec-img {
+        background-size: auto;
+        background-repeat: no-repeat;
+        background-position-y: 30px;
+        background-position-x: right;
+
+    }
+
+    &-testimonial {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        margin-top: -80px;
+        background: rgba(255, 255, 255, 0.8);
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+
+        &-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+
+            @media (max-width: 768px) {
+                height: 150px;
+            }
+        }
+
+        &-client {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        &-unit {
+            &:hover {
+                  .ks-decor-testimonial {
+                    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+                }
+            }
+        }
+    }
+
+    &-blog {
+       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+       transition: 0.2s cubic-bezier(1, 0.25, 0, 1.02);
+       cursor: pointer;
+
+       &:hover {
+          box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+       }
+
+       &-link {
+            font-size: 16px;
+
+            i {
+                position: relative;
+                bottom: -1px;
+            }
+       }
+
+       &-date {
+            margin-top: -60px;
+            z-index: 1;
+       }
+
+       &-img {
+           width: 100%;
+           height: 250px;
+           object-fit: cover;
+
+           @media (max-width: 575px) {
+                height: 200px;
+           }
+       }
+
+       > .p-3 {
+            position: relative;
+            z-index: 3;
+       }
+    }
+
+    &-slider {
+        @media (max-width: 575px) {
+            margin-bottom: 50px;
+        }
+
+        &-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: 0.3s ease-in-out;
+        }
+
+        &-text {
+            font-size: 100px;
+            top: 200px;
+            right: 150px;
+            text-shadow: -6px 4px 6px rgba(0, 0, 0, 0.6);
+            line-height: 1.2;
+            opacity: 0;
+
+            @media (max-width: 1400px) {
+                  font-size: 80px;
+                  top: 60px;
+            }
+
+            @media (max-width: 1024px) {
+               right: 0;
+            }
+
+            @media (max-width: 575px) {
+                 font-size: 40px;
+            }
+
+            &-outlined {
+                font-size: 100px;
+                top: 50%;
+                left: 60px;
+                color: transparent;
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: white;
+                writing-mode: vertical-rl;
+                line-height: 1;
+                text-transform: uppercase;
+                transform: translateY(-50%);
+                opacity: 0;
+
+                @media (max-width: 1400px) {
+                     font-size: 60px;
+                     top: calc(50% - 20px);
+                }
+
+                @media (max-width: 575px) {
+                     font-size: 24px;
+                     left: 40px;
+                }
+            }
+        }
+
+
+        @media (min-width: 576px) {
+            .carousel-control {
+                &-prev,
+                &-next {
+                    background: white;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    top: calc(50% - 30px);
+                    opacity: 0;
+                    transition: 0.2s ease-in-out;
+                   &-icon {
+                        width: 20px;
+                        height: 20px;
+                   }
+                }
+
+                &-prev {
+                    left: 20px;
+                     &-icon {
+                        background-image: url('data:image/svg+xml;charset=utf8,<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 240.823 240.823" style="enable-background:new 0 0 240.823 240.823;" xml:space="preserve"><g><path id="Chevron_Right" d="M57.633,129.007L165.93,237.268c4.752,4.74,12.451,4.74,17.215,0c4.752-4.74,4.752-12.439,0-17.179
+            l-99.707-99.671l99.695-99.671c4.752-4.74,4.752-12.439,0-17.191c-4.752-4.74-12.463-4.74-17.215,0L57.621,111.816
+            C52.942,116.507,52.942,124.327,57.633,129.007z"/></g></svg>');
+                     }
+                }
+
+                 &-next {
+                    right: 20px;
+
+                    &-icon {
+                            background-image: url('data:image/svg+xml;charset=utf8,<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 240.823 240.823" style="enable-background:new 0 0 240.823 240.823;" xml:space="preserve"><g><path id="Chevron_Right_1_" d="M183.189,111.816L74.892,3.555c-4.752-4.74-12.451-4.74-17.215,0c-4.752,4.74-4.752,12.439,0,17.179
+                        l99.707,99.671l-99.695,99.671c-4.752,4.74-4.752,12.439,0,17.191c4.752,4.74,12.463,4.74,17.215,0l108.297-108.261
+                        C187.881,124.315,187.881,116.495,183.189,111.816z"/></g></svg>');
+                    }
+                 }
+            }
+        }
+
+
+        .carousel-item  {
+            img {
+              filter: brightness(0.7);
+              height: calc(100vh - 180px);
+              object-fit: cover;
+
+              @media (max-width: 1024px) {
+                height: 40vh;
+              }
+
+              @media (max-width: 575px) {
+                height: 50vh;
+              }
+            }
+
+            &.active {
+               .ks-decor-slider-text-outlined {
+                   animation: fadeIn 0.6s ease-in-out forwards;
+               }
+
+               .ks-decor-slider-text {
+                    animation: moveupfull 0.6s ease-in-out forwards;
+               }
+            }
+        }
+
+        &:hover {
+            .carousel-control-prev,
+            .carousel-control-next {
+                opacity: 1;
+            }
+        }
+    }
+
+    &-categories {
+        padding-top: 70%;
+        background-size: cover;
+
+        &-text {
+            bottom: 3px;
+            left: 3px;
+            width: calc(100% - 6px);
+            background: rgba(0, 0, 0, 0.31);
+            padding: 20px;
+            text-align: center;
+
+            @media (max-width: 575px) {
+                bottom: 7px;
+                left: 15px;
+                width: calc(100% - 30px);
+            }
+        }
+
+        &-dual {
+            @media (min-width: 576px) {
+                padding-top: calc(35% - 3px);
+            }
+        }
+    }
+
+    .text-primary {
+        &:hover {
+            color: $primary !important;
+        }
+    }
+
+    @media (max-width: 1200px) and (min-width: 575px) {
+        > section:not(:first-child) {
+            padding: 0 20px;
+        }
+    }
+}
+
+.theme-text {
+    color: $theme-text-color;
+}
+
+.ks-arrow-move {
+    i {
+        transition: 0.2s ease-in-out;
+    }
+    &:hover {
+        i {
+            transform: translateX(10px);
+        }
+    }
+}
+
+
+.ws-nowrap {
+    white-space: nowrap;
+}
+
+.f-30 {
+    font-size: 30px;
+}
+
+.bg-img-opacity {
+    @media (max-width: 575px) {
+        background-blend-mode: color;
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.gutter-3 > [class*="col-"] {
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+.ks-decor-products > [class*="col-"] {
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    @media (max-width: 575px) {
+        padding: 7px 15px;
+    }
+}

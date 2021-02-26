@@ -1,0 +1,213 @@
+<odoo>
+        <template id="ks_landing_furniture" name="Furniture">
+        <section>
+            <div class="oe_structure oe_empty">
+                    <!--  Hero Section     -->
+                    <!--                    <section class="ks-furniture-hero" >-->
+                    <!--                        <div id="carouselExampleIndicators" class="carousel slide mainTransparent" data-ride="carousel">-->
+                    <!--                            <ol class="carousel-indicators">-->
+                    <!--                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" />-->
+                    <!--                                <li data-target="#carouselExampleIndicators" data-slide-to="1" />-->
+                    <!--                                <li data-target="#carouselExampleIndicators" data-slide-to="2" />-->
+                    <!--                            </ol>-->
+                    <!--                            <div class="carousel-inner">-->
+                    <!--                                <div class="carousel-item active">-->
+                    <!--                                    <div class="ks-banner-txt">-->
+                    <!--                                        <div class="ks-banner-txt-sub"   >New Arrivals</div>-->
+                    <!--                                        <div class="ks-banner-txt-main"  >Don't Miss this <br/> Great Offers </div>-->
+                    <!--                                        <button class="btn ks-btn-theme"  >+ Shop Now +</button>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="ks-banner-offer"> <span>20%</span>OFF</div>-->
+                    <!--                                    <img class="d-block w-100" src="ks_furniture_page/static/src/landing-pages-images/furniture-img/banner-2.png" alt="First slide" />-->
+                    <!--                                </div>-->
+                    <!--                                <div class="carousel-item">-->
+                    <!--                                    <div class="ks-banner-txt">-->
+                    <!--                                        <div class="ks-banner-txt-sub"  >Best Sellers</div>-->
+                    <!--                                        <div class="ks-banner-txt-main"  >Everybody Loves <br/>These Chairs </div>-->
+                    <!--                                        <button class="btn ks-btn-theme"  >+ Shop Now +</button>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="ks-banner-offer"> <span>25%</span>OFF</div>-->
+                    <!--                                    <img class="d-block w-100" src="ks_furniture_page/static/src/landing-pages-images/furniture-img/banner-3.png" alt="First slide" />-->
+                    <!--                                </div>-->
+                    <!--                                <div class="carousel-item">-->
+                    <!--                                    <div class="ks-banner-txt">-->
+                    <!--                                        <div class="ks-banner-txt-sub"   >Top Trending</div>-->
+                    <!--                                        <div class="ks-banner-txt-main"  >The Eye Catching  <br/> Style Suprior </div>-->
+                    <!--                                        <button class="btn ks-btn-theme"  >+ Shop Now +</button>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="ks-banner-offer"> <span>20%</span>OFF</div>-->
+                    <!--                                    <img class="d-block w-100" src="ks_furniture_page/static/src/landing-pages-images/furniture-img/banner-4.png" alt="First slide" />-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </section>-->
+                    <section class="ks-kinetik-slider" >
+                        <div id="carouselExampleIndicators" class="carousel slide mainTransparent" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" />
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1" />
+                            <li data-target="#carouselExampleIndicators" data-slide-to="2" />
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="ks-kinetik-blobs">
+                                    <div class="ks-kinetik-blobs-left position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/left-blob.svg" alt="" />
+                                    </div>
+                                    <div class="ks-kinetik-blobs-right position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/right-blob.svg" alt="" />
+                                    </div>
+                                </div>
+                                <img class="d-block w-100" src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/kinetik-s-1.jpg" alt="First slide" />
+                                <div class="ks-banner-txt2">
+                                    <div class="ks-banner-txt-sub2">Best Sellers</div>
+                                    <div class="ks-banner-txt-main2 text-dark">Everybody Loves <br />These Chairs </div>
+                                    <div class="ks-slider-btn-outer my-4">
+                                          <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="ks-kinetik-blobs">
+                                    <div class="ks-kinetik-blobs-left position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/left-blob.svg" alt="" />
+                                    </div>
+                                    <div class="ks-kinetik-blobs-right position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/right-blob.svg" alt="" />
+                                    </div>
+                                </div>
+                                <img class="d-block w-100" src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/kinetik-s-2.jpg" alt="First slide" />
+                                <div class="ks-banner-txt2">
+                                    <div class="ks-banner-txt-sub2">New Arrival</div>
+                                    <div class="ks-banner-txt-main2 text-dark">Don't Miss <br />This Great Offer </div>
+                                    <div class="ks-slider-btn-outer my-4">
+                                       <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="ks-kinetik-blobs">
+                                    <div class="ks-kinetik-blobs-left position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/left-blob.svg" alt="" />
+                                    </div>
+                                    <div class="ks-kinetik-blobs-right position-absolute" >
+                                        <img src="ks_furniture_page/static/src/landing-pages-images/furniture-img/right-blob.svg" alt="" />
+                                    </div>
+                                </div>
+                                <img class="d-block w-100" src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/kinetik-s-3.jpg" alt="First slide" />
+                                <div class="ks-banner-txt2">
+                                    <div class="ks-banner-txt-sub2">Top Trending</div>
+                                    <div class="ks-banner-txt-main2 text-dark">Eye Catching <br />Style Superior </div>
+                                    <div class="ks-slider-btn-outer my-4">
+                                       <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                    <!--  Collections Section     -->
+                    <section class="ks-product-collection container-lg m-auto" >
+                        <div class="ks-collection-view flex no-animation py-lg-5">
+                            <section class="ks-collection-item justify-content-center flex-column p-3 mb-2  mr-2 text-right" style="background-image:url('/ks_furniture_page/static/src/landing-pages-images/furniture-img/Product-banner-1.jpg')">
+                                <section class="ks-collection-text my-4">
+                                    <h4 class="ks-collection-main-text">All New Home Decorators</h4>
+                                    <div class="ks-collection-secondary-text">Must have for rooms</div>
+                                </section>
+                                <section>
+                                    <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                </section>
+                            </section>
+                            <section class="ks-collection-item justify-content-center flex-column p-3 mb-2  ml-sm-2 mr-2 mr-sm-0" style="background-image:url('/ks_furniture_page/static/src/landing-pages-images/furniture-img/Product-banner-2.jpg')">
+                                <section class="ks-collection-text my-4">
+                                    <h4 class="ks-collection-main-text">Brand New Shelve Boards</h4>
+                                    <div class="ks-collection-secondary-text">Keep things at one place easily</div>
+                                </section>
+                                <section>
+                                   <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                </section>
+                            </section>
+                            <section class="ks-collection-item justify-content-center flex-column p-3 mt-2  mr-2 text-right" style="background-image:url('/ks_furniture_page/static/src/landing-pages-images/furniture-img/Product-banner-3.jpg')">
+                                <section class="ks-collection-text my-4">
+                                    <h4 class="ks-collection-main-text">Stylish Sofa Sets</h4>
+                                    <div class="ks-collection-secondary-text">Comfortable to Sit, Attractive to Look</div>
+                                </section>
+                                <section>
+                                    <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                </section>
+                            </section>
+                            <section class="ks-collection-item justify-content-center flex-column p-3 mt-2  ml-sm-2 mr-2 mr-sm-0 mb-sm-0 mb-2" style="background-image:url('/ks_furniture_page/static/src/landing-pages-images/furniture-img/Product-banner-4.jpg')">
+                                <section class="ks-collection-text my-4">
+                                    <h4 class="ks-collection-main-text">Wooden Interior</h4>
+                                    <div class="ks-collection-secondary-text">Available at Unbelievable price</div>
+                                </section>
+                                <section>
+                                   <a role="button" class="btn ks-btn-theme ml-auto" href="/shop"> Shop Now </a>
+                                </section>
+                            </section>
+                        </div>
+                    </section>
+                    <!--  Slider Section     -->
+                    <section class="container ks-sliding-products py-5">
+                        <h4 class="theme__heading mb-5">New Sofa Sets</h4>
+                        <a class="ks-product-set d-flex align-items-center mb-5 no-animation" href="#">
+                            <img src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/sofa-1.jpg" alt="product img" />
+                            <div class="ks-product-about position-relative">
+                                <h2>LIVERPOOL SOFA</h2>
+                                <div class="ks-product-about-sub" >
+                                    3 seats sofa length- 85"
+                                </div>
+                            </div>
+                        </a>
+                        <a class="ks-product-set set-2 d-flex align-items-center pt-5 mb-5 no-animation" href="#">
+                            <div class="ks-product-about position-relative order-2 order-sm-0">
+                                <h2>Winchester Fabric Sofa</h2>
+                                <div class="ks-product-about-sub">
+                                    3 seats sofa length- 85.5"
+                                </div>
+                            </div>
+                            <img src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/sofa-2.jpg" alt="product img" />
+                        </a>
+                        <a class="ks-product-set d-flex align-items-center pt-5 no-animation" href="#">
+                            <img src="/ks_furniture_page/static/src/landing-pages-images/furniture-img/sofa-3.jpg" alt="product img" />
+                            <div class="ks-product-about position-relative">
+                                <h2>Adelaide Sofa</h2>
+                                <div class="ks-product-about-sub">
+                                    3 seats sofa length- 65"
+                                </div>
+                            </div>
+                        </a>
+                    </section>
+                    <!-- Banner -->
+                    <section class="container-lg m-auto py-4">
+                        <section class="ks-deal-sales ks-furniture-deal no-animation" style="background: url('/ks_furniture_page/static/src/landing-pages-images/furniture-img/deal.jpg');">
+                            <div class="row h-100">
+                                <div class="col-lg-6 ml-auto d-flex justify-content-center align-items-center flex-wrap">
+                                    <div class="right-panel">
+                                        <div class="heading-container text-center w-100">
+                                            <h3 class="heading font-50 b-600">Stylish Products</h3>
+                                        </div>
+                                        <div class="text-container text-center w-100">
+                                            <p class="text font-30 mt-4">Lowest price of Home Accessories</p>
+                                        </div>
+                                        <section class="d-flex justify-content-center align-items-center w-100">
+                                           <a role="button" class="btn ks-btn-theme ml-auto" href="/shop">   <span> Shop Now </span>
+                                           </a>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </div>
+        </section>
+    </template>
+        <data>
+            <template id="ks_theme_furniture" name="Kinetik Furniture">
+                <t t-call="website.layout">
+                    <t t-call="ks_furniture_page.ks_landing_furniture"/>
+                </t>
+            </template>
+        </data>
+
+</odoo>

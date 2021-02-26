@@ -1,0 +1,162 @@
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary.dropdown-toggle {
+    background: $btn-secondary-color;
+    color: $btn-secondary-bg;
+    border-color: $btn-secondary-color;
+}
+
+.btn-secondary:not(:disabled):not(.disabled):active:focus {
+   box-shadow: 0 0 0 0.2rem lighten($btn-secondary-bg,20%);
+}
+
+.btn-secondary:disabled {
+    background-color: $disabled-color;
+    border-color: $disabled-color;
+}
+
+.show > .btn-secondary.dropdown-toggle {
+    background: $btn-secondary-color;
+    color: $btn-secondary-bg;
+    border-color: $btn-secondary-color;
+}
+
+.show > .btn-secondary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba($secondary-theme-color, 0.5);
+}
+
+.page-item {
+    &.active {
+        .page-link {
+            color: $text-color;
+            background-color: $btn-primary;
+            border-color: $btn-border-color;
+        }
+    }
+
+    .page-link {
+       &:focus,
+       &:hover {
+            box-shadow: none;
+            background-color: $btn-primary;
+            color: $text-color;
+        }
+    }
+}
+
+.btn.btn-secondary {
+    background: transparent;  //$btn-secondary-bg;
+    color: $btn-secondary-color;
+    border-color: $btn-secondary-color;
+//     border-radius: $btn-radius;
+
+    &:hover {
+        background: $btn-secondary-color;
+        color: $btn-secondary-bg;
+        border-color: $btn-secondary-color;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem lighten($btn-secondary-bg,20%);
+    }
+
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+    color: $text-color;
+    background: $primary;
+    border-color: $primary;
+}
+
+
+.page-link:focus {
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.5);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+  .show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.5);
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $primary;
+    color: $text-color;
+}
+
+.btn:disabled {
+    pointer-events: none;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+.input-group-prepend {
+    .btn-secondary {
+        //border-radius: 25px 0 0 25px !important;
+    }
+}
+
+.input-group-append {
+    .btn-secondary {
+       // border-radius: 0 25px 25px 0 !important;
+    }
+}
+
+.btn-theme {
+    background: $primary;
+    color: $theme-text-color;
+    border-radius: $btn-radius;
+    padding: 6px 20px;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1);
+        color: $theme-text-color;
+    }
+}
+
+#web_editor-toolbars .popover-body {
+    .btn-secondary {
+        background: transparent !important;
+        color: #fff !important;
+        border: none !important;
+
+        &:hover {
+            transform: none !important;
+            background: transparent !important;
+            color: #fff !important;
+            border: none !important;
+        }
+
+        &:not(.dropdown-toggle) {
+            &:after,
+            &:before {
+                display: none;
+            }
+        }
+
+        &.dropdown-toggle {
+            &:before {
+                display: none;
+            }
+        }
+    }
+}
+
+.snippet-option-undefined {
+    > a,
+    label {
+        color: #d4d5d7 !important;
+        padding: 5px 10px;
+        font-weight: bold;
+    }
+}
+.btn-lg {
+    max-width: 100%;
+    white-space: normal;
+}
+//button class name
+$primary-btn-name: '.btn-primary:not([data-action="save"]):not([title="Customize"]):not(.js_add_cart_json):not(.js_check_product):not(.css_edit_dynamic),.btn-secondary:not(.ks_add_to_cart):not(.js_add_cart_json):not(.o_add_wishlist_dyn):not(.o_quick_view):not(.o_add_compare):not(.o_add_wishlist):not([title="Shopping cart"]):not([data-action="cancel"]):not(.oe_snippet_parent):not(.oe_snippet_remove):not(.oe_snippet_move):not(.oe_snippet_clone):not(.ks-add-to-cart-btn)';

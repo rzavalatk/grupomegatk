@@ -1,0 +1,633 @@
+<odoo>
+     <template id="ks_landing_christmas" name="Christmas">
+        <section>
+          <div class="oe_structure oe_empty ">
+                    <section class="ks-adjust-font ks-hero-bg position-relative overflow-hidden ks-xmasBgColor overflow-hidden">
+                        <canvas id="snow-fall">snow-fall-effect</canvas>
+                        <div class="p-sm-5 pt-5 mt-5 container-lg text-center text-white d-flex flex-column align-items-center view-height mainTransparent">
+                            <div class="h2 position-relative z-index-10"> <span>HO!</span><span class="mx-3">HO!</span><span>HO!</span>  </div>
+                            <div class="display-2 font-600 position-relative z-index-10">CHRISTMAS EVENT</div>
+                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/moon.svg" alt="" class="ks-xmas-moon position-absolute" />
+                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/santa-flying.gif" alt="" class="santa-flying position-relative z-index-10 mb-4" />
+                            <div class="parallax-trees position-absolute w-100">
+                                <div class="ks-red-trees position-absolute w-100"
+                                     style="background-image:url(/ks_christmas_page/static/src/landing-pages-images/christmas/trees-red.svg );" />
+                                <div class="ks-white-trees position-relative"
+                                     style="background-image:url(/ks_christmas_page/static/src/landing-pages-images/christmas/trees-white.svg );" /></div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font container-lg position-relative z-index-10 mt-lg-5 pt-5 px-3 overflow-hidden">
+                        <div class="row align-items-center">
+                            <div class="col-lg-4 align-self-end order-2 order-lg-1 col-sm-6 md-m-auto">
+                                <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Girl.jpg" class="w-100" alt="" />
+                            </div>
+                            <div class="col-lg-8 pb-5 order-1 order-lg-2">
+                                <h1 class="display-3 font-weight-normal mb-0 text-center text-lg-left text-black">About the Event</h1>
+                                <p class="text-muted text-center text-lg-left">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <div class="d-flex mt-5 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                                    <div class="ks-bell-image rounded-circle p-2 mr-4 ks-xmas-bg">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Bell.png" alt="" />
+                                    </div>
+                                    <div>
+                                        <h2>Save Big Now</h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod minus, tempora obcaecati natus
+                                            itaque iste unde dolore impedit repudiandae, eveniet, quidem odit molestias fugiat
+                                            reprehenderit. Quasi soluta earum inventore hic.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-5 wow fadeInRight" data-wow-duration="1.5s" data-wow-delay="0.5s">
+                                    <div class="ks-bell-image rounded-circle p-2 mr-4 ks-xmas-bg">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Bell.png" alt="" />
+                                    </div>
+                                    <div>
+                                        <h2>Your Best Xmas</h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod minus, tempora obcaecati natus
+                                            itaque iste unde dolore impedit repudiandae, eveniet, quidem odit molestias fugiat
+                                            reprehenderit. Quasi soluta earum inventore hic.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-5 wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.5s">
+                                    <div class="ks-bell-image rounded-circle p-2 mr-4 ks-xmas-bg">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Bell.png" alt="" />
+                                    </div>
+                                    <div>
+                                        <h2>Happy Holidays</h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod minus, tempora obcaecati natus
+                                            itaque iste unde dolore impedit repudiandae, eveniet, quidem odit molestias fugiat
+                                            reprehenderit. Quasi soluta earum inventore hic.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font ks-xmas-bg position-relative overflow-hidden px-3">
+                        <ul class="list-unstyled mb-0">
+                            <li class="cube" />
+                            <li class="cube" />
+                            <li class="cube" />
+                            <li class="cube" />
+                            <li class="cube" />
+                            <li class="cube" />
+                        </ul>
+                        <div class="container-lg text-center text-white px-5 pb-5 position-relative z-index-10">
+                            <div class="wow slideInDown" data-wow-duration="1s" data-wow-delay="0.5s" >
+                                <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/latto-white.svg" alt="" class="ks-latto-images" />
+                            </div>
+                            <div class="display-3 mt-4">Order Your Event Ticket Today</div>
+                            <p class="mb-4 font-weight-normal h5 mt-3">Never  Miss This Chance</p>
+                            <button class="btn btn-lg btn-red-white">Order Now</button>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font bg-light-gray px-3 overflow-hidden">
+                        <div class="container-lg pb-5">
+                            <div class="text-center">
+                                <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/latto-red.svg" alt="" class="ks-latto-images wow slideInDown" data-wow-duration="1s" data-wow-delay="0.5s" />
+                                <h1 class="display-3 font-weight-normal mb-0 mt-5 text-black">Event Schedule </h1>
+                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-lg-4 wow slideInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-card m-sm-4 bg-white mb-4">
+                                        <div class="position-relative">
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/ev-1.jpg" class="w-100" alt="" />
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Shape.png" class="position-absolute ks-ev-decorator" alt="" />
+                                        </div>
+                                        <div
+                                                class="ks-ev-date ks-xmas-bg rounded-circle text-white ml-3 position-relative d-flex flex-column justify-content-center align-items-center">
+                                            <span class="h2 mb-0 font-weight-bold">20</span>
+                                            <span class="h5 mb-0">Dec</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3 class="font-weight-bold my-3">Opening Day</h3>
+                                            <p>Come get Your free gifts <br /> and say hello to santa</p>
+                                            <button class="btn text-white ks-xmas-bg mb-4 font-600">BOOK NOW</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 wow slideInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-card m-sm-4 bg-white mb-4">
+                                        <div class="position-relative">
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/ev-2.jpg" class="w-100" alt="" />
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Shape.png" class="position-absolute ks-ev-decorator" alt="" />
+                                        </div>
+                                        <div
+                                                class="ks-ev-date ks-xmas-bg rounded-circle text-white ml-3 position-relative d-flex flex-column justify-content-center align-items-center">
+                                            <span class="h2 mb-0 font-weight-bold">22</span>
+                                            <span class="h5 mb-0">Dec</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3 class="font-weight-bold my-3">Visit Santa</h3>
+                                            <p>Come get Your free gifts <br /> and say hello to santa</p>
+                                            <button class="btn text-white ks-xmas-bg mb-4 font-600">BOOK NOW</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 wow slideInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-card m-sm-4 bg-white mb-4">
+                                        <div class="position-relative">
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/ev-3.jpg" class="w-100" alt="" />
+                                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Shape.png" class="position-absolute ks-ev-decorator" alt="" />
+                                        </div>
+                                        <div
+                                                class="ks-ev-date ks-xmas-bg rounded-circle text-white ml-3 position-relative d-flex flex-column justify-content-center align-items-center">
+                                            <span class="h2 mb-0 font-weight-bold">24</span>
+                                            <span class="h5 mb-0">Dec</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3 class="font-weight-bold my-3">Free Giveaway</h3>
+                                            <p>Come get Your free gifts <br /> and say hello to santa</p>
+                                            <button class="btn text-white ks-xmas-bg mb-4 font-600">BOOK NOW</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font container-lg pb-sm-5 pb-3 px-3 overflow-hidden">
+                        <div class="text-center">
+                            <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/latto-red.svg" alt="" class="ks-latto-images wow slideInDown" data-wow-duration="1s" data-wow-delay="0.5s" />
+                            <h1 class="display-3 font-weight-normal mb-0 mt-5">Client Experiences </h1>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-1.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Mabella Rodreges</div>
+                                    <div class="text-muted">New York</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-2.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Peggy Carter</div>
+                                    <div class="text-muted">Brooklyn</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-3.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Scarlet Johnson</div>
+                                    <div class="text-muted">Sydeny</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-4.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Diana Meera</div>
+                                    <div class="text-muted">Atanltic</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-1.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Syinde</div>
+                                    <div class="text-muted">Maxico</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5">
+                                <div class="ks-xmas-client position-relative text-center p-4">
+                                    <div class="ks-xmas-bg position-absolute ks-xmas-client-quotes">
+                                        <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/quotes.svg" alt="" />
+                                    </div>
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/xmas-p-2.jpg" class="rounded-circle ks-xmas-client-img" alt="" />
+                                    <p class="text-muted mt-3">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe adipisci tempora aliquid earum
+                                        voluptates perferendis ducimus reiciendis nihil ab praesentium a amet, velit fuga iusto itaque,
+                                        rem porro nam aspernatur!
+                                    </p>
+                                    <div class="d-flex justify-content-center text-warning h4">
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star mr-1" />
+                                        <i class="fa fa-star" />
+                                    </div>
+                                    <div class="h4 my-3">Tara Seth</div>
+                                    <div class="text-muted">Delhi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font bg-light-gray px-3 overflow-hidden">
+                        <div class="container-lg">
+                            <div class="text-center">
+                                <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/latto-red.svg" alt="" class="ks-latto-images wow slideInDown" data-wow-duration="1s" data-wow-delay="0.5s" />
+                                <h1 class="display-3 font-weight-normal mb-0 mt-5 text-black">Event Pricing </h1>
+                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-lg-4 mb-5 wow slideInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-pricing bg-white position-relative">
+                                        <div class="ks-xmas-pricing-head head-black text-white p-5 text-center">
+                                            <div>
+                                                <span class="h2">$</span>
+                                                <span class="display-3 font-600">100</span>
+                                            </div>
+                                            <div class="h4">
+                                                Friends Pack
+                                            </div>
+                                        </div>
+                                        <div class="ks-wave-img-conatiner position-relative">
+                                            <svg class="ks-card-wave" enable-background="new 0 0 300 100" height="100px" id="Layer_1"
+                                                 preserveAspectRatio="none" version="1.1" viewBox="0 0 300 100" width="300px" x="0px"
+                                                  y="0px">
+                                            <path class="ks-card-wave-layer layer-1" d="M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+                                                c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z" fill="#FFFFFF"
+                                                  opacity="0.6" />
+                                                <path class="ks-card-wave-layer layer-2" d="M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+                                                c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z" fill="#FFFFFF"
+                                                                  opacity="0.6" >
+                                            </path>
+                                                <path class="ks-card-wave-layer layer-3" d="M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+                                                H42.401L43.415,98.342z" fill="#FFFFFF" opacity="0.7" />
+                                                <path class="ks-card-wave-layer layer-4"
+                                                      d="M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+                                                    c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z" fill="#FFFFFF">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <ul class="list-unstyled text-center position-relative z-index-10 mt-4 ks-xmas-pass-info">
+                                            <li>2 Persons</li>
+                                            <li>Econmical Pass</li>
+                                            <li>Day Food</li>
+                                            <li>Night Show</li>
+                                        </ul>
+                                        <div class="text-center">
+                                            <button class="btn text-white ks-xmas-bg mb-4 font-600">Get Now</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-lg-4 mb-5 wow slideInRight" data-wow-duration="1.5s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-pricing bg-white position-relative">
+                                        <div class="ks-xmas-pricing-head ks-xmas-bg text-white p-5 text-center">
+                                            <div>
+                                                <span class="h2">$</span>
+                                                <span class="display-3 font-600">200</span>
+                                            </div>
+                                            <div class="h4">
+                                                Couple Pack
+                                            </div>
+                                        </div>
+                                        <div class="ks-wave-img-conatiner position-relative">
+                                            <svg class="ks-card-wave" enable-background="new 0 0 300 100" height="100px" id="Layer_1"
+                                                 preserveAspectRatio="none" version="1.1" viewBox="0 0 300 100" width="300px" x="0px"
+                                                 y="0px">
+                                                <path class="ks-card-wave-layer layer-1" d="M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+                                                    c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z" fill="#FFFFFF"
+                                                      opacity="0.6" />
+                                                                <path class="ks-card-wave-layer layer-2" d="M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+                                                    c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z" fill="#FFFFFF"
+                                                                      opacity="0.6">
+                                                </path>
+                                                                <path class="ks-card-wave-layer layer-3" d="M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+                                                    H42.401L43.415,98.342z" fill="#FFFFFF" opacity="0.7" />
+                                                                <path class="ks-card-wave-layer layer-4"
+                                                                      d="M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+                                                    c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z" fill="#FFFFFF">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <ul class="list-unstyled text-center position-relative z-index-10 mt-4 ks-xmas-pass-info">
+                                            <li>2 Persons</li>
+                                            <li>Premimum Pass</li>
+                                            <li>Day Food</li>
+                                            <li>Day-Night Shows</li>
+                                        </ul>
+                                        <div class="text-center">
+                                            <button class="btn text-white ks-xmas-bg-black mb-4 font-600">Get Now</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-lg-4 mb-5 wow slideInRight" data-wow-duration="2s" data-wow-delay="0.5s">
+                                    <div class="ks-xmas-pricing bg-white position-relative">
+                                        <div class="ks-xmas-pricing-head head-black text-white p-5 text-center">
+                                            <div>
+                                                <span class="h2">$</span>
+                                                <span class="display-3 font-600">500</span>
+                                            </div>
+                                            <div class="h4">
+                                                Family Pack
+                                            </div>
+                                        </div>
+                                        <div class="ks-wave-img-conatiner position-relative">
+                                            <svg class="ks-card-wave" enable-background="new 0 0 300 100" height="100px" id="Layer_1"
+                                                 preserveAspectRatio="none" version="1.1" viewBox="0 0 300 100" width="300px" x="0px"
+                                                  y="0px">
+                                                <path class="ks-card-wave-layer layer-1" d="M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+                                                    c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z" fill="#FFFFFF"
+                                                      opacity="0.6" />
+                                                                <path class="ks-card-wave-layer layer-2" d="M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+                                                    c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z" fill="#FFFFFF"
+                                                                      opacity="0.6">
+                                                </path>
+                                                                <path class="ks-card-wave-layer layer-3" d="M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+                                                    H42.401L43.415,98.342z" fill="#FFFFFF" opacity="0.7" />
+                                                                <path class="ks-card-wave-layer layer-4"
+                                                                      d="M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+                                                    c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z" fill="#FFFFFF">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <ul class="list-unstyled text-center position-relative z-index-10 mt-4 ks-xmas-pass-info">
+                                            <li>5 Persons</li>
+                                            <li>Premium Pass</li>
+                                            <li>Day Food</li>
+                                            <li>Day-Night Show</li>
+                                        </ul>
+                                        <div class="text-center">
+                                            <button class="btn text-white ks-xmas-bg mb-4 font-600">Get Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font ks-banner-left-text img-attachment-fixed ks-hotel-parallax text-white overflow-hidden" style="background-image: url('/ks_christmas_page/static/src/landing-pages-images/christmas/parallax.jpg');background-color: rgba(0, 0, 0, 0.5);background-blend-mode: color;">
+                        <div class="row h-100 no-gutters px-4 py-5">
+                            <div class="col-lg-9 col-sm-12 col-12 h-100 d-flex align-items-center justify-content-center mx-auto">
+                                <div class="ks-text-pannel-left d-block text-center">
+                                    <h1 class="font-weight-normal heading-text-info text-center mb-4 wow zoomInRight" data-wow-duration="1s" data-wow-delay="0.5s">Our Video Promo
+                                    </h1>
+                                    <p class="font-weight-normal h3 text-center my-sm-4 wow zoomInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+                                        Lorem Ipsum dolor sit amet
+                                    </p>
+                                    <div class="btn-container justify-content-center wow zoomInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                                         <a  data-toggle="modal" data-target="#youtubeModal" class="ks-xmas-play-btn cursor-pointer"> <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/play-icon.svg" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="ks-adjust-font bg-light-gray px-sm-3 overflow-hidden">
+                        <div class="container-lg">
+                            <div class="text-center">
+                                <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/latto-red.svg" alt="" class="ks-latto-images wow slideInDown" data-wow-duration="1s" data-wow-delay="0.5s" />
+                                <h1 class="display-3 font-weight-normal mb-0 mt-5">Know About the Event </h1>
+                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-lg-7 ks-xmas-accordian pb-5">
+                                    <div id="accordion">
+                                        <div class="card border-0 mb-4">
+                                            <div class="card-header" id="headingOne">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link position-relative pl-5" data-toggle="collapse"
+                                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                        When does the event start?
+                                                        <span
+                                                                class="ks-accordian-toggler d-flex justify-content-center align-items-center text-white ks-xmas-bg position-absolute rounded-circle ">
+                                                            <i class="fa fa-plus" /> </span>
+                                                    </button>
+                                                </h5>
+                                            </div>
+
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                 data-parent="#accordion">
+                                                <div class="card-body">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                                                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
+                                                    accusamus labore sustainable VHS.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card border-0 mb-4">
+                                            <div class="card-header" id="headingTwo">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link collapsed position-relative pl-5" data-toggle="collapse"
+                                                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        Where will the event take place?
+                                                        <span
+                                                                class="ks-accordian-toggler d-flex justify-content-center align-items-center text-white ks-xmas-bg position-absolute rounded-circle ">
+                                                            <i class="fa fa-plus" /> </span>
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                                 data-parent="#accordion">
+                                                <div class="card-body">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                                                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
+                                                    accusamus labore sustainable VHS.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card border-0 mb-4">
+                                            <div class="card-header" id="headingThree">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link collapsed position-relative pl-5" data-toggle="collapse"
+                                                            data-target="#collapseThree" aria-expanded="false"
+                                                            aria-controls="collapseThree">
+                                                        How much money does one entrance cost?
+                                                        <span
+                                                                class="ks-accordian-toggler d-flex justify-content-center align-items-center text-white ks-xmas-bg position-absolute rounded-circle ">
+                                                            <i class="fa fa-plus" /> </span>
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                                 data-parent="#accordion">
+                                                <div class="card-body">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                                                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
+                                                    accusamus labore sustainable VHS.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card border-0 mb-4">
+                                            <div class="card-header" id="headingFour">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link collapsed position-relative pl-5" data-toggle="collapse"
+                                                            data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                        Are there any discounts available?
+                                                        <span
+                                                                class="ks-accordian-toggler d-flex justify-content-center align-items-center text-white ks-xmas-bg position-absolute rounded-circle ">
+                                                            <i class="fa fa-plus" /> </span>
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                                                 data-parent="#accordion">
+                                                <div class="card-body">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                                                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
+                                                    accusamus labore sustainable VHS.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 d-flex align-items-end order-change-on-rtl">
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/Girl1.png" class="w-100" alt="" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section class="ks-adjust-font container-lg pt-5 px-3 overflow-hidden">
+                        <div class="text-center">
+                            <h1 class="display-3 font-weight-normal mb-0 mt-5 text-black">Stay In Touch </h1>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-lg-4 mb-5 wow slideInUp" data-wow-duration="0.5s" data-wow-delay="0.5s">
+                                <div class="ks-footer-card p-4 text-center" >
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/location.svg" class="ks-footer-card-img mb-4" alt="" />
+                                    <div class="h2">Location</div>
+                                    <div>
+                                        B-4, Sector 63, Noida (UP), India
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5 wow slideInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                                <div class="ks-footer-card p-4 text-center" >
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/ecommerce.svg" class="ks-footer-card-img mb-4" alt="" />
+                                    <div class="h2">Contact Number</div>
+                                    <div>
+                                        +91 123-456-7890
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-5 wow slideInUp" data-wow-duration="1.5s" data-wow-delay="0.5s">
+                                <div class="ks-footer-card p-4 text-center" >
+                                    <img src="/ks_christmas_page/static/src/landing-pages-images/christmas/message.svg" class="ks-footer-card-img mb-4" alt="" />
+                                    <div class="h2">E-mail</div>
+                                    <div>
+                                        sales@ksolves.com
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="modal fade" id="youtubeModal" tabindex="-1" role="dialog" aria-labelledby="youtubeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content ks-youtube-content">
+                                <div class="modal-header border-bottom-0">
+                                    <button type="button" class="close text-white font-28 font-weight-normal" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-times" />
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center youtube-modal-video">
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/CGcnqwb1veU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         </section>
+     </template>
+
+     <template id="ks_theme_christmas" name="Kinetik Christmas">
+        <t t-call="website.layout">
+            <t t-call="ks_christmas_page.ks_landing_christmas"/>
+        </t>
+    </template>
+
+</odoo>

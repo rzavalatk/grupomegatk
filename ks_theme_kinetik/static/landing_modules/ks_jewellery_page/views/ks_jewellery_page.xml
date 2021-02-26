@@ -1,0 +1,416 @@
+<odoo>
+    <template id="ks_landing_jewel" name="Jewellery">
+        <section>
+            <div class="oe_structure oe_empty">
+                <!--   Slider     -->
+                <section id="myCarousel1567089566964" class="s_carousel carousel slide s_carousel_default ks-jewellery-shop" data-interval="10000">
+                    <div class="carousel-inner mainTransparent">
+                        <div class="carousel-item oe_custom_bg oe_img_bg py-5 active" style="background-image: url(/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-2.jpg);" data-name="Slide">
+                            <div class="container h-100 align-items-center">
+                                <div class="row content w-100">
+                                    <div class="carousel-content col-md-6 offset-md-6">
+                                        <h2>
+                                            <font style="font-size: 62px;" class="o_default_snippet_text">Your Perfect Style</font>
+                                        </h2>
+                                        <h4>
+                                            <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
+                                        </h4>
+                                        <div class="s_btn text-left pt16 pb16" data-name="Buttons">
+                                            <a href="/contactus" class="btn btn-primary ">Explore More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item oe_custom_bg oe_img_bg py-5 ks-jewel-banner-right" style="background-image: url(/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-1.jpg);" data-name="Slide">
+                            <div class="container h-100 align-items-center">
+                                <div class="row content w-100">
+                                    <div class="carousel-content col-md-7">
+                                        <div class="s_title pb8" data-name="Title">
+                                            <h2 class="s_title_default">
+                                                <font style="font-size: 62px;" class="o_default_snippet_text">Get Ready to SHINE</font>
+                                            </h2>
+                                        </div>
+                                        <h4>
+                                            <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
+                                        </h4>
+                                        <div class="s_btn text-left pt16 pb16" data-name="Buttons">
+                                            <a href="/contactus" class="btn btn-primary ">Explore More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-control-prev" data-target="#myCarousel1567089566964" data-slide="prev" role="img" aria-label="Previous" title="Previous">
+                        <span class="carousel-control-prev-icon"/>
+                        <span class="sr-only o_default_snippet_text">Previous</span>
+                    </div>
+                    <div class="carousel-control-next" data-target="#myCarousel1567089566964" data-slide="next" role="img" aria-label="Next" title="Next">
+                        <span class="carousel-control-next-icon"/>
+                        <span class="sr-only o_default_snippet_text">Next</span>
+                    </div>
+                </section>
+
+                <!-- Collection  -->
+                <section class="ks-container-gallery  container">
+                    <div class="row no-gutters p-3">
+                        <div class="col-md-4 p-3">
+                            <div class="hovereffect2">
+                                <img class="image-fluid"
+                                     src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-3.jpg" alt=""/>
+                                <div class="overlay d-flex">
+                                    <h4 class="mt-auto" >Diamond Rings <br/> <font style="font-size:0.8em" >15% Off</font> </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 p-3">
+                            <div class="hovereffect2">
+                                <img class="image-fluid"
+                                     src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-4.jpg" alt=""/>
+                                <div class="overlay d-flex">
+                                    <h4 class="mt-auto" >Wedding Rings <br/> <font style="font-size:0.8em" >42% Off</font> </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 p-3">
+                            <div class="hovereffect2">
+                                <img class="image-fluid"
+                                     src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-5.jpg" alt=""/>
+                                <div class="overlay d-flex">
+                                    <h4 class="mt-auto" >Designer Rings <br/> <font style="font-size:0.8em" >25% Off</font> </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--   Why Us     -->
+                <section>
+                    <div class="ks-offers bg-white mb-5  container">
+                        <div class="row no-gutters position-relative"  >
+                            <div class="col-12">
+                                <div class="right-panel py-5">
+                                    <h3 class="theme__heading mb-5">Why Us</h3>
+                                    <div class="row no-gutters">
+                                        <div class="col-lg-8 row mx-0">
+                                            <div class="col-sm-6 d-flex">
+                                                <div class="d-inline-block pt-1 mr-3">
+                                                    <i class="fa fa-diamond icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Lorem Ipsum is simply</h4>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 d-flex">
+                                                <div class="d-inline-block pt-1 mr-3">
+                                                    <i class="fa fa-diamond icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Lorem Ipsum is simply</h4>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 d-flex">
+                                                <div class="d-inline-block pt-1 mr-3">
+                                                    <i class="fa fa-diamond icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Lorem Ipsum is simply</h4>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 d-flex">
+                                                <div class="d-inline-block pt-1 mr-3">
+                                                    <i class="fa fa-diamond icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="heading">Lorem Ipsum is simply</h4>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                        industry. Lorem Ipsum has been the industry's standard dummy
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 text-center mt-lg-0 mt-4" >
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-6.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--    Gallery    -->
+                <section>
+                    <div class="ks-gallery pb-3 ks-jewellery-shop-view container">
+                        <div class="panel-heading text-center pt-4 pb-3">
+                            <h4 class="text-shadow theme__heading">Our Shop</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 px-0">
+                                <div class="left-pannel">
+                                    <section class="top position-relative p-3">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-7.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white">Finest Bangles
+                                        </section>
+                                    </section>
+                                    <section class="bottom position-relative p-3">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-8.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white">Ear Rings
+                                        </section>
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 px-0">
+                                <div class="middle-pannel">
+                                    <section class="top position-relative p-3">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-9.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white">Necklaces
+                                        </section>
+                                    </section>
+                                    <section class="bottom position-relative p-3">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-10.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white"> Stylish Rings
+                                        </section>
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 px-0">
+                                <div class="right-pannel row h-100">
+                                    <section class="top position-relative p-3 col-lg-12 col-md-6 h-md-auto">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-11.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white">Designer Diamonds
+                                        </section>
+                                    </section>
+                                    <section class="bottom position-relative p-3 col-lg-12 col-md-6 h-md-auto">
+                                        <section class="h-100">
+                                            <img src="/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-12.jpg"
+                                                 class="ks-image-fluid"/>
+                                        </section>
+                                        <section class="text-position w-100 text-center color-white">Pure Pearls
+                                        </section>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!--   Testimonial      -->
+                <section class="py-5 px-md-0 px-3 container ks-static-testimonial my-sm-5">
+                    <h2 class="theme__heading mb-5 text-center">What Our Client Says</h2>
+                    <div class="row mx-0">
+                        <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <p class="overview"><b>Paula Wilson</b>, Media Analyst
+                            </p>
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <p class="overview"><b>Paula Wilson</b>, Media Analyst
+                            </p>
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                            <p class="testimonial mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
+                                sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel,
+                                semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh
+                                non aliquet.
+                            </p>
+                            <p class="overview"><b>Paula Wilson</b>, Media Analyst
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!--   Contact      -->
+                <section>
+                    <div class="ks-contact">
+                        <section class="ks-contact-head"
+                                 style="background-image: url('/ks_jewellery_page/static/src/landing-pages-images/jewellery/j-13.jpg');">
+                            <div class="ks-bg-color ">
+                                <div class="container d-flex align-items-center justify-content-center h-100">
+                                    <div class="">
+                                        <h2 class="header-text-info text-center color-white b-600">Contact us</h2>
+                                        <p class="text-center color-white">Lorem Ipsum is simply dummy text of the printing and
+                                            typesetting
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="container mb-100">
+                            <div class="row pt-3">
+                                <div class="col-lg-6 col-md-12 col-12 pl-md-5">
+                                    <div class="px-lg-5 border-right ">
+                                        <h4 class="b-600">Lorem Ipsum is simply dummy text</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                        <ul class="list pl-0">
+                                            <li class="d-flex py-2">
+                                                <span class="pr-4 font-24">
+                                                    <i class="fa fa-thumb-tack"></i>
+                                                </span>
+                                                <div class="font-14">Ground Floor, Office - 123, Sector- 63, Noida - 123456
+                                                </div>
+                                            </li>
+                                            <li class="d-flex py-2">
+                                                <span class="pr-4 font-24">
+                                                    <i class="fa fa-mobile"></i>
+                                                </span>
+                                                <div class="font-14">+91-7428<span class="d-none">-</span>721493</div>
+                                            </li>
+                                            <li class="d-flex py-2">
+                                                <span class="pr-4 font-24">
+                                                    <i class="fa fa-envelope"></i>
+                                                </span>
+                                                <div class="font-14">sales@ksolves.com</div>
+                                            </li>
+                                            <li class="d-flex pt-2">
+                                                <span class="pr-4 font-24">
+                                                    <i class="fa fa-globe"></i>
+                                                </span>
+                                                <div class="font-14">https://www.ksolves.com</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <form class="col-lg-6 col-md-12 col-12">
+                                    <div class="row ks-form-info">
+                                        <label class="col-md-3 col-12">
+                                            <span class="max-width">Full Name:</span>
+                                        </label>
+                                        <input type="text" name="" placeholder="Enter full name"
+                                               class="col-md-9 col-12 custom-input"/>
+                                    </div>
+                                    <div class="row ks-form-info">
+                                        <label class="col-md-3 col-12">
+                                            <span class="max-width">Email:</span>
+                                        </label>
+                                        <input type="text" name="" placeholder="Enter email address"
+                                               class="col-md-9 col-12 custom-input"/>
+                                    </div>
+                                    <div class="row ks-form-info">
+                                        <label class="col-md-3 col-12">
+                                            <span class="max-width">Phone:</span>
+                                        </label>
+                                        <input type="number" name="" placeholder="Enter phone number"
+                                               class="col-md-9 col-12 custom-input"/>
+                                    </div>
+                                    <div class="row ks-form-info">
+                                        <label class="col-md-3 col-12">
+                                            <span class="max-width">Message:</span>
+                                        </label>
+                                        <textarea class="col-md-9 col-12 custom-textarea"
+                                                  placeholder="Your comment..."></textarea>
+                                    </div>
+                                    <div class="row ks-form-info justify-content-end">
+                                        <div class="col-md-3 max-width"></div>
+                                        <div class="col-md-9 col-12 d-flex justify-content-end">
+                                            <button class="btn ks-btn-theme">Submit</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--    Services    -->
+                <section class="ks-hepl-panel d-flex align-items-center bg-white container">
+                    <div class="row w-100 ml-0 mr-0 my-3">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12 d-flex align-items-center my-3 my-md-0 my-lg-0 pannel-item-center">
+                            <div class="d-flex">
+                                <div class="icon-container mr-3">
+                                    <img src="/ks_jewellery_page/static/src/static-snippet-images/services/ion-cash---Ionicons.png"
+                                         alt="cash Ionicons" class="w-100"/>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">MONEY BACK</h5>
+                                    <p class="mb-0 ">GUARANTEE</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12 d-flex align-items-center my-3 my-md-0 my-lg-0 pannel-item-center">
+                            <div class="d-flex">
+                                <div class="d-flex icon-container mr-3">
+                                    <img src="/ks_jewellery_page/static/src/static-snippet-images/services/ion-plane---Ionicons.png"
+                                         alt="plan Ionicons" class="w-100"/>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">FREE SHIPPING</h5>
+                                    <p class="mb-0 ">ON ORDER OVER $500</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12 d-flex align-items-center my-3 my-md-0 my-lg-0 pannel-item-center">
+                            <div class="d-flex">
+                                <div class="icon-container mr-3">
+                                    <img src="/ks_jewellery_page/static/src/static-snippet-images/services/ion-android-call---Ionicons.png"
+                                         alt="call Ionicons" class="w-100"/>
+                                </div>
+                                <div class="d-flex align-items-center flex-column text-center">
+                                    <h5 class="mb-0">SUPPORT 24X7</h5>
+                                    <p class="mb-0 ">CALL US: 012-345-678</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12 d-flex align-items-center my-3 my-md-0 my-lg-0 pannel-item-center">
+                            <div class="d-flex">
+                                <div class="icon-container mr-3">
+                                    <img src="/ks_jewellery_page/static/src/static-snippet-images/services/ion-ios-pricetags---Ionicons.png"
+                                         alt="pricetags Ionicons" class="w-100"/>
+                                </div>
+                                <div class="d-flex align-items-center flex-column text-center">
+                                    <h5 class="mb-0">DISCOUNT</h5>
+                                    <p class="mb-0 ">10% ON OVER $2000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </template>
+
+    <data>
+        <template id="ks_theme_jewellery" name="Kinetik Jewellery Shop">
+            <t t-call="website.layout">
+                <t t-call="ks_jewellery_page.ks_landing_jewel"/>
+            </t>
+        </template>
+    </data>
+
+</odoo>
