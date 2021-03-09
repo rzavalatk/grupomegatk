@@ -13,11 +13,6 @@ class PrestamosCuotas(models.Model):
     _description = "Cuotas de los prestamos"
     _order = "id"
 
-    @api.model
-    def cuentas(self):
-        self.write({'producto_interes_id': self.env['ir.config_parameter'].sudo().get_param('prestamos.producto_interes_id') or False,
-            'recibir_pagos': self.env['ir.config_parameter'].sudo().get_param('prestamos.recibir_pagos') or False
-            })
 
     @api.model
     def tipo(self):
@@ -52,13 +47,12 @@ class PrestamosCuotas(models.Model):
     #   self.currency_id = self.cuotas_prestamo_id.currency_id.id
 
     def validar(self):
-        self.cuentas();
         obj_factura = self.env["account.invoice"]
         lineas = []
         if self.cuota_interes > 0:
             val_lineas = {
             'name': 'Cobro de interes mensual de ' + str(self.cuotas_prestamo_id.tasa) + '%',
-            'account_id': self.producto_interes_id.property_account_income_id.id or self.producto_interes_id.categ_id.property_account_income_categ_id.id,
+            'account_id': self.cuotas_prestamo_id.producto_interes_id.property_account_income_id.id or self.cuotas_prestamo_id.producto_interes_id.categ_id.property_account_income_categ_id.id,
             'price_unit': self.cuota_interes,
             'quantity': 1,
             'product_id': self.producto_interes_id.id or False,
@@ -107,7 +101,7 @@ class PrestamosCuotas(models.Model):
                 'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
                 'amount': self.cuota_interes + capital,
                 'currency_id': self.cuotas_prestamo_id.currency_id.id,
-                'journal_id': self.recibir_pagos.id,
+                'journal_id': self.cuotas_prestamo_id.recibir_pagos.id,
                 'payment_date': self.fecha_pago,
                 'communication': self.cuotas_prestamo_id.name + ' ' + self.name,
                 'payment_method_id': 1
