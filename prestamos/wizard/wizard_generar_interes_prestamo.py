@@ -14,7 +14,6 @@ class WizardGenerarfacturainteres(models.TransientModel):
 
 	def factu_interes(self):
 		if self.pago > 0 or self.interes > 0:
-			pass
 			obj_factura = self.env["account.invoice"]
 			ctx = self._context
 			obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])

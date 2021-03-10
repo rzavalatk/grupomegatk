@@ -24,12 +24,12 @@ class Check(models.Model):
 		return print
 
 	def get_totalt(self):
-		self.amount_total_text=''
+		self.amount_total_text = ''
 
 		if self.currency_id:
-			self.amount_total_text=self.to_word(self.total)
+			self.amount_total_text = self.to_word(self.total)
 		else:
-			self.amount_total_text =self.to_word(self.total)
+			self.amount_total_text = self.to_word(self.total)
 		return True
 
 	def to_word(self,number):

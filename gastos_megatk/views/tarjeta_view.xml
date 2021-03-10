@@ -20,7 +20,7 @@
 	</h2>
 	<group colspan="4">
 	<group cols="2">
-		<field name="company_id" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+		<field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
 		<field name="empleado_solicitud" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id', '=' , company_id), ('es_empleado', '=', True)]"/>
 	</group>
 	<group cols="2">
@@ -91,7 +91,7 @@
 <field name="model">gastos.tarjeta.megatk</field>
 <field name="arch" type="xml">
 	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-info="state == 'pendiente'"  decoration-danger="state == 'rechazado'">
-		<field name="company_id"/>
+		<field name="company_id" groups="base.group_multi_company"/>
 		<field name="fecha_inicio" />
 		<field name="fecha_aprobacion"/>	
 		<field name="empleado_solicitud"/>

@@ -64,7 +64,7 @@
                 <group colspan="4">
                 <group cols="2">
                     <field name="name" attrs="{'readonly': [('state','!=','borrador')]}"/>
-                    <field name="company_id" attrs="{'readonly': [('state','!=','borrador')]}"/>
+                    <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','borrador')]}"/>
                 </group>
                 <group cols="2">
                     <field name="descuento" attrs="{'readonly': [('state','!=','borrador')]}"/>
@@ -93,7 +93,7 @@
                 <tree >
                     <field name="name"/>
                     <field name="descuento"/>
-                    <field name="company_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
                     <field name="state"/>
                 </tree>
             </field>

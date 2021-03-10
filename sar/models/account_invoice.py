@@ -53,7 +53,10 @@ class AccountInvoice(models.Model):
     internal_number = fields.Char(string='Número interno', default=False, help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
                                    domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
-
+    x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A");
+    x_registro_exonerado = fields.Char("Registro exonerado", default="N/A");
+    x_registro_sag = fields.Char("Registro del SAG", default="N/A");
+    
     @api.one
     @api.depends('journal_id')
     def get_totalt(self):

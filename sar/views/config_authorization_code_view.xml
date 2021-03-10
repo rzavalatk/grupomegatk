@@ -51,7 +51,7 @@
             <tree decoration-info="active == False" decoration-muted="active == True">
                 <field name="name"/>
                 <field name="code_type"/>
-                <field name="company_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
                 <field name="active"/>
             </tree>
         </field>
@@ -74,7 +74,7 @@
                         <group cols="2">
                             <field name="name"/>
                             <field name="code_type"/>
-                            <field name="company_id" placeholder="Select a company..." options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company" placeholder="Select a company..." options="{'no_create': True}"/>
                         </group>
                         <group cols="2">
                             <field name="start_date" placeholder="Select a date..."/>

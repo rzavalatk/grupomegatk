@@ -10,7 +10,7 @@
     'author': "César Alejandro Rodriguez Castillo",
     'category': 'Accounting',
     'version': '0.1',
-    'depends': ['base', 'account', 'analytic', 'account_pdc', 'purchase'],
+    'depends': ['base', 'account', 'analytic', 'purchase'],
     'data': [
         "security/groups.xml",
         "security/ir.model.access.csv",

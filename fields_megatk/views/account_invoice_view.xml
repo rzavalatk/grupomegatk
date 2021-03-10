@@ -11,9 +11,6 @@
 			</xpath> -->
 			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[2]/field[@name='origin']" position="after">
     			<field name="x_comision"/>
-    			<field name="x_compra_exenta"/>
-    			<field name="x_registro_exonerado"/>
-    			<field name="x_registro_sag"/>
   			</xpath>
   			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='invoice_line_ids']/tree[1]/field[@name='account_analytic_id']" position="after">
 				<field name="x_user_id" groups="base.group_user"/>

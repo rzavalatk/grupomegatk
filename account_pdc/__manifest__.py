@@ -13,6 +13,7 @@
         "base",
         "account",
         "mail",
+        "banks",
     ],
     'data': [
         "security/groups.xml",

@@ -10,7 +10,7 @@
     <sheet>
         <group colspan="4">
         <group cols="2">
-        <field name="company_id" widget="selection"/>
+        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
         <field name="journal_id"/>
         <field name="total" />
         </group>
@@ -61,7 +61,7 @@
         <field name="journal_id" />
         <field name="total" sum="total"/>
         <field name="currency_id"/>
-         <field name="company_id"/>
+         <field name="company_id" groups="base.group_multi_company"/>
     </tree>
     </field>
 </record>

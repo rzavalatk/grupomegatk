@@ -12,7 +12,7 @@
       <separator string="Tipos de documentos"/>
 <group  colspan="4">
     <group >
-        <field name="company_id" options="{'no_create': True}"/>
+        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
         <field name="account_id" options="{'no_create': True}"/>
         <field name="journal_id" options="{'no_create': True}"/>
         <field name="doc_type" />

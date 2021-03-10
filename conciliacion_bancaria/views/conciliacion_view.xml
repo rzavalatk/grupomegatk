@@ -76,7 +76,7 @@
              <field name="saldo_inicial" attrs="{'readonly': [('state','!=','draft')]}"/>
         </group>
         <group cols="2">
-              <field name="company_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+              <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','draft')]}"/>
             <field name="saldo_final" attrs="{'readonly': [('state','!=','draft')]}"/>
             <field name="difference" />
             <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>

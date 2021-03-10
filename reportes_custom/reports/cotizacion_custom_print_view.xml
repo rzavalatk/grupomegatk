@@ -31,7 +31,7 @@
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
 							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
 								<t t-if="o.x_consignacion == 'no'">
-										<span t-if="o.state not in ['draft','sent']">ORDEN</span>
+										<span t-if="o.state not in ['draft','sent']">COTIZACIÓN</span>
 										<span t-if="o.state in ['draft','sent']">COTIZACIÓN </span>
 								</t>
 								<t t-if="o.x_consignacion == 'si'">

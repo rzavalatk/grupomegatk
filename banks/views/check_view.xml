@@ -47,7 +47,7 @@
         <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
         <group colspan="4">
         <group cols="2">
-        <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
+        <field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
         <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
         <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
         </group>
@@ -115,7 +115,7 @@
         <field name="total" sum="total"/>
         <field name="currency_id"/>
         <field name="state"/>
-         <field name="company_id"/>
+         <field name="company_id" groups="base.group_multi_company"/>
     </tree>
     </field>
 </record>

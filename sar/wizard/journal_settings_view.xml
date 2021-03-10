@@ -12,7 +12,7 @@
                     <separator string="Configuración de diario y usuarios"/>
                     <group colspan="4">
                         <group cols="2">
-                            <field name="company_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
                             <field name="journal_id" placeholder="Seleccione un diario..." domain="[('company_id', '=', company_id), ('type', 'in', ['sale','purchase','general'])]"/>
                         </group>
                         <group cols="2">

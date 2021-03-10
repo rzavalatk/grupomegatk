@@ -183,7 +183,7 @@
 							<page string="Cuentas">
 								<group>
 									<group name="productos">
-										<field name="company_id"/>
+										<field name="company_id" groups="base.group_multi_company"/>
 										<field name="user_id"/>
 										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": [["state","in",["draft","cancelado"]]]}'/>
 									</group>
