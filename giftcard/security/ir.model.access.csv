@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_giftcard_manager,giftcard,model_giftcard,giftcard_manager,1,1,1,1
+access_giftcard_user,giftcard,model_giftcard,giftcard_user,1,0,0,0
+access_giftcard_manager_detalle,giftcard_detalle,model_giftcard_detalle,giftcard_manager,1,1,1,1
+access_giftcard_user_detalle,giftcard_detalle,model_giftcard_detalle,giftcard_user,1,0,0,0

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<report
+		id="giftcard_report"
+		model="giftcard"
+		string="Estado de tarjeta"
+		name="giftcard.giftcard_print_view"
+		file="giftcard.giftcard_print_view"
+		report_type="qweb-pdf"
+		attachment_use="True" 
+		paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
+
+		<report
+			id="voucher_report"
+			model="giftcard"
+			string="Váucher"
+			name="giftcard.voucher_report_view"
+			file="giftcard.voucher_report_view"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_pos"/>
+	
+	</data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="giftcard_print_view">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="giftcard.giftcard_print_view_estado" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+    <template id="giftcard_print_view_estado">
+      <t t-call="giftcard.external_layout_standard_giftcard">
+        <div class="page">
+          <br/>
+          <br/>
+          <br/>
+          <table class="table table-sm o_main_table">
+            <thead>
+              <tr>
+                <th style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">FECHA</th>
+                <th style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">DESCRIPCIÓN</th>
+                <th style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">MONTO</th>
+              </tr>
+            </thead>
+            <tbody class="sale_tbody">
+              <t t-foreach="o.giftcard_detalle" t-as="l">
+                <tr>
+                  <td style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="l.date"/>
+                  </td>
+                  <td style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    <span t-field="l.descripcion"/>
+                  </td>
+                  <td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                    L. <span t-field="l.monto"/>
+                  </td>
+                </tr>
+              </t>
+              <tr>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
+                <td class="hidden-top" style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+                <td class="hidden-top" style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              </tr>
+            </tbody>  
+          </table>
+          
+        </div>  
+      </t>
+    </template>
+  </data>
+</odoo>

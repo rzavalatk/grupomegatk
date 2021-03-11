@@ -76,8 +76,7 @@
                 <group name="x_1">
                   <field name="res_parner_id" options="{'no_create': True}" attrs="{'readonly': 
                     [('state','!=','draft')]}"/>
-                  <field name="date"
-                    attrs="{'invisible': [('state','==','draft')]}"/>
+                  <field name="date"/>
                     <field name="descripcion"
                     attrs="{'readonly': [('state','!=','draft')]}"/>
                 </group>

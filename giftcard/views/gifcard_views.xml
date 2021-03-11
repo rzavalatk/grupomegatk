@@ -1,0 +1,229 @@
+<odoo>
+  <data>
+
+    <record id="giftcard_detalle_tree_view" model="ir.ui.view">
+      <field name="name">giftcard.detalle.tree.view</field>
+      <field name="model">giftcard.detalle</field>   
+      <field name="arch" type="xml">
+        <tree edit="0" create="0" delete="0">
+          <field name="date"/>
+          <field name="gifcard_id"/>
+          <field name="descripcion"/>
+          <field name="monto"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_giftcard_detalle">
+      <field name="name">Giftcard.detalle</field>
+      <field name="res_model">giftcard.detalle</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('gifcard_id','=',active_id)]</field>
+    </record>
+
+    <!-- Form View -->
+    <record model="ir.ui.view" id="giftcard_form_view">
+      <field name="name">giftcard.form.view</field>
+      <field name="model">giftcard</field>
+      <field name="arch" type="xml">
+        <form string = "Form Import">
+          <header> 
+            <button name="back_draft" type="object" string="Volver a borrador" 
+              states="cancelado" class="oe_highlight"/>
+            <button name="%(action_wizard_giftcard_recar)d" type="action" string="Validar" states="draft" 
+              class="oe_highlight" />
+            <button name="%(action_wizard_giftcard_recar)d" type="action" string="Recargar" states="validado" class="oe_highlight"/>
+            <button name="%(action_wizard_giftcard_cobrar)d" type="action" string="Cobrar" states="validado" class="oe_highlight"/>
+            <button name="cancelar" type="object" string="Cancelar" 
+              states="validado," class="oe_highlight" confirm='¿Está seguro de cancelar la gift card?'/>
+            <field name="state" widget="statusbar" nolabel="1"/>  
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <button class="oe_stat_button"
+                icon="fa-list-alt"
+                type="action" 
+                name="%(action_giftcard_detalle)d"
+                attrs="{'invisible': [('detalle', '=', 0)]}" string="Detalle">
+                <field name="detalle" widget="statinfo"  invisible='1'/>
+              </button>
+            </div>
+            <group>
+              <h1> <field name="name" attrs="{'readonly': True}"/></h1>
+            </group>
+            <group>
+              <group>
+                <field name="partner_id" />
+                <field name="saldo" attrs="{'readonly': True}"/>
+                <field name="pago" invisible='1'/>
+              </group>
+              <group>
+                <field name="fechaval" />
+                <field name="company_id"/>
+              </group>
+            </group>        
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+        <!-- Kanba View -->
+    <record id="giftcard_kanban_view_afiliados" model="ir.ui.view">
+      <field name="name">giftcard.kanban</field>
+      <field name="model">giftcard</field>
+      <field name="arch" type="xml">
+        <kanban class="o_hr_employee_kanban center-block">
+          <field name="name"/>
+          <separator/>
+          <templates>
+            <t t-name="kanban-box">
+              <div style="height:90px" class="oe_kanban_global_click">
+                <b>Número: </b> <field name="name"/>
+                <br/>
+                <b>Cliente: </b> <field name="partner_id"/>
+                <br/>
+                <div style="text-align:right;">
+                  <b>Saldo: </b> <field name="saldo"/>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <record id="giftcard_tree_view" model="ir.ui.view">
+      <field name="name">giftcard.tree.view</field>
+      <field name="model">giftcard</field>   
+      <field name="arch" type="xml">
+        <tree edit="0" create="0" delete="0">
+          <field name="name"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Reglas de registro -->
+    <record id="giftcard_rule" model="ir.rule">
+      <field name="name">Gift Card</field>
+      <field name="model_id" ref="model_giftcard"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+
+    <!-- Action model view -->
+    <record model="ir.actions.act_window" id="action_gift_card">
+      <field name="name">Gift Card</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">giftcard</field>
+      <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+     <record id="giftcard_detalle_tree_view1" model="ir.ui.view">
+      <field name="name">giftcard.detalle.tree.view1</field>
+      <field name="model">giftcard.detalle</field> 
+      <field name="arch" type="xml">
+        <tree edit="0" create="0" delete="0">
+          <field name="date"/>
+          <field name="partner_id" />
+          <field name="gifcard_id"/>
+          <field name="descripcion"/>
+          <field name="monto"/>
+        </tree>
+      </field>
+    </record>
+
+     <!-- Action model view -->
+    <record model="ir.actions.act_window" id="action_gift_card_detalle">
+      <field name="name">Gift Card Detalle</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">giftcard.detalle</field>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="giftcard_detalle_tree_view1"/>
+      <field name="context">{"search_default_monto":1}</field>  
+    </record>
+
+    <record model="ir.ui.view" id="gift_card_detalle_search">
+    <field name="name">giftcard.detalle.search</field>
+    <field name="model">giftcard.detalle</field>
+    <field name="view_id" ref="giftcard_detalle_tree_view1"/>
+    <field name="arch" type="xml">
+      <search string = 'search'>
+        <filter string="hoy" name="monto" domain="[('monto','>',0),('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+        <filter string="Recarga" name="recarga" domain="[('monto','>',0)]"/>
+        <group expand="0" string="Group By">
+           <filter string="Fecha" name="fecha" domain="[]" context="{'group_by':'date'}"/>
+        </group>
+      </search>
+    </field>
+</record>
+    
+    <!-- menu categories -->
+      <menuitem name="Gift Card" id="giftcard_menu_root" sequence = "1" 
+      web_icon="giftcard,static/description/icon.png" action = "action_gift_card"/> 
+      <menuitem name="Movimientos" id="giftcard_menu_movimientos" sequence = "1"   parent="giftcard_menu_root" />
+      <menuitem name="Detalle" id="giftcard_menu_detalle" sequence = "1"   parent="giftcard_menu_movimientos" action = "action_gift_card_detalle"/>
+
+
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="/home/rzavala/odoo/prueba12/giftcard.list">
+      <field name="name">/home/rzavala/ODOO/prueba12/giftcard list</field>
+      <field name="model">/home/rzavala/odoo/prueba12/giftcard./home/rzavala/odoo/prueba12/giftcard</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="/home/rzavala/odoo/prueba12/giftcard.action_window">
+      <field name="name">/home/rzavala/ODOO/prueba12/giftcard window</field>
+      <field name="res_model">/home/rzavala/odoo/prueba12/giftcard./home/rzavala/odoo/prueba12/giftcard</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="/home/rzavala/odoo/prueba12/giftcard.action_server">
+      <field name="name">/home/rzavala/ODOO/prueba12/giftcard server</field>
+      <field name="model_id" ref="model_/home/rzavala/odoo/prueba12/giftcard_/home/rzavala/odoo/prueba12/giftcard"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="/home/rzavala/ODOO/prueba12/giftcard" id="/home/rzavala/odoo/prueba12/giftcard.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="/home/rzavala/odoo/prueba12/giftcard.menu_1" parent="/home/rzavala/odoo/prueba12/giftcard.menu_root"/>
+    <menuitem name="Menu 2" id="/home/rzavala/odoo/prueba12/giftcard.menu_2" parent="/home/rzavala/odoo/prueba12/giftcard.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="/home/rzavala/odoo/prueba12/giftcard.menu_1_list" parent="/home/rzavala/odoo/prueba12/giftcard.menu_1"
+              action="/home/rzavala/odoo/prueba12/giftcard.action_window"/>
+    <menuitem name="Server to list" id="/home/rzavala/odoo/prueba12/giftcard" parent="/home/rzavala/odoo/prueba12/giftcard.menu_2"
+              action="/home/rzavala/odoo/prueba12/giftcard.action_server"/>
+    -->
+  </data>
+</odoo>

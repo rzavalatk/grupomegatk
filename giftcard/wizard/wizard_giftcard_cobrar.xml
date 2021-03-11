@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="giftcard_cobrar_view_form" model="ir.ui.view">
+			<field name="name">gifrcard.wizard.cobrar.form_view</field>
+			<field name="model">gifrcard.wizard.cobrar</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Transaction Type">
+					<sheet>
+						<group  >
+							<group >
+                <field name="descripcion" />
+							</group>
+							<group >
+                <field name="monto" />
+							</group>
+						</group>
+						<footer>
+						  <button name="aceptar" string="Aceptar" type="object" class="oe_highlight"/>
+						  <button class="oe_highlight" special="cancel" string="Cancelar"/>       
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_wizard_giftcard_cobrar">
+			<field name="name">Crear</field>
+			<field name="res_model">gifrcard.wizard.cobrar</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="giftcard_cobrar_view_form"/>
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>

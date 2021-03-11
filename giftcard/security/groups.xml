@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record model="ir.module.category" id="module_category_giftcard">
+            <field name="name">Gestión de Gift Card</field>
+            <field name="description">Gestión de Gift Card</field>
+            <field name="sequence">4</field>
+    	</record>
+    	
+        <record id="giftcard_manager" model="res.groups">
+    		<field name="category_id" ref="module_category_giftcard"/>
+            <field name="name">Responsable</field>
+        </record>
+
+        <record id="giftcard_user" model="res.groups">
+            <field name="category_id" ref="module_category_giftcard"/>
+            <field name="name">Usuario</field>
+        </record>
+
+        <record id="giftcard_debitos" model="res.groups">
+            <field name="category_id" ref="module_category_giftcard"/>
+            <field name="name">Debito</field>
+        </record>
+
+        <record id="giftcard_creditos" model="res.groups">
+            <field name="category_id" ref="module_category_giftcard"/>
+            <field name="name">Credito</field>
+        </record>
+
+    </data>
+</odoo>
