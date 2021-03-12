@@ -35,7 +35,8 @@ class Check(models.Model):
 	def to_word(self,number):
 		valor = number
 		number = int(number)
-		centavos = math.ceil((round(valor-number,2)) * 100)
+		parte_decimal, parte_entera = math.modf(valor)
+		centavos = round(parte_decimal * 100)
 		UNIDADES = (
 			'',
 			'UN ',
