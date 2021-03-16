@@ -25,7 +25,7 @@ class Saleorder(models.Model):
     # tiempo_mantenimiento = fields.Integer("Tiempo de mantenimiento")
     # aplica_color = fields.Boolean("Apllica color")
     pricelist_id = fields.Many2one(copy=False)
-    x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
+    x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('30','30 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
 
 
