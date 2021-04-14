@@ -18,15 +18,21 @@ class WizardGenerarfacturainteres(models.TransientModel):
 			ctx = self._context
 			obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 			lineas = []
+			producto_interes_id = ''
 			company_id = obj_prestamo.company_id.id
-			obj_prestamo.cuentas()
+
+			config = self.env['res.config.settings']
+			listcon = config.search([('company_id','=',company_id)])
+			for anali in listcon:
+				producto_interes_id = anali.producto_interes_id
+
 			if self.interes > 0:
 				val_lineas = {
 				'name': 'Cobro de interes',
-				'account_id': obj_prestamo.producto_interes_id.property_account_income_id.id or obj_prestamo.producto_interes_id.categ_id.property_account_income_categ_id.id,
+				'account_id': producto_interes_id.property_account_income_id.id or producto_interes_id.categ_id.property_account_income_categ_id.id,
 				'price_unit': self.interes,
 				'quantity': 1,
-				'product_id': obj_prestamo.producto_interes_id.id or False,
+				'product_id': producto_interes_id.id or False,
 				'x_user_id': obj_prestamo.env.user.id
 				}
 				lineas.append((0, 0, val_lineas))
