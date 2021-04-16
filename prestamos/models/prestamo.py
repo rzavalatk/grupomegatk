@@ -260,14 +260,14 @@ class Prestamos(models.Model):
 		dia = fecha_inicial.day
 		mes = fecha_inicial.month + x - 1 if x > 1 else fecha_inicial.month
 		year = fecha_inicial.year
-		if mes==13: 
+		if mes > 12: 
 			mes = 1
 			year = year + 1
 		while saldo > 0.1:
 			interes = monto * tasa
 			saldo = monto + interes - cuota - monto_atrasado1
 			mes = mes + 1
-			if mes==13: 
+			if mes > 12: 
 				mes = 1
 				year = year + 1
 			if self.comprobar_fecha(year, mes, dia):
