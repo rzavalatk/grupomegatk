@@ -37,7 +37,6 @@ class PrestamosCuotas(models.Model):
     saldo = fields.Float(string='Saldo',readonly=True,copy=False)
     gastos = fields.Float(string='Gastos',copy=False)
     pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
-    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', domain=[('sale_ok', '=', True)],)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
     
     invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
@@ -55,7 +54,7 @@ class PrestamosCuotas(models.Model):
             'account_id': self.cuotas_prestamo_id.producto_interes_id.property_account_income_id.id or self.cuotas_prestamo_id.producto_interes_id.categ_id.property_account_income_categ_id.id,
             'price_unit': self.cuota_interes,
             'quantity': 1,
-            'product_id': self.producto_interes_id.id or False,
+            'product_id': self.cuotas_prestamo_id.producto_interes_id.id or False,
             'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas))
@@ -63,10 +62,10 @@ class PrestamosCuotas(models.Model):
         if self.interes_moratorio > 0:
             val_lineas1 = {
                 'name': 'Interes moratorios por incumplimiento de pago',
-                'account_id': self.producto_interes_id.property_account_income_id.id or self.producto_interes_id.categ_id.property_account_income_categ_id.id,
+                'account_id': self.cuotas_prestamo_id.producto_interes_id.property_account_income_id.id or self.cuotas_prestamo_id.producto_interes_id.categ_id.property_account_income_categ_id.id,
                 'price_unit': self.interes_moratorio,
                 'quantity': 1,
-                'product_id': self.producto_interes_id.id or False,
+                'product_id': self.cuotas_prestamo_id.producto_interes_id.id or False,
                 'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas1))

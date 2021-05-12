@@ -29,19 +29,12 @@ class WizardGenerarDeposito(models.TransientModel):
         obj_factura = self.env["account.invoice"]
         ctx = self._context
         obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
-        obj_prestamo.desembolso_cuenta()
-
-        pagos_id = ''
-        config = self.env['res.config.settings']
-        listcon = config.search([('company_id','=',self.env.user.company_id.id)])
-        for anali in listcon:
-            pagos_id = anali.pagos_id
 
         if obj_prestamo.pagos_id:
             lineas = []
             val_lineas = {
                 'name': self.description,
-                'account_id': pagos_id.id,
+                'account_id': obj_prestamo.pagos_id.id,
                 'price_unit': self.monto,
                 'quantity': 1,
                 'product_id': False,

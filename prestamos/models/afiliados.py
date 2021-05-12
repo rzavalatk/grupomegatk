@@ -28,9 +28,6 @@ class Afiliados(models.Model):
 				z = z + 1
 		self.invoice_count_cxp = z
 		
-	def desembolso_cuenta(self):
-		self.write({'pagos_id': self.env['ir.config_parameter'].sudo().get_param('prestamos.interes_id') or False})
-		
 	name_mostrar = fields.Char('Nombre', copy=False)
 	res_partner_prov_id = fields.Many2one('res.partner', string='Afiliado', readonly=True, states={'draft': [('readonly', False)]},)
 	cuenta = fields.Char('Numero de cuenta', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
@@ -42,7 +39,7 @@ class Afiliados(models.Model):
 	active = fields.Boolean(string='Activo', default=True, )
 	movimientos_line = fields.One2many("prestamos.afiliados.movimientos", "moviminetos_id", "Detalle de moviminetos")
 
-	saldo_inicial = fields.Float(string='Saldo inicial', copy=False, readonly=True, )
+	saldo_inicial = fields.Float(string='Ultimo depósito', copy=False, readonly=True, )
 	saldo_real = fields.Float(string='Saldo real', compute='_credit_debit_get', copy=False, readonly=True, )
 	fecha_apertura = fields.Date(string='Fecha de apertura', readonly=True, required=True, states={'draft': [('readonly', False)]},)
 	
@@ -51,7 +48,7 @@ class Afiliados(models.Model):
 	invoice_count_cxp = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 
-	pagos_id = fields.Many2one("account.account", "Recibir depósito",)
+	pagos_id = fields.Many2one("account.account", "Recibir depósito", required=True, copy=True,)
 
 	def back_draft(self):
 		self.write({'state': 'draft'})

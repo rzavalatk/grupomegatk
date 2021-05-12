@@ -14,7 +14,6 @@ class WizardGenerarCheque(models.TransientModel):
         if self.currency_id:
             if self.currency_id != self.company_id.currency_id:
                 tasa = self.currency_id.with_context(date=self.fecha)
-                print("tasa");print("tasa");print("tasa");print(tasa.rate);print("tasa");
                 self.currency_rate = 1 / tasa.rate 
                 self.es_moneda_base = False
             else:
@@ -53,15 +52,9 @@ class WizardGenerarCheque(models.TransientModel):
         obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
         obj_check = self.env["banks.check"]
 
-        account_id = ''
-        config = self.env['res.config.settings']
-        listcon = config.search([('company_id','=',self.company_id.id)])
-        for anali in listcon:
-            account_id = anali.account_id
-                
         lineas = []
         val_lineas = {
-            'account_id': account_id.id,
+            'account_id': obj_prestamo.account_id.id,
             'move_type': 'debit',
             'name': self.name,
             'amount': self.monto,

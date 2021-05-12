@@ -21,18 +21,13 @@ class WizardGenerarfacturainteres(models.TransientModel):
 			producto_interes_id = ''
 			company_id = obj_prestamo.company_id.id
 
-			config = self.env['res.config.settings']
-			listcon = config.search([('company_id','=',company_id)])
-			for anali in listcon:
-				producto_interes_id = anali.producto_interes_id
-
 			if self.interes > 0:
 				val_lineas = {
 				'name': 'Cobro de interes',
-				'account_id': producto_interes_id.property_account_income_id.id or producto_interes_id.categ_id.property_account_income_categ_id.id,
+				'account_id': obj_prestamo.producto_interes_id.property_account_income_id.id or obj_prestamo.producto_interes_id.categ_id.property_account_income_categ_id.id,
 				'price_unit': self.interes,
 				'quantity': 1,
-				'product_id': producto_interes_id.id or False,
+				'product_id': obj_prestamo.producto_interes_id.id or False,
 				'x_user_id': obj_prestamo.env.user.id
 				}
 				lineas.append((0, 0, val_lineas))
@@ -56,7 +51,6 @@ class WizardGenerarfacturainteres(models.TransientModel):
 				account_invoice_id = obj_factura.create(val_encabezado)
 				obj_prestamo.invoice_cxc_ids = [(4, account_invoice_id.id, 0)]
 				
-			
 			if self.pago > 0:
 				obj_paymet_id = self.env["account.payment"]
 				val_payment = {
@@ -76,8 +70,9 @@ class WizardGenerarfacturainteres(models.TransientModel):
 				obj_prestamo.payment_ids = [(4, paymet_id.id, 0)]
 
 			if obj_prestamo.monto_restante > 0 :
-				if self.pago - self.interes > 0:
+				if self.pago - self.interes < 0:
 					obj_prestamo.monto_restante = obj_prestamo.monto_restante - (self.pago - self.interes)
+			obj_prestamo.interes_generado = (obj_prestamo.monto_restante * obj_prestamo.tasa)/100
 		else:
 			raise UserError(_('El pago y El interes no pueden ser cero.'))
 

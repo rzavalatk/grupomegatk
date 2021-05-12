@@ -20,15 +20,9 @@ class WizardGenerarCheque(models.TransientModel):
 				self.currency_rate = 1
 				self.es_moneda_base = True
 
-	def get_company(self):
-		contexto = self._context
-		if 'active_id' in contexto:
-			obj_prestamo = self.env["prestamos"].browse(contexto['active_id'])
-			return obj_prestamo.company_id
-
 	fecha = fields.Date("Fecha de cheque/transferencia", required=True)
 	name = fields.Char("Descripción del cheque", required=True)
-	company_id = fields.Many2one("res.company", "Empresa", required=True, default=get_company)
+	company_id = fields.Many2one("res.company", "Empresa", required=True, default=lambda self: self.env.user.company_id)
 	banco_id = fields.Many2one("account.journal", "Banco", required=True)
 	monto = fields.Float("Total",)
 	doc_type = fields.Selection([('check', 'Cheque'), ('transference', 'Transferencia'),('debit','Débito')], string='Tipo de Transacción', required=True)

@@ -74,6 +74,13 @@
 	                </tree>
 		            </field>
 		        	</page>
+							<page string="Cuenta">
+								<group>
+									<group>
+										<field name="pagos_id" />
+									</group>
+								</group>
+		        	</page>
 						</notebook>
 					</sheet>
 					<div class="oe_chatter">

@@ -94,6 +94,8 @@
 							attrs="{'invisible': ['|',('state','!=','proceso'),('tipo_prestamo','!=','personal')]}" class="oe_highlight" />
 						<button name="cancelar" type="object" string="Cancelar" 
 							states="validado,desembolso,proceso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
+						<button name="fechainicio" type="object" string="Fecha" 
+							class="oe_highlight"/>
 						<field name="state" widget="statusbar" nolabel="1"/>  
 					</header>
 					<sheet>
@@ -139,6 +141,7 @@
 								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
 								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>  <!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
 								<field name="monto_restante" widget='monetary' readonly="1" attrs="{'invisible': [('state', '!=', 'proceso')]}"/>
+								<field name="interes_generado" widget='monetary' readonly="1" attrs="{'invisible': ['&amp;',('state', '=', 'proceso'),('tipo_prestamo', '!=', 'personal')]}"/>
 							</group>
 							<group name="datos_pres">
 								<field name="gasto_prestamo" widget='monetary'/>
@@ -188,7 +191,11 @@
 										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": [["state","in",["draft","cancelado"]]]}'/>
 									</group>
 									<group name="cuentas">
-										
+										<field name="account_id"/>
+										<field name="account_redes_id"/>
+										<field name="producto_gasto_id"/>
+										<field name="producto_interes_id"/>
+										<field name="recibir_pagos"/>
 									</group>
 								</group>
 							</page>
@@ -272,7 +279,5 @@
 		<menuitem name="Personales" id="prestamos_personales_menu_category" sequence = "1"		parent="prestamos_menu_category" action = "action_prestamos"/>
 		<menuitem name="Financiamiento" id="prestamos_financiamiento_menu_category" sequence = "2"    parent="prestamos_menu_category" action = "action_prestamos_financiamiento"/>
 
-		<menuitem name="Configuración" id="config_menu_category" sequence = "3" parent="prestamos_menu_root"/>
-		<menuitem name="Configuración" id="config_config_menu_category" sequence = "10" parent="config_menu_category" action = "prestamo_config_settings_action"/>
 	</data>
 </odoo>
