@@ -114,11 +114,11 @@ class Prestamos(models.Model):
     
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')], required=True,)
     
-    producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)],)
-    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True, domain=[('sale_ok', '=', True)],)
+    producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)], default = product_gasto,)
+    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True, domain=[('sale_ok', '=', True)], default = product_interes,)
 
-    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True,)
-    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'draft': [('readonly', False)]}, )
+    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True, default = desembolso_cuenta,)
+    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'draft': [('readonly', False)]}, default=redescuento_cuenta)
     
     user_id = fields.Many2one('res.users', string='Responsable', index=True,  default=lambda self: self.env.user,readonly=True, states={'draft': [('readonly', False)]},)
     
