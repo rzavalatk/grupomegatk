@@ -26,6 +26,28 @@ class AccountInvoice(models.Model):
             else:
                 return False
 
+    @api.one
+    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
+                 'currency_id', 'company_id', 'date_invoice', 'type', 'date')
+    def _compute_amount_vt(self):
+        descuento = 0
+        exento = 0
+        gravado = 0
+        subtotal = 0
+        isv = 0
+        for line in self.invoice_line_ids:
+            descuento = descuento + ((line.price_unit * line.quantity) * (line.discount / 100))
+            subtotal = subtotal + line.price_subtotal
+            isv = isv + line.price_tax
+            if line.price_tax == 0:
+                exento = exento + line.price_subtotal
+            else:
+                gravado = gravado + line.price_subtotal
+
+        self.descuento = descuento
+        self.exento = exento
+        self.gravado = gravado
+
     @api.multi
     @api.depends("journal_id")
     def _default_sequence(self, journal_id):
@@ -56,6 +78,10 @@ class AccountInvoice(models.Model):
     x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A");
     x_registro_exonerado = fields.Char("Registro exonerado", default="N/A");
     x_registro_sag = fields.Char("Registro del SAG", default="N/A");
+    x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
+    descuento = fields.Monetary(string='Descuento', store=True, readonly=True, compute='_compute_amount_vt')
+    exento = fields.Monetary(string='Exento', store=True, readonly=True, compute='_compute_amount_vt')
+    gravado = fields.Monetary(string='Gravado', store=True, readonly=True, compute='_compute_amount_vt')
     
     @api.one
     @api.depends('journal_id')
@@ -170,7 +196,6 @@ class AccountInvoice(models.Model):
         if(centavos)>0:
             converted+= "con %2i/100 Centavos"%centavos
         return converted.title()
-
 
     def convert_group(self,n):
         UNIDADES = (
@@ -335,3 +360,20 @@ class AccountInvoice(models.Model):
                 else:
                     inv.move_id.write({'name': inv.internal_number})
         return res
+
+    @api.onchange('cash_rounding_id', 'invoice_line_ids', 'tax_line_ids', 'amount_total')
+    def _onchange_cash_rounding_vt(self):
+        descuento = 0
+        exento = 0
+        gravado = 0
+        for line in self.invoice_line_ids:
+            descuento = descuento + ((line.price_unit * line.quantity) * (line.discount / 100))
+            if line.price_tax == 0:
+                exento = exento + line.price_subtotal
+            else:
+                gravado = gravado + line.price_subtotal
+
+        self.descuento = descuento
+        self.exento = exento
+        self.gravado = gravado
+

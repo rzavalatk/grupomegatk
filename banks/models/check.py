@@ -37,6 +37,7 @@ class Check(models.Model):
 		number = int(number)
 		parte_decimal, parte_entera = math.modf(valor)
 		centavos = round(parte_decimal * 100)
+
 		UNIDADES = (
 			'',
 			'UN ',

@@ -7,13 +7,26 @@
     <field name="inherit_id" ref="account.invoice_form" />
     <field name="arch" type="xml">
         <field name="payment_term_id" position="after">
-	 <field name="fiscal_control" invisible="1"/>
+            <field name="fiscal_control" invisible="1"/>
             <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
-'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
-         </field>
-	 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[1]/field[@name='company_id']" position="after">
+    'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
+        </field>
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[1]/field[@name='company_id']" position="after">
             <field name="internal_number" groups="base.group_system"/>
         </xpath>
+        <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+            <attribute name="string">Sub Total</attribute>
+        </xpath>
+        <xpath expr="//field[@name='amount_tax']" position="attributes">
+            <attribute name="string">ISV</attribute>
+        </xpath>
+        <field name="amount_untaxed" position="before">
+            <field name="descuento"/>
+        </field>
+        <field name="amount_untaxed" position="after">
+            <field name="exento"/>
+            <field name="gravado"/>
+        </field>
     </field>
 </record>
 
@@ -43,6 +56,7 @@
             <field name="x_compra_exenta"/>
             <field name="x_registro_exonerado"/>
             <field name="x_registro_sag"/>
+            <field name="x_comision" invisible = '1' />
         </xpath>
     </field>
 </record>

@@ -233,7 +233,7 @@
                         <strong>Importe Exonerado</strong>
                       </td>
                       <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                        <t t-if="not o.x_compra_exenta == 'N/A'">
+                        <t t-if="not o.x_registro_exonerado == 'N/A'">
                           <span t-esc="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                         </t>
                         <t t-else="" >
@@ -244,7 +244,7 @@
                     <tr>
                       <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Importe Exento</strong></td>
                       <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                        <t t-if="o.x_compra_exenta == 'N/A'">
+                        <t t-if="o.x_registro_exonerado == 'N/A'">
                           <span t-esc="_exento_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                         </t>
                         <t t-else="" >
@@ -255,7 +255,7 @@
                     <tr>
                       <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Importe Gravado 15%</strong></td>
                       <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                        <t t-if="o.x_compra_exenta == 'N/A'">
+                        <t t-if="o.x_registro_exonerado == 'N/A'">
                           <span t-esc="o.amount_untaxed - _exento_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                         </t>
                         <t t-else="" >

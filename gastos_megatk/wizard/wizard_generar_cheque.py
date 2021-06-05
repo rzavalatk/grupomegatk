@@ -14,7 +14,6 @@ class WizardGenerarCheque(models.TransientModel):
         if self.currency_id:
             if self.currency_id != self.company_id.currency_id:
                 tasa = self.currency_id.with_context(date=self.fecha)
-                print("tasa");print("tasa");print("tasa");print(tasa.rate);print("tasa");
                 self.currency_rate = 1 / tasa.rate 
                 self.es_moneda_base = False
             else:

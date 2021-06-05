@@ -7,7 +7,6 @@ class Account_invoice(models.Model):
 
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     
-
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 

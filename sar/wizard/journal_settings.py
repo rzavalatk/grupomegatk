@@ -167,12 +167,13 @@ class SequenceJournal(models.TransientModel):
             vitt_max_value = self.vitt_prefix + str(final_number_filled)
         sequence_validated = self.env["ir.sequence"].search([('vitt_prefix', '=', self.vitt_prefix), ('vitt_padding', '=', self.vitt_padding)])
         values = {'name': self.sequence_name,
-                  'fiscal_sequence_regime_ids': [(4, obj_fiscal_sequence_regime.id, None)],
+                  'fiscal_sequence_regime_ids': [(4, obj_fiscal_sequence_regime.id, 0)],
                   'min_value': self.min_value,
                   'max_value': self.max_value,
                   'expiration_date': obj_code_authorization.expiration_date,
-                  'vitt_prefix': self.vitt_prefix,
-                  'vitt_padding': self.vitt_padding,
+                  'cai': obj_code_authorization.name,
+                  'prefix': self.vitt_prefix,
+                  'padding': self.vitt_padding,
                   'vitt_min_value': vitt_min_value,
                   'vitt_max_value': vitt_max_value,
                   'is_fiscal_sequence': True,
@@ -184,7 +185,7 @@ class SequenceJournal(models.TransientModel):
             users_vals = {}
             for users in self.user_ids:
                 users_vals = {
-                    'user_ids': [(4, users.id, None)],
+                    'user_ids': [(4, users.id, 0)],
                 }
             if users_vals:
                 obj_sequence.write(users_vals)

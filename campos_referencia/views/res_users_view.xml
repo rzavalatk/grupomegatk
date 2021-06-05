@@ -5,18 +5,20 @@
 	  		<field name="name">res.users.megatk.view</field>
 	  		<field name="model">res.users</field>
 	  		<field name="inherit_id" ref="base.view_users_form" />
-			<field name="arch" type="xml">
-				<field name="partner_id" position="after">
-					<group string="Info Vendedor">
-						<group name="studio_group_0IoKR">
-							<field name="tipo_vendedor"/>
-							<field name="ubicacion_vendedor" />
-						</group>
-						<group name="studio_group_0IoKR">
-							<field name="empresa_pertenece" />
-						</group>
-					</group>
-				</field>
+				<field name="arch" type="xml">
+					<xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+				    <page name="studio_page_Qsa42" string="Custom">
+				      <group string="Info Vendedor">
+								<group name="studio_group_0IoKR">
+									<field name="tipo_vendedor"/>
+									<field name="ubicacion_vendedor" />
+								</group>
+								<group name="studio_group_0IoKR">
+									<field name="empresa_pertenece" />
+								</group>
+							</group>
+				    </page>
+		  		</xpath>
 			</field>
 	   	</record>
 	</data>	

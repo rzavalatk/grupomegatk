@@ -10,10 +10,10 @@
 				<attribute name="invisible">1</attribute>
 			</xpath> -->
 			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[2]/field[@name='origin']" position="after">
-    			<field name="x_comision"/>
-  			</xpath>
-  			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='invoice_line_ids']/tree[1]/field[@name='account_analytic_id']" position="after">
-				<field name="x_user_id" groups="base.group_user"/>
+  			<field name="x_comision"/>
+			</xpath>
+			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='invoice_line_ids']/tree[1]/field[@name='account_analytic_id']" position="after">
+			<field name="x_user_id" groups="base.group_user"/>
 			</xpath>
 			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='invoice_line_ids']/tree[1]/field[@name='name']" position="after">
 				<field name="x_series" groups="base.group_user"/>

@@ -51,6 +51,8 @@
         <field name="name">Configuración de Secuencias</field>
         <field name="res_model">sar.journal.settings</field>
         <field name="view_mode">form</field>
+        <field name="view_id" ref="journal_settings_view_form"/>
+        <field name="target">new</field>
     </record>
 
 </data>
