@@ -12,6 +12,15 @@ class Product(models.Model):
     # 	,('helse','HELSE'),('lares','LARES'),('ritedent','RITEDENT'),('lumadent','LUMADENT'),('bioart','BIOART'),('mdcdental','MDC DENTAL'),('mdk','MDK'),('smiledt','SMILE DT'),('medeco','MEDECO'),('mediceptuk','MEDICEPT UK'),('medimax','MEDIMAX'),('medico','MEDICO'),('metabiomed','METABIOMED'),('midmark','MIDMARK'),('mti','MTI'),('nsk','NSK'),('pacdent','PACDENT')
     # 	,('pulpdent','PULPDENT'),('scipharm','SCI PHARM'),('tehnodent','TEHNODENT'),('vistadental','VISTA DENTAL'),('ritdent','RITDENT'),('dfs','DFS'),('biolectronics','BIOELECTRONICS'),('etal','ETAL'),('tribest','TRIBEST'),('mc_dental','MC DENTAL'),('importadoragil','IMPORTADORA Y EXPORTADORA GIL'),('dromeinter','DROMEINTER'),('vdw','VDW'),('henryshe','HENRY SCHEIN')
     # 	,('odontotech','ODONTOTECH')],string = 'Marca')
+
+    @api.one
+    @api.depends('list_price', 'currency_id', 'company_id', 'x_costo_real', 'standard_price')
+    def _compute_amount_vt(self):
+        if self.x_costo_real == 0:
+            self.x_ganancia = ((self.list_price - self.standard_price)*100) / self.standard_price
+        else:
+            self.x_ganancia = ((self.list_price - self.x_costo_real)*100) / self.x_costo_real
+
     x_tipo = fields.Selection([('producto','Producto'),('suministro','Suministro')],string = 'Tipo')
     x_ingresotk = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
     	,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte'),('varios','Ingreso Varios')],string = 'Ingreso/Linea')
@@ -25,7 +34,7 @@ class Product(models.Model):
     x_ingresonic = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
         ,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte')
         ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
-
+    x_ganancia = fields.Float(string='Ganancia', compute='_compute_amount_vt')
 
 
 class ProductMarca(models.Model):

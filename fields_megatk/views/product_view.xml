@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-	<record model="ir.ui.view" id="product_campo_megatk_view_inh">
+		<record model="ir.ui.view" id="product_campo_megatk_view_inh">
   		<field name="name">product.campomegatk.view</field>
   		<field name="model">product.template</field>
   		<field name="inherit_id" ref="product.product_template_form_view" />
-		<field name="arch" type="xml">
-			<xpath expr="//field[@name='standard_price']" position="attributes">
-			    <attribute name="groups">stock.group_stock_manager,base.group_system,purchase.group_purchase_manager</attribute>
-			</xpath>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='standard_price']" position="attributes">
+				    <attribute name="groups">stock.group_stock_manager,base.group_system,purchase.group_purchase_manager</attribute>
+				</xpath>
 		  	<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='general_information']/group[1]" position="after">
 		    	<group name="marca">
 		    	  	<group name="studio_group_iZx2r_left">
@@ -22,7 +22,7 @@
 		      		</group>
 		    	</group>
 		  	</xpath>
-		</field>
+			</field>
    	</record>
 
    	<record model="ir.ui.view" id="product_page_megatk_view_inh">
@@ -34,8 +34,8 @@
 			    <page name="x_importacion" string="Personalización" groups="stock.group_stock_user">
 			      	<group name="x_datos"  string="Importación">
 			        	<group name="x_datos_left">
-			        		<field name="x_costo_real" widget="monetary"/>
-			        		<field name="x_ponderacion"/>
+			        		<field name="x_costo_real" widget="monetary" readonly="1"/>
+			        		<field name="x_ponderacion" readonly="1"/>
 		     	   		</group>	        	
 			      	</group>
 			      	<group name="x_datos1" string="Comisiones">
@@ -46,6 +46,10 @@
 			      	</group>
 			    </page>
 			 </xpath>
+			<xpath expr="//field[@name='list_price']" position="after">
+    		<field name="x_costo_real" widget="monetary"/>
+    		<field name="x_ganancia" readonly="1"/>
+			</xpath>
 		</field>
    	</record>
 
@@ -70,6 +74,10 @@
 			      	</group>
 			    </page>
 			 </xpath>
+			 <xpath expr="//field[@name='lst_price']" position="after">
+    		<field name="x_costo_real" widget="monetary" readonly="1"/>
+    		<field name="x_ganancia" readonly="1" />
+			</xpath>
 		</field>
    	</record>
 
