@@ -34,7 +34,7 @@ class Product(models.Model):
     x_ingresonic = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
         ,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte')
         ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
-    x_ganancia = fields.Float(string='Ganancia', compute='_compute_amount_vt')
+    x_ganancia = fields.Float(string='Ganancia', store=True, compute='_compute_amount_vt')
 
 
 class ProductMarca(models.Model):
