@@ -58,10 +58,17 @@ class CrmLead(models.Model):
     def imprimir_soporte(self):
         self.ensure_one()
         if self.tipo_soporte == 'taller':
+            self.send_email_with_attachment()
             return self.env.ref('fields_megatk.crm_orden_ingreso').report_action(self)
         elif self.tipo_soporte == 'visita':
             return self.env.ref('fields_megatk.crm_visita_tecnica').report_action(self)
-       
+    
+    def send_email_with_attachment(self):
+        template = self.env.ref('fields_megatk.email_template_ingreso_taller')
+        email_values = {'email_to': self.email_from ,
+            'email_from': self.env.user.email}
+        template.send_mail(self.id, email_values=email_values, force_send=True)
+        return True
 
 class CrmLeadTipo(models.Model):
     _name = 'crm.lead.tipo'

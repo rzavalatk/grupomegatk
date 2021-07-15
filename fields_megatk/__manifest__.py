@@ -10,6 +10,7 @@
         "hr",
         "base_import",
        	"purchase",
+        "mail",
         "formatos_papel_mega",
 	  ],
     "data": [
@@ -20,6 +21,7 @@
         'reports/orden_ingreso.xml',
         'reports/ingreso_print_view.xml',
         "security/ir.model.access.csv",
+        "views/email_template.xml",
     	"views/sale_order_view.xml",
     	"views/purchase_order_view.xml",
     	"views/product_view.xml",

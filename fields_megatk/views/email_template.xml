@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">    
+    <record id="email_template_ingreso_taller" model="mail.template">
+      <field name="name">Ingreso al taller</field>
+      <field name="model_id" ref="model_crm_lead"/>
+      <field name="subject">Ingreso del equipo (${object.serie})</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+                Orden de Ingreso                         
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <div style="float: right; margin-top: -30px;">
+              <h4>Fecha Ingreso: <span> ${object.create_date} </span></h4>                           
+            </div>
+            <table style="table-layout: fixed; width:100%">
+              <tr>
+                <td colspan="3" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                  Información del Cliente
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-aliword-wrap: break-word; gn:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  Cliente: <span>${object.partner_id.name} </span>
+                </td>
+                <td style="vertical-align:word-wrap: break-word; middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                  Telefono: <span>${object.phone} </span>
+                </td>
+                <td style="vertical-align:word-wrap: break-word; middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  Email: <span>${object.email_from} </span>
+                </td>
+              </tr>
+            </table>
+            <table style="table-layout: fixed; width:100%">
+              <tr>
+                <td colspan="4" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                  Datos del Equipo
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-aliword-wrap: break-word; gn:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  # Serie: <span>${object.serie} </span>
+                </td>
+                <td style="vertical-align:word-wrap: break-word; middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                  Marca: <span>${object.marca_id.name} </span>
+                </td>
+                <td style="vertical-align:word-wrap: break-word; middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  Categoría: <span>${object.categoria_id.name} </span>
+                </td>
+                <td style="vertical-align:word-wrap: break-word; middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  Modelo: <span>${object.modelo_id.name} </span>
+                </td>
+              </tr>
+            </table>
+            <br/>
+    
+            <table style="table-layout: fixed; width:100%">
+              <tr>
+                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                  Accesorios Incluidos
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" class="text-center" style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                  % for line in object.accesorio_ids:
+                      <span>${line.name}</span>
+                  % endfor
+                </td>
+              </tr>
+            </table>
+            <table style="table-layout: fixed; width:100%">
+              
+            </table>
+            <table style="width:100%">
+              <tr>
+                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                  Estado del Equipo
+                </td>
+               </tr>
+              <tr>
+                <td style="word-wrap: break-word; width:10%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+                  Fallas: 
+                </td>
+                <td style="width:90%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid;border-right: 1px solid;font-family:'Arial'; font-size:14pt; ">
+                   <span>${object.fallas} </span>
+                </td>
+              </tr>
+            </table>
+            <br></br>
+            <div style="width:100%; vertical-align:middle; font-family:'Arial'; font-size:11pt; text-align: justify;">
+              NOTA: La presente sirve como constancia de que nuestra empresa está a la disposición de brindar la revisión, diagnóstico y reparación del equipo ingresado a nuestro Departamento Técnico. El cobro establecido por diagnóstico, equipo sin garantía, compra ajena a nuestra empresa tendrá un costo de L. 800.00 más el impuesto sobre la venta. El tiempo de respuesta para los equipos es de tres días hábiles después de notificada la reparación del equipo se dará una prórroga de 30 días para retirarlo luego de este tiempo se cobrara el 5% del importe de la reparación. Pasada 90 días el equipo entrara en subasta. Este documento no es válido sin firma ni sello de la empresa. Para sugerencias o reclamos con atención al cliente Tel.(504) 2269 4416/20 o escribanos a: info@megatk.com.
+            </div>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+          </div>  
+          <br></br>
+          <br></br>
+          <br></br>
+          <div style="font-family:Helvetica, Arial, sans-serif;font-size:13px;">
+            <span>
+                <table width="615" border="0" cellspacing="0" cellpadding="0" style="color:rgb(0, 0, 0);font-family:New;font-size:medium;border:1px solid rgb(98, 54, 193);background-image:url(https://ecp.yusercontent.com/mail?url=http%3A%2F%2Ffondos.megatk.net%2Fuploads%2F3%2F4%2F9%2F5%2F34958894%2Ffirma-espacio-1-01_1_orig.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=yHGIHr5dyfovRHqVNczcaA--~D);background-size:100% 100%;background-color:rgb(156, 208, 236);">
+                    <tbody>
+                        <tr>
+                            <td width="170" height="170" align="right" valign="top" style="border-top:1px solid rgb(98, 54, 193);border-bottom:1px solid rgb(98, 54, 193);border-right:none;border-left:none;">
+                                <a rel="nofollow noopener noreferrer" target="_blank" href="https://megatk.net/index.html">
+                                    <img src="https://ecp.yusercontent.com/mail?url=http%3A%2F%2Ffondos.megatk.net%2Fuploads%2F3%2F4%2F9%2F5%2F34958894%2Ffirma-logo-mesa-de-trabajo-1_orig.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=rsuFKG3__8eed_M6cMjhyg--~D" style="padding-top:15px;width:150px;max-width:316px;" class="yiv5981638624"/>www.megatk.net
+                                </a>
+                            </td>
+                            <td width="430" height="170" valign="bottom" style="padding-left:25px;font-family:Helvetica, Arial, sans-serif;font-size:13px;border-top:1px solid rgb(98, 54, 193);border-bottom:1px solid rgb(98, 54, 193);border-left:none;border-right:none;line-height:16px;">
+                                <p style="font-size:18px;"><b>Gabriela Paz</b></p>
+                                <p style="line-height:19px;"><b>Asistente de Soporte / IT Grupo Megatk</b></p>
+                                <p style="line-height:19px;">Tel: +(504)2269-4416 ext 9000 / 9001 </p>
+                                <p style="line-height:19px;">Mail: gpaz@megatk.com </p>
+                                <p> <b>Síguenos en:</b></p>
+                                <p>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://www.facebook.com/MEGATKHN/">
+                                        <img src="https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F285%2FPNG%2F256%2Fsocial_facebook_box_white_256_30647.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=WrqkWgBzF7_OV4oJXGCCkQ--~D" width="30" height="30" class="yiv5981638624"/>
+                                    </a>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://twitter.com/megatkhn">
+                                        <img src="https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F285%2FPNG%2F256%2Fsocial_twitter_box_white_256_30621.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=P9Seq5WbMCAxHepzyb.6zw--~D" width="30" height="30" class="yiv5981638624"/>
+                                    </a>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://es.linkedin.com/company/megatk">
+                                        <img src="https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F285%2FPNG%2F128%2Fsocial_linkedin_box_white_256_30640.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=5tP_m45iHmxyKn95McIKrA--~D" width="30" height="30" class="yiv5981638624"/>
+                                    </a>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://www.instagram.com/explore/tags/megatk/top/?hl=es-la">
+                                        <img src="https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F1106%2FPNG%2F128%2F1485972241-instagramsocialnetworkbrandlogo_79015.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=JqY.opyetAxpIdei.3Ir_Q--~D" width="30" height="30" class="yiv5981638624"/>
+                                    </a>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://api.whatsapp.com/send?phone=50495093273&amp;text=&amp;source=&amp;data=">
+                                        <img src="https://ecp.yusercontent.com/mail?url=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F1753%2FPNG%2F128%2Ficonfinder-social-media-applications-23whatsapp-4102606_113811.png&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=kdiaaVE2n5T6N48CQ5WY1g--~D" width="30" height="30" class="yiv5981638624"/>
+                                    </a>
+                                    <a rel="nofollow noopener noreferrer" target="_blank" href="https://megatk.net/ofertas.html">
+                                        <img src="https://ecp.yusercontent.com/mail?url=http%3A%2F%2Fwww.gyre.es%2Fs%2Fcc_images%2Fteaserbox_12892228.png%3Ft%3D1474485471&amp;t=1626292699&amp;ymreqid=0bd59a9e-b65e-051b-1ce8-d40083016f00&amp;sig=U1SgPrmKoc8LsjX7TebAhg--~D" width="70" height="35" class="yiv5981638624"/>
+                                    </a>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </span>
+          </div>
+        </div>
+      </field>
+      <field name="report_template" ref="fields_megatk.crm_orden_ingreso"/>
+      <field name="report_name">'Ingreso de equipo'</field>
+    </record>
+  </data>
+</odoo>

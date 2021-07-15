@@ -56,8 +56,6 @@
               Orden de Ingreso                         
           </div>
           <br/>
-          <br/>
-          <br/>
           <div style="float: right; margin-top: -30px;">
               <h4>Fecha Ingreso: <span t-field="o.create_date" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></h4>                           
           </div>
