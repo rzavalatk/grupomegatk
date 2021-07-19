@@ -68,8 +68,8 @@ class LiquidacionGastos(models.Model):
     total_gastos = fields.Float("Total gastos", compute=get_totalgastos, track_visibility='onchange')
     total_diferencia = fields.Float("Diferencia", compute=get_totalgastos, track_visibility='onchange')
     monto_anticipo = fields.Float("Monto de anticipo", track_visibility='onchange')
-    banco_id = fields.Many2one("banks.check", "Cheque/Transferencia", track_visibility='onchange')
-    banco_debit_id = fields.Many2one("banks.debit", "Debito", track_visibility='onchange')
+    banco_id = fields.Many2one("banks.check", "Cheque/Transferencia", track_visibility='onchange', copy=False)
+    banco_debit_id = fields.Many2one("banks.debit", "Debito", track_visibility='onchange', copy=False)
     journal_id = fields.Many2one("account.journal", "Diario", domain=[('type','=','general')])
     move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
 
