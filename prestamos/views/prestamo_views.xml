@@ -62,10 +62,10 @@
 								<field name="cuota_prestamo"  attrs='{"readonly": [["cuota_prestamo","!=",False]]}'/>
 							</group>
 							<group name="x_2">
-								<field name="fecha_pago"  required="1"/>
+								<field name="fecha_pago"  required="1" readonly="1"/>
  								<field name="cuotas_prestamo_id"  attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
 								<field name="pago"  attrs='{"invisible": [["pago","=",0]]}'/>
-								<field name="fecha_pagado" />
+								<field name="fecha_pagado" attrs='{"readonly": [["state","!=","draft"]]}'/>
 								<field name="interes_generado"  attrs='{"invisible": [["interes_generado","=",0]]}'/>
 								<field name="interes_moratorio"  attrs='{"invisible": [["interes_moratorio","=",0]]}'/>
 							</group>
