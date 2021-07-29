@@ -7,9 +7,10 @@ class StockPicking(models.Model):
 
 	@api.multi
 	def unlink(self):
-		if self.state == 'done':
-			raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
-		return super(StockPicking, self).unlink()
+		for line in self:
+			if line.state == 'done':
+				raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
+			return super(StockPicking, self).unlink()
 
 	@api.multi
 	def button_validate(self):

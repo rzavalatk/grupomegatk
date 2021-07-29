@@ -40,42 +40,44 @@
         </style>
         <div style="display: block; height: 100%;width: 100%;">
           <div style="width: 100%;">
-            <div style ='font-family: Arial; font-size: 20px; font-weight: bold; width: 55%; float:right; padding: 20px; text-align: right'>
-              CHEQUE No. <span t-field="o.numero_chek" />
-              <br/><br/>
+            <div style="border: 2px solid;">
+              <div style ='font-family: Arial; font-size: 20px; font-weight: bold; width: 55%; float:right; padding: 20px; text-align: right'>
+                CHEQUE No. <span t-field="o.numero_chek" />
+                <br/><br/>
+              </div>
+              <div style ='font-family: Arial; font-size: 20px; font-weight: bold; width: 55%; float:right;'>
+                Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
+                <p>Lugar y Fecha</p>
+              </div>
+              <br/>
+              <span style="padding: 18px; font-family: Arial; font-size: 18px; font-weight: bold;" t-field="o.company_id.company_registry" />
+              <br/><br/><br/><br/><br/><br/><br/>
+              <div>
+                <table style="width: 100%; text-align: center;">
+                  <tr>
+                    <td style="width: 74%;font-family: Arial; font-size: 20px; font-weight: bold; text-transform:uppercase;">
+                      <span t-field="o.name" />
+                      <p>Páguese a la orden de</p>
+                    </td>
+                    <td style="width: 2%;">L</td>
+                    <td style="width: 24%; font-family: Arial; font-size: 20px; font-weight: bold;">
+                      <div style=" background-color: #e3e5e4" ><span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' /></div>
+                    </td>
+                  </tr>
+                  <tr><td colspan="3"><br/><br/></td></tr>
+                  <tr>
+                    <td colspan="3" style="font-family: Arial; font-size: 18px; font-weight: bold;">
+                      *** <span t-field="o.amount_total_text" /> ***
+                      <p>Cantidad en letras</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div style="padding: 12px; font-family: Arial; font-size: 18px; font-weight: bold;">
+                CUENTA. <span  t-field="o.journal_id.bank_account_id.acc_number" />
+              </div>
+              <img t-if="o.journal_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.journal_id.logo)" style="width: 200px; height: 50px"/>
             </div>
-            <div style ='font-family: Arial; font-size: 20px; font-weight: bold; width: 55%; float:right;'>
-              Tegucigalpa M.D.C. <span t-field="o.fecha_string" />
-              <p>Lugar y Fecha</p>
-            </div>
-            <br/>
-            <span style="padding: 18px; font-family: Arial; font-size: 18px; font-weight: bold;" t-field="o.company_id.company_registry" />
-            <br/><br/><br/><br/><br/><br/><br/>
-            <div>
-              <table style="width: 100%; text-align: center;">
-                <tr>
-                  <td style="width: 74%;font-family: Arial; font-size: 20px; font-weight: bold; text-transform:uppercase;">
-                    <span t-field="o.name" />
-                    <p>Páguese a la orden de</p>
-                  </td>
-                  <td style="width: 2%;">L</td>
-                  <td style="width: 24%; font-family: Arial; font-size: 20px; font-weight: bold;">
-                    <div style=" background-color: #e3e5e4" ><span t-esc="o.total" t-options='{"widget": "float", "precision": 2}' /></div>
-                  </td>
-                </tr>
-                <tr><td colspan="3"><br/><br/></td></tr>
-                <tr>
-                  <td colspan="3" style="font-family: Arial; font-size: 18px; font-weight: bold;">
-                    *** <span t-field="o.amount_total_text" /> ***
-                    <p>Cantidad en letras</p>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div style="padding: 12px; font-family: Arial; font-size: 18px; font-weight: bold;">
-              CUENTA. <span  t-field="o.journal_id.bank_account_id.acc_number" />
-            </div>
-            <img t-if="o.journal_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.journal_id.logo)" style="width: 200px; height: 50px"/>
             <br/><br/><br/><br/>
             <table style="width: 100%; border: 2px solid;">
               <thead>

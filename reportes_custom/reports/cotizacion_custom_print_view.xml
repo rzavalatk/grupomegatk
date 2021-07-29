@@ -65,7 +65,15 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:195px;">
+					<div style="margin-top:170px;">
+					  <div style ='font-size:11pt;'>
+					    <div t-if="o.company_id.name =='MEDITEK'">
+					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
+					    </div>
+					    <div t-if="o.company_id.name =='MEGATK'">
+					      CAI: 0164A4-3337C2-554799-E18564-042AAF-16
+					    </div>
+					  </div> 
 						<table style="text-align: center;">
 							<tr>
 								<td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
