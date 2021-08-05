@@ -15,15 +15,24 @@ class ListaPrecios(models.Model):
     precio_ids = fields.One2many("lista.precios.producto", "lista_id", "Precios por productos")
     
     def defaulprecio(self):
-        lineas = self.env['account.invoice.line'].search([('precio_id','=',False),('create_date','>','2019-01-01')])
-        for line in lineas:
-            preciolista = self.env['lista.precios.producto']
-            preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
-            for lista in preciodefaul:
-                porcentaje= (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
-                porcentaje=round(porcentaje,2)
-                if porcentaje >= lista.descuento:
-                    line.write({'precio_id': lista.id})
+        product_ids = self.env["product.template"].search([('type', '=', 'product')])
+        for producto in product_ids:
+            if not producto.standard_price == 0:
+                if producto.x_costo_real == 0:
+                    producto.x_ganancia = ((producto.list_price - producto.standard_price)*100) / producto.standard_price
+                else:
+                    producto.x_ganancia = ((producto.list_price - producto.x_costo_real)*100) / producto.x_costo_real
+        # if self.state == 'borrador':
+        #     product_ids = self.env["product.template"].search([('type', '=', 'product'),('sale_ok', '=',True),('standard_price', '>=',0)])
+        #     self.detalle_ids.unlink()
+        #     for producto in product_ids:
+        #         print(producto.name)
+        #         precio_descuento = producto.list_price * (1 + (self.descuento / 100))
+        #         self.detalle_ids.create({'obj_padre': self.id,
+        #                                 'product_id': producto.id,
+        #                                 'precio_publico': producto.list_price,
+        #                                 'precio_descuento': precio_descuento,
+        #                                 })
 
     @api.onchange("name")
     def onchangedescuento(self):
