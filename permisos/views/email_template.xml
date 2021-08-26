@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>    
+    <record id="email_template_permiso_solicitud" model="mail.template">
+      <field name="name">Solicitud Permiso</field>
+      <field name="model_id" ref="model_hr_employee_permisos"/>
+      <field name="subject">Permiso solicitado (${object.name})</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            Estimado Sr(a) <b>${object.employe_id.name}</b>.<br/><br/><br/>
+
+            La solicitud de su permiso fue enviada exitosamente.
+          </div>  
+        </div>
+      </field>
+    </record>
+
+    <record id="email_template_permiso_solicitud_jefe" model="mail.template">
+      <field name="name">Solicitud Permiso</field>
+      <field name="model_id" ref="model_hr_employee_permisos"/>
+      <field name="subject">Permiso Solicitado (${object.name})</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            Estimado Sr(a) <b>${object.sudo().employe_id.parent_id.name}</b>.<br/><br/><br/>
+
+            Se ha recibido una solicitud de permiso de <b>${object.employe_id.name}</b>.<br/>
+            Favor revisar la plataforma de permisos para aprobar o denegar.
+          </div>  
+        </div>
+      </field>
+    </record>
+
+    <record id="email_template_permiso_solicitud_denegar" model="mail.template">
+      <field name="name">Solicitud Permiso Denegada</field>
+      <field name="model_id" ref="model_hr_employee_permisos"/>
+      <field name="subject">Permiso Denegado (${object.name})</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            Estimado Sr(a) <b>${object.employe_id.name}</b>.<br/><br/><br/>
+
+            La solicitud de su permiso fue denegado.
+          </div>  
+        </div>
+      </field>
+    </record>
+
+    <record id="email_template_permiso_solicitud_aprobado" model="mail.template">
+      <field name="name">Solicitud Permiso aprobado</field>
+      <field name="model_id" ref="model_hr_employee_permisos"/>
+      <field name="subject">Permiso Aprobado (${object.name})</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            Estimado Sr(a) <b>Rodriguez</b>.<br/><br/><br/>
+
+            Se notifica que el permiso del empleado <b>${object.employe_id.name}</b> ha sido aprobado con los siguientes datos:<br/><br/><br/>
+
+            Desde: ${object.fecha_inicio_txt}<br/>
+            Hasta: ${object.fecha_fin_txt}<br/>
+            Tiempo solicitado: ${object.dias} dias, ${object.horas}  horas, ${object.minutos}  minutos.<br/>
+            Fecha de aprobación: ${datetime.date.today().strftime('%d-%m-%Y')}<br/>
+            Justificación: ${object.justificacion}<br/>
+            Cargado a: ${object.cargo}<br/><br/><br/>
+            Tiempo restante: ${object.employe_id.permisos_dias} dias, ${object.employe_id.permisos_horas}  horas, ${object.employe_id.permisos_minutos}  minutos.<br/>
+          </div>  
+        </div>
+      </field>
+    </record>
+
+    <record id="email_template_vaciones_automaticas" model="mail.template">
+      <field name="name">Vaciones por ley</field>
+      <field name="model_id" ref="model_hr_employee_permisos"/>
+      <field name="subject">Vacaciones cargadas</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            
+          </div>  
+        </div>
+      </field>
+    </record>
+  </data>
+</odoo>
