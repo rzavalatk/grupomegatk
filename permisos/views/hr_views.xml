@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="hr_permiso_view_inh">
+      <field name="name">hr.employee.permisos.view</field>
+      <field name="model">hr.employee</field>
+      <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+          <group name="active_group" position="after">
+            <group string='Vacaciones disponibles'>
+              <field name="permisos_dias"/>
+              <field name="permisos_horas"/>
+              <field name="permisos_minutos"/>
+            </group>
+          </group>
+          <xpath expr="//field[@name='user_id']" position="after">
+            <field name="fecha_ingreso"/>
+          </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_permiso_view_kanban_inh">
+      <field name="name">hr.employee.permisos.view.kanban</field>
+      <field name="model">hr.employee</field>
+      <field name="inherit_id" ref="hr.hr_kanban_view_employees" />
+        <field name="arch" type="xml">
+          <xpath expr="//kanban[1]/templates[1]/t[1]/div[1]/div[3]" position="after">
+            <strong class="o_kanban_record_title">
+              <b>Días: </b><field name="permisos_dias"/>
+              <b>Horas: </b><field name="permisos_horas"/>
+              <b>Minutos: </b><field name="permisos_minutos"/>
+            </strong>
+          </xpath>
+        </field>
+    </record>
+   
+    <!-- Reglas de registro -->
+    <record id="permisos_employee_rule" model="ir.rule">
+      <field name="name">Permisos</field>
+      <field name="model_id" ref="model_hr_employee"/>
+      <field name = "groups" eval = "[(4, ref ('permiso_jefe')),(4, ref ('permiso_user'))]" /> 
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="False"/>
+      <field name="perm_create" eval="False"/>
+      <field name="perm_unlink" eval="False"/>
+      <field name="domain_force">['|',('user_id', '=', user.id),('parent_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <!-- TODO remove me in master -->
+      <record id="hr_employee_action_permisos" model="ir.actions.act_window">
+        <field name="name">Solicitar permiso</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee.permisos</field>
+        <field name="domain">[]</field>
+        <field name = "groups" eval = "[(4, ref ('permiso_admin'))]" /> 
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hr_employe_permisos_form_view"/>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+      </record>
+  </data> 
+</odoo>

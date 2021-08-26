@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+      <record id="permisos_wizard_view_form" model="ir.ui.view">
+        <field name="name">permisos.wizard.form_view</field>
+        <field name="model">hr.employee.permisos.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form string="Transaction Type">
+            <sheet>
+              <div class="oe_button_box" name="button_box">
+                <button 
+                  class="oe_stat_button">
+                  <field name="dias" widget="statinfo"/>
+                </button>
+                <button 
+                  class="oe_stat_button">
+                  <field name="horas" widget="statinfo"/>
+                </button>
+                <button 
+                  class="oe_stat_button">
+                  <field name="minutos" widget="statinfo"/>
+                </button>
+              </div>
+
+              <separator string="Retiro"/>
+              <group string='Solicitar Permiso' >
+                <group >
+                  <field name="fecha_inicio" />
+                  <field name="fecha_fin" />
+                  <!--<field name="doc_type" />-->
+                </group>
+                <group >
+                  <!--<field name="doc_type" /> -->
+                  <field name="employe_ids" widget="many2many_tags" options="{'no_create': True}" />
+                </group>
+              </group>
+              <group col="3">
+                <group string='Cargar A'>
+                  <field name="cargo"  widget="radio" nolabel="1" />
+                  <!--<field name="doc_type" />-->
+                </group>
+                <group string='Reporto ausencia'>
+                  <!--<field name="doc_type" /> -->
+                  <field name="reporto"  widget="radio" nolabel="1" />
+                </group>
+                <group string='Motivo'>
+                  <field name="justificacion" placeholder='Justificación de Ausencia' nolabel="1"/>
+                </group>
+              </group>
+              <footer>
+                <button name="crear_permisos" string="Aceptar" type="object" class="oe_highlight"/>
+                <button class="oe_highlight" special="cancel" string="Cancelar"/>       
+              </footer>
+            </sheet>
+          </form>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="action_permisos_wizard">
+        <field name="name">Crear</field>
+        <field name="res_model">hr.employee.permisos.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="permisos_wizard_view_form"/>
+        <field name="target">new</field>
+      </record>
+    </data>
+</odoo>

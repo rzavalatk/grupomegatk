@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_activity_permiso" model="mail.activity.type">
+            <field name="name">Permiso</field>
+            <field name="icon">fa-exclamation-circle</field>
+            <field name="delay_count">1</field>
+            <field name="sequence">12</field>
+        </record>
+    </data>
+</odoo>
