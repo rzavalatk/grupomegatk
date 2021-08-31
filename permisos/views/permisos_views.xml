@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
        <form string="Transaction Type">
             <header> 
-              <button name="vacaciones_por_ley" type="object" string="Solicitar" states="draft" 
+              <button name="solicitar" type="object" string="Solicitar" states="draft" 
                 class="oe_highlight"/>
               <button name="aprobar" type="object" string="Aprobar" 
                 states="pendiente" class="oe_highlight" groups="permisos.permiso_admin, permisos.permiso_jefe"/>
