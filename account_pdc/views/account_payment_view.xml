@@ -11,7 +11,7 @@
         <!--<button name="post_payment" type="object" string="Registrar Pagos" class="oe_highlight" states="draft" groups="account_pdc.group_deposito_custom_validate"/>-->
         <button name="post_payment" type="object" string="Registrar Pagos" class="oe_highlight" states="draft" groups="account_pdc.group_deposito_custom_validate"/>
       <field name="state" widget="statusbar" statusbar_visible="draft,paid"/>
-    </header> 
+    </header>
     <sheet>
 	 <h1>
         <field name="name"  class="oe_inline" readonly="1"/> 
