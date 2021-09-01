@@ -37,9 +37,8 @@
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
                     <span t-field="o.scheduled_date"/>
                   </td>
-              <!--
-                    <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
-                    <td t-if="o.number &gt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td>-->
+              <!-- <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
+                    <td t-if="o.number &gt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td> -->
                     <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
                 </tr>
               </table>
@@ -61,7 +60,7 @@
                 </tr>
               </table>
           </div>
-        <div class="article o_report_layout_standard">
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
           <t t-raw="0"/>
         </div>
     </template>
@@ -114,7 +113,10 @@
                 </tr>
               </tbody>
             </table>
-            <br/>  <br/>  <br/>  <br/>  <br/> <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  <br/>  
+            <br/>
+            <div style="display: flex; width: 100%; text-align: center;">
+              <img t-att-src="image_data_uri(o.sign)" style="height: 150px; width: 70%;"/>
+            </div>
             <div style="text-align:center; font-size:34pt; font-family:'Arial';"> Firma </div>    
         </div>
 			</t>    

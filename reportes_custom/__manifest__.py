@@ -15,7 +15,7 @@
     'version': "12.0.1.0.0",
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fields_megatk','fields_megatk_stock'],
+    'depends': ['base','fields_megatk','fields_megatk_stock','web_notify'],
 
     # always loaded
     'data': [
@@ -28,5 +28,7 @@
         'reports/purchase_order_custom_print_view.xml',
         'reports/stock_picking_custom_print_view.xml',
         'reports/stock_picking_custom_print_view_pos.xml',
+        'wizard/wizard_sign.xml',
+        'views/stock.xml',
     ],
 }
