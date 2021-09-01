@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<!-- Cambio de prueba -->
 	<data>
 		<report
 			id="account_factura_custom"
