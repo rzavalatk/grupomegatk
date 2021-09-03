@@ -1,0 +1,22 @@
+<odoo>
+  <!-- Access Breadcum SHOP-->
+  <record id="breadcum_custom_access" model="ir.model.access">
+    <field name="name">breadcum.custom.access</field>
+    <field name="model_id" ref="website_custom.model_breadcum_custom_images" />
+    <field name="group_id" ref="base.group_system" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+  <!-- Access carousel-->
+  <record id="carousel_access" model="ir.model.access">
+    <field name="name">carousel.access</field>
+    <field name="model_id" ref="website_custom.model_carousel_images" />
+    <field name="group_id" ref="base.group_system" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+</odoo>

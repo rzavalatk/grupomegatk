@@ -1,0 +1,58 @@
+<odoo>
+  <data>
+    <!-- Assets -->
+    <template id="website_custom_frontend" inherit_id="website.assets_frontend" name="Breadcum custom">
+      <xpath expr="." position="inside">
+        <script type="text/javascript" src="/website_custom/static/src/js/controller.js"/>
+        <link rel="stylesheet" type="text/scss" href="/website_custom/static/src/css/styles.css"/>
+      </xpath>
+    </template>
+    <!-- View Store -->
+    <template id="website_custom.breadcum_custom" inherit_id="ks_theme_kinetik.ks_breadcrumb">
+      <xpath expr="//div[@id='wrap']//t[@t-if='ks_img_url']" position="replace">
+        <t t-if="True">
+          <div id="section_breadcum" class="content-breadcum-image">
+            <h1 style="color: black;">Tienda</h1>
+            <div class="ml-auto">
+              <ol class="breadcrumb breadcrumb-custom">
+                <li class="breadcrumb-item active">
+                  <a href="/">
+                    <i class="fa fa-home"/>
+                  </a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="/shop">Tienda</a>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </t>
+      </xpath>
+    </template>
+
+    <!-- View Details Product -->
+    <template id="website_custom.details_breadcum_custom" inherit_id="ks_theme_kinetik.ks_Breadcrumb_product">
+      <xpath expr="//div[@id='wrap']//div[@class='breadcrumb ks-bread-bg-color']" position="replace">
+        <div id="section_breadcum" class="content-breadcum-image">
+          <h1 style="color: black;"><span t-field="product.name"/></h1>
+          <div class="ml-auto">
+            <ol class="breadcrumb breadcrumb-custom">
+              <li class="breadcrumb-item active">
+                <a href="/">
+                  <i class="fa fa-home"/>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="/shop">Tienda</a>
+              </li>
+              <li t-if="category" class="breadcrumb-item">
+                <a t-att-href="keep('/shop/category/%s' % slug(category), category=0)" t-field="category.name"/>
+              </li>
+              <li class="breadcrumb-item active"><span t-field="product.name"/></li>
+            </ol>
+          </div>
+        </div>
+      </xpath>
+    </template>
+  </data>
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Assets -->
+        <template id="carousel_frontend" inherit_id="website.assets_frontend" name="Carousel">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/website_custom/static/src/js/snippets/carousel.js"/>
+                <link rel="stylesheet" type="text/scss" href="/website_custom/static/src/css/styles.css"/>
+            </xpath>
+        </template>
+        <!-- Snippet -->
+        <template id="snippet_carousel_website" name="Carousel Dinamico">
+            <section id="myCarousel1630355169852" class="s_carousel carousel slide s_carousel_default ks-jewellery-shop" data-interval="10000">
+                <div id="my-carousel-content" class="carousel-inner mainTransparent">
+                    <!-- HTML por defecto si no hay imagenes para el carousel en la base de datos -->
+                    <div class="carousel-item oe_custom_bg oe_img_bg py-5 active" style="background-image: url(&quot;/ks_theme_kinetik/static/src/static-snippet-images/sliders/slide-4.jpg&quot;);" data-name="Slide">
+                        <div class="container mt-5">
+                            <div class="row content">
+                                <div class="carousel-content col-lg-6 offset-lg-6">
+                                    <h2>
+                                        <font style="font-size: 62px;" class="o_default_snippet_text">Your Perfect Style</font>
+                                    </h2>
+                                    <h4>
+                                        <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
+                                    </h4>
+                                    <div class="s_btn text-left pt16 pb16" data-name="Buttons">
+                                        <a href="/contactus" class="btn btn-primary  o_default_snippet_text">Explore More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item oe_custom_bg oe_img_bg py-5" style="background-image: url(&quot;/ks_theme_kinetik/static/src/static-snippet-images/sliders/slide-3.jpg&quot;);" data-name="Slide">
+                        <div class="container mt-5">
+                            <div class="row content">
+                                <div class="carousel-content col-lg-7">
+                                    <div class="s_title pb8" data-name="Title">
+                                        <h2 class="s_title_default">
+                                            <font style="font-size: 62px;" class="o_default_snippet_text">Get Ready to SHINE</font>
+                                        </h2>
+                                    </div>
+                                    <h4>
+                                        <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
+                                    </h4>
+                                    <div class="s_btn text-left pt16 pb16" data-name="Buttons">
+                                        <a href="/contactus" class="btn btn-primary  o_default_snippet_text">Explore More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- HTML por defecto si no hay imagenes para el carousel en la base de datos -->
+                </div>
+                <div class="carousel-control-prev" data-target="#myCarousel1630355169852" data-slide="prev" role="img" aria-label="Previous" title="Previous">
+                    <span class="carousel-control-prev-icon"/>
+                    <span class="sr-only o_default_snippet_text">Previous</span>
+                </div>
+                <div class="carousel-control-next" data-target="#myCarousel1630355169852" data-slide="next" role="img" aria-label="Next" title="Next">
+                    <span class="carousel-control-next-icon"/>
+                    <span class="sr-only o_default_snippet_text">Next</span>
+                </div>
+            </section>
+        </template>
+    </data>
+</odoo>

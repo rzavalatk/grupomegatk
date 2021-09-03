@@ -1,0 +1,23 @@
+.content-breadcum-image{
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.breadcrumb-custom{
+    background-color: transparent !important;
+    font-size: 20px;
+}
+
+@media only screen and (max-width: 400px) {
+    .content-breadcum-image{
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+  }
