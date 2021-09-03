@@ -13,38 +13,11 @@
             <section id="myCarousel1630355169852" class="s_carousel carousel slide s_carousel_default ks-jewellery-shop" data-interval="10000">
                 <div id="my-carousel-content" class="carousel-inner mainTransparent">
                     <!-- HTML por defecto si no hay imagenes para el carousel en la base de datos -->
-                    <div class="carousel-item oe_custom_bg oe_img_bg py-5 active" style="background-image: url(&quot;/ks_theme_kinetik/static/src/static-snippet-images/sliders/slide-4.jpg&quot;);" data-name="Slide">
+                    <div class="carousel-item oe_custom_bg oe_img_bg py-5 active" style="background-color: with;" data-name="Slide">
                         <div class="container mt-5">
                             <div class="row content">
                                 <div class="carousel-content col-lg-6 offset-lg-6">
-                                    <h2>
-                                        <font style="font-size: 62px;" class="o_default_snippet_text">Your Perfect Style</font>
-                                    </h2>
-                                    <h4>
-                                        <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
-                                    </h4>
-                                    <div class="s_btn text-left pt16 pb16" data-name="Buttons">
-                                        <a href="/contactus" class="btn btn-primary  o_default_snippet_text">Explore More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item oe_custom_bg oe_img_bg py-5" style="background-image: url(&quot;/ks_theme_kinetik/static/src/static-snippet-images/sliders/slide-3.jpg&quot;);" data-name="Slide">
-                        <div class="container mt-5">
-                            <div class="row content">
-                                <div class="carousel-content col-lg-7">
-                                    <div class="s_title pb8" data-name="Title">
-                                        <h2 class="s_title_default">
-                                            <font style="font-size: 62px;" class="o_default_snippet_text">Get Ready to SHINE</font>
-                                        </h2>
-                                    </div>
-                                    <h4>
-                                        <font class="o_default_snippet_text">Good writing is simple, but not simplistic.</font>
-                                    </h4>
-                                    <div class="s_btn text-left pt16 pb16" data-name="Buttons">
-                                        <a href="/contactus" class="btn btn-primary  o_default_snippet_text">Explore More</a>
-                                    </div>
+                                    <span class="spinner"></span>
                                 </div>
                             </div>
                         </div>
