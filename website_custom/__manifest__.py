@@ -26,7 +26,4 @@
         'views/carousel.xml',
         'security/security.xml',
     ],
-    'qweb': [
-    ],
-    'installable': True, 
 }
