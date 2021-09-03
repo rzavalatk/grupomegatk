@@ -26,11 +26,18 @@ class CarouselCustom(models.Model):
         else:
             self.color = 1
 
+    
+    @api.one
+    @api.depends('website')
+    def _company(self):
+        self.company = self.website.company_id
+
 
     name = fields.Char(string="Nombre")
     description = fields.Text(string="Descripción")
     image = fields.Binary(string="Imagen")
     website = fields.Many2one("website","Sitio web")
+    company = fields.Many2one("res.company")
     product = fields.Many2one("product.template","Producto")
     font_color_name = fields.Char(string="Color del nombre",default='white')
     font_color_description = fields.Char(string="Color de la descripción",default='white')
@@ -61,3 +68,8 @@ class CarouselCustom(models.Model):
            self.color_stroke_description = "white"
         else:
             self.color_stroke_description = ""
+
+    
+    @api.onchange('website')
+    def _company(self):
+        self.company = self.website.company_id

@@ -47,13 +47,14 @@
                         </group>
                         <group>
                             <group>
+                                <field name="company" invisible="1" />
                                 <field name="active" />
                                 <field name="name" />
                                 <field name="description" />
                                 <field name="font_color_name" />
                                 <field name="font_color_description" />
-                                <field name="website" />
-                                <field name="product" domain="[('website_id', '=', website)]" />
+                                <field name="website" widget='many2one' />
+                                <field name="product" domain="[('company_id', '=', company)]" />
                             </group>
                             <group>
                                 <field name="label_button" />
