@@ -34,7 +34,7 @@
     <template id="website_custom.details_breadcum_custom" inherit_id="ks_theme_kinetik.ks_Breadcrumb_product">
       <xpath expr="//div[@id='wrap']//div[@class='breadcrumb ks-bread-bg-color']" position="replace">
         <div id="section_breadcum" class="content-breadcum-image">
-          <h1 style="color: black; width: 150px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+          <h1 style="color: black; width: 250px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
             <span t-field="product.name"/>
           </h1>
           <div class="ml-auto">
