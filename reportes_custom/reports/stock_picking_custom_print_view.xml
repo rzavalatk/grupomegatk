@@ -165,7 +165,9 @@
             </tr>
           </tbody>
         </table>
-        <img t-att-src="image_data_uri(o.sign)" style="height: 150px; width: 30%;"/>
+        <div style='width:100%; text-align: start; position:absolute; top:400px; left: 0px;'>
+          <img t-att-src="image_data_uri(o.sign)" style="height: 250px; width: 60%;"/>
+        </div>
         <t t-set="backorder" t-value="False"/>
 
         <p t-if="o.backorder_id">
