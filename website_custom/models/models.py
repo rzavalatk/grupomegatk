@@ -32,13 +32,30 @@ class CarouselCustom(models.Model):
     def _company(self):
         self.company = self.website.company_id
 
+    
+    @api.one
+    @api.depends('product')
+    def _name_product_trunc(self):
+        textTrunc = ""
+        length = 15
+        i = 0
+        for char in self.product.name:
+            if i < length:
+                textTrunc += char
+            if i == length:
+                textTrunc += "..."
+            i += 1
+        self.name_product_trunc = textTrunc
+
+
 
     name = fields.Char(string="Nombre")
     description = fields.Text(string="Descripción")
     image = fields.Binary(string="Imagen")
     website = fields.Many2one("website","Sitio web")
-    company = fields.Many2one("res.company")
+    company = fields.Many2one("res.company", compute=_company)
     product = fields.Many2one("product.template","Producto")
+    name_product_trunc = fields.Char(compute=_name_product_trunc)
     font_color_name = fields.Char(string="Color del nombre",default='white')
     font_color_description = fields.Char(string="Color de la descripción",default='white')
     label_button = fields.Char(string="Text del boton",default='Ver')
@@ -68,8 +85,4 @@ class CarouselCustom(models.Model):
            self.color_stroke_description = "white"
         else:
             self.color_stroke_description = ""
-
     
-    @api.onchange('website')
-    def _company(self):
-        self.company = self.website.company_id
