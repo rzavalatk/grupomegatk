@@ -117,7 +117,7 @@
             <br/>
             <br/>
             <div style="display: flex; width: 100%; text-align: center;">
-              <img t-att-src="image_data_uri(o.sign)" style="height: 250px; width: 70%;"/>
+              <img t-att-src="image_data_uri(o.sign)" style="height: 500px; width: 70%;"/>
             </div>
             <div style="text-align:center; font-size:34pt; font-family:'Arial';"> Firma </div>    
         </div>
