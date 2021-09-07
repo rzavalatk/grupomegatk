@@ -31,7 +31,7 @@ class HrPermisos(models.Model):
 	cubierto_employe_id = fields.Many2one('hr.employee', string='Ausencia cubierta', copy=False,)
 	justificacion = fields.Text('Motivo' ,copy=False,)
 	state = fields.Selection( [('draft', 'Borrador'), ('pendiente', 'Pendiente'), ('aprobado', 'Aprobado'), ('denegado', 'Denegado'), ('cancelado', 'Cancelado')], string="Estado", default='draft',copy=False, track_visibility='onchange',)
-	dias = fields.Integer(string='Días', default=1,)
+	dias = fields.Integer(string='Días', default=0)
 	horas = fields.Integer(string='Horas', default=0,)
 	minutos = fields.Integer(string='Minutos', default=0,)
 	department_id = fields.Integer(string="Departamento")
@@ -157,43 +157,47 @@ class HrPermisos(models.Model):
 		return res
 	
 	def solicitar(self):
-		if not self.name:
-			if not self.sequence_id.id:
-				obj_sequence = self.env["ir.sequence"].search([('name','=','permisos')])
-				if not obj_sequence.id:
-					values = {'name': 'permisos',
-						'prefix': 'Permiso ',
-						'padding':4,}
-					sequence_id = obj_sequence.create(values)
+		if self.dias != 0 or self.minutos != 0 or self.horas != 0:
+			if not self.name:
+				if not self.sequence_id.id:
+					obj_sequence = self.env["ir.sequence"].search([('name','=','permisos')])
+					if not obj_sequence.id:
+						values = {'name': 'permisos',
+							'prefix': 'Permiso ',
+							'padding':4,}
+						sequence_id = obj_sequence.create(values)
+					else:
+						sequence_id = obj_sequence  
+					self.write({'sequence_id': sequence_id.id})
+
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
 				else:
-					sequence_id = obj_sequence  
-				self.write({'sequence_id': sequence_id.id})
+					self.write({'sequence_id': self.sequence_id.id})
+					new_name = self.sequence_id.with_context().next_by_id()
+					self.write({'name': new_name})
 
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
-			else:
-				self.write({'sequence_id': self.sequence_id.id})
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
+			activity = self.env['mail.activity'].sudo().create({
+				'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
+				'note': _('Prueba'),
+				'res_id': self.id,
+				'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
+				'user_id': self.sudo().employe_id.parent_id.user_id.id or false,
+			})
+			activity._onchange_activity_type_id()
+			self.write({'state': 'pendiente'})
+			template = self.env.ref('permisos.email_template_permiso_solicitud')
+			email_values = {'email_to': self.employe_id.work_email}
+			template.send_mail(self.id, email_values=email_values, force_send=True)
 
-		activity = self.env['mail.activity'].sudo().create({
-			'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
-			'note': _('Prueba'),
-			'res_id': self.id,
-			'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
-			'user_id': self.sudo().employe_id.parent_id.user_id.id or false,
-		})
-		activity._onchange_activity_type_id()
-		self.write({'state': 'pendiente'})
-		template = self.env.ref('permisos.email_template_permiso_solicitud')
-		email_values = {'email_to': self.employe_id.work_email}
-		template.send_mail(self.id, email_values=email_values, force_send=True)
+			self.env.user.notify_success(message='Solicitud enviada correctamente')
 
-		self.env.user.notify_success(message='Solicitud enviada correctamente')
+			template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_jefe')
+			email_values_jefe = {'email_to': self.sudo().employe_id.parent_id.work_email}
+			template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)
+		else:
+			self.env.user.notify_warning(message='Verificar fechas, no puede solicitar 0 dias, 0 horas, 0 minutos')
 
-		template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_jefe')
-		email_values_jefe = {'email_to': self.sudo().employe_id.parent_id.work_email}
-		template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)
 
 	def vacaciones_restantes(self,operacion):
 		minutos_actuales = (self.employe_id.permisos_dias * 480) + (self.employe_id.permisos_horas * 60 ) + self.employe_id.permisos_minutos
@@ -232,7 +236,6 @@ class HrPermisos(models.Model):
 		template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)
 
 	def rechazar(self):
-		self.write({'state': 'pendiente'})
 		template = self.env.ref('permisos.email_template_permiso_solicitud_denegar')
 		email_values = {'email_to': self.employe_id.work_email}
 		template.send_mail(self.id, email_values=email_values, force_send=True)
