@@ -125,8 +125,8 @@
 								icon="fa-bank"
 								type="action" 
 								name="%(action_prestamo_cuotas)d"
-                attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
-                <field name="cuotas_count" widget="statinfo" string="Cuotas"/>
+				                attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
+				                <field name="cuotas_count" widget="statinfo" string="Cuotas"/>
 							</button>
 						</div>
 	                        
