@@ -236,7 +236,7 @@ class HrPermisos(models.Model):
 		template = self.env.ref('permisos.email_template_permiso_solicitud_denegar')
 		email_values = {'email_to': self.employe_id.work_email}
 		template.send_mail(self.id, email_values=email_values, force_send=True)
-		self.write({'state': 'rechazado'})
+		self.write({'state': 'denegado'})
 		self.env.user.notify_danger(message='Permiso denegado')
 
 	def back_draft(self):
