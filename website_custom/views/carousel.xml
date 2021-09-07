@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="carousel_list" model="ir.ui.view">
+            <field name="name">carousel.list</field>
+            <field name="model">carousel.images</field>
+            <field name="arch" type="xml">
+                <kanban class="o_hr_employee_kanban center-block">
+                    <field name="id"/>
+                    <field name="name" />
+                    <field name="website" />
+                    <field name="image" widget="image"/>
+                    <field name="product" />
+                    <field name="color" />
+                    <field name="name_product_trunc" />
+                    <separator/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div style="height:250px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                                <img style="width: 100%; height:150px; " class="o_kanban_image" t-att-src="kanban_image('carousel.images', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                <div style="padding: 5px">
+                                    <b style="font-size: 18px;">Sitio web: </b>
+                                    <span style="font-size: 18px;">
+                                        <field name="website" />
+                                    </span>
+                                </div>
+                                <div style="padding: 5px;">
+                                    <b style="font-size: 18px;">Producto: </b>
+                                    <span style="font-size: 18px;">
+                                        <field name="name_product_trunc"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="carousel_form" model="ir.ui.view">
+            <field name="name">carousel.form</field>
+            <field name="model">carousel.images</field>
+            <field name="arch" type="xml">
+                <form string="Ingresar imagenes">
+                    <sheet>
+                        <group>
+                            <field name="image" widget="image"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company" invisible="1" />
+                                <field name="active" />
+                                <field name="name" />
+                                <field name="description" />
+                                <field name="font_color_name" />
+                                <field name="font_color_description" />
+                                <field name="website" widget='many2one' />
+                                <field name="product" domain="[('company_id', '=', company)]" />
+                            </group>
+                            <group>
+                                <field name="label_button" />
+                                <field name="stroke_name" />
+                                <field name="color_stroke_name" attrs="{'invisible': [('stroke_name','=', False)]}" />
+                                <field name="size_stroke_name" attrs="{'invisible': [('stroke_name','=', False)]}"/>
+                                <field name="stroke_description" />
+                                <field name="color_stroke_description" attrs="{'invisible': [('stroke_description','=', False)]}" />
+                                <field name="style" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+                <!-- "search_default_group_website":1 -->
+
+        <record id="carousel_action" model="ir.actions.act_window">
+            <field name="name">Imagenes del carousel</field>
+            <field name="res_model">carousel.images</field>
+            <field name="context">{"search_default_active_and_inactive":1,}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+        </record>
+
+        <menuitem name="Carousel" id="carousel_menu_root" 
+        sequence = "1" parent="website_custom.website_custom_menu_root"
+        action = "website_custom.carousel_action" />
+    </data>
+</odoo>

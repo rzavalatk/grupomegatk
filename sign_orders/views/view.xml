@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <record id="sign_orders_view_kanban" model="ir.ui.view">
+            <field name="name">sign.orders.view.kanban</field>
+            <field name="model">stock.picking</field>
+            <field name="arch" type="xml">
+                <kanban default_order="scheduled_date desc" class="o_hr_employee_kanban center-block">
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <field name="scheduled_date"/>
+                    <field name="state"/>
+                    <field name="color"/>
+                    <separator/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div style="height:120px" t-attf-class="oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                                <b style="font-size: 20px;">Cliente: </b>
+                                <span style="font-size: 20px;">
+                                    <field name="partner_id"/>
+                                </span>
+                                <br/>
+                                <b>Nombre: </b>
+                                <field name="name"/>
+                                <br/>
+                                <b>Fecha: </b>
+                                <field name="scheduled_date" />
+                                <br/>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="sign_orders_view_search" model="ir.ui.view">
+            <field name="name">sign.orders.view.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search" />
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='cancel']" position="after">
+                    <filter string="Ordenes sin firmar" name="init_view" domain="['&amp;',('passed','=','No'),('picking_type_code','=','outgoing'),('state', 'in', ('waiting','confirmed','assigned'))]" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

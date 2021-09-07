@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+  <data>
+
     <template id="stock_picking_custom_print_view">
       <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
@@ -12,145 +13,174 @@
     <template id="external_layout_stock_picking_custom">
       <div class="header">
         <div class="row" style="margin-top: -160px;">
-            <div class="col-xs-3 mb4">
-                <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
-            </div>
-            
+          <div class="col-xs-3 mb4">
+            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
           </div>
-          <div style="float: right; margin-top: -270px;">
-            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
+
+        </div>
+        <div style="float: right; margin-top: -270px;">
+          <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
+        </div>
+
+        <div style="float: right; margin-top: -230px;">
+          <div style="float: right;">
+            <table style="text-align: center; width:330px">
+              <tr>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold;">FECHA</td>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold;">TRANSFERENCIA</td>
+              </tr>
+              <tr>
+                <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <span t-field="o.scheduled_date"/>
+                </td>
+                <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <span t-field="o.name"/>
+                </td>
+              </tr>
+            </table>
           </div>
-          
-          <div style="float: right; margin-top: -230px;">
-            <div style="float: right;">
-              <table style="text-align: center; width:330px">
-                <tr>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold;">FECHA</td>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold;">TRANSFERENCIA</td>
-                </tr>
-                <tr>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <span t-field="o.scheduled_date"/>
-                  </td>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
-                </tr>
-              </table>
-            </div>  
-          </div>
-          
-          <div>
-            <div style="margin-top: -145px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+        </div>
+
+        <div>
+          <div style="margin-top: -145px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
               FACTURAR A: 
-            </div>
-            <div style="width: 150px !important;">
-              <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 120px;'>
-                <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
-                <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+          </div>
+          <div style="width: 150px !important;">
+            <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 120px;'>
+              <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+              <div t-if="o.partner_id.vat" class="mt16">
+                <t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>
+:                <span t-field="o.partner_id.vat"/>
               </div>
             </div>
           </div>
-          <div style="float: right;">
-              <table style="text-align: center;">
-                <tr>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">TERMINOS</td>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold; min-width:180px;">FUENTE</td>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">VENCEN.</td>
-                  <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">VENDEDOR.</td>
-                </tr>
-                <tr>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-
-                  </td>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <div t-if="o.origin" >
-                      <span t-field="o.origin"/>
-                    </div>
-                  </td>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-
-                  </td>
-                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-
-                  </td>
-                  
-                </tr>
-              </table>
-           
-          </div>
         </div>
+        <div style="float: right;">
+          <table style="text-align: center;">
+            <tr>
+              <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">TERMINOS</td>
+              <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold; min-width:180px;">FUENTE</td>
+              <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">VENCEN.</td>
+              <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">VENDEDOR.</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+
+              </td>
+              <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                <div t-if="o.origin">
+                  <span t-field="o.origin"/>
+                </div>
+              </td>
+              <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+
+              </td>
+              <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+
+              </td>
+
+            </tr>
+          </table>
+
+        </div>
+      </div>
 
       <div class="article o_report_layout_standard">
         <t t-raw="0"/>
       </div>
-      
+
       <div class="footer" style='font-size:10pt !important;'>
         <div style="border-top: 1px solid rgb(13, 143, 210);">
           <ul style="text-align: center;" class="list-inline mb4">
-            <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+            <li t-if="user.company_id.street">
+              <span t-field="user.company_id.street"/>
+            </li>
           </ul>
           <ul style="text-align: center;" class="list-inline mb4">
-            <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+            <li t-if="user.company_id.street2">
+              <span t-field="user.company_id.street2"/>
+            </li>
           </ul>
           <ul style="text-align: center;" class="list-inline mb4">
             <li>
-              <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
-              <t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></t>
-              <t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></t>
-              <t t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+              <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/>
+              </t>
+              <t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/>
+              </t>
+              <t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/>
+              </t>
+              <t t-if="user.company_id.vat">
+                <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>
+:                <span t-field="user.company_id.vat"/>
+              </t>
             </li>
           </ul>
           <div class="text-muted">
-            Pag. <span class="page"/> / <span class="topage"/>
-          </div>
-
-          <div name="financial_infos">
-            <span t-field="user.company_id.report_footer"/>
-          </div>
-
+            Pag. <span class="page"/>
+ /          <span class="topage"/>
         </div>
+
+        <div name="financial_infos">
+          <span t-field="user.company_id.report_footer"/>
+        </div>
+
       </div>
-    </template>
+    </div>
+  </template>
+  <!-- B01/IN/00162 para test -->
 
-    <template id="stock_picking_odoo_custom">
-  		<t t-call="reportes_custom.external_layout_stock_picking_custom">
-        <div class="page">
-          <div class="oe_structure"/>
-            <table class="table table-sm o_main_table mt48"> <!--t-if="not o.move_line_ids"-->
-              <thead>
-                <tr>
-                  <th style='padding: 2px;'><strong>CODIGO</strong></th>
-                  <th style='padding: 2px;'><strong>PRODUCTO</strong></th>
-                  <th style='padding: 2px;'><strong>CANTIDAD</strong></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr t-foreach="o.move_lines" t-as="move">
-                   <td style='padding: 2px;'>
-                    <span t-field="move.x_codigo"/>
-                  </td>
-                  <td style='padding: 2px;'>
-                    <span t-field="move.product_id"/>
-                    <p t-if="move.x_series"><span t-esc="move.x_series"/></p>
-                  </td>
-                  <td style='padding: 2px;'>
-                    <span t-field="move.product_uom_qty"/>
-                    <span t-field="move.product_uom"/>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          <t t-set="backorder" t-value="False"/>
+  <template id="stock_picking_odoo_custom">
+    <t t-call="reportes_custom.external_layout_stock_picking_custom">
+      <div class="page">
+        <div class="oe_structure"/>
+        <table class="table table-sm o_main_table mt48">          <!--t-if="not o.move_line_ids"-->
+          <thead>
+            <tr>
+              <th style='padding: 2px;'>
+                <strong>CODIGO</strong>
+              </th>
+              <th style='padding: 2px;'>
+                <strong>PRODUCTO</strong>
+              </th>
+              <th style='padding: 2px;'>
+                <strong>CANTIDAD</strong>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="o.move_lines" t-as="move">
+              <td style='padding: 2px;'>
+                <span t-field="move.x_codigo"/>
+              </td>
+              <td style='padding: 2px;'>
+                <span t-field="move.product_id"/>
+                <p t-if="move.x_series">
+                  <span t-esc="move.x_series"/>
+                </p>
+              </td>
+              <td style='padding: 2px;'>
+                <span t-field="move.product_uom_qty"/>
+                <span t-field="move.product_uom"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style='width:100%; text-align: start; position:absolute; top:400px; left: 0px;'>
+          <img t-att-src="image_data_uri(o.sign)" style="height: 250px; width: 60%;"/>
+        </div>
+        <t t-set="backorder" t-value="False"/>
 
-          <p t-if="o.backorder_id">
-            This shipment is a backorder of <t t-esc="o.backorder_id.name"/>.
-          </p>
-          <p>
-            <t t-if="backorder">
+        <p t-if="o.backorder_id">
+            This shipment is a backorder of <t t-esc="o.backorder_id.name"/>
+.
+        </p>
+        <p>
+          <t t-if="backorder">
               All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
-            </t>
-          </p>
-        </div> 
-  		</t>
-  	</template>
-	</data>
+          </t>
+        </p>
+      </div>
+    </t>
+  </template>
+</data>
 </odoo>

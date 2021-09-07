@@ -11,7 +11,7 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
-			<report
+		<report
 			id="account_factura_custom_printex"
 			model="account.invoice"
 			string="Factura printex"
@@ -64,6 +64,7 @@
 		<report
 			id="stock_picking_custom"
 			model="stock.picking"
+			menu="False"
 			string="Orden de entrega"
 			name="reportes_custom.stock_picking_custom_print_view"
 			file="reportes_custom.stock_picking_custom_print_view"
@@ -74,6 +75,7 @@
 		<report
 			id="stock_picking_custom_pos"
 			model="stock.picking"
+			menu="False"
 			string="Orden de entraga pos"
 			name="reportes_custom.stock_picking_custom_print_view_pos"
 			file="reportes_custom.stock_picking_custom_print_view_pos"

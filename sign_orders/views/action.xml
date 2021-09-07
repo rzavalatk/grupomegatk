@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sign_orders_list_action" model="ir.actions.act_window">
+            <field name="name">Firmar ordenes</field>
+            <field name="res_model">stock.picking</field>
+            <field name="context">{"search_default_init_view":1}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+        </record>
+
+        <menuitem name="Firmar ordenes" id="sign_orders_menu_root" 
+        sequence = "1" web_icon="sign_orders,static/description/icon.png" 
+        action = "sign_orders.sign_orders_list_action" />
+    </data>
+</odoo>
