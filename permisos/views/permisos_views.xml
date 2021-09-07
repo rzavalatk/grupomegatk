@@ -15,7 +15,7 @@
               <button name="rechazar" type="object" string="Denegar" 
                 states="pendiente," groups="permisos.permiso_admin, permisos.permiso_jefe"/>
               <button name="back_draft" type="object" string="Volver a borrador" 
-                states="rechazado" class="oe_highlight"/>
+                states="denegado" class="oe_highlight"/>
               <button name="cancelar" type="object" string="Cancelar" 
               states="aprobado" confirm='¿Está seguro de cancelar el permiso? esta acción retorna los días solicitados' groups="permisos.permiso_admin, permisos.permiso_jefe"/>
 
