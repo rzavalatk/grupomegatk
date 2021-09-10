@@ -45,5 +45,16 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="sign_orders_view_tree" model="ir.ui.view">
+            <field name="name">sign.orders.view.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree" />
+            <field name="arch" type="xml">
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="default_order">scheduled_date desc</attribute>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
