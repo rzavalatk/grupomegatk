@@ -89,7 +89,7 @@ class HrPermisos(models.Model):
 		if dateInit == dateEnd and timeInit != timeEnd:
 			days = 0
 			hour = timeEnd.hour - timeInit.hour
-			if timeEnd.hour > 12:
+			if timeEnd.hour > 12 and timeInit.hour <= 12:
 				hour = hour - 1
 			if hour < 0:
 				return "Error en las Horas."
@@ -122,9 +122,10 @@ class HrPermisos(models.Model):
 			else:
 				res['D'],res['H'],res['M'] = rang,0,0
 		if dateInit != dateEnd and timeInit != timeEnd:
-			rang = self.rangeDate(dateInit=dateInit, dateEnd=dateEnd) - 1
+			rang = self.rangeDate(dateInit=dateInit, dateEnd=dateEnd)
 			if rang < 0:
 				return "Error en las fechas."
+			rang = rang - 1
 			sab = 0
 			if (dateEnd.weekday() == 5 or dateEnd.weekday() == 6) and timeEnd.hour > 12:
 				sab = timeEnd.hour - 12
@@ -151,7 +152,7 @@ class HrPermisos(models.Model):
 			if dateEnd.weekday() == 6:
 				rang = rang - 1
 			if rang < 0:
-				return "Error en las Fechas"
+				return "Error en las fechas."
 			else:
 				res['D'],res['H'],res['M'] = rang,time,minutes
 		return res
@@ -197,7 +198,6 @@ class HrPermisos(models.Model):
 			template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)
 		else:
 			self.env.user.notify_warning(message='Verificar fechas, no puede solicitar 0 dias, 0 horas, 0 minutos')
-
 
 	def vacaciones_restantes(self,operacion):
 		minutos_actuales = (self.employe_id.permisos_dias * 480) + (self.employe_id.permisos_horas * 60 ) + self.employe_id.permisos_minutos
