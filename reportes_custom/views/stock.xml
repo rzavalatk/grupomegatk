@@ -14,7 +14,7 @@
                         icon="fa-edit"
                         type="action" 
                         context="{'active_id': id, 'active_ids': [id,]}" 
-                        attrs="{'invisible': ['|', ('passed','=','Si'), ('state', 'not in', ('waiting','confirmed','assigned'))]}" 
+                        attrs="{'invisible': ['|', ('passed','=','Si'), ('state', 'not in', ('waiting','confirmed','assigned','done'))]}" 
                         class="oe_highlight" />
                         <button 
                         name="%(reportes_custom.stock_picking_custom)d" 
