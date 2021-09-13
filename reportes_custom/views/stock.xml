@@ -30,6 +30,21 @@
                         type="action"
                         attrs="{'invisible': [('passed','=','No')]}"
                         class="oe_highlight" />
+                        <!--  -->
+                        <button 
+                        name="%(reportes_custom.stock_picking_custom)d" 
+                        string="Orden de entrega"
+                        icon="fa-download"
+                        type="action"
+                        attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}" 
+                        class="oe_highlight" />
+                        <button 
+                        name="%(reportes_custom.stock_picking_custom_pos)d" 
+                        string="Orden de entrega POS"
+                        icon="fa-download"
+                        type="action"
+                        attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}"
+                        class="oe_highlight" />
                     </xpath>
                     <xpath expr="//field[@name='origin']" position="after">
                         <field name="passed" invisible="1" />
