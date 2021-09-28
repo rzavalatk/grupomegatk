@@ -9,6 +9,7 @@
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="cubing" />
                     <field name="weight" />
+                    <field name="code_reference" />
                     <field name="count_compute" invisible="1" />
                 </xpath>
             </field>

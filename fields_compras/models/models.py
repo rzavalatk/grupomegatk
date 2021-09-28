@@ -16,5 +16,6 @@ class ModelCompras(models.Model):
 
     cubing = fields.Float("Cubicaje total")
     weight = fields.Float("Peso total")
+    code_reference = fields.Char("Código de Referencia")
     count = fields.Float()
     count_compute = fields.Float("Total",compute=_count_compute)

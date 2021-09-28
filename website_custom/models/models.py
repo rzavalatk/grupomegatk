@@ -39,12 +39,13 @@ class CarouselCustom(models.Model):
         textTrunc = ""
         length = 15
         i = 0
-        for char in self.product.name:
-            if i < length:
-                textTrunc += char
-            if i == length:
-                textTrunc += "..."
-            i += 1
+        if self.product:
+            for char in self.product.name:
+                if i < length:
+                    textTrunc += char
+                if i == length:
+                    textTrunc += "..."
+                i += 1
         self.name_product_trunc = textTrunc
 
 
