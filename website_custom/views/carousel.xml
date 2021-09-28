@@ -10,9 +10,9 @@
                     <field name="name" />
                     <field name="website" />
                     <field name="image" widget="image"/>
-                    <field name="product" />
+                    <!-- <field name="product" /> -->
                     <field name="color" />
-                    <field name="name_product_trunc" />
+                    <!-- <field name="name_product_trunc" /> -->
                     <separator/>
                     <templates>
                         <t t-name="kanban-box">
@@ -27,7 +27,7 @@
                                 <div style="padding: 5px;">
                                     <b style="font-size: 18px;">Producto: </b>
                                     <span style="font-size: 18px;">
-                                        <field name="name_product_trunc"/>
+                                        <!-- <field name="name_product_trunc"/> -->
                                     </span>
                                 </div>
                             </div>
