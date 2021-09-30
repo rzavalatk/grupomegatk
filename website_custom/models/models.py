@@ -104,7 +104,7 @@ class ProductTemplateCustom(models.Model):
         self.quantity = num
         return num
 
-    quantity = fields.Float("Cantidad total", compute=_quantity)
+    # quantity = fields.Float("Cantidad total", compute=_quantity)
 
 
     def get_quantity(self, product):

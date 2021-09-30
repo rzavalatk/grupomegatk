@@ -28,7 +28,6 @@
         'views/breadcum.xml',
         'views/carousel.xml',
         'views/hide_content.xml',
-        'views/product_template.xml',
         'security/security.xml',
         'static/src/xml/logos_base64.xml',
 
