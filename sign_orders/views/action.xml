@@ -12,5 +12,5 @@
         <menuitem name="Firmar ordenes" id="sign_orders_menu_root" 
         sequence = "1" web_icon="sign_orders,static/description/icon.png" 
         action = "sign_orders.sign_orders_list_action" />
-    </data>
+    </data> 
 </odoo>
