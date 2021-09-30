@@ -38,3 +38,9 @@ class RoutesJSON(http.Controller):
             })
 
         return res
+
+
+    @http.route(['/get_quantity'], type='json', auth='public', website=True)
+    def get_quantity(self, product):
+        res = http.request.env['product.template'].get_quantity(product)
+        return res

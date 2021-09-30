@@ -10,7 +10,10 @@ odoo.define("carousel.front", ["web.ajax"], (require) => {
           i === 0 ? " active" : ""
         }" style="background-image: url('data:image/jpg;base64,${
           image.image
-        }');" data-name="Slide">
+        }'); backgroundRepeat: no-repeat !important;
+        backgroundPosition: center center !important;
+        backgroundSize: cover !important;" 
+        data-name="Slide">
           <div class="container mt-5">
               <div class="row content">
                   <div class="carousel-content col-lg-6 offset-lg-6">
@@ -64,9 +67,7 @@ odoo.define("carousel.front", ["web.ajax"], (require) => {
                       <div class="s_title pb8" data-name="Title">
                           <h2 class="s_title_default">
                               <font style="font-size: 62px;
-                              -webkit-text-fill-color: ${
-                                image.font_color_name
-                              };
+                              -webkit-text-fill-color: ${image.font_color_name};
                           ${
                             image.stroke_name
                               ? `-webkit-text-stroke: ${image.size_stroke_name}px ${image.color_stroke_name};`
@@ -101,7 +102,14 @@ odoo.define("carousel.front", ["web.ajax"], (require) => {
           </div>
       </div>
         `;
-
+      case "3":
+        return `
+          <div class="carousel-item oe_custom_bg oe_img_bg py-5 ${
+            i === 0 ? " active" : ""
+          }" data-name="Slide">
+            <img class="d-block w-100" src="data:image/jpg;base64,${image.image}" alt="${image.name}">
+          </div>
+          `;
       default:
         return "";
     }
