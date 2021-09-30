@@ -18,18 +18,19 @@
     'depends': ['base','website'],
 
     'data': [
+        'views/assets/assets.xml',
         'views/website/breadcrum_shop.xml',
         'views/website/footer.xml',
+        'views/website/products_details.xml',
         'views/snippets/carousel.xml',
         'views/snippets/snippets.xml',
         'views/filters/carousel.xml',
         'views/breadcum.xml',
         'views/carousel.xml',
+        'views/hide_content.xml',
+        'views/product_template.xml',
         'security/security.xml',
         'static/src/xml/logos_base64.xml',
 
     ],
-    'qweb': [
-        # 'static/src/xml/logos_base64.xml',
-    ]
 }
