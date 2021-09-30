@@ -35,12 +35,11 @@
 
 .content-breadcum-image {
   height: 80px;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding-left: 10px;
-  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .breadcrumb-custom {
