@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>  
+        <template id="hide_to_cart_wishlist" name="hide.to.cart.wishlist" inherit_id="website_sale_wishlist.product_wishlist">
+            <xpath expr="//td[@class='text-center td-wish-btn']" position="replace">
+                
+            </xpath>
+            <xpath expr="//div[@class='checkbox']" position="replace">
+                
+            </xpath>
+        </template>
+        <template id="hide_comparator_page" name="hide.comparator.page" inherit_id="website_sale_comparison.product_compare">
+            <xpath expr="//form[@class='text-center']" position="replace">
+                
+            </xpath>
+        </template>
+    </data>
+</odoo>
