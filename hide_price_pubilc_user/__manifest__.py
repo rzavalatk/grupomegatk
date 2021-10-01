@@ -19,7 +19,7 @@
     'depends': ['base', 'website', 'ks_theme_kinetik'],
 
     'data': [
-        'views/price.xml',
+        # 'views/price.xml',
         'views/views.xml',
     ],
 }
