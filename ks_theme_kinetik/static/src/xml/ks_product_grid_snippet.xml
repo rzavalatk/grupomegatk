@@ -95,7 +95,7 @@
                                     </a>
                                     <div class="wishlist_and_comparision row no-gutters">
                                         <t t-set="product_variant_id" t-value='prods.ks_product_var_id'/>
-                                        <t t-if="prods.is_ks_cart">
+                                        <t t-if="False">
                                             <div class="col">
                                                 <form action="/ks_shop/cart/update" method="post" class="text-center ks_shop">
                                                     <input name="product_id" t-att-value="prods.ks_product_var_id" type="hidden"/>
@@ -114,7 +114,7 @@
                                                 </a>
                                             </div>
                                         </t>
-                                        <t t-if="prods.is_ks_compare">
+                                        <t t-if="False">
                                             <div class="col ks_custom_d_none">
                                                 <button type="button" role="button" class="d-none d-md-inline-block btn btn-secondary btn-sm o_add_compare" title="Compare" aria-label="Compare" t-att-data-product-product-id="prods.ks_product_var_id" data-action="o_comparelist">
                                                     <span class="fa fa-exchange"/>
