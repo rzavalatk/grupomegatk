@@ -108,5 +108,15 @@
         </xpath>
       </field>
     </record>
+    <!-- View wishlist -->
+    <record id="custom_product_wishlist" model="ir.ui.view">
+      <field name="name">custom.product.wishlist</field>
+      <field name="inherit_id" ref="website_sale_wishlist.product_wishlist" />
+      <field name="arch" type="xml">
+        <xpath expr="//tr[@t-att-data-wish-id='wish.id']/td[3]" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
   </data>
 </odoo>
