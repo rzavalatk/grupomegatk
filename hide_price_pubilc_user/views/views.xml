@@ -64,5 +64,49 @@
         </xpath>
       </field>
     </record>
+    <!-- View Product Summary Cart -->
+    <record id="custom_product_summary_cart" model="ir.ui.view">
+      <field name="name">custom.product.summary.cart</field>
+      <field name="inherit_id" ref="website_sale.cart_summary" />
+      <field name="arch" type="xml">
+        <xpath expr="//td[@class='text-center td-price']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- View Price Range -->
+    <record id="custom_price_range" model="ir.ui.view">
+      <field name="name">custom.price.range</field>
+      <field name="inherit_id" ref="ks_theme_kinetik.products_attributes" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='ks_price_container ']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+        <xpath expr="//li[@class='nav-item border-top']" position="attributes">
+          <attribute name="style">display: none;</attribute>
+        </xpath>
+      </field>
+    </record>
+    <!-- View Product Summary Cart 2-->
+    <record id="custom_product_summary_cart_2" model="ir.ui.view">
+      <field name="name">custom.product.summary.cart.2</field>
+      <field name="inherit_id" ref="website_sale_comparison.product_compare" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='product_summary']/span" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
+    <!-- View poppop compare product -->
+    <record id="custom_product_compare_popover" model="ir.ui.view">
+      <field name="name">custom.product.compare.popover</field>
+      <field name="inherit_id" ref="website_sale_comparison.product_product" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='ks-price']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
   </data>
 </odoo>

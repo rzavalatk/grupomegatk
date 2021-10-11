@@ -107,7 +107,7 @@
                                                 </form>
                                             </div>
                                         </t>
-                                        <t t-if="prods.is_ks_product_det">
+                                        <t t-if="False">
                                             <div class="col ks_custom_d_none_info">
                                                 <a class="btn btn-secondary btn-sm o_quick_view" data-toggle="modal" data-target="#product_quick_preview_Modal" title="Quick Preview" t-att-data-product-product-id="prods.ks_product_var_id" t-att-data-product-template-id="prods.prod_id">
                                                     <span class="fa fa-info-circle" role="img" aria-label="Product Information"/>
