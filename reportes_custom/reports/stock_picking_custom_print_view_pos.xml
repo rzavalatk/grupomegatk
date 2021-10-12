@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
+	<data>
     <template id="stock_picking_custom_print_view_pos">
       <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
@@ -8,70 +8,65 @@
         </t>
       </t>
     </template>
-
-    <template id="external_layout_stock_picking_custom_pos">
+		
+		<template id="external_layout_stock_picking_custom_pos">
       <div class="header1">
-        <div class="row">
-          <div class="col-xs-3 mb4">
-            <div style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:100%;">
+          <div class="row">
+            <div class="col-xs-3 mb4">
+                <div style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:100%;">
                   CLIENTE: 
-            </div>
-            <div style="width: 100% !important;">
-              <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
-                <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
-                <div t-if="o.partner_id.vat" class="mt16">
-                  <t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>
-:                  <span t-field="o.partner_id.vat"/>
                 </div>
-
-              </div>
+                <div style="width: 100% !important;">
+                  <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+                    <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+                  
+                  </div>
+                </div>
             </div>
+            
           </div>
-
-        </div>
-        <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
-        <div style="float: right;">
-          <table style="text-align: center; width:90%">
-            <tr>
-              <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold;">FECHA</td>
-              <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold;">Numero</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                <span t-field="o.scheduled_date"/>
-              </td>
+            <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
+            <div style="float: right;">
+              <table style="text-align: center; width:90%">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold;">FECHA</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold;">Numero</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.scheduled_date"/>
+                  </td>
               <!-- <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
                     <td t-if="o.number &gt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td> -->
-              <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                <span t-field="o.name"/>
-              </td>
-            </tr>
-          </table>
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.name"/></td>
+                </tr>
+              </table>
+            </div>  
+              <table style="text-align: center;">
+                <tr>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:120px;">UBICACIÓN</td>
+                  <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold; width:120px;">FUENTE</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <span t-field="o.location_id"/>
+                  </td>
+                  <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                    <div t-if="o.origin" >
+                      <span t-field="o.origin"/>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+          </div>
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+          <t t-raw="0"/>
         </div>
-        <table style="text-align: center;">
-          <tr>
-            <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt;  font-weight: bold; width:120px;">UBICACIÓN</td>
-            <td style="color: white; background: rgb(13, 143, 210); padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:14pt; font-weight: bold; width:120px;">FUENTE</td>
-          </tr>
-          <tr>
-            <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-              <span t-field="o.location_id"/>
-            </td>
-            <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-              <div t-if="o.origin">
-                <span t-field="o.origin"/>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-        <t t-raw="0"/>
-      </div>
     </template>
 
-    <template id="stock_picking_odoo_custom_pos">
-      <t t-call="reportes_custom.external_layout_stock_picking_custom_pos">
+		<template id="stock_picking_odoo_custom_pos">
+  		<t t-call="reportes_custom.external_layout_stock_picking_custom_pos">
         <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
         <div class="page" style='margin-left:-15; '>
            <p style="font-family:'Arial'; font-size:72pt;  font-weight: bold;text-align: center;"><span t-field="o.company_id.name"/></p>
@@ -128,7 +123,7 @@
             </t>
             <div style="text-align:center; font-size:34pt; font-family:'Arial';"> Firma </div>    
         </div>
-      </t>
-    </template>
-  </data>
+			</t>    
+  	</template>
+	</data>
 </odoo>
