@@ -35,9 +35,13 @@
                 <filter string="Factura" name='factu_report' domain="[('type','=','out_invoice')]"/>
                 <filter string="Nota de credito" name='credit_report' domain="[('type','=','out_refund')]"/>
                 <separator/>
+                <filter string="Abiertas" name='state_open' domain="[('state','in',['open'])]"/>
+                <filter string="Cerradas" name='state_paid' domain="[('state','in',['paid'])]"/>
+                <separator/>
                 <filter string="Marca" name='group_marca' context="{'group_by':'marca_id'}"/>
                 <filter string="Responsable" name="invoicedate" context="{'group_by':'user_id'}"/>
-                <filter string="Fecha" name="invoicedate" context="{'group_by':'date'}"/>
+                <filter string="Cliente" name="customer" context="{'group_by':'partner_id'}"/>
+                <filter string="Fecha" name="date" context="{'group_by':'date'}"/>
             </search>
         </field>
     </record>

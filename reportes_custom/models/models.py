@@ -44,5 +44,12 @@ class StockPicking(models.Model):
             print("///////////Error al adjuntar el reporte//////////////")
         return True
 
+    def _default_passed(self):
+        if self.picking_type_code == "outgoing":
+            return "No"
+        else:
+            return "Si"
+            
+
     sign = fields.Binary()
-    passed = fields.Char(string="Aprobado", default="No")
+    passed = fields.Char(string="Aprobado", default=_default_passed)

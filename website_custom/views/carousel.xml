@@ -10,24 +10,16 @@
                     <field name="name" />
                     <field name="website" />
                     <field name="image" widget="image"/>
-                    <field name="product" />
                     <field name="color" />
-                    <field name="name_product_trunc" />
                     <separator/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div style="height:250px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
+                            <div style="height:200px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
                                 <img style="width: 100%; height:150px; " class="o_kanban_image" t-att-src="kanban_image('carousel.images', 'image', record.id.raw_value)" t-att-alt="record.name"/>
                                 <div style="padding: 5px">
                                     <b style="font-size: 18px;">Sitio web: </b>
                                     <span style="font-size: 18px;">
                                         <field name="website" />
-                                    </span>
-                                </div>
-                                <div style="padding: 5px;">
-                                    <b style="font-size: 18px;">Producto: </b>
-                                    <span style="font-size: 18px;">
-                                        <field name="name_product_trunc"/>
                                     </span>
                                 </div>
                             </div>
@@ -71,7 +63,6 @@
                 </form>
             </field>
         </record>
-                <!-- "search_default_group_website":1 -->
 
         <record id="carousel_action" model="ir.actions.act_window">
             <field name="name">Imagenes del carousel</field>

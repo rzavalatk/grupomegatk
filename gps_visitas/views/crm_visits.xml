@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_visits_tree" model="ir.ui.view">
+            <field name="name">crm.visits.tree</field>
+            <field name="model">crm.visits</field>
+            <field name="arch" type="xml">
+                <tree create="false" default_order="timestamp_init_visit desc">
+                    <field name="client_name" />
+                    <field name="user_name" />
+                    <field name="timestamp_init_visit" />
+                    <field name="timestamp_end_visit" />
+                    <field name="total_time" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="crm_visits_view_search" model="ir.ui.view">
+            <field name="name">crm.visits.view.search</field>
+            <field name="model">crm.visits</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="group_responsable" string="Por responsable" context="{'group_by':'user_name'}"/>
+                    <filter name="group_customer" string="Por cliente" context="{'group_by':'client_name'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="crm_visits_form" model="ir.ui.view">
+            <field name="name">crm.visits.form</field>
+            <field name="model">crm.visits</field>
+            <field name="arch" type="xml">
+                <form string="Visita" create="false" edit="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="id_visit" />
+                                <field name="company_id" />
+                                <field name="client_name" />
+                                <field name="user_name" />
+                                <field name="api_key" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="timestamp_init_visit" />
+                                <field name="timestamp_end_visit" />
+                                <field name="total_time" />
+                                <field name="lat_init_visit" invisible="1"/>
+                                <field name="lng_init_visit" invisible="1"/>
+                                <field name="lat_end_visit" invisible="1"/>
+                                <field name="lng_end_visit" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <sheet>
+                        <script>
+                            <![CDATA[
+                                let latInit = document.getElementsByName("lat_init_visit");
+                                let lngInit = document.getElementsByName("lng_init_visit");
+                                let latEnd = document.getElementsByName("lat_end_visit");
+                                let lngEnd = document.getElementsByName("lng_end_visit");
+                                let apiKey = document.getElementsByName("api_key");
+                                let scriptMap = document.getElementById("script_map");
+
+                                if (apiKey.length > 0) {
+                                    apiKey = apiKey.item(0).innerHTML;
+                                    scriptMap.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initialize`;
+                                } else {
+                                    apiKey = false;
+                                }
+
+                                if (latInit.length > 0) {
+                                    latInit = parseFloat(latInit.item(0).innerHTML);
+                                } else {
+                                    latInit = false;
+                                }
+
+                                if (lngInit.length > 0) {
+                                    lngInit = parseFloat(lngInit.item(0).innerHTML);
+                                } else {
+                                    lngInit = false;
+                                }
+
+                                if (latEnd.length > 0) {
+                                    latEnd = parseFloat(latEnd.item(0).innerHTML);
+                                } else {
+                                    latEnd = false;
+                                }
+
+                                if (lngEnd.length > 0) {
+                                    lngEnd = parseFloat(lngEnd.item(0).innerHTML);
+                                } else {
+                                    lngEnd = false;
+                                }
+
+                                function initialize(){
+                                    let divMap = document.getElementById('map')
+                                    divMap.innerHTML = ''
+                                    let map = new google.maps.Map(divMap, {
+                                        center: { lat: latInit, lng: lngInit },
+                                        zoom: 18,
+                                    });
+
+                                    const markerInit = new google.maps.Marker({ 
+                                        map: map, 
+                                        position: {
+                                            lat: latInit,
+                                            lng: lngInit
+                                        },
+                                        });
+                                    const markerEnd = new google.maps.Marker({ 
+                                        map: map, 
+                                        position: {
+                                            lat: latEnd,
+                                            lng: lngEnd
+                                        },
+                                        color: 'blue'
+                                    });
+                                }
+                            ]]>
+                        </script>
+                        <script id="script_map"></script>
+                        <div id="map" style="width:100%;height:500px;"></div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.server" id="crm_visits_action_server">
+            <field name="name">Visitas</field>
+            <field name="model_id" ref="model_crm_visits"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">action = model.visits_filter_by_company()</field>
+        </record>
+
+        <menuitem name="Visitas" id="cmd_visitas_menu" 
+        sequence = "16" parent="crm.crm_menu_config"
+        action = "gps_visitas.crm_visits_action_server" />
+    </data>
+</odoo>

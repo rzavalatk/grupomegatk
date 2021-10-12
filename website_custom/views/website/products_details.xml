@@ -14,5 +14,10 @@
             <xpath expr="//div[@class='custom_add_to_cart_and_call']//a[@id='add_to_cart']" position="before">
             </xpath>
         </template>
+        <template id="product_price_custom" name="product.price.custom" inherit_id="website_sale.product_price">
+            <xpath expr="//b[@class='oe_price']" position="attributes">
+                <attribute name="id">price_public</attribute>
+            </xpath>
+        </template>
     </data>
 </odoo>
