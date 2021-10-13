@@ -286,6 +286,12 @@ class WebsiteSale(main.WebsiteSale):
                     ks_max_selected_price = ks_max_price_avail
                 else:
                     ks_max_selected_price = post.get('max', ks_max_price_avail)
+                    
+        open_price_filter = None
+        try:
+          open_price_filter = True if request.website.viewref('website_sale.products_attributes').active and (float(ks_min_price_avail) != float(ks_min_selected_price) or float(ks_max_price_avail) != float(ks_max_selected_price)) else False
+        except:
+          open_price_filter = False
 
         values = {
             'search': search,
@@ -320,7 +326,7 @@ class WebsiteSale(main.WebsiteSale):
             'page_count':pager['page_count'],
             'breadcumb_shop': breadcrumb_url,
             'show_price_filter': show_price_filter,
-            'open_price_filter': True if request.website.viewref('website_sale.products_attributes').active and (float(ks_min_price_avail) != float(ks_min_selected_price) or float(ks_max_price_avail) != float(ks_max_selected_price)) else False,
+            'open_price_filter': open_price_filter,
         }
         if category:
             values['main_object'] = category
