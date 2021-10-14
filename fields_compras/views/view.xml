@@ -10,7 +10,7 @@
                     <field name="cubing" />
                     <field name="weight" />
                     <field name="code_reference" />
-                    <field name="count_compute" invisible="1" />
+                    <field name="origin_city" />
                 </xpath>
             </field>
         </record>
