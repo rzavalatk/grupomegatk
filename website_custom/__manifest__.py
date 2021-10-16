@@ -20,6 +20,7 @@
     'data': [
         'views/assets/assets.xml',
         'views/website/breadcrum_shop.xml',
+        'views/website/chat_facebook.xml',
         'views/website/footer.xml',
         'views/website/products_details.xml',
         'views/snippets/carousel.xml',
