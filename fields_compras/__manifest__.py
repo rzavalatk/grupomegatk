@@ -14,8 +14,9 @@
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     'version': '0.1',
-    'depends': ['base','purchase',],
+    'depends': ['base','purchase',"importacion"],
     'data': [
         'views/view.xml',
+        'views/stock.xml',
     ],
 }

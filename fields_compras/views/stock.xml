@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>  
+        <record id="stock_picking_custom_dates" model="ir.ui.view">
+            <field name="name">stock.picking.custom.dates</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='scheduled_date']" position="attributes">
+                    <attribute name="string">Fecha del pedido</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_done']" position="attributes">
+                    <attribute name="string">Fecha de recepción</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_picking_custom_dates_tree" model="ir.ui.view">
+            <field name="name">stock.picking.custom.dates.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='scheduled_date']" position="after">
+                    <field name="date_done" />
+                </xpath>
+                <xpath expr="//field[@name='scheduled_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_done']" position="attributes">
+                    <attribute name="string">Fecha de recepción</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Importaciones -->
+        
+        <record id="import_product_mega_custom_brand" model="ir.ui.view">
+            <field name="name">import.product.mega.custom.brand</field>
+            <field name="model">import.product.mega</field>
+            <field name="inherit_id" ref="importacion.import_product_mega_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="brand_produt" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="import_product_mega_custom_brand_tree" model="ir.ui.view">
+            <field name="name">import.product.mega.custom.brand.tree</field>
+            <field name="model">import.product.mega</field>
+            <field name="inherit_id" ref="importacion.import_product_mega_tree_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='res_parner_id']" position="after">
+                    <field name="brand_produt" />
+                </xpath>
+            </field>
+        </record>
+        <record id="import_product_mega_custom_brand_search" model="ir.ui.view">
+            <field name="name">import.product.mega.custom.brand.search</field>
+            <field name="model">import.product.mega</field>
+            <field name="inherit_id" ref="importacion.import_product_mega_search_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='esato_import']" position="after">
+                    <separator/>
+                    <field name="brand_name"/>
+                    <filter string="Marcas" name="brand_name" context="{'group_by':'brand_name'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
