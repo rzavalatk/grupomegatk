@@ -13,14 +13,12 @@
     'author': "Alejandro Zelaya",
     'website': "azelaya@mehatk.com",
 
-    'category': 'Users',
+    'category': 'Crm',
     'version': '0.1',
 
-    'depends': ['base', 'crm'],
+    'depends': ['base', 'crm', 'fields_megatk'],
 
     'data': [
-        'views/crm_stage.xml',
-        'views/crm_lead.xml',
         'views/crm_visits.xml',
         'security/security.xml',
     ],

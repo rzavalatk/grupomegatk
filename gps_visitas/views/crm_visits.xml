@@ -5,24 +5,12 @@
             <field name="name">crm.visits.tree</field>
             <field name="model">crm.visits</field>
             <field name="arch" type="xml">
-                <tree create="false" default_order="timestamp_init_visit desc">
-                    <field name="client_name" />
-                    <field name="user_name" />
-                    <field name="timestamp_init_visit" />
-                    <field name="timestamp_end_visit" />
-                    <field name="total_time" />
+                <tree>
+                    <field name="name"/>
+                    <field name="pertner_id" />
+                    <field name="user_id" />
+                    <field name="state_visit" />
                 </tree>
-            </field>
-        </record>
-
-        <record id="crm_visits_view_search" model="ir.ui.view">
-            <field name="name">crm.visits.view.search</field>
-            <field name="model">crm.visits</field>
-            <field name="arch" type="xml">
-                <search>
-                    <filter name="group_responsable" string="Por responsable" context="{'group_by':'user_name'}"/>
-                    <filter name="group_customer" string="Por cliente" context="{'group_by':'client_name'}"/>
-                </search>
             </field>
         </record>
 
@@ -30,111 +18,182 @@
             <field name="name">crm.visits.form</field>
             <field name="model">crm.visits</field>
             <field name="arch" type="xml">
-                <form string="Visita" create="false" edit="false">
+                <form string="Visita">
+                    <script type="text/javascript" src="/gps_visitas/static/src/js/controller.js"/>
+                    <header>
+                        <field name="button_init" invisible="1"/>
+                        <field name="button_end" invisible="1"/>
+                        <field name="create_opportunity" invisible="1" />
+                        <button string="Iniciar Visita" id="init_visit" attrs="{'invisible': [('button_init', '=', True)]}" class="oe_highlight" />
+                        <button string="Finalizar Visita" id="end_visit" attrs="{'invisible': ['|',('button_init', '=', False),('button_end', '=', True)]}" class="oe_highlight"/>
+                        <button string="Crear portunidad" name="create_chance" type="object" attrs="{'invisible': ['|',('button_end', '=', False),('create_opportunity', '=', True)]}" />
+                        <field name="state_visit" widget="statusbar"/>
+                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="go_to_opportunity" type="object" class="oe_stat_button" icon="fa-check" attrs="{'invisible': [('create_opportunity', '=', False)]}">
+                                Oportunidad
+                            </button>
+                        </div>
+                        <div id="hidden_box" class="modal fade" data-backdrop="static">
+                            <div class="modal-dialog modal-content" style="min-height:150px;max-width:400px;">
+                                <div style="display: flex !important; flex-direction: row !important;">
+                                    <div style="display: flex !important; justify-content: center !important; align-items: flex-start !important; padding: 5px; margin-top: 30px !important;">
+                                        <img alt="warning" style="width: 50px; heigth: 50px;" src="/gps_visitas/static/img/warning.png" />
+                                    </div>
+                                    <div class="modal-body" id="pop_html">
+                                        <br/>
+                                        <h2 style="text-align:start; font-size 24px; font-weight:bold" class="o_default_snippet_text">Advertencia:</h2>
+                                        <p style="font-size 12px; font-weight:bold">Este navegador no puede otorgar permisos de ubicación, se recomienda abrir otro navegador para continuar con la acción.</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="buton-close" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <a id="go" role="button" href="/" class="btn btn-primary">Abrir otro navegador</a>
+                                </div>
+                            </div>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="saved" invisible="1"/>
+                                <field name="tipo_id" widget='selection' attrs="{'readonly': [('saved', '=', True)]}" />
+                            </h1>
+                        </group>
                         <group>
                             <group>
-                                <field name="id_visit" />
-                                <field name="company_id" />
-                                <field name="client_name" />
-                                <field name="user_name" />
-                                <field name="api_key" invisible="1"/>
+                                <field name="id" invisible="1" />
+                                <field name="currency_id" invisible="1" />
+                                <field name="planned_revenue" />
+                                <field name="pertner_id" />
                             </group>
                             <group>
-                                <field name="timestamp_init_visit" />
-                                <field name="timestamp_end_visit" />
-                                <field name="total_time" />
-                                <field name="lat_init_visit" invisible="1"/>
-                                <field name="lng_init_visit" invisible="1"/>
-                                <field name="lat_end_visit" invisible="1"/>
-                                <field name="lng_end_visit" invisible="1"/>
+                                <field name="user_id" />
+                                <field name="tipo_soporte" />
+                                <field name="api_key" invisible="1"/>
                             </group>
                         </group>
-                    </sheet>
-                    <sheet>
-                        <script>
-                            <![CDATA[
-                                let latInit = document.getElementsByName("lat_init_visit");
-                                let lngInit = document.getElementsByName("lng_init_visit");
-                                let latEnd = document.getElementsByName("lat_end_visit");
-                                let lngEnd = document.getElementsByName("lng_end_visit");
-                                let apiKey = document.getElementsByName("api_key");
-                                let scriptMap = document.getElementById("script_map");
+                        <group>
+                            <notebook>
+                                <page string="Información general">
+                                    <group>
+                                        <field name="timestamp_init_visit" />
+                                        <field name="timestamp_end_visit" />
+                                        <field name="total_time_compute" />
+                                        <field name="description" />
+                                        <field name="lat_init_visit" invisible="1" />
+                                        <field name="lng_init_visit" invisible="1" />
+                                        <field name="lat_end_visit" invisible="1" />
+                                        <field name="lng_end_visit" invisible="1" />
+                                    </group>
+                                </page>
+                                <page string="Mapa" groups="permisos.permiso_admin">
+                                    <script>
+                                        <![CDATA[
+                                            let latInit = document.getElementsByName("lat_init_visit");
+                                            let lngInit = document.getElementsByName("lng_init_visit");
+                                            let latEnd = document.getElementsByName("lat_end_visit");
+                                            let lngEnd = document.getElementsByName("lng_end_visit");
+                                            let apiKey = document.getElementsByName("api_key");
+                                            let scriptMap = document.getElementById("script_map");
 
-                                if (apiKey.length > 0) {
-                                    apiKey = apiKey.item(0).innerHTML;
-                                    scriptMap.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initialize`;
-                                } else {
-                                    apiKey = false;
-                                }
+                                            if (apiKey.length > 0) {
+                                                apiKey = apiKey.item(0).innerHTML;
+                                                scriptMap.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initialize`;
+                                            } else {
+                                                apiKey = false;
+                                            }
 
-                                if (latInit.length > 0) {
-                                    latInit = parseFloat(latInit.item(0).innerHTML);
-                                } else {
-                                    latInit = false;
-                                }
+                                            if (latInit.length > 0) {
+                                                latInit = parseFloat(latInit.item(0).innerHTML);
+                                            } else {
+                                                latInit = false;
+                                            }
 
-                                if (lngInit.length > 0) {
-                                    lngInit = parseFloat(lngInit.item(0).innerHTML);
-                                } else {
-                                    lngInit = false;
-                                }
+                                            if (lngInit.length > 0) {
+                                                lngInit = parseFloat(lngInit.item(0).innerHTML);
+                                            } else {
+                                                lngInit = false;
+                                            }
 
-                                if (latEnd.length > 0) {
-                                    latEnd = parseFloat(latEnd.item(0).innerHTML);
-                                } else {
-                                    latEnd = false;
-                                }
+                                            if (latEnd.length > 0) {
+                                                latEnd = parseFloat(latEnd.item(0).innerHTML);
+                                            } else {
+                                                latEnd = false;
+                                            }
 
-                                if (lngEnd.length > 0) {
-                                    lngEnd = parseFloat(lngEnd.item(0).innerHTML);
-                                } else {
-                                    lngEnd = false;
-                                }
+                                            if (lngEnd.length > 0) {
+                                                lngEnd = parseFloat(lngEnd.item(0).innerHTML);
+                                            } else {
+                                                lngEnd = false;
+                                            }
 
-                                function initialize(){
-                                    let divMap = document.getElementById('map')
-                                    divMap.innerHTML = ''
-                                    let map = new google.maps.Map(divMap, {
-                                        center: { lat: latInit, lng: lngInit },
-                                        zoom: 18,
-                                    });
+                                            function initialize(){
+                                                let divMap = document.getElementById('map')
+                                                if(latInit && lngInit){
+                                                    divMap.innerHTML = ''
+                                                    let map = new google.maps.Map(divMap, {
+                                                        center: { lat: latInit, lng: lngInit },
+                                                        zoom: 18,
+                                                    });
 
-                                    const markerInit = new google.maps.Marker({ 
-                                        map: map, 
-                                        position: {
-                                            lat: latInit,
-                                            lng: lngInit
-                                        },
-                                        });
-                                    const markerEnd = new google.maps.Marker({ 
-                                        map: map, 
-                                        position: {
-                                            lat: latEnd,
-                                            lng: lngEnd
-                                        },
-                                        color: 'blue'
-                                    });
-                                }
-                            ]]>
-                        </script>
-                        <script id="script_map"></script>
-                        <div id="map" style="width:100%;height:500px;"></div>
+                                                    const markerInit = new google.maps.Marker({ 
+                                                        map: map, 
+                                                        position: {
+                                                            lat: latInit,
+                                                            lng: lngInit
+                                                        },
+                                                        });
+                                                    const markerEnd = new google.maps.Marker({ 
+                                                        map: map, 
+                                                        position: {
+                                                            lat: latEnd,
+                                                            lng: lngEnd
+                                                        },
+                                                        color: 'blue'
+                                                    });
+
+                                                }else{
+                                                    divMap.style = "width: 100%; height: 200px;"
+                                                    divMap.innerHTML = `<p>No hay posición que mostrar</p>`
+                                                }
+                                            }
+                                        ]]>
+                                    </script>
+                                    <script id="script_map"></script>
+                                    <div id="map" style="width: 100%; height: 500px;"></div>
+                                </page>
+                            </notebook>
+                        </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record model="ir.actions.server" id="crm_visits_action_server">
+        <record id="crm_visitas_view_search" model="ir.ui.view">
+            <field name="name">crm.visitas.view.search</field>
+            <field name="model">crm.visits</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <filter string="Mis visitas" name="my" domain="[('user_id', '=', uid)]"/>
+                    <field name="state_visit" invisible="1" />
+                    <field name="pertner_id" />
+                    <field name="name" />
+                    <filter name="in_visit" string="En vista" domain="[('state_visit', '=', 'in_visit')]"/>
+                    <filter name="in_opportunity" string="En oportunidad" domain="[('state_visit', '=', 'in_opportunity')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="crm_visits_action_view" model="ir.actions.act_window">
             <field name="name">Visitas</field>
-            <field name="model_id" ref="model_crm_visits"/>
-            <field name="type">ir.actions.server</field>
-            <field name="state">code</field>
-            <field name="code">action = model.visits_filter_by_company()</field>
+            <field name="res_model">crm.visits</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_my":1}</field>
         </record>
 
         <menuitem name="Visitas" id="cmd_visitas_menu" 
-        sequence = "16" parent="crm.crm_menu_config"
-        action = "gps_visitas.crm_visits_action_server" />
+        sequence = "3" parent="crm.crm_menu_root"
+        action = "gps_visitas.crm_visits_action_view" />
     </data>
 </odoo>

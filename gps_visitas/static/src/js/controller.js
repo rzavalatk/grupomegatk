@@ -25,9 +25,10 @@ try {
           }
           let idInt = id.innerHTML.replace(/[,]/g, "");
           let date = new Date(pos.timestamp);
+          console.log(method);
           rpc
             .query({
-              model: "crm.lead",
+              model: "crm.visits",
               method: method,
               args: [
                 [parseInt(idInt)],
@@ -64,7 +65,7 @@ try {
         e.preventDefault();
         rpc
             .query({
-              model: "crm.lead",
+              model: "crm.visits",
               method: "open_wizard",
               args: [[],],
             })
@@ -90,7 +91,7 @@ try {
             "lat_end_visit",
             "lng_end_visit",
             "timestamp_end_visit",
-            "write_end"
+            "write"
           );
         });
       }
@@ -101,7 +102,7 @@ try {
             "lat_init_visit",
             "lng_init_visit",
             "timestamp_init_visit",
-            "write_init"
+            "write"
           );
         });
       }
@@ -111,3 +112,4 @@ try {
   // console.log(error);
   location.reload();
 }
+
