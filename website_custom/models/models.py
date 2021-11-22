@@ -26,8 +26,17 @@ class BreadcumCustom(models.Model):
         """
         self.env.cr.execute(sql)
         data = self.env.cr.fetchall()
-        print("////////////",data,"////////////")
-        return data
+        csv = """'Fecha','Cliente','Numero de Facturas',\n"""
+        if len(data) > 0:
+            for row in data:
+                csv_row = ""
+                for item in row:
+                    item = str(item)
+                    item = item.replace('	', '')
+                    temp = item.replace(',', '')
+                    csv_row+= "{},".format(temp)
+                csv+="{}\n".format(csv_row[:-1])
+        return csv
 
 
 class CarouselCustom(models.Model):
