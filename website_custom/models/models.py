@@ -14,6 +14,20 @@ class BreadcumCustom(models.Model):
         ('website_id_uniq', 'unique (website_id)',
          'El Sitio web no debe repetirce!')
     ]
+    
+    def generate_report(self):
+        sql = """
+        SELECT  date_invoice as Fecha,
+        (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
+        count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
+        WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
+        GROUP BY partner_id, date_invoice  
+        ORDER BY  date_invoice asc
+        """
+        self.env.cr.execute(sql)
+        data = self.env.cr.fetchall()
+        print("////////////",data,"////////////")
+        return data
 
 
 class CarouselCustom(models.Model):
