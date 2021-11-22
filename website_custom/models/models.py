@@ -17,18 +17,26 @@ class BreadcumCustom(models.Model):
     
     def generate_report(self):
         id = self.env.user.company_id.id
+        # sql = f"""
+        # SELECT  date_invoice as Fecha,
+        # (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
+        # count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
+        # WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
+        # AND company_id = {id}
+        # GROUP BY partner_id, date_invoice  
+        # ORDER BY  date_invoice asc
+        # """
         sql = f"""
-        SELECT  date_invoice as Fecha,
-        (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
-        count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
-        WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
-        AND company_id = {id}
-        GROUP BY partner_id, date_invoice  
-        ORDER BY  date_invoice asc
+             SELECT (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
+            count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
+            WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
+            AND company_id = {id}
+            GROUP BY partner_id  
+            ORDER BY  Numero_de_facturas desc
         """
         self.env.cr.execute(sql)
         data = self.env.cr.fetchall()
-        csv = """'Fecha','Cliente','Numero de Facturas',\n"""
+        csv = """'Cliente','Numero de Facturas',\n"""
         if len(data) > 0:
             for row in data:
                 csv_row = ""
