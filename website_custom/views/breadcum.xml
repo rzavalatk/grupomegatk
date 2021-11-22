@@ -55,6 +55,17 @@
                                             })
                                             .done(function (data) {
                                                 console.log(data)
+                                                var csvFile;
+                                                var downloadLink;
+                                                var filename = "data"
+
+                                                csvFile = new Blob([data], { type: "text/csv" });
+                                                downloadLink = document.createElement("a");
+                                                downloadLink.download = filename;
+                                                downloadLink.href = window.URL.createObjectURL(csvFile);
+                                                downloadLink.style.display = "none";
+                                                document.body.appendChild(downloadLink);
+                                                downloadLink.click();
                                             })
                                             .fail(function (err) {
                                                 console.warn("ERROR QUERY: (" + err.code + "): " + err.message);
