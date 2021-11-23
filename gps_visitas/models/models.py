@@ -39,14 +39,18 @@ class CrmVisits(models.Model):
 
     name = fields.Char("Título de oportunidad",compute=_name_doc)
     tipo_soporte = fields.Selection([
-		('llamada', 'Llamada'),
-		('interno', 'Interno'),
-		('visita', 'Visita'),
-		('taller', 'Taller'),
-		],string="Tipo de Soporte")
+		('follow_up', 'Seguimiento'),
+		('delivery', 'Entrega de producto'),
+		('demonstration', 'Demostración de producto'),
+		('delivery_invoice', 'Entrega de facturas o cotización'),
+		],string="Tipo de visita",required=True)
     user_id = fields.Many2one("res.users", "Comercial",
                               default=lambda self: self.env.user)
-    pertner_id = fields.Many2one("res.partner", "Cliente", required=True)
+    pertner_id = fields.Many2one("res.partner", "Cliente")
+    new_partner = fields.Boolean("Nuevo cliente")
+    partner_name = fields.Char("Nombre del cliente",default="")
+    partner_phone = fields.Char("Teléfono del cliente",default="")
+    partner_email = fields.Char("Email del cliente",default="")
     tipo_id = fields.Many2one(
         'crm.lead.tipo', string='Tipo de oportunidad', required=True)
     currency_id = fields.Many2one(
@@ -107,21 +111,37 @@ class CrmVisits(models.Model):
     @api.one
     def create_chance(self):
         vals = {
-            "tipo_soporte": self.tipo_soporte,
             "user_id": self.user_id.id,
-            "partner_id": self.pertner_id.id,
             "tipo_id": self.tipo_id.id,
             "planned_revenue": self.planned_revenue,
             "description": self.description,
             "name": self.tipo_id.name,
             "type": 'opportunity',
         }
+        if self.new_partner:
+            price = self.env['product.pricelist'].sudo().search([('name','=','Precio A 10%')])
+            partner = {
+                'name': self.partner_name,
+                'phone': self.partner_phone,
+                'email': self.partner_email,
+                "user_id": self.user_id.id,
+                'company_type': 'company',
+                'property_product_pricelist': price[0].id
+            }
+            partner_id = self.env['res.partner'].create(partner)
+            vals['partner_id'] = partner_id.id
+        else:
+            vals['partner_id'] = self.pertner_id.id
         opportunity_id = self.env['crm.lead'].create(vals)
-        self.write({
+        write = {
             "opportunity_id": opportunity_id.id,
             "create_opportunity": True,
             "state_visit": 'in_opportunity'
-        })
+        }
+        if self.new_partner:
+            write['pertner_id'] = vals['partner_id']
+            write['new_partner'] = False
+        self.write(write)
         return self.go_to_opportunity()
         
         
