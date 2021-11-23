@@ -54,7 +54,7 @@ class Consults(models.Model):
                 for item in row:
                     item = str(item)
                     item = item.replace('	', '')
-                    item = item.replace('.', '')
+                    # item = item.replace('.', '')
                     temp = item.replace(',', '')
                     csv_row+= "{},".format(temp)
                 csv+="{}\n".format(csv_row[:-1])
