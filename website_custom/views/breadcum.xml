@@ -32,57 +32,6 @@
             <field name="model">breadcum_custom.images</field>
             <field name="arch" type="xml">
                 <form string="Ingresar imagenes">
-                    <script>
-                        <![CDATA[
-                            try {
-                                let str = "";
-                                let abc = "abcdefghijklmnopqrstuvwxyz";
-                                for (let i = 0; i < 4; i++) {
-                                    str += abc.charAt(Math.floor(Math.random() * abc.length));
-                                }
-                                odoo.define(`report.custom-${str}`, function (require) {
-                                    "use strict";
-                                    const rpc = require("web.rpc");
-
-                                    $(document).ready(function () {
-                                        let button = $("#generate_report")
-                                        button.click(function (e){
-                                            e.preventDefault();
-                                            rpc.query({
-                                                model: "breadcum_custom.images",
-                                                method: "generate_report",
-                                                args: [[]],
-                                            })
-                                            .done(function (data) {
-                                                console.log(data)
-                                                var csvFile;
-                                                var downloadLink;
-                                                var filename = "data"
-
-                                                csvFile = new Blob([data], { type: "text/csv" });
-                                                downloadLink = document.createElement("a");
-                                                downloadLink.download = filename;
-                                                downloadLink.href = window.URL.createObjectURL(csvFile);
-                                                downloadLink.style.display = "none";
-                                                document.body.appendChild(downloadLink);
-                                                downloadLink.click();
-                                            })
-                                            .fail(function (err) {
-                                                console.warn("ERROR QUERY: (" + err.code + "): " + err.message);
-                                            });
-                                        })
-                                    })
-                                    
-                                });
-                            } catch (error) {
-                                console.log(error);
-                                location.reload();
-                            }
-                        ]]>
-                    </script>
-                    <header>
-                        <button string="Generar reporte" id="generate_report" class="oe_highlight"/>
-                    </header>
                     <sheet>
                         <group>
                             <field name="image" widget="image"/>

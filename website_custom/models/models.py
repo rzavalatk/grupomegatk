@@ -14,9 +14,20 @@ class BreadcumCustom(models.Model):
         ('website_id_uniq', 'unique (website_id)',
          'El Sitio web no debe repetirce!')
     ]
+
+
+class Consults(models.Model):
+    _name = 'consultas.custom'
+    _description = """
+        Modelo para correr consultas directamente a la base
+    """
+    
+    name = fields.Char("Titulo")
+    col = fields.Char("Columnas")
+    query = fields.Text("Consulta")
     
     def generate_report(self):
-        id = self.env.user.company_id.id
+        # id = self.env.user.company_id.id
         # sql = f"""
         # SELECT  date_invoice as Fecha,
         # (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
@@ -26,23 +37,24 @@ class BreadcumCustom(models.Model):
         # GROUP BY partner_id, date_invoice  
         # ORDER BY  date_invoice asc
         # """
-        sql = f"""
-             SELECT (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
-            count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
-            WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
-            AND company_id = {id}
-            GROUP BY partner_id  
-            ORDER BY  Numero_de_facturas desc
-        """
-        self.env.cr.execute(sql)
+        # sql = f"""
+        #     SELECT (SELECT name FROM res_partner as r WHERE r.id = a.partner_id) as Cliente, 
+        #     count(partner_id) as Numero_de_facturas FROM  account_invoice as a 
+        #     WHERE state='paid' AND date_invoice BETWEEN '2021-01-01' AND '2021-12-31' 
+        #     AND company_id = {id}
+        #     GROUP BY partner_id  
+        #     ORDER BY  Numero_de_facturas desc
+        # """
+        self.env.cr.execute(self.query)
         data = self.env.cr.fetchall()
-        csv = """'Cliente','Numero de Facturas',\n"""
+        csv = f"""{self.col},\n"""
         if len(data) > 0:
             for row in data:
                 csv_row = ""
                 for item in row:
                     item = str(item)
                     item = item.replace('	', '')
+                    item = item.replace('.', '')
                     temp = item.replace(',', '')
                     csv_row+= "{},".format(temp)
                 csv+="{}\n".format(csv_row[:-1])

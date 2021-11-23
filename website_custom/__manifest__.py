@@ -28,6 +28,7 @@
         'views/filters/carousel.xml',
         'views/breadcum.xml',
         'views/carousel.xml',
+        'views/consultas.xml',
         'views/hide_content.xml',
         'security/security.xml',
         'static/src/xml/logos_base64.xml',

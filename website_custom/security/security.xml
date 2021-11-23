@@ -19,4 +19,14 @@
     <field name="perm_create" eval="1" />
     <field name="perm_unlink" eval="1" />
   </record>
+  <!-- Access consultas-->
+  <record id="consultas_custom_access_module" model="ir.model.access">
+    <field name="name">consultas.custom.access</field>
+    <field name="model_id" ref="website_custom.model_consultas_custom" />
+    <field name="group_id" ref="website.group_website_designer" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
 </odoo>
