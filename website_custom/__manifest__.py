@@ -27,6 +27,7 @@
         'views/snippets/snippets.xml',
         'views/filters/carousel.xml',
         'views/breadcum.xml',
+        'views/res_confog_setting.xml',
         'views/carousel.xml',
         'views/consultas.xml',
         'views/hide_content.xml',

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_employee_markings_tree" model="ir.ui.view">
+            <field name="name">hr.employee.markings.tree</field>
+            <field name="model">hr.employee.markings</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee"/>
+                    <field name="date"/>
+                    <field name="enter"/>
+                    <field name="exit"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_employee_markings_form" model="ir.ui.view">
+            <field name="name">hr.employee.markings.form</field>
+            <field name="model">hr.employee.markings</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="employee"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="enter" />
+                                <field name="exit" />
+                                <field name="hour_extra" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_employee_markings_view_search" model="ir.ui.view">
+            <field name="name">hr.employee.markings.view.search</field>
+            <field name="model">hr.employee.markings</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="employee" />
+                    <field name="date" />
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_employee_markings_action_view" model="ir.actions.act_window">
+            <field name="name">Marcaciones</field>
+            <field name="res_model">hr.employee.markings</field>
+            <field name= "view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Marcaciones" id="hr_employee_markings_menu" 
+        sequence = "2" parent="hr.menu_open_view_employee_list_my" groups="permisos.permiso_admin"
+        action = "marcacion_y_horas_extras.hr_employee_markings_action_view" />
+
+        <menuitem name="Empleados" id="hr_employee_menu_custom" 
+        sequence = "1" parent="hr.menu_open_view_employee_list_my"
+        action = "hr.open_view_employee_list_my" />
+    </data>
+</odoo>

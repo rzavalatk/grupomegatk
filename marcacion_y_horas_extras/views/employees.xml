@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="hr_employee_inherit_view" model="ir.ui.view">
+            <field name="name">hr.employee.inherit.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page string="Marcaciones" groups="permisos.permiso_admin">
+                        <field name="marking_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
+                            <tree create="0">
+                                <field name="date"/>
+                                <field name="enter"/>
+                                <field name="exit"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

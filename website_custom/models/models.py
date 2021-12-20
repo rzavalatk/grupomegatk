@@ -2,6 +2,31 @@
 
 from odoo import models, fields, api
 
+class CustomResConfig(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    chat_facebook_active = fields.Boolean(string="Activar chat de Facebook")
+    
+    def getParams(self):
+        return self.get_values()
+    
+    @api.model
+    def get_values(self):
+        res = super(CustomResConfig, self).get_values()
+        ConfigOBJ = self.env['ir.config_parameter'].sudo()
+        chat_facebook_active = ConfigOBJ.get_param(
+            'website_custom.chat_facebook_active')
+        res.update(
+            chat_facebook_active=chat_facebook_active,
+        )
+        return res
+
+    @api.model
+    def set_values(self):
+        self.env['ir.config_parameter'].set_param(
+            'website_custom.chat_facebook_active', self.chat_facebook_active)
+        super(CustomResConfig, self).set_values()
+        
 
 class BreadcumCustom(models.Model):
     _name = 'breadcum_custom.images'

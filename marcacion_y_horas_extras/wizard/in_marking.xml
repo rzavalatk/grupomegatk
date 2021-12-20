@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="making_inside_wizard_form" model="ir.ui.view">
+            <field name="name">making.inside.wizard.form</field>
+            <field name="model">making.inside</field>
+            <field name="arch" type="xml">
+                <form id="form_wizard">
+                    <script type="text/javascript" src="/marcacion_y_horas_extras/static/src/js/in_marking.js"/>
+                    <div id="hidden_box" class="modal fade" data-backdrop="static">
+                        <div class="modal-dialog modal-content" style="max-height:270px;max-width:500px;">
+                            <div style="display: flex !important; flex-direction: row !important;">
+                                <div style="display: flex !important; justify-content: center !important; align-items: flex-start !important; padding: 10px; margin-top: 20px !important;">
+                                    <img alt="warning" style="width: 50px; heigth: 50px;" src="/gps_visitas/static/img/warning.png" />
+                                </div>
+                                <div class="modal-body" id="pop_html">
+                                    <br/>
+                                    <h2 style="text-align:start; font-size 24px; font-weight:bold" class="o_default_snippet_text">Advertencia:</h2>
+                                    <p style="font-size 12px;">El rango de fechas no es valido, asegurece de ingresar un rango de fechas correcto.</p>
+                                    <p style="font-size 12px; font-weight:bold">Sugerencia:</p>
+                                    <span style="font-size 11px;">La fecha final debe ser mayor a la fecha inicial.</span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a id="go" role="button" href="/" class="btn btn-primary">OK</a>
+                            </div>
+                        </div>
+                    </div>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date" attrs="{'invisible': [('more_one_day','=',True)]}" />
+                                <field name="date_init" attrs="{'invisible': [('more_one_day','=',False)]}" />
+                                <field name="date_end" attrs="{'invisible': [('more_one_day','=',False)]}" />
+                            </group>
+                            <group>
+                                <field name="more_one_day" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="marking_ids" nolabel="1" mode="tree,kanban" options="{'no_create': True}">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="company_id" />
+                                    <field name="work_email" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Generar excel" id="generate_button" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="making_inside_wizard_action" model="ir.actions.act_window">
+            <field name="name">Ingreso masivo de marcaciones</field>
+            <field name="res_model">making.inside</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>
