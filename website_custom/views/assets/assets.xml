@@ -9,7 +9,7 @@
             </xpath>
         </template>
 
-        <template id="widget_live_chat_3" inherit_id="website.layout" name="widget.live.chat">
+        <template id="widget_live_chat" inherit_id="website.layout" name="widget.live.chat">
             <xpath expr="//header" position="inside">
                 <link rel="stylesheet" href="https://grupomegatk.odoo.com/im_livechat/external_lib.css"/>
                 <script type="text/javascript" src="https://grupomegatk.odoo.com/im_livechat/external_lib.js"></script>
