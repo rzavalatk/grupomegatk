@@ -6,7 +6,6 @@ odoo.define("breadcum_custom.front", ["web.ajax", "web.rpc"], (require) => {
     let section = document.getElementById("section_breadcum");
     let a = document.getElementsByTagName("a");
     let sold_out = document.getElementById("sold_out");
-    let price = document.getElementById("price_public");
     for (const i of a) {
       if (i.id === "add_to_cart") {
         i.style.display = "none";
@@ -19,10 +18,6 @@ odoo.define("breadcum_custom.front", ["web.ajax", "web.rpc"], (require) => {
       ajax
         .jsonRpc("/get_quantity", "call", { product: idProduct })
         .then(function (data) {
-          // if (data.price && price) {
-          //   price.innerHTML = "";
-          //   price.innerHTML =`L&nbsp <span>${data.price}</span>`;
-          // }
           if (data.quantity > 0) {
             for (const i of a) {
               if (i.id === "add_to_cart") {
