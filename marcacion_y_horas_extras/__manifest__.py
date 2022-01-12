@@ -15,6 +15,7 @@
     'data': [
         'security/security.xml',
         'wizard/in_marking.xml',
+        'wizard/hours_xtra.xml',
         'views/assets.xml',
         'views/employees.xml',
         'views/view.xml',

@@ -8,8 +8,7 @@
                 <tree>
                     <field name="employee"/>
                     <field name="date"/>
-                    <field name="enter"/>
-                    <field name="exit"/>
+                    <field name="hour"/>
                 </tree>
             </field>
         </record>
@@ -26,9 +25,7 @@
                                 <field name="date"/>
                             </group>
                             <group>
-                                <field name="enter" />
-                                <field name="exit" />
-                                <field name="hour_extra" />
+                                <field name="hour" />
                             </group>
                         </group>
                     </sheet>

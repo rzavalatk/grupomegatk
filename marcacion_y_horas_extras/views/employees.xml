@@ -11,8 +11,7 @@
                         <field name="marking_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
                             <tree create="0">
                                 <field name="date"/>
-                                <field name="enter"/>
-                                <field name="exit"/>
+                                <field name="hour"/>
                             </tree>
                         </field>
                     </page>

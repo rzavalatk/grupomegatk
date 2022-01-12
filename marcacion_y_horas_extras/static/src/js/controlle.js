@@ -14,6 +14,9 @@ odoo.define(
         self.$buttons
           .find("#inside_marcking")
           .click(self.proxy("tree_view_action"));
+        self.$buttons
+          .find("#generate_xhour")
+          .click(self.proxy("generate_report_hours_xtra"));
       },
       tree_view_action: function () {
         var self = this;
@@ -23,8 +26,20 @@ odoo.define(
             method: "open_wizard",
             args: [],
           })
-          .then(function (csv) {
-            self.do_action(csv);
+          .then(function (e) {
+            self.do_action(e);
+          });
+      },
+      generate_report_hours_xtra: function () {
+        var self = this;
+        self
+          ._rpc({
+            model: "hr.employee.markings",
+            method: "open_generate_hours_xtra",
+            args: [],
+          })
+          .then(function (e) {
+            self.do_action(e);
           });
       },
     });

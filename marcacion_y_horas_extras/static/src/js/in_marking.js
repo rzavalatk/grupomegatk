@@ -8,6 +8,7 @@ try {
     "use strict";
     const rpc = require("web.rpc");
     var FormRenderer = require("web.FormRenderer");
+    const myExcelXML = require("excel.xml")
     let data = {};
 
     FormRenderer.include({
@@ -23,7 +24,7 @@ try {
     $("#go").click(function (e) {
       e.preventDefault();
       location.reload();
-    })
+    });
 
     function rpc_consult(data) {
       rpc
@@ -34,17 +35,8 @@ try {
         })
         .done(function (csv) {
           if (csv) {
-            var csvFile;
-            var downloadLink;
-            var filename = "making_inside";
-  
-            csvFile = new Blob([csv], { type: "text/csv" });
-            downloadLink = document.createElement("a");
-            downloadLink.download = filename;
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
+            var XML = new myExcelXML(csv);
+            XML.downLoad();
             location.reload();
           }
         })
@@ -64,12 +56,12 @@ try {
       }
       if (data.more_one_day) {
         if (data.date_end > data.date_init) {
-          rpc_consult(data)
+          rpc_consult(data);
         } else {
           $("#hidden_box").modal("show");
         }
-      }else{
-        rpc_consult(data)
+      } else {
+        rpc_consult(data);
       }
     });
 

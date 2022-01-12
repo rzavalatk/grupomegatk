@@ -32,6 +32,7 @@
                                 <field name="date" attrs="{'invisible': [('more_one_day','=',True)]}" />
                                 <field name="date_init" attrs="{'invisible': [('more_one_day','=',False)]}" />
                                 <field name="date_end" attrs="{'invisible': [('more_one_day','=',False)]}" />
+                                <field name="one_time" />
                             </group>
                             <group>
                                 <field name="more_one_day" />

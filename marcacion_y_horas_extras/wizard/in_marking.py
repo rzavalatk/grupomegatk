@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
 import datetime
-from odoo.exceptions import ValidationError
 
 
 class WizardInMarking(models.TransientModel):
@@ -10,6 +9,7 @@ class WizardInMarking(models.TransientModel):
     marking_ids = fields.Many2many(
         'hr.employee', 'user_id', string='Empleados')
     more_one_day = fields.Boolean('Rango de fechas')
+    one_time = fields.Boolean('Solo una marcación')
     date_init = fields.Date('Fecha inicial')
     date_end = fields.Date('Fecha final')
     date = fields.Date('Fecha a ingresar')
@@ -28,8 +28,14 @@ class WizardInMarking(models.TransientModel):
                 'date': date,
                 'employee': item
             }
-            temp = self.env['hr.employee.markings'].create(values)
-            ids.append(temp.id)
+            i = 0
+            if self._evalueIndex('one_time', vals[0]):
+                if vals[0]['one_time']:
+                    i = 1
+            while i<2:
+                temp = self.env['hr.employee.markings'].create(values)
+                i+=1
+                ids.append(temp.id)
         return ids
 
     @api.model
