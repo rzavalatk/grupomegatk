@@ -7,12 +7,12 @@ odoo.define(`excel.xml`, function (require) {
     SheetName = "SHEET 1",
     styleID = 1,
     columnWidth = 80,
-    fileName = "marcaciones",
+    fileName = "",
     uri,
     link;
 
   class myExcelXML {
-    constructor(o=[]) {
+    constructor(o=[], name="archivo") {
       let respArray = o;
       let finalDataArray = [];
 
@@ -22,6 +22,7 @@ odoo.define(`excel.xml`, function (require) {
 
       let s = JSON.stringify(finalDataArray);
       fs = s.replace(/&/gi, "&amp;");
+      fileName = name
     }
 
     downLoad() {

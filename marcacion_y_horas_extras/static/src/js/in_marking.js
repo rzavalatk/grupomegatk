@@ -33,9 +33,12 @@ try {
           method: "create_marking",
           args: [[data]],
         })
-        .done(function (csv) {
-          if (csv) {
-            var XML = new myExcelXML(csv);
+        .done(function (e) {
+          if (e) {
+            let fileName = data.date 
+              ? `marcaciones_${data.date.format("DD-MM-YYYY")}`
+              : `marcaciones_${data.date_init.format("DD-MM-YYYY")}-to-${data.date_end.format("DD-MM-YYYY")}`
+            var XML = new myExcelXML(e, fileName);
             XML.downLoad();
             location.reload();
           }

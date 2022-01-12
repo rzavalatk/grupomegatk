@@ -29,7 +29,7 @@ try {
           })
           .done(function (e) {
             if (e) {
-              var XML = new myExcelXML(e);
+              var XML = new myExcelXML(e, `horas_extra_${data.date.format("DD-MM-YYYY")}`);
               XML.downLoad();
               location.reload();
             }
