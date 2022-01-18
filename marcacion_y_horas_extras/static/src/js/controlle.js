@@ -3,6 +3,7 @@ odoo.define(
   function (require) {
     "use strict";
 
+    const myExcelXML = require("excel.xml")
     var core = require("web.core");
     var ListController = require("web.ListController");
     var QWeb = core.qweb;
@@ -19,18 +20,27 @@ odoo.define(
           .click(self.proxy("generate_report_hours_xtra"));
       },
       tree_view_action: function () {
-        var self = this;
-        self
-          ._rpc({
-            model: "hr.employee.markings",
-            method: "open_wizard",
-            args: [],
-          })
-          .then(function (e) {
-            self.do_action(e);
-          });
+        let fileName = "plantilla-para-importar"
+        let col = [{
+          'Fecha': '',
+          'Nombre': '',
+          'Hora': '',
+        }]
+        var XML = new myExcelXML(col, fileName);
+        XML.downLoad();
+        location.reload();
+        // var self = this;
+        // self
+        //   ._rpc({
+        //     model: "hr.employee.markings",
+        //     method: "open_wizard",
+        //     args: [],
+        //   })
+        //   .then(function (e) {
+        //     self.do_action(e);
+        //   });
       },
-      generate_report_hours_xtra: function () {
+      generate_report_hours_xtra: function () { 
         var self = this;
         self
           ._rpc({

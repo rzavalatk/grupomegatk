@@ -2,8 +2,8 @@
 <template id="template" xml:space="preserve">
     <t t-extend="ListView.buttons">
         <t t-jquery="button.o_list_button_add" t-operation="after">
-            <button t-if="widget.modelName == 'hr.employee.markings'" id='inside_marcking' class="btn btn-primary" type="button">Creación masiva</button>
-            <button t-if="widget.modelName == 'hr.employee.markings'" id='generate_xhour' class="btn btn-primary" type="button">Generar horas extras</button>
+            <button t-if="widget.modelName == 'hr.employee.markings'" id='inside_marcking' class="btn btn-primary" type="button">Descargar plantilla</button>
+            <!-- <button t-if="widget.modelName == 'hr.employee.markings'" id='generate_xhour' class="btn btn-primary" type="button">Generar horas extras</button> -->
         </t>
     </t>
 </template>
