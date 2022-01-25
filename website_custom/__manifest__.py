@@ -22,7 +22,7 @@
         'views/website/breadcrum_shop.xml',
         'views/website/chat_facebook.xml',
         'views/website/footer.xml',
-        'views/website/social_buttons.xml',
+        # 'views/website/social_buttons.xml',
         'views/website/products_details.xml',
         'views/snippets/carousel.xml',
         'views/snippets/snippets.xml',
