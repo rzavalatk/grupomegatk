@@ -186,3 +186,21 @@ class ProductTemplateCustom(models.Model):
         return {
             "quantity": num
         }
+        
+        
+class MenuSocial(models.Model):
+    _name = 'menu.social.link'
+    
+    name = fields.Char(string="Nombre")
+    icon = fields.Char(string="Icono")
+    link = fields.Char(string="Enlace")
+    
+
+class BanksCheck(models.Model):
+    _inherit = 'banks.check'
+    
+    def sum_check_lines(self):
+        res = 0
+        for item in self.check_lines:
+            res = res + item.amount
+        return res

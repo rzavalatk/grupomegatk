@@ -29,4 +29,14 @@
     <field name="perm_create" eval="1" />
     <field name="perm_unlink" eval="1" />
   </record>
+  <!-- Access consultas-->
+  <record id="menu_social_link_access" model="ir.model.access">
+    <field name="name">menu.social.link.access</field>
+    <field name="model_id" ref="website_custom.model_menu_social_link" />
+    <field name="group_id" ref="website.group_website_designer" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
 </odoo>
