@@ -40,6 +40,8 @@ class CrmVisits(models.Model):
     name = fields.Char("Título de oportunidad",compute=_name_doc)
     tipo_soporte = fields.Selection([
 		('follow_up', 'Seguimiento'),
+		('repair', 'Reparación'),
+		('study', 'Estudio'),
 		('delivery', 'Entrega de producto'),
 		('demonstration', 'Demostración de producto'),
 		('delivery_invoice', 'Entrega de facturas o cotización'),
