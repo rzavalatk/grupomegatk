@@ -24,8 +24,7 @@ try {
             id = false;
           }
           let idInt = id.innerHTML.replace(/[,]/g, "");
-          let date = new Date(pos.timestamp);
-          console.log(method);
+          let date = new Date();
           rpc
             .query({
               model: "crm.visits",

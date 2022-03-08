@@ -5,11 +5,12 @@
             <field name="name">crm.visits.tree</field>
             <field name="model">crm.visits</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree default_order='create_date asc'>
                     <field name="name"/>
                     <field name="new_partner" invisible="1" />
                     <field name="pertner_id" attrs="{'invisible': [('new_partner','=',True)]}" />
                     <field name="partner_name" attrs="{'invisible': [('new_partner','=',False)]}" />
+                    <!-- <field name="create_date" /> -->
                     <field name="timestamp_init_visit" />
                     <field name="user_id" />
                     <field name="state_visit" />
@@ -29,7 +30,7 @@
                         <field name="create_opportunity" invisible="1" />
                         <button string="Iniciar Visita" id="init_visit" attrs="{'invisible': [('button_init', '=', True)]}" class="oe_highlight" />
                         <button string="Finalizar Visita" id="end_visit" attrs="{'invisible': ['|',('button_init', '=', False),('button_end', '=', True)]}" class="oe_highlight"/>
-                        <button string="Crear portunidad" name="create_chance" type="object" attrs="{'invisible': ['|',('button_end', '=', False),('create_opportunity', '=', True)]}" />
+                        <button string="Crear Óportunidad" name="create_chance" type="object" attrs="{'invisible': ['|',('button_end', '=', False),('create_opportunity', '=', True)]}" />
                         <field name="state_visit" widget="statusbar"/>
                     </header>
                     <sheet>

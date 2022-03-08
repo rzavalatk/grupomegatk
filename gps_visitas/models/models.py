@@ -41,6 +41,9 @@ class CrmVisits(models.Model):
     tipo_soporte = fields.Selection([
 		('follow_up', 'Seguimiento'),
 		('repair', 'Reparación'),
+		('diagnosis', 'Diagnostico'),
+		('install', 'Instalación'),
+		('various', 'Varios'),
 		('study', 'Estudio'),
 		('delivery', 'Entrega de producto'),
 		('demonstration', 'Demostración de producto'),
