@@ -23,6 +23,7 @@
         "security/groups.xml",
         'security/ir.model.access.csv',
         "wizard/wizard_recibir_pago.xml",
+        "wizard/wizard_aportar_capital.xml",
         "wizard/wizard_generar_cheque.xml",
         "wizard/wizard_generar_cheque_afiliado.xml",
         'wizard/wizard_generar_deposito.xml',

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="aporte_capital_view_form_wizard" model="ir.ui.view">
+            <field name="name">aporte.capital.view.form.wizard</field>
+            <field name="model">prestamos.aporte.capital</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Transaction Type">
+                    <sheet>
+                        <group >
+                            <field name="abono"/>
+                            <field name="date"/>
+                        </group>
+                        <footer>
+                            <button name="aportar_capital" string="Hacer aporte" type="object" class="oe_highlight"/>
+                            <button class="oe_highlight" special="cancel" string="Cancelar"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="aporte_capital_action_wizard">
+            <field name="name">Aportar</field>
+            <field name="res_model">prestamos.aporte.capital</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="aporte_capital_view_form_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

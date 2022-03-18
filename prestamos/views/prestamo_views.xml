@@ -86,6 +86,9 @@
 						<button name="%(action_wizard_prestamos_interes_wizard_personal)d" type="action" string="Facturar interes" attrs="{'invisible': ['|',('state','!=','proceso'),('tipo_prestamo','!=','personal')]}" class="oe_highlight" />
 						<button name="cancelar" type="object" string="Cancelar" states="validado,desembolso,proceso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
 						<button name="fechainicio" type="object" string="Fecha" class="oe_highlight"/>
+						<button name="ending" type="object" string="Finalizar" states="proceso" class="oe_highlight"/>
+						<button name="re_validate" type="object" string="Re-validar" states="validado,desembolso,proceso"/>
+						<button name="%(aporte_capital_action_wizard)d" type="action" string="Aportar capital" states="proceso" context="{'active_id': id}" />
 						<field name="state" widget="statusbar" nolabel="1"/>
 					</header>
 					<sheet>
