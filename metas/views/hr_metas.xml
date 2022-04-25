@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hr_metas_tree">
+            <field name="name">hr.metas.tree</field>
+            <field name="model">hr.metas</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="name"/>
+                    <field name="tipo_meta"/>
+                    <field name="value"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_metas_form">
+            <field name="name">hr.metas.form</field>
+            <field name="model">hr.metas</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="tipo_meta"/>
+                            </group>
+                            <group>
+                                <field name="value"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_metas">
+            <field name="name">Metas a asignar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.metas</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Metas para asignar" id="hr_metas_menu" sequence = "4" parent="fields_megatk.hr_employe_equipos" action = "action_hr_metas"/>
+
+    </data>
+</odoo>

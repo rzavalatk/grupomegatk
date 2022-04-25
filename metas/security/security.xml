@@ -1,0 +1,70 @@
+<odoo>
+  <!-- Grupos -->
+  <record id="metas_jefes" model="res.groups">
+    <field name="name">Metas/Jefes</field>
+  </record>
+
+  <record id="metas_colaborador" model="res.groups">
+    <field name="name">Metas/colaborador</field>
+  </record>
+  <!--  -->
+  <record id="hr_employee_metas_access_module_user" model="ir.model.access">
+    <field name="name">hr.employee.metas.access.user</field>
+    <field name="model_id" ref="metas.model_hr_employee_metas" />
+    <field name="group_id" ref="metas.metas_colaborador" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="0" />
+    <field name="perm_create" eval="0" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+  <record id="hr_metas_access_module_user" model="ir.model.access">
+    <field name="name">hr.metas.access.user</field>
+    <field name="model_id" ref="metas.model_hr_metas" />
+    <field name="group_id" ref="metas.metas_colaborador" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="0" />
+    <field name="perm_create" eval="0" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+  <record id="hr_employee_metas_access_module" model="ir.model.access">
+    <field name="name">hr.employee.metas.access</field>
+    <field name="model_id" ref="metas.model_hr_employee_metas" />
+    <field name="group_id" ref="metas.metas_jefes" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+
+  <record id="hr_metas_access_module" model="ir.model.access">
+    <field name="name">hr.metas.access</field>
+    <field name="model_id" ref="metas.model_hr_metas" />
+    <field name="group_id" ref="metas.metas_jefes" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+  <!-- metas esquipos -->
+  <record id="hr_employee_equipo_metas_access_module_user" model="ir.model.access">
+    <field name="name">hr.employee.equipo.metas.access.user</field>
+    <field name="model_id" ref="metas.model_hr_employee_equipo_metas" />
+    <field name="group_id" ref="metas.metas_colaborador" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="0" />
+    <field name="perm_create" eval="0" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+  <record id="hr_employee_equipo_metas_access_module" model="ir.model.access">
+    <field name="name">hr.employee.equipo.metas.access</field>
+    <field name="model_id" ref="metas.model_hr_employee_equipo_metas" />
+    <field name="group_id" ref="metas.metas_jefes" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+</odoo>
