@@ -84,6 +84,7 @@ class EmpleadoMetas(models.Model):
              
 
     name = fields.Char(compute=_employee)
+    date_meta = fields.Date("Fecha")
     empleado_id = fields.Many2one(
         'hr.employee', 'Empleado', auto_join=True, index=True, ondelete="cascade", required=True)
     metas_id = fields.Many2many('hr.metas','employee_meta_id')

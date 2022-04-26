@@ -19,6 +19,7 @@
                 <field name="name" invisible="1"/>
                 <field name="state_meta" invisible="1"/>
                 <field name="empleado_id" domain="[('equipo_metas_id','=',active_id)]" />
+                <field name="date_meta"/>
               </group>
               <group>
                 <field name="extra" attrs="{'readonly': [('state','!=','valid')]}" />
@@ -40,18 +41,6 @@
                         <field name="asign" attrs="{'readonly': [('state','!=','valid')]}"/>
                       </tree>
                     </field>
-                  </group>
-                  <group>
-                    <group>
-                    </group>
-                    <group>
-                      <h1>
-                        <field name="total" />
-                        % /
-                        <field name="total_posible" />
-                        %
-                      </h1>
-                    </group>
                   </group>
                 </page>
                 <page string="Notas">
