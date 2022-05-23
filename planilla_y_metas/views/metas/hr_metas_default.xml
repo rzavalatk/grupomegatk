@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record model="ir.ui.view" id="hr_meta_default_tree">
+            <field name="name">hr.meta.default.tree</field>
+            <field name="model">hr.metas.default</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="name"/>
+                    <field name="obj"/>
+                    <field name="point_meta"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_meta_default_form">
+            <field name="name">hr.meta.default.form</field>
+            <field name="model">hr.metas.default</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Asignar a empleados" name="assign_all_employee" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />                               
+                            </group>
+                            <group>
+                                <field name="obj" />
+                                <field name="point_meta" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_metas_default">
+            <field name="name">Normas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.metas.default</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Normas" id="menu_hr_metas_default" sequence = "2" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_default"/>
+
+    
+    </data>
+</odoo>

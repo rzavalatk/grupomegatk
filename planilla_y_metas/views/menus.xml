@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Planilla" id="planilla_menu" sequence = "6" parent="hr.menu_hr_root"/>
+    </data>
+</odoo>

@@ -1,0 +1,190 @@
+<odoo>
+    <!-- Grupos -->
+    <record id="planilla_manager" model="res.groups">
+        <field name="name">Recursos humanos/Manager</field>
+    </record>
+
+    <record id="planilla_colaborator" model="res.groups">
+        <field name="name">Recursos humanos/colaborador</field>
+    </record>
+    <!--  -->
+    <record id="hr_employee_deductions_access" model="ir.model.access">
+        <field name="name">hr.employee.deductions.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_employee_deductions" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_file_access" model="ir.model.access">
+        <field name="name">hr.employee.file.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_employee_file" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_spreadsheet_access" model="ir.model.access">
+        <field name="name">hr.employee.spreadsheet.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_employee_spreadsheet" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_metas_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_metas_access_colaborator" model="ir.model.access">
+        <field name="name">hr.employee.metas.access.colaborator</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas" />
+        <field name="group_id" ref="planilla_y_metas.planilla_colaborator" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="hr_employee_metas_asignadas_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.asignadas.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_asignadas" />
+        <field name="group_id" ref="base.group_private_addresses" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_metas_team_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.team.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_team" />
+        <field name="group_id" ref="base.group_private_addresses" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_metas_default_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.default.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_default" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_metas_default_colaborador_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.default.colaborador.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_default" />
+        <field name="group_id" ref="planilla_y_metas.planilla_colaborator" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="hr_employee_metas_asignadas_default_access" model="ir.model.access">
+        <field name="name">hr.employee.metas.asignadas.default.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_asignadas_default" />
+        <field name="group_id" ref="base.group_private_addresses" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_metas_planeadas_access" model="ir.model.access">
+        <field name="name">hr.metas.planeadas.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_planeadas" />
+        <field name="group_id" ref="base.group_private_addresses" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_metas_resultados_default_colaborador_access" model="ir.model.access">
+        <field name="name">hr.metas.resultados.default.colaborador.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_resultados_default" />
+        <field name="group_id" ref="planilla_y_metas.planilla_colaborator" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="hr_metas_resultados_default_manager_access" model="ir.model.access">
+        <field name="name">hr.metas.resultados.default.manager.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_resultados_default" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_metas_resultados_colaborador_access" model="ir.model.access">
+        <field name="name">hr.metas.resultados.colaborador.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_resultados" />
+        <field name="group_id" ref="planilla_y_metas.planilla_colaborator" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="hr_metas_resultados_manager_access" model="ir.model.access">
+        <field name="name">hr.metas.resultados.manager.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_metas_resultados" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_resultados_colaborador_access" model="ir.model.access">
+        <field name="name">hr.resultados.colaborador.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_resultados" />
+        <field name="group_id" ref="planilla_y_metas.planilla_colaborator" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="hr_resultados_manager_access" model="ir.model.access">
+        <field name="name">hr.resultados.manager.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_resultados" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="hr_employee_access" model="ir.model.access">
+        <field name="name">hr.employee.access</field>
+        <field name="model_id" ref="planilla_y_metas.model_hr_employee" />
+        <field name="group_id" ref="planilla_y_metas.planilla_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+</odoo>

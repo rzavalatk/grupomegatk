@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_avance_metas_asignadas" model="mail.template">
+            <field name="name">Avance de metas</field>
+            <field name="model_id" ref="model_hr_metas_asignadas"/>
+            <field name="subject">Avance de metas</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px">
+                    <div class="page">
+                        <div class="text-center" style="font-family: 'Arial'; font-size: 30pt">
+                            Avance de metas
+                        </div>
+                        <br />
+                        <br />
+                        <div style="float: left; margin-top: -30px">
+                            <h4>Fecha: <span> ${object.date} </span>
+                            </h4>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <ul>
+                            <li>
+                                <h4>Meta: </h4>
+                                <span> ${object.meta_id.name} </span>
+                            </li>
+                            <li>
+                                <h4>Empleado: </h4>
+                                <span>${object.empleado_id.name}</span>
+                            </li>
+                            <li>
+                                <h4>Avance: </h4>
+                                <span> ${object.advance} </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>
