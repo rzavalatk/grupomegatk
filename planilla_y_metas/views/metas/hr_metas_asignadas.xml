@@ -12,7 +12,7 @@
                         <button string="Editar puntaje" groups="planilla_y_metas.planilla_manager" states="draft,valid" name="%(planilla_y_metas.hr_metas_puntaje_action)d" type="action" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" />
                         <button string="Re-evaluar" groups="sign_orders.group_admins" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
                         <button string="Ingresar avance" groups="planilla_y_metas.planilla_colaborator" states="draft" name="%(planilla_y_metas.hr_metas_avance_action)d" context="{'active_id': id}" type="action" />
-                        <button string="Enviar email" name="send_email" type="object" />
+                        <!-- <button string="Enviar email" name="send_email" type="object" /> -->
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
