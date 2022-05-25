@@ -19,7 +19,7 @@
             <field name="arch" type="xml">
                 <form create="0" edit="0" delete="0">
                     <header>
-                        <button string="Probar email" name="send_email" type="object" class="oe_highlight"/>
+                        <button string="Enviar resultados" name="send_email" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <group>
@@ -27,7 +27,7 @@
                                 <field name="name" />
                             </h2>
                             <field name="team" />
-                            <field name="date" />
+                            <field name="str_date" />
                         </group>
 
                         <h3>

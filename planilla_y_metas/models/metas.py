@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from email.policy import default
+from time import strftime
 from odoo import models, api, fields
 from odoo.exceptions import Warning
 from datetime import datetime, date, timedelta
@@ -334,9 +335,7 @@ class MetaAsignada(models.Model):
     def send_email(self):
         template = self.env.ref('planilla_y_metas.email_template_avance_metas_asignadas')
         email_values = {
-            # 'email_to': self.evaluator.work_email,
-            # 'email_from': self.env.user.email
-            'email_to': 'azelaya@megatk.com',
+            'email_to': self.evaluator.work_email,
             'email_from': self.env.user.email
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
@@ -456,6 +455,35 @@ class ResultadosMetas(models.Model):
 class ResultadosNormas(models.Model):
     _name = "hr.resultados"
 
+    def _suma_points_normas(self):
+        total = 0
+
+        for norma in self.normas_ids:
+            total = total + norma.point_meta
+
+        self.total_points_normas = total
+        
+    def _suma_points_estrategicas(self):
+        total = 0
+
+        for meta in self.metas_ids:
+            if meta.meta_id.tipo_meta == 'strategic':
+                total = total + meta.point_meta
+
+        self.total_points_estatigicas = total
+        
+    def _suma_points_apoyo(self):
+        total = 0
+
+        for meta in self.metas_ids:
+            if meta.meta_id.tipo_meta == 'extra':
+                total = total + meta.point_meta
+
+        self.total_points_apoyo = total
+        
+    def _str_date(self):
+        self.str_date=self.date.strftime('%B del %Y')
+    
     def _suma_points_assign(self):
         total = 0
         for meta in self.metas_ids:
@@ -469,14 +497,18 @@ class ResultadosNormas(models.Model):
     name = fields.Many2one("hr.employee", "Empleado", readonly=True)
     team = fields.Char("Equipo")
     date = fields.Date("Fecha")
+    str_date = fields.Char("Fecha",compute=_str_date)
     metas_ids = fields.One2many("hr.metas.resultados", "resultado_id")
     normas_ids = fields.One2many("hr.metas.resultados.default", "resultado_id")
     total_points = fields.Float("Total Puntos", default=100)
+    total_points_normas = fields.Float("Total Puntos", compute=_suma_points_normas)
+    total_points_estatigicas = fields.Float("Total Puntos", compute=_suma_points_estrategicas)
+    total_points_apoyo = fields.Float("Total Puntos", compute=_suma_points_apoyo)
     total_assign = fields.Float(
         "Total Puntos asignados", compute=_suma_points_assign)
 
     def send_email(self):
-        template = self.env.ref('planilla_y_metas.email_template_avance_metas')
+        template = self.env.ref('planilla_y_metas.email_template_resultados_meta')
         email_values = {
             'email_to': self.name.work_email,
             'email_from': self.env.user.email

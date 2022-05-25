@@ -8,7 +8,7 @@
         <field name="name">Recursos humanos/colaborador</field>
     </record>
     <!--  -->
-    <record id="hr_employee_deductions_access" model="ir.model.access">
+    <!-- <record id="hr_employee_deductions_access" model="ir.model.access">
         <field name="name">hr.employee.deductions.access</field>
         <field name="model_id" ref="planilla_y_metas.model_hr_employee_deductions" />
         <field name="group_id" ref="planilla_y_metas.planilla_manager" />
@@ -36,7 +36,7 @@
         <field name="perm_write" eval="1" />
         <field name="perm_create" eval="1" />
         <field name="perm_unlink" eval="1" />
-    </record>
+    </record> -->
 
     <record id="hr_employee_metas_access" model="ir.model.access">
         <field name="name">hr.employee.metas.access</field>

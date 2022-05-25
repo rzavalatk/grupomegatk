@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_resultados_meta" model="mail.template">
+            <field name="name">Resultados</field>
+            <field name="model_id" ref="model_hr_resultados"/>
+            <field name="subject">Resultados de ${object.str_date} </field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px">
+                    <div class="page">
+                        <div style="float: left;">
+                            <span> ${object.name.name}, se le adjunta el resultado final de sus metas. </span>
+                        </div>
+                    </div>
+                </div>
+            </field>
+            <field name="report_template" ref="planilla_y_metas.hr_resultados_report"/>
+            <field name="report_name">'Resultados'</field>
+        </record>
+    </data>
+</odoo>

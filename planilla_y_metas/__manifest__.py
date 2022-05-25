@@ -27,5 +27,7 @@
         'views/metas/hr_metas_default_asignada.xml', 
         'views/metas/hr_resultados.xml', 
         'static/template/email_avances.xml',
+        'static/template/pdf_template.xml',
+        'static/template/email_resultados.xml',
     ],
 }

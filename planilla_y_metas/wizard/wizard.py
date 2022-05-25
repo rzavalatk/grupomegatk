@@ -41,14 +41,12 @@ class AvanceMeta(models.TransientModel):
             'state': 'valid'
         }
         assign.write(vals)
+        assign.send_email()
         return {
             'type': 'ir.actions.client',
             'tag': 'reload',
         }
     
-    def send_email(self):
-        active_id = self.env.context.get('active_id')
-        self.env['hr.metas.asignadas'].browse(active_id).send_email()
 
 
 class EvaluarMeta(models.TransientModel):
