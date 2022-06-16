@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_metas_asignadas" model="mail.template">
+            <field name="name">Metas</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="subject">Metas asignadas</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px">
+                    <div class="page">
+                        <div style="margin: 0px; padding: 0px">
+                            <div class="page">
+                                <div style="float: left">
+                                    <span>
+                                        ${object.name}, se le informa que se le han asignado las siguientes
+                                        metas:
+                                    </span>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                                <table style="width: 100%; border: 1; align: center; text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th class="titulo_Ametas" colspan="3">Meta</th>
+                                            <th class="titulo_Ametas" colspan="3">Objetivo</th>
+                                            <th class="titulo_Ametas" colspan="1">Puntaje</th>
+                                            <th class="titulo_Ametas" colspan="2">Evaluador</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sale_tbody">
+                                        % for row in object.metas_ids:
+                                        <tr>
+                                            <td colspan="3">
+                                                <span>${row.meta_id.name}</span>
+                                            </td>
+                                            <td colspan="3">
+                                                <span>${row.meta_id.obj}</span>
+                                            </td>
+                                            <td colspan="1">
+                                                <span>${row.point_meta}</span>
+                                            </td>
+                                            <td colspan="2">
+                                                <span>${row.evaluator.name}</span>
+                                            </td>
+                                        </tr>
+                                        %endfor
+                                    </tbody>
+                                </table>
+                                <br />
+                                <br />
+                                <br />
+                                <div>
+                                    <span>
+                                    Puede consultar y ver más detalles de las metas en el sistema Odoo:
+                                    <a href="https://grupomegatk.odoo.com/web#id=${object.id}&amp;action=426&amp;model=hr.employee&amp;view_type=form&amp;menu_id=315">
+                                    Aquí
+                                    </a>.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

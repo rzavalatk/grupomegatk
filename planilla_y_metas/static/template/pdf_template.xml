@@ -753,6 +753,13 @@
             </div>
         </template>
 
-        <report id="hr_resultados_report" model="hr.resultados" string="Resultados" name="planilla_y_metas.hr_resultados_print_view" report_type="qweb-pdf" attachment_use="True" paperformat="planilla_y_metas.report_paperformat_horizontally"/>
+        <report 
+        id="hr_resultados_report" 
+        model="hr.resultados" 
+        string="Resultados" 
+        name="planilla_y_metas.hr_resultados_print_view" 
+        report_type="qweb-pdf" 
+        attachment_use="True" 
+        paperformat="planilla_y_metas.report_paperformat_horizontally" />
     </data>
 </odoo>

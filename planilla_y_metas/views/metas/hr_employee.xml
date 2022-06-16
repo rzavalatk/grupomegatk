@@ -7,6 +7,7 @@
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='button_box']" position="inside">
+                    <script type="text/javascript" src="/planilla_y_metas/static/src/js/xls.js"/>
                     <button name="go_to_resultados" type="object" class="oe_stat_button" icon="fa-newspaper-o">
                         Resultados
                     </button>
@@ -14,9 +15,9 @@
 
                 <xpath expr="//header" position="inside">
                     <button string="Enviar resultados" states="done" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_results" type="object" />
+                    <button string="Enviar metas por email" confirm="Se van a envíar las metas por correo al empleado, ¿Desea continuar?" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_mentas" type="object" />
                     <button string="Asignar meta" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object" />
                     <button string="Planificar meta" groups="planilla_y_metas.planilla_manager" name="%(planilla_y_metas.hr_meta_planeada_wizard_action)d" type="action" />
-                    <!-- <button string="cambiar estado" groups="planilla_y_metas.planilla_manager" name="state_non" type="object" /> -->
                     <!-- <button string="cambiar a evaluada" groups="planilla_y_metas.planilla_manager" name="state_done" type="object" /> -->
                 </xpath>
 
@@ -28,7 +29,9 @@
                             <button string="Puntos extra" attrs="{'invisible': ['|',('invisible_extra','=',True),('state','=','procces')]}" context="{'type_meta': 'extra'}" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="create_exta_amonestacion" type="object" />
                             <button string="Amonestación" attrs="{'invisible': ['|',('invisible_amonestacion','=',True),('state','=','procces')]}" context="{'type_meta': 'amonestacion'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
                             <button string="Evaluadas" states="procces" groups="planilla_y_metas.planilla_manager" name="listen" type="object" />
+                            <button string="Exportar metas" groups="planilla_y_metas.planilla_manager" id="export" />
                             <field name="state" widget="statusbar" />
+                            <field name="id" invisible="1" />
                         </header>
                         <h3>
                             <b>
@@ -49,7 +52,7 @@
                             </b>
                         </h3>
                         <field name="metas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
-                            <tree create="0" delete="0">
+                            <tree create="0">
                                 <field name="meta_id"/>
                                 <field name="advance"/>
                                 <field name="point_meta"/>

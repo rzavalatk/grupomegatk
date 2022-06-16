@@ -13,8 +13,8 @@
     'version': '0.1',
     'depends': ['base','hr'],
     'data': [
-        'security/security.xml',
         'wizard/wizard.xml',
+        'security/security.xml',
         'data/data_hr_metas_default.xml',
         'views/menus.xml', 
         'views/planilla/deductions.xml', 
@@ -29,5 +29,6 @@
         'static/template/email_avances.xml',
         'static/template/pdf_template.xml',
         'static/template/email_resultados.xml',
+        'static/template/email_metas.xml'
     ],
 }

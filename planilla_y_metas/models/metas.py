@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from email.policy import default
-from time import strftime
+# from email.policy import default
+# from time import strftime
 from odoo import models, api, fields
 from odoo.exceptions import Warning
 from datetime import datetime, date, timedelta
@@ -70,6 +70,7 @@ class Empleado(models.Model):
         ('procces', 'En proceso'),
         ('done', 'Evaluadas'),
     ], string="Estado", default='procces')
+    metas_binary = fields.Binary("Metas",filename="metas.xls")
 
     def go_to_resultados(self):
         return {
@@ -266,6 +267,51 @@ class Empleado(models.Model):
             raise Warning(
                 "Este Empleado ya no tiene puntos disponibles para asignarle una meta.")
 
+    def send_mentas(self):
+        template = self.env.ref(
+            'planilla_y_metas.email_template_metas_asignadas')
+        email_values = {
+            'email_to': self.work_email,
+            'email_from': self.env.user.email
+        }
+        template.with_context(url="https://grupomegatk.odoo.com/web#id=${self.id}&amp;action=426&amp;model=hr.employee&amp;view_type=form&amp;menu_id=315").send_mail(
+            self.id, email_values=email_values, force_send=True)
+        return True
+    
+    @api.multi
+    def write(self, vals):
+        try:
+            for item in vals['metas_ids']:
+                if item[0] == 2:
+                    meta = self.env['hr.metas.asignadas'].browse(item[1])
+                    for em in meta.meta_id.team:
+                        if em.empleado_id.id == self.id:
+                            meta.meta_id.write({
+                                'team': [(2, em.id)]
+                            })
+        except:
+            pass
+        res = super(Empleado, self).write(vals)
+        return res
+    
+    
+    
+    def csv_download(self):
+        res = self.metas_ids.export_data(
+            ['meta_id/name','point_meta','point_assign','meta_id/obj','meta_id/tipo_meta','evaluator/name'], True)
+        data_res = []
+        col = ["Nombre","Puntaje","Puntaje asignado","Objetivo","Tipo de meta","Evaluador"]
+        if len(res['datas']) > 0:
+            for row in res['datas']:
+                data_row = {}
+                i = 0
+                while i<len(col):
+                    data_row[col[i]] = row[i]
+                    i+=1
+                data_res.append(data_row)
+        print("////////////",data_res,"//////////////")
+        return data_res
+
 
 class MetaAsignadadefault(models.Model):
     _name = "hr.metas.asignadas.default"
@@ -302,7 +348,7 @@ class MetaAsignada(models.Model):
     @api.one
     def _name_assign(self):
         self.name = self.empleado_id.name
-        
+
     @api.one
     def _current_date(self):
         self.date = datetime.today()
@@ -316,7 +362,7 @@ class MetaAsignada(models.Model):
     point_assign = fields.Float("Puntos asignados", readonly=True)
     advance = fields.Text("Avances", readonly=True)
     remark = fields.Text("Observaciones", readonly=True)
-    date = fields.Datetime("Fecha actual",compute=_current_date)
+    date = fields.Datetime("Fecha actual", compute=_current_date)
     date_end = fields.Date("Fecha de evaluación", readonly=True)
     date_valid = fields.Date("Fecha de asignación", readonly=True)
     state = fields.Selection([
@@ -331,9 +377,10 @@ class MetaAsignada(models.Model):
             vals['point_assign'] = -vals['point_assign']
         res = super(MetaAsignada, self).write(vals)
         return res
-    
+
     def send_email(self):
-        template = self.env.ref('planilla_y_metas.email_template_avance_metas_asignadas')
+        template = self.env.ref(
+            'planilla_y_metas.email_template_avance_metas_asignadas')
         email_values = {
             'email_to': self.evaluator.work_email,
             'email_from': self.env.user.email
@@ -355,7 +402,7 @@ class Metas(models.Model):
     name = fields.Text("Meta")
     obj = fields.Text("Objetivo")
     team = fields.One2many("hr.metas.team", "meta_id",
-                           string="Equipo", readonly=True)
+                           string="Equipo")
     tipo_meta = fields.Selection([
         ('strategic', 'Estratégicas'),
         ('extra', 'Apoyo extra'),
@@ -462,7 +509,7 @@ class ResultadosNormas(models.Model):
             total = total + norma.point_meta
 
         self.total_points_normas = total
-        
+
     def _suma_points_estrategicas(self):
         total = 0
 
@@ -471,7 +518,7 @@ class ResultadosNormas(models.Model):
                 total = total + meta.point_meta
 
         self.total_points_estatigicas = total
-        
+
     def _suma_points_apoyo(self):
         total = 0
 
@@ -480,10 +527,10 @@ class ResultadosNormas(models.Model):
                 total = total + meta.point_meta
 
         self.total_points_apoyo = total
-        
+
     def _str_date(self):
-        self.str_date=self.date.strftime('%B del %Y')
-    
+        self.str_date = self.date.strftime('%B del %Y')
+
     def _suma_points_assign(self):
         total = 0
         for meta in self.metas_ids:
@@ -497,18 +544,22 @@ class ResultadosNormas(models.Model):
     name = fields.Many2one("hr.employee", "Empleado", readonly=True)
     team = fields.Char("Equipo")
     date = fields.Date("Fecha")
-    str_date = fields.Char("Fecha",compute=_str_date)
+    str_date = fields.Char("Fecha", compute=_str_date)
     metas_ids = fields.One2many("hr.metas.resultados", "resultado_id")
     normas_ids = fields.One2many("hr.metas.resultados.default", "resultado_id")
     total_points = fields.Float("Total Puntos", default=100)
-    total_points_normas = fields.Float("Total Puntos", compute=_suma_points_normas)
-    total_points_estatigicas = fields.Float("Total Puntos", compute=_suma_points_estrategicas)
-    total_points_apoyo = fields.Float("Total Puntos", compute=_suma_points_apoyo)
+    total_points_normas = fields.Float(
+        "Total Puntos", compute=_suma_points_normas)
+    total_points_estatigicas = fields.Float(
+        "Total Puntos", compute=_suma_points_estrategicas)
+    total_points_apoyo = fields.Float(
+        "Total Puntos", compute=_suma_points_apoyo)
     total_assign = fields.Float(
         "Total Puntos asignados", compute=_suma_points_assign)
 
     def send_email(self):
-        template = self.env.ref('planilla_y_metas.email_template_resultados_meta')
+        template = self.env.ref(
+            'planilla_y_metas.email_template_resultados_meta')
         email_values = {
             'email_to': self.name.work_email,
             'email_from': self.env.user.email

@@ -2,5 +2,12 @@
 <odoo>
     <data>
         <menuitem name="Planilla" id="planilla_menu" sequence = "6" parent="hr.menu_hr_root"/>
+
+
+        <!-- <template id="js_meta_hr_employee" name="js_meta_hr_employee" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/planilla_y_metas/static/src/js/xls.js"></script>
+            </xpath>
+        </template> -->
     </data>
 </odoo>
