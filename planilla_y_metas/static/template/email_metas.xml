@@ -21,28 +21,28 @@
                                 <br />
                                 <br />
                                 <br />
-                                <table style="width: 100%; border: 1; align: center; text-align: center">
+                                <table style="width: 100%; border: 1; align: center; text-align: center; overflow: scroll;">
                                     <thead>
-                                        <tr>
-                                            <th class="titulo_Ametas" colspan="3">Meta</th>
-                                            <th class="titulo_Ametas" colspan="3">Objetivo</th>
-                                            <th class="titulo_Ametas" colspan="1">Puntaje</th>
-                                            <th class="titulo_Ametas" colspan="2">Evaluador</th>
+                                        <tr style="border: black 0.5px solid;">
+                                            <th style="text-align: center; color: white; font-size: 14px; background: #0973b9; border: black 1px solid; padding: 2px;" colspan="3">Meta</th>
+                                            <th style="text-align: center; color: white; font-size: 14px; background: #0973b9; border: black 1px solid; padding: 2px;" colspan="4">Objetivo</th>
+                                            <th style="text-align: center; color: white; font-size: 14px; background: #0973b9; border: black 1px solid; padding: 2px;" colspan="2">Puntaje</th>
+                                            <th style="text-align: center; color: white; font-size: 14px; background: #0973b9; border: black 1px solid; padding: 2px;" colspan="2">Evaluador</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="sale_tbody">
+                                    <tbody >
                                         % for row in object.metas_ids:
-                                        <tr>
-                                            <td colspan="3">
+                                        <tr style="border: black 0.5px solid;">
+                                            <td style="border: black 1px solid; padding: 5px" colspan="3">
                                                 <span>${row.meta_id.name}</span>
                                             </td>
-                                            <td colspan="3">
+                                            <td style="border: black 1px solid; padding: 5px" colspan="4">
                                                 <span>${row.meta_id.obj}</span>
                                             </td>
-                                            <td colspan="1">
+                                            <td style="border: black 1px solid; padding: 5px" colspan="2">
                                                 <span>${row.point_meta}</span>
                                             </td>
-                                            <td colspan="2">
+                                            <td style="border: black 1px solid; padding: 5px" colspan="2">
                                                 <span>${row.evaluator.name}</span>
                                             </td>
                                         </tr>
@@ -55,9 +55,9 @@
                                 <div>
                                     <span>
                                     Puede consultar y ver más detalles de las metas en el sistema Odoo:
-                                    <a href="https://grupomegatk.odoo.com/web#id=${object.id}&amp;action=426&amp;model=hr.employee&amp;view_type=form&amp;menu_id=315">
+                                        <a href="https://grupomegatk.odoo.com/web#id=${object.id}&amp;action=426&amp;model=hr.employee&amp;view_type=form&amp;menu_id=315">
                                     Aquí
-                                    </a>.
+                                        </a>.
                                     </span>
                                 </div>
                             </div>
