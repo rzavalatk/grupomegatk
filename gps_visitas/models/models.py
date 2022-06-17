@@ -52,6 +52,7 @@ class CrmVisits(models.Model):
     user_id = fields.Many2one("res.users", "Comercial",
                               default=lambda self: self.env.user)
     pertner_id = fields.Many2one("res.partner", "Cliente")
+    company_id = fields.Many2one("res.company","Compañia",default= lambda self : self.env.user.company_id)
     new_partner = fields.Boolean("Nuevo cliente")
     partner_name = fields.Char("Nombre del cliente",default="")
     partner_phone = fields.Char("Teléfono del cliente",default="")
@@ -85,6 +86,26 @@ class CrmVisits(models.Model):
 		('in_opportunity', 'En oportunidad')
 		],string="Estado de la visita",default='in_visit')
     description = fields.Text("Notas internas")
+    
+    def reoartir_companys(self):
+        visits = self.env['crm.visits'].search([])
+        for item in visits:
+             item.write({
+                'company_id': item.pertner_id.sudo().company_id.id if item.pertner_id.sudo().company_id.id else item.user_id.sudo().company_id.id
+             })
+    
+    def go_visit(self):
+        return {
+            'name': 'Visitas',
+            'type': 'ir.actions.act_window',
+            'res_model': 'crm.visits',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'views': [(False, 'tree'), (False, 'form')],
+            'target': 'current',
+            'context': {"search_default_my":1},
+            'domain': [('company_id', '=', self.env.user.company_id.id)],
+        }
 
 
     @api.model
