@@ -31,7 +31,7 @@
                         <button string="Iniciar Visita" id="init_visit" attrs="{'invisible': [('button_init', '=', True)]}" class="oe_highlight" />
                         <button string="Finalizar Visita" id="end_visit" attrs="{'invisible': ['|',('button_init', '=', False),('button_end', '=', True)]}" class="oe_highlight"/>
                         <button string="Crear Óportunidad" name="create_chance" type="object" attrs="{'invisible': ['|',('button_end', '=', False),('create_opportunity', '=', True)]}" />
-                        <button string="Company" name="reoartir_companys" type="object" class="oe_highlight"/>
+                        <!-- <button string="Company" name="reoartir_companys" type="object" class="oe_highlight"/> -->
                         <field name="state_visit" widget="statusbar"/>
                     </header>
                     <sheet>
