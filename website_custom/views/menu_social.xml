@@ -6,6 +6,7 @@
             <field name="model">menu.social.link</field>
             <field name="arch" type="xml">
                 <tree string="Redes sociales">
+                    <field name="website" />
                     <field name="name" />
                     <field name="icon" />
                     <field name="link" />

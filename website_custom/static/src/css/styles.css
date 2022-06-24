@@ -93,3 +93,10 @@
   justify-content: flex-start;
   align-items: center;
 }
+
+.video_web_no_found{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

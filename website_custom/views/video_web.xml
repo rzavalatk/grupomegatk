@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="video_web_tree" model="ir.ui.view">
+            <field name="name">video.web.tree</field>
+            <field name="model">video.web</field>
+            <field name="arch" type="xml">
+                <tree string="Redes sociales">
+                    <field name="website" />
+                    <field name="name" />
+                    <field name="url" />
+                    <field name="position" />
+                    <field name="path" />
+                    <field name="width" />
+                    <field name="height" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="video_web_action" model="ir.actions.act_window">
+            <field name="name">Video Web</field>
+            <field name="res_model">video.web</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Video Web" id="video_web_menu" parent="website_custom.website_custom_menu_root"
+        sequence = "6" action = "website_custom.video_web_action" />
+    </data>
+</odoo>

@@ -194,6 +194,7 @@ class MenuSocial(models.Model):
     name = fields.Char(string="Nombre")
     icon = fields.Char(string="Icono")
     link = fields.Char(string="Enlace")
+    website = fields.Many2one('website', string="Página web")
     
 
 class BanksCheck(models.Model):

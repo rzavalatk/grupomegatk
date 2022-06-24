@@ -26,6 +26,7 @@
         'views/website/products_details.xml',
         'views/snippets/carousel.xml',
         'views/snippets/snippets.xml',
+        'views/snippets/video_youtube.xml',
         'views/filters/carousel.xml',
         'views/breadcum.xml',
         'views/res_confog_setting.xml',
@@ -33,8 +34,8 @@
         'views/menu_social.xml',
         'views/consultas.xml',
         'views/hide_content.xml',
+        'views/video_web.xml',
         'security/security.xml',
         'static/src/xml/logos_base64.xml',
-
     ],
 }
