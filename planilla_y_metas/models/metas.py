@@ -44,7 +44,7 @@ class Empleado(models.Model):
         for item in self.metas_ids:
             if item.state != 'done':
                 ready_meta = False
-        if ready_meta and ready_norma and self._suma_points() == 100:
+        if ready_meta and ready_norma:
             self.state_done('state')
         else:
             raise Warning(
@@ -82,6 +82,30 @@ class Empleado(models.Model):
             'views': [(False, 'tree'), (False, 'form')],
             'target': 'current',
             'domain': [('name', '=', self.id)],
+        }
+        
+    def go_to_assign_metas(self):
+        return {
+            'name': 'Evaluar metas',
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.metas.asignadas',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'views': [(False, 'tree'), (False, 'form')],
+            'target': 'current',
+            'domain': [('evaluator', '=', self.id)],
+        }
+    
+    def go_to_assign_normas(self):
+        return {
+            'name': 'Evaluar normas',
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.metas.asignadas.default',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'views': [(False, 'tree'), (False, 'form')],
+            'target': 'current',
+            'domain': [('evaluator', '=', self.id)],
         }
 
     def get_planificadas(self):
@@ -146,13 +170,13 @@ class Empleado(models.Model):
                     'date_valid': None,
                     'state': "draft"
                 })
-                self.write({
+                self.sudo().write({
                     'state': 'procces',
                     'invisible_extra': False,
                     'invisible_amonestacion': False
                 })
             else:
-                self.write({
+                self.sudo().write({
                     'metas_ids': [(2, meta.id)],
                     'state': 'procces',
                     'invisible_extra': False,
@@ -169,7 +193,7 @@ class Empleado(models.Model):
                 'point_meta': meta.point_meta
             }
             self.env['hr.metas.asignadas'].create(vals)
-            self.write({
+            self.sudo().write({
                 'planeadas_ids': [(2, item)],
             })
 
@@ -211,10 +235,10 @@ class Empleado(models.Model):
     def state_done(self, state):
         item = {}
         item[state] = 'done'
-        self.write(item)
+        self.sudo().write(item)
 
     def state_non(self):
-        self.write({
+        self.sudo().write({
             'state': 'procces'
         })
 
@@ -315,6 +339,15 @@ class Empleado(models.Model):
 
 class MetaAsignadadefault(models.Model):
     _name = "hr.metas.asignadas.default"
+    
+    def _active_id(self):
+        active_id = self.env.context.get('active_ids', [])
+        return [('id', 'not in', active_id)]
+
+    def _define_user(self):
+        employee = self.env['hr.employee'].sudo().search(
+            [('user_id', '=', self.env.user.id)])
+        return employee
 
     @api.one
     def _point_meta(self):
@@ -322,16 +355,35 @@ class MetaAsignadadefault(models.Model):
 
     meta_id = fields.Many2one("hr.metas.default", "Meta", readonly=True)
     empleado_id = fields.Many2one("hr.employee", "Asignado", readonly=True)
+    evaluator = fields.Many2one(
+        "hr.employee", "Evaluador", domain=_active_id, default=_define_user)
     point_meta = fields.Float("Puntaje", compute=_point_meta)
     point_assign = fields.Float("Puntos asignados", readonly=True)
     advance = fields.Text("Avances", readonly=True, default="Norma")
     date_end = fields.Date("Fecha de evaluación", readonly=True)
     remark = fields.Text("Observaciones", readonly=True)
     state = fields.Selection([
-        ('valid', 'En avances'),
+        ('valid', 'Sin evaluar'),
         ('done', 'Evaluada'),
     ], string="Estado", default='draft')
-
+    
+    
+    def assign_evaluator(self):
+        evaluadores = [206,229,229,False]
+        i = 1
+        for item in evaluadores: 
+            metas = self.env['hr.metas.asignadas.default'].search([('meta_id','=',i)])
+            for meta in metas:
+                if item:
+                    meta.write({
+                        'evaluator': item
+                    })
+                else:
+                    meta.write({
+                        'evaluator': meta.empleado_id.parent_id.id
+                    })
+            i += 1
+        
 
 class MetaAsignada(models.Model):
     _name = "hr.metas.asignadas"
@@ -341,13 +393,13 @@ class MetaAsignada(models.Model):
         return [('id', 'not in', active_id)]
 
     def _define_user(self):
-        employee = self.env['hr.employee'].search(
+        employee = self.env['hr.employee'].sudo().search(
             [('user_id', '=', self.env.user.id)])
         return employee
 
     @api.one
     def _name_assign(self):
-        self.name = self.empleado_id.name
+        self.name = self.empleado_id.sudo().name
 
     @api.one
     def _current_date(self):
@@ -382,7 +434,7 @@ class MetaAsignada(models.Model):
         template = self.env.ref(
             'planilla_y_metas.email_template_avance_metas_asignadas')
         email_values = {
-            'email_to': self.evaluator.work_email,
+            'email_to': self.evaluator.sudo().work_email,
             'email_from': self.env.user.email
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
@@ -441,10 +493,9 @@ class Metasdefault(models.Model):
                 vals = {
                     'meta_id': self.id,
                     'empleado_id': employee.id,
-                    'state': 'valid'
+                    'state': 'valid',
                 }
                 assign.create(vals)
-
 
 class MetaPlaneadas(models.Model):
     _name = "hr.metas.planeadas"

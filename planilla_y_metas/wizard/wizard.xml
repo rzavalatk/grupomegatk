@@ -172,5 +172,39 @@
             <field name="view_mode">form</field>
         </record>
 
+                <!-- Re asignar -->
+
+        <record id="hr_meta_reasignar_view" model="ir.ui.view">
+            <field name="name">hr.meta.reasignar.view</field>
+            <field name="model">hr.meta.reasignar</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="empleados_ids" widget="many2many_tags"/>
+                                <field name="evaluator" />
+                            </group>
+                            <group>
+                                <field name="point_meta" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Guardar" name="re_assign" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_meta_reasignar_action" model="ir.actions.act_window">
+            <field name="name">Re asignar meta</field>
+            <field name="res_model">hr.meta.reasignar</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
     </data>
 </odoo>

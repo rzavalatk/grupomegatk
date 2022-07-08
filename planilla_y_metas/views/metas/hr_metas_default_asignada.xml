@@ -2,26 +2,41 @@
 <odoo>
     <data>
 
+        <record model="ir.ui.view" id="hr_metas_asignadas_default_tree">
+            <field name="name">hr.metas.asignadas.default.tree</field>
+            <field name="model">hr.metas.asignadas.default</field>
+            <field name="arch" type="xml">
+                <tree create="0" import="0">
+                    <field name="meta_id"/>
+                    <field name="empleado_id"/>
+                    <field name="evaluator"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="hr_metas_asignadas_default_form">
             <field name="name">hr.metas.asignadas.default.form</field>
             <field name="model">hr.metas.asignadas.default</field>
             <field name="arch" type="xml">
-                <form>
+                <form create="0" edit="0">
                     <header>
                         <button string="Evaluar" groups="planilla_y_metas.planilla_manager" class="oe_highlight" states="draft,valid" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id,'active_model': 'hr.metas.asignadas.default'}" type="action" />
-                        <button string="Re-evaluar" groups="sign_orders.group_admins" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id}" type="action" />
+                        <button string="Re-evaluar" groups="planilla_y_metas.planilla_manager" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id}" type="action" />
+                        <button string="Asignar evaluador" groups="sign_orders.group_admins" name="assign_evaluator" type="object" />
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="meta_id" />                               
+                                <field name="meta_id" />
                                 <field name="point_meta" />
                                 <field name="advance" />
                                 <field name="remark" />
                             </group>
                             <group>
                                 <field name="empleado_id" />
+                                <field name="evaluator"/>
                                 <field name="point_assign" />
                             </group>
                         </group>
@@ -32,5 +47,16 @@
                 </form>
             </field>
         </record>
+
+        <record model="ir.actions.act_window" id="action_hr_metas_asignadas_default">
+            <field name="name">Normas asignadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.metas.asignadas.default</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Normas asignadas" id="menu_hr_metas_asignadas_default" sequence = "4" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_asignadas_default"/>
+
     </data>
 </odoo>

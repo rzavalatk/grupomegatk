@@ -6,10 +6,13 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
-                <xpath expr="//div[@name='button_box']" position="inside">
+                <xpath expr="//button[@name='toggle_active']" position="after" >
                     <script type="text/javascript" src="/planilla_y_metas/static/src/js/xls.js"/>
-                    <button name="go_to_resultados" type="object" class="oe_stat_button" icon="fa-newspaper-o">
-                        Resultados
+                    <button name="go_to_assign_metas" type="object" class="oe_stat_button" icon="fa-check">
+                        Evaluar metas
+                    </button>
+                    <button name="go_to_assign_normas" type="object" style="text-align:center" class="oe_stat_button">
+                        Evaluar normas
                     </button>
                 </xpath>
 
@@ -19,6 +22,7 @@
                     <button string="Asignar meta" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object" />
                     <button string="Planificar meta" groups="planilla_y_metas.planilla_manager" name="%(planilla_y_metas.hr_meta_planeada_wizard_action)d" type="action" />
                     <!-- <button string="cambiar a evaluada" groups="planilla_y_metas.planilla_manager" name="state_done" type="object" /> -->
+                    <!-- <button string="cambiar a proceso" groups="planilla_y_metas.planilla_manager" name="state_non" type="object" /> -->
                 </xpath>
 
                 <xpath expr="//page[@name='hr_settings']" position="after">

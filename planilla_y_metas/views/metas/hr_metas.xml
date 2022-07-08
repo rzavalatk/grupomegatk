@@ -19,6 +19,9 @@
             <field name="model">hr.metas</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button string="Re-asignar" name="%(planilla_y_metas.hr_meta_reasignar_action)d" type="action" context="{'active_id': id}" class="oe_highlight"/>
+                    </header>
                     <sheet>
                         <group>
                             <group>
@@ -52,8 +55,8 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Metas" id="metas_menu_root" groups="sign_orders.group_admins" sequence = "7" parent="hr.menu_hr_root"/>
-        <menuitem name="Metas" id="menu_hr_metas" sequence = "0" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas"/>
+        <menuitem name="Metas" id="metas_menu_root" groups="planilla_y_metas.planilla_manager" sequence = "7" parent="hr.menu_hr_root"/>
+        <menuitem name="Metas" id="menu_hr_metas" sequence = "0" groups="planilla_y_metas.planilla_manager" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas"/>
 
     </data>
 </odoo>

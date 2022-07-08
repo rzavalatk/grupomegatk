@@ -4,6 +4,60 @@ from datetime import datetime
 from odoo.exceptions import Warning
 
 
+class ReasignarMeta(models.TransientModel):
+    _name = "hr.meta.reasignar"
+
+    def _active_id(self):
+        active_id = self.env.context.get('active_ids', [])
+        return [('id', 'not in', active_id)]
+
+    def _define_user(self):
+        employee = self.env['hr.employee'].search(
+            [('user_id', '=', self.env.user.id)])
+        return employee
+
+    empleados_ids = fields.Many2many(
+        "hr.employee", "planeadas_ids", string="Asignados")
+    evaluator = fields.Many2one(
+        "hr.employee", "Evaluador", domain=_active_id, default=_define_user)
+    point_meta = fields.Float("Puntaje")
+
+    def _check(self, items_hr, points):
+        for item in items_hr:
+            res = item.check_availability(points)
+            if res == False:
+                raise Warning(
+                    f"El Empleado {item.name} ya no tiene puntos disponibles para asignarle una meta.")
+        return True
+
+    def re_assign(self):
+        active_id = self.env.context.get('active_id')
+        ids = []
+        for item in self.empleados_ids:
+            ids.append(item.id)
+        hr = self.env['hr.employee'].search([('id', 'in', ids)])
+        if self._check(hr, self.point_meta):
+            t=self.env['hr.metas'].browse(active_id)
+            t.write({
+                'team': [(5,)]
+            })
+            asign_meta = self.env['hr.metas.asignadas']
+            team = self.env['hr.metas.team']
+            for employee in hr:
+                asign_meta.create({
+                    'meta_id': active_id,
+                    'empleado_id': employee.id,
+                    'evaluator': self.evaluator.id,
+                    'date_valid': datetime.today(),
+                    'point_meta': self.point_meta,
+                })
+                team.create({
+                    'meta_id': active_id,
+                    'empleado_id': employee.id,
+                })
+        
+             
+
 class PuntajeMeta(models.TransientModel):
     _name = "hr.meta.puntaje"
 
@@ -12,7 +66,7 @@ class PuntajeMeta(models.TransientModel):
     def set_point_meta(self):
         active_id = self.env.context.get('active_id')
         assign = self.env['hr.metas.asignadas'].browse(active_id)
-        check = assign.empleado_id.check_availability_edit(
+        check = assign.sudo().empleado_id.check_availability_edit(
             assign.point_meta, self.point_meta)
         if check:
             vals = {
@@ -46,7 +100,6 @@ class AvanceMeta(models.TransientModel):
             'type': 'ir.actions.client',
             'tag': 'reload',
         }
-    
 
 
 class EvaluarMeta(models.TransientModel):
@@ -76,16 +129,16 @@ class EvaluarMeta(models.TransientModel):
         }
         check = {}
         try:
-            check = assign.empleado_id.check_total_assign(
+            check = assign.sudo().empleado_id.check_total_assign(
                 -points if assign.meta_id.negative else points)
         except:
-            check = assign.empleado_id.check_total_assign(points)
+            check = assign.sudo().empleado_id.check_total_assign(points)
         if check:
             assign.write(vals)
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'reload',
-            }
+            # return {
+            #     'type': 'ir.actions.client',
+            #     'tag': 'reload',
+            # }
         else:
             raise Warning(
                 "El Empleado sobre pasa el 100'%' de puntos en las metas, Corrija el valor antes de evaluar")
