@@ -156,19 +156,19 @@ class AssignMeta(models.TransientModel):
             [('user_id', '=', self.env.user.id)])
         return employee
 
-    name = fields.Text("Meta")
-    obj = fields.Text("Objetivo")
+    name = fields.Text("Meta", required=True)
+    obj = fields.Text("Objetivo",required=True)
     evaluator = fields.Many2one(
-        "hr.employee", "Evaluador", domain=_active_id, default=_define_user)
+        "hr.employee", "Evaluador", domain=_active_id, default=_define_user,required=True)
     mates = fields.Many2many("hr.employee", "metas_ids",
                              string="Compañeros", domain=_active_id)
     tipo_meta = fields.Selection([
         ('strategic', 'Estratégicas'),
         ('extra', 'Apoyo extra'),
-    ], string="Tipo de meta")
-    date_max = fields.Date("Fecha maxima")
+    ], string="Tipo de meta",required=True)
+    date_max = fields.Date("Fecha maxima",required=True)
     reapet = fields.Boolean("Repetitiva")
-    point_meta = fields.Float("Puntaje")
+    point_meta = fields.Float("Puntaje",required=True)
 
     def _check(self, items_hr, points):
         for item in items_hr:

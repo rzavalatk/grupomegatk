@@ -23,7 +23,7 @@
                     <header>
                         <button string="Evaluar" groups="planilla_y_metas.planilla_manager" class="oe_highlight" states="draft,valid" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
                         <button string="Editar puntaje" groups="planilla_y_metas.planilla_manager" states="draft,valid" name="%(planilla_y_metas.hr_metas_puntaje_action)d" type="action" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" />
-                        <button string="Re-evaluar" groups="sign_orders.group_admins" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
+                        <button string="Re-evaluar" groups="planilla_y_metas.planilla_manager" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
                         <button string="Ingresar avance" groups="planilla_y_metas.planilla_colaborator" states="draft" name="%(planilla_y_metas.hr_metas_avance_action)d" context="{'active_id': id}" type="action" />
                         <!-- <button string="Enviar email" name="send_email" type="object" /> -->
                         <field name="state" widget="statusbar"/>
@@ -48,6 +48,17 @@
                         </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <record id="hr_metas_asignadas_view_search" model="ir.ui.view">
+            <field name="name">hr.metas.asignadas.view.search</field>
+            <field name="model">hr.metas.asignadas</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="pendient" string="Pendiente" domain="[('state', '!=', 'done')]" />
+                    <filter name="done" string="Evaluadas" domain="[('state', '=', 'done')]" />
+                </search>
             </field>
         </record>
 

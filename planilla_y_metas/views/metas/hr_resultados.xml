@@ -114,7 +114,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Resultados de metas" id="menu_hr_resultadoss" sequence = "3" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_resultados"/>
+        <menuitem name="Resultados de metas" id="menu_hr_resultadoss" sequence = "3" groups="planilla_y_metas.planilla_manager" parent="planilla_y_metas.metas_menu_root" action = "action_hr_resultados"/>
 
     </data>
 </odoo>
