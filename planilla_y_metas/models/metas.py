@@ -117,6 +117,11 @@ class Empleado(models.Model):
             if item.date < days.strftime('%Y-%m-%d'):
                 metas_dis.append(item.id)
         return metas_dis
+    
+    def valid_porcentage(self, points, points_meta):
+        porcentage = 100 * (points/points_meta)
+        return True if porcentage > 50 else False
+    
 
     def send_results(self):
         resultado = self.env['hr.resultados'].create({
@@ -160,8 +165,7 @@ class Empleado(models.Model):
                 'date_valid': meta.date_valid,
             }
             metas.create(vals)
-
-            if meta.meta_id.reapet:
+            if meta.meta_id.reapet or self.valid_porcentage(meta.point_assign,meta.point_meta) == False:
                 meta.write({
                     'point_assign': 0,
                     'advance': "",
@@ -196,6 +200,7 @@ class Empleado(models.Model):
             self.sudo().write({
                 'planeadas_ids': [(2, item)],
             })
+        resultado.send_email()
 
     def create_exta_amonestacion(self):
         type_meta = self.env.context.get('type_meta')
@@ -612,7 +617,7 @@ class ResultadosNormas(models.Model):
         template = self.env.ref(
             'planilla_y_metas.email_template_resultados_meta')
         email_values = {
-            'email_to': self.name.work_email,
+            'email_to': self.name.sudo().work_email,
             'email_from': self.env.user.email
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)

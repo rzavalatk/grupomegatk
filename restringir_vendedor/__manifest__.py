@@ -14,9 +14,10 @@
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     'version': '0.1',
-    'depends': ['base','crm'],
+    'depends': ['base','crm','sale'],
     'data': [
         # 'security/security.xml',
         'views/res_users.xml',
+        'views/account_analitic.xml',
     ],
 }
