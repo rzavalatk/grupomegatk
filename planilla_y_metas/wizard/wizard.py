@@ -17,10 +17,11 @@ class ReasignarMeta(models.TransientModel):
         return employee
 
     empleados_ids = fields.Many2many(
-        "hr.employee", "planeadas_ids", string="Asignados")
+        "hr.employee", "planeadas_ids", string="Asignados",required=True)
     evaluator = fields.Many2one(
-        "hr.employee", "Evaluador", domain=_active_id, default=_define_user)
-    point_meta = fields.Float("Puntaje")
+        "hr.employee", "Evaluador", domain=_active_id, default=_define_user,required=True)
+    point_meta = fields.Float("Puntaje",required=True)
+    date_max = fields.Date("Fecha maxima",required=True)
 
     def _check(self, items_hr, points):
         for item in items_hr:
@@ -33,13 +34,16 @@ class ReasignarMeta(models.TransientModel):
     def re_assign(self):
         active_id = self.env.context.get('active_id')
         ids = []
+        today=datetime.today()
         for item in self.empleados_ids:
             ids.append(item.id)
         hr = self.env['hr.employee'].search([('id', 'in', ids)])
         if self._check(hr, self.point_meta):
             t=self.env['hr.metas'].browse(active_id)
             t.write({
-                'team': [(5,)]
+                'team': [(5,)],
+                'date_max': self.date_max,
+                'date': today
             })
             asign_meta = self.env['hr.metas.asignadas']
             team = self.env['hr.metas.team']
@@ -48,13 +52,18 @@ class ReasignarMeta(models.TransientModel):
                     'meta_id': active_id,
                     'empleado_id': employee.id,
                     'evaluator': self.evaluator.id,
-                    'date_valid': datetime.today(),
+                    'date_valid': today,
                     'point_meta': self.point_meta,
                 })
                 team.create({
                     'meta_id': active_id,
                     'empleado_id': employee.id,
                 })
+                # for meta in employee.metas_ids:
+                #      if meta.meta_id.id == active_id:
+                #          employee.write({
+                #              'metas_ids': [(2,meta.id)]
+                #          })
         
              
 

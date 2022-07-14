@@ -127,10 +127,10 @@ class Empleado(models.Model):
         resultado = self.env['hr.resultados'].create({
             'name': self.id,
             'team': self.equipo_madrug_id.name,
-            'date': date.today(),
         })
         normas = self.env['hr.metas.resultados.default']
         metas = self.env['hr.metas.resultados']
+        dates = []
 
         for norma in self.normas_ids:
             vals = {
@@ -151,6 +151,7 @@ class Empleado(models.Model):
                 'state': "valid",
             })
         for meta in self.metas_ids:
+            dates.append((meta.date_valid,meta.date_end))
             vals = {
                 'name': self.name,
                 'resultado_id': resultado.id,
@@ -200,7 +201,36 @@ class Empleado(models.Model):
             self.sudo().write({
                 'planeadas_ids': [(2, item)],
             })
+        resultado.write({
+            'date': self.date_str(dates)
+        })
         resultado.send_email()
+    
+    def date_str(self, dates):
+        igual = []
+        dif1 = []
+        dif2 = []
+        for item in dates:
+            try:
+                init = item[0].strftime('%B del %Y')
+                end = item[1].strftime('%B del %Y')
+                if init==end:
+                    igual.append(item[0])
+                else:
+                    if item[0].day >= 20:
+                        dif1.append(item[1])
+                    else:
+                        dif2.append(item[0])
+            except :
+                pass
+        if len(igual) >= len(dif1) and len(igual) >= len(dif2):
+            return igual[0]
+        elif len(dif1) >= len(igual) and len(dif1) >= len(dif2):
+            return dif1[0]
+        else:
+            return dif2[0]
+            
+            
 
     def create_exta_amonestacion(self):
         type_meta = self.env.context.get('type_meta')
@@ -338,7 +368,6 @@ class Empleado(models.Model):
                     data_row[col[i]] = row[i]
                     i+=1
                 data_res.append(data_row)
-        print("////////////",data_res,"//////////////")
         return data_res
 
 
@@ -409,7 +438,23 @@ class MetaAsignada(models.Model):
     @api.one
     def _current_date(self):
         self.date = datetime.today()
-
+        
+    @api.one
+    def _date_str(self):
+        try:
+            init = self.date_valid.strftime('%B del %Y')
+            end = self.meta_id.date_max.strftime('%B del %Y')
+            if init==end:
+                self.date_str = init
+            else:
+                if self.date_valid.day >= 20:
+                    self.date_str = end
+                else:
+                    self.date_str = init
+        except :
+            pass
+        
+        
     name = fields.Char("Meta", compute=_name_assign)
     meta_id = fields.Many2one("hr.metas", "Meta", readonly=True)
     empleado_id = fields.Many2one("hr.employee", "Asignado", readonly=True)
@@ -420,8 +465,9 @@ class MetaAsignada(models.Model):
     advance = fields.Text("Avances", readonly=True)
     remark = fields.Text("Observaciones", readonly=True)
     date = fields.Datetime("Fecha actual", compute=_current_date)
+    date_str = fields.Char("Meta de", compute=_date_str)
     date_end = fields.Date("Fecha de evaluación", readonly=True)
-    date_valid = fields.Date("Fecha de asignación", readonly=True)
+    date_valid = fields.Date("Fecha de asignación",readonly=True)
     state = fields.Selection([
         ('draft', 'Asignada'),
         ('valid', 'En avances'),
@@ -584,6 +630,7 @@ class ResultadosNormas(models.Model):
 
         self.total_points_apoyo = total
 
+    @api.one
     def _str_date(self):
         self.str_date = self.date.strftime('%B del %Y')
 
@@ -600,7 +647,7 @@ class ResultadosNormas(models.Model):
     name = fields.Many2one("hr.employee", "Empleado", readonly=True)
     team = fields.Char("Equipo")
     date = fields.Date("Fecha")
-    str_date = fields.Char("Fecha", compute=_str_date)
+    str_date = fields.Char("Metas de:", compute=_str_date)
     metas_ids = fields.One2many("hr.metas.resultados", "resultado_id")
     normas_ids = fields.One2many("hr.metas.resultados.default", "resultado_id")
     total_points = fields.Float("Total Puntos", default=100)
@@ -622,3 +669,14 @@ class ResultadosNormas(models.Model):
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         return True
+    
+    
+    def fixed_dates(self):
+        dates = []
+        date_str = self.env['hr.employee'].date_str
+        for item in self.metas_ids:
+            dates.append((item.date_valid,item.date_end))
+        self.write({
+            'date': date_str(dates)
+        })
+            

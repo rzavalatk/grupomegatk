@@ -7,6 +7,7 @@
             <field name="arch" type="xml">
                 <tree create="0" import="0">
                     <field name="meta_id"/>
+                    <field name="date_str"/>
                     <field name="empleado_id"/>
                     <field name="evaluator"/>
                     <field name="state"/>
@@ -45,6 +46,7 @@
                         <group>
                             <field name="date_valid" />
                             <field name="date_end" />
+                            <field name="date_str" />
                         </group>
                     </sheet>
                 </form>

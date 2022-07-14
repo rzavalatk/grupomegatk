@@ -7,6 +7,10 @@
     <record id="planilla_colaborator" model="res.groups">
         <field name="name">Recursos humanos/colaborador</field>
     </record>
+
+    <record id="admin_functions" model="res.groups">
+        <field name="name">Funciones/Admin</field>
+    </record>
     <!--  -->
     <!-- <record id="hr_employee_deductions_access" model="ir.model.access">
         <field name="name">hr.employee.deductions.access</field>

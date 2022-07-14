@@ -187,6 +187,7 @@
                             </group>
                             <group>
                                 <field name="point_meta" />
+                                <field name="date_max" />
                             </group>
                         </group>
                     </sheet>

@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <tree create="0" delete="0">
                     <field name="name"/>
-                    <field name="date"/>
+                    <field name="str_date"/>
                     <field name="team"/>
                 </tree>
             </field>
@@ -20,6 +20,7 @@
                 <form create="0" edit="0" delete="0">
                     <header>
                         <button string="Enviar resultados" name="send_email" type="object" class="oe_highlight"/>
+                        <button string="Arreglar fecha" groups="planilla_y_metas.admin_functions" name="fixed_dates" type="object" />
                     </header>
                     <sheet>
                         <group>
