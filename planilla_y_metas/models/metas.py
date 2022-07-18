@@ -231,7 +231,6 @@ class Empleado(models.Model):
                 'state': "valid",
             })
         for meta in self.metas_ids:
-            dates.append((meta.date_valid,meta.date_end))
             vals = {
                 'name': self.name,
                 'resultado_id': resultado.id,
