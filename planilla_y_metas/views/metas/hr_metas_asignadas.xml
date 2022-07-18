@@ -62,6 +62,7 @@
                 <search>
                     <filter name="pendient" string="Pendiente" domain="[('state', '!=', 'done')]" />
                     <filter name="done" string="Evaluadas" domain="[('state', '=', 'done')]" />
+                    <field name="date_str" />
                 </search>
             </field>
         </record>
