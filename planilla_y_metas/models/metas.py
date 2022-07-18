@@ -6,6 +6,84 @@ from odoo.exceptions import Warning
 from datetime import datetime, date, timedelta
 
 
+class Mes(models.Model):
+    _name = "hr.metas.mes"
+    
+    options = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+    name = fields.Char("Mes",default=lambda self : self.options[0])
+    employee_id = fields.Many2one("hr.employee",string="Empleado")
+    
+    def next(self):
+        i = 0
+        while i < len(self.options):
+            if self.name == self.options[i]:
+                indice = i+1 if i+1 < len(self.options) else 0
+                self.write({
+                    'name': self.options[indice]
+                })
+                break
+            i += 1
+    
+    def get_next(self):
+        i = 0
+        while i < len(self.options):
+            if self.name == self.options[i]:
+                indice = i+1 if i+1 < len(self.options) else 0
+                return self.options[indice]
+                
+            i += 1
+    
+    def back(self):
+        i = 0
+        while i < len(self.options):
+            if self.name == self.options[i]:
+                indice = i-1 if i-1 >= 0 else len(self.options) -1
+                self.write({
+                    'name': self.options[indice]
+                })
+                break
+            i += 1
+            
+    def assign_all(self):
+        employees = self.env['hr.employee'].search([])
+        for item in employees:
+            if item.id == self.employee_id.id:
+                item.sudo().write({
+                    'mes_activo': self.id
+                })
+            else:
+                mes = self.create({
+                    'employee_id': item.id
+                })
+                item.sudo().write({
+                    'mes_activo': mes.id
+                })
+            
+    def assign_all_result(self):
+        today_date = date.today()
+        resultados = self.env['hr.resultados'].search([])
+        for item in resultados:
+            if item.str_date == False:    
+                item.sudo().write({
+                    'str_date': f"{self.name} del {today_date.year}"
+                })
+                
+    def rescribir_asignadas(self):
+            asignadas = self.env['hr.metas.asignadas'].search([])
+            for item in asignadas:
+                try:
+                    mes_activo = self.env['hr.metas.mes'].search([('employee_id','=',item.empleado_id.id)])
+                    m = {}
+                    for i in mes_activo:
+                        m = i
+                    item.write({
+                        'date_str': m.name
+                    })
+                except :
+                    pass
+        
+
+
 class Empleado(models.Model):
     _inherit = "hr.employee"
 
@@ -71,6 +149,8 @@ class Empleado(models.Model):
         ('done', 'Evaluadas'),
     ], string="Estado", default='procces')
     metas_binary = fields.Binary("Metas",filename="metas.xls")
+    mes_activo = fields.Many2one("hr.metas.mes","Mes activo")
+    saved = fields.Boolean(default=False)
 
     def go_to_resultados(self):
         return {
@@ -124,14 +204,14 @@ class Empleado(models.Model):
     
 
     def send_results(self):
+        today_date = date.today()
         resultado = self.env['hr.resultados'].create({
             'name': self.id,
             'team': self.equipo_madrug_id.name,
+            'str_date': f"{self.mes_activo.name} del {today_date.year}"
         })
         normas = self.env['hr.metas.resultados.default']
         metas = self.env['hr.metas.resultados']
-        dates = []
-
         for norma in self.normas_ids:
             vals = {
                 'meta_id': norma.meta_id.id,
@@ -172,8 +252,9 @@ class Empleado(models.Model):
                     'advance': "",
                     'remark': "",
                     'date_end': None,
-                    'date_valid': None,
-                    'state': "draft"
+                    'date_valid': today_date,
+                    'state': "draft",
+                    'date_str': self.mes_activo.get_next()
                 })
                 self.sudo().write({
                     'state': 'procces',
@@ -187,52 +268,29 @@ class Empleado(models.Model):
                     'invisible_extra': False,
                     'invisible_amonestacion': False
                 })
-        planificadas = self.get_planificadas()
-        for item in planificadas:
-            meta = self.env['hr.metas.planeadas'].browse(item)
-            vals = {
-                'meta_id': meta.meta_id.id,
-                'empleado_id': meta.empleado_id.id,
-                'evaluator': meta.evaluator.id,
-                'date_valid': meta.meta_id.date,
-                'point_meta': meta.point_meta
-            }
-            self.env['hr.metas.asignadas'].create(vals)
-            self.sudo().write({
-                'planeadas_ids': [(2, item)],
-            })
-        resultado.write({
-            'date': self.date_str(dates)
-        })
+        self.mes_activo.next()
         resultado.send_email()
+        # planificadas = self.get_planificadas()
+        # for item in planificadas:
+        #     meta = self.env['hr.metas.planeadas'].browse(item)
+        #     vals = {
+        #         'meta_id': meta.meta_id.id,
+        #         'empleado_id': meta.empleado_id.id,
+        #         'evaluator': meta.evaluator.id,
+        #         'date_valid': meta.meta_id.date,
+        #         'point_meta': meta.point_meta,
+        #         'str_date': self.mes_activo
+        #     }
+        #     self.env['hr.metas.asignadas'].create(vals)
+        #     self.sudo().write({
+        #         'planeadas_ids': [(2, item)],
+        #     })
     
-    def date_str(self, dates):
-        igual = []
-        dif1 = []
-        dif2 = []
-        for item in dates:
-            try:
-                init = item[0].strftime('%B del %Y')
-                end = item[1].strftime('%B del %Y')
-                if init==end:
-                    igual.append(item[0])
-                else:
-                    if item[0].day >= 20:
-                        dif1.append(item[1])
-                    else:
-                        dif2.append(item[0])
-            except :
-                pass
-        if len(igual) >= len(dif1) and len(igual) >= len(dif2):
-            return igual[0]
-        elif len(dif1) >= len(igual) and len(dif1) >= len(dif2):
-            return dif1[0]
-        else:
-            return dif2[0]
             
             
 
     def create_exta_amonestacion(self):
+        today=datetime.today()
         type_meta = self.env.context.get('type_meta')
         metas_id = self.env['hr.metas']
         meta_id = metas_id.search(
@@ -250,7 +308,7 @@ class Empleado(models.Model):
                 'advance': "Puntos Extra" if type_meta == 'extra' else "Amonestación",
                 'reapet': False,
                 'point_meta': 0,
-                'date': datetime.today(),
+                'date': today,
                 'negative': False if type_meta == 'extra' else True,
             }
             id_meta = metas_id.create(vals)
@@ -260,7 +318,7 @@ class Empleado(models.Model):
             'meta_id': id_meta.id,
             'empleado_id': self.id,
             'evaluator': evaluator.id,
-            'date_valid': datetime.today()
+            'date_valid': today
         })
         field = "invisible_extra" if type_meta == 'extra' else "invisible_amonestacion"
         val = {}
@@ -337,6 +395,12 @@ class Empleado(models.Model):
             self.id, email_values=email_values, force_send=True)
         return True
     
+    @api.model
+    def create(self, vals):
+        vals['saved'] = True
+        res = super(Empleado, self).create(vals)
+        return res
+    
     @api.multi
     def write(self, vals):
         try:
@@ -350,6 +414,8 @@ class Empleado(models.Model):
                             })
         except:
             pass
+        
+        vals['saved'] = True
         res = super(Empleado, self).write(vals)
         return res
     
@@ -404,13 +470,14 @@ class MetaAsignadadefault(models.Model):
     
     def assign_evaluator(self):
         evaluadores = [206,229,229,False]
-        i = 1
-        for item in evaluadores: 
-            metas = self.env['hr.metas.asignadas.default'].search([('meta_id','=',i)])
+        norma = self.env['hr.metas.default'].search([])
+        i = 0
+        for j in norma:     
+            metas = self.env['hr.metas.asignadas.default'].search([('meta_id','=',j.id)])
             for meta in metas:
-                if item:
+                if evaluadores[i]:
                     meta.write({
-                        'evaluator': item
+                        'evaluator': evaluadores[i]
                     })
                 else:
                     meta.write({
@@ -440,19 +507,15 @@ class MetaAsignada(models.Model):
         self.date = datetime.today()
         
     @api.one
-    def _date_str(self):
-        try:
-            init = self.date_valid.strftime('%B del %Y')
-            end = self.meta_id.date_max.strftime('%B del %Y')
-            if init==end:
-                self.date_str = init
-            else:
-                if self.date_valid.day >= 20:
-                    self.date_str = end
-                else:
-                    self.date_str = init
-        except :
-            pass
+    def _evaluator_colaborator(self):
+        user = self.env.user
+        user_employee = self.evaluator.sudo().user_id
+        print("////////////",user.id == user_employee.id,"/////////////")
+        if user.id == user_employee.id:
+            self.evaluator_colaborator = True
+        else:
+            self.evaluator_colaborator = False
+            
         
         
     name = fields.Char("Meta", compute=_name_assign)
@@ -465,9 +528,10 @@ class MetaAsignada(models.Model):
     advance = fields.Text("Avances", readonly=True)
     remark = fields.Text("Observaciones", readonly=True)
     date = fields.Datetime("Fecha actual", compute=_current_date)
-    date_str = fields.Char("Meta de", compute=_date_str)
+    date_str = fields.Char("Meta de")
     date_end = fields.Date("Fecha de evaluación", readonly=True)
     date_valid = fields.Date("Fecha de asignación",readonly=True)
+    evaluator_colaborator = fields.Boolean(compute=_evaluator_colaborator)
     state = fields.Selection([
         ('draft', 'Asignada'),
         ('valid', 'En avances'),
@@ -570,6 +634,26 @@ class MetaPlaneadas(models.Model):
     evaluator = fields.Many2one(
         "hr.employee", "Evaluador", domain=_active_id, default=_define_user)
     point_meta = fields.Float("Puntaje", readonly=True)
+    
+    def assign_meta(self):
+        if self.empleado_id.check_availability(self.point_meta):
+            today = datetime.today()
+            vals = {
+                'meta_id': self.meta_id.id,
+                'empleado_id': self.empleado_id.id,
+                'evaluator': self.evaluator.id,
+                'date_valid': today,
+                'point_meta': self.point_meta,
+                'date_str': self.empleado_id.mes_activo.name
+            }
+            print("//////////////",vals,"//////////////////")
+            self.env['hr.metas.asignadas'].create(vals)
+            self.empleado_id.sudo().write({
+                'planeadas_ids': [(2, self.id)],
+            })
+        else:
+            raise Warning(
+                f"El Empleado {self.empleado_id.name} ya no tiene puntos disponibles para asignarle una meta.")
 
 
 class ResultadosNormas(models.Model):
@@ -647,7 +731,7 @@ class ResultadosNormas(models.Model):
     name = fields.Many2one("hr.employee", "Empleado", readonly=True)
     team = fields.Char("Equipo")
     date = fields.Date("Fecha")
-    str_date = fields.Char("Metas de:", compute=_str_date)
+    str_date = fields.Char("Metas de:")
     metas_ids = fields.One2many("hr.metas.resultados", "resultado_id")
     normas_ids = fields.One2many("hr.metas.resultados.default", "resultado_id")
     total_points = fields.Float("Total Puntos", default=100)

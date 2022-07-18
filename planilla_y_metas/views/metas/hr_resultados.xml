@@ -4,7 +4,7 @@
         <record model="ir.ui.view" id="hr_resultados_tree">
             <field name="name">hr.resultados.tree</field>
             <field name="model">hr.resultados</field>
-            <field name="arch" type="xml">
+            <field name="arch" type="xml"> 
                 <tree create="0" delete="0">
                     <field name="name"/>
                     <field name="str_date"/>
@@ -20,7 +20,7 @@
                 <form create="0" edit="0" delete="0">
                     <header>
                         <button string="Enviar resultados" name="send_email" type="object" class="oe_highlight"/>
-                        <button string="Arreglar fecha" groups="planilla_y_metas.admin_functions" name="fixed_dates" type="object" />
+                        <!-- <button string="Arreglar fecha" groups="planilla_y_metas.admin_functions" name="fixed_dates" type="object" /> -->
                     </header>
                     <sheet>
                         <group>
@@ -99,7 +99,10 @@
             <field name="model">hr.resultados</field>
             <field name="arch" type="xml">
                 <search>
-                    <filter name="last_month" string="Ultimo mes" domain="[('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <!-- <filter name="last_month" string="Ultimo mes" domain="[('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"/> -->
+                    <field name="str_date" />
+                    <field name="name" />
+                    <field name="team" />
                     <filter name="team" string="Equipo" icon="fa-users" context="{'group_by':'team'}" />
                 </search>
             </field>

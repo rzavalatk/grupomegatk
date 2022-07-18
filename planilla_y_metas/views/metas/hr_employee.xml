@@ -6,7 +6,7 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='toggle_active']" position="after" >
+                <xpath expr="//button[@name='toggle_active']" position="after">
                     <script type="text/javascript" src="/planilla_y_metas/static/src/js/xls.js"/>
                     <button name="go_to_assign_metas" type="object" class="oe_stat_button" icon="fa-check">
                         Evaluar metas
@@ -17,10 +17,6 @@
                 </xpath>
 
                 <xpath expr="//header" position="inside">
-                    <button string="Enviar resultados" states="done" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_results" type="object" />
-                    <button string="Enviar metas por email" confirm="Se van a envíar las metas por correo al empleado, ¿Desea continuar?" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_mentas" type="object" />
-                    <button string="Asignar meta" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object" />
-                    <button string="Planificar meta" groups="planilla_y_metas.planilla_manager" name="%(planilla_y_metas.hr_meta_planeada_wizard_action)d" type="action" />
                     <!-- <button string="cambiar a evaluada" groups="planilla_y_metas.planilla_manager" name="state_done" type="object" /> -->
                     <!-- <button string="cambiar a proceso" groups="planilla_y_metas.planilla_manager" name="state_non" type="object" /> -->
                 </xpath>
@@ -30,16 +26,28 @@
                         <header>
                             <field name="invisible_extra" invisible="1" />
                             <field name="invisible_amonestacion" invisible="1" />
-                            <button string="Puntos extra" attrs="{'invisible': ['|',('invisible_extra','=',True),('state','=','procces')]}" context="{'type_meta': 'extra'}" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="create_exta_amonestacion" type="object" />
+                            <button string="Asignar meta" class="oe_highlight" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object" />
+                            <button string="Enviar resultados" states="done" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_results" type="object" />
+                            <button string="Enviar metas por email" confirm="Se van a envíar las metas por correo al empleado, ¿Desea continuar?" groups="planilla_y_metas.planilla_manager" name="send_mentas" type="object" />
+                            <button string="Puntos extra" attrs="{'invisible': ['|',('invisible_extra','=',True),('state','=','procces')]}" context="{'type_meta': 'extra'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
                             <button string="Amonestación" attrs="{'invisible': ['|',('invisible_amonestacion','=',True),('state','=','procces')]}" context="{'type_meta': 'amonestacion'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
                             <button string="Evaluadas" states="procces" groups="planilla_y_metas.planilla_manager" name="listen" type="object" />
                             <button string="Exportar metas" groups="planilla_y_metas.planilla_manager" id="export" />
                             <field name="state" widget="statusbar" />
                             <field name="id" invisible="1" />
                         </header>
+                        <group>
+                            <label for="mes_activo" string="Mes de"/>
+                            <h1>
+                                <b>
+                                    <field name="saved" invisible="1"/>
+                                    <field name="mes_activo" widget='selection' attrs="{'readonly': [('saved', '=', True)]}" />
+                                </b>
+                            </h1>
+                        </group>
                         <h3>
                             <b>
-                            Normas
+                                Normas
                             </b>
                         </h3>
                         <field name="normas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
@@ -93,12 +101,16 @@
                         </div>
                     </page>
                     <page string="Metas planificadas" groups="planilla_y_metas.planilla_manager">
+                        <header>
+                            <button string="Planificar meta" groups="planilla_y_metas.planilla_manager" name="%(planilla_y_metas.hr_meta_planeada_wizard_action)d" type="action" />
+                        </header>
                         <field name="planeadas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
                             <tree create="0" delete="0">
                                 <field name="meta_id"/>
                                 <field name="date"/>
                                 <field name="evaluator"/>
                                 <field name="point_meta"/>
+                                <button string="Asignar meta" groups="planilla_y_metas.planilla_manager" name="assign_meta" type="object" />
                             </tree>
                         </field>
                     </page>

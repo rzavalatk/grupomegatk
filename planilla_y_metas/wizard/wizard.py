@@ -188,6 +188,7 @@ class AssignMeta(models.TransientModel):
         return True
 
     def create_meta(self, current):
+        today=datetime.today()
         ids = [current['active_id']]
         for item in self.mates:
             ids.append(item.id)
@@ -200,18 +201,23 @@ class AssignMeta(models.TransientModel):
                 'tipo_meta': self.tipo_meta,
                 'date_max': self.date_max,
                 'reapet': self.reapet,
-                'date': datetime.today(),
+                'date': today,
             }
             id_meta = self.env['hr.metas'].create(vals)
             asign_meta = self.env['hr.metas.asignadas']
             team = self.env['hr.metas.team']
             for employee in hr:
+                date_str = self.env["hr.metas.mes"].search([('employee_id','=',employee.id)])
+                mes = {}
+                for item in date_str:
+                     mes = item
                 asign_meta.create({
                     'meta_id': id_meta.id,
                     'empleado_id': employee.id,
                     'evaluator': self.evaluator.id,
-                    'date_valid': datetime.today(),
+                    'date_valid': today,
                     'point_meta': self.point_meta,
+                    'date_str': mes.name
                 })
                 team.create({
                     'meta_id': id_meta.id,

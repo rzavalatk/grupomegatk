@@ -22,7 +22,9 @@
             <field name="arch" type="xml">
                 <form create="0" edit="0">
                     <header>
+                        <field name="evaluator_colaborator" invisible="1" />
                         <button string="Evaluar" groups="planilla_y_metas.planilla_manager" class="oe_highlight" states="draft,valid" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
+                        <!--<button string="Evaluar como colaborador" attrs="{'invisible': [('evaluator_colaborator','=',False)]}" groups="planilla_y_metas.planilla_colaborator" class="oe_highlight" states="draft,valid" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" /> -->
                         <button string="Editar puntaje" groups="planilla_y_metas.planilla_manager" states="draft,valid" name="%(planilla_y_metas.hr_metas_puntaje_action)d" type="action" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" />
                         <button string="Re-evaluar" groups="planilla_y_metas.planilla_manager" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id, 'active_model': 'hr.metas.asignadas.default'}" type="action" />
                         <button string="Ingresar avance" groups="planilla_y_metas.planilla_colaborator" states="draft" name="%(planilla_y_metas.hr_metas_avance_action)d" context="{'active_id': id}" type="action" />

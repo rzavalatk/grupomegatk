@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hr_metas_mes_tree">
+            <field name="name">hr.metas.mes.tree</field>
+            <field name="model">hr.metas.mes</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_metas_mes_form">
+            <field name="name">hr.metas.mes.form</field>
+            <field name="model">hr.metas.mes</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Anterior" name="back" type="object" class="oe_highlight"/>
+                        <button string="Siguiente" name="next" type="object" class="oe_highlight"/>
+                        <button string="Asignar a todos" name="assign_all" groups="planilla_y_metas.admin_functions" type="object" />
+                        <button string="Asignar a resultados" name="assign_all_result" groups="planilla_y_metas.admin_functions" type="object" />
+                        <button string="Rescribir asignadas" name="rescribir_asignadas" groups="planilla_y_metas.admin_functions" type="object" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <h1>
+                                    <field name="name" />
+                                </h1>
+                            </group>
+                            <group>
+                                <field name="employee_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_metas_mes">
+            <field name="name">Mes activo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.metas.mes</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Mes activo" id="menu_hr_metas_mes" sequence = "8" groups="planilla_y_metas.admin_functions" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_mes"/>
+
+    </data>
+</odoo>
