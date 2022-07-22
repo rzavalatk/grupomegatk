@@ -12,10 +12,10 @@
 		  	<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='general_information']/group[1]" position="after">
 		    	<group name="marca">
 		    	  	<group name="studio_group_iZx2r_left">
-		    	  		<field name="marca_id" domain="[('company_id', '=', company_id)]"/>
-		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","not in",8]]}'/>
-		     	   		<field name="x_ingresome" attrs='{"invisible": [["company_id","not in",9]]}'/>
-		     	   		<field name="x_ingresonic" attrs='{"invisible": [["company_id","not in",12]]}'/>
+		    	  		<field name="marca_id"  required="1" domain="[('company_id', '=', company_id)]"/>
+		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","not in",8]], "required": [["company_id","in",8]]}'/>
+		     	   		<field name="x_ingresome" attrs='{"invisible": [["company_id","not in",9]], "required": [["company_id","in",9]]}'/>
+		     	   		<field name="x_ingresonic" attrs='{"invisible": [["company_id","not in",12]], "required": [["company_id","in",12]]}'/>
 		    		</group>
 		    	  	<group name="tipo">
 		        		<field name="x_tipo" attrs='{"invisible": [["company_id","not in",8]]}'/>
