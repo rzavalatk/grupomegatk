@@ -9,6 +9,9 @@
 			<!-- <xpath expr="//field[@name='user_id']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath> -->
+			<xpath expr="//button[@name='action_invoice_draft']" position="after">
+				<button string="borrador" groups="sign_orders.group_admins" name="go_draft" type="object" />
+			</xpath>
 			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[2]/field[@name='origin']" position="after">
   			<field name="x_comision"/>
 			</xpath>

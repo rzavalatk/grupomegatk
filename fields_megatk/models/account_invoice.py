@@ -7,6 +7,13 @@ class Account_invoice(models.Model):
 
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     
+    
+    def go_draft(self):
+        self.write({
+            'state': 'draft'
+        })
+    
+    
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
