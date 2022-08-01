@@ -52,7 +52,7 @@
 					     <group name="soporte">
 					        <group name="data1">
 					        	<field name="tipo_soporte"/>
-					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        	<field name="proposito" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        </group>	
@@ -101,7 +101,7 @@
 					     <group name="soporte">
 					        <group name="data1">
 					        	<field name="tipo_soporte"/>
-					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        	<field name="proposito" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        </group>	
@@ -109,11 +109,11 @@
 					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
 					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
-					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
+					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
+					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        </group>	
 					    </group>
-					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'>
+					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'>
 					        <group name="data3">
 					        	<field name="marca_id"/>
 					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
