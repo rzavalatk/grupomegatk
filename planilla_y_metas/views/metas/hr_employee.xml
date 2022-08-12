@@ -23,80 +23,163 @@
 
                 <xpath expr="//page[@name='hr_settings']" position="after">
                     <page string="Metas">
-                        <header>
-                            <field name="invisible_extra" invisible="1" />
-                            <field name="invisible_amonestacion" invisible="1" />
-                            <button string="Asignar meta" class="oe_highlight" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object" />
-                            <button string="Enviar resultados" states="done" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_results" type="object" />
-                            <button string="Enviar metas por email" confirm="Se van a envíar las metas por correo al empleado, ¿Desea continuar?" groups="planilla_y_metas.planilla_manager" name="send_mentas" type="object" />
-                            <button string="Puntos extra" attrs="{'invisible': ['|',('invisible_extra','=',True),('state','=','procces')]}" context="{'type_meta': 'extra'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
-                            <button string="Amonestación" attrs="{'invisible': ['|',('invisible_amonestacion','=',True),('state','=','procces')]}" context="{'type_meta': 'amonestacion'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
-                            <button string="Evaluadas" states="procces" groups="planilla_y_metas.planilla_manager" name="listen" type="object" />
-                            <button string="Exportar metas" groups="planilla_y_metas.planilla_manager" id="export" />
-                            <field name="state" widget="statusbar" />
-                            <field name="id" invisible="1" />
-                        </header>
-                        <group>
-                            <label for="mes_activo" string="Mes de"/>
-                            <h1>
-                                <b>
-                                    <field name="saved" invisible="1"/>
-                                    <field name="mes_activo" widget='selection' attrs="{'readonly': [('saved', '=', True)]}" />
-                                </b>
-                            </h1>
-                        </group>
-                        <h3>
-                            <b>
-                                Normas
-                            </b>
-                        </h3>
-                        <field name="normas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
-                            <tree create="0" delete="0">
-                                <field name="meta_id"/>
-                                <field name="advance"/>
-                                <field name="point_meta"/>
-                                <field name="point_assign"/>
-                            </tree>
-                        </field>
-                        <h3>
-                            <b>
-                                Estrategicas y Apoyo extra
-                            </b>
-                        </h3>
-                        <field name="metas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
-                            <tree create="0">
-                                <field name="meta_id"/>
-                                <field name="advance"/>
-                                <field name="point_meta"/>
-                                <field name="point_assign"/>
-                            </tree>
-                        </field>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <div style="width: 50%">
+                        <group groups="base.group_system">
+                            <div class="oe_button_box" style="padding-top: 8px;" name="button_box">
+                                <label for="toggle_active_meta" string="Metas: "/>
+                                <button name="toggle_active_meta" type="object" style="text-align:center" class="oe_stat_button">
+                                    <field name="active_metas" widget="boolean_button" options='{"terminology": {
+                                        "string_true": " Activas",
+                                        "hover_true": " Inactivar",
+                                        "string_false": " Inactivas",
+                                        "hover_false": " Activar"
+                                    }}'/>
+                                </button>
                             </div>
-                            <div style="display: flex;">
-                                <h3 style="padding: 10px">
+                        </group>
+                        <div attrs="{'invisible': [('active_metas','=',False)]}">
+                            <header>
+                                <field name="invisible_extra" invisible="1" />
+                                <field name="invisible_amonestacion" invisible="1" />
+                                <button string="Asignar meta" class="oe_highlight" groups="planilla_y_metas.planilla_manager" name="open_wizard" type="object"  />
+                                <button string="Enviar resultados" states="done" groups="planilla_y_metas.planilla_manager" class="oe_highlight" name="send_results" type="object" />
+                                <button string="Enviar metas por email" confirm="Se van a envíar las metas por correo al empleado, ¿Desea continuar?" groups="planilla_y_metas.planilla_manager" name="send_mentas" type="object" />
+                                <button string="Puntos extra" attrs="{'invisible': ['|',('invisible_extra','=',True),('state','=','procces')]}" context="{'type_meta': 'extra'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
+                                <button string="Amonestación" attrs="{'invisible': ['|',('invisible_amonestacion','=',True),('state','=','procces')]}" context="{'type_meta': 'amonestacion'}" groups="planilla_y_metas.planilla_manager" name="create_exta_amonestacion" type="object" />
+                                <button string="Evaluadas" states="procces" groups="planilla_y_metas.planilla_manager" name="listen" type="object" />
+                                <button string="Exportar metas" groups="planilla_y_metas.planilla_manager" id="export" />
+                                <field name="state" widget="statusbar" />
+                                <field name="id" invisible="1" />
+                            </header>
+                            <group>
+                                <label for="mes_activo" string="Mes de"/>
+                                <h1>
                                     <b>
+                                        <field name="saved" invisible="1"/>
+                                        <field name="mes_activo" widget='selection' attrs="{'readonly': [('saved', '=', True)]}" />
+                                    </b>
+                                </h1>
+                            </group>
+                            <h3>
+                                <b>
+                                Normas
+                                </b>
+                            </h3>
+                            <field name="normas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
+                                <tree create="0" delete="0">
+                                    <field name="meta_id"/>
+                                    <field name="advance"/>
+                                    <field name="point_meta"/>
+                                    <field name="point_assign"/>
+                                </tree>
+                            </field>
+                            <h3>
+                                <b>
+                                Estrategicas y Apoyo extra
+                                </b>
+                            </h3>
+                            <field name="metas_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
+                                <tree create="0">
+                                    <field name="meta_id"/>
+                                    <field name="advance"/>
+                                    <field name="point_meta"/>
+                                    <field name="point_assign"/>
+                                </tree>
+                            </field>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <div style="width: 50%">
+                                </div>
+                                <div style="display: flex;">
+                                    <h3 style="padding: 10px">
+                                        <b>
                                     Total
-                                    </b>
-                                </h3>
-                                <h2>
-                                    <b>
-                                        <field name="total_points" nolabel="1" style="padding: 10px"/>
+                                        </b>
+                                    </h3>
+                                    <h2>
+                                        <b>
+                                            <field name="total_points" nolabel="1" style="padding: 10px"/>
                                     %
-                                    </b>
-                                </h2>
-                                <h3 style="padding: 10px">
-                                    <b>
+                                        </b>
+                                    </h2>
+                                    <h3 style="padding: 10px">
+                                        <b>
                                     Total asignado
-                                    </b>
-                                </h3>
-                                <h2>
-                                    <b>
-                                        <field name="total_assign" nolabel="1" style="padding: 10px"/>
+                                        </b>
+                                    </h3>
+                                    <h2>
+                                        <b>
+                                            <field name="total_assign" nolabel="1" style="padding: 10px"/>
                                     %
+                                        </b>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div attrs="{'invisible': [('active_metas','=',True)]}">
+                            <header>
+                                <field name="state" widget="statusbar" />
+                            </header>
+                            <group>
+                                <label for="mes_activo" string="Mes de"/>
+                                <h1>
+                                    <b>
+                                        <field name="saved" invisible="1"/>
+                                        <field name="mes_activo" widget='selection' attrs="{'readonly': [('saved', '=', True)]}" />
                                     </b>
-                                </h2>
+                                </h1>
+                            </group>
+                            <h3>
+                                <b>
+                                Normas
+                                </b>
+                            </h3>
+                            <field name="normas_ids" readonly="1" style="pointer-events:none;" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
+                                <tree create="0" delete="0">
+                                    <field name="meta_id"/>
+                                    <field name="advance"/>
+                                    <field name="point_meta"/>
+                                    <field name="point_assign"/>
+                                </tree>
+                            </field>
+                            <h3>
+                                <b>
+                                Estrategicas y Apoyo extra
+                                </b>
+                            </h3>
+                            <field name="metas_ids" readonly="1" style="pointer-events:none;" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
+                                <tree create="0">
+                                    <field name="meta_id"/>
+                                    <field name="advance"/>
+                                    <field name="point_meta"/>
+                                    <field name="point_assign"/>
+                                </tree>
+                            </field>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <div style="width: 50%">
+                                </div>
+                                <div style="display: flex;">
+                                    <h3 style="padding: 10px">
+                                        <b>
+                                    Total
+                                        </b>
+                                    </h3>
+                                    <h2>
+                                        <b>
+                                            <field name="total_points" nolabel="1" style="padding: 10px"/>
+                                    %
+                                        </b>
+                                    </h2>
+                                    <h3 style="padding: 10px">
+                                        <b>
+                                    Total asignado
+                                        </b>
+                                    </h3>
+                                    <h2>
+                                        <b>
+                                            <field name="total_assign" nolabel="1" style="padding: 10px"/>
+                                    %
+                                        </b>
+                                    </h2>
+                                </div>
                             </div>
                         </div>
                     </page>

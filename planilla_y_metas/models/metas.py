@@ -150,7 +150,13 @@ class Empleado(models.Model):
     ], string="Estado", default='procces')
     metas_binary = fields.Binary("Metas",filename="metas.xls")
     mes_activo = fields.Many2one("hr.metas.mes","Mes activo")
+    active_metas = fields.Boolean("Activar metas",default=True)
     saved = fields.Boolean(default=False)
+    
+    def toggle_active_meta(self):
+        self.write({
+            'active_metas': False if self.active_metas else True
+        })
 
     def go_to_resultados(self):
         return {
@@ -509,7 +515,6 @@ class MetaAsignada(models.Model):
     def _evaluator_colaborator(self):
         user = self.env.user
         user_employee = self.evaluator.sudo().user_id
-        print("////////////",user.id == user_employee.id,"/////////////")
         if user.id == user_employee.id:
             self.evaluator_colaborator = True
         else:
@@ -645,7 +650,6 @@ class MetaPlaneadas(models.Model):
                 'point_meta': self.point_meta,
                 'date_str': self.empleado_id.mes_activo.name
             }
-            print("//////////////",vals,"//////////////////")
             self.env['hr.metas.asignadas'].create(vals)
             self.empleado_id.sudo().write({
                 'planeadas_ids': [(2, self.id)],
