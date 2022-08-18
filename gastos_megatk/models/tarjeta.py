@@ -124,5 +124,5 @@ class LineaGastos(models.Model):
     comprobante = fields.Char("Factura/Comprobante")
     account_id = fields.Many2one('account.account', 'Cuenta', domain="[('company_id', '=', parent.company_id)]")
     analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica", domain="[('company_id', '=', parent.company_id)]")
-    partner_id = fields.Many2one('res.partner', 'Empresa', domain="[('company_id', '=', parent.company_id)]")
+    partner_id = fields.Many2one('res.partner', 'Empresa o Persona', domain="[('company_id', '=', parent.company_id)]")
     monto = fields.Float("Monto a liquidar")
