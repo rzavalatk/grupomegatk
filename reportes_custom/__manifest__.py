@@ -19,6 +19,7 @@
 
     # always loaded
     'data': [
+        'reports/baecode_products_stickers.xml',
         'reports/reports.xml',
         'reports/factura_custom_print_view.xml',
         'reports/factura_custom_printe_view.xml',

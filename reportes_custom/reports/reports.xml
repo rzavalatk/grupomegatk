@@ -81,7 +81,19 @@
 			file="reportes_custom.stock_picking_custom_print_view_pos"
 			report_type="qweb-pdf"
 			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_pos"/>
+			paperformat="formatos_papel_mega.report_paperformat_pos"
+		/>
+
+		<report
+            id="report_product_product_barcode_custom"
+            string="Código de barras del producto - A7 (PDF)"
+            model="product.template"
+            report_type="qweb-pdf"
+            name="reportes_custom.report_productbarcode_sticker"
+            file="reportes_custom.report_productbarcode_sticker"
+            print_report_name="'Products barcode - %s' % (object.name)"
+			paperformat="report_sticker_barcode_2"
+        />
 
 	</data>
 </odoo>
