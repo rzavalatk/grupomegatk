@@ -41,6 +41,9 @@
 				<button name="liquidar_gastos" type="object" string="Liquidar Gastos" states="desembolso" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>
 				<button name="cancelar_liquidados" type="object" string="Cancelar Liquidación" states="liquidado" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>		
 				<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Desembolso" states="aprobado" class="oe_highlight"/>
+				<!--  -->
+				<button name="rechazar_gastos_admin" type="object" string="Rechazar" groups="planilla_y_metas.admin_functions"/>
+				<!--  -->
 				<field name="state" widget="statusbar" nolabel="1"/>	
 			</header>
 			<sheet>

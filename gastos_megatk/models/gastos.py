@@ -110,6 +110,9 @@ class LiquidacionGastos(models.Model):
     @api.multi
     def rechazar_gastos(self):
         self.write({'state': 'rechazado'})
+        
+    def rechazar_gastos_admin(self):
+        self.rechazar_gastos()
 
     @api.multi
     def aprobar_gastos(self):
