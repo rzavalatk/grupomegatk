@@ -13,6 +13,9 @@ odoo.define(
         var self = this;
         self._super($node);
         self.$buttons
+          .find("#camaron_cuatrero")
+          .click(self.proxy("generate_report_camaron_cuatrero"));
+        self.$buttons
           .find("#inside_marcking")
           .click(self.proxy("tree_view_action"));
         self.$buttons
@@ -46,6 +49,17 @@ odoo.define(
           ._rpc({
             model: "hr.employee.markings",
             method: "open_generate_hours_xtra",
+            args: [],
+          })
+          .then(function (e) {
+            self.do_action(e);
+          });
+      },generate_report_camaron_cuatrero: function () { 
+        var self = this;
+        self
+          ._rpc({
+            model: "hr.employee.markings",
+            method: "open_generate_camaron_cuatrero",
             args: [],
           })
           .then(function (e) {
