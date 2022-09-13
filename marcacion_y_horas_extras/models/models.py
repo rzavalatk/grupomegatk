@@ -71,7 +71,7 @@ class ModuleMarkings(models.Model):
     
     
     def filter_camaron_cuatrero(self,report):
-        ref_hour_enter = time(8,6,0)
+        ref_hour_enter = time(8,7,0)
         ref_hour_exit = time(17,6,0)
         hour = self.hour.split(':')
         t1 = self._arr_to_time(hour)
