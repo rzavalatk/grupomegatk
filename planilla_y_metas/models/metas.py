@@ -86,6 +86,7 @@ class Mes(models.Model):
 
 class Empleado(models.Model):
     _inherit = "hr.employee"
+    
 
     def _suma_points(self):
         total = 0
@@ -144,6 +145,10 @@ class Empleado(models.Model):
         "Total Puntos asignados", compute=_total_assign)
     invisible_extra = fields.Boolean(default=False)
     invisible_amonestacion = fields.Boolean(default=False)
+    state_email = fields.Selection([
+        (0, 'No envíado'),
+        (1, 'Envíado'),
+    ], string="Estado", default=0)
     state = fields.Selection([
         ('procces', 'En proceso'),
         ('done', 'Evaluadas'),
@@ -264,13 +269,15 @@ class Empleado(models.Model):
                 self.sudo().write({
                     'state': 'procces',
                     'invisible_extra': False,
-                    'invisible_amonestacion': False
+                    'invisible_amonestacion': False,
+                    'state_email': 0
                 })
             else:
                 self.sudo().write({
                     'metas_ids': [(2, meta.id)],
                     'state': 'procces',
                     'invisible_extra': False,
+                    'state_email': 0,
                     'invisible_amonestacion': False
                 })
         self.mes_activo.next()
@@ -398,6 +405,9 @@ class Empleado(models.Model):
         }
         template.with_context(url="https://grupomegatk.odoo.com/web#id=${self.id}&amp;action=426&amp;model=hr.employee&amp;view_type=form&amp;menu_id=315").send_mail(
             self.id, email_values=email_values, force_send=True)
+        self.sudo().write({
+            'state_email': 1
+        })
         return True
     
     @api.model
@@ -519,8 +529,11 @@ class MetaAsignada(models.Model):
             self.evaluator_colaborator = True
         else:
             self.evaluator_colaborator = False
-            
-        
+    
+    
+    @api.one
+    def _date_str(self):        
+        self.date_str = self.empleado_id.sudo().mes_activo.name
         
     name = fields.Char("Meta", compute=_name_assign)
     meta_id = fields.Many2one("hr.metas", "Meta", readonly=True)
@@ -532,7 +545,7 @@ class MetaAsignada(models.Model):
     advance = fields.Text("Avances", readonly=True)
     remark = fields.Text("Observaciones", readonly=True)
     date = fields.Datetime("Fecha actual", compute=_current_date)
-    date_str = fields.Char("Meta de")
+    date_str = fields.Char("Meta de",compute=_date_str)
     date_end = fields.Date("Fecha de evaluación", readonly=True)
     date_valid = fields.Date("Fecha de asignación",readonly=True)
     evaluator_colaborator = fields.Boolean(compute=_evaluator_colaborator)
@@ -541,6 +554,11 @@ class MetaAsignada(models.Model):
         ('valid', 'En avances'),
         ('done', 'Evaluada'),
     ], string="Estado", default='draft')
+
+
+    def delete_meta(self):
+        self.unlink()
+
 
     @api.multi
     def write(self, vals):
@@ -648,7 +666,7 @@ class MetaPlaneadas(models.Model):
                 'evaluator': self.evaluator.id,
                 'date_valid': today,
                 'point_meta': self.point_meta,
-                'date_str': self.empleado_id.mes_activo.name
+                # 'date_str': self.empleado_id.mes_activo.name
             }
             self.env['hr.metas.asignadas'].create(vals)
             self.empleado_id.sudo().write({
