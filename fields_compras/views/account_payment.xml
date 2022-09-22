@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_payment_region" model="ir.ui.view">
+            <field name="name">account.payment.region</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="region" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <data>
+        <record id="account_payment_invoice_region" model="ir.ui.view">
+            <field name="name">account.payment.invoice.region</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="region" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
