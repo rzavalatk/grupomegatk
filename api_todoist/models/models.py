@@ -63,6 +63,7 @@ class MailActivity(models.Model):
     @api.model
     def create(self, values):
         try:
+            model = self.env['ir.model'].browse(values['res_model_id']).model
             users = self.env['todoist.users'].search(
                 [('name', '=', values['user_id'])])
             user = {}
@@ -71,7 +72,7 @@ class MailActivity(models.Model):
                     user = item
             project = self.env['todoist.users'].browse(user.id).get_id_projects()
             vals = {
-                "content": values['summary'] + " - Ticket: "+ str(values['res_id']),
+                "content": values['summary'] + " - Ticket: "+ str(values['res_id']) if model == 'crm.lead' else values['summary'],
                 "due_lang": "es",
                 "due_date": values['date_deadline'],
                 "project_id": project
