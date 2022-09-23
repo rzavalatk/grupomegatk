@@ -25,6 +25,14 @@ class ModelCompras(models.Model):
     weight = fields.Float("Peso total")
     code_reference = fields.Char("Código de Referencia")
     origin_city = fields.Char("Ciudad de origen")
+    
+    
+class Productos(models.Model):
+    _inherit = 'product.template'
+
+    ala = fields.Char("Ala")
+    estante = fields.Char("Estante")
+    nivel = fields.Char("Nivel")
 
 
 class ModelImport(models.Model):
