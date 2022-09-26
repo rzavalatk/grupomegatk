@@ -242,8 +242,6 @@ class HrPermisos(models.Model):
 		self.write({'state': 'denegado'})
 		self.env.user.notify_danger(message='Permiso denegado')
 
-	def back_draft(self):
-		self.write({'state': 'draft'})
 
 	def cancelar(self):
 		dias, horas, minutos_resultante = self.vacaciones_restantes('suma')
@@ -253,6 +251,11 @@ class HrPermisos(models.Model):
 							'permisos_horas': horas,
 							'permisos_minutos': minutos_resultante})
 		self.env.user.notify_danger(message='Permiso cancelado')
+
+	def back_draft(self):
+		self.cancelar()
+		self.write({'state': 'draft'})
+
 
 	def unlink(self):
 		for rec in self:
