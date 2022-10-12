@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import Warning
+
 
 class CustomResConfig(models.TransientModel):
     _inherit = 'res.config.settings'
@@ -51,6 +53,14 @@ class Consults(models.Model):
     col = fields.Char("Columnas")
     query = fields.Text("Consulta")
     
+    def execute_query(self):
+        try:
+            self.env.cr.execute(self.query)
+            return True
+        except Exception as inst:
+            raise Warning('Error en la consulta: '+inst.args[0])
+
+        
     def generate_report(self):
         # id = self.env.user.company_id.id
         # sql = f"""

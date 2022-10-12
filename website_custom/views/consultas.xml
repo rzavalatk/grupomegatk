@@ -73,6 +73,7 @@
                     <header>
                         <field name="id" invisible="1" />
                         <button string="Generar reporte" id="generate_report" class="oe_highlight"/>
+                        <button string="Ejecutar consulta" name="execute_query" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <group>
