@@ -224,56 +224,59 @@ class Prestamos(models.Model):
             self.fecha_final = fecha_inicio
 
     def validar(self):
-        if self.monto_cxc < 0:
-            raise Warning(_('No se puede procesar el prestamo'))
-        if not self.name:
-            if self.tipo_prestamo == 'financiamiento':
-                if not self.sequence_id.id:
-                    obj_sequence = self.env["ir.sequence"].search(
-                        [('company_id', '=', self.company_id.id), ('name', '=', 'Financiamiento')])
-                    if not obj_sequence.id:
-                        values = {'name': 'Financiamiento',
-                                  'prefix': 'FINAN. ',
-                                  'company_id': self.company_id.id,
-                                  'padding': 6, }
-                        sequence_id = obj_sequence.create(values)
-                    else:
-                        sequence_id = obj_sequence
-                    self.write({'sequence_id': sequence_id.id})
+        if int(self.tasa) > 0:
+            if self.monto_cxc < 0:
+                raise Warning(_('No se puede procesar el prestamo'))
+            if not self.name:
+                if self.tipo_prestamo == 'financiamiento':
+                    if not self.sequence_id.id:
+                        obj_sequence = self.env["ir.sequence"].search(
+                            [('company_id', '=', self.company_id.id), ('name', '=', 'Financiamiento')])
+                        if not obj_sequence.id:
+                            values = {'name': 'Financiamiento',
+                                    'prefix': 'FINAN. ',
+                                    'company_id': self.company_id.id,
+                                    'padding': 6, }
+                            sequence_id = obj_sequence.create(values)
+                        else:
+                            sequence_id = obj_sequence
+                        self.write({'sequence_id': sequence_id.id})
 
-                    new_name = self.sequence_id.with_context().next_by_id()
-                    self.write({'name': new_name})
+                        new_name = self.sequence_id.with_context().next_by_id()
+                        self.write({'name': new_name})
+                    else:
+                        self.write({'sequence_id': self.sequence_id.id})
+                        new_name = self.sequence_id.with_context().next_by_id()
+                        self.write({'name': new_name})
+                    self._financiamiento()
                 else:
-                    self.write({'sequence_id': self.sequence_id.id})
-                    new_name = self.sequence_id.with_context().next_by_id()
-                    self.write({'name': new_name})
-                self._financiamiento()
+                    if not self.sequence_id.id:
+                        obj_sequence = self.env["ir.sequence"].search(
+                            [('company_id', '=', self.company_id.id), ('name', '=', 'Prestamos')])
+                        if not obj_sequence.id:
+                            values = {'name': 'Prestamos',
+                                    'prefix': 'PER. ',
+                                    'company_id': self.company_id.id,
+                                    'padding': 6, }
+                            sequence_id = obj_sequence.create(values)
+                        else:
+                            sequence_id = obj_sequence
+                        self.write({'sequence_id': sequence_id.id})
+
+                        new_name = self.sequence_id.with_context().next_by_id()
+                        self.write({'name': new_name})
+                    else:
+                        self.write({'sequence_id': self.sequence_id.id})
+                        new_name = self.sequence_id.with_context().next_by_id()
+                        self.write({'name': new_name})
+                    self._personal()
             else:
-                if not self.sequence_id.id:
-                    obj_sequence = self.env["ir.sequence"].search(
-                        [('company_id', '=', self.company_id.id), ('name', '=', 'Prestamos')])
-                    if not obj_sequence.id:
-                        values = {'name': 'Prestamos',
-                                  'prefix': 'PER. ',
-                                  'company_id': self.company_id.id,
-                                  'padding': 6, }
-                        sequence_id = obj_sequence.create(values)
-                    else:
-                        sequence_id = obj_sequence
-                    self.write({'sequence_id': sequence_id.id})
-
-                    new_name = self.sequence_id.with_context().next_by_id()
-                    self.write({'name': new_name})
+                if self.tipo_prestamo == 'financiamiento':
+                    self._financiamiento()
                 else:
-                    self.write({'sequence_id': self.sequence_id.id})
-                    new_name = self.sequence_id.with_context().next_by_id()
-                    self.write({'name': new_name})
-                self._personal()
+                    self._personal()
         else:
-            if self.tipo_prestamo == 'financiamiento':
-                self._financiamiento()
-            else:
-                self._personal()
+            raise Warning(_('La Tasa no debe ser menor o igual a 0'))
 
     def _financiamiento(self):
         monto = self.monto_cxc or self.monto_cxp
@@ -330,6 +333,25 @@ class Prestamos(models.Model):
                     'cuota_prestamo': cuota,
                     'cuota_inicial': cuota + self.gasto_prestamo
                     })
+    
+    def _add_aporte_capital(self,monto,pago,date_pago):
+        cuotas_line = self.env["prestamos.cuotas"]
+        valores = {
+                'name': 'Cuota AC',
+                'cuotas_prestamo_id': self.id,
+                'cuota_prestamo': 0,
+                'cuota_interes': 0,
+                'cuota_capital': monto + pago,
+                'saldo': monto,
+                'pago': pago,
+                'interes_moratorio': 0,
+                'gastos': 0,
+                'fecha_pagado': date_pago,
+                'state': 'hecho',
+                'fecha_pago': None,
+                'res_partner_id': self.res_partner_id.id,
+            }
+        cuotas_line.create(valores)
 
     def _cuotas(self, monto, tasa, cuota, gasto, monto_atrasado):
         cuotas_ids = self.env["prestamos.cuotas"].search(
@@ -340,7 +362,7 @@ class Prestamos(models.Model):
             for cuotas in cuotas_ids:
                 if cuotas.state == 'draft':
                     cuotas.sudo().unlink()
-                else:
+                elif cuotas.name != 'Cuota AC':
                     x = x + 1
 
         obj_precio = self.env["prestamos.cuotas"]
@@ -354,7 +376,8 @@ class Prestamos(models.Model):
             year = year + 1
         while saldo > 0.1:
             interes = monto * tasa
-            saldo = monto + interes - cuota - monto_atrasado1
+            # saldo = monto + interes - cuota - monto_atrasado1
+            saldo = monto + interes - cuota
             mes = mes + 1
             if mes > 12:
                 mes = 1
@@ -404,6 +427,7 @@ class Prestamos(models.Model):
                 paymet_id.post()
                 tasa = self.tasa / 100
                 cuota2 = cuota.cuota_prestamo - cuota.gastos
+                self._add_aporte_capital(restante,monto,date)
                 self._cuotas(restante, tasa, cuota2, 0, cuota.interes_generado)
                 self.write({
                     'monto_restante': restante,
@@ -487,6 +511,11 @@ class Prestamos(models.Model):
 
     def back_draft(self):
         self.write({'state': 'draft'})
+        
+    def write(self,vals):
+        print("///////////////",vals,"////////////////")
+        return super(Prestamos, self).write(vals)
+        
 
     def unlink(self):
         for prestamo in self:

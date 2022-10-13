@@ -116,16 +116,17 @@ class PrestamosCuotas(models.Model):
                     'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
                 }   
         self.cuotas_prestamo_id.write(vals) 
-        capital_real = self.cuota_capital + self.cuota_interes
+        # capital_real = self.cuota_capital + self.cuota_interes
         if capital != 0:
-            if self.pago < self.cuota_prestamo:
-                saldo = self.cuota_capital + self.cuota_interes + self.interes_moratorio  - self.pago
-            elif self.pago == capital_real:
-                saldo = self.cuota_capital + self.cuota_interes - self.pago
-            elif self.pago > self.cuota_prestamo:
-                saldo = self.cuota_capital - self.pago
-            else:
-                saldo = self.saldo
+            # if self.pago < self.cuota_prestamo:
+            #     saldo = self.cuota_capital + self.cuota_interes + self.interes_moratorio  - self.pago
+            # elif self.pago == capital_real:
+            #     saldo = self.cuota_capital + self.cuota_interes - self.pago
+            # elif self.pago > self.cuota_prestamo:
+            #     saldo = self.cuota_capital - self.pago
+            # else:
+            #     saldo = self.saldo
+            saldo = self.cuota_capital + self.cuota_interes + self.interes_moratorio - self.pago
             if 0 >= saldo: 
                 vals_c= {
                     'monto_restante': saldo,
