@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_cierre_diario" model="mail.template">
+            <field name="name">Cierre Diario</field>
+            <field name="model_id" ref="model_account_payment"/>
+            <field name="subject">Cierre de ${ctx.get('date')} </field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px">
+                    <div class="page">
+                        <div style="float: left;">
+                            % for row in ctx.get('accounts'):
+                                <b>
+                                    <span> ${row} </span>
+                                </b>
+                                % for col in ctx.get('accounts')[row]:
+                                 <dd>
+                                    &amp;nbsp;&amp;nbsp;&amp;nbsp;<span> ${col}: </span>
+                                    &amp;nbsp;&amp;nbsp;&amp;nbsp;<span> L. ${ctx.get('accounts')[row][col]} </span>
+                                 </dd>
+                                %endfor
+                            %endfor
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>
