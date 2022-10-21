@@ -88,7 +88,9 @@ class Pagos(models.Model):
         dict_medisa = self._reoder_data(obj_medisa)
         value['accounts'] = {**dict_mega,**dict_medisa}
         value['company'] = "MegaTK y Mediteksa NIC"
-        self.send_email(value,"lmoran@megatk.com")
+        self.send_email(value,"azelaya@megatk.com")
+        # self.send_email(value,"lmoran@megatk.com")
         value['company'] = "Mediteksa"
         value['accounts'] = dict_medi
-        self.send_email(value,"jmoran@meditekhn.com")
+        self.send_email(value,"azelaya@meditekhn.com")
+        # self.send_email(value,"jmoran@meditekhn.com")
