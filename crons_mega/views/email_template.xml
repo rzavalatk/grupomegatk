@@ -38,8 +38,12 @@
                         </div>
                     % endif
                 </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div class="footer">
-                    <span> Mensaje automático de Odoo, no responder. </span>
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
                 </div>
             </field>
         </record>
