@@ -18,8 +18,8 @@
                                     </b>
                                 % for col in ctx.get('accounts')[row]:
                                     <p>
-                                        &amp;nbsp;&amp;nbsp;&amp;nbsp;<span> ${col}: </span>
-                                        &amp;nbsp;&amp;nbsp;&amp;nbsp;<span> 
+                                        <span style="margin-left: 20px;"> ${col}: </span>
+                                        <span> 
                                         % if row == 'Nicaragua' :
                                             $ 
                                         % else :
