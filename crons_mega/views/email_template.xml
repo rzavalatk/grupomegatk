@@ -30,7 +30,16 @@
                                 %endfor
                             %endfor
                         </div>
+                    % else :
+                        <div>
+                            <p>
+                                No hay pagos registrados.
+                            </p>
+                        </div>
                     % endif
+                </div>
+                <div class="footer">
+                    <span> Mensaje automático de Odoo, no responder. </span>
                 </div>
             </field>
         </record>
