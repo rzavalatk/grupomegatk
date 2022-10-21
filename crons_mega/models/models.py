@@ -10,7 +10,7 @@ class Pagos(models.Model):
     
     def send_email(self,values,to):
         template = self.env.ref(
-            'crons_mega.email_template_cierre_diario')
+            'crons_mega.email_template_cierre_diario_2')
         email_values = {
             'email_from': 'azelaya@megatk.com',
             'email_to': to,
