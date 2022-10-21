@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="account.view_account_payment_form" />
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_draft']" position="after">
-                    <button string="Probar" name="get_payments_today" type="object" class="oe_highlight"/>
+                    <button string="Probar" groups="planilla_y_metas.admin_functions" name="get_payments_today" type="object" class="oe_highlight"/>
                 </xpath>
             </field>
         </record>

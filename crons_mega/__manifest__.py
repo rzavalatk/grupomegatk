@@ -16,7 +16,7 @@
     'version': '0.1',
     'depends': ['base','account'],
     'data': [
-        # 'views/view.xml',
+        'views/view.xml',
         'views/cierre_diario.xml',
         'views/email_template.xml'
     ]
