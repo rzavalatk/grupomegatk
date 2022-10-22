@@ -54,7 +54,7 @@ class Pagos(models.Model):
         today_datetime = datetime.now(tz)
         today = today_datetime.strftime('%Y-%m-%d')
         value = {}
-        value['date'] = today
+        value['date'] = today_datetime.strftime('%d/%m/%Y')
         mega = self.env['res.company'].search([('name','=','MEGATK')])
         meditek = self.env['res.company'].search([('name','=','MEDITEK')])
         mediteksa = self.env['res.company'].search([('name','=','MEDITEKSA NIC')])
