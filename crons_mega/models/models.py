@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api
-from datetime import date
+from datetime import datetime
+# import datetime
+import pytz
 
 
 class Pagos(models.Model):
@@ -46,10 +48,13 @@ class Pagos(models.Model):
         else:
             return amount/current.rate
 
+
     def get_payments_today(self):
-        today = date.today()
+        tz = pytz.timezone("America/Guatemala")
+        today_datetime = datetime.now(tz)
+        today = today_datetime.strftime('%Y-%m-%d')
         value = {}
-        value['date'] = today.strftime('%Y-%m-%d')
+        value['date'] = today
         mega = self.env['res.company'].search([('name','=','MEGATK')])
         meditek = self.env['res.company'].search([('name','=','MEDITEK')])
         mediteksa = self.env['res.company'].search([('name','=','MEDITEKSA NIC')])
@@ -60,15 +65,15 @@ class Pagos(models.Model):
         for item in mediteksa:
             medisa_id = item.id     
         payments_mega = self.env['account.payment'].search(
-            ['&',('payment_date', '=', today.strftime('%Y-%m-%d')),
+            ['&',('payment_date', '=', today),
              ('company_id', '=', mega_id)
              ])
         payments_medi = self.env['account.payment'].search(
-            ['&',('payment_date', '=', today.strftime('%Y-%m-%d')),
+            ['&',('payment_date', '=', today),
              ('company_id', '=', medi_id)
              ])
         payments_medisa = self.env['account.payment'].search(
-            ['&',('payment_date', '=', today.strftime('%Y-%m-%d')),
+            ['&',('payment_date', '=', today),
              ('company_id', '=', medisa_id)
              ])
         obj_mega = []
@@ -88,9 +93,9 @@ class Pagos(models.Model):
         dict_medisa = self._reoder_data(obj_medisa)
         value['accounts'] = {**dict_mega,**dict_medisa}
         value['company'] = "MegaTK y Mediteksa NIC"
-        # self.send_email(value,"azelaya@megatk.com")
-        self.send_email(value,"lmoran@megatk.com")
+        self.send_email(value,"azelaya@megatk.com")
+        # self.send_email(value,"lmoran@megatk.com")
         value['company'] = "Mediteksa"
         value['accounts'] = dict_medi
-        # self.send_email(value,"azelaya@meditekhn.com")
-        self.send_email(value,"jmoran@meditekhn.com")
+        self.send_email(value,"azelaya@megatk.com")
+        # self.send_email(value,"jmoran@meditekhn.com")
