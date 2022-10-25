@@ -11,7 +11,7 @@
     'website': "azelaya@megatk.com",
     'category': 'employees',
     'version': '0.1',
-    'depends': ['base','hr'],
+    'depends': ['base','hr','fields_megatk'],
     'data': [
         'wizard/wizard.xml',
         'security/security.xml',
@@ -30,6 +30,7 @@
         'static/template/email_avances.xml',
         'static/template/pdf_template.xml',
         'static/template/email_resultados.xml',
-        'static/template/email_metas.xml'
+        'static/template/email_metas.xml',
+        'views/equipo_madrugador.xml',
     ],
 }

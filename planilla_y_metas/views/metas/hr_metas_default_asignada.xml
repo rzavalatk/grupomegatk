@@ -21,14 +21,15 @@
             <field name="arch" type="xml">
                 <form create="0" edit="0">
                     <header>
-                        <button string="Evaluar" groups="planilla_y_metas.planilla_manager" class="oe_highlight" states="draft,valid" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id,'active_model': 'hr.metas.asignadas.default'}" type="action" />
-                        <button string="Re-evaluar" groups="planilla_y_metas.planilla_manager" states="done" name="%(planilla_y_metas.hr_metas_evaluar_action)d" context="{'active_id': id}" type="action" />
+                        <button string="Evaluar" groups="planilla_y_metas.planilla_manager" class="oe_highlight" states="draft,valid" name="go_to_evalues_normas" context="{'active_id': id,'active_model': 'hr.metas.asignadas.default'}" type="object" />
+                        <button string="Re-evaluar" groups="planilla_y_metas.planilla_manager" states="done" name="go_to_evalues_normas" context="{'active_id': id}" type="object" />
                         <button string="Asignar evaluador" groups="sign_orders.group_admins" name="assign_evaluator" type="object" />
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
                         <group>
                             <group>
+                                <field name="compute_val_5s" invisible="1"/>
                                 <field name="meta_id" />
                                 <field name="point_meta" />
                                 <field name="advance" />
@@ -42,6 +43,12 @@
                         </group>
                         <group>
                             <field name="date_end" />
+                        </group>
+                        <group string="Detalles del puntaje 5´S" attrs="{'invisible': [('compute_val_5s','=',False)]}">
+                            <field name="clasificacion" />
+                            <field name="orden" />
+                            <field name="limpieza" />
+                            <field name="disiplina" />
                         </group>
                     </sheet>
                 </form>

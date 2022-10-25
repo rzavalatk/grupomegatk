@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    
+
         <record model="ir.ui.view" id="hr_meta_default_tree">
             <field name="name">hr.meta.default.tree</field>
             <field name="model">hr.metas.default</field>
@@ -23,9 +23,19 @@
                         <button string="Asignar a empleados" name="assign_all_employee" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_cinco_eses" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-th-list">
+                                <field name="cinco_eses" widget="boolean_button" options='{"terminology": {
+                                    "string_true": "5´S",
+                                    "hover_true": "5´S",
+                                    "string_false": "No 5´S",
+                                    "hover_false": "No 5´S"
+                                }}'/>
+                            </button>
+                        </div>
                         <group>
                             <group>
-                                <field name="name" />                               
+                                <field name="name" />
                             </group>
                             <group>
                                 <field name="obj" />
@@ -47,6 +57,6 @@
 
         <menuitem name="Normas" id="menu_hr_metas_default" sequence = "2" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_default"/>
 
-    
+
     </data>
 </odoo>

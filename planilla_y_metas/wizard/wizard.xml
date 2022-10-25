@@ -144,6 +144,47 @@
             <field name="view_mode">form</field>
         </record>
 
+        <!-- Evaluar 5s -->
+
+        <record id="hr_metas_evaluar_5s_view" model="ir.ui.view">
+            <field name="name">hr.metas.evaluar.5s.view</field>
+            <field name="model">hr.meta.evaluar.5s</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <h2 style="padding-bottom: 10px;">
+                                <b>
+                                Ingrese un valor de 0 a 25:
+                                </b>
+                            </h2>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="clasificacion" />
+                            </group>
+                            <group>
+                                <field name="orden" />
+                            </group>
+                            <group>
+                                <field name="limpieza" />
+                            </group>
+                            <group>
+                                <field name="disiplina" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="remark" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Evaluar" name="set_points" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
         <!-- Puntaje -->
 
         <record id="hr_metas_puntaje_view" model="ir.ui.view">
@@ -172,7 +213,7 @@
             <field name="view_mode">form</field>
         </record>
 
-                <!-- Re asignar -->
+        <!-- Re asignar -->
 
         <record id="hr_meta_reasignar_view" model="ir.ui.view">
             <field name="name">hr.meta.reasignar.view</field>

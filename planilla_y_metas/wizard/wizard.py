@@ -112,6 +112,52 @@ class AvanceMeta(models.TransientModel):
 
 
 class EvaluarMeta(models.TransientModel):
+    _name = "hr.meta.evaluar.5s"
+
+    clasificacion = fields.Float("Clasificación %",required=True)
+    orden = fields.Float("Orden %",required=True)
+    limpieza = fields.Float("Limpieza %",required=True)
+    disiplina = fields.Float("Disiplina %",required=True)
+    remark = fields.Text("Observación")
+    
+    def set_points(self):
+        porcentajes = {
+            'clasificacion': self.clasificacion,
+            'orden': self.orden,
+            'limpieza': self.limpieza,
+            'disiplina': self.disiplina,
+        }
+        _raise = []
+        for item in porcentajes:
+            porcentaje = porcentajes[item]
+            if porcentaje < 0:
+                porcentajes[item] = porcentaje * -1
+            if porcentaje > 25:
+                _raise.append(item)
+        if len(_raise) > 0:
+            msj = ""
+            for item in _raise:
+                msj += item + ", "
+            raise Warning(
+                f"El valor NO puede superar los 25 en el(los) campo(s) {msj} intente de nuevo y asegurece de ingresar un valor entre 0 - 25.")
+        
+        active_id = self.env.context.get('active_id')
+        assign = self.env['hr.metas.asignadas.default'].browse(active_id)
+        points_total = 0
+        for item in porcentajes:
+            porcentaje = porcentajes[item]
+            points = assign.point_meta * (porcentaje/100) if assign.point_meta > 0 else porcentaje
+            porcentajes[item] = points
+            points_total += points
+        porcentajes['point_assign'] = points_total
+        porcentajes['state'] = 'done'
+        porcentajes['date_end'] = datetime.today()
+        porcentajes['remark'] = self.remark
+        assign.write(porcentajes)
+        
+        
+
+class EvaluarMeta(models.TransientModel):
     _name = "hr.meta.evaluar"
 
     point_assign = fields.Integer("Porcentaje %")

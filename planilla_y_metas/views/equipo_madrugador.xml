@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_employee_metas_equipo_madrugador_send_email" model="ir.ui.view">
+            <field name="name">hr.employee.metas.equipo.madrugador.send.email</field>
+            <field name="model">hr.employee.equipo.madrugador</field>
+            <field name="inherit_id" ref="fields_megatk.hr_employe_madrugador_mega_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employe_ids']" position="attributes">
+                    <attribute name="nolabel">1</attribute>
+                </xpath>
+                <xpath expr="//sheet[1]" position="before">
+                    <header>
+                        <button string="Enviar Metas Por Email" states="metas" name="send_metas_email" type="object" class="oe_highlight"/>
+                        <button string="Confirmar Evaluación de Metas" states="confirm" name="confirm_eval_metas" type="object" class="oe_highlight"/>
+                        <button string="Enviar Resultados Por Email" states="result" name="send_result" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" />
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
