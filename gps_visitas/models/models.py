@@ -3,6 +3,7 @@ from odoo import models, fields, api
 
 class CrmVisits(models.Model):
     _name = "crm.visits"
+    _order = "create_date desc"
 
     @api.one
     def _api_key(self):
@@ -46,6 +47,8 @@ class CrmVisits(models.Model):
 		('various', 'Varios'),
 		('study', 'Estudio'),
 		('delivery', 'Entrega de producto'),
+		('cobro', 'Cobros'),
+		('deposito', 'Depositos de Cheques'),
 		('demonstration', 'Demostración de producto'),
 		('delivery_invoice', 'Entrega de facturas o cotización'),
 		],string="Tipo de visita",required=True)
