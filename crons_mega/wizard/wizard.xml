@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_cierre_mail_view" model="ir.ui.view">
+            <field name="name">account.cierre.mail.view</field>
+            <field name="model">account.cierre.mail</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="mail" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Enviar" name="obtener_mail" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_cierre_mail_action" model="ir.actions.act_window">
+            <field name="name">Destinatario</field>
+            <field name="res_model">account.cierre.mail</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</odoo>

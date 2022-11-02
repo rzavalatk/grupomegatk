@@ -20,9 +20,11 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
+                        <field name="id" invisible="1" />
                         <button string="Iniciar Cierre" states="draft" name="iniciar_cierre" type="object" class="oe_highlight"/>
                         <button string="Procesar Cierre" states="init" name="procesar_cierre" type="object" class="oe_highlight"/>
-                        <button string="Enviar por Email" states="proccess,done" name="send_email" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Enviar por Email" states="done" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}"/>
                         <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
                         <button string="Cancelar" confirm="¿Esta seguro que desea cancelar este Cierre?" states="init,proccess,done" name="cancel" type="object"/>
                         <field name="state" widget="statusbar" />
@@ -80,12 +82,21 @@
             </field>
         </record>
 
-        <record id="account_cierre_action" model="ir.actions.act_window">
+        <!-- <record id="account_cierre_action" model="ir.actions.act_window">
             <field name="name">Cierre Diario</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.cierre</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+        </record> -->
+
+        <record id="account_cierre_action" model="ir.actions.server">
+            <field name="name">Cierre Diario</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_account_cierre" />
+            <field name="state">code</field>
+            <field name="code">action=model.go_to_view_tree()</field>
         </record>
 
         <menuitem id="account_cierre_menu" name="Cierre Diario" action="account_cierre_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="16"/>

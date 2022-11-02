@@ -180,18 +180,31 @@ class CierreDiario(models.Model):
         })
         
         
-    def send_email(self):
+    def send_email(self,email):
         template = self.env.ref(
         'crons_mega.email_template_cierre_diario_1')
         email_values = {
             'email_from': 'azelaya@megatk.com',
-            'email_to': 'azelaya@megatk.com'
+            'email_to': email
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
         return True
+    
+    
+    def go_to_view_tree(self):
+        return {
+            'name': 'Cierre Diario',
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.cierre',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'views': [(False, 'tree'), (False, 'form')],
+            'target': 'current',
+            'domain': [('company_id', '=', self.env.user.company_id.id)],
+        }
     
     
 class CierreDiarioLine(models.Model):
