@@ -67,7 +67,7 @@
                                     % for row in object.cierre_line_ids:
                                 <th>${row.name}</th>
                                     %endfor
-                                <th>Total     </th>
+                                <th>Total           </th>
                             </thead>
                             <tbody>
                                 <tr>
