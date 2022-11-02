@@ -22,7 +22,7 @@
                     <header>
                         <button string="Iniciar Cierre" states="draft" name="iniciar_cierre" type="object" class="oe_highlight"/>
                         <button string="Procesar Cierre" states="init" name="procesar_cierre" type="object" class="oe_highlight"/>
-                        <button string="Enviar por Email" states="proccess" name="send_email" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" states="proccess,done" name="send_email" type="object" class="oe_highlight"/>
                         <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
                         <button string="Cancelar" confirm="¿Esta seguro que desea cancelar este Cierre?" states="init,proccess,done" name="cancel" type="object"/>
                         <field name="state" widget="statusbar" />
