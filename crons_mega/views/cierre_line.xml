@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_cierre_line_view_tree" model="ir.ui.view">
+            <field name="name">account.cierre.line.view.tree</field>
+            <field name="model">account.cierre.line</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="currency_id" invisible="1" />
+                    <field name="name" />
+                    <field name="facturado" />
+                    <field name="cobrado" />
+                    <field name="total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_cierre_line_view_form" model="ir.ui.view">
+            <field name="name">account.cierre.line.view.form</field>
+            <field name="model">account.cierre.line</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_credito" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="credito" widget="boolean_button" options='{"terminology": {
+                                    "string_true": "Credito",
+                                    "hover_true": "Credito",
+                                    "string_false": "No Credito",
+                                    "hover_false": "No Credito"
+                                }}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="journal_id" />
+                                <field name="currency_id" invisible="1" />
+                            </group>
+                            <group>
+                                <field name="facturado" />
+                                <field name="cobrado" />
+                                <field name="total" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
