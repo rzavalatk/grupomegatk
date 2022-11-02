@@ -32,8 +32,12 @@
                     align-items: center;
                     }
 
+                    .th_total{
+                        width: 25%;
+                    }
+
                     table {
-                    width: 90%;
+                    width: 100%;
                     border: 1px solid #000;
                     background-color: black;
                     }
@@ -63,7 +67,7 @@
                                     % for row in object.cierre_line_ids:
                                 <th>${row.name}</th>
                                     %endfor
-                                <th>Total</th>
+                                <th class="th_total">Total</th>
                             </thead>
                             <tbody>
                                 <tr>
