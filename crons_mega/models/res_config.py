@@ -29,7 +29,7 @@ class Settings(models.TransientModel):
     def get_values(self):
         res = super(Settings, self).get_values()
         IrValues = self.env['ir.config_parameter'].sudo()
-        journal_ids = IrValues.get_param('crons_mega.journal_ids')
+        journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
         teams_sps = IrValues.get_param('crons_mega.teams_sps')
         if journal_ids:
             journal_ids = journal_ids.replace('[','')
@@ -47,7 +47,7 @@ class Settings(models.TransientModel):
     @api.multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
-        IrValues.set_param('crons_mega.journal_ids', self.journal_ids.ids)
+        IrValues.set_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id), self.journal_ids.ids)
         IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
         super(Settings, self).set_values()
 
