@@ -20,7 +20,7 @@ class CierreDiario(models.Model):
                 total += item.cobrado
             if field == 'facturado':
                 total += item.facturado
-        return total
+        return round(total, 2)
         
     
     @api.one
@@ -207,7 +207,8 @@ class CierreDiarioLine(models.Model):
     
     @api.one
     def _total(self):
-        self.total = self.cobrado - self.facturado
+        total = self.cobrado - self.facturado
+        self.total = round(total, 2)
     
         
     name = fields.Char("Nombre",compute=_name_)
