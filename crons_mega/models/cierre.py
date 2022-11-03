@@ -99,29 +99,39 @@ class CierreDiario(models.Model):
         pagos=self.env['account.payment'].search([
             '&',
             '&',
+            '&',
             ('payment_date','=',self.date),
             ('company_id','=',self.company_id.id),
             ('region','=',self.region),
             ('partner_type','=','customer'),
+            ('state','=','posted'),
         ])
         teams_sps = self.env['res.config.settings'].get_values_teams_sps()
         if self.region == "San Pedro Sula":
             facturas=self.env['account.invoice'].search([
                 '&',
                 '&',
+                '&',
+                '|',
                 ('date_invoice','=',self.date),
                 ('company_id','=',self.company_id.id),
                 ('team_id','in', teams_sps),
                 ('type','=','out_invoice'),
+                ('state','!=','cancel'),
+                ('state','!=','draft'),
             ])
         else:
             facturas=self.env['account.invoice'].search([
                 '&',
                 '&',
+                '&',
+                '|',
                 ('date_invoice','=',self.date),
                 ('company_id','=',self.company_id.id),
                 ('team_id','not in', teams_sps),
                 ('type','=','out_invoice'),
+                ('state','!=','cancel'),
+                ('state','!=','draft'),
             ])
         ids_facturas = []
         journal_ids = self.env['res.config.settings'].get_values_journal_ids()
