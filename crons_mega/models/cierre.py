@@ -143,7 +143,7 @@ class CierreDiario(models.Model):
                     if pago.journal_id.id == item.journal_id.id:
                         acumulado_factura = 0
                         for factura in pago.invoice_ids.ids:
-                            if factura.id not in ids_facturas:
+                            if factura not in ids_facturas:
                                 factura_id = self.env['account.invoice'].browse(factura)
                                 if factura_id.date_invoice == self.date:
                                     acumulado_factura += factura_id.amount_total_signed
