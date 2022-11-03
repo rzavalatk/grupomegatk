@@ -118,8 +118,8 @@ class CierreDiario(models.Model):
                 ('company_id','=',self.company_id.id),
                 ('team_id','in', teams_sps),
                 ('type','=','out_invoice'),
-                ('state','=','paid'),
-                ('state','=','open'),
+                ('state','!=','cancel'),
+                ('state','!=','draft'),
             ])
         else:
             facturas=self.env['account.invoice'].search([
@@ -132,8 +132,8 @@ class CierreDiario(models.Model):
                 ('company_id','=',self.company_id.id),
                 ('team_id','not in', teams_sps),
                 ('type','=','out_invoice'),
-                ('state','=','paid'),
-                ('state','=','open'),
+                ('state','!=','cancel'),
+                ('state','!=','draft'),
             ])
         ids_facturas = []
         journal_ids = self.env['res.config.settings'].get_values_journal_ids()
