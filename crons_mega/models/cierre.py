@@ -137,26 +137,6 @@ class CierreDiario(models.Model):
             ])
         ids_facturas = []
         journal_ids = self.env['res.config.settings'].get_values_journal_ids()
-        for factura in facturas:
-            ids_facturas.append(factura.id)
-            if factura.id not in ids_facturas:
-                if factura.payment_term_id.name != 'Contado':
-                    for item in self.cierre_line_ids:
-                        if item.credito: 
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
-                else:
-                    for item in self.cierre_line_ids:
-                        if item.journal_id.name == "Efectivo": 
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
-                            
         for pago in pagos:
             if pago.journal_id.id in journal_ids:
                 for item in self.cierre_line_ids:
@@ -187,7 +167,26 @@ class CierreDiario(models.Model):
                                 'facturado': acumulado_factura + item.facturado
                             })]
                         })
+            ids_facturas = ids_facturas + pago.invoice_ids.ids
                         
+        for factura in facturas:
+            if factura.id not in ids_facturas:
+                if factura.payment_term_id.name != 'Contado':
+                    for item in self.cierre_line_ids:
+                        if item.credito: 
+                            self.write({
+                                'cierre_line_ids': [(1, item.id, {
+                                    'facturado': factura.amount_total_signed + item.facturado
+                                })]
+                            })
+                else:
+                    for item in self.cierre_line_ids:
+                        if item.journal_id.name == "Efectivo": 
+                            self.write({
+                                'cierre_line_ids': [(1, item.id, {
+                                    'facturado': factura.amount_total_signed + item.facturado
+                                })]
+                            })
         self.write({
             'state': 'proccess'
         })
