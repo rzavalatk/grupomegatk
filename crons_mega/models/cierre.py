@@ -4,6 +4,7 @@ from odoo import models, api,fields
 
 class CierreDiario(models.Model):
     _name = "account.cierre"
+    _order = "create_date desc"
     
     regions_list = [
         ("Nicaragua","NIC"),
