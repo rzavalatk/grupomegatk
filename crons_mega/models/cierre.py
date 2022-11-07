@@ -6,9 +6,9 @@ class CierreDiario(models.Model):
     _name = "account.cierre"
     
     regions_list = [
-        ("Tegucigalpa","TGU"),
+        ("Nicaragua","NIC"),
         ("San Pedro Sula","SPS"),
-        ("Nicaragua","NIC")
+        ("Tegucigalpa","TGU"),
     ]
     
     def _recorrec_lines(self,field):
@@ -21,11 +21,6 @@ class CierreDiario(models.Model):
             if field == 'facturado':
                 total += item.facturado
         return round(total, 2)
-        
-    
-    @api.one
-    def _total(self):
-        self.total = self._recorrec_lines("total")
 
     @api.one
     def _total_cobrado(self):
@@ -53,9 +48,9 @@ class CierreDiario(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', readonly=True, default=lambda self : self.env.user.company_id.currency_id)
     total_facturado = fields.Monetary("Total Facturado",compute=_total_facturado)
     total_cobrado = fields.Monetary("Total Cobrado",compute=_total_cobrado)
-    total = fields.Monetary("Total",compute=_total)
-    region = fields.Selection(regions_list,string="Region/Zona")
+    region = fields.Selection(regions_list,string="Region/Zona",required=True)
     date = fields.Date("Fecha")
+    logs = fields.Text("Registros")
     state = fields.Selection([
         ("draft","Borrador"),
         ("init","Iniciado"),
@@ -77,6 +72,7 @@ class CierreDiario(models.Model):
              
         self.write({
             'cierre_line_ids': ids,
+            'logs': "",
             'state': 'cancel'
         })
     
@@ -94,8 +90,39 @@ class CierreDiario(models.Model):
             'state': 'init'
         })
         
+    def register_ids(self,obj, name):
+        text = ""
+        length = 0
+        for item in obj:
+            text += str(item.id) +", "
+            length += 1
+        self.write({
+            'logs': self.logs + "ids de objetos consultados: \n" 
+            + text + "\n Nombre lista: " + name + "\n" + "Tamaño: "+ str(length) +
+            "\n ----------------------------------------------------------------------\n"
+        })
+    
+    
+    def register_list(self,lists, name):
+        text = ""
+        for item in lists:
+            try:
+                text += item +", "
+            except:
+                text += str(item) +", "
+        self.write({
+            'logs': self.logs + "Datos en la lista: \n" 
+            + text + "\n Nombre lista: " + name + "\n" + "Tamaño: "+ str(len(lists)) +
+            "\n ----------------------------------------------------------------------\n"
+        })
+             
+        
     
     def procesar_cierre(self):
+        val = [i for i in range(len(self.regions_list)) if self.regions_list[i][0]==self.region]
+        region_comerciales = self.env['res.users'].search([('ubicacion_vendedor','=',val[0]+1)])
+        self.register_ids(region_comerciales,'comerciales')
+        users_ids = [i.id for i in region_comerciales]
         pagos=self.env['account.payment'].search([
             '&',
             '&',
@@ -106,69 +133,40 @@ class CierreDiario(models.Model):
             ('partner_type','=','customer'),
             ('state','=','posted'),
         ])
-        teams_sps = self.env['res.config.settings'].get_values_teams_sps()
-        if self.region == "San Pedro Sula":
-            facturas=self.env['account.invoice'].search([
-                '&',
-                '&',
-                '&',
-                '&',
-                '&',
-                ('date_invoice','=',self.date),
-                ('company_id','=',self.company_id.id),
-                ('team_id','in', teams_sps),
-                ('type','=','out_invoice'),
-                ('state','!=','cancel'),
-                ('state','!=','draft'),
-            ])
-        else:
-            facturas=self.env['account.invoice'].search([
-                '&',
-                '&',
-                '&',
-                '&',
-                '&',
-                ('date_invoice','=',self.date),
-                ('company_id','=',self.company_id.id),
-                ('team_id','not in', teams_sps),
-                ('type','=','out_invoice'),
-                ('state','!=','cancel'),
-                ('state','!=','draft'),
-            ])
+        self.register_ids(pagos,'pagos')
+        facturas=self.env['account.invoice'].search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            ('date_invoice','=',self.date),
+            ('company_id','=',self.company_id.id),
+            ('user_id','in',users_ids),
+            ('type','=','out_invoice'),
+            ('state','!=','cancel'),
+            ('state','!=','draft'),
+        ])
+        self.register_ids(facturas,'facturas')
         ids_facturas = []
-        journal_ids = self.env['res.config.settings'].get_values_journal_ids()
         for pago in pagos:
-            if pago.journal_id.id in journal_ids:
-                for item in self.cierre_line_ids:
-                    if pago.journal_id.id == item.journal_id.id:
-                        acumulado_factura = 0
-                        for factura in pago.invoice_ids.ids:
-                            if factura not in ids_facturas:
-                                factura_id = self.env['account.invoice'].browse(factura)
-                                if factura_id.date_invoice == self.date:
-                                    acumulado_factura += factura_id.amount_total_signed
-                        self.write({
-                            'cierre_line_ids': [(1, item.id, {
-                                'cobrado': pago.amount + item.cobrado,
-                                'facturado': acumulado_factura + item.facturado
-                            })]
-                        })
-            else:
-                for item in self.cierre_line_ids:
-                    if item.journal_id.name == "Efectivo":
-                        acumulado_factura = 0
-                        for factura in pago.invoice_ids.ids:
+            for item in self.cierre_line_ids:
+                if pago.journal_id.id == item.journal_id.id:
+                    acumulado_factura = 0
+                    for factura in pago.invoice_ids.ids:
+                        if factura not in ids_facturas:
                             factura_id = self.env['account.invoice'].browse(factura)
+                            self.register_ids(factura_id,'facturas de pagos')
                             if factura_id.date_invoice == self.date:
                                 acumulado_factura += factura_id.amount_total_signed
-                        self.write({
-                            'cierre_line_ids': [(1, item.id, {
-                                'cobrado': pago.amount + item.cobrado,
-                                'facturado': acumulado_factura + item.facturado
-                            })]
-                        })
-            ids_facturas = ids_facturas + pago.invoice_ids.ids
-                        
+                    self.write({
+                        'cierre_line_ids': [(1, item.id, {
+                            'cobrado': pago.amount + item.cobrado,
+                            'facturado': acumulado_factura + item.facturado
+                        })]
+                    })
+                    ids_facturas = ids_facturas + pago.invoice_ids.ids
+        self.register_list(ids_facturas,'ids_facturas')        
         for factura in facturas:
             if factura.id not in ids_facturas:
                 if factura.payment_term_id.name != 'Contado':
@@ -232,7 +230,7 @@ class CierreDiarioLine(models.Model):
     
     @api.one
     def _total(self):
-        total = self.cobrado - self.facturado
+        total = self.cobrado
         self.total = round(total, 2)
     
         

@@ -81,7 +81,7 @@
                                     <th>Cobrado</th>
                                         % for row in object.cierre_line_ids:
                                             % if row.credito :
-                                                <th>No Disponible</th>
+                                                <th>No Aplica</th>
                                             % else :
                                                 <th>${row.currency_id.symbol} ${row.cobrado}</th>
                                             % endif
@@ -91,7 +91,7 @@
                                 <tr>
                                     <th>Total</th>
                                         % for row in object.cierre_line_ids:
-                                    <th>${row.currency_id.symbol} ${row.total}</th>
+                                                <th>${row.currency_id.symbol} ${row.total}</th>
                                         %endfor
                                     <th>${object.currency_id.symbol} ${object.total}</th>
                                 </tr>
