@@ -51,7 +51,7 @@ class CierreDiario(models.Model):
     total_cobrado = fields.Monetary("Total Cobrado",compute=_total_cobrado)
     region = fields.Selection(regions_list,string="Region/Zona",required=True)
     date = fields.Date("Fecha")
-    logs = fields.Text("Registros")
+    logs = fields.Text("Registros",default="")
     state = fields.Selection([
         ("draft","Borrador"),
         ("init","Iniciado"),
