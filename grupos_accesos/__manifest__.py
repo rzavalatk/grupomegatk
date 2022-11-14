@@ -16,7 +16,7 @@
     'category': 'Usuarios',
     'version': '0.1',
 
-    'depends': ['base','sale','res','account'],
+    'depends': ['base','sale','account'],
 
     'data': [
         'security/groups.xml',
