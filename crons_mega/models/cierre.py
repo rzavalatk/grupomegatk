@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 from odoo import models, api,fields
+from datetime import datetime
+import pytz
 
+
+class Facturas(models.Model):
+    _inherit = "account.invoice"
+    
+    cierre_id = fields.Many2one("account.cierre")
 
 class CierreDiario(models.Model):
     _name = "account.cierre"
@@ -48,6 +55,7 @@ class CierreDiario(models.Model):
     company_id = fields.Many2one("res.company","Compañia", default=lambda self : self.env.user.company_id.id)
     currency_id = fields.Many2one('res.currency', string='Currency', readonly=True, default=lambda self : self.env.user.company_id.currency_id)
     total_facturado = fields.Monetary("Total Facturado",compute=_total_facturado)
+    facturas_ids = fields.One2many("account.invoice","cierre_id","Facturas")
     total_cobrado = fields.Monetary("Total Cobrado",compute=_total_cobrado)
     region = fields.Selection(regions_list,string="Region/Zona",required=True)
     date = fields.Date("Fecha")
@@ -67,12 +75,16 @@ class CierreDiario(models.Model):
         })
     
     def cancel(self):
-        ids = []
+        lines_ids = []
+        facturas = []
         for item in self.cierre_line_ids:
-            ids.append((2,item.id))
+            lines_ids.append((2,item.id))
+        for item in self.facturas_ids:
+            facturas.append((3,item.id))
              
         self.write({
-            'cierre_line_ids': ids,
+            'cierre_line_ids': lines_ids,
+            'facturas_ids': facturas,
             'logs': "",
             'state': 'cancel'
         })
@@ -120,10 +132,16 @@ class CierreDiario(models.Model):
         
     
     def procesar_cierre(self):
-        val = [i for i in range(len(self.regions_list)) if self.regions_list[i][0]==self.region]
-        region_comerciales = self.env['res.users'].search([('ubicacion_vendedor','=',val[0]+1)])
-        self.register_ids(region_comerciales,'comerciales')
-        users_ids = [i.id for i in region_comerciales]
+        # val = [i for i in range(len(self.regions_list)) if self.regions_list[i][0]==self.region]
+        # region_comerciales = self.env['res.users'].search([('ubicacion_vendedor','=',val[0]+1)])
+        # self.register_ids(region_comerciales,'comerciales')
+        # users_ids = [i.id for i in region_comerciales]
+        if self.region == self.regions_list[2][0]:
+            canales_ids = [36,38,39,45,47]
+        elif self.region == self.regions_list[1][0]:
+            canales_ids = [43,41,46]
+        else:
+            canales_ids = [50,49]
         pagos=self.env['account.payment'].search([
             '&',
             '&',
@@ -143,7 +161,8 @@ class CierreDiario(models.Model):
             '&',
             ('date_invoice','=',self.date),
             ('company_id','=',self.company_id.id),
-            ('user_id','in',users_ids),
+            # ('user_id','in',users_ids),
+            ('team_id','in',canales_ids),
             ('type','=','out_invoice'),
             ('state','!=','cancel'),
             ('state','!=','draft'),
@@ -168,6 +187,12 @@ class CierreDiario(models.Model):
                     })
                     ids_facturas = ids_facturas + pago.invoice_ids.ids
         self.register_list(ids_facturas,'ids_facturas')        
+        for factura in facturas:
+            if factura.state == 'open' and factura.payment_term_id.name == 'Contado':
+                self.write({
+                    'facturas_ids': [(4,factura.id)]
+                })
+            
         for factura in facturas:
             if factura.id not in ids_facturas:
                 if factura.payment_term_id.name != 'Contado':
@@ -204,6 +229,35 @@ class CierreDiario(models.Model):
         })
         return True
     
+    def cron_eject(self):
+        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        today = datetime.now(user_tz)
+        company_ids = [8,9,12]
+        ids = []
+        for i in company_ids:
+            if i != 12:
+                j = 1
+                while j < 3:
+                    obj = self.create({
+                        'date': today,
+                        'company_id': i,
+                        'region': self.regions_list[j][0]
+                    })
+                    ids.append(obj.id)
+                    j += 1
+            else:
+                obj = self.create({
+                        'date': today,
+                        'company_id': i,
+                        'region': self.regions_list[0][0]
+                    })
+                ids.append(obj.id)
+        for i in ids:
+            cierre = self.browse(i)
+            cierre.iniciar_cierre()
+            cierre.procesar_cierre()
+            cierre.send_email("lmoran@megatk.com")
+    
     
     def go_to_view_tree(self):
         return {
@@ -231,7 +285,11 @@ class CierreDiarioLine(models.Model):
     
     @api.one
     def _total(self):
-        total = self.cobrado
+        total = self.cobrado - self.facturado
+        if total < 0:
+            total = total * (-1)
+        elif total == 0:
+            total = self.cobrado
         self.total = round(total, 2)
     
         

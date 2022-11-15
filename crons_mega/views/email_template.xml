@@ -81,9 +81,9 @@
                                     <th>Cobrado</th>
                                         % for row in object.cierre_line_ids:
                                             % if row.credito :
-                                                <th>No Aplica</th>
+                                    <th>No Aplica</th>
                                             % else :
-                                                <th>${row.currency_id.symbol} ${row.cobrado}</th>
+                                    <th>${row.currency_id.symbol} ${row.cobrado}</th>
                                             % endif
                                         %endfor
                                     <th>${object.currency_id.symbol} ${object.total_cobrado}</th>
@@ -91,13 +91,38 @@
                                 <tr>
                                     <th>Total</th>
                                         % for row in object.cierre_line_ids:
-                                                <th>${row.currency_id.symbol} ${row.total}</th>
+                                            <th>${row.currency_id.symbol} ${row.total}</th>
                                         %endfor
-                                    <th>${object.currency_id.symbol} ${object.total}</th>
+                                    <!-- <th>${object.currency_id.symbol} ${object.total}</th> -->
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <h3 class="texto_centro">Facturas sin pagar</h3>
+                <div class="tabla_centrada">
+                    <table>
+                        <thead>
+                            <th>Cliente</th>
+                            <th>Número</th> 
+                            <th>Comercial</th> 
+                            <th>Total</th> 
+                        </thead>
+                        <tbody>
+                            % for row in object.facturas_ids:
+                                <tr>
+                                    <th>${row.partner_id.name}</th>
+                                    <th>${row.number}</th>
+                                    <th>${row.user_id.name}</th>
+                                    <th>${row.amount_total_signed}</th>
+                                </tr>
+                            %endfor
+                        </tbody>
+                    </table>
                 </div>
                 <br/>
                 <br/>

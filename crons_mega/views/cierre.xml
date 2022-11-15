@@ -44,19 +44,34 @@
                             <page string="Categorías">
                                 <field name="cierre_line_ids" readonly="1" />
                                 <group>
-                                    <group class="oe_subtotal_footer oe_right" >
+                                    <group class="oe_subtotal_footer oe_right">
                                         <div class="oe_inline o_td_label" style="padding-left: 15px;">
                                             <label for="total_cobrado"/>
                                         </div>
-                                        <field name="total_cobrado" nolabel="1"  widget="monetary" />
+                                        <field name="total_cobrado" nolabel="1" widget="monetary" />
                                     </group>
-                                    <group class="oe_subtotal_footer oe_right"  >
+                                    <group class="oe_subtotal_footer oe_right">
                                         <div class="oe_inline o_td_label" style="padding-left: 15px;">
                                             <label for="total_facturado"/>
                                         </div>
-                                        <field name="total_facturado" nolabel="1"  widget="monetary" />
+                                        <field name="total_facturado" nolabel="1" widget="monetary" />
                                     </group>
                                 </group>
+                            </page>
+                            <page string="Facturas sin pagar">
+                                <field name="facturas_ids" nolabel="1">
+                                    <tree string="Facturas">
+                                        <field name="partner_id" string="Cliente" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="number" />
+                                        <field name="user_id" />
+                                        <field name="amount_untaxed_invoice_signed" string="Total sin impuesto" sum="Total" />
+                                        <field name="amount_tax_signed" string="Impuesto" sum="Total" />
+                                        <field name="amount_total_signed" string="Total" sum="Total"/>
+                                        <field name="residual_signed" string="Saldo" sum="Total" />
+                                        <field name="state" />
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Registros internos">
                                 <field name="logs" nolabel="1"/>
