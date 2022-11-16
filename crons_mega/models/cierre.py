@@ -2,6 +2,7 @@
 from odoo import models, api,fields
 from datetime import datetime
 import pytz
+import time
 
 
 class Facturas(models.Model):
@@ -90,7 +91,7 @@ class CierreDiario(models.Model):
         })
     
     def iniciar_cierre(self):
-        journal_ids = self.env['res.config.settings'].get_values_journal_ids()
+        journal_ids = self.env['res.config.settings'].get_values_journal_ids(self.company_id.id)
         values = [(0, 0,  {
             'credito': True
         })]
@@ -128,6 +129,14 @@ class CierreDiario(models.Model):
             + text + "\n Nombre lista: " + name + "\n" + "Tamaño: "+ str(len(lists)) +
             "\n ----------------------------------------------------------------------\n"
         })
+        
+    # def register_sleep(self,i,secuencia):
+    #     cierre = self.browse(i)
+    #     self.write({
+    #         'logs': self.logs +secuencia +" sleep: \n    Fecha: " +
+    #         str(cierre.date) + "\nCompañia: " + cierre.company_id.name + "\nZona: "+ cierre.region +
+    #         "\n ----------------------------------------------------------------------\n"
+    #     })
              
         
     
@@ -255,8 +264,11 @@ class CierreDiario(models.Model):
         for i in ids:
             cierre = self.browse(i)
             cierre.iniciar_cierre()
+            time.sleep(2)
             cierre.procesar_cierre()
+            time.sleep(2)
             cierre.send_email("lmoran@megatk.com")
+            time.sleep(2)
     
     
     def go_to_view_tree(self):

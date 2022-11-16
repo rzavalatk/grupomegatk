@@ -6,11 +6,13 @@ from odoo import models, fields, api, _
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
+    company_cierre = 0
     journal_ids = fields.Many2many(
         "account.journal", "alias_id", string="Diarios de cierre")
     teams_sps = fields.Char("Canales de SPS")
     
-    def get_values_journal_ids(self):
+    def get_values_journal_ids(self,company):
+        self.company_cierre = company
         obj = self.get_values()
         return obj['journal_ids'][0][2]
         
@@ -29,7 +31,8 @@ class Settings(models.TransientModel):
     def get_values(self):
         res = super(Settings, self).get_values()
         IrValues = self.env['ir.config_parameter'].sudo()
-        journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
+        journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
+        # journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
         teams_sps = IrValues.get_param('crons_mega.teams_sps')
         if journal_ids:
             journal_ids = journal_ids.replace('[','')
