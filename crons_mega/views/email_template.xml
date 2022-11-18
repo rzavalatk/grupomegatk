@@ -78,7 +78,7 @@
                                     <th>${object.currency_id.symbol} ${object.total_facturado}</th>
                                 </tr>
                                 <tr>
-                                    <th>Cobrado</th>
+                                    <th>Cobrado Cxc</th>
                                         % for row in object.cierre_line_ids:
                                             % if row.credito :
                                     <th>No Aplica</th>

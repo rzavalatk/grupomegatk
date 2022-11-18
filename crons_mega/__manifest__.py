@@ -16,6 +16,7 @@
     'version': '0.1',
     'depends': ['base','account'],
     'data': [
+        'views/account_invoice.xml',
         'views/cierre_diario_cron.xml',
         'wizard/wizard.xml',
         'security/security.xml',
