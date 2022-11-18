@@ -264,11 +264,12 @@ class CierreDiario(models.Model):
         for i in ids:
             cierre = self.browse(i)
             cierre.iniciar_cierre()
-            time.sleep(2)
+            time.sleep(1)
             cierre.procesar_cierre()
-            time.sleep(2)
-            cierre.send_email("lmoran@megatk.com")
-            time.sleep(2)
+            time.sleep(1)
+            cierre.send_email("azelaya@megatk.com")
+            # cierre.send_email("lmoran@megatk.com")
+            time.sleep(1)
     
     
     def go_to_view_tree(self):
