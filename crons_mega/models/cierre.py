@@ -146,9 +146,9 @@ class CierreDiario(models.Model):
         # self.register_ids(region_comerciales,'comerciales')
         # users_ids = [i.id for i in region_comerciales]
         if self.region == self.regions_list[2][0]:
-            canales_ids = [36,38,39,45,47]
+            canales_ids = [35,36,37,38,39,45,47,53]
         elif self.region == self.regions_list[1][0]:
-            canales_ids = [43,41,46]
+            canales_ids = [43,41,46,58,44]
         else:
             canales_ids = [50,49]
         pagos=self.env['account.payment'].search([
@@ -291,7 +291,7 @@ class CierreDiarioLine(models.Model):
     @api.one
     def _name_(self):
         if self.credito:
-            self.name = "Creditos"
+            self.name = "Al credito"
         else:
             self.name = self.journal_id.name
     
