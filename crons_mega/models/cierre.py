@@ -188,9 +188,14 @@ class CierreDiario(models.Model):
                             self.register_ids(factura_id,'facturas de pagos')
                             if factura_id.date_invoice == self.date:
                                 acumulado_factura += factura_id.amount_total_signed
+                            else:
+                                self.write({
+                                    'cierre_line_ids': [(1, item.id, {
+                                        'cobrado': pago.amount + item.cobrado
+                                    })]
+                                })
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
-                            'cobrado': pago.amount + item.cobrado,
                             'facturado': acumulado_factura + item.facturado
                         })]
                     })
@@ -298,11 +303,13 @@ class CierreDiarioLine(models.Model):
     
     @api.one
     def _total(self):
-        total = self.cobrado - self.facturado
-        if total < 0:
-            total = total * (-1)
-        elif total == 0:
-            total = self.cobrado
+        total = self.cobrado + self.facturado
+        if self.credito:
+            total = 0
+        # if total < 0:
+        #     total = total * (-1)
+        # elif total == 0:
+        #     total = self.cobrado
         self.total = round(total, 2)
     
         
