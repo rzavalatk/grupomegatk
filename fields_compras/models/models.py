@@ -42,11 +42,14 @@ class ModelImport(models.Model):
     def _brand_produt(self):
         try:
             self.brand_produt = self.import_line_id[0].product_id.marca_id.id
+            self.write({
+                "brand_name": self.import_line_id[0].product_id.marca_id.name
+            })
         except :
             self.brand_produt = ""
-        self.write({
-            "brand_name": self.import_line_id[0].product_id.marca_id.name
-        })
+            self.write({
+                "brand_name": ""
+            })
 
     brand_produt = fields.Many2one('product.marca',"Marca", compute=_brand_produt)
     brand_name = fields.Char()
