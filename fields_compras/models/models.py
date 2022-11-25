@@ -40,7 +40,10 @@ class ModelImport(models.Model):
 
     @api.one
     def _brand_produt(self):
-        self.brand_produt = self.import_line_id[0].product_id.marca_id.id
+        try:
+            self.brand_produt = self.import_line_id[0].product_id.marca_id.id
+        except :
+            self.brand_produt = ""
         self.write({
             "brand_name": self.import_line_id[0].product_id.marca_id.name
         })
