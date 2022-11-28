@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class PrestamosCuotas(models.Model):
     _name = 'prestamos.cuotas'
     _description = "Cuotas de los prestamos"
-    _order = "id"
+    _order = "fecha_pagado asc"
 
 
     @api.model
@@ -38,7 +38,6 @@ class PrestamosCuotas(models.Model):
     gastos = fields.Float(string='Gastos',copy=False)
     pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
-    
     invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
 
     # @api.onchange('cuotas_prestamo_id')
@@ -141,7 +140,7 @@ class PrestamosCuotas(models.Model):
 
             if self.saldo > 0 and abs(self.pago - self.cuota_prestamo) > 0.01:
                 tasa = self.cuotas_prestamo_id.tasa / 100
-                cuota = self.cuota_prestamo - self.gastos
+                cuota = self.pago - self.gastos
                 self.cuotas_prestamo_id._cuotas(saldo,tasa,cuota,0,self.interes_generado)
         self.write({
             'invoice_id' : account_invoice_id.id,

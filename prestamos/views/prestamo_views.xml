@@ -89,6 +89,8 @@
 						<button name="ending" type="object" string="Finalizar" states="proceso" class="oe_highlight"/>
 						<button name="re_validate" type="object" string="Re-validar" states="validado,desembolso,proceso"/>
 						<button name="%(aporte_capital_action_wizard)d" type="action" string="Aportar capital" states="proceso" context="{'active_id': id}" />
+						<button string="Revisar prestamo 1" name="review_prestamo" groups="planilla_y_metas.admin_functions" type="object"/>
+						<button string="Revisar prestamo 2" name="review_prestamo_2" groups="planilla_y_metas.admin_functions" type="object"/>
 						<field name="state" widget="statusbar" nolabel="1"/>
 					</header>
 					<sheet>
@@ -179,6 +181,9 @@
 										<field name="recibir_pagos"/>
 									</group>
 								</group>
+							</page>
+							<page string="Registros" groups="planilla_y_metas.admin_functions">
+								<field name="logs" nolabel='1' />
 							</page>
 						</notebook>
 					</sheet>

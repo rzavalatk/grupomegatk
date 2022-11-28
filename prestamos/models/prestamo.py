@@ -5,6 +5,7 @@ from odoo.exceptions import Warning
 from odoo.addons import decimal_precision as dp
 import math
 import logging
+import json
 #import numpy_financial as npf
 
 _logger = logging.getLogger(__name__)
@@ -167,6 +168,7 @@ class Prestamos(models.Model):
         string='Payment Count', compute='_get_invoiced', readonly=True)
     cuotas_count = fields.Integer(
         string='cuotas Count', compute='_get_invoiced', readonly=True)
+    logs = fields.Text(default="")
 
     def re_validate(self):
         fecha_inicial = self.fecha_inicio or fields.Date.context_today(self)
@@ -401,7 +403,7 @@ class Prestamos(models.Model):
             gasto = 0
             x = x + 1
 
-    def re_write_cuotas(self, monto, date):
+    def re_write_cuotas(self, monto, date,res_pago=True):
         ids = []
         for item in self.cuotas_id:
             if item.state == 'draft':
@@ -423,16 +425,20 @@ class Prestamos(models.Model):
                     'communication': self.name + ' ' + 'Abono a capital',
                     'payment_method_id': 1
                 }
-                paymet_id = obj_paymet_id.create(val_payment)
-                paymet_id.post()
+                if res_pago:    
+                    paymet_id = obj_paymet_id.create(val_payment)
+                    paymet_id.post()
                 tasa = self.tasa / 100
                 cuota2 = cuota.cuota_prestamo - cuota.gastos
                 self._add_aporte_capital(restante,monto,date)
                 self._cuotas(restante, tasa, cuota2, 0, cuota.interes_generado)
-                self.write({
+                vals = {
                     'monto_restante': restante,
                     'payment_ids': [(4, paymet_id.id, 0)]
-                })
+                } if res_pago else {
+                    'monto_restante': restante,
+                }
+                self.write(vals)
             elif int(restante) < 0:
                 raise Warning(
                     _('No se puede procesar el abono a capital por exeder lo adeudado'))
@@ -513,7 +519,6 @@ class Prestamos(models.Model):
         self.write({'state': 'draft'})
         
     def write(self,vals):
-        print("///////////////",vals,"////////////////")
         return super(Prestamos, self).write(vals)
         
 
@@ -664,3 +669,83 @@ class Prestamos(models.Model):
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
+
+    
+    def _clear_logs(self):
+        self.write({
+            'logs': ""
+        })
+    
+    
+    def _register_list(self,lista,name,campos=False):
+        string = ""
+        for item in lista:
+            if campos:
+                c = campos.split(",")
+                for i in c: 
+                    string += i +" : " + str(item[i]) + "\n"
+            else:
+                string += item
+        self.write({
+            'logs': self.logs+ "\n" +name +"(Tamaño: " + str(len(lista))+")" + " : \n" + string
+        })
+             
+    
+    def review_prestamo(self):
+        self._clear_logs() 
+        saldo = self.monto_cxc
+        tasa = self.tasa / 100
+        for item in self.cuotas_id:
+            if item.state == "hecho":
+                temp = saldo
+                if item.name != "Cuota AC":
+                    interes = saldo * tasa
+                else:
+                    interes = 0
+                saldo = saldo + interes - item.pago
+                item.write({
+                    'saldo': saldo,
+                    'cuota_interes':interes,
+                    'cuota_capital': temp
+                })
+        self._cuotas(saldo, tasa, self.cuota_prestamo, 0, 0)
+        self.write({
+            'monto_restante': saldo
+        })
+
+
+    def review_prestamo_2(self):
+            self._clear_logs() 
+            ac1 = []
+            ac2 = []
+            ac3 = []
+            for item in self.invoice_cxc_ids:
+                if item.state == "open":
+                    d = json.loads(item.payments_widget)
+                    for pay in d:
+                        if pay == 'content':
+                            for i in d[pay]:
+                                if "Abono a capital" in i['ref']:
+                                    ac1.append(i)
+            for item in self.cuotas_id:
+                if item.state == "hecho":
+                    if "Cuota AC" in item.name:
+                        ac2.append({
+                            'date': item.fecha_pagado,
+                            'pago': item.pago
+                        })
+            for i in ac1:
+                temp = True
+                for j in ac2:
+                    if i['date'] == str(j['date']) and i['amount'] == j['pago']:
+                        temp = False
+                if temp:
+                    ac3.append(i)
+            # print("///////////",ac1,"/////////////")
+            # print("///////////",ac2,"/////////////")
+            # print("///////////",ac3,"/////////////")
+            self._register_list(ac1,"ac1","ref,date,amount")
+            self._register_list(ac2,"ac2","date,pago")
+            self._register_list(ac3,"ac3","ref,date,amount")
+            for item in ac3:
+                self.re_write_cuotas(item['amount'], item['date'],False)
