@@ -273,11 +273,11 @@ class CierreDiario(models.Model):
             time.sleep(1)
             cierre.procesar_cierre()
             time.sleep(1)
-            cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
-            # if self.company_id.id in [8,12]:
-            #     cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
-            # if self.company_id.id in [9]:
-            #     cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
+            # cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
+            if self.company_id.id in [8,12]:
+                cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
+            if self.company_id.id in [9]:
+                cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
             time.sleep(1)
     
     
