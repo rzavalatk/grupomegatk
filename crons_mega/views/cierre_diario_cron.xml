@@ -3,7 +3,7 @@
     <data>
         <record id="cierre_diario_send_email" model="ir.cron">
             <field name="name">cierre.diario.send.email</field>
-            <field eval="True" name="active" />
+            <field eval="False" name="active" />
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
