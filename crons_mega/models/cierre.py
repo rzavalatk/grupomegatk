@@ -230,12 +230,13 @@ class CierreDiario(models.Model):
         })
         
         
-    def send_email(self,email):
+    def send_email(self,email,cc=""):
         template = self.env.ref(
         'crons_mega.email_template_cierre_diario_1')
         email_values = {
             'email_from': 'azelaya@megatk.com',
-            'email_to': email
+            'email_to': email,
+            'email_cc': cc
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
@@ -272,8 +273,11 @@ class CierreDiario(models.Model):
             time.sleep(1)
             cierre.procesar_cierre()
             time.sleep(1)
-            cierre.send_email("azelaya@megatk.com,ecolindres@megatk.com")
-            # cierre.send_email("lmoran@megatk.com")
+            cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
+            # if self.company_id.id in [8,12]:
+            #     cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
+            # if self.company_id.id in [9]:
+            #     cierre.send_email("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
             time.sleep(1)
     
     

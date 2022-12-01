@@ -7,6 +7,7 @@
             <field name="subject">Cierre de ${object.name}</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_cc">${user.email_formatted | safe}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
