@@ -272,8 +272,8 @@ class CierreDiario(models.Model):
             time.sleep(1)
             cierre.procesar_cierre()
             time.sleep(1)
-            cierre.send_email("azelaya@megatk.com,ecolindres@megatk.com")
-            # cierre.send_email("lmoran@megatk.com")
+            # cierre.send_email("azelaya@megatk.com")
+            cierre.send_email("lmoran@megatk.com")
             time.sleep(1)
     
     
