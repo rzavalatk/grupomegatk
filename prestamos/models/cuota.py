@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class PrestamosCuotas(models.Model):
     _name = 'prestamos.cuotas'
     _description = "Cuotas de los prestamos"
-    _order = "fecha_pagado asc"
+    # _order = "fecha_pagado asc"
 
 
     @api.model
