@@ -66,7 +66,7 @@
                             <thead>
                                 <th></th>
                                     % for row in object.cierre_line_ids:
-                                        <th>${row.name}</th>
+                                <th>${row.name}</th>
                                     %endfor
                                 <th>Total</th>
                             </thead>
@@ -92,9 +92,8 @@
                                 <tr>
                                     <th>Total</th>
                                         % for row in object.cierre_line_ids:
-                                            <th>${row.currency_id.symbol} ${row.total}</th>
+                                    <th>${row.currency_id.symbol} ${row.total}</th>
                                         %endfor
-                                    <!-- <th>${object.currency_id.symbol} ${object.total}</th> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -109,21 +108,106 @@
                     <table>
                         <thead>
                             <th>Cliente</th>
-                            <th>Número</th> 
-                            <th>Comercial</th> 
-                            <th>Total</th> 
+                            <th>Número</th>
+                            <th>Comercial</th>
+                            <th>Total</th>
                         </thead>
                         <tbody>
                             % for row in object.facturas_ids:
-                                <tr>
-                                    <th>${row.partner_id.name}</th>
-                                    <th>${row.number}</th>
-                                    <th>${row.user_id.name}</th>
-                                    <th>${row.amount_total_signed}</th>
-                                </tr>
+                            <tr>
+                                <th>${row.partner_id.name}</th>
+                                <th>${row.number}</th>
+                                <th>${row.user_id.name}</th>
+                                <th>${row.amount_total_signed}</th>
+                            </tr>
                             %endfor
                         </tbody>
                     </table>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="footer">
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
+                </div>
+            </field>
+        </record>
+
+        <record id="email_template_product_expirated" model="mail.template">
+            <field name="name">Producto por expirar</field>
+            <field name="model_id" ref="model_stock_production_lot"/>
+            <field name="subject">Productos por vencer</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_cc">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                <style>
+                    .cuadro {
+                    border-color: #000;
+                    border-width: 1px;
+                    border-style: solid;
+                    }
+
+                    .tamaño_del_cuadro {
+                    width: 900px;
+                    height: 300px;
+                    margin: 0px;
+                    padding: 0px;
+                    }
+
+                    .texto_centro {
+                    text-align: center;
+                    }
+
+                    .tabla_centrada{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    }
+
+                    .th_total{
+                        width: 25%;
+                    }
+
+                    table {
+                    width: 100%;
+                    border: 1px solid #000;
+                    background-color: black;
+                    }
+
+                    th,
+                    td {
+                    width: 15%;
+                    text-align: left;
+                    vertical-align: top;
+                    border: 1px solid #000;
+                    border-collapse: collapse;
+                    padding: 0.1em;
+                    background-color: white;
+                    }
+
+                    caption {
+                    padding: 0.3em;
+                    }
+                </style>
+                <div class="page">
+                    <h1 class="texto_centro">Productos por Vencer</h1>
+                    <h3 class="texto_centro"></h3>
+                    <div class="tabla_centrada">
+                        <table>
+                            <thead>
+                                <th>Código</th>
+                                <th>Productos</th>
+                                <th>Compañia</th>
+                                <th>Fecha de vencimiento</th>
+                                <th>Días por expirar/expirado</th>
+                            </thead>
+                            <tbody>
+                                ${ctx.get('body')}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <br/>
                 <br/>

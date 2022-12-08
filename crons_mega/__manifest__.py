@@ -23,6 +23,7 @@
         'views/cierre.xml',
         'views/cierre_line.xml',
         'views/email_template.xml',
+        'views/stock_production_lot.xml',
         'views/res_config.xml',
     ]
 }

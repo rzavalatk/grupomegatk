@@ -9,6 +9,7 @@
                     <sheet>
                         <group>
                             <field name="mail" />
+                            <field name="cc" />
                         </group>
                     </sheet>
                     <footer>

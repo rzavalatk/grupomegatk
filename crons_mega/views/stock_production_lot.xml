@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="stock_production_lot_add_company_1" model="ir.ui.view">
+            <field name="name">stock.production.lot.add.company</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]//sheet[1]" position="before">
+                    <header>
+                        <button string="Probar funcion" groups="planilla_y_metas.admin_functions" name="review_date_expired" type="object" class="oe_highlight"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="company_id" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_production_lot_view_search_inherit" model="ir.ui.view">
+            <field name="name">stock.production.lot.view.search</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.search_product_lot_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_by_product']" position="before">
+                    <filter name="group_by_company" string="Compañia" context="{'group_by':'company_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock.action_production_lot_form" model="ir.actions.act_window">
+            <field name="context">{'search_default_group_by_company': 1,'search_default_group_by_product': 1}</field>
+        </record>
+    </data>
+</odoo>
