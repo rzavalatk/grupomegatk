@@ -204,7 +204,7 @@
                                 <th>Días por expirar/expirado</th>
                             </thead>
                             <tbody>
-                                ${ctx.get('body')}
+                                ${ctx.get('body') | safe}
                             </tbody>
                         </table>
                     </div>
