@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-    <!-- <data  noupdate="1"> -->
+    <!-- <data> -->
+    <data  noupdate="1">
         <record id="cierre_diario_send_email" model="ir.cron">
             <field name="name">cierre.diario.send.email</field>
             <field eval="True" name="active" />
