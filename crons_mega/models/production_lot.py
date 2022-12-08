@@ -95,6 +95,6 @@ class Lots(models.Model):
                 """
                 html += "</tr>"
             contexto['body'] = html
-            to = "azelaya@megatk.com"
-            cc = "rzavala@megatk.com"
+            to = "bodegatgu@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com"
+            cc = "nfuentes@meditekhn.com"
             self.send_email(to,cc,contexto)

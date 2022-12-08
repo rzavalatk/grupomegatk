@@ -18,6 +18,7 @@
     'data': [
         'views/account_invoice.xml',
         'views/cierre_diario_cron.xml',
+        'views/product_expired_cron.xml',
         'wizard/wizard.xml',
         'security/security.xml',
         'views/cierre.xml',
