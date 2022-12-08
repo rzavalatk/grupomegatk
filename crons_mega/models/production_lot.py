@@ -53,7 +53,8 @@ class Lots(models.Model):
 
     def review_date_expired(self):
         html = ""
-        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        admin = self.env['res.users'].browse(2)
+        user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = dt.now(user_tz)
         lots = self.env['stock.production.lot'].search([])
         products = []

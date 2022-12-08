@@ -243,7 +243,8 @@ class CierreDiario(models.Model):
         return True
 
     def cron_eject(self):
-        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        admin = self.env['res.users'].browse(2)
+        user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
         company_ids = [8, 9, 12]
         ids = []
