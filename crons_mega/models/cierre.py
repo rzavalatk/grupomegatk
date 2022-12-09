@@ -83,9 +83,9 @@ class CierreDiario(models.Model):
         lines_ids = []
         facturas = []
         for item in self.cierre_line_ids:
-            lines_ids.append((2, item.sudo().id))
+            lines_ids.append((2, item.id))
         for item in self.facturas_ids:
-            facturas.append((3, item.sudo().id))
+            facturas.append((3, item.id))
 
         self.write({
             'cierre_line_ids': lines_ids,
@@ -95,7 +95,7 @@ class CierreDiario(models.Model):
         })
 
     def iniciar_cierre(self):
-        journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
+        journal_ids = self.env['res.config.settings'].get_values_journal_ids(
             self.company_id.id)
         values = [(0, 0,  {
             'credito': True
@@ -113,7 +113,7 @@ class CierreDiario(models.Model):
         text = ""
         length = 0
         for item in obj:
-            text += str(item.sudo().id) + ", "
+            text += str(item.id) + ", "
             length += 1
         self.write({
             'logs': self.logs + "ids de objetos consultados: \n"
@@ -149,7 +149,7 @@ class CierreDiario(models.Model):
             canales_ids = [43, 41, 46, 58, 44]
         else:
             canales_ids = [50, 49]
-        pagos = self.env['account.payment'].sudo().search([
+        pagos = self.env['account.payment'].search([
             '&',
             '&',
             '&',
@@ -160,14 +160,14 @@ class CierreDiario(models.Model):
             ('state', '=', 'posted'),
         ])
         self.register_ids(pagos, 'pagos')
-        facturas = self.env['account.invoice'].sudo().search([
+        facturas = self.env['account.invoice'].search([
             '&',
             '&',
             '&',
             '&',
             '&',
             ('date_invoice', '=', self.date),
-            ('company_id', '=', self.company_id.sudo().id),
+            ('company_id', '=', self.company_id.id),
             # ('user_id','in',users_ids),
             ('team_id', 'in', canales_ids),
             ('type', '=', 'out_invoice'),
@@ -178,20 +178,19 @@ class CierreDiario(models.Model):
         ids_facturas = []
         for pago in pagos:
             for item in self.cierre_line_ids:
-                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                if pago.journal_id.id == item.journal_id.id:
                     acumulado_factura = 0
-                    for factura in pago.invoice_ids.sudo().ids:
+                    for factura in pago.invoice_ids.ids:
                         if factura not in ids_facturas:
-                            factura_id = self.env['account.invoice'].sudo().browse(
+                            factura_id = self.env['account.invoice'].browse(
                                 factura)
                             self.register_ids(factura_id, 'facturas de pagos')
                             if factura_id.date_invoice == self.date:
                                 acumulado_factura += factura_id.amount_total_signed
                             else:
-                                temp = factura_id.amount_total_signed - factura_id.residual
                                 self.write({
                                     'cierre_line_ids': [(1, item.id, {
-                                        'cobrado': temp + item.cobrado
+                                        'cobrado': factura_id.amount_total_signed + item.cobrado
                                     })]
                                 })
                     self.write({
@@ -199,17 +198,17 @@ class CierreDiario(models.Model):
                             'facturado': acumulado_factura + item.facturado
                         })]
                     })
-                    ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
+                    ids_facturas = ids_facturas + pago.invoice_ids.ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
-            if factura.state == 'open' and factura.payment_term_id.sudo().name == 'Contado':
+            if factura.state == 'open' and factura.payment_term_id.name == 'Contado':
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
 
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.payment_term_id.sudo().name != 'Contado':
+                if factura.payment_term_id.name != 'Contado':
                     for item in self.cierre_line_ids:
                         if item.credito:
                             self.write({
@@ -237,14 +236,14 @@ class CierreDiario(models.Model):
             'email_to': email,
             'email_cc': cc
         }
-        template.sudo().send_mail(self.id, email_values=email_values, force_send=True)
+        template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
         return True
 
     def cron_eject(self):
-        admin = self.env['res.users'].sudo().browse(2)
+        admin = self.env['res.users'].browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
         company_ids = [8, 9, 12]
@@ -268,17 +267,17 @@ class CierreDiario(models.Model):
                 })
                 ids.append(obj.id)
         for i in ids:
-            cierre = self.sudo().browse(i)
+            cierre = self.browse(i)
             cierre.iniciar_cierre()
             time.sleep(1)
             cierre.procesar_cierre()
             # cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
-            if cierre.company_id.sudo().id in [8, 12]:
+            if cierre.company_id.id in [8, 12]:
                 # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
                 time.sleep(1)
                 cierre.send_email(
                     "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "eduron@megatk.com")
-            if cierre.company_id.sudo().id in [9]:
+            if cierre.company_id.id in [9]:
                 # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
                 time.sleep(1)
                 cierre.send_email(
