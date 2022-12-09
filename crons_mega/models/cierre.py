@@ -188,9 +188,10 @@ class CierreDiario(models.Model):
                             if factura_id.date_invoice == self.date:
                                 acumulado_factura += factura_id.amount_total_signed
                             else:
+                                temp = factura_id.amount_total_signed - factura_id.residual
                                 self.write({
                                     'cierre_line_ids': [(1, item.id, {
-                                        'cobrado': factura_id.amount_total_signed + item.cobrado
+                                        'cobrado': temp + item.cobrado
                                     })]
                                 })
                     self.write({
