@@ -190,7 +190,7 @@ class CierreDiario(models.Model):
                             else:
                                 self.write({
                                     'cierre_line_ids': [(1, item.id, {
-                                        'cobrado': pago.amount + item.cobrado
+                                        'cobrado': factura_id.amount_total_signed + item.cobrado
                                     })]
                                 })
                     self.write({
