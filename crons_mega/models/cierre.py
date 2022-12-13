@@ -3,6 +3,7 @@ from odoo import models, api, fields
 from datetime import datetime
 import pytz
 import time
+import json
 
 
 class Facturas(models.Model):
@@ -35,6 +36,10 @@ class CierreDiario(models.Model):
     @api.one
     def _total_cobrado(self):
         self.total_cobrado = self._recorrec_lines("cobrado")
+        
+    @api.one
+    def _total(self):
+        self.total = self._recorrec_lines("total")
 
     @api.one
     def _total_facturado(self):
@@ -61,6 +66,7 @@ class CierreDiario(models.Model):
         "Total Facturado", compute=_total_facturado)
     facturas_ids = fields.One2many("account.invoice", "cierre_id", "Facturas")
     total_cobrado = fields.Monetary("Total Cobrado", compute=_total_cobrado)
+    total = fields.Monetary("Total Cobrado", compute=_total)
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
@@ -83,9 +89,9 @@ class CierreDiario(models.Model):
         lines_ids = []
         facturas = []
         for item in self.cierre_line_ids:
-            lines_ids.append((2, item.id))
+            lines_ids.append((2, item.sudo().id))
         for item in self.facturas_ids:
-            facturas.append((3, item.id))
+            facturas.append((3, item.sudo().id))
 
         self.write({
             'cierre_line_ids': lines_ids,
@@ -95,7 +101,7 @@ class CierreDiario(models.Model):
         })
 
     def iniciar_cierre(self):
-        journal_ids = self.env['res.config.settings'].get_values_journal_ids(
+        journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
             self.company_id.id)
         values = [(0, 0,  {
             'credito': True
@@ -113,7 +119,7 @@ class CierreDiario(models.Model):
         text = ""
         length = 0
         for item in obj:
-            text += str(item.id) + ", "
+            text += str(item.sudo().id) + ", "
             length += 1
         self.write({
             'logs': self.logs + "ids de objetos consultados: \n"
@@ -149,7 +155,7 @@ class CierreDiario(models.Model):
             canales_ids = [43, 41, 46, 58, 44]
         else:
             canales_ids = [50, 49]
-        pagos = self.env['account.payment'].search([
+        pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
             '&',
@@ -160,55 +166,74 @@ class CierreDiario(models.Model):
             ('state', '=', 'posted'),
         ])
         self.register_ids(pagos, 'pagos')
-        facturas = self.env['account.invoice'].search([
+        facturas = self.env['account.invoice'].sudo().search([
+            '&',
             '&',
             '&',
             '&',
             '&',
             '&',
             ('date_invoice', '=', self.date),
-            ('company_id', '=', self.company_id.id),
+            ('company_id', '=', self.company_id.sudo().id),
             # ('user_id','in',users_ids),
             ('team_id', 'in', canales_ids),
             ('type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
+            ('de_consignacion', '=', False),
         ])
         self.register_ids(facturas, 'facturas')
+        mas_de_un_pago_factura = {}
         ids_facturas = []
+        # Recorrer los pagos
         for pago in pagos:
+            # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
-                if pago.journal_id.id == item.journal_id.id:
-                    acumulado_factura = 0
-                    for factura in pago.invoice_ids.ids:
+                # Compartar que pagos entran en los diarios de cierre
+                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                    acumulado_factura = 0 # lo acumulado de facturas
+                    # recorrer facturas de los pagos
+                    for factura in pago.invoice_ids.sudo().ids:
                         if factura not in ids_facturas:
-                            factura_id = self.env['account.invoice'].browse(
+                            factura_id = self.env['account.invoice'].sudo().browse(
                                 factura)
                             self.register_ids(factura_id, 'facturas de pagos')
                             if factura_id.date_invoice == self.date:
-                                acumulado_factura += factura_id.amount_total_signed
-                            else:
-                                self.write({
-                                    'cierre_line_ids': [(1, item.id, {
-                                        'cobrado': factura_id.amount_total_signed + item.cobrado
-                                    })]
-                                })
+                                payments_widget = json.loads(factura_id.payments_widget)['content']
+                                
+                                for pay in payments_widget:
+                                    if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
+                                        acumulado_factura += pay['amount']
+                                        if len(payments_widget) > 1:
+                                            try:
+                                                mas_de_un_pago_factura[factura_id.internal_number]
+                                                temp = mas_de_un_pago_factura[factura_id.internal_number] -1
+                                                if temp <= 0:
+                                                    ids_facturas = ids_facturas + [factura_id.id]
+                                                else:
+                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                            except:
+                                                mas_de_un_pago_factura[factura_id.internal_number] = len(payments_widget) - 1
+                                        else:
+                                            ids_facturas = ids_facturas + [factura_id.id]
+                                            
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
-                            'facturado': acumulado_factura + item.facturado
+                            'facturado': acumulado_factura + item.facturado,
+                            'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
-                    ids_facturas = ids_facturas + pago.invoice_ids.ids
+                    # ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
-            if factura.state == 'open' and factura.payment_term_id.name == 'Contado':
+            if factura.state == 'open' and factura.payment_term_id.sudo().name == 'Contado':
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
 
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.payment_term_id.name != 'Contado':
+                if factura.payment_term_id.sudo().name != 'Contado':
                     for item in self.cierre_line_ids:
                         if item.credito:
                             self.write({
@@ -216,14 +241,14 @@ class CierreDiario(models.Model):
                                     'facturado': factura.amount_total_signed + item.facturado
                                 })]
                             })
-                else:
-                    for item in self.cierre_line_ids:
-                        if item.journal_id.name == "Efectivo":
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
+                # else:
+                #     for item in self.cierre_line_ids:
+                #         if item.journal_id.name == "Efectivo":
+                #             self.write({
+                #                 'cierre_line_ids': [(1, item.id, {
+                #                     'facturado': factura.amount_total_signed + item.facturado
+                #                 })]
+                #             })
         self.write({
             'state': 'proccess'
         })
@@ -243,46 +268,47 @@ class CierreDiario(models.Model):
         return True
 
     def cron_eject(self):
-        admin = self.env['res.users'].browse(2)
+        admin = self.env['res.users'].sudo().browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
-        company_ids = [8, 9, 12]
-        ids = []
-        for i in company_ids:
-            if i != 12:
-                j = 1
-                while j < 3:
+        if today.weekday() != 6:
+            company_ids = [8, 9, 12]
+            ids = []
+            for i in company_ids:
+                if i != 12:
+                    j = 1
+                    while j < 3:
+                        obj = self.create({
+                            'date': today,
+                            'company_id': i,
+                            'region': self.regions_list[j][0]
+                        })
+                        ids.append(obj.id)
+                        j += 1
+                else:
                     obj = self.create({
                         'date': today,
                         'company_id': i,
-                        'region': self.regions_list[j][0]
+                        'region': self.regions_list[0][0]
                     })
                     ids.append(obj.id)
-                    j += 1
-            else:
-                obj = self.create({
-                    'date': today,
-                    'company_id': i,
-                    'region': self.regions_list[0][0]
-                })
-                ids.append(obj.id)
-        for i in ids:
-            cierre = self.browse(i)
-            cierre.iniciar_cierre()
-            time.sleep(1)
-            cierre.procesar_cierre()
-            # cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
-            if cierre.company_id.id in [8, 12]:
-                # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
+            for i in ids:
+                cierre = self.sudo().browse(i)
+                cierre.iniciar_cierre()
                 time.sleep(1)
-                cierre.send_email(
-                    "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "eduron@megatk.com")
-            if cierre.company_id.id in [9]:
-                # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
+                cierre.procesar_cierre()
+                # cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
+                if cierre.company_id.sudo().id in [8, 12]:
+                    # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
+                    time.sleep(1)
+                    cierre.send_email(
+                        "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "eduron@megatk.com")
+                if cierre.company_id.sudo().id in [9]:
+                    # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
+                    time.sleep(1)
+                    cierre.send_email(
+                        "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "nfuentes@meditekhn.com")
                 time.sleep(1)
-                cierre.send_email(
-                    "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "nfuentes@meditekhn.com")
-            time.sleep(1)
 
     def go_to_view_tree(self):
         return {

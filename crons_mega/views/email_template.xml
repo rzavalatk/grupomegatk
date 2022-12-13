@@ -111,6 +111,7 @@
                             <th>Número</th>
                             <th>Comercial</th>
                             <th>Total</th>
+                            <th>Saldo</th>
                         </thead>
                         <tbody>
                             % for row in object.facturas_ids:
@@ -119,6 +120,7 @@
                                 <th>${row.number}</th>
                                 <th>${row.user_id.name}</th>
                                 <th>${row.amount_total_signed}</th>
+                                <th>${row.residual}</th>
                             </tr>
                             %endfor
                         </tbody>
