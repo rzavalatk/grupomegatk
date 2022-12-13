@@ -180,7 +180,7 @@ class CierreDiario(models.Model):
             ('type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-            ('de_consignacion', '=', False),
+            # ('de_consignacion', '=', False),
         ])
         self.register_ids(facturas, 'facturas')
         mas_de_un_pago_factura = {}
