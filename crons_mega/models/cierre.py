@@ -172,7 +172,7 @@ class CierreDiario(models.Model):
             '&',
             '&',
             '&',
-            '&',
+            # '&',
             ('date_invoice', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
             # ('user_id','in',users_ids),
