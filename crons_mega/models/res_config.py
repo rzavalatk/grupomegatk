@@ -29,22 +29,26 @@ class Settings(models.TransientModel):
 
     @api.model
     def get_values(self):
-        res = super(Settings, self).get_values()
-        IrValues = self.env['ir.config_parameter'].sudo()
-        journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
-        # journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
-        teams_sps = IrValues.get_param('crons_mega.teams_sps')
-        if journal_ids:
+        try:
+            res = super(Settings, self).get_values()
+            IrValues = self.env['ir.config_parameter'].sudo()
+            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
+            # journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
+            teams_sps = IrValues.get_param('crons_mega.teams_sps')
+            ids = []
+            if not journal_ids:
+                journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))    
             journal_ids = journal_ids.replace('[','')
             journal_ids = journal_ids.replace(']','')
             journal_ids = journal_ids.split(',')
-            ids = []
             for item in journal_ids:
                 ids.append(int(item))
             lines = False
             if ids:
                 lines = [(6, 0, ids)]
             res.update(journal_ids=lines,teams_sps=teams_sps)
+        except:
+            pass
         return res
 
     @api.multi

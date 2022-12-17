@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="change_context_button_create_invoice" model="ir.ui.view">
+            <field name="name">change_context_button_create_invoice</field>
+            <field name="model">sale.advance.payment.inv</field>
+            <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/footer[1]/button[1]" position="attributes">
+                    <attribute name="context">{'open_invoices': True,'de_consignacion': False}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

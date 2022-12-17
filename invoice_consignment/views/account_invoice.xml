@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <record id="account_invoice_view_form_quit_payment" model="ir.ui.view">
+        <record id="account_invoice_view_form_quit_payment_1" model="ir.ui.view">
             <field name="name">account.invoice.view.form.quit.payment</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
@@ -9,11 +9,26 @@
                 <xpath expr="//button[@name='127']" position="after">
                     <field name="de_consignacion" invisible="1" />
                 </xpath>
+                <xpath expr="//button[@name='action_invoice_sent']" position="before">
+                    <button string="Crear Presupuesto" confirm="¿Seguro que desea crear un presupuesto a partir de esta consignación?" name="create_sale" type="object" attrs="{'invisible': ['|','|',('state','not in',['open','paid']),('de_consignacion','!=',True),('state_sale','=',True)]}" class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//field[@name='reference']" position="after">
+                    <field name="state_sale" invisible="1" />
+                    <field name="consig_sale_id" attrs="{'invisible':[('de_consignacion','=',False)]}" />
+                </xpath>
                 <xpath expr="//button[@name='127']" position="attributes">
                     <attribute name="attrs">{
                         'invisible': ['|',
                         ('state', '!=', 'open'),
                         ('de_consignacion','=',True)]
+                    }</attribute>
+                </xpath>
+                <xpath expr="//button[@name='190']" position="attributes">
+                    <attribute name="attrs">{
+                        'invisible': ['|','|',
+                        ('de_consignacion','=',True),
+                        ('type', '=', 'out_refund'), 
+                        ('state', 'not in', ('open','in_payment','paid'))]
                     }</attribute>
                 </xpath>
             </field>
