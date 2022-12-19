@@ -45,7 +45,7 @@
 
                     th,
                     td {
-                    width: 15%;
+                    width: 5%;
                     text-align: left;
                     vertical-align: top;
                     border: 1px solid #000;
