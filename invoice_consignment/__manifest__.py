@@ -19,6 +19,7 @@
         'views/account_invoice.xml',
         'views/sale_wizar_invoice.xml',
         'views/inherit_action_invoice.xml',
+        'views/type_account.xml',
         'views/res_config.xml',
     ],
 }

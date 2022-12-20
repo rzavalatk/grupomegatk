@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_account_type_action" model="ir.actions.act_window">
+            <field name="name">Tipos de Cuentas</field>
+            <field name="res_model">account.account.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="account_account_type_menu"
+            name="Tipos de Cuentas"
+            action="account_account_type_action"
+            groups="planilla_y_metas.admin_functions"
+            parent="account.account_account_menu"
+            sequence="101"/>
+    </data>
+</odoo>
