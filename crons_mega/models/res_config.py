@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import Warning
 
 
 class Settings(models.TransientModel):
@@ -10,11 +11,22 @@ class Settings(models.TransientModel):
     journal_ids = fields.Many2many(
         "account.journal", "alias_id", string="Diarios de cierre")
     teams_sps = fields.Char("Canales de SPS")
+    account_ids_cron_mega = fields.Many2many(
+        "account.account", "code", string="Cuentas Cxc para cierre")
     
     def get_values_journal_ids(self,company):
         self.company_cierre = company
         obj = self.get_values()
         return obj['journal_ids'][0][2]
+    
+    def get_values_account_ids_cron_mega(self,company):
+        try:
+            self.company_cierre = company
+            obj = self.get_values()
+            return obj['account_ids_cron_mega'][0][2]
+        
+        except:
+            return []
         
     
     def get_values_teams_sps(self):
@@ -33,27 +45,47 @@ class Settings(models.TransientModel):
             res = super(Settings, self).get_values()
             IrValues = self.env['ir.config_parameter'].sudo()
             journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
-            # journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))
-            teams_sps = IrValues.get_param('crons_mega.teams_sps')
+            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre)) 
+            lines = []
+            lines_account = []
+            
+            account_ids = []
+            if not account_ids_cron_mega:
+                account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id)) 
+            try:
+                account_ids_cron_mega = account_ids_cron_mega.replace('[','')
+                account_ids_cron_mega = account_ids_cron_mega.replace(']','')
+                account_ids_cron_mega = account_ids_cron_mega.split(',')
+                for item in account_ids_cron_mega:
+                    account_ids.append(int(item))
+                if account_ids:
+                    lines_account = [(6, 0, account_ids)]
+            except:
+                pass
+                
             ids = []
             if not journal_ids:
                 journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))    
-            journal_ids = journal_ids.replace('[','')
-            journal_ids = journal_ids.replace(']','')
-            journal_ids = journal_ids.split(',')
-            for item in journal_ids:
-                ids.append(int(item))
-            lines = False
-            if ids:
-                lines = [(6, 0, ids)]
-            res.update(journal_ids=lines,teams_sps=teams_sps)
-        except:
+            try:
+                journal_ids = journal_ids.replace('[','')
+                journal_ids = journal_ids.replace(']','')
+                journal_ids = journal_ids.split(',')
+                for item in journal_ids:
+                    ids.append(int(item))
+                if ids:
+                    lines = [(6, 0, ids)]
+            except:
+                pass
+            res.update(journal_ids=lines,account_ids_cron_mega=lines_account)
+        except Exception as e:
             pass
+            # raise Warning(_(f'Error: {e}'))
         return res
 
     @api.multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
+        IrValues.set_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id), self.account_ids_cron_mega.ids)
         IrValues.set_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id), self.journal_ids.ids)
         IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
         super(Settings, self).set_values()

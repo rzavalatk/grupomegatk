@@ -23,13 +23,12 @@
                     <div class="col-12 col-lg-6 o_setting_box">
                         <div class="o_setting_left_pane"/>
                         <div class="o_setting_right_pane">
-                            <label for="teams_sps" />
+                            <label for="account_ids_cron_mega" />
                             <div class="text-muted">
-                                    IDs de los canales de venta de SPS, para el Cierre diario
-                                    OJO: separar cada ID con una coma y sin espacios, Ejem.: 1,2,3
+                                    Cuentas CXC que se utilizaran en el cierre diario
                             </div>
                             <div class="text-muted">
-                                <field name="teams_sps"  />
+                                <field name="account_ids_cron_mega" widget="many2many_tags" options="{'no_create_edit': True, 'no_create':True}" />
                             </div>
                         </div>
                     </div>

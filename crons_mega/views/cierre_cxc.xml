@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_cierre_cxc_line_view_form" model="ir.ui.view">
+            <field name="name">account.cierre.cxc.line.view.form</field>
+            <field name="model">account.cierre.cxc.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="debe" />
+                                <field name="haber" />
+                            </group>
+                            <group>
+                                <field name="account_id" />
+                                <field name="currency_id" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="account_cierre_cxc_view_tree" model="ir.ui.view">
+            <field name="name">account.cierre.cxc.view.tree</field>
+            <field name="model">account.cierre.cxc</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="date" />
+                    <field name="name" />
+                    <field name="company_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_cierre_cxc_view_form" model="ir.ui.view">
+            <field name="name">account.cierre.cxc.view.form</field>
+            <field name="model">account.cierre.cxc</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Iniciar" states="draft" name="init_cierre_cxc" type="object" class="oe_highlight"/>
+                        <button string="Obtener Movimientos" states="init" name="add_move" type="object" class="oe_highlight"/>
+                        <button string="Procesar" states="add_move" name="proccess_cierre" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Volver a Borrador" states="cancel" name="come_back_draft" type="object" />
+                        <button string="Cancelar" states="init,add_move,proccess,done" name="cancel" type="object" />
+                        <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="date" attrs="{'readonly':[('state','!=','draft')]}" />
+                            </group>
+                            <group>
+                                <field name="company_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="currency_id" invisible="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas CXC">
+                                <field name="cierre_cxc_line_ids" readonly="1">
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="currency_id" invisible="1" />
+                                        <field name="debe" sum="Total"/>
+                                        <field name="haber" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Lineas de apuntes contables">
+                                <field name="moves_ids" readonly="1">
+                                    <tree>
+                                        <field name="date" />
+                                        <field name="name" />
+                                        <field name="ref" />
+                                        <field name="partner_id" />
+                                        <field name="account_id" />
+                                        <field name="debit" sum="Total" />
+                                        <field name="credit" sum="Total" />
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Registros internos">
+                                <field name="logs" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_cierre_cxc_view_search" model="ir.ui.view">
+            <field name="name">account.cierre.cxc.view.search</field>
+            <field name="model">account.cierre.cxc</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+
+        <record id="account_cierre_cxc_action" model="ir.actions.server">
+            <field name="name">Cierre Diario CXC</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_account_cierre_cxc" />
+            <field name="state">code</field>
+            <field name="code">action=model.go_to_view_tree()</field>
+        </record>
+
+        <menuitem id="account_cierre_cxc_menu" name="Cierre Diario CXC" action="account_cierre_cxc_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="16" />
+    </data>
+</odoo>
