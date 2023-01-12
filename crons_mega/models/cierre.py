@@ -257,7 +257,7 @@ class CierreDiario(models.Model):
         template = self.env.ref(
             'crons_mega.email_template_cierre_diario_1')
         email_values = {
-            'email_from': 'info@megatk.com',
+            'email_from': 'megatk.no_reply@megatk.com',
             'email_to': email,
             'email_cc': cc
         }

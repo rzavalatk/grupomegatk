@@ -105,7 +105,7 @@ class CXC(models.Model):
         template = self.env.ref(
             'crons_mega.email_template_cierre_diario_cxc')
         email_values = {
-            'email_from': 'info@megatk.com',
+            'email_from': 'megatk.no_reply@megatk.com',
             'email_to': mail,
             'email_cc': cc
         }
