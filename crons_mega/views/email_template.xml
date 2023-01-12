@@ -4,7 +4,7 @@
         <record id="email_template_cierre_diario_1" model="mail.template">
             <field name="name">Cierre Diario</field>
             <field name="model_id" ref="model_account_cierre"/>
-            <field name="subject">Cierre de ${object.name}</field>
+            <field name="subject">Facturación ${object.name} ${object.region} cierre</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="email_cc">${user.email_formatted | safe}</field>
@@ -224,7 +224,7 @@
         <record id="email_template_cierre_diario_cxc" model="mail.template">
             <field name="name">Cierre Diario Cxc</field>
             <field name="model_id" ref="model_account_cierre_cxc"/>
-            <field name="subject">Cierre Cxc ${object.name}</field>
+            <field name="subject">Cuentas por cobrar ${object.name} cierre</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="email_cc">${user.email_formatted | safe}</field>
