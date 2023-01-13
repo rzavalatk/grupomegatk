@@ -172,6 +172,7 @@ class CierreDiario(models.Model):
             '&',
             '&',
             '&',
+            '&',
             # '&',
             ('date_invoice', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
@@ -180,6 +181,7 @@ class CierreDiario(models.Model):
             ('type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
+            ('state', '!=', 'open'),
             # ('de_consignacion', '=', False),
         ])
         self.register_ids(facturas, 'facturas')
