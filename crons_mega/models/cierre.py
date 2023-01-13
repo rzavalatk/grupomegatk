@@ -203,7 +203,7 @@ class CierreDiario(models.Model):
                                 try:
                                     payments_widget = json.loads(factura_id.payments_widget)['content']
                                 except:
-                                    raise Warning(f'Valor de payments_widget {factura_id.payments_widget} de factura {factura_id.number}')
+                                    raise Warning(f'Valor de payments_widget {factura_id.payments_widget} de factura {factura_id.number} con id {factura_id.id}')
                                 
                                 for pay in payments_widget:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
