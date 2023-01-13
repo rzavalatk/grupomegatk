@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, api, fields
 from datetime import datetime
+from odoo.exceptions import Warning
 import pytz
 import time
 import json
@@ -199,7 +200,10 @@ class CierreDiario(models.Model):
                                 factura)
                             self.register_ids(factura_id, 'facturas de pagos')
                             if factura_id.date_invoice == self.date:
-                                payments_widget = json.loads(factura_id.payments_widget)['content']
+                                try:
+                                    payments_widget = json.loads(factura_id.payments_widget)['content']
+                                except:
+                                    raise Warning(f'Valor de payments_widget {factura_id.payments_widget}')
                                 
                                 for pay in payments_widget:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
