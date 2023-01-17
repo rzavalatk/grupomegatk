@@ -702,7 +702,7 @@ class Prestamos(models.Model):
                     interes = saldo * tasa
                 else:
                     interes = 0
-                saldo = saldo + interes - item.pago
+                saldo = saldo + interes + item.interes_moratorio - item.pago
                 item.write({
                     'saldo': saldo,
                     'cuota_interes':interes,
