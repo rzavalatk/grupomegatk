@@ -30,6 +30,22 @@
             Estimado Sr(a) <b>${object.sudo().employe_id.parent_id.name}</b>.<br/><br/><br/>
 
             Se ha recibido una solicitud de permiso de <b>${object.employe_id.name}</b>.<br/>
+            Solicitando <b>${object.dias} Días</b>, <b>${object.horas} Horas</b>, <b>${object.minutos} Minutos</b>.<br/><br/><br/>
+            <b>${object.employe_id.name}</b> tiene disponible:<br/>
+            <table>
+              <tr>
+                <td><b>Días</b></td>
+                <td>${object.employe_id.permisos_dias}</td>
+              </tr>
+              <tr>
+                <td><b>Horas</b></td>
+                <td>${object.employe_id.permisos_horas}</td>
+              </tr>
+              <tr>
+                <td><b>Minutos</b></td>
+                <td>${object.employe_id.permisos_minutos}</td>
+              </tr>
+            </table><br/><br/><br/>
             Favor revisar la plataforma de permisos para aprobar o denegar.
           </div>  
         </div>
