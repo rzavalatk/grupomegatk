@@ -23,7 +23,8 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        "views/res_users_view.xml"
+        "views/res_users_view.xml",
+        "views/res_partner.xml"
     ],
     # only loaded in demonstration mode
     'installable': True,

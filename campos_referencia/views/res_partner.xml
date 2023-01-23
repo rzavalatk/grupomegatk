@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="requerid_phone_and_email_inherit_res_partner" model="ir.ui.view">
+            <field name="name">requerid.phone.and.email.inherit.res.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="attrs">{'required':[('email','in',[None,False,''])]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="attributes">
+                    <attribute name="attrs">{'required':[('phone','in',[None,False,''])]}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
