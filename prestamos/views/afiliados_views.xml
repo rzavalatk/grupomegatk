@@ -134,7 +134,7 @@
 
 		<!-- Action model view -->
 		<record model="ir.actions.act_window" id="action_prestamos_afiliados">
-			<field name="name">Afiliados</field>
+			<field name="name">Depositantes</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">prestamos.afiliados</field>
 			<field name="view_mode">kanban,tree,form,activity</field>
@@ -142,7 +142,7 @@
 
 		<!-- Reglas de registro -->
 		<record id="prestamos_afiliado_rule" model="ir.rule">
-			<field name="name">Afiliados</field>
+			<field name="name">Depositantes</field>
 			<field name="model_id" ref="model_prestamos_afiliados"/>
 			<field name="perm_read" eval="True"/>
 			<field name="perm_write" eval="True"/>
