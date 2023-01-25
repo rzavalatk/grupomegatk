@@ -171,7 +171,7 @@
 			<!-- menu categories -->
 			<menuitem name="Financiera" id="prestamos_menu_root" sequence = "1" 
 			web_icon="prestamos,static/description/icon.png" action = "action_prestamos_afiliados"/> 
-		<menuitem name="Afiliados" id="afiliados_menu_category" sequence = "1" parent="prestamos_menu_root"/>
-		<menuitem name="Afiliados" id="afiliaciones_menu_category" sequence = "10" parent="afiliados_menu_category" action = "action_prestamos_afiliados"/>
+		<menuitem name="Depositantes" id="afiliados_menu_category" sequence = "1" parent="prestamos_menu_root"/>
+		<menuitem name="Depositantes" id="afiliaciones_menu_category" sequence = "10" parent="afiliados_menu_category" action = "action_prestamos_afiliados"/>
 	</data>
 </odoo>
