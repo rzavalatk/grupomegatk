@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- Grupos -->
+    <record id="payment_terms_user_group" model="res.groups">
+        <field name="name">Termino de pago/Usuario</field>
+    </record>
+
+    <record id="payment_terms_user_rule" model="ir.rule">
+            <field name="name">Termino de pago/Usuario</field>
+            <field name="model_id" ref="payment_term_custom.model_account_payment_term"/>
+            <field name="groups" eval="[(6, 0, [ref('payment_terms_user_group')])]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="domain_force">[('public','=',True)]</field>
+        </record>
+    <!--  -->
+</odoo>
