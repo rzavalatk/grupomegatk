@@ -27,7 +27,7 @@ class Product(models.Model):
     	,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte'),('varios','Ingreso Varios')],string = 'Ingreso/Linea')
     x_ingresome = fields.Selection([('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
     x_arancel = fields.Char(string='Arancel',store=True)
-    x_costo_real = fields.Float(string='Costo Honduras',store=True)
+    x_costo_real = fields.Float(string='Costo Nacionalizado',store=True)
     x_ponderacion = fields.Float(string='Ponderación',store=True)
     marca_id = fields.Many2one('product.marca', string='Marca',)
     x_comisiones_a=fields.Integer(string='Comision A',store=True)
