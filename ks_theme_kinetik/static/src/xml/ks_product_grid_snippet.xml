@@ -41,7 +41,7 @@
                                                 <div class="fp__name text-truncate text-left">
                                                     <t t-esc="prods.product_name"/>
                                                 </div>
-                                                <t t-if="prods.is_rating">
+                                                <!-- <t t-if="prods.is_rating">
                                                     <div class="o_rating_star_card">
                                                         <t t-set="val_integer" t-value="Math.floor(prods.rating_avg)"/>
                                                         <t t-set="val_decimal" t-value="prods.rating_avg - val_integer"/>
@@ -61,7 +61,7 @@
 )
                                                         </div>
                                                     </div>
-                                                </t>
+                                                </t> -->
                                             </div>
                                             <div>
                                                 <b>
