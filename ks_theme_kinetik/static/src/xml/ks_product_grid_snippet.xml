@@ -69,15 +69,15 @@
                                                     <i class="fa fa-angle-right"></i>
                                                 </b>
                                             </div>
-                                            <div t-if="False" class="fp__price ks_price_info d-flex justify-content-center align-items-center">
-                                                <!-- <div class="fp__current_price d-flex">
+                                            <!-- <div t-if="False" class="fp__price ks_price_info d-flex justify-content-center align-items-center">
+                                                <div class="fp__current_price d-flex">
                                                     <span t-esc="prods.website_price"/>
                                                 </div>
                                                 <t t-if="prods.percentage_discount>0">
                                                     <del class="ks_public_price" style="white-space: nowrap;">
                                                         <span t-esc="prods.website_public_price"/>
                                                     </del>
-                                                </t> -->
+                                                </t>
                                                 <t t-if="prods.percen_show">
                                                     <t class="text-danger" t-if="prods.percentage_discount>0">
                                                         <div class="ks_snippet_percentage_discount_2">
@@ -90,7 +90,7 @@
                                                         </div>
                                                     </t>
                                                 </t>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </a>
                                     <div class="wishlist_and_comparision row no-gutters">
