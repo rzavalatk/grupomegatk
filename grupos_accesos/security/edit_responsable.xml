@@ -23,9 +23,6 @@
                 <xpath expr="//field[@name='user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
-                <xpath expr="//field[@name='x_user_id']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                </xpath>
             </field>
         </record>
 

@@ -21,7 +21,5 @@
     'data': [
         'security/groups.xml',
         'security/edit_responsable.xml',
-        'views/config.xml',
-        'views/crm_lead.xml',
     ],
 }

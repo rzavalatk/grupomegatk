@@ -27,7 +27,7 @@ class Facturas(models.Model):
     def create(self,val):
         try:
             context = self.env.context
-            data = self.env['res.config.settings'].sudo().get_data_consignacion()
+            data = self.env['res.config.settings'].get_data_consignacion()
             if context.get('de_consignacion'):
                 val['journal_id'] = data['journal_id']
                 val['account_id'] = data['account_id']
@@ -47,7 +47,7 @@ class Facturas(models.Model):
     @api.onchange('sequence_ids')
     def _onchange_sequence_ids(self):
             context = self.env.context
-            data = self.env['res.config.settings'].sudo().get_data_consignacion()
+            data = self.env['res.config.settings'].get_data_consignacion()
             journal_ids = self.env['account.journal'].search([('type','=','sale'),('company_id','=',self.env.user.company_id.id)])
             journal_id = [i.id for i in journal_ids]
             if context.get('de_consignacion'):
@@ -108,7 +108,7 @@ class LineasFacturas(models.Model):
         context = self.env.context
         self.name = self.product_id.display_name
         if context.get('de_consignacion'):
-            data = self.env['res.config.settings'].sudo().get_data_consignacion()
+            data = self.env['res.config.settings'].get_data_consignacion()
             journal = self.env['account.journal'].browse(data['journal_id'])
             self.account_id = journal.default_debit_account_id.id
             self.invoice_line_tax_ids = None
