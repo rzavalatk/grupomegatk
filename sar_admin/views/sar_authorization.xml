@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sar_authorization_code_admin_functions_2" model="ir.ui.view">
+            <field name="name">sar.authorization.code.admin.functions.2</field>
+            <field name="model">sar.authorization.code</field>
+            <field name="inherit_id" ref="sar.vitt_code_authorization_form_view"/>
+            <field name="groups_id" eval="[(6, 0, [ref('planilla_y_metas.admin_functions') ])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sequence_id']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

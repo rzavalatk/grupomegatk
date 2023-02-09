@@ -88,11 +88,18 @@ class Fiscal_sequence(models.Model):
     def write(self, vals):
         super(Fiscal_sequence, self).write(vals)
         self._update_ir_sequence()
+    
+    def _review_index(self,index,array):
+        try:
+            array[index]
+            return True
+        except :
+            return False
 
     @api.multi
     def create(self, vals):
         res = super(Fiscal_sequence, self).create(vals)
-        if not vals.get("journal_id"):
+        if not vals[0]['journal_id']:
             raise Warning(_('Set a journal and a sequence'))
         return res
 
