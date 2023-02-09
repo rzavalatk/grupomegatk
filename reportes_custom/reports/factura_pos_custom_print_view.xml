@@ -61,7 +61,7 @@
                 </tr>
                 <tr>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <span t-field="o.payment_term_id"/>
+                    <span t-field="o.sudo().payment_term_id"/>
                   </td>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
                     <div t-if="o.origin" >
@@ -287,8 +287,8 @@
               </p>
             </div>
             <br/>
-            <p t-if="o.payment_term_id" style="text-align: center; font-weight: normal;font-size: 34pt;">
-                <span t-field="o.payment_term_id.note"/>
+            <p t-if="o.sudo().payment_term_id" style="text-align: center; font-weight: normal;font-size: 34pt;">
+                <span t-field="o.sudo().payment_term_id.note"/>
             </p>
             <p t-if="o.fiscal_position_id.note" style="text-align: center; font-weight: normal;font-size: 34pt;">
                 <span t-field="o.fiscal_position_id.note"/>

@@ -82,7 +82,7 @@
 							</tr>
 							<tr>
 								<td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-									<span t-field="o.payment_term_id"/>
+									<span t-field="o.sudo().payment_term_id"/>
 								</td>
 								<td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
 									<div t-if="o.x_valido" >
@@ -263,8 +263,8 @@
 						</div>
 	
 						<p t-field="o.note"/>
-						<p t-if="o.payment_term_id.note">
-								<span t-field="o.payment_term_id.note"/>
+						<p t-if="o.sudo().payment_term_id.note">
+								<span t-field="o.sudo().payment_term_id.note"/>
 						</p>
 						<p id="fiscal_position_remark" t-if="o.fiscal_position_id and o.fiscal_position_id.note">
 								<strong>Fiscal Position Remark:</strong>
