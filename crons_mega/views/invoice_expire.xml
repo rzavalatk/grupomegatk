@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_invoice_expire_tree" model="ir.ui.view">
+            <field name="name">account.invoice.expire.tree</field>
+            <field name="model">account.invoice.expire</field>
+            <field name="arch" type="xml">
+                <tree string="Facturas Vencidas">
+                    <field name="name" />
+                    <field name="date" widget="date" />
+                    <field name="company_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_invoice_expire_view_form" model="ir.ui.view">
+            <field name="name">account.invoice.expire.view.form</field>
+            <field name="model">account.invoice.expire</field>
+            <field name="arch" type="xml">
+                <form string="Facturas Vencidas">
+                    <header>
+                        <button string="Iniciar" states="draft" name="init_review" type="object" class="oe_highlight"/>
+                        <button string="Procesar" states="init" name="procesar_facturas" type="object" class="oe_highlight"/>
+                        <button string="Enviar Facturas" states="proccess" name="enviar_facturas_vencidas" type="object" class="oe_highlight"/>
+                        <button string="Enviar Facturas" states="done" name="enviar_facturas_vencidas" type="object" />
+                        <button string="Cancelar" name="cancel" states="init,proccess,done" type="object" />
+                        <button string="Volver a Borrador" states="cancel" name="volver_borrador" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date" widget="date" />
+                            </group>
+                            <group>
+                                <field name="company_id" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas Facturas Vencidas">
+                                <field name="invoice_expire_line" nolabel="1" readonly="1">
+                                    <tree string="Lineas">
+                                        <field name="user_id" />
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="user_id" />
+                                                </group>
+                                                <group>
+                                                    <field name="facturas_ids" nolabel="1" readonly="1"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Facturas">
+                                <field name="facturas_ids" nolabel="1" readonly="1">
+                                    <tree string="Facturas">
+                                        <field name="partner_id" string="Cliente" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="date_due" string="Fecha" />
+                                        <field name="number" />
+                                        <field name="user_id" />
+                                        <field name="amount_total_signed" string="Total" sum="Total"/>
+                                        <field name="residual" string="Saldo" sum="Total" />
+                                        <field name="state" />
+                                        <field name="state_expired" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_invoice_expire_action" model="ir.actions.act_window">
+            <field name="name">Facturas Vencidas</field>
+            <field name="res_model">account.invoice.expire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <!-- <record id="account_invoice_expire_line_action" model="ir.actions.act_window">
+            <field name="name">Facturas Vencidas Lineas</field>
+            <field name="res_model">invoice.expire.line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record> -->
+
+        <menuitem id="account_invoice_expire_menu" name="Facturas Vencidas" action="account_invoice_expire_action" groups="planilla_y_metas.admin_functions" parent="account.account_management_menu" sequence="11"/>
+        <!-- <menuitem id="account_invoice_expire_line_menu" name="Facturas Vencidas Lineas" action="account_invoice_expire_line_action" groups="planilla_y_metas.admin_functions" parent="account.account_management_menu" sequence="12"/> -->
+    </data>
+</odoo>

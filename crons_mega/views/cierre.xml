@@ -100,23 +100,23 @@
             </field>
         </record>
 
-        <!-- <record id="account_cierre_action" model="ir.actions.act_window">
+        <record id="account_cierre_action_2" model="ir.actions.act_window">
             <field name="name">Cierre Diario</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.cierre</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-        </record> -->
+        </record>
 
-        <record id="account_cierre_action" model="ir.actions.server">
+        <!-- <record id="account_cierre_action" model="ir.actions.server">
             <field name="name">Cierre Diario</field>
             <field name="condition">True</field>
             <field name="type">ir.actions.server</field>
             <field name="model_id" ref="model_account_cierre" />
             <field name="state">code</field>
             <field name="code">action=model.go_to_view_tree()</field>
-        </record>
+        </record> -->
 
-        <menuitem id="account_cierre_menu" name="Cierre Diario" action="account_cierre_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="16"/>
+        <menuitem id="account_cierre_menu" name="Cierre Diario" action="account_cierre_action_2" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="16"/>
     </data>
 </odoo>
