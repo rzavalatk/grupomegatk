@@ -53,6 +53,7 @@ class Sales(models.Model):
     @api.model
     def create(self,vals):
         vals['payment_term_id'] = vals['payment_term']
+        vals['payment_term'] = None
         res = super(Sales,self).create(vals)
         return res
     
@@ -68,6 +69,7 @@ class Sales(models.Model):
     def write(self,vals):
         if self._exist_index('payment_term',vals):
             vals['payment_term_id'] = vals['payment_term']
+            vals['payment_term'] = None
         res = super(Sales,self).write(vals)
         return res
  

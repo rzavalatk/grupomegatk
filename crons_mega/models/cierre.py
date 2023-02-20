@@ -297,21 +297,24 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)
             for i in ids:
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
+                cc_mega = "eduron@megatk.com"
+                cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
                 time.sleep(1)
                 cierre.procesar_cierre()
-                # cierre.send_email("azelaya@megatk.com","ecolindres@megatk.com")
                 if cierre.company_id.sudo().id in [8, 12]:
-                    # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","eduron@megatk.com")
                     time.sleep(1)
-                    cierre.send_email(
-                        "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "eduron@megatk.com")
+                    if cierre.company_id.sudo().id == 12:
+                        cc_mega += ",kpadilla@meditekhn.com"
+                    if cierre.sudo().region == 'San Pedro Sula':
+                        cc_mega += ",idubon@megatk.com"
+                    print("/////////////",principal_emails,cc_mega,"//////////////")
+                    cierre.send_email(principal_emails,cc_mega)
                 if cierre.company_id.sudo().id in [9]:
-                    # print("lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com","nfuentes@meditekhn.com")
                     time.sleep(1)
-                    cierre.send_email(
-                        "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "nfuentes@meditekhn.com")
+                    cierre.send_email(principal_emails,cc_meditek)
                 time.sleep(1)
 
     def go_to_view_tree(self):
