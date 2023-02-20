@@ -1,6 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
+        <record id="payment_custom_sale_order" model="ir.ui.view">
+            <field name="name">payment.custom.sale.order</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="payment_term" />
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record id="account_payment_term_new_field_public" model="ir.ui.view">
             <field name="name">account.payment.term.new.field.public</field>
             <field name="model">account.payment.term</field>
