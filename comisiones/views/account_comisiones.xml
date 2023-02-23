@@ -22,6 +22,7 @@
                         <button string="Iniciar" name="init_comisiones" states="draft" type="object" class="oe_highlight"/>
                         <button string="Procesar" name="proccess_comisiones" states="init" type="object" class="oe_highlight"/>
                         <button string="Depurar" name="depurar_facturas" states="proccess" type="object" class="oe_highlight"/>
+                        <button string="No Depurar" name="quit_depurar_facturas" states="done" type="object" class="oe_highlight"/>
                         <button string="Generar Excel" states="proccess,done" type="button" id="create_excel" context="{'active_id': id}"/>
                         <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
                         <button string="Cancelar" confirm="¿Esta seguro que desea cancelar las comisiones?" states="init,proccess,done" name="cancel" type="object"/>

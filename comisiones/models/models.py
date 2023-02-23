@@ -120,19 +120,19 @@ class Comisiones(models.Model):
         })
 
     def cancel(self):
-        lines_ids = []
-        invoice_ids = []
-        for item in self.facturas_ids:
-            invoice_ids.append((3, item.sudo().id))
-            item.sudo().write({
-                 'x_comision': '2'
-             })
-        for item in self.comision_line:
-            lines_ids.append((2, item.sudo().id))
+        # lines_ids = []
+        # invoice_ids = []
+        # for item in self.facturas_ids:
+        #     invoice_ids.append((3, item.sudo().id))
+        #     item.sudo().write({
+        #          'x_comision': '2'
+        #      })
+        # for item in self.comision_line:
+        #     lines_ids.append((2, item.sudo().id))
 
         self.write({
-            'facturas_ids': invoice_ids,
-            'comision_line': lines_ids,
+            'facturas_ids': [(5,0,[])],
+            'comision_line': [(5,0,[])],
             'state': 'cancel'
         })
 
@@ -218,6 +218,15 @@ class Comisiones(models.Model):
              })
         self.write({
             'state': 'done'
+        })
+    
+    def quit_depurar_facturas(self):
+        for factura in self.facturas_ids:
+             factura.write({
+                 'x_comision': '2'
+             })
+        self.write({
+            'state': 'proccess'
         })
         
         
