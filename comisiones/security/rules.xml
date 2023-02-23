@@ -4,7 +4,7 @@
     
         <record id="account_comisiones_access_rule" model="ir.rule">
             <field name="name">account.comisiones.access.rule</field>
-            <field name="model_id" ref="crons_mega.model_account_comisiones" />
+            <field name="model_id" ref="comisiones.model_account_comisiones" />
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
