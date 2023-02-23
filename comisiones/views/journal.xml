@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="inherit_view_account_journal" model="ir.ui.view">
+            <field name="name">inherit.view.account.journal</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <group groups="planilla_y_metas.admin_functions" string="Comisiones">
+                        <field name="comision_a" />
+                        <field name="comision_m" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

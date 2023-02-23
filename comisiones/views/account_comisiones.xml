@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_comisiones_view_tree" model="ir.ui.view">
+            <field name="name">account.comisiones.view.tree</field>
+            <field name="model">account.comisiones</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="company_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_comisiones_view_form" model="ir.ui.view">
+            <field name="name">account.comisiones.view.form</field>
+            <field name="model">account.comisiones</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <header>
+                        <button string="Iniciar" name="init_comisiones" states="draft" type="object" class="oe_highlight"/>
+                        <button string="Procesar" name="proccess_comisiones" states="init" type="object" class="oe_highlight"/>
+                        <button string="Depurar" name="depurar_facturas" states="proccess" type="object" class="oe_highlight"/>
+                        <button string="Generar Excel" states="proccess,done" type="button" id="create_excel" context="{'active_id': id}"/>
+                        <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
+                        <button string="Cancelar" confirm="¿Esta seguro que desea cancelar las comisiones?" states="init,proccess,done" name="cancel" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label for="name" class="oe_edit_only"/>
+                            <field name="name" />
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="users_ids" widget="many2many_tags" />
+                            </group>
+                            <group>
+                                <field name="date" />
+                                <field name="company_id" />
+                                <field name="type" widget="radio"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas de Comisiones">
+                                <field name="comision_line" nolabel="1" />
+                            </page>
+                            <page string="Facturas">
+                                <field name="facturas_ids" nolabel="1">
+                                    <tree string="Facturas">
+                                        <field name="partner_id" string="Cliente" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="number" />
+                                        <field name="user_id" />
+                                        <field name="amount_untaxed_invoice_signed" string="Total sin impuesto" sum="Total" />
+                                        <field name="amount_tax_signed" string="Impuesto" sum="Total" />
+                                        <field name="amount_total_signed" string="Total" sum="Total"/>
+                                        <field name="residual" string="Saldo" sum="Total" />
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_comisiones_view_search" model="ir.ui.view">
+            <field name="name">account.comisiones.view.search</field>
+            <field name="model">account.comisiones</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="name" />
+                    <field name="date" />
+                </search>
+            </field>
+        </record>
+
+        <record id="account_comisiones_action" model="ir.actions.act_window">
+            <field name="name">Comisiones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.comisiones</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="account_comisiones_menu" name="Comisiones" action="account_comisiones_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="17"/>
+
+    </data>
+</odoo>

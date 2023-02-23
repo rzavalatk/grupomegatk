@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_comisiones_line_view_tree" model="ir.ui.view">
+            <field name="name">account.comisiones.line.view.tree</field>
+            <field name="model">account.comisiones.line</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="user_id" />
+                    <field name="invoice_line_id" />
+                    <field name="currency_id" invisible="1" />
+                    <field name="pocentaje_comision" />
+                    <field name="posible_comision" />
+                    <field name="forma_comision" />
+                    <field name="antiguedad_pago" />
+                    <field name="pocentaje_pago" widget="percentpie" />
+                    <field name="comision_pagar" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_comisiones_line_view_form" model="ir.ui.view">
+            <field name="name">account.comisiones.line.view.form</field>
+            <field name="model">account.comisiones.line</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="user_id" />
+                                <field name="invoice_line_id" />
+                                <field name="antiguedad_pago" />
+                                <field name="pocentaje_pago" widget="progressbar" />
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1" />
+                                <field name="posible_comision" />
+                                <field name="forma_comision" />
+                                <field name="comision_pagar" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
