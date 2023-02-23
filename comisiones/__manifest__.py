@@ -19,6 +19,7 @@
 
     'data': [
         'security/security.xml',
+        'security/rules.xml',
         'views/account_comisiones_line.xml',
         'views/account_comisiones.xml',
         'views/assets.xml',
