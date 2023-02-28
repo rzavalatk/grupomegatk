@@ -23,8 +23,9 @@ class Facturas(models.Model):
     @api.model
     def create(self,vals):
         try:
-            payment_term = self.env['account.payment.term'].browse(vals['payment_term_id'])
-            payment_term.name
+            if self.env.user.company_id.id in [8,9,12]:
+                payment_term = self.env['account.payment.term'].browse(vals['payment_term_id'])
+                payment_term.name
             res = super(Facturas,self).create(vals)
             return res
         except :
