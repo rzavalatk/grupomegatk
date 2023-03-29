@@ -12,5 +12,6 @@ class ModelMail(models.TransientModel):
     def obtener_mail(self):
         active_id = self._context.get('active_id')
         active_model = self._context.get('active_model')
+        # print("/////////////",active_id,active_model,"////////////////")
         cierre_id = self.env[active_model].browse(active_id)
         cierre_id.send_email(self.mail,self.cc)

@@ -310,7 +310,7 @@ class CierreDiario(models.Model):
                         cc_mega += ",kpadilla@meditekhn.com"
                     if cierre.sudo().region == 'San Pedro Sula':
                         cc_mega += ",idubon@megatk.com"
-                    print("/////////////",principal_emails,cc_mega,"//////////////")
+                    # print("/////////////",principal_emails,cc_mega,"//////////////")
                     cierre.send_email(principal_emails,cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)

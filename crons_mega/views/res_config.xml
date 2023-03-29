@@ -32,6 +32,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="marca_ids" />
+                            <div class="text-muted">
+                                Marcas para reporte semanal
+                            </div>
+                            <div class="text-muted">
+                                <field name="marca_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create':True}" />
+                            </div>
+                        </div>
+                    </div>
                 </xpath>
             </field>
         </record>

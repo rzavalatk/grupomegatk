@@ -41,13 +41,18 @@
                             <page string="Lineas Facturas Vencidas">
                                 <field name="invoice_expire_line" nolabel="1" readonly="1">
                                     <tree string="Lineas">
-                                        <field name="user_id" />
+                                        <field name="name" />
+                                        <field name="type" />
                                     </tree>
                                     <form>
                                         <sheet>
                                             <group>
                                                 <group>
-                                                    <field name="user_id" />
+                                                    <field name="user_id" attrs="{'invisible':[('type','=','customer')]}"/>
+                                                    <field name="partner_id" attrs="{'invisible':[('type','=','comercial')]}" />
+                                                    <field name="type" />
+                                                    <field name="show_tabla" />
+                                                    <field name="time_due" />
                                                 </group>
                                                 <group>
                                                     <field name="facturas_ids" nolabel="1" readonly="1"/>
@@ -59,6 +64,21 @@
                             </page>
                             <page string="Facturas">
                                 <field name="facturas_ids" nolabel="1" readonly="1">
+                                    <tree string="Facturas">
+                                        <field name="partner_id" string="Cliente" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="date_due" string="Fecha" />
+                                        <field name="number" />
+                                        <field name="user_id" />
+                                        <field name="amount_total_signed" string="Total" sum="Total"/>
+                                        <field name="residual" string="Saldo" sum="Total" />
+                                        <field name="state" />
+                                        <field name="state_expired" />
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Facturas Vencidas de Clientes">
+                                <field name="facturas_ids_customers" nolabel="1" readonly="1">
                                     <tree string="Facturas">
                                         <field name="partner_id" string="Cliente" />
                                         <field name="date_invoice" string="Fecha" />

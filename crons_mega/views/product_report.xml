@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="product_report_view_tree" model="ir.ui.view">
+            <field name="name">product.report.view.tree</field>
+            <field name="model">product.report</field>
+            <field name="arch" type="xml">
+                <tree string="Reportes">
+                    <field name="name" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                    <field name="company_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_report_view_form" model="ir.ui.view">
+            <field name="name">product.report.view.form</field>
+            <field name="model">product.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Agrupar lineas" name="init_report" states="draft" type="object" class="oe_highlight"/>
+                        <button string="Procesar" name="proccess_line_report" states="init" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Enviar por Email" states="done" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}" />
+                        <button string="Cancelar" name="cancel_report" states="draft,init,proccess,done" type="object"/>
+                        <button string="Volver a Borrador" name="back_to_draft" states="cancel" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date_from" />
+                                <field name="date_to" />
+                            </group>
+                            <group>
+                                <field name="company_id" />
+                                <field name="currency_id" invisible="1" />
+                                <field name="total" invisible="1" />
+                                <field name="sub_total" invisible="1" />
+                                <field name="tax_total" invisible="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Líneas de Factura">
+                                <field name="line_invoices" readonly="1">
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="quantity" />
+                                        <field name="price_unit" />
+                                        <field name="price_subtotal" string="Sub-Total" sum="Total"/>
+                                        <field name="price_tax" string="Impuesto" sum="Total"/>
+                                        <field name="price_total" string="Total" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Líneas de Reporte">
+                                <field name="line_report" readonly="1">
+                                    <tree>
+                                        <field name="product_id" />
+                                        <field name="total_quantity" />
+                                        <field name="currency_id" invisible="1" />
+                                        <field name="total_sold" string="Total" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_report_action" model="ir.actions.act_window">
+            <field name="name">Reporte de Marcas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="product_report_menu"
+            name="Reporte de Marcas"
+            action="product_report_action"
+            groups="planilla_y_metas.admin_functions"
+            parent="account.account_reports_management_menu"
+            sequence="23"/>
+    </data>
+</odoo>

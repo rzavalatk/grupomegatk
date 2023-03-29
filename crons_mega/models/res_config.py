@@ -13,6 +13,8 @@ class Settings(models.TransientModel):
     teams_sps = fields.Char("Canales de SPS")
     account_ids_cron_mega = fields.Many2many(
         "account.account", "code", string="Cuentas Cxc para cierre")
+    marca_ids = fields.Many2many(
+        "product.marca", "setting_id", string="Marcas")
     
     def get_values_journal_ids(self,company):
         self.company_cierre = company
@@ -44,10 +46,24 @@ class Settings(models.TransientModel):
         try:
             res = super(Settings, self).get_values()
             IrValues = self.env['ir.config_parameter'].sudo()
+            marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
             journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
             account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre)) 
             lines = []
             lines_account = []
+            marcas = []
+            marcas_ids = []
+            
+            try:
+                marca_ids = marca_ids.replace('[','')
+                marca_ids = marca_ids.replace(']','')
+                marca_ids = marca_ids.split(',')
+                for item in marca_ids:
+                    marcas_ids.append(int(item))
+                if marcas_ids:
+                    marcas = [(6, 0, marcas_ids)]
+            except:
+                pass
             
             account_ids = []
             if not account_ids_cron_mega:
@@ -76,7 +92,7 @@ class Settings(models.TransientModel):
                     lines = [(6, 0, ids)]
             except:
                 pass
-            res.update(journal_ids=lines,account_ids_cron_mega=lines_account)
+            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
         except Exception as e:
             pass
             # raise Warning(_(f'Error: {e}'))
@@ -85,6 +101,7 @@ class Settings(models.TransientModel):
     @api.multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
+        IrValues.set_param('crons_mega.marca_ids'+str(self.env.user.company_id.id), self.marca_ids.ids)
         IrValues.set_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id), self.account_ids_cron_mega.ids)
         IrValues.set_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id), self.journal_ids.ids)
         IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
