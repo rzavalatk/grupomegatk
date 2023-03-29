@@ -71,6 +71,7 @@ class FacturasAVencer(models.Model):
         })
 
     def init_review(self):
+        dias_3 = self.date + timedelta(days=-3)
         dias_7 = self.date + timedelta(days=-7)
         dias_14 = self.date + timedelta(days=-14)
         filtros = [
@@ -96,7 +97,7 @@ class FacturasAVencer(models.Model):
             ('state', '=', 'open'),
             ('state_expired', 'in', ['none', '1er Aviso', '2do Aviso']),
             ('date_due', '<=',
-                self.date.strftime("%Y-%m-%d")
+                dias_3.strftime("%Y-%m-%d")
              )
             ]
         facturas_ids = self.env['account.invoice'].sudo().search(filtros)
