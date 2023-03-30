@@ -70,29 +70,30 @@ class ReviewRules(models.Model):
 
     
     def cron_eject(self):
-        admin = self.env['res.users'].sudo().browse(2)
-        user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
-        _today = dt.now(user_tz)
-        if _today.weekday() != 0:
-            company_ids = [8, 9]
-            ids = []
-            for i in company_ids:
-                id = self.create({
-                    'date': _today,
-                    'company_id': i
-                })
-                ids.append(id.id)
-            review = self.env['orderpoint.review.rules'].sudo().browse(ids)
-            for item in review:
-                principal_emails = "lmoran@megatk.com,bodegatgu@megatk.com"
-                cc = ""
-                item.init_review()
-                time.sleep(1)
-                if item.send:
-                    if i == 9:
-                        cc += "jmoran@meditekhn.com,"
-                    item.send_email(principal_emails,cc)
+        if len(self.warehouse_ids.ids) > 0:
+            admin = self.env['res.users'].sudo().browse(2)
+            user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
+            _today = dt.now(user_tz)
+            if _today.weekday() != 0:
+                company_ids = [8, 9]
+                ids = []
+                for i in company_ids:
+                    id = self.create({
+                        'date': _today,
+                        'company_id': i
+                    })
+                    ids.append(id.id)
+                review = self.env['orderpoint.review.rules'].sudo().browse(ids)
+                for item in review:
+                    principal_emails = "lmoran@megatk.com,bodegatgu@megatk.com"
+                    cc = ""
+                    item.init_review()
                     time.sleep(1)
+                    if item.send:
+                        if i == 9:
+                            cc += "jmoran@meditekhn.com,"
+                        item.send_email(principal_emails,cc)
+                        time.sleep(1)
     
 
 class Warehouse(models.Model):

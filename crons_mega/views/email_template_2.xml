@@ -5,7 +5,7 @@
         <record id="email_template_orderpoint_review_rules" model="mail.template">
             <field name="name">Reglas de Abastecimiento</field>
             <field name="model_id" ref="model_orderpoint_review_rules"/>
-            <field name="subject">Reorden - Productos en su Capasidad Minima</field>
+            <field name="subject">Reorden - Productos en su Capacidad Minima</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="email_cc">${user.email_formatted | safe}</field>

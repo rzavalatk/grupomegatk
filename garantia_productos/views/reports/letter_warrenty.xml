@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <report id="stock_picking_letter_warrenty_custom" 
+            menu="False"
+            model="stock.picking" 
+            string="Garantía" 
+            name="garantia_productos.letter_warrenty_custom" 
+            file="garantia_productos.letter_warrenty_custom" 
+            report_type="qweb-pdf" 
+            attachment_use="True" 
+            paperformat="formatos_papel_mega.report_paperformat_ducumentos" 
+        />
+
+
+        <template id="letter_warrenty_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="garantia_productos.letter_warrenty_custom_page" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="letter_warrenty_custom_header">
+            <div class="header" style="height: 100%; margin-top: 250px !important;">
+                <div class="container" style="height: 80%;">
+                    <div class="row d-flex align-items-start justify-content-between" style="height: 100%; width: 612px;">
+                        <div class="col-sm">
+                            <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo_garantia)" style="width: 500px; padding: 15px; padding-bottom: 30" />
+                        </div>
+                        <div class="d-flex align-items-center col-sm" style="height: 100%; ">
+                            <p class="h6 text-center" style="width: 200px;">
+                                <b>
+                                    Informe de No. de Serie de 
+                                    Equipos Entregados a Clientes
+                                </b>
+                            </p>
+                        </div>
+                        <div class="col-sm d-flex align-items-center justify-content-center">
+                            <span t-field="o.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm table-responsive -sm" style="padding: 50px;">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr style="color: white; background: rgb(13, 143, 210);">
+                                        <th scope="col">
+                                            <b>Cliente</b>
+                                        </th>
+                                        <th scope="col" style="width: 20%">
+                                            <b>Fecha</b>
+                                        </th>
+                                        <th scope="col" style="width: 30%">
+                                            <b>No. Orden</b>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="height; 400px">
+                                    <tr>
+                                        <td scope="col" style="height; 400px">
+                                            <p>
+                                                <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                                            </p>
+                                            <p>
+                                                RTN: <span t-field="o.partner_id.vat"/>
+                                            </p>
+                                        </td>
+                                        <td scope="col" style="width: 20%; height; 400px;">
+                                            <span t-field="o.scheduled_date"/>
+                                        </td>
+                                        <td scope="col" style="width: 30%; height; 400px">
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="article o_report_layout_standard">
+                <t t-raw="0"/>
+            </div>
+            <div class="footer" style='font-size:10pt !important;'>
+                <div style="border-top: 1px solid rgb(13, 143, 210);">
+                    <ul style="text-align: center;" class="list-inline mb4">
+                        <li t-if="user.company_id.street">
+                            <span t-field="user.company_id.street"/>
+                        </li>
+                    </ul>
+                    <ul style="text-align: center;" class="list-inline mb4">
+                        <li t-if="user.company_id.street2">
+                            <span t-field="user.company_id.street2"/>
+                        </li>
+                    </ul>
+                    <ul style="text-align: center;" class="list-inline mb4">
+                        <li>
+                            <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/>
+                            </t>
+                            <t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/>
+                            </t>
+                            <t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/>
+                            </t>
+                            <t t-if="user.company_id.vat">
+                                <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>
+:                                <span t-field="user.company_id.vat"/>
+                            </t>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <template id="letter_warrenty_custom_page">
+            <t t-call="garantia_productos.letter_warrenty_custom_header">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+                <div class="page">
+                    <table class="table table-sm o_main_table" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Código</th>
+                                <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Descripción</th>
+                                <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">No. Serie</th>
+                                <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Garantía</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.move_ids_without_package" t-as="l">
+                                <t t-if="l.x_series not in ['',False,None]">
+                                    <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
+                                        <span t-field="l.product_id.barcode"/>
+                                    </th>
+                                    <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
+                                        <span t-field="l.product_id.name"/>
+                                    </th>
+                                    <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
+                                        <span t-field="l.x_series"/>
+                                    </th>
+                                    <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
+                                        <span t-field="l.x_period"/>
+                                    </th>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
