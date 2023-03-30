@@ -135,6 +135,9 @@
                                         <span t-field="l.product_id.name"/>
                                     </th>
                                     <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
+                                        <span t-field="l.quantity_done"/>
+                                    </th>
+                                    <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">
                                         <span t-field="l.x_series"/>
                                     </th>
                                     <th class="text-center" style="font-family:'Arial'; font-size:10pt; border: 1px solid rgb(13, 143, 210);padding: 2px;">

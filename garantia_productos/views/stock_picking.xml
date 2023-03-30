@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
-                    <button string="Imprimir Garantia" name="letter_of_warranty" type="object" class="oe_highlight"/>
+                    <button string="Imprimir Garantia" status="done" name="letter_of_warranty" type="object" class="oe_highlight"/>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[2]/field[@name='move_ids_without_package']/tree[1]/field[@name='product_uom_qty']" position="before">
                     <field name="x_period" />
