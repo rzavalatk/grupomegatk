@@ -121,6 +121,7 @@
                             <tr>
                                 <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Código</th>
                                 <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Descripción</th>
+                                <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Cantidad</th>
                                 <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">No. Serie</th>
                                 <th class="text-center" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Garantía</th>
                             </tr>
