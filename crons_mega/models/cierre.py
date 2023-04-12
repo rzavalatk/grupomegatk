@@ -213,13 +213,15 @@ class CierreDiario(models.Model):
                                                 mas_de_un_pago_factura[factura_id.internal_number]
                                                 temp = mas_de_un_pago_factura[factura_id.internal_number] -1
                                                 if temp <= 0:
-                                                    ids_facturas = ids_facturas + [factura_id.id]
+                                                    if 'Crédito' not in factura_id.payment_term_id.sudo().name:
+                                                        ids_facturas = ids_facturas + [factura_id.id]
                                                 else:
                                                     mas_de_un_pago_factura[factura_id.internal_number] = temp
                                             except:
                                                 mas_de_un_pago_factura[factura_id.internal_number] = len(payments_widget) - 1
                                         else:
-                                            ids_facturas = ids_facturas + [factura_id.id]
+                                            if 'Crédito' not in factura_id.payment_term_id.sudo().name:
+                                                ids_facturas = ids_facturas + [factura_id.id]
                                             
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
