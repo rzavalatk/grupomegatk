@@ -87,7 +87,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="account_comisiones_menu" name="Comisiones" action="account_comisiones_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="17"/>
+        <menuitem id="account_comisiones_menu" name="Comisiones" action="account_comisiones_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="17"/>
 
     </data>
 </odoo>
