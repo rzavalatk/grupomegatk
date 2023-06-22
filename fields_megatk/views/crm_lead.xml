@@ -108,8 +108,8 @@
 					        	<field name="proposito" attrs='{"invisible": [("tipo_soporte", "not in", ["visita", "visita_sin_costo", "llamada"])]}'/>
 					        </group>	
 					        <group name="data2">
-					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo"), ("tipo_soporte", "=", "llamada")]}'/>
-					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo"), ("tipo_soporte", "=", "llamada")]}'/>
+					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
+					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
 					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"]]}'/>
 					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
