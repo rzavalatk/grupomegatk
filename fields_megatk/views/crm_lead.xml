@@ -80,6 +80,7 @@
 				  </xpath>
 			</field>
  		</record>
+
    		<record model="ir.ui.view" id="crm_form_campo_megatk_view_inh">
 	  		<field name="name">crm.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
@@ -100,15 +101,16 @@
 				    <page name="soportetecnico" string="Soporte Tecnico">
 					     <group name="soporte">
 					        <group name="data1">
-					        	<field name="tipo_soporte"/>
+					        	<field name="tipo_soporte"/> 
 					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="proposito" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+								<field name="tipo_visita_sin_costo" attrs='{"invisible": [["tipo_soporte","!=","visita_sin_costo"]]}'/>
+					        	<field name="proposito" attrs='{"invisible": [("tipo_soporte", "not in", ["visita", "visita_sin_costo", "llamada"])]}'/>
 					        </group>	
 					        <group name="data2">
-					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
+					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo"), ("tipo_soporte", "=", "llamada")]}'/>
+					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo"), ("tipo_soporte", "=", "llamada")]}'/>
+					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"]]}'/>
 					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        </group>	
