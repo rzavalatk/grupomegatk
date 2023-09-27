@@ -1,8 +1,0 @@
-<templates>
-    <t t-name="ks_snippet_product_multi_slider">
-        <section>
-            <select class="product_slider_dropdwon">
-            </select>
-        </section>
-    </t>
-</templates>

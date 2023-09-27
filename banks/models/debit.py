@@ -107,7 +107,7 @@ class Debit(models.Model):
 					debit_line += 0
 			self.total_debitos = debit_line
 			self.total_creditos = credit_line
-			self.rest_credit = self.total - (debit_line - credit_line)
+			self.rest_credit = self.total - ( round(debit_line,2) - credit_line)
 		else:
 			for lines in self.debit_line:
 				if lines.move_type == 'debit':
@@ -464,12 +464,13 @@ class Debit(models.Model):
 class Debitline(models.Model):
 	_name = 'banks.debit.line'
 
-
-
 	@api.onchange("account_id")
 	def onchangecuenta(self):
 		if self.debit_id.doc_type == 'credit' or self.debit_id.doc_type == 'deposit':
 			self.move_type = 'credit'
+	
+	
+
 
 	debit_id = fields.Many2one('banks.debit', 'Check')
 	partner_id = fields.Many2one('res.partner', 'Empresa')
@@ -479,3 +480,8 @@ class Debitline(models.Model):
 	currency_id = fields.Many2one('res.currency', string='Currency')
 	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica")
 	move_type = fields.Selection([('debit', 'Débito'), ('credit', 'Crédito')], 'Débito/Crédito', default='debit', required=True)
+
+	@api.onchange('amount')
+	def _onchange_amount(self):
+		if self.amount:
+			self.amount = round(self.amount, 2)

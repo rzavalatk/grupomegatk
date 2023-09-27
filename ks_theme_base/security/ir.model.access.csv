@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_ks_product_manager_ks_brand,ks_product_manager.ks_brand,model_ks_product_manager_ks_brand,,1,1,1,1
-access_ks_theme_tags,ks_theme.tags,model_ks_theme_tags,,1,1,1,1
-access_ks_product_grid,ks_product.grid,model_ks_product_grid,,1,1,1,1
-access_ks_product_slider,ks_product.slider,model_ks_product_slider,,1,1,1,1
-access_ks_product_main_slider,ks_product_main.slider,model_ks_product_main_slider,,1,1,1,1
-access_ks_products_track_tags_rel,ks_products_track_tags_rel,model_ks_products_track_tags_rel,,1,1,1,1

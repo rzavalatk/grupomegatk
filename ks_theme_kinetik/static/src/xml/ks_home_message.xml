@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<template id="template" xml:space="preserve">
-   <div t-name="website.homepage_editor_welcome_message" class="container text-center o_homepage_editor_welcome_message">
-        <h2 class="mt0">Theme Kinetik Succesfully Installed Please Customize Theme from Theme customization Menu<b>Kinetik Magic</b>!</h2>
-        <p class="lead d-none d-md-block">Let's start designing.</p>
-    </div>
-</template>
