@@ -92,10 +92,10 @@
 <field name="arch" type="xml">
 	<tree string="Gastos" decoration-primary="state == 'draft'" decoration-info="state == 'pendiente'"  decoration-danger="state == 'rechazado'">
 		<field name="company_id" groups="base.group_multi_company"/>
-		<field name="fecha_inicio" />
-		<field name="fecha_aprobacion"/>	
+		<field name="fecha_inicio" />	
 		<field name="empleado_solicitud"/>
 		<field name="state" />
+		<field name="total_gastos"/>
 	</tree>
 </field> 
 </record>
