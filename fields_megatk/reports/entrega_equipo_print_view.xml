@@ -19,7 +19,7 @@
           <br/>
           <div style="float: right; margin-top: -30px;">
               <h4>Fecha Ingreso: <span t-field="o.create_date" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>&amp;nbsp;&amp;nbsp;                          
-              Fecha Entrega: <span t-field="o.date_deadline" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></h4>                           
+              Fecha Entrega: <span t-field="o.date_closed" t-field-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/></h4>                           
           </div>
           <table style="table-layout: fixed; width:100%">
             <tr>
