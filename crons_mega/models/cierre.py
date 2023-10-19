@@ -300,7 +300,7 @@ class CierreDiario(models.Model):
                     ids.append(obj.id)
             for i in ids:
                 principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
-                cc_mega = "eduron@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
@@ -311,7 +311,7 @@ class CierreDiario(models.Model):
                     if cierre.company_id.sudo().id == 12:
                         cc_mega += ",kpadilla@meditekhn.com"
                     if cierre.sudo().region == 'San Pedro Sula':
-                        cc_mega += ",idubon@megatk.com"
+                        cc_mega += ",vmoran@megatk.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
                     cierre.send_email(principal_emails,cc_mega)
                 if cierre.company_id.sudo().id in [9]:
