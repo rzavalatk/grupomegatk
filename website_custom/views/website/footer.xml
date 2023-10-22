@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--<data>
+        <template id="website_custom.breadcum_custom" inherit_id="ks_theme_kinetik.custom_footer_layout_2">
+            <xpath expr="//div[@id='footer']//div[@class='py-2']" position="replace">
+
+            </xpath>
+            <xpath expr="//div[@id='footer']//div[@class='pt-2 pb-3']" position="replace">
+                    <div class="pt-2 pb-3">
+                        <a href='#'>
+                            <t t-call="website_custom.visa_base64"/>
+                        </a>
+                        <a href='#'>
+                            <t t-call="website_custom.mastercard_base64"/>
+                        </a>
+                        <a href='#'>
+                            <t t-call="website_custom.paypal_base64"/>
+                        </a>
+                    </div>
+            </xpath>
+        </template>
+    </data>-->
+</odoo>

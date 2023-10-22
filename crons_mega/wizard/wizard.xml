@@ -24,7 +24,6 @@
             <field name="name">Destinatario</field>
             <field name="res_model">account.cierre.mail</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 

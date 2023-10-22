@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+    
     <data>
-        <record id="account.action_invoice_tree1" model="ir.actions.act_window">
+        <!--<record id="account.action_invoice_tree1" model="ir.actions.act_window">
             <field name="domain">['&amp;',('de_consignacion', '=', False),('type','=','out_invoice')]</field>
-        </record>
+        </record>-->
     </data>
 </odoo>

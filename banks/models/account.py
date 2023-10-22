@@ -7,10 +7,10 @@ class Account(models.Model):
 	
 	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica",)
 
-class AccountInvoice(models.Model):
+class AccountMove(models.Model):
 	_inherit = "account.move.line"
 
-	@api.model
+	#@api.model
 	def create(self,values):
 		config = self.env['res.config.settings']
 		listcon = config.search([('company_id','=',self.env.user.company_id.id)])
@@ -30,4 +30,4 @@ class AccountInvoice(models.Model):
 					else:
 						raise Warning(_('Cuenta analitica requerida en la linea con cuenta: '+ account.code+' '+account.name+' descripción: '+values['name']))
 		
-		return super(AccountInvoice, self).create(values)
+		return super(AccountMove, self).create(values)

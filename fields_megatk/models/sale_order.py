@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+#CAMPOS EN VENTAS/PRESUPUESTOS
 class Saleorder(models.Model):
     _inherit = "sale.order"
 
@@ -25,10 +26,13 @@ class Saleorder(models.Model):
     # tiempo_mantenimiento = fields.Integer("Tiempo de mantenimiento")
     # aplica_color = fields.Boolean("Apllica color")
     pricelist_id = fields.Many2one(copy=False)
+
+    #CAMPO EN PRESUPUESTO
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('30','30 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
+    #CAMPO EN OTRA INFORMACIÓN
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
 
-
+#CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
     _inherit = "sale.order.line"
 
@@ -37,14 +41,14 @@ class SaleorderLine(models.Model):
     x_series = fields.Text("Series")
     
 
-    @api.multi
-    def _prepare_invoice_line(self, qty):
-        values = super(SaleorderLine, self)._prepare_invoice_line(qty)
-        values['x_user_id'] = self.x_user_id.id
-        values['x_series'] = self.x_series
-        return values
+    #@api.model_create_multi
+    #def _prepare_invoice_line(self, qty):
+    #    values = super(SaleorderLine, self)._prepare_invoice_line(qty)
+    #    values['x_user_id'] = self.x_user_id.id
+    #    values['x_series'] = self.x_series
+    #    return values
 
-    @api.multi
+    #@api.model_create_multi
     @api.onchange('product_id')
     def product_id_change1(self):
         self.x_user_id = self.obj_padre.id

@@ -47,16 +47,16 @@
         <record id="hr_employee_markings_action_view" model="ir.actions.act_window">
             <field name="name">Marcaciones</field>
             <field name="res_model">hr.employee.markings</field>
-            <field name= "view_type">form</field>
+            <!--<field name= "view_type">form</field>-->
             <field name="view_mode">tree,form</field>
         </record>
 
         <menuitem name="Marcaciones" id="hr_employee_markings_menu" 
-        sequence = "2" parent="hr.menu_open_view_employee_list_my" groups="permisos.permiso_admin"
+        sequence = "2" parent="hr.menu_hr_employee_payroll" groups="permisos.permiso_admin"
         action = "marcacion_y_horas_extras.hr_employee_markings_action_view" />
 
-        <menuitem name="Empleados" id="hr_employee_menu_custom" 
-        sequence = "1" parent="hr.menu_open_view_employee_list_my"
-        action = "hr.open_view_employee_list_my" />
+        <!--<menuitem name="Empleados" id="hr_employee_menu_custom" 
+        sequence = "1" parent="hr.menu_hr_employee_payroll"
+        action = "hr.hr_employee_payroll" />-->
     </data>
 </odoo>

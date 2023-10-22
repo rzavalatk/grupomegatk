@@ -5,7 +5,6 @@
             <field name="name">Firmar ordenes</field>
             <field name="res_model">stock.picking</field>
             <field name="context">{"search_default_init_view":1}</field>
-            <field name="view_type">form</field>
             <field name="view_mode">kanban,form</field>
         </record>
 

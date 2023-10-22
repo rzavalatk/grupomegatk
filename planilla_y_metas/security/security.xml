@@ -82,15 +82,15 @@
         <field name="perm_unlink" eval="1" />
     </record>
 
-    <record id="hr_employee_metas_default_admins_access" model="ir.model.access">
+    <!--<record id="hr_employee_metas_default_admins_access" model="ir.model.access">
         <field name="name">hr.employee.metas.default.admins.access</field>
         <field name="model_id" ref="planilla_y_metas.model_hr_metas_default" />
-        <field name="group_id" ref="sign_orders.group_admins" />
+        <field name="group_id" ref="sign.group_sign_manager" />
         <field name="perm_read" eval="1" />
         <field name="perm_write" eval="1" />
         <field name="perm_create" eval="1" />
         <field name="perm_unlink" eval="1" />
-    </record>
+    </record>-->
 
     <record id="hr_employee_metas_default_access" model="ir.model.access">
         <field name="name">hr.employee.metas.default.access</field>

@@ -6,12 +6,12 @@ import pytz
 import time
 import json
 
-
+"""
 class Factura(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
-    expire_id = fields.Many2one("account.invoice.expire")
-    expire_customer_id = fields.Many2one("account.invoice.expire")
+    #expire_id = fields.Many2one("account.move.expire")
+    expire_customer_id = fields.Many2one("account.move.expire")
     expire_line_id = fields.Many2one("invoice.expire.line")
     warning_customer = fields.Boolean(default=False)
     state_expired = fields.Selection([
@@ -22,10 +22,9 @@ class Factura(models.Model):
 
 
 class FacturasAVencer(models.Model):
-    _name = "account.invoice.expire"
+    _name = "account.move.expire"
     _order = "create_date desc"
 
-    @api.one
     def _name_(self):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
@@ -37,8 +36,8 @@ class FacturasAVencer(models.Model):
     invoice_expire_line = fields.One2many(
         "invoice.expire.line", "invoice_expire_id", "Facturas")
     facturas_ids_customers = fields.One2many(
-        "account.invoice", "expire_customer_id", "Facturas Vencidas")
-    facturas_ids = fields.One2many("account.invoice", "expire_id", "Facturas")
+        "account.move", "expire_customer_id", "Facturas Vencidas")
+    facturas_ids = fields.One2many("account.move", "Facturas")
     state = fields.Selection([
         ("draft", "Borrador"),
         ("init", "Iniciado"),
@@ -219,15 +218,12 @@ class FacturaVencerLine(models.Model):
     _name = "invoice.expire.line"
     _order = "create_date desc"
 
-    @api.one
     def _name_(self):
         self.name = self.user_id.name if self.type == 'comercial' else self.partner_id.name
 
-    @api.one
     def _company_id(self):
         self.company_id = self.invoice_expire_id.company_id.id
 
-    @api.one
     def _show_tabla(self):
         if len(self.facturas_ids.ids) > 1:
             self.show_tabla = True
@@ -245,8 +241,6 @@ class FacturaVencerLine(models.Model):
             return 1
           
     
-
-    @api.one
     def _time_due(self):
         if not len(self.facturas_ids.ids) > 1:
             for invoice in self.facturas_ids:
@@ -255,11 +249,11 @@ class FacturaVencerLine(models.Model):
     name = fields.Char("Nombre", compute=_name_)
     user_id = fields.Many2one("res.users", string="Comercial")
     partner_id = fields.Many2one("res.partner", string="Cliente")
-    invoice_expire_id = fields.Many2one("account.invoice.expire")
+    invoice_expire_id = fields.Many2one("account.move.expire")
     company_id = fields.Many2one(
         "res.company", compute=_company_id)
     facturas_ids = fields.One2many(
-        "account.invoice", "expire_line_id", "Facturas")
+        "account.move", "expire_line_id", "Facturas")
     show_tabla = fields.Boolean(compute=_show_tabla)
     time_due = fields.Integer(compute=_time_due)
     type = fields.Selection([
@@ -292,3 +286,5 @@ class FacturaVencerLine(models.Model):
                 template.send_mail(
                     self.id, email_values=email_values, force_send=True)
         return True
+        
+        """

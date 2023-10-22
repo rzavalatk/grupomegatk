@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="menu_social_link_tree" model="ir.ui.view">
+            <field name="name">menu.social.link.tree</field>
+            <field name="model">menu.social.link</field>
+            <field name="arch" type="xml">
+                <tree string="Redes sociales">
+                    <field name="website" />
+                    <field name="name" />
+                    <field name="icon" />
+                    <field name="link" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="menu_social_link_action" model="ir.actions.act_window">
+            <field name="name">Redes Sociales</field>
+            <field name="res_model">menu.social.link</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Redes Sociales" id="menu_social_link_menu" parent="website_custom.website_custom_menu_root"
+        sequence = "5" action = "website_custom.menu_social_link_action" />
+    </data>
+</odoo>

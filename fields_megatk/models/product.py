@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+#CAMPOS EN INVENTARIO/PŔODUCTO/INFORMACION GENERAL
 class Product(models.Model):
     _inherit = "product.template"
 
@@ -13,14 +14,15 @@ class Product(models.Model):
     # 	,('pulpdent','PULPDENT'),('scipharm','SCI PHARM'),('tehnodent','TEHNODENT'),('vistadental','VISTA DENTAL'),('ritdent','RITDENT'),('dfs','DFS'),('biolectronics','BIOELECTRONICS'),('etal','ETAL'),('tribest','TRIBEST'),('mc_dental','MC DENTAL'),('importadoragil','IMPORTADORA Y EXPORTADORA GIL'),('dromeinter','DROMEINTER'),('vdw','VDW'),('henryshe','HENRY SCHEIN')
     # 	,('odontotech','ODONTOTECH')],string = 'Marca')
 
-    @api.one
+    
     @api.depends('list_price', 'currency_id', 'company_id', 'x_costo_real', 'standard_price')
     def _compute_amount_vt(self):
-        if not self.standard_price == 0:
-            if self.x_costo_real == 0:
-                self.x_ganancia = ((self.list_price - self.standard_price)*100) / self.standard_price
-            else:
-                self.x_ganancia = ((self.list_price - self.x_costo_real)*100) / self.x_costo_real
+        for product in self:
+            if product.standard_price != 0:
+                if product.x_costo_real == 0:
+                    product.x_ganancia = ((product.list_price - product.standard_price) * 100) / product.standard_price
+                else:
+                    product.x_ganancia = ((product.list_price - product.x_costo_real) * 100) / product.x_costo_real
 
     x_tipo = fields.Selection([('producto','Producto'),('suministro','Suministro')],string = 'Tipo')
     x_ingresotk = fields.Selection([('energia','Ingreso Energía'),('grafica','Ingreso Linea Gráfica'),('identificacion','Ingreso Linea Identificación')
@@ -37,7 +39,7 @@ class Product(models.Model):
         ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
     x_ganancia = fields.Float(string='Ganancia', compute='_compute_amount_vt', store=True)
 
-
+#Formulario al crear una marca
 class ProductMarca(models.Model):
     _name = 'product.marca'
     _order = 'name asc'

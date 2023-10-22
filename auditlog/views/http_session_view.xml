@@ -55,7 +55,6 @@
         <field name="name">User sessions</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">auditlog.http.session</field>
-        <field name="view_type">form</field>
         <field name="view_id" ref="view_auditlog_http_session_tree"/>
     </record>
 

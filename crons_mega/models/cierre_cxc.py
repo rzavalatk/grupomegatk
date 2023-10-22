@@ -9,10 +9,14 @@ import json
 class CXC(models.Model):
     _name = "account.cierre.cxc"
     _order = "create_date desc"
+    _description = "description"
     
-    @api.one
     def _name_(self):
-        self.name = self.company_id.name + " - " + str(self.date)        
+        for record in self:
+            company_name = record.company_id.name or ''
+            create_date = record.create_date
+            formatted_date = create_date.strftime('%Y-%m-%d')
+            record.name = f'{company_name} - {formatted_date}'        
     
 
     name = fields.Char(compute=_name_)
@@ -165,8 +169,8 @@ class CXC(models.Model):
 
 class CXCLine(models.Model):
     _name = "account.cierre.cxc.line"
+    _description = "description"
     
-    @api.one
     def _name_(self):
         self.name = self.account_id.name
 

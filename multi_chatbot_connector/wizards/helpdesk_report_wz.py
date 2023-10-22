@@ -28,8 +28,9 @@ import time
 
 class ReportMonthChannelTemplate(models.AbstractModel):
     _name = 'report.multi_chatbot_connector.report_month_channel_template'
+    _description = "description"
     
-    @api.multi
+    #@api.multi
     def months_between(self, start, end):
         months = []
         cursor = datetime.strptime(str(start), DEFAULT_SERVER_DATE_FORMAT)
@@ -39,7 +40,7 @@ class ReportMonthChannelTemplate(models.AbstractModel):
             cursor += timedelta(weeks=1)
         return OrderedDict((m, True) for m in months).keys()
     
-    @api.model
+    #@api.model
     def _get_report_values(self, docids, data=None):
         Report = self.env['ir.actions.report']._get_report_from_name('multi_chatbot_connector.report_month_channel_template')
         channels = self.env['im_livechat.channel'].sudo().browse(data['form'][0].get('channel_ids', []))
@@ -65,8 +66,9 @@ class ReportMonthChannelTemplate(models.AbstractModel):
 
 class ReportManagerChannelTemplate(models.AbstractModel):
     _name = 'report.multi_chatbot_connector.report_manager_channel_template'
+    _description = "description"
     
-    @api.multi
+    #@api.multi
     def months_between(self, start, end):
         months = []
         cursor = datetime.strptime(str(start), DEFAULT_SERVER_DATE_FORMAT)
@@ -76,7 +78,7 @@ class ReportManagerChannelTemplate(models.AbstractModel):
             cursor += timedelta(weeks=1)
         return OrderedDict((m, True) for m in months).keys()
 
-    @api.model
+    #@api.model
     def _get_report_values(self, docids, data=None):
         Report = self.env['ir.actions.report']._get_report_from_name('multi_chatbot_connector.report_manager_channel_template')
         channels = self.env['im_livechat.channel'].sudo().browse(data['form'][0].get('channel_ids', []))
@@ -104,6 +106,7 @@ class ReportManagerChannelTemplate(models.AbstractModel):
 
 class OnlineHelpdeskWz(models.TransientModel):
     _name = 'online.helpdesk.wz'
+    _description = "description"
     
     is_channel = fields.Boolean('Channel(s)')
     status = fields.Selection([('new','New'),('working','In Progress'),('finish','Finish')], default='finish')
@@ -123,13 +126,13 @@ class OnlineHelpdeskWz(models.TransientModel):
             user_list += channel.user_ids.ids
         self.user_ids = list(set(user_list))
     
-    @api.multi
+    #@api.multi
     def print_report(self):
         helpdesk = self.env['online.helpdesk'].sudo().search([('status','=',self.status)])
         if self.channel_ids:
             return self.channel_ids.env.ref('multi_chatbot_connector.report_channel').with_context({'discard_logo_check': True}).report_action(self.channel_ids)
     
-    @api.multi
+    #@api.multi
     def print_self_report(self):
         self.ensure_one()
         data = self.read()

@@ -61,7 +61,7 @@ class Prestamos(models.Model):
         product = self.env['product.product'].search([('interes', '=', '1')])
         return product.id
 
-    @api.multi
+    @api.model_create_multi
     def fechainicio(self):
         pres = self.env['prestamos'].search(
             [('company_id', '=', self.company_id.id)])
@@ -139,7 +139,7 @@ class Prestamos(models.Model):
         "banks.check", "Cheque/Transferencia", copy=False,)
 
     invoice_cxc_ids = fields.Many2many(
-        "account.invoice", string='Facturas cxc', readonly=True, copy=False)
+        "account.move", string='Facturas cxc', readonly=True, copy=False)
 
     payment_ids = fields.Many2many(
         "account.payment", string="Pagos", copy=False,)
@@ -192,7 +192,6 @@ class Prestamos(models.Model):
     def _onchange_monto_cxc(self):
         self.monto_restante = self.monto_cxc
 
-    @api.one
     @api.depends('precio_a', 'prima')
     def _onchange_precioa_prima(self):
         if self.precio_a != 0 and self.prima != 0:

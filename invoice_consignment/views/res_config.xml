@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+    
+    
     <data>
         <record id="res_config_settings_form_cuenta_consignacion_view" model="ir.ui.view">
             <field name="name">res.config.settings.form.cuenta.consignacion.view</field>

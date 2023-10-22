@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+#CAMPOS EN FORMULARIO CONTACTO/VENTAS Y COMPRAS/VARIOS
 class ResParnertIndustry(models.Model):
     _inherit = "res.partner.industry"
 

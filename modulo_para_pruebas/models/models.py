@@ -5,6 +5,7 @@ from datetime import datetime
 
 class Logs(models.Model):
     _name="logs.model"
+    _description = "description"
     
     name = fields.Char("Nambre")
     register = fields.Text()

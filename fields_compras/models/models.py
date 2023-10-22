@@ -38,7 +38,6 @@ class Productos(models.Model):
 class ModelImport(models.Model):
     _inherit = 'import.product.mega'
 
-    @api.one
     def _brand_produt(self):
         try:
             self.brand_produt = self.import_line_id[0].product_id.marca_id.id

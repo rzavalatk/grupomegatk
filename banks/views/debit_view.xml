@@ -1,178 +1,190 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
 <data>
 
-<record id="debit_form_view" model="ir.ui.view">
-    <field name="name">Debito Bancario</field>
-    <field name="model">banks.debit</field>
-    <field name="arch" type="xml">
-    <form string="Debits">
-    <header>
-        <button name="action_draft" type="object" string="Cambiar a Borrador" states="anulated" class="oe_highlight"/>
-        <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
-        <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
-        <button name="action_anulate_debit" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
-           confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
-    </header>
-    <sheet>
-        
-        <h1>
-            <field name="number_calc" readonly='1' attrs="{'invisible': [('state','!=','draft')]}"/>
-            <field name="number" readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
-        </h1>
-        <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
-        <group colspan="4">
-        <group cols="2">
-            <field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
-            <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
-        </group>
-        <group cols="2">
-            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="currency_id" options="{'no_create': True}"/>
-            <field name="doc_type" invisible="1"/>
-            <field name="es_moneda_base" invisible="1"/>
-            <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
-             <field name="plantilla_id" invisible="1" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"  
-                domain="[('doc_type', '=', doc_type)]"/> 
-        </group>
-        </group>
-        <group colspan="4">
-        <group col="2">
-            <field name="namea" attrs="{'readonly': [('state','!=','draft')]}"/>
-        </group>
-        <group col="2">
-            <field name="name"  attrs="{'readonly': [('state','!=','draft')]}"/>
-        </group>
-        </group>
-        <notebook>
-        <page string="Detalle de Transacción">
-        <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
-            <tree editable="bottom">
-               <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]" options="{'no_create': True}"/>
-               <field name="name"/>
-               <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
-               <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
-               <field name="amount"/>
-               <field name="move_type"/>
-            </tree>
+    <record id="debit_form_view" model="ir.ui.view">
+        <field name="name">Debito Bancario</field>
+        <field name="model">banks.debit</field>
+        <field name="arch" type="xml">
+            <form string="Debits">
+                <header>
+                    <button name="action_draft" type="object" string="Cambiar a Borrador" states="anulated" class="oe_highlight"/>
+                    <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
+                    <button name="action_anulate_debit" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
+                    confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    
+                    <h1>
+                        <field name="number_calc" readonly='1' attrs="{'invisible': [('state','!=','draft')]}"/>
+                        <field name="number" readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
+                    </h1>
+                    <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
+                    <group colspan="4">
+                        <group cols="2">
+                            <field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+                            <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group cols="2">
+                            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="currency_id" options="{'no_create': True}"/>
+                            <field name="doc_type" invisible="1"/>
+                            <field name="es_moneda_base" invisible="1"/>
+                            <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
+                            <field name="plantilla_id" invisible="1" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"  
+                                domain="[('doc_type', '=', doc_type)]"/> 
+                        </group>
+                    </group>
+                    <group colspan="4">
+                        <group col="2">
+                            <field name="namea" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group col="2">
+                            <field name="name"  attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detalle de Transacción">
+                            <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
+                                <tree editable="bottom">
+                                <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]" options="{'no_create': True}"/>
+                                <field name="name"/>
+                                <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="amount"/>
+                                <field name="move_type"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Apuntes Contables" attrs="{'invisible': [('state','!=','validated')]}">
+                            <group>
+                                <field name="move_id" readonly="1" widget="many2one_tree" options="{'middle_node_select': False}"  />
+                            </group>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="rest_credit" widget="monetary" options="{'currency_field': 'currency_id'}"/>                      
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
         </field>
-        </page>
-        <page string="Apuntes Contables" attrs="{'invisible': [('state','!=','validated')]}">
-			<group>
-            	<field name="move_id" readonly="1" widget="many2one_tree" options="{'middle_node_select': False}"  >
-            	</field>
-			</group>
-        </page>
-        </notebook>
-		<group class="oe_subtotal_footer oe_right">
-			<field name="rest_credit" widget="monetary" options="{'currency_field': 'currency_id'}"/>                      
-        </group>
-    </sheet>
-    <div class="oe_chatter">
-          <field name="message_ids" widget="mail_thread"/>
-    </div>
-    </form>
-    </field>
-</record>
+    </record> 
 
-<record model="ir.ui.view" id="banks_debit_view_tree">
-    <field name="name">banks.debit.tree</field>
-    <field name="model">banks.debit</field>
-    <field name="arch" type="xml">
-    <tree string="Debits and Credits" decoration-muted="state=='anulated'" decoration-info="state=='draft'" create="true">
-		<field name="number"/>
-        <field name="name" />
-        <field name="date" />
-        <field name="journal_id" widget="selection" />
-        <field name="total" sum="total"/>
-        <field name="currency_id"/>
-        <field name="state"/>
-        <field name="company_id" groups="base.group_multi_company"/>
-    </tree>
-    </field>
-</record>
-
-<record model="ir.ui.view" id="view_banks_debit_search">
-    <field name="name">debit.search</field>
-    <field name="model">banks.debit</field>
-    <field name="arch" type="xml">
-    <search string = 'search'>
-        <field name="name" filter_domain="[('namea', 'ilike', self)]" string="Pagado a"/>
-        <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>
-        <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
-        <filter string="Anulado" name="anulado_back" domain="[('state','=','anulated')]"/>
-        <filter string="Borrador" name="borrador_back" domain="[('state','=','draft')]"/>
-        <filter string="Validado" name="validado_back" domain="[('state','=','validated')]"/>
-        <group expand="0" string="Group By">
-           <filter string="Mes" name="mes_back" domain="[]" context="{'group_by':'date'}"/>
-           <filter string="Estado" name="estado_back" domain="[]" context="{'group_by':'state'}"/>
-           <filter string="Banco" name="banco_back" domain="[]" context="{'group_by':'journal_id'}"/>
-        </group>
-        </search>
-    </field>
-</record>
-<!-- Reglas de registro -->
-    <record id="rule_banco_debitos" model="ir.rule">
-      <field name="name">Debito</field>
-      <field name="model_id" ref="model_banks_debit"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="True"/>
-      <field name="perm_create" eval="True"/>
-      <field name="perm_unlink" eval="True"/>
-      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+    <record model="ir.ui.view" id="banks_debit_view_tree">
+        <field name="name">banks.debit.tree</field>
+        <field name="model">banks.debit</field>
+        <field name="arch" type="xml">
+        <tree string="Debits and Credits" decoration-muted="state=='anulated'" decoration-info="state=='draft'" create="true">
+            <field name="number"/>
+            <field name="name" />
+            <field name="date" />
+            <field name="journal_id" widget="selection" />
+            <field name="total" sum="total"/>
+            <field name="currency_id"/>
+            <field name="state"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+        </tree>
+        </field>
     </record>
 
-<record id="action_debit_management" model="ir.actions.act_window">
-    <field name="name">Débitos Bancarios</field>
-    <field name="res_model">banks.debit</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field name="domain">[('doc_type','=','debit')]</field>
-    <field name="context">{'default_doc_type':'debit'}</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to record a new debit.
-    </p>
-    </field>
-</record>
+    <record model="ir.ui.view" id="view_banks_debits_search">
+        <field name="name">debit.search</field>
+        <field name="model">banks.debit</field>
+        <field name="arch" type="xml">
+        <search string = 'search'>
+            <field name="name" filter_domain="[('namea', 'ilike', self)]" string="Pagado a"/>
+            <field name="name" filter_domain="[('number', 'ilike', self)]" string="Número"/>
+            <field name="name" filter_domain="[('journal_id', 'ilike', self)]" string="Banco"/>
+            <filter string="Anulado" name="anulado_back" domain="[('state','=','anulated')]"/>
+            <filter string="Borrador" name="borrador_back" domain="[('state','=','draft')]"/>
+            <filter string="Validado" name="validado_back" domain="[('state','=','validated')]"/>
+            <group expand="0" string="Group By">
+            <filter string="Mes" name="mes_back" domain="[]" context="{'group_by':'date'}"/>
+            <filter string="Estado" name="estado_back" domain="[]" context="{'group_by':'state'}"/>
+            <filter string="Banco" name="banco_back" domain="[]" context="{'group_by':'journal_id'}"/>
+            </group>
+            </search>
+        </field>
+    </record>
+    <!-- Reglas de registro -->
+        <record id="rule_banco_debitos" model="ir.rule">
+        <field name="name">Debito</field>
+        <field name="model_id" ref="model_banks_debit"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+        </record>
 
-<record id="action_credit_management" model="ir.actions.act_window">
-    <field name="name">Créditos Bancarios</field>
-    <field name="res_model">banks.debit</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field name="domain">[('doc_type','=','credit')]</field>
-    <field name="context">{'default_doc_type':'credit'}</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to record a new debit.
-    </p>
-    </field>
-</record>
+    <record id="action_debit_management" model="ir.actions.act_window">
+        <field name="name">Débitos Bancarios</field>
+        <field name="res_model">banks.debit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('doc_type','=','debit')]</field>
+        <field name="context">{'default_doc_type':'debit'}</field>
+        <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+            Click to record a new debit.
+        </p>
+        </field>
+    </record>
 
-<record id="action_deposit_management" model="ir.actions.act_window">
-    <field name="name">Depósitos</field>
-    <field name="res_model">banks.debit</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field name="domain">[('doc_type','=','deposit')]</field>
-    <field name="context">{'default_doc_type':'deposit'}</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click para crear primer registro.
-    </p>
-    </field>
-</record>
+    <record id="action_credit_management" model="ir.actions.act_window">
+        <field name="name">Créditos Bancarios</field>
+        <field name="res_model">banks.debit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('doc_type','=','credit')]</field>
+        <field name="context">{'default_doc_type':'credit'}</field>
+        <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+            Click to record a new debit.
+        </p>
+        </field>
+    </record>
 
-<menuitem action="action_debit_management" id="menu_management_debit" name="Débitos Bancarios"
-          string="Débitos Bancarios" parent="menu_banks_gestion" sequence="5"/>
+    <record id="action_deposit_management" model="ir.actions.act_window">
+        <field name="name">Depósitos</field>
+        <field name="res_model">banks.debit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('doc_type','=','deposit')]</field>
+        <field name="context">{'default_doc_type':'deposit'}</field>
+        <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+            Click para crear primer registro.
+        </p>
+        </field>
+    </record>
 
-<menuitem action="action_credit_management" id="menu_management_credit" name="Créditos Bancarios"
-          string="Créditos Bancarios" parent="menu_banks_gestion" sequence="20"/>
+    <menuitem
+        id="menu_management_debit"
+        name="Debitos Bancarios"
+        action="action_debit_management"
+        parent="menu_banks_gestion"
+        sequence="5"/>
+        
+    <menuitem 
+        action="action_credit_management" 
+        id="menu_management_credit" 
+        name="Créditos Bancarios"
+        parent="menu_banks_gestion" 
+        sequence="20"/>
 
-<menuitem action="action_deposit_management" id="menu_management_deposit" name="Depósitos"
-          string="Depósitos" parent="menu_banks_gestion" sequence="30"/>
+    <menuitem 
+        action="action_deposit_management" 
+        id="menu_management_deposit" 
+        name="Depósitos"
+        parent="menu_banks_gestion" 
+        sequence="30"/>
+
+    
+    
+
 
 </data>
 </odoo>

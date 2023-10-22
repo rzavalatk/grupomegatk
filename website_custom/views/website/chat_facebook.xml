@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!--<template id="chat_facebook_1" inherit_id="ks_theme_kinetik.custom_footer_scroll_top">
+            <xpath expr="//section[@class='ks-scroll-top flex-center']" position="after">
+                <div id="fb-root"></div>
+                <div id="fb-customer-chat" class="fb-customerchat">
+                </div>
+                <script> 
+                    <![CDATA[
+                        try {
+                            let str = "";
+                            let abc = "abcdefghijklmnopqrstuvwxyz";
+                            for (let i = 0; i < 4; i++) {
+                                str += abc.charAt(Math.floor(Math.random() * abc.length));
+                            }
+                            odoo.define(`chat.facebook.${str}`, function (require) {
+                                "use strict";
+                                const ajax = require("web.ajax");
+                                ajax.jsonRpc("/chat_facebook_active").then((data) => {
+                                    if (data === 'True') {
+                                        var chatbox = document.getElementById('fb-customer-chat');
+                                        chatbox.setAttribute("page_id", "233463493478084");
+                                        chatbox.setAttribute("attribution", "biz_inbox");
+
+                                        window.fbAsyncInit = function() {
+                                            FB.init({
+                                            xfbml: true,
+                                            version: 'v12.0'
+                                            });
+                                        };
+
+                                        (function(d, s, id) {
+                                            var js, fjs = d.getElementsByTagName(s)[0];
+                                            if (d.getElementById(id)) return;
+                                            js = d.createElement(s); js.id = id;
+                                            js.src = 'https://connect.facebook.net/es_LA/sdk/xfbml.customerchat.js';
+                                            fjs.parentNode.insertBefore(js, fjs);
+                                        }(document, 'script', 'facebook-jssdk'));
+                                    }
+                                });
+                                
+                            });
+                        } catch (error) {
+                            //   console.log(error);
+                            location.reload();
+                        }
+                    ]]>
+                </script>
+            </xpath>
+        </template>-->
+    </data>
+</odoo>

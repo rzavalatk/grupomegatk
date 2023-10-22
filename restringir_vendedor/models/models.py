@@ -13,7 +13,7 @@ class Users(models.Model):
 class Leads(models.Model):
     _inherit = "crm.lead"
     
-    @api.multi
+    #@api.multi
     def unlink(self):
         if self.env.user.vendor:
             raise Warning("No tiene permisos para realizar esta acción. Consulte con su Administrador.")

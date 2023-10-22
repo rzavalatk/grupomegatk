@@ -66,7 +66,6 @@
             <field name="name">Metas Planeadas</field>
             <field name="res_model">hr.meta.planeada.wizard</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 
@@ -76,7 +75,6 @@
             <field name="name">Asignar Meta</field>
             <field name="res_model">hr.meta.wizard</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 
@@ -104,7 +102,6 @@
             <field name="name">Ingresar Avance</field>
             <field name="res_model">hr.meta.avance</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 
@@ -140,7 +137,6 @@
             <field name="name">Evaluar meta</field>
             <field name="res_model">hr.meta.evaluar</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 
@@ -209,7 +205,6 @@
             <field name="name">Editar Puntaje</field>
             <field name="res_model">hr.meta.puntaje</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 
@@ -244,7 +239,6 @@
             <field name="name">Re asignar meta</field>
             <field name="res_model">hr.meta.reasignar</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 

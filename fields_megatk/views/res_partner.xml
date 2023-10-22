@@ -10,6 +10,8 @@
   				<xpath expr="//field[@name='industry_id']" position="after">
     				<field name="x_zonac"/>
   				</xpath>
+
+				
 			</data>
 		              
 		</field>

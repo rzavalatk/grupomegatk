@@ -8,8 +8,8 @@ import pytz
 class HrPermisos(models.Model):
 	_name = 'hr.employee.permisos'
 	_order = "id desc"
-	_inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-
+	_inherit = ['mail.thread', 'mail.activity.mixin']
+	_description = "description"
 
 	@api.model
 	def solicitante(self):
@@ -20,20 +20,20 @@ class HrPermisos(models.Model):
 		except Exception as e:
 			return 0
 
-	name = fields.Char('Permiso', copy=False,)
-	fecha_inicio = fields.Datetime(string='Desde', required=True, ) 
-	fecha_inicio_txt = fields.Char(string='Desde', ) 
-	fecha_fin = fields.Datetime(string='Hasta', required=True, )
-	fecha_fin_txt = fields.Char(string='Hasta',  )
+	name = fields.Char('Permiso', copy=False)
+	fecha_inicio = fields.Datetime(string='Desde: ', required=True ) 
+	fecha_inicio_txt = fields.Char(string='Desde' ) 
+	fecha_fin = fields.Datetime(string='Hasta: ', required=True )
+	fecha_fin_txt = fields.Char(string='Hasta')
 	cargo = fields.Selection([('vaciones', 'Vacaciones'),('deduccion', 'Dedución de sueldo'),('sincargo', 'Sin cargo'),('incapacidad', 'Incapacidad')], default= 'vaciones', copy=False, required=True, track_visibility='onchange')
 	reporto = fields.Selection([('anticipado', 'Anticipado'),('llamada', 'Llamada'),('mensaje', 'Mensaje'),('noreporto', 'No reporto')], default= 'anticipado', copy=False, required=True, track_visibility='onchange')
 	employe_id = fields.Many2one('hr.employee', string='Solicitante', default = solicitante, required=True, track_visibility='onchange')
 	cubierto_employe_id = fields.Many2one('hr.employee', string='Ausencia cubierta', copy=False,)
-	justificacion = fields.Text('Motivo' ,copy=False,)
-	state = fields.Selection( [('draft', 'Borrador'), ('pendiente', 'Pendiente'), ('aprobado', 'Aprobado'), ('denegado', 'Denegado'), ('cancelado', 'Cancelado')], string="Estado", default='draft',copy=False, track_visibility='onchange',)
+	justificacion = fields.Text('Motivo' ,copy=False)
+	state = fields.Selection( [('draft', 'Borrador'), ('pendiente', 'Pendiente'), ('aprobado', 'Aprobado'), ('denegado', 'Denegado'), ('cancelado', 'Cancelado')], string="Estado", default='draft',copy=False, track_visibility='onchange')
 	dias = fields.Integer(string='Días', default=0)
-	horas = fields.Integer(string='Horas', default=0,)
-	minutos = fields.Integer(string='Minutos', default=0,)
+	horas = fields.Integer(string='Horas', default=0)
+	minutos = fields.Integer(string='Minutos', default=0)
 	department_id = fields.Integer(string="Departamento")
 	sequence_id = fields.Many2one('ir.sequence', "Prestamo")
 	por_empresa = fields.Boolean('Por Empresa:', default=False)
@@ -313,7 +313,7 @@ class HrPermisos(models.Model):
 								'permisos_horas': horas,
 								'permisos_minutos': minutos_resultante})
 							template = self.env.ref('permisos.email_template_vaciones_automaticas')
-							email_values = {'email_to': 'erodriguez@megatk.com',
+							email_values = {'email_to': 'dzuniga@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
 											'body_html': "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas<br/><br/> <b>Años cumplidos</b>: " + str(hoy.year - employe_id.fecha_ingreso.year) + '<br/>'+
 											'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos' }
@@ -326,7 +326,7 @@ class HrPermisos(models.Model):
 								'permisos_horas': horas,
 								'permisos_minutos': minutos_resultante})
 							template = self.env.ref('permisos.email_template_vaciones_automaticas')
-							email_values = {'email_to': 'erodriguez@megatk.com',
+							email_values = {'email_to': 'dzuniga@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
 											'body_html': 'Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas <br/><br/><b>2.5 dias</b> por mes cumplido <br/>' +
 													'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos' }

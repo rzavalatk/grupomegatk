@@ -9,6 +9,7 @@ class BanksPayment(models.Model):
 	_name = "banks.payment.invoices.custom"
 	_order = 'effective_date asc'
 	_inherit = ['mail.thread']
+	_description = "description"
 
 	def get_sequence(self):
 		if self.journal_id:
@@ -46,7 +47,6 @@ class BanksPayment(models.Model):
 			if seq.move_type == doc_type:
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)
 
-	@api.one
 	@api.depends('invoice_ids.monto_pago', 'amount')
 	def get_diferencia(self):
 		if self.invoice_ids:
@@ -101,13 +101,14 @@ class BanksPayment(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	@api.model
+
+	#@api.model
 	def create(self, vals):
 		vals["name"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
 		check = super(BanksPayment, self).create(vals)
 		return check
 
-	@api.multi
+	#@api.model_create_multi
 	def get_invoices(self):
 		invoice_ids = self.env["account.invoice"].search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open'), 
 			('currency_id', '=', self.currency_id.id), ('type','=','in_invoice')])
@@ -131,7 +132,7 @@ class BanksPayment(models.Model):
 			}
 			facturas.create(vals)
 
-	@api.multi
+	#@api.model_create_multi
 	def post_payment(self):
 		if self.amount <= 0:
 			raise Warning(_('El monto debe de ser mayor que cero'))
@@ -148,7 +149,7 @@ class BanksPayment(models.Model):
 		to_reconcile_lines = self.env['account.move.line']
 		for factura in self.invoice_ids:
 			if factura.currency_id != self.currency_id:
-				 raise Warning(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
+				raise Warning(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
 			if factura.monto_pago > 0:
 				vals_interes = {
 					'debit': factura.monto_pago * self.currency_rate,
@@ -201,7 +202,7 @@ class BanksPayment(models.Model):
 
 	def reconciliar(self, invoice_id, move_id):
 		to_reconcile_lines = self.env['account.move.line']
-		inv = self.env["account.invoice"].search([('id', '=', invoice_id)])
+		inv = self.env["account.move"].search([('id', '=', invoice_id)])
 		account_move = self.env['account.move'].search([('id', '=', move_id)])
 		movelines = inv.move_id.line_ids
 		for line in movelines:
@@ -216,6 +217,7 @@ class BanksPayment(models.Model):
 
 class BanksPayemtline(models.Model):
 	_name = "banks.payment.line.custom"
+	_description = "description"
 
 	pago_id = fields.Many2one("banks.payment.invoices.custom", "Pago")
 	partner_id = fields.Many2one("res.partner", "Proveedor")
@@ -223,7 +225,7 @@ class BanksPayemtline(models.Model):
 	date_invoice = fields.Date('Fecha de factura')
 	date_due = fields.Date('Fecha de vencimiento')
 	name = fields.Char("Referencia")
-	invoice_id = fields.Many2one('account.invoice', string="Invoices", readonly=False)
+	invoice_id = fields.Many2one('account.move', string="Invoices", readonly=False)
 	amount_total = fields.Float("Total de factura")
 	residual = fields.Float("Saldo de pendiente")
 	monto_pago = fields.Float("Monto a pagar")

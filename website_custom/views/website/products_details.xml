@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--<template id="website_products_sale_custom" inherit_id="website_sale.product">
+            <xpath expr="//div[@id='product_details']//a[@id='add_to_cart']" position="after">
+                <div style="padding: 5px; margin-top: 15px;">
+                    <div class="alert alert-danger" id="sold_out" style="display: none; " role="before">
+                        Producto agotado
+                    </div>
+                </div>
+            </xpath>
+        </template>
+        <template id="website_add_to_cart_custom" inherit_id="ks_theme_kinetik.kps_product">
+            <xpath expr="//div[@class='custom_add_to_cart_and_call']//a[@id='add_to_cart']" position="before">
+            </xpath>
+        </template>
+        <template id="product_price_custom" name="product.price.custom" inherit_id="website_sale.product_price">
+            <xpath expr="//b[@class='oe_price']" position="attributes">
+                <attribute name="id">price_public</attribute>
+            </xpath>
+        </template>-->
+    </data>
+</odoo>

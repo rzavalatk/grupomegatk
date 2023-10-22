@@ -7,6 +7,7 @@ from odoo.exceptions import Warning
 
 class WizardGenerarCheque(models.TransientModel):
     _name = 'prestamos.wizard.cheque'
+    _description = "description"
 
     
     @api.onchange("currency_id")
@@ -43,7 +44,7 @@ class WizardGenerarCheque(models.TransientModel):
     es_moneda_base = fields.Boolean("Es moneda base")
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
-    @api.multi
+    @api.model_create_multi
     def generate_cheque(self):
         if self.monto <= 0:
             raise Warning(_('El monto del cheque/transferencia debe de ser mayor que cero.'))

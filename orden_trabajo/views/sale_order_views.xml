@@ -5,7 +5,7 @@
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
-         <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+         <xpath expr="//form/sheet/notebook" position="inside">
           <page name="orden_trabajo" string="Orden de Trabajo" groups="orden_trabajo.ot_printex">
             <group name="ot_page">
               <group name="ot_left">

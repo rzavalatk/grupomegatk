@@ -9,3 +9,4 @@ model_gastos_tarjeta_megatk,grupo_gastos_tarjeta_manager,access_gastos_tarjeta_m
 model_gastos_tarjeta_lineas_megatk,grupo_gastos_tarjeta_manager,access_gastos_tarjeta_linea_manager,gastos.tarjeta.lineas.megatk,1,1,1,1
 model_gastos_tarjeta_megatk,grupo_gastos_tarjeta_user,access_gastos_tarjeta_user,gastos.tarjeta.megatk,1,0,0,0
 model_gastos_tarjeta_lineas_megatk,grupo_gastos_tarjeta_user,access_gastos_tarjeta_linea_user,gastos.tarjeta.lineas.megatk,1,0,0,0
+model_gastos_megatk_wizard_cheque,grupo_gastos_personal_desembolso,access_gastos_desembolso,gastos.megatk,1,1,1,1

@@ -12,11 +12,11 @@ class SignOrders(models.Model):
     color = fields.Integer(default=1234)
     current_user = fields.Many2one('res.users', compute='_get_current_user')
 
-    @api.depends()
+    #@api.depends()
     def _get_current_user(self):
         self.update({'current_user' : self.env.user.id})
 
-    @api.multi
+    #@api.model_create_multi
     def _automate_color(self):
         print("////////////////Inicio del coloreo Kanban, module:sign_orders, model:stock.picking /////////////")
         data = self.env['stock.picking'].sudo().search([('passed','=','No')])

@@ -6,7 +6,7 @@ from odoo import models, api
 class CustomUsers(models.Model):
     _inherit = 'res.users'
 
-    @api.model
+    #@api.model
     def _signup_create_user(self, values):
         current_website = self.env['website'].get_current_website()
         values['company_id'] = current_website.company_id.id

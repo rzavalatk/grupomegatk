@@ -6,10 +6,11 @@ from odoo.exceptions import Warning
 
 class WizardTemplatebanks(models.TransientModel):
     _name = "banks.wizard.template"
+    _description = "description"
 
     name = fields.Char("Nombre de plantilla", required=True)
 
-    @api.multi
+    @api.model_create_multi
     def set_template(self):
         obj_template = self.env["banks.template"]
         ctx = self._context

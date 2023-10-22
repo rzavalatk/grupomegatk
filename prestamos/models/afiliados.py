@@ -32,7 +32,7 @@ class Afiliados(models.Model):
 	res_partner_prov_id = fields.Many2one('res.partner', string='Afiliado', readonly=True, states={'draft': [('readonly', False)]},)
 	cuenta = fields.Char('Numero de cuenta', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id, readonly=True, states={'draft': [('readonly', False)]},)
-	imagen = fields.Binary(related='res_partner_prov_id.image', string="Imegen")
+	#imagen = fields.Binary(related='res_partner_prov_id.image', string="Imegen")
 	company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'draft': [('readonly', False)]},)
 	state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'),('validado', 'Validado'),], string="Estado", default='draft',copy=False, track_visibility='onchange', )
 
@@ -44,7 +44,7 @@ class Afiliados(models.Model):
 	fecha_apertura = fields.Date(string='Fecha de apertura', readonly=True, required=True, states={'draft': [('readonly', False)]},)
 	
 	user_id = fields.Many2one('res.users', string='Responsable', index=True,  default=lambda self: self.env.user,readonly=True, states={'draft': [('readonly', False)]},)
-	invoice_cxc_ids = fields.Many2many("account.invoice", string='Facturas cxc', readonly=True, copy=False)
+	invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
 	invoice_count_cxp = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
 	payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
 
@@ -85,7 +85,6 @@ class Afiliados(models.Model):
 				vals["haber"] = movimiento.credit
 			obj_line.create(vals)
 
-	@api.one
 	def _credit_debit_get(self):
 		credit = 0
 		debit = 0
@@ -117,7 +116,7 @@ class Afiliados(models.Model):
 		if len(invoices) > 1:
 			action['domain'] = [('id', 'in', invoices.ids),('type','=','in_invoice')]
 		elif len(invoices) == 1:
-			action['views'] = [(self.env.ref('account.invoice_supplier_form').id, 'form')]
+			action['views'] = [(self.env.ref('account.move_supplier_form').id, 'form')]
 			action['res_id'] = invoices.ids[0]
 		else:
 			action = {'type': 'ir.actions.act_window_close'}

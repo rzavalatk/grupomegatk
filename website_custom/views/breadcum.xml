@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="breadcum_custom_list" model="ir.ui.view">
+            <field name="name">breadcum.custom.list</field>
+            <field name="model">breadcum_custom.images</field>
+            <field name="arch" type="xml">
+                <kanban class="o_hr_employee_kanban center-block">
+                    <field name="id"/>
+                    <field name="name" />
+                    <field name="website_id" />
+                    <field name="image" widget="image"/>
+                    <separator/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div style="height:150px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click">
+                                <img style="width: 100%; height:80px; " class="o_kanban_image" t-att-src="kanban_image('breadcum_custom.images', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                <div style="padding: 5px">
+                                    <b style="font-size: 18px;">Sitio web: </b>
+                                    <span style="font-size: 18px;">
+                                        <field name="website_id" />
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="breadcum_custom_form" model="ir.ui.view">
+            <field name="name">breadcum.custom.form</field>
+            <field name="model">breadcum_custom.images</field>
+            <field name="arch" type="xml">
+                <form string="Ingresar imagenes">
+                    <sheet>
+                        <group>
+                            <field name="image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="name" />
+                            <field name="website_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="website_custom_action" model="ir.actions.act_window">
+            <field name="name">Imagenes del Breadcrumb</field>
+            <field name="res_model">breadcum_custom.images</field>
+            <field name="view_mode">kanban,form</field>
+        </record>
+
+        <menuitem name="Admin Website" id="website_custom_menu_root" 
+        sequence = "1" web_icon="website_custom,static/description/icon.png" 
+        action = "website_custom.website_custom_action" />
+    </data>
+</odoo>

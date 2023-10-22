@@ -7,6 +7,7 @@ import requests
 
 class ApiTodoist(models.TransientModel):
     _name = "api.todoist"
+    _description = "description"
 
     basePath = "https://api.todoist.com/rest/v2"
 
@@ -32,6 +33,7 @@ class ApiTodoist(models.TransientModel):
 
 class TodoistUsers(models.Model):
     _name = "todoist.users"
+    _description = "description"
 
     name = fields.Many2one("res.users", "Empleado")
     token = fields.Char("Token de usuario todoist")
@@ -60,7 +62,7 @@ class TodoistUsers(models.Model):
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    @api.model
+    #@api.model_create_multi
     def create(self, values):
         try:
             model = self.env['ir.model'].browse(values['res_model_id']).model

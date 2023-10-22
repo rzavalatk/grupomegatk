@@ -13,7 +13,6 @@ class PrestamosCuotas(models.Model):
     _description = "Cuotas de los prestamos"
     # _order = "fecha_pago asc"
 
-
     @api.model
     def tipo(self):
         if self.cuotas_prestamo_id:
@@ -38,14 +37,14 @@ class PrestamosCuotas(models.Model):
     gastos = fields.Float(string='Gastos',copy=False)
     pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
-    invoice_id = fields.Many2one("account.invoice", "Factura", track_visibility='onchange',copy=False,)
+    invoice_id = fields.Many2one("account.move", "Factura", track_visibility='onchange',copy=False,)
 
     # @api.onchange('cuotas_prestamo_id')
     # def _onchange_cuotas_prestamo_id(self):
     #   self.currency_id = self.cuotas_prestamo_id.currency_id.id
 
     def validar(self):
-        obj_factura = self.env["account.invoice"]
+        obj_factura = self.env["account.move"]
         lineas = []
         if self.cuota_interes > 0:
             val_lineas = {
@@ -70,7 +69,7 @@ class PrestamosCuotas(models.Model):
             lineas.append((0, 0, val_lineas1))
         
         company_id = self.company_id.id
-        journal_id = (self.env['account.invoice'].with_context(company_id=company_id or self.env.user.company_id.id)
+        journal_id = (self.env['account.move'].with_context(company_id=company_id or self.env.user.company_id.id)
             .default_get(['journal_id'])['journal_id'])
         if not journal_id:
             raise UserError(_('Please define an accounting sales journal for this company.'))
@@ -153,7 +152,7 @@ class PrestamosCuotas(models.Model):
         if len(invoices) > 1:
             action['domain'] = [('id', 'in', invoices.ids)]
         elif len(invoices) == 1:
-            action['views'] = [(self.env.ref('account.invoice_form').id, 'form')]
+            action['views'] = [(self.env.ref('account.move_form').id, 'form')]
             action['res_id'] = invoices.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}

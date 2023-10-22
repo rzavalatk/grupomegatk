@@ -2,7 +2,7 @@
 {
     'name': 'Account Invoice Line Report',
     'summary': 'Lineas de facturas validadas ',
-    'version': '12.0',
+    'version': '14.0',
     'category': 'Account',
     'author': 'Romel Zavala',
     'depends': [

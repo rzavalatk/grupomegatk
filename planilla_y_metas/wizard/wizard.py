@@ -6,6 +6,7 @@ from odoo.exceptions import Warning
 
 class ReasignarMeta(models.TransientModel):
     _name = "hr.meta.reasignar"
+    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])
@@ -69,6 +70,7 @@ class ReasignarMeta(models.TransientModel):
 
 class PuntajeMeta(models.TransientModel):
     _name = "hr.meta.puntaje"
+    _description = "description"
 
     point_meta = fields.Float("Puntaje")
 
@@ -93,6 +95,7 @@ class PuntajeMeta(models.TransientModel):
 
 class AvanceMeta(models.TransientModel):
     _name = "hr.meta.avance"
+    _description = "description"
 
     advance = fields.Text("Avances")
 
@@ -113,6 +116,7 @@ class AvanceMeta(models.TransientModel):
 
 class EvaluarMeta(models.TransientModel):
     _name = "hr.meta.evaluar.5s"
+    _description = "description"
 
     clasificacion = fields.Float("Clasificación %",required=True)
     orden = fields.Float("Orden %",required=True)
@@ -159,6 +163,7 @@ class EvaluarMeta(models.TransientModel):
 
 class EvaluarMeta(models.TransientModel):
     _name = "hr.meta.evaluar"
+    _description = "description"
 
     point_assign = fields.Integer("Porcentaje %")
     remark = fields.Text("Observación")
@@ -201,6 +206,7 @@ class EvaluarMeta(models.TransientModel):
 
 class AssignMeta(models.TransientModel):
     _name = "hr.meta.wizard"
+    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])
@@ -273,6 +279,7 @@ class AssignMeta(models.TransientModel):
 
 class AssignMetaPlaneada(models.TransientModel):
     _name = "hr.meta.planeada.wizard"
+    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])

@@ -5,19 +5,19 @@ from odoo import models, fields, api
 
 
 class AccountInvoiceReport(models.Model):
-	_name = "account.invoice.report.line"
+	_name = "account.move.report.line"
 	_description = "Productos vendidos"
 	_auto = False
 	_rec_name = 'date'
-
-	@api.multi
+	
+	#@api.model_create_multi
 	@api.depends('currency_id', 'date', 'price_total', 'price_average', 'residual')
 	def _compute_amounts_in_user_currency(self):
 		"""Compute the amounts in the currency of the user
 		"""
 		user_currency_id = self.env.user.company_id.currency_id
 		currency_rate_id = self.env['res.currency.rate'].search([
-			('rate', '=', 1),
+			('rate', '=', 1), 
 			'|', ('company_id', '=', self.env.user.company_id.id), ('company_id', '=', False)], limit=1)
 		base_currency_id = currency_rate_id.currency_id
 		for record in self:
@@ -49,7 +49,7 @@ class AccountInvoiceReport(models.Model):
 	user_currency_price_average = fields.Float(string="Average Price in Currency", compute='_compute_amounts_in_user_currency', digits=0)
 	currency_rate = fields.Float(string='Currency Rate', readonly=True, group_operator="avg", groups="base.group_multi_currency")
 	nbr = fields.Integer(string='Line Count', readonly=True)  # TDE FIXME master: rename into nbr_lines
-	invoice_id = fields.Many2one('account.invoice', readonly=True)
+	invoice_origin = fields.Many2one('account.move', readonly=True)
 	type = fields.Selection([
 		('out_invoice', 'Customer Invoice'),
 		('in_invoice', 'Vendor Bill'),
@@ -75,15 +75,15 @@ class AccountInvoiceReport(models.Model):
 	_order = 'date desc'
 
 	_depends = {
-		'account.invoice': [
+		'account.move': [
 			'account_id', 'amount_total_company_signed', 'commercial_partner_id', 'company_id',
 			'currency_id', 'date_due', 'date_invoice', 'fiscal_position_id',
 			'journal_id', 'number', 'partner_bank_id', 'partner_id', 'payment_term_id',
 			'residual', 'state', 'type', 'user_id',
 		],
-		'account.invoice.line': [
-			'account_id', 'invoice_id', 'price_subtotal', 'product_id',
-			'quantity', 'uom_id', 'account_analytic_id',
+		'account.move.line': [
+			'account_id', 'invoice_origin', 'product_id',
+			'quantity', 'product_uom_id', 'account_analytic_id',
 		],
 		'product.product': ['product_tmpl_id'],
 		'product.template': ['categ_id'],
@@ -95,10 +95,10 @@ class AccountInvoiceReport(models.Model):
 
 	def _select(self):
 		select_str = """
-			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id, sub.account_analytic_id,
-				sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
-				sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.invoice_id, sub.type, sub.state,
-				sub.categ_id, sub.marca_id, sub.costo, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
+			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id, sub.analytic_account_id,
+				sub.invoice_payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
+				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr, sub.invoice_origin, sub.move_type, sub.state,
+				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
 				sub.product_qty, sub.price_total as price_total, sub.price_average as price_average, sub.amount_total / COALESCE(cr.rate, 1) as amount_total,
 				COALESCE(cr.rate, 1) as currency_rate, sub.residual as residual, sub.commercial_partner_id as commercial_partner_id
 		"""
@@ -107,29 +107,29 @@ class AccountInvoiceReport(models.Model):
 	def _sub_select(self):
 		select_str = """
 				SELECT ail.id AS id,
-					ai.date_invoice AS date,
-					ai.number as number,
-					ail.product_id, ai.partner_id, ai.payment_term_id, ail.account_analytic_id,
+					ai.invoice_date AS date,
+					ai.name as number,
+					ail.product_id, ai.partner_id, ai.invoice_payment_term_id, ail.analytic_account_id,
 					u2.name AS uom_name,
-					ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.user_id, ai.company_id,
+					ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.invoice_user_id, ai.company_id,
 					1 AS nbr,
-					ai.id AS invoice_id, ai.type, ai.state, pt.categ_id, pt.marca_id, 
+					ai.id AS invoice_origin, ai.move_type, ai.state, pt.categ_id, pt.marca_id, 
 					CASE 
 						WHEN pt.x_costo_real > 0 
 							THEN pt.x_costo_real 
-							ELSE (SELECT pph.cost FROM product_price_history AS pph WHERE pph.product_id = ail.product_id ORDER BY id DESC fetch first 1 rows only)
+							
 						END AS costo, 
-					ai.date_due, ai.account_id, ail.account_id AS account_line_id,
+					ai.invoice_date_due, ail.move_id AS account_line_id,
 					ai.partner_bank_id,
 					SUM ((invoice_type.sign_qty * ail.quantity) / COALESCE(u.factor,1) * COALESCE(u2.factor,1)) AS product_qty,
-					SUM(ail.price_subtotal_signed * invoice_type.sign) AS price_total,
+					SUM(ail.price_subtotal* invoice_type.sign) AS price_total,
 					SUM(ail.price_total * invoice_type.sign_qty) AS amount_total,
-					SUM(ABS(ail.price_subtotal_signed)) / CASE
+					SUM(ABS(ail.price_subtotal)) / CASE
 							WHEN SUM(ail.quantity / COALESCE(u.factor,1) * COALESCE(u2.factor,1)) <> 0::numeric
 							   THEN SUM(ail.quantity / COALESCE(u.factor,1) * COALESCE(u2.factor,1))
 							   ELSE 1::numeric
 							END AS price_average,
-					ai.residual_company_signed / (SELECT count(*) FROM account_invoice_line l where invoice_id = ai.id) *
+					ai.amount_residual_signed / (SELECT count(*) FROM account_move_line l where CAST(invoice_origin AS integer) = ai.id) *
 					count(*) * invoice_type.sign AS residual,
 					ai.commercial_partner_id as commercial_partner_id,
 					coalesce(partner.country_id, partner_ai.country_id) AS country_id
@@ -138,41 +138,40 @@ class AccountInvoiceReport(models.Model):
 
 	def _from(self):
 		from_str = """
-				FROM account_invoice_line ail
-				JOIN account_invoice ai ON ai.id = ail.invoice_id
+				FROM account_move_line ail
+				JOIN account_move ai ON ai.id = ail.move_id
 				JOIN res_partner partner ON ai.commercial_partner_id = partner.id
 				JOIN res_partner partner_ai ON ai.partner_id = partner_ai.id
 				LEFT JOIN product_product pr ON pr.id = ail.product_id
 				left JOIN product_template pt ON pt.id = pr.product_tmpl_id
-				LEFT JOIN uom_uom u ON u.id = ail.uom_id
+				LEFT JOIN uom_uom u ON u.id = ail.product_uom_id
 				LEFT JOIN uom_uom u2 ON u2.id = pt.uom_id
 				JOIN (
 					-- Temporary table to decide if the qty should be added or retrieved (Invoice vs Credit Note)
 					SELECT id,(CASE
-						 WHEN ai.type::text = ANY (ARRAY['in_refund'::character varying::text, 'in_invoice'::character varying::text])
+						 WHEN ai.move_type::text = ANY (ARRAY['in_refund'::character varying::text, 'in_invoice'::character varying::text])
 							THEN -1
 							ELSE 1
 						END) AS sign,(CASE
-						 WHEN ai.type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
+						 WHEN ai.move_type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
 							THEN -1
 							ELSE 1
 						END) AS sign_qty
-					FROM account_invoice ai
+					FROM account_move ai
 				) AS invoice_type ON invoice_type.id = ai.id
 		"""
 		return from_str
 
 	def _group_by(self):
 		group_by_str = """
-				GROUP BY ail.id, ail.product_id, ail.account_analytic_id, ai.date_invoice, ai.id,
-					ai.partner_id, ai.payment_term_id, u2.name, u2.id, ai.currency_id, ai.journal_id,
-					ai.fiscal_position_id, ai.user_id, ai.company_id, ai.id, ai.type, invoice_type.sign, ai.state, pt.categ_id, 
-					pt.marca_id, pt.x_costo_real, ai.date_due, ai.account_id, ail.account_id, ai.partner_bank_id, ai.residual_company_signed,
-					ai.amount_total_company_signed, ai.commercial_partner_id, coalesce(partner.country_id, partner_ai.country_id)
+				GROUP BY ail.id, ail.product_id, ail.analytic_account_id, ai.invoice_date, ai.id,
+					ai.partner_id, ai.invoice_payment_term_id, u2.name, u2.id, ai.currency_id, ai.journal_id,
+					ai.fiscal_position_id, ai.invoice_user_id, ai.company_id, ai.id, ai.move_type, invoice_type.sign, ai.state, pt.categ_id, 
+					pt.marca_id, pt.x_costo_real, ai.invoice_date_due, ail.account_id, ai.partner_bank_id, ai.amount_residual_signed,
+					ai.amount_total_signed, ai.commercial_partner_id, coalesce(partner.country_id, partner_ai.country_id)
 		"""
 		return group_by_str
 
-	@api.model_cr
 	def init(self):
 		# self._table = account_invoice_report
 		tools.drop_view_if_exists(self.env.cr, self._table)

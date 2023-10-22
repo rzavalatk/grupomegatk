@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+        <record id="consultas_custom_tree" model="ir.ui.view">
+            <field name="name">consultas_custom_tree</field>
+            <field name="model">consultas.custom</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="col" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="consultas_custom_form" model="ir.ui.view">
+            <field name="name">consultas.custom.form</field>
+            <field name="model">consultas.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <script>
+                        <![CDATA[
+                            try {
+                                let str = "";
+                                let abc = "abcdefghijklmnopqrstuvwxyz";
+                                for (let i = 0; i < 4; i++) {
+                                    str += abc.charAt(Math.floor(Math.random() * abc.length));
+                                }
+                                odoo.define(`report.custom-${str}`, function (require) {
+                                    "use strict";
+                                    const rpc = require("web.rpc");
+
+                                    $(document).ready(function () {
+                                        let button = $("#generate_report")
+                                        let id = document.getElementsByName("id");
+                                        if (id.length > 0) {
+                                            id = id.item(0);
+                                        } else {
+                                            id = false;
+                                        }
+                                        let idInt = id.innerHTML.replace(/[,]/g, "");
+                                        button.click(function (e){
+                                            e.preventDefault();
+                                            rpc.query({
+                                                model: "consultas.custom",
+                                                method: "generate_report",
+                                                args: [[parseInt(idInt)]],
+                                            })
+                                            .done(function (data) {
+                                                var csvFile;
+                                                var downloadLink;
+                                                var filename = "data"
+
+                                                csvFile = new Blob([data], { type: "text/csv" });
+                                                downloadLink = document.createElement("a");
+                                                downloadLink.download = filename;
+                                                downloadLink.href = window.URL.createObjectURL(csvFile);
+                                                downloadLink.style.display = "none";
+                                                document.body.appendChild(downloadLink);
+                                                downloadLink.click();
+                                            })
+                                            .fail(function (err) {
+                                                console.warn("ERROR QUERY: (" + err.code + "): " + err.message);
+                                            });
+                                        })
+                                    })
+                                    
+                                });
+                            } catch (error) {
+                                console.log(error);
+                                location.reload();
+                            }
+                        ]]>
+                    </script>
+                    <header>
+                        <field name="id" invisible="1" />
+                        <button string="Generar reporte" id="generate_report" class="oe_highlight"/>
+                        <button string="Ejecutar consulta" name="execute_query" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="col" />
+                            <field name="query" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="consultas_custom_action" model="ir.actions.act_window">
+            <field name="name">Consultas</field>
+            <field name="res_model">consultas.custom</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Consultas" id="consultas_custom_menu_root" parent="website_custom.website_custom_menu_root"
+        sequence = "4" action = "website_custom.consultas_custom_action" />
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Assets -->
+        <template id="website_custom_frontend" inherit_id="website.assets_frontend" name="Breadcum custom">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/website_custom/static/src/js/controller.js"/>
+                <link rel="stylesheet" type="text/scss" href="/website_custom/static/src/css/styles.css"/>
+            </xpath>
+        </template>
+
+        <template id="widget_live_chat" inherit_id="website.layout" name="widget.live.chat">
+            <xpath expr="//header" position="inside">
+                <!-- <link rel="stylesheet" href="https://shop.meditekhn.com/im_livechat/external_lib.css"/>
+                <script type="text/javascript" src="https://shop.meditekhn.com/im_livechat/external_lib.js"></script>
+                <script type="text/javascript" src="https://shop.meditekhn.com/im_livechat/loader/3"></script> -->
+            </xpath>
+        </template>
+    </data>
+</odoo>
