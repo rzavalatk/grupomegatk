@@ -2,14 +2,12 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-#CAMPOS EN EMPLEADOS/PERFIL/CONFIGURACION DE RRHH
 class Empleado(models.Model):
     _inherit = "hr.employee"
 
     marcacion_id = fields.Char(string = "Reloj marcación")
     equipo_madrug_id = fields.Many2one('hr.employee.equipo.madrugador', string='Equipo madrugador',)
 
-#FORMULARIO PARA CREAR EQUIPO DEL CAMPO equipo_madrug_id
 class EmpleadoMetas(models.Model):
     _name = 'hr.employee.equipo.madrugador'
     _description = 'Madrugador'

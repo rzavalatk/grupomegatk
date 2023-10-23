@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 {
     "name": "Gestión de gastos Grupo Mega",
-    "version": "14",
+    "version": "10",
     "category": "accounting",
     "author": "César Alejandro Rodriguez",
     "depends": [

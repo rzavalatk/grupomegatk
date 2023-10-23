@@ -6,7 +6,6 @@ from odoo.exceptions import Warning
 class ListaPrecios(models.Model):
     _name = "lista.precios.megatk"
     _order = 'name asc'
-    _description = "description"
 
     name = fields.Many2one("lista.precios.tipo.descuento", "Tipo de Precio", required=True, ondelete='cascade')
     descuento = fields.Float(" Porcentaje %")
@@ -40,11 +39,11 @@ class ListaPrecios(models.Model):
         if self.name:
             self.descuento = self.name.descuento
 
-    @api.model_create_multi
+    @api.multi
     def back_draft(self):
         self.write({'state': 'borrador'})
 
-    @api.model_create_multi
+    @api.multi
     def validar_lista(self):
         if self.detalle_ids:
             if self.precio_ids:
@@ -69,7 +68,7 @@ class ListaPrecios(models.Model):
         else:
             raise Warning(_('No existe productos en la lista de precios'))
 
-    @api.model_create_multi
+    @api.multi
     def unlink(self):
         if not self.state == 'borrador':
             raise Warning(_('No se puede borrar lista de precios validadas'))
@@ -80,7 +79,6 @@ class ListaPrecios(models.Model):
 
 class ListaPreciosLine(models.Model):
     _name = "lista.precios.megatk.line"
-    _description = "description"
 
     obj_padre = fields.Many2one("lista.precios.megatk", "Precio", ondelete='cascade')
     product_id = fields.Many2one("product.template", "Producto", required=True, )

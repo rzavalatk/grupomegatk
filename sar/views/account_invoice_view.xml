@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 <data>
-<record model="ir.ui.view" id="account_move_form_view_sequence_inh">
-    <field name="name">account.move.sequence.form.view.inh</field>
-    <field name="model">account.move</field>
-    <field name="inherit_id" ref="account.view_move_form" />
+<record model="ir.ui.view" id="account_invoice_form_view_sequence_inh">
+    <field name="name">account.invoice.sequence.form.view.inh</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form" />
     <field name="arch" type="xml">
-        <field name="ref" position="after">
+        <field name="payment_term_id" position="after">
             <field name="fiscal_control" invisible="1"/>
             <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
     'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
         </field>
-        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group/field[@name='company_id']" position="after">
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[1]/field[@name='company_id']" position="after">
             <field name="internal_number" groups="base.group_system"/>
         </xpath>
         <xpath expr="//field[@name='amount_untaxed']" position="attributes">
@@ -32,27 +32,27 @@
 
 <record model="ir.ui.view" id="account_invoice_view_sequence_tree_view_inh">
     <field name="name">invoice_fix.numero_factura</field>
-    <field name="model">account.move</field>
-    <field name="inherit_id" ref="account.view_invoice_tree" />
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_tree" />
     <field name="arch" type="xml">
-        <field name="invoice_date" position="after">
+        <field name="date_invoice" position="after">
             <field name="internal_number"/>
         </field>
-        <xpath expr="//field[@name='name']" position="attributes">
+        <xpath expr="//field[@name='number']" position="attributes">
             <attribute name="invisible">True</attribute>
         </xpath>
     </field>
 </record>
 
 <record model="ir.ui.view" id="account_invoice_campo_sar_view_inh">
-    <field name="name">account.move.sar.view</field>
-    <field name="model">account.move</field>
-    <field name="inherit_id" ref="account.view_move_form" />
+    <field name="name">account.invoice.sar.view</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form" />
     <field name="arch" type="xml">
     <!-- <xpath expr="//field[@name='user_id']" position="attributes">
         <attribute name="invisible">1</attribute>
     </xpath> -->
-        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group/field[@name='invoice_origin']" position="after">
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[2]/field[@name='origin']" position="after">
             <field name="x_compra_exenta"/>
             <field name="x_registro_exonerado"/>
             <field name="x_registro_sag"/>
@@ -62,7 +62,7 @@
 </record>
 <record model="ir.ui.view" id="view_invoice_search_cancelled">
     <field name="name">Cancelled Invoices</field>
-    <field name="model">account.move</field>
+    <field name="model">account.invoice</field>
     <field name="inherit_id" ref="account.view_account_invoice_filter"/>
     <field name="arch" type="xml">
         <filter name="unpaid" position="after">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	     
+	<data>     
 		<report
 			id="banks_check_print"
 			model="banks.check"
@@ -22,5 +22,5 @@
 			attachment_use="True" 
 			print_report_name="('Vaucher'+((object.number).split('.'))[1])"
 			paperformat="banks.vaucher_paper_format"/>
-	
+	</data>
 </odoo>

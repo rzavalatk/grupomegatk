@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	
+	<data>
 		<template id="write_checks_print">
 			<t t-call="report.html_container">
 
@@ -308,5 +308,5 @@ size : 40px;
 
 
 	</template>
-	
+	</data>
 </openerp>

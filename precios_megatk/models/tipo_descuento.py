@@ -7,7 +7,6 @@ from odoo.exceptions import Warning
 class TipoDescuento(models.Model):
     _name = "lista.precios.tipo.descuento"
     _order = 'name asc'
-    _description = "description"
 
     name = fields.Char('Margen',  required=True)
     active = fields.Boolean("Activo", default=True)

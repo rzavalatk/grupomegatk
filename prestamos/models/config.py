@@ -18,6 +18,7 @@ class ResConfigSettings(models.TransientModel):
 	interes_id = fields.Many2one("account.account", "Recibir depósito", domain="[ ('user_type_id.type', '=', 'other'), ('company_id', '=', company_id)]", related='company_id.interes_id',readonly=False,)
 
 
+
 	@api.model
 	def get_values(self):
 		res = super(ResConfigSettings, self).get_values()
@@ -31,8 +32,8 @@ class ResConfigSettings(models.TransientModel):
 
 		)
 		return res
-	
-	@api.model_create_multi
+		
+	@api.multi
 	def set_values(self):
 		super(ResConfigSettings, self).set_values()
 		self.env['ir.config_parameter'].sudo().set_param('prestamos.account_id', self.account_id.id)

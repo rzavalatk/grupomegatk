@@ -36,7 +36,7 @@
 			<tree string="Detalle" editable="bottom">
 				<field name="account_id" options="{'no_create': True}" required="1"/>
 				<field name="name"/>
-				<field name="partner_id"  options="{'no_create': True}" />
+				<field name="partner_id" domain="[('customer','=',True)]" options="{'no_create': True}" />
 				<field name="analytic_id" options="{'no_create': True}"/>
 				<field name="monto" sum="Total"/>
 			</tree>
@@ -103,6 +103,7 @@
 <record model="ir.actions.act_window" id="gastos_tarjeta_megatk_action">
 <field name="name">Liquidación de tarjetas</field>
 <field name="res_model">gastos.tarjeta.megatk</field>
+<field name="view_type">form</field>
 <field name="view_mode">tree,form</field>
 </record>
 
@@ -123,18 +124,10 @@
    <!-- Fin de Action de Contratos -->
      <!--  Menu Principal de contratos-->
 
-<menuitem  
-	id="submenu_gastos_tarjeta" 
-	name="Liquidación de Tarjetas" 
-	parent="menu_principal_gastos" 
-	sequence="1"/>
+<menuitem  id="submenu_gastos_tarjeta" name="Liquidación de Tarjetas" parent="menu_principal_gastos" sequence="1"/>
 
-<menuitem  
-	id="menu_gestion_liquidacion_tarjeta" 
-	name="Liquidación" 
-	action="gastos_tarjeta_megatk_action" 
-	parent="submenu_gastos_tarjeta"  
-	sequence="10"/>
+<menuitem  id="menu_gestion_liquidacion_tarjeta" name="Liquidación" action="gastos_tarjeta_megatk_action" 
+parent="submenu_gastos_tarjeta"  sequence="10"/>
 
 
 

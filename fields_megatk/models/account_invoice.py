@@ -2,27 +2,26 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-#Campo de comisión pagada en las facturas
-class Account_Move(models.Model):
-    _inherit = "account.move"
+class Account_invoice(models.Model):
+    _inherit = "account.invoice"
 
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     
-    #mostrar boton en factura de borrados
+    
     def go_draft(self):
         self.write({
             'state': 'draft'
         })
     
     
-class AccountMoveLine(models.Model):
-    _inherit = "account.move.line"
+class AccountInvoiceLine(models.Model):
+    _inherit = "account.invoice.line"
 
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
+    obj_padre = fields.Many2one(related="invoice_id.user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
 
-    #@api.model_create_multi
+    @api.multi
     @api.onchange('product_id')
     def product_id_change1(self):
-        if self.move_id:
-            self.x_user_id = self.move_id.user_id.id
+        self.x_user_id = self.obj_padre.id

@@ -8,7 +8,6 @@ from datetime import datetime, date, timedelta
 
 class Mes(models.Model):
     _name = "hr.metas.mes"
-    _description = "description"
 
     options = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -153,8 +152,8 @@ class Empleado(models.Model):
     invisible_extra = fields.Boolean(default=False)
     invisible_amonestacion = fields.Boolean(default=False)
     state_email = fields.Selection([
-        ('0', 'No envíado'),
-        ('1', 'Envíado'),
+        (0, 'No envíado'),
+        (1, 'Envíado'),
     ], string="Estado", default=0)
     state = fields.Selection([
         ('procces', 'En proceso'),
@@ -419,7 +418,7 @@ class Empleado(models.Model):
         res = super(Empleado, self).create(vals)
         return res
 
-    @api.model_create_multi
+    @api.multi
     def write(self, vals):
         try:
             for item in vals['metas_ids']:
@@ -456,7 +455,6 @@ class Empleado(models.Model):
 
 class MetaAsignadadefault(models.Model):
     _name = "hr.metas.asignadas.default"
-    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])
@@ -467,7 +465,7 @@ class MetaAsignadadefault(models.Model):
             [('user_id', '=', self.env.user.id)])
         return employee
 
-    #@api.one
+    @api.one
     def _point_meta(self):
         self.point_meta = self.meta_id.point_meta
         
@@ -540,7 +538,6 @@ class MetaAsignadadefault(models.Model):
 
 class MetaAsignada(models.Model):
     _name = "hr.metas.asignadas"
-    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])
@@ -551,15 +548,15 @@ class MetaAsignada(models.Model):
             [('user_id', '=', self.env.user.id)])
         return employee
 
-    #@api.one
+    @api.one
     def _name_assign(self):
         self.name = self.empleado_id.sudo().name
 
-    #@api.one
+    @api.one
     def _current_date(self):
         self.date = datetime.today()
 
-    #@api.one
+    @api.one
     def _evaluator_colaborator(self):
         user = self.env.user
         user_employee = self.evaluator.sudo().user_id
@@ -568,7 +565,7 @@ class MetaAsignada(models.Model):
         else:
             self.evaluator_colaborator = False
 
-    #@api.one
+    @api.one
     def _date_str(self):
         self.date_str = self.empleado_id.sudo().mes_activo.name
 
@@ -595,7 +592,7 @@ class MetaAsignada(models.Model):
     def delete_meta(self):
         self.unlink()
 
-    @api.model_create_multi
+    @api.multi
     def write(self, vals):
         if self.meta_id.negative:
             vals['point_assign'] = -vals['point_assign']
@@ -615,7 +612,6 @@ class MetaAsignada(models.Model):
 
 class MetasTeam(models.Model):
     _name = "hr.metas.team"
-    _description = "description"
 
     empleado_id = fields.Many2one("hr.employee", "Empleado")
     meta_id = fields.Many2one("hr.metas", "Meta")
@@ -623,7 +619,6 @@ class MetasTeam(models.Model):
 
 class Metas(models.Model):
     _name = "hr.metas"
-    _description = "description"
 
     name = fields.Text("Meta")
     obj = fields.Text("Objetivo")
@@ -638,7 +633,7 @@ class Metas(models.Model):
     reapet = fields.Boolean("Repetitiva")
     negative = fields.Boolean("Repetitiva", default=False)
 
-    @api.model_create_multi
+    @api.multi
     def unlink(self):
         metas_assign = self.env['hr.metas.asignadas'].search(
             [('meta_id', '=', self.id)])
@@ -650,7 +645,6 @@ class Metas(models.Model):
 
 class Metasdefault(models.Model):
     _name = "hr.metas.default"
-    _description = "description"
 
     name = fields.Text("Meta")
     obj = fields.Text("Objetivo")
@@ -680,7 +674,6 @@ class Metasdefault(models.Model):
 
 class MetaPlaneadas(models.Model):
     _name = "hr.metas.planeadas"
-    _description = "description"
 
     def _active_id(self):
         active_id = self.env.context.get('active_ids', [])
@@ -691,7 +684,7 @@ class MetaPlaneadas(models.Model):
             [('user_id', '=', self.env.user.id)])
         return employee
 
-    #@api.one
+    @api.one
     def _date_assign(self):
         self.date = self.meta_id.date
 
@@ -724,7 +717,6 @@ class MetaPlaneadas(models.Model):
 
 class ResultadosNormas(models.Model):
     _name = "hr.metas.resultados.default"
-    _description = "description"
 
     meta_id = fields.Many2one("hr.metas.default", "Meta", readonly=True)
     resultado_id = fields.Many2one("hr.resultados", readonly=True)
@@ -738,7 +730,6 @@ class ResultadosNormas(models.Model):
 
 class ResultadosMetas(models.Model):
     _name = "hr.metas.resultados"
-    _description = "description"
 
     name = fields.Char("Meta", readonly=True)
     resultado_id = fields.Many2one("hr.resultados", readonly=True)
@@ -755,7 +746,6 @@ class ResultadosMetas(models.Model):
 
 class ResultadosNormas(models.Model):
     _name = "hr.resultados"
-    _description = "description"
 
     def _suma_points_normas(self):
         total = 0
@@ -783,7 +773,7 @@ class ResultadosNormas(models.Model):
 
         self.total_points_apoyo = total
 
-    #@api.one
+    @api.one
     def _str_date(self):
         self.str_date = self.date.strftime('%B del %Y')
 

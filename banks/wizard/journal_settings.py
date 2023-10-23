@@ -8,7 +8,7 @@ class SequenceJournal(models.TransientModel):
     _name = "vitt.banks.journal.settings"
     _description = "Journal Settings"
 
-    @api.model_create_multi
+    @api.multi
     def get_journal(self):
         context = dict(self._context or {})
         active_model = context.get('active_model')
@@ -56,6 +56,7 @@ class SequenceJournal(models.TransientModel):
         else:
             raise Warning(_("Select a journal."))
 
+    @api.one
     def fct_sequence_settings(self):
         ctx = self._context
         journal_id = self.env["account.journal"].browse(ctx['active_id'])

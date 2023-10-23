@@ -7,7 +7,6 @@ from odoo.exceptions import Warning
 
 class WizardGenerarDeposito(models.TransientModel):
 	_name = 'prestamos.afiliados.wizard.deposito'
-	_description = "description"
 
 	def _get_moneda(self):
 		ctx = self._context
@@ -21,7 +20,7 @@ class WizardGenerarDeposito(models.TransientModel):
 	fechavence = fields.Date(string='Vence', required=True,)
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=_get_moneda,)
 
-	@api.model_create_multi
+	@api.multi
 	def deposito(self):
 		if self.monto > 0:
 			self.crear_factura_cxp()
@@ -29,7 +28,7 @@ class WizardGenerarDeposito(models.TransientModel):
 			raise Warning(_('El monto debe ser mayor que cero.'))
 
 	def crear_factura_cxp(self):
-		obj_factura = self.env["account.move"]
+		obj_factura = self.env["account.invoice"]
 		ctx = self._context
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 

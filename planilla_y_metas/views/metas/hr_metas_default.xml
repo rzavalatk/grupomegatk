@@ -51,11 +51,12 @@
             <field name="name">Normas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.metas.default</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Normas" id="menu_hr_metas_default" sequence = "2" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_default"/>
-    <!--        <menuitem name="Normas" id="menu_hr_metas_default" sequence = "2" groups="sign.group_sign_manager" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_default"/>-->
+        <menuitem name="Normas" id="menu_hr_metas_default" sequence = "2" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_default"/>
+
 
     </data>
 </odoo>

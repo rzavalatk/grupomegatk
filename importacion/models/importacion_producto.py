@@ -8,11 +8,10 @@ from datetime import date
 class ImportacionProducto(models.Model):
 	_name='import.product.mega'
 	_order = "name desc"
-	_description = "description"
 
 	name = fields.Char(string="Name")
 	descripcion = fields.Char("Descripción")
-	stock_pick_ids = fields.Many2many(comodel_name="stock.picking",relation="x_stockpicking_impor_product_mega",column1="stock_picking_id",column2="import_mega_id",string="Transferencias",required=False,)
+	stock_pick_ids = fields.Many2many(comodel_name="stock.picking",relation="x_stockpicking_impor_product_mega",column1="stock_picking_id",column2="import_mega_id",string="Transferencias",required=True,)
 	import_line_id = fields.One2many("import.product.mega.line.purchase", "import_product_id", "Detalle de transferencia")
 	import_gsto_id = fields.One2many("import.product.mega.line.gasto", "import_product_id", "Detalle de transferencia")
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id)
@@ -29,7 +28,7 @@ class ImportacionProducto(models.Model):
 	total = fields.Float(string='Total', store=True, readonly=True,)
 	porcentaje = fields.Float(string='Ponderación %', store=True, readonly=True,)
 
-	res_parner_id = fields.Many2one('res.partner', string='Agente aduanero',domain=[('x_supplier','=',True), ])
+	res_parner_id = fields.Many2one('res.partner', string='Agente aduanero',domain=[('supplier','=',True), ])
 	res_country = fields.Many2one('res.country', string='Pais',)
 	res_country_state = fields.Many2one('res.country.state', string='Estado',)
 
@@ -39,21 +38,22 @@ class ImportacionProducto(models.Model):
 
 	date = fields.Date(string="Fecha", help="Fecha de ponderación", required=True,)
 
-	#@api.model_create_multi
+
+	@api.multi
 	def unlink(self):
 		if not self.state == 'draft':
 			raise Warning(_('No se puede borrar las ponderaciones validadas'))
 		res = super(ImportacionProducto, self).unlink()
 		return res
 
-	#@api.model_create_multi
+	@api.multi
 	def cancelar_impor(self):
 		if self.costo_id:
 			for lis in self.costo_id:
 				lis.unlink()
 		self.write({'state': 'cancelado'})
 
-	#@api.model_create_multi
+	@api.multi
 	def back_draft(self):
 		if self.costo_id:
 			for lis in self.costo_id:
@@ -65,7 +65,7 @@ class ImportacionProducto(models.Model):
 				})
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
+	@api.multi
 	def validar(self):
 		if not self.import_line_id:
 			raise Warning(_('No existe detalle de facturación'))
@@ -128,7 +128,7 @@ class ImportacionProducto(models.Model):
 					'date': date.today()
 					})
 
-	#@api.model_create_multi
+	@api.multi
 	@api.onchange('stock_pick_ids')
 	def _onchange_stock_pick_ids(self):
 		recepciones=self.stock_pick_ids
@@ -184,7 +184,6 @@ class ImportacionProducto(models.Model):
 	
 class LinePurchaseImport(models.Model):
 	_name = 'import.product.mega.line.purchase'
-	_description = "description"
 
 	import_product_id = fields.Many2one('import.product.mega', string='Impor Product Reference', index=True, required=True, ondelete='cascade')
 	name = fields.Text(string='Descripción', required=True)
@@ -205,7 +204,6 @@ class LinePurchaseImport(models.Model):
 
 class LinePurchaseImport(models.Model):
 	_name = 'import.product.mega.line.gasto'
-	_description = "description"
 
 	import_product_id = fields.Many2one('import.product.mega', string='Impor Product Reference', index=True, required=True, ondelete='cascade')
 	gasto_id = fields.Many2one('import.gasto.mega', 'Gasto')

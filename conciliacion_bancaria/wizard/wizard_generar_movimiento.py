@@ -28,7 +28,7 @@ class Wizardgenerarmovimiento(models.TransientModel):
             else:
                 self.currency_id = self.company_id.currency_id.id
 
-    
+    @api.one
     @api.depends('wizard_ids.amount', 'monto')
     def _compute_rest_credit(self):
         debit_line = 0
@@ -85,7 +85,7 @@ class Wizardgenerarmovimiento(models.TransientModel):
                 self.currency_rate = 1
                 self.es_moneda_base = True
 
-    #@api.model_create_multi
+    @api.multi
     def action_validate(self):
         if not self.wizard_ids:
             raise Warning(_("No existen detalles de movimientos a registrar"))
@@ -239,7 +239,6 @@ class Wizardgenerarmovimiento(models.TransientModel):
 
 class Wizardgenerarmovimientoline(models.TransientModel):
     _name = "conciliacion.wizard.movimientos.line"
-    _description = "description"
 
     @api.onchange("account_id")
     def onchangecuenta(self):

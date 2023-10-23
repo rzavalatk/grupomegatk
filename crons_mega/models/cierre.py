@@ -8,7 +8,7 @@ import json
 
 
 class Facturas(models.Model):
-    _inherit = "account.move"
+    _inherit = "account.invoice"
 
     cierre_id = fields.Many2one("account.cierre")
 
@@ -16,7 +16,6 @@ class Facturas(models.Model):
 class CierreDiario(models.Model):
     _name = "account.cierre"
     _order = "create_date desc"
-    _description = "description"
 
     regions_list = [
         ("Nicaragua", "NIC"),
@@ -35,19 +34,24 @@ class CierreDiario(models.Model):
                 total += item.facturado
         return round(total, 2)
 
+    @api.one
     def _total_cobrado(self):
         self.total_cobrado = self._recorrec_lines("cobrado")
         
+    @api.one
     def _total(self):
         self.total = self._recorrec_lines("total")
 
+    @api.one
     def _total_facturado(self):
         self.total_facturado = self._recorrec_lines("facturado")
 
+    @api.one
     def _team_id(self):
         if self.region == "San Pedro Sula":
             self.team_id = 43
 
+    @api.one
     def _name_(self):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
@@ -61,7 +65,7 @@ class CierreDiario(models.Model):
                                   default=lambda self: self.env.user.company_id.currency_id)
     total_facturado = fields.Monetary(
         "Total Facturado", compute=_total_facturado)
-    facturas_ids = fields.One2many("account.move", "cierre_id", "Facturas")
+    facturas_ids = fields.One2many("account.invoice", "cierre_id", "Facturas")
     total_cobrado = fields.Monetary("Total Cobrado", compute=_total_cobrado)
     total = fields.Monetary("Total Cobrado", compute=_total)
     region = fields.Selection(
@@ -163,7 +167,7 @@ class CierreDiario(models.Model):
             ('state', '=', 'posted'),
         ])
         self.register_ids(pagos, 'pagos')
-        facturas = self.env['account.move'].sudo().search([
+        facturas = self.env['account.invoice'].sudo().search([
             '&',
             '&',
             '&',
@@ -192,7 +196,7 @@ class CierreDiario(models.Model):
                     # recorrer facturas de los pagos
                     for factura in pago.invoice_ids.sudo().ids:
                         if factura not in ids_facturas:
-                            factura_id = self.env['account.move'].sudo().browse(
+                            factura_id = self.env['account.invoice'].sudo().browse(
                                 factura)
                             self.register_ids(factura_id, 'facturas de pagos')
                             if factura_id.date_invoice == self.date:
@@ -296,7 +300,7 @@ class CierreDiario(models.Model):
                     ids.append(obj.id)
             for i in ids:
                 principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
-                cc_mega = "eduron@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
@@ -307,7 +311,7 @@ class CierreDiario(models.Model):
                     if cierre.company_id.sudo().id == 12:
                         cc_mega += ",kpadilla@meditekhn.com"
                     if cierre.sudo().region == 'San Pedro Sula':
-                        cc_mega += ",idubon@megatk.com"
+                        cc_mega += ",vmoran@megatk.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
                     cierre.send_email(principal_emails,cc_mega)
                 if cierre.company_id.sudo().id in [9]:
@@ -330,14 +334,15 @@ class CierreDiario(models.Model):
 
 class CierreDiarioLine(models.Model):
     _name = "account.cierre.line"
-    _description = "description"
 
+    @api.one
     def _name_(self):
         if self.credito:
             self.name = "Al credito"
         else:
             self.name = self.journal_id.name
 
+    @api.one
     def _total(self):
         total = self.cobrado + self.facturado
         if self.credito:

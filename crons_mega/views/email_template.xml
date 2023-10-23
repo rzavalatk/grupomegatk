@@ -310,7 +310,7 @@
             </field>
         </record>
 
-        <!--<record id="email_template_account_invoice_expire" model="mail.template">
+        <record id="email_template_account_invoice_expire" model="mail.template">
             <field name="name">Facturas Vencidas</field>
             <field name="model_id" ref="model_invoice_expire_line"/>
             <field name="subject">Facturas Vencidas</field>
@@ -393,7 +393,7 @@
                                     <th>${row.partner_id.name}</th>
                                     <th>${row.number}</th>
                                     <th>${row.date_invoice}</th>
-                                    <th>${row.invoice_date_due}</th>
+                                    <th>${row.date_due}</th>
                                     <th>${row.amount_total_signed}</th>
                                     <th>${row.residual}</th>
                                     <th>${row.state_expired}</th>
@@ -419,9 +419,9 @@
                     </div>
                 </div>
             </field>
-        </record>-->
+        </record>
 
-        <!--<record id="email_template_account_invoice_expire_customer" model="mail.template">
+        <record id="email_template_account_invoice_expire_customer" model="mail.template">
             <field name="name">Facturas Vencidas para Clientes</field>
             <field name="model_id" ref="model_invoice_expire_line"/>
             <field name="subject">Facturas Vencidas</field>
@@ -518,7 +518,7 @@
                                     <tr>
                                         <th>${row.number}</th>
                                         <th>${row.date_invoice}</th>
-                                        <th>${row.invoice_date_due}</th>
+                                        <th>${row.date_due}</th>
                                         <th>${round(row.amount_total_signed,2)}</th>
                                         <th>${round(row.residual,2)}</th>
                                         <th>${object.rangeDate(row.date_invoice,object.invoice_expire_id.date)} días vencida </th>
@@ -542,7 +542,7 @@
                     </div>
                 </div>
             </field>
-        </record>-->
+        </record>
 
         <record id="email_template_marca_productos" model="mail.template">
             <field name="name">Reporte Productos</field>

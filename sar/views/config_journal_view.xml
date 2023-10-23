@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="account.view_account_journal_form"/> 
         <field name="arch" type="xml">
 
-            <xpath expr="//field[@name='currency_id']" position="after" string='Allow Multi-Sequence'>
+            <xpath expr="//field[@name='default_debit_account_id']" position="after" string='Allow Multi-Sequence'>
                 <field name="allow_multi_sequence" readonly="True" attrs="{'invisible': [('type','not in',['sale','purchase','general'])]}"/>
             </xpath>
 

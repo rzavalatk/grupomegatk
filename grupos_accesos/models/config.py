@@ -21,7 +21,8 @@ class Settings(models.TransientModel):
             pass
             #raise Warning(_(f'Error: {e}'))
         
-    #@api.model
+    
+    @api.model
     def get_values(self):
         res = super(Settings, self).get_values()
         IrValues = self.env['ir.config_parameter'].sudo()
@@ -39,7 +40,7 @@ class Settings(models.TransientModel):
             res.update(usuarios_vendedores=lines)
         return res
 
-    #@api.model_create_multi
+    @api.multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
         IrValues.set_param('grupos_accesos.usuarios_vendedores_sin_change_comercial',self.usuarios_vendedores.ids)

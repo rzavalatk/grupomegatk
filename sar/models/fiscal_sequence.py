@@ -6,7 +6,6 @@ from odoo.exceptions import Warning
 
 class Authorization(models.Model):
     _name = "sar.authorization.code"
-    _description = "description"
 
     name = fields.Char('Código de autorización', help='Código de autorización', required=True)
     expiration_date = fields.Date('Fecha de expiración', required=True)
@@ -35,15 +34,15 @@ class Authorization(models.Model):
                 #'target': 'new',
                 #'context': ctx}
 
-    @api.model_create_multi
+    @api.multi
     def _update_ir_sequence(self):
         for fiscal_sequence in self.fiscal_sequence_regime_ids:
             if fiscal_sequence.sequence_id:
                 sequence_vals = {'expiration_date': self.expiration_date}
                 fiscal_sequence.sequence_id.write(sequence_vals)
         return True
-    
-    @api.model_create_multi
+
+    @api.multi
     def write(self, vals):
         res = super(Authorization, self).write(vals)
         res = self._update_ir_sequence()
@@ -52,7 +51,6 @@ class Authorization(models.Model):
 
 class Fiscal_sequence(models.Model):
     _name = "sar.fiscal.sequence.regime"
-    _description = "description"
 
     authorization_code_id = fields.Many2one('sar.authorization.code', required=True)
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
@@ -70,7 +68,7 @@ class Fiscal_sequence(models.Model):
             res = prefix + str(number).zfill(padding)
         return res
 
-    @api.model_create_multi
+    @api.multi
     def _update_ir_sequence(self):
         if self.sequence_id:
             sequence_vals = {'vitt_min_value': self.build_numbers(self._from),
@@ -86,7 +84,7 @@ class Fiscal_sequence(models.Model):
         if self.actived and not self.sequence_id.active:
             self.sequence_id.write({'active': True})
 
-    @api.model_create_multi
+    @api.multi
     def write(self, vals):
         super(Fiscal_sequence, self).write(vals)
         self._update_ir_sequence()
@@ -98,7 +96,7 @@ class Fiscal_sequence(models.Model):
         except :
             return False
 
-    @api.model_create_multi
+    @api.multi
     def create(self, vals):
         res = super(Fiscal_sequence, self).create(vals)
         if not vals[0]['journal_id']:
@@ -116,7 +114,6 @@ class Fiscal_sequence(models.Model):
 
 class Code_authorization_type(models.Model):
     _name = "sar.authorization.code.type"
-    _description = "description"
 
     name = fields.Char('Nombre', help='tax regime type', required=True)
     description = fields.Char('Descripción', help='tax regime type description', required=True)

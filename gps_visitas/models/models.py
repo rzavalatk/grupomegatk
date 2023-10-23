@@ -4,14 +4,15 @@ from odoo import models, fields, api
 class CrmVisits(models.Model):
     _name = "crm.visits"
     _order = "create_date desc"
-    _description = "description"
 
+    @api.one
     def _api_key(self):
         params_system = self.env['ir.config_parameter'].sudo().search([])
         for param in params_system:
             if param.key == "google_maps_api_key":
                 self.api_key = param.value
 
+    @api.one
     def _total_time_compute(self):
         if self.timestamp_end_visit and self.timestamp_init_visit:
             self.total_time_compute = self.timestamp_end_visit - self.timestamp_init_visit
@@ -19,7 +20,7 @@ class CrmVisits(models.Model):
                 'total_time': self.timestamp_end_visit - self.timestamp_init_visit
             })
 
-
+    @api.one
     def _view(self):
         if self.timestamp_init_visit:
             self.button_init = True
@@ -31,6 +32,7 @@ class CrmVisits(models.Model):
         else:
             self.button_end = False
 
+    @api.one
     def _name_doc(self):
         if self.tipo_id.name:
             self.name = self.tipo_id.name
@@ -108,7 +110,8 @@ class CrmVisits(models.Model):
             'domain': [('company_id', '=', self.env.user.company_id.id)],
         }
 
-    #@api.model
+
+    @api.model
     def create(self, vals):
         vals['saved'] = True
         if not vals['tipo_soporte']:
@@ -126,12 +129,15 @@ class CrmVisits(models.Model):
             'res_id': self.opportunity_id.id, 
         }
 
-    #@api.model_create_multi
+
+    @api.multi
     def open_wizard(self):
         current_website = self.env['website'].get_current_website()
         return current_website.id
 
-    #@api.model_create_multi
+
+    @api.multi
+    @api.one
     def create_chance(self):
         vals = {
             "user_id": self.user_id.id,

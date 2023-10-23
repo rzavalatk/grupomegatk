@@ -67,7 +67,7 @@ class Vittbankstransferences(models.Model):
 	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
 
-	#@api.model_create_multi
+	@api.multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated' or move.state == 'anulated':
@@ -83,18 +83,18 @@ class Vittbankstransferences(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	#@api.model_create_multi
+	@api.multi
 	def action_anulate_debit(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
 			move.unlink()
 		self.write({'state': 'anulated'})
 
-	#@api.model_create_multi
+	@api.multi
 	def action_draft(self):
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
+	@api.multi
 	def action_validate(self):
 		if not self.number_calc:
 			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
@@ -114,24 +114,23 @@ class Vittbankstransferences(models.Model):
 			'debit': 0.0,
 			'credit': self.total * self.currency_rate,
 			'name': self.memo,
-			'account_id': self.journal_id_out.default_account_id.id,
+			'account_id': self.journal_id_out.default_credit_account_id.id,
 			'date': self.date,
-
 		}
 		if self.currency_id:
-			if self.journal_id_out.default_account_id.currency_id :
-				if self.journal_id_out.default_account_id.currency_id  == self.currency_id:
+			if self.journal_id_out.default_credit_account_id.currency_id :
+				if self.journal_id_out.default_credit_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
 						vals_haber["amount_currency"] = 0.0
 					else:
 						vals_haber["currency_id"] = self.currency_id.id
 						vals_haber["amount_currency"] = self.total * -1
-				elif self.journal_id_out.default_account_id.currency_id  == self.company_id.currency_id:
+				elif self.journal_id_out.default_credit_account_id.currency_id  == self.company_id.currency_id:
 					vals_haber["currency_id"] = self.currency_id.id
 					vals_haber["amount_currency"] = self.total * -1
 				else:
-					vals_haber["currency_id"] = self.journal_id_out.default_account_id.currency_id.id
-					tasa = self.journal_id_out.default_account_id.currency_id .with_context(date=self.date)
+					vals_haber["currency_id"] = self.journal_id_out.default_credit_account_id.currency_id.id
+					tasa = self.journal_id_out.default_credit_account_id.currency_id .with_context(date=self.date)
 					vals_haber["amount_currency"] = self.total * tasa.rate * -1
 			else:
 				if self.currency_id == self.company_id.currency_id:
@@ -143,23 +142,23 @@ class Vittbankstransferences(models.Model):
 			'debit': self.total * self.currency_rate,
 			'credit': 0.0,
 			'name': self.memo,
-			'account_id': self.journal_id_in.default_account_id.id,
+			'account_id': self.journal_id_in.default_credit_account_id.id,
 			'date': self.date,
 		}
 		if self.currency_id:
-			if self.journal_id_in.default_account_id.currency_id :
-				if self.journal_id_in.default_account_id.currency_id  == self.currency_id:
+			if self.journal_id_in.default_credit_account_id.currency_id :
+				if self.journal_id_in.default_credit_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
 						vals_debe["amount_currency"] = 0.0
 					else:
 						vals_debe["currency_id"] = self.currency_id.id
 						vals_debe["amount_currency"] = self.total
-				elif self.journal_id_in.default_account_id.currency_id  == self.company_id.currency_id:
+				elif self.journal_id_in.default_credit_account_id.currency_id  == self.company_id.currency_id:
 					vals_debe["currency_id"] = self.currency_id.id
 					vals_debe["amount_currency"] = self.total
 				else:
-					vals_debe["currency_id"] = self.journal_id_in.default_account_id.currency_id.id
-					tasa = self.journal_id_in.default_account_id.currency_id .with_context(date=self.date)
+					vals_debe["currency_id"] = self.journal_id_in.default_credit_account_id.currency_id.id
+					tasa = self.journal_id_in.default_credit_account_id.currency_id .with_context(date=self.date)
 					vals_debe["amount_currency"] = self.total * tasa.rate
 			else:
 				if self.currency_id == self.company_id.currency_id:

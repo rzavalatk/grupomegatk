@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
+    <data>
         <record id="change_context_button_create_invoice" model="ir.ui.view">
             <field name="name">change_context_button_create_invoice</field>
             <field name="model">sale.advance.payment.inv</field>

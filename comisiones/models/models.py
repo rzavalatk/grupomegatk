@@ -12,7 +12,7 @@ class Usuarios(models.Model):
     comision_id = fields.Many2one("account.comisiones")
     
 class Facturas(models.Model):
-    _inherit = "account.move"
+    _inherit = "account.invoice"
 
     comision_id = fields.Many2one("account.comisiones")
 
@@ -20,8 +20,6 @@ class Facturas(models.Model):
 class ComisionesLine(models.Model):
     _name = "account.comisiones.line"
     _order = "user_id asc"
-    _description = "description"
-    
     vencimiento = [{
         'from': 0,
         'to': 14,
@@ -42,12 +40,14 @@ class ComisionesLine(models.Model):
         'pay': 0
     }]
     
+    @api.one
     def _pocentaje_pago(self):
         for item in self.vencimiento:
             if self.antiguedad_pago >= item['from'] and self.antiguedad_pago <= item['to']:
                 self.pocentaje_pago = item['pay']
 
-
+             
+    @api.one
     def _comision_pagar(self):
         self.comision_pagar = self.forma_comision * (self.pocentaje_pago/100)
         
@@ -55,7 +55,7 @@ class ComisionesLine(models.Model):
     comision_id = fields.Many2one("account.comisiones")
     user_id = fields.Many2one("res.users", "Comercial")
     invoice_line_id = fields.Many2one(
-        "account.move.line", string="Linea de Factura")
+        "account.invoice.line", string="Linea de Factura")
     currency_id = fields.Many2one(
         'res.currency', default=lambda self: self.env.user.company_id.currency_id.id)
     posible_comision = fields.Monetary("Comision Posible")
@@ -69,7 +69,6 @@ class ComisionesLine(models.Model):
 class Comisiones(models.Model):
     _name = "account.comisiones"
     _order = "create_date desc"
-    _description = "description"
     
 
     def _existe_key(self, list, key):
@@ -79,6 +78,7 @@ class Comisiones(models.Model):
         except:
             return False
 
+    @api.one
     def _name_(self):
         try:
             if len(self.users_ids) > 1:
@@ -99,7 +99,7 @@ class Comisiones(models.Model):
     comision_line = fields.One2many(
         "account.comisiones.line", "comision_id", string="Lineas de comision")
     facturas_ids = fields.One2many(
-        "account.move", "comision_id", string="Facturas")
+        "account.invoice", "comision_id", string="Facturas")
     date = fields.Date("Hasta la Fecha", default=lambda self: dt.now(
         pytz.timezone(self.env.context.get('tz') or self.env.user.tz)).date())
     type = fields.Selection([
@@ -137,7 +137,7 @@ class Comisiones(models.Model):
         })
 
     def init_comisiones(self):
-        invoices_ids = self.env['account.move'].search(['&', '&', '&', '&',
+        invoices_ids = self.env['account.invoice'].search(['&', '&', '&', '&',
             ('date_invoice', '<=', self.date),
             ('user_id', 'in', self.users_ids.ids),
             ('type', '=', 'out_invoice'),
@@ -249,7 +249,7 @@ class Comisiones(models.Model):
             vals.append({
                 'Fecha creada': line.invoice_line_id.invoice_id.date_invoice,
                 'Fecha vencimiento': line.invoice_line_id.invoice_id.date_due,
-                'Número': line.invoice_line_id.invoice_id.name,
+                'Número': line.invoice_line_id.invoice_id.number,
                 'Cliente': line.invoice_line_id.invoice_id.partner_id.name,
                 'Item': line.invoice_line_id.name,
                 'Cantidad': line.invoice_line_id.quantity,

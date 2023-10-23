@@ -10,11 +10,11 @@ class TermPament(models.Model):
     public = fields.Boolean("Publico",default=False)
     
 class Facturas(models.Model):
-    _inherit = "account.move"
+    _inherit = "account.invoice"
     
-    #@api.one
+    @api.one
     def _payment_term_compute(self):
-        self.payment_term_compute = self.payment_term.sudo().name
+        self.payment_term_compute = self.payment_term_id.sudo().name
         
     
     payment_term_compute = fields.Char("Plazo de pago(computado)",compute=_payment_term_compute)
@@ -24,7 +24,7 @@ class Facturas(models.Model):
     def create(self,vals):
         try:
             if self.env.user.company_id.id in [8,9,12]:
-                payment_term = self.env['account.payment.term'].browse(vals['payment_term'])
+                payment_term = self.env['account.payment.term'].browse(vals['payment_term_id'])
                 payment_term.name
             res = super(Facturas,self).create(vals)
             return res
@@ -49,14 +49,14 @@ class Sales(models.Model):
     
     @api.onchange('payment_term')
     def _onchange_payment_term(self):
-        self.payment_term = self.payment_term
+        self.payment_term_id = self.payment_term
     
-    #@api.model
-    #def create(self,vals):
-    #    if self._exist_index('payment_term', vals):
-    #        del vals['payment_term']  # Eliminar la clave 'payment_term' del diccionario vals
-    #    res = super(Sales, self).write(vals)
-    #    return res
+    @api.model
+    def create(self,vals):
+        vals['payment_term_id'] = vals['payment_term']
+        vals['payment_term'] = None
+        res = super(Sales,self).create(vals)
+        return res
     
     def _exist_index(self,index,array):
         try:
@@ -66,11 +66,11 @@ class Sales(models.Model):
             return False
     
     
-    #@api.model
-    def write(self, vals):
-        if self._exist_index('payment_term', vals):
-            del vals['payment_term']  # Eliminar la clave 'payment_term' del diccionario vals
-        res = super(Sales, self).write(vals)
+    @api.model
+    def write(self,vals):
+        if self._exist_index('payment_term',vals):
+            vals['payment_term_id'] = vals['payment_term']
+            vals['payment_term'] = None
+        res = super(Sales,self).write(vals)
         return res
-
  

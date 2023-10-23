@@ -8,7 +8,7 @@ import time
 
 
 class LineasFactura(models.Model):
-    _inherit = "account.move.line"
+    _inherit = "account.invoice.line"
     
     product_report_id = fields.Many2one("product.report")
 
@@ -19,7 +19,6 @@ class Marcas(models.Model):
     
 class ReporteSemanal(models.Model):
     _name = "product.report.line"
-    _description = "description"
  
     product_id = fields.Many2one("product.template","Producto")
     report_id = fields.Many2one("product.report")
@@ -32,8 +31,9 @@ class ReporteSemanal(models.Model):
 class ReporteSemanal(models.Model):
     _name = "product.report"
     _order = "create_date desc"
-    _description = "description"
     
+    
+    @api.one
     def _name_(self):
         self.name = self.company_id.name+' ('+ str(self.date_from) +' // '+str(self.date_to)+')'
     
@@ -60,7 +60,7 @@ class ReporteSemanal(models.Model):
     date_from = fields.Date("De")
     date_to = fields.Date("A")
     line_report = fields.One2many("product.report.line","report_id","Lineas de Reporte")
-    line_invoices = fields.One2many("account.move.line","product_report_id","Lineas de Factura")
+    line_invoices = fields.One2many("account.invoice.line","product_report_id","Lineas de Factura")
     company_id = fields.Many2one("res.company","Compañia",default=lambda self : self.env.user.company_id.id)
     state = fields.Selection([
         ("draft", "Borrador"),
@@ -97,7 +97,7 @@ class ReporteSemanal(models.Model):
         marcas = self.env['res.config.settings'].get_values()
         marcas = marcas['marca_ids'][0][2]
         range_date = self.rangeDate(self.date_from,self.date_to)
-        invoice_ids = self.env['account.move'].search(['&',
+        invoice_ids = self.env['account.invoice'].search(['&',
             ('date_invoice','in',range_date),
             ('state','=','paid')
         ])
@@ -105,7 +105,7 @@ class ReporteSemanal(models.Model):
         for i in invoice_ids:
             for j in i.invoice_line_ids:
                 invoices_line_ids.append(j.id)
-        line_invoice = self.env['account.move.line'].browse(invoices_line_ids)
+        line_invoice = self.env['account.invoice.line'].browse(invoices_line_ids)
         lines = []
         for line in line_invoice:
             if line.product_id.marca_id.id in marcas:

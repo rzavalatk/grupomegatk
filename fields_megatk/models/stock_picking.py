@@ -2,7 +2,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-#CAMPOS EN INVENTARIO/SECCION/FORMULARIO (NUEVO O CREADO) SECCION INFERIOR PAGE OPERACIONES
 class StockPickingLine(models.Model):
     _inherit = "stock.move"
 

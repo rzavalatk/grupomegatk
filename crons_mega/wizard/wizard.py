@@ -4,7 +4,6 @@ from odoo import fields, models
 
 class ModelMail(models.TransientModel):
     _name = "account.cierre.mail"
-    _description = "description"
 
     mail = fields.Char("Destinatarios")
     cc = fields.Char("CC")

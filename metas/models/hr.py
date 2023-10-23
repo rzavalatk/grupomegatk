@@ -15,15 +15,14 @@ class EmpleadoEquipoMetas(models.Model):
     _name = 'hr.employee.equipo.metas'
     _description = 'Metas'
     _order = 'name asc'
-    _description = "description de la description descriptiva"
 
     name = fields.Char("Equipo")
     active = fields.Boolean(string='Activo', default=True)
     employe_ids = fields.One2many(
         'hr.employee', 'equipo_metas_id', string='Empleados',)
     employe_jefe_id = fields.Many2one('hr.employee', string='Jefe',)
-    
-    #@api.model_create_multi
+
+    @api.multi
     def go_metas(self):
         ids=[]
         for item in self.employe_ids:
@@ -42,7 +41,6 @@ class EmpleadoEquipoMetas(models.Model):
 
 class EmpleadoMetas(models.Model):
     _name = 'hr.metas'
-    _description = "description"
     
 
     name = fields.Char("Meta")
@@ -60,7 +58,6 @@ class EmpleadoMetas(models.Model):
 
 class EmpleadoMetas(models.Model):
     _name = 'hr.employee.metas'
-    _description = "description"
 
     def _state_meta(self):
         for item in self.metas_id:

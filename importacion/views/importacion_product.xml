@@ -28,6 +28,7 @@
       <field name="arch" type="xml">
         <form string = "ponderacion">
           <sheet>
+            <tree>
               <group name="x_datos0">
                 <group name="x_1">
                   <field name="product_id"/>
@@ -38,6 +39,7 @@
                   <field name="costo_real"/>
                 </group>
               </group>
+            </tree>
           </sheet>
         </form>
       </field>
@@ -49,16 +51,16 @@
       <field name="model">import.product.mega</field>
       <field name="arch" type="xml">
         <form string = "Form Import">
-          
-          <sheet><header> 
+          <header> 
             <button name="back_draft" type="object" string="Volver a borrador" 
-              state="cancelado" class="oe_highlight"/>
+              states="cancelado" class="oe_highlight"/>
             <button name="cancelar_impor" type="object" string="Cancelar" 
-              state="validado" class="oe_highlight" confirm='¿Está seguro de cancelar la ponderación validada?'/>
-            <button name="validar" type="object" string="Validar" state="draft" 
+              states="validado" class="oe_highlight" confirm='¿Está seguro de cancelar la ponderación validada?'/>
+            <button name="validar" type="object" string="Validar" states="draft" 
               class="oe_highlight" confirm='¿Desea validar la ponderación?'/>
             <field name="state" widget="statusbar" nolabel="1"/>  
           </header>
+          <sheet>
             <div class="oe_button_box" name="button_box" states="validado">
               <button class="oe_stat_button"
                 icon="fa-strikethrough"
@@ -98,7 +100,7 @@
               </group>
               <group>
                 <field name="stock_pick_ids" widget="many2many_tags" attrs="
-                    {'readonly': [('state','!=','draft')]}" domain="[('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done')]" options="{'no_create': True}"/>
+                    {'readonly': [('state','!=','draft')]}" domain="                    [('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done'),('picking_type_code','=','incoming')]" options="{'no_create': True}"/>
               </group>
               <group>
                 <group>

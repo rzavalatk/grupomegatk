@@ -5,9 +5,8 @@ from odoo.exceptions import Warning
 
 class PaymentInvoice(models.TransientModel):
 	_name = "banks.invoice.payment.supplier"
-	_description = "description"
 
-	#@api.model
+	@api.model
 	def _get_invoice_number(self):
 		ctx = self._context
 		if 'active_id' in ctx:
@@ -38,8 +37,8 @@ class PaymentInvoice(models.TransientModel):
 	def onchangedoc_journal(self):
 		if self.journal_id and self.doc_type:
 			self.get_msg_number()
-	
-	#@api.model
+
+	@api.model
 	def _get_amount(self):
 		ctx = self._context
 		if 'active_id' in ctx:
@@ -52,20 +51,19 @@ class PaymentInvoice(models.TransientModel):
 	journal_id = fields.Many2one('account.journal', 'Diario', required=True, domain=[('type', 'in', ['bank', 'cash'])])
 	name = fields.Char(string="Número", required=True, compute=get_msg_number)
 	amount = fields.Float("Monto a Pagar", required=True, default=_get_amount)
-	currency_id = fields.Many2one('res.currency', string='Moneda')
 	invoice_number = fields.Char("# de Factura", readonly=True, default=_get_invoice_number)
 	doc_type = fields.Selection([('check', 'Cheque'), ('transference', 'Transferencia'), ('otro', 'Otro')], string='Tipo de Transacción', required=True)
 	msg = fields.Char(compute=get_msg_number)
 	ref = fields.Char("Referencia de pago", required=True)
 
-	#@api.model
+	@api.multi
 	def action_pago(self):
 		self.get_msg_number()
 		obj_pago = self.env["banks.payment.invoices.custom"]
 		active_id = self._context.get('active_id')
 		lineas = []
 		if active_id:
-			inv = self.env['account.move'].browse(active_id)
+			inv = self.env['account.invoice'].browse(active_id)
 			if inv.residual < 0:
 				raise Warning(_('!! Amount must be greater than zero !!'))
 

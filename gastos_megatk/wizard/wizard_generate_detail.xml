@@ -87,6 +87,7 @@
     <record id="action_wizard_pago_cuota_prestamo" model="ir.actions.act_window">
             <field name="name">Pago de Cuotas</field>
             <field name="res_model">comercial.wizard.payment</field>
+            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="domain">[('prestamo_id','=',active_id)]</field>
             <field name="view_id" ref="wizard_set_payment_prestamos"/>

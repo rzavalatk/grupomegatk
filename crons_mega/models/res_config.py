@@ -39,7 +39,9 @@ class Settings(models.TransientModel):
             res.append(int(item))
         return res
         
-    #@api.model_create_multi
+    
+
+    @api.model
     def get_values(self):
         try:
             res = super(Settings, self).get_values()
@@ -96,7 +98,7 @@ class Settings(models.TransientModel):
             # raise Warning(_(f'Error: {e}'))
         return res
 
-    #@api.model_create_multi
+    @api.multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
         IrValues.set_param('crons_mega.marca_ids'+str(self.env.user.company_id.id), self.marca_ids.ids)

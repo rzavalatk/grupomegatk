@@ -19,14 +19,14 @@ class CrmLead(models.Model):
     tipo_visita = fields.Selection([('cortesia','Cortesía'),('contado','Contado'),('garantia','Garantía'),('capacitacion','Capacitación'),('instalacion','Instalación')], string='Tipo de Visita')
     tipo_visita_sin_costo = fields.Selection([('cortesia','Cortesía'),('garantia','Garantía'),('capacitacion','Capacitación'),('instalacion','Instalación')], string='Tipo de Visita.')
     tipo_venta = fields.Selection([('llamada','Llamada'),('visitac','Visita Calle'),('visitat','Visita Tienda')], string='Venta', default='llamada')
-    reporto = fields.Char(string='La persona que reporto',)
+    reporto = fields.Char(string='Persona que reporto',)
     repor_tel = fields.Char(string='Telefono',)
     repor_email = fields.Char(string='Correo electrónico',)
     proposito = fields.Char(string='Propósito de la visita',)
     observacion_visita = fields.Html(string='Observaciones')
-    producto1 = fields.Char(string='Campaña',)
-    producto2 = fields.Char(string='Media',)
-    producto3 = fields.Char(string='Origen',)
+    producto1 = fields.Char(string='Producto',)
+    producto2 = fields.Char(string='Producto',)
+    producto3 = fields.Char(string='Producto',)
     fecha_movimiento = fields.Datetime(string='Fecha primer movimiento',)
 
 
@@ -35,7 +35,7 @@ class CrmLead(models.Model):
         self.categoria_id=False
         self.modelo_id=False
 
-    #@api.model_create_multi
+    @api.multi
     def write(self, values):
         if not self.fecha_movimiento:
             if self.create_uid.id != self.env.user.id:
@@ -43,7 +43,7 @@ class CrmLead(models.Model):
                 values['fecha_movimiento'] = datetime.now()
         return super(CrmLead, self).write(values)
 
-    #@api.model_create_multi
+    @api.multi
     def _message_post_after_hook(self, message, *args, **kwargs):
         self.observacion_visita = message.body
         return super(CrmLead, self)._message_post_after_hook(message,*args, **kwargs)
@@ -90,7 +90,7 @@ class CrmLeadCategoria(models.Model):
     _name = 'crm.lead.categoria'
     _order = 'name asc'
 
-    name = fields.Char(string='Nombre:',)
+    name = fields.Char(string='Nombre',)
     marca_id = fields.Many2one('crm.lead.marca', string='Marca', ondelete='cascade')
     modelo_ids = fields.One2many('crm.lead.modelo', 'categoria_id',  string='Modelo',)
     active = fields.Boolean(string='Activo', default=True)

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-
 		<record model="ir.ui.view" id="product_campo_megatk_view_inh">
   		<field name="name">product.campomegatk.view</field>
   		<field name="model">product.template</field>

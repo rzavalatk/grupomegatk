@@ -3,57 +3,60 @@
     <data>
         <record id="account_invoice_view_form_quit_payment_1" model="ir.ui.view">
             <field name="name">account.invoice.view.form.quit.payment</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='button_draft']" position="after">
+                <xpath expr="//button[@name='127']" position="after">
                     <field name="de_consignacion" invisible="1" />
                 </xpath>
-                <xpath expr="//button[@name='button_cancel']" position="before">
+                <xpath expr="//button[@name='action_invoice_sent']" position="before">
                     <button string="Crear Presupuesto" confirm="¿Seguro que desea crear un presupuesto a partir de esta consignación?" name="create_sale" type="object" attrs="{'invisible': ['|','|',('state','not in',['open','paid']),('de_consignacion','!=',True),('state_sale','=',True)]}" class="oe_highlight"/>
                 </xpath>
-                <xpath expr="//field[@name='authorized_transaction_ids']" position="after">
+                <xpath expr="//field[@name='reference']" position="after">
                     <field name="state_sale" invisible="1" />
                     <field name="consig_sale_id" attrs="{'invisible':[('de_consignacion','=',False)]}" />
                 </xpath>
-                <xpath expr="//button[@name='button_draft']" position="attributes">
+                <xpath expr="//button[@name='127']" position="attributes">
                     <attribute name="attrs">{
                         'invisible': ['|',
                         ('state', '!=', 'open'),
                         ('de_consignacion','=',True)]
                     }</attribute>
                 </xpath>
-                <!--<xpath expr="//button[@name='132']" position="attributes">
+                <xpath expr="//button[@name='190']" position="attributes">
                     <attribute name="attrs">{
                         'invisible': ['|','|',
                         ('de_consignacion','=',True),
-                        ('move_type', '=', 'out_refund'), 
+                        ('type', '=', 'out_refund'), 
                         ('state', 'not in', ('open','in_payment','paid'))]
                     }</attribute>
-                </xpath>-->
+                </xpath>
             </field>
         </record>
 
         <record id="account_invoice_consignacion_action" model="ir.actions.act_window">
             <field name="name">Facturas de Consignación</field>
-            <field name="res_model">account.move</field>
-            <!--#<field name="view_type">form</field>-->
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
             <field name="context">{'type':'out_invoice','journal_type': 'sale','de_consignacion':True}</field>
             <field name="domain">[('de_consignacion', '=', True)]</field>
             <field name="search_view_id" ref="account.view_account_invoice_filter" />
             <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {
+                'view_mode': 'tree',
+                'view_id': ref('account.invoice_tree_with_onboarding')
+            }),(0, 0, {
                 'view_mode': 'form',
-                'view_id': ref('account.view_move_form')
+                'view_id': ref('account.invoice_form')
             })]" />
         </record>
 
         <menuitem
             id="account_invoice_consignacion_menu"
             name="Facturas de Consignación"
-            action="account_invoice_consignacion_action"
+            action="invoice_consignment.account_invoice_consignacion_action"
             parent="account.menu_finance_receivables"
-            />
+            sequence="10"/>
     </data>
 </odoo>

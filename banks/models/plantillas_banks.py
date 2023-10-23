@@ -7,7 +7,7 @@ from odoo.exceptions import Warning
 
 class PlantillasDocuments(models.Model):
 	_name = 'banks.template'
-	_description = "description"
+
 
 	pagar_a = fields.Char("Pagar a", required=True)
 	journal_id = fields.Many2one("account.journal", "Banco", required=True)
@@ -25,7 +25,6 @@ class PlantillasDocuments(models.Model):
 
 class check_line(models.Model):
 	_name = 'banks.template.line'
-	_description = "description"
 
 	template_id = fields.Many2one('banks.template', 'Plantilla')
 	partner_id = fields.Many2one('res.partner', 'Empresa', domain="[('company_id', '=', parent.company_id)]")

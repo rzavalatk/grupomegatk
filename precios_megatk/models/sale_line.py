@@ -6,19 +6,17 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 class Saleline(models.Model):
     _inherit = 'sale.order.line'
 
-    precio_id = fields.Many2one("lista.precios.producto", "Lista del Precio")
+    precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
     pricelist_id = fields.Many2one(related='order_id.pricelist_id', string='Field Label', )
-    nombreproducto = fields.Integer(related='product_id.product_tmpl_id.id', string="nombre producto")
+    nombreproducto = fields.Integer(related='product_id.product_tmpl_id.id')
     lista_precio = fields.Char("Lista de Precio",)
 
-    #@api.model_create_multi
-    #def _prepare_invoice_line(self, optional_values):
-    #    values = super(Saleline, self)._prepare_invoice_line(optional_values)
-    #    values['precio_id'] = self.precio_id.id
-    #    values['lista_precio'] = self.lista_precio
-    #    return values
-    
-
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        values = super(Saleline, self)._prepare_invoice_line(qty)
+        values['precio_id'] = self.precio_id.id
+        values['lista_precio'] = self.lista_precio
+        return values
 
     @api.onchange("precio_id")
     def onchangedescuento(self):
@@ -62,7 +60,7 @@ class Saleline(models.Model):
                                 if porcentaje >= lista.descuento:
                                     line.precio_id = lista.id
 
-    #@api.model
+    @api.model
     def create(self, values):
         line = super(Saleline, self).create(values)
         preciolista = self.env['lista.precios.producto']
@@ -74,7 +72,7 @@ class Saleline(models.Model):
                 line.precio_id = lista.id
         return line
     
-    #@api.model_create_multi
+    @api.multi
     def write(self, values):
         super(Saleline, self).write(values)
         for line in self:

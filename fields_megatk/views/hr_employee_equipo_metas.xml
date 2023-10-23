@@ -2,10 +2,7 @@
 <odoo>
 	<data>
 	   	<!-- Form View -->
-	    
-		
-		
-		<record model="ir.ui.view" id="hr_employe_metas_mega_form_view">
+	    <record model="ir.ui.view" id="hr_employe_metas_mega_form_view">
 	      	<field name="name">hr.employee.metasmega.form.view</field>
 	      	<field name="model">hr.employee.equipo.metas</field>
 	      	<field name="arch" type="xml">
@@ -88,6 +85,7 @@
 			<field name="name">Metas</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">hr.employee.equipo.metas</field>
+			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
 	    </record>
 

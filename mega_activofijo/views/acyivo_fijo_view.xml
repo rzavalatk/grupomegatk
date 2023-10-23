@@ -3,10 +3,10 @@
   <data>
     <record model="ir.ui.view" id="mega_activo_fijo_form_view">
       <field name="name">megatk.activo.fijo</field>
-      <field name="model">account.asset</field>
-      <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
       <field name="arch" type="xml">
-        <field name="journal_id" position="after">
+        <field name="date" position="after">
           <field name="employee_id"/>
           <field name="departamento"/>
         </field>
@@ -15,10 +15,10 @@
 
     <record model="ir.ui.view" id="mega_activo_fijo_tree_view">
       <field name="name">megatk.activo.fijo.tree</field>
-      <field name="model">account.asset</field>
-      <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_purchase_tree"/>
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='book_value']" position="after">
+        <xpath expr="//field[@name='date']" position="after">
           <field name="employee_id"/>
         </xpath>
       </field>
@@ -26,10 +26,10 @@
 
     <record model="ir.ui.view" id="mega_activo_fijo_info_view">
       <field name="name">megatk.activo.fijo.info</field>
-      <field name="model">account.asset</field>
-      <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+      <field name="model">account.asset.asset</field>
+      <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
       <field name="arch" type="xml">
-        <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+        <xpath expr="//form/sheet/notebook" position="inside">
           <page name="info_adicional" string="Información Adicional">
             <group name="info">
               <group name="info_left">

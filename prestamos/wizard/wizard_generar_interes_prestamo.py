@@ -7,7 +7,6 @@ from odoo.exceptions import Warning
 
 class WizardGenerarfacturainteres(models.TransientModel):
 	_name = 'prestamos.personal.wizard.interes'
-	_description = "description"
 
 	pago = fields.Float(string='Pago',)
 	interes = fields.Float(string='Interes',)
@@ -15,7 +14,7 @@ class WizardGenerarfacturainteres(models.TransientModel):
 
 	def factu_interes(self):
 		if self.pago > 0 or self.interes > 0:
-			obj_factura = self.env["account.move"]
+			obj_factura = self.env["account.invoice"]
 			ctx = self._context
 			obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 			lineas = []
@@ -33,7 +32,7 @@ class WizardGenerarfacturainteres(models.TransientModel):
 				}
 				lineas.append((0, 0, val_lineas))
 
-				journal_id = (self.env['account.move'].with_context(company_id=company_id)
+				journal_id = (self.env['account.invoice'].with_context(company_id=company_id)
 					.default_get(['journal_id'])['journal_id'])
 				if not journal_id:
 					raise UserError(_('Please define an accounting sales journal for this company.'))

@@ -7,7 +7,6 @@ from odoo.exceptions import Warning
 
 class WizardGiftCardRecar(models.TransientModel):
 	_name = 'gifrcard.wizard.recar'
-	_description = "description"
 
 	monto = fields.Float("Monto", required=True,)
 	descripcion = fields.Char('Descripción', required=True, default='Recarga')

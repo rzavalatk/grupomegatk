@@ -16,10 +16,10 @@
     'category': 'Users',
     'version': '0.1',
 
-    'depends': ['base', 'website'],
+    'depends': ['base', 'website', 'ks_theme_kinetik'],
 
     'data': [
         # 'views/price.xml',
-        #'views/views.xml',
+        'views/views.xml',
     ],
 }

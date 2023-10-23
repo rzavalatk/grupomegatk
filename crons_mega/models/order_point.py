@@ -9,13 +9,14 @@ import time
 class ReviewRules(models.Model):
     _name = "orderpoint.review.rules"
     _order = "create_date desc"
-    _description = "description"
     
+    @api.one
     def _name_(self):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
     
     
+    @api.one
     def _send(self):
         self.send = len(self.warehouse_ids.ids) > 0
     

@@ -71,10 +71,11 @@
             <field name="name">Metas asignadas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.metas.asignadas</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Metas asignadas" id="menu_hr_metas_asignadas" sequence = "5" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_asignadas"/>
-        <!--<menuitem name="Metas asignadas" id="menu_hr_metas_asignadas" sequence = "5" groups="sign.group_sign_manager" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_asignadas"/>-->
+        <menuitem name="Metas asignadas" id="menu_hr_metas_asignadas" sequence = "5" groups="sign_orders.group_admins" parent="planilla_y_metas.metas_menu_root" action = "action_hr_metas_asignadas"/>
+
     </data>
 </odoo>

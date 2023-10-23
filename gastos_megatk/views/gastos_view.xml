@@ -40,7 +40,7 @@
 				<button name="rechazar_gastos" type="object" string="Rechazar" states="pendiente" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_rechazar"/>
 				<button name="liquidar_gastos" type="object" string="Liquidar Gastos" states="desembolso" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>
 				<button name="cancelar_liquidados" type="object" string="Cancelar Liquidación" states="liquidado" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_liquidar"/>		
-				<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Desembolso" states="aprobado" class="oe_highlight" groups="gastos_megatk.grupo_gastos_personal_manager"/>
+				<button name="%(action_wizard_gastos_megatk_wizard_cheque)d" type="action" string="Desembolso" states="aprobado" class="oe_highlight"/>
 				<!--  -->
 				<button name="rechazar_gastos_admin" type="object" string="Rechazar" groups="planilla_y_metas.admin_functions"/>
 				<!--  -->
@@ -160,6 +160,7 @@
 		<record model="ir.actions.act_window" id="gastos_megatk_action">
 		<field name="name">Gestión de gastos de personal</field>
 		<field name="res_model">gastos.megatk</field>
+		<field name="view_type">form</field>
 		<field name="view_mode">tree,form</field>
 		 <field name="context">{'default_tipo_gasto':'viatico'}</field>
 		</record>
@@ -167,6 +168,7 @@
 		<record model="ir.actions.act_window" id="gastos_megatk_liquidados_action">
 		<field name="name">Gestión Liquidados</field>
 		<field name="res_model">gastos.megatk</field>
+		<field name="view_type">form</field>
 		<field name="view_mode">tree,form</field>
 		<field name="domain">[('state', '=', 'liquidado')]</field>
 		</record>
@@ -174,42 +176,24 @@
 		<record model="ir.actions.act_window" id="gastos_megatk_rechazado_action">
 		<field name="name">Gestión Rechazados</field>
 		<field name="res_model">gastos.megatk</field>
+		<field name="view_type">form</field>
 		<field name="view_mode">tree,form</field>
 		<field name="domain">[('state', '=', 'rechazado')]</field>
 		</record>
 		   <!-- Fin de Action de Contratos -->
 		     <!--  Menu Principal de contratos-->
 
-		<menuitem 
-			id="menu_principal_gastos" 
-			name="Gastos" 
-			web_icon="gastos_megatk,static/description/icon.png"/>
+		<menuitem id="menu_principal_gastos" name="Gastos" string="Gastos" web_icon="gastos_megatk,static/description/icon.png"/>
 
-		<menuitem  
-			id="submenu_gastos" 
-			name="Gastos de Personal" 
-			parent="menu_principal_gastos" 
-			sequence="1"/>
+		<menuitem  id="submenu_gastos" name="Gastos de Personal" parent="menu_principal_gastos" sequence="1"/>
 
-		<menuitem  
-			id="menu_gestion_gastos" 
-			name="Solicitud de gastos" 
-			action="gastos_megatk_action" 
-			parent="submenu_gastos"  
-			sequence="10"/>
+		<menuitem  id="menu_gestion_gastos" name="Solicitud de gastos" action="gastos_megatk_action" 
+		parent="submenu_gastos"  sequence="10"/>
 
-		<menuitem  
-			id="menu_gestion_gastos_liquidados" 
-			name="Gastos liquidados" 
-			action="gastos_megatk_liquidados_action" 
-			parent="submenu_gastos"  
-			sequence="20"/>
+		<menuitem  id="menu_gestion_gastos_liquidados" name="Gastos liquidados" action="gastos_megatk_liquidados_action" 
+		parent="submenu_gastos"  sequence="20"/>
 
-		<menuitem  
-			id="menu_gestion_gastos_rechazados" 
-			name="Gastos rechazados" 
-			action="gastos_megatk_rechazado_action" 
-			parent="submenu_gastos"  
-			sequence="30"/>
+		<menuitem  id="menu_gestion_gastos_rechazados" name="Gastos rechazados" action="gastos_megatk_rechazado_action" 
+		parent="submenu_gastos"  sequence="30"/>
 	</data>
 </odoo>

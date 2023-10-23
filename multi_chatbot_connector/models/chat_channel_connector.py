@@ -42,7 +42,6 @@ class ResCompany_Bot(models.Model):
 class ChainOfBots(models.Model):
     _name = 'chain.bots'
     _order = 'sequence'
-    _description = "description"
 
     company_id = fields.Many2one('res.company', string="Company",
                                  readonly=True, default=lambda self: self.env.user.company_id)
@@ -87,7 +86,7 @@ class ImLivechatMultiChannel(models.Model):
         self.issue_category = False
         self.timer = False
 
-    #@api.multi
+    @api.multi
     def action_operators_user(self):
         view_id = self.env.ref(
             'multi_chatbot_connector.wizard_view_operators_user').sudo().id
@@ -117,7 +116,7 @@ class ImLivechatMultiChannel(models.Model):
         else:
             raise ValidationError(_('Please Select Channel Category!'))
 
-    #@api.multi
+    @api.multi
     def get_mail_channel_by_id(self, mail_channel_id, mail_id):
         mail_channel = self.env['mail.channel'].sudo().search(
             [('id', '=', mail_channel_id)])
@@ -134,7 +133,6 @@ class ImLivechatMultiChannel(models.Model):
 class OnlineHelpdesk(models.Model):
     _name = 'online.helpdesk'
     _order = 'create_date desc'
-    _description = "description"
 
     status = fields.Selection(
         [('new', 'New'), ('working', 'In Progress'), ('finish', 'Finish')], default='new')
@@ -150,7 +148,7 @@ class OnlineHelpdesk(models.Model):
     company_id = fields.Many2one('res.company', string='Company')
     previous_reply = fields.Char(string="Previous Reply")
 
-    #@api.multi
+    @api.multi
     def unlink(self):
         for helpdesk in self:
             if helpdesk.status not in ('draft'):
@@ -158,14 +156,14 @@ class OnlineHelpdesk(models.Model):
                     _('You can not delete a Helpdesk Lead History!'))
         return super(OnlineHelpdesk, self).unlink()
 
-    #@api.multi
+    @api.multi
     def online_helpdesk_process(self, cron_mode=True):
         CurrentDate = datetime.datetime.now()
         for helpdesk in self.env['online.helpdesk'].sudo().search([('status', '=', 'new')]):
             if self.env['mail.channel'].sudo().search([('helpdesk_lead_id', '=', helpdesk.id), ('create_date', '<', CurrentDate.strftime(DEFAULT_SERVER_DATE_FORMAT))]):
                 helpdesk.status = 'finish'
 
-    #@api.multi
+    @api.multi
     def send_by_chat_history_mail(self):
         Template = self.env.ref(
             'multi_chatbot_connector.chat_feedback_history_template', False)
@@ -184,7 +182,7 @@ class OnlineHelpdesk(models.Model):
         Template.send_mail(self.maill_channel_id.id, force_send=True)
         return True
 
-    #@api.multi
+    @api.multi
     def action_schedule_meeting(self):
         xml_id = 'im_livechat.mail_channel_view_tree'
         tree_view_id = self.env.ref(xml_id).id
@@ -200,7 +198,7 @@ class OnlineHelpdesk(models.Model):
             'type': 'ir.actions.act_window',
         }
 
-    #@api.multi
+    @api.multi
     def action_talk_to_client(self):
         mail_channel = self.env['mail.channel'].sudo().search(
             [('helpdesk_lead_id', '=', self.id)], limit=1)
@@ -237,7 +235,6 @@ class MailChannelMulti(models.Model):
 
 class OnlineHelpCategory(models.Model):
     _name = 'online.help.category'
-    _description = "description"
 
     name = fields.Char('Name')
 
@@ -255,7 +252,7 @@ class ResConfigSettingsInheritMulti(models.TransientModel):
 
     is_chain_of_bot = fields.Boolean(string='is Chain of Bot')
 
-    #@api.model
+    @api.model
     def get_values(self):
         res = super(ResConfigSettingsInheritMulti, self).get_values()
         ConfigOBJ = self.env['ir.config_parameter'].sudo()
@@ -266,7 +263,7 @@ class ResConfigSettingsInheritMulti(models.TransientModel):
         )
         return res
 
-    #@api.model
+    @api.model
     def set_values(self):
         self.env['ir.config_parameter'].set_param(
             'multi_chatbot_connector.is_chain_of_bot', self.is_chain_of_bot)

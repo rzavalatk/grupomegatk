@@ -4,6 +4,7 @@
 <record id="action_movimientos_concilidos" model="ir.actions.act_window">
     <field name="name">Conciliación Bancaria</field>
     <field name="res_model">account.move</field>
+    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
     <field name="domain"> [('conciliacion_id', '=', active_id)]</field>
 </record>
@@ -30,6 +31,7 @@
 <record id="action_no_conicliacion_bancaria_line" model="ir.actions.act_window">
     <field name="name">No Conciliados</field>
     <field name="res_model">conicliacion.bancaria.line</field>
+    <field name="view_type">form</field>
     <field name="view_mode">tree</field>
     <field name="domain"> [('conciliacion_id', '=', active_id), ('es_conciliado', '=', False)]</field>
 </record>
@@ -155,6 +157,7 @@
 <record id="action_conicliacion_bancaria" model="ir.actions.act_window">
     <field name="name">Conciliación Bancaria</field>
     <field name="res_model">conicliacion.bancaria</field>
+    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
     <field name="help" type="html">
       <p class="oe_view_nocontent_create">
@@ -163,19 +166,11 @@
     </field>
 </record>
 
-<menuitem  
-    id="menu_banks_conciliation_main" 
-    name="Conciliación Bancaria" 
-    parent="banks.menu_banks" 
-    sequence="80"/>
+<menuitem  id="menu_banks_conciliation_main" name="Conciliación Bancaria" parent="banks.menu_banks" sequence="80"/>
 
 
-<menuitem 
-    action="action_conicliacion_bancaria" 
-    id="menu_management_conciliation_record" 
-    name="Conciliación Bancaria"
-    parent="menu_banks_conciliation_main" 
-    sequence="20"/>
+<menuitem action="action_conicliacion_bancaria" id="menu_management_conciliation_record" name="Conciliación Bancaria"
+          string="Conciliación Bancaria" parent="menu_banks_conciliation_main" sequence="20"/>
 
 
 </data>

@@ -23,7 +23,7 @@
                         <button string="Procesar" name="proccess_comisiones" states="init" type="object" class="oe_highlight"/>
                         <button string="Depurar" name="depurar_facturas" states="proccess" type="object" class="oe_highlight"/>
                         <button string="No Depurar" name="quit_depurar_facturas" states="done" type="object" class="oe_highlight"/>
-                        <button string="Generar Excel" name="gen_excel" states="proccess,done" type="button" id="create_excel" context="{'active_id': id}"/>
+                        <button string="Generar Excel" states="proccess,done" type="button" id="create_excel" context="{'active_id': id}"/>
                         <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
                         <button string="Cancelar" confirm="¿Esta seguro que desea cancelar las comisiones?" states="init,proccess,done" name="cancel" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />
@@ -51,15 +51,14 @@
                                 <field name="facturas_ids" nolabel="1">
                                     <tree string="Facturas">
                                         <field name="partner_id" string="Cliente" />
-                                        <field name="invoice_date" string="Fecha" />
-                                        <field name="name" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="number" />
                                         <field name="user_id" />
-                                        <field name="amount_untaxed_signed" string="Total sin impuesto" sum="Total" />
-                                        <field name="amount_tax" string="Impuesto" sum="Total" />
-                                        <field name="amount_total" string="Total" sum="Total"/>
-                                        <field name="amount_residual" string="Saldo" sum="Total" />
+                                        <field name="amount_untaxed_invoice_signed" string="Total sin impuesto" sum="Total" />
+                                        <field name="amount_tax_signed" string="Impuesto" sum="Total" />
+                                        <field name="amount_total_signed" string="Total" sum="Total"/>
+                                        <field name="residual" string="Saldo" sum="Total" />
                                         <field name="state" />
-
                                     </tree>
                                 </field>
                             </page>
@@ -84,6 +83,7 @@
             <field name="name">Comisiones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.comisiones</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 

@@ -68,13 +68,13 @@
                                 <field name="facturas_ids" nolabel="1">
                                     <tree string="Facturas">
                                         <field name="partner_id" string="Cliente" />
-                                        <field name="invoice_date" string="Fecha" />
-                                        <field name="name" />
+                                        <field name="date_invoice" string="Fecha" />
+                                        <field name="number" />
                                         <field name="user_id" />
-                                        <field name="amount_untaxed_signed" string="Total sin impuesto" sum="Total" />
+                                        <field name="amount_untaxed_invoice_signed" string="Total sin impuesto" sum="Total" />
                                         <field name="amount_tax_signed" string="Impuesto" sum="Total" />
                                         <field name="amount_total_signed" string="Total" sum="Total"/>
-                                        <field name="amount_residual" string="Saldo" sum="Total" />
+                                        <field name="residual" string="Saldo" sum="Total" />
                                         <field name="state" />
                                     </tree>
                                 </field>
@@ -104,6 +104,7 @@
             <field name="name">Cierre Diario</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.cierre</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 

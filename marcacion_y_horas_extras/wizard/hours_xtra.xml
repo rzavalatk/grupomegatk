@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!--<record id="hours_xtras_wizard_form" model="ir.ui.view">
+        <record id="hours_xtras_wizard_form" model="ir.ui.view">
             <field name="name">hours.xtras.wizard.form</field>
             <field name="model">hours.xtras</field>
             <field name="arch" type="xml">
@@ -27,15 +27,15 @@
                     </footer>
                 </form>
             </field>
-        </record>-->
+        </record>
 
-        <!--<record id="hours_xtras_wizard_action" model="ir.actions.act_window">
+        <record id="hours_xtras_wizard_action" model="ir.actions.act_window">
             <field name="name">Gererar horas extra</field>
             <field name="res_model">hours.xtras</field>
             <field name="target">new</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-        </record>-->
+        </record>
 
 
         <record id="camaro_cuatrero_wizard_form" model="ir.ui.view">

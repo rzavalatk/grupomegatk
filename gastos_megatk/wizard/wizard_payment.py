@@ -7,7 +7,6 @@ from odoo.exceptions import Warning
 
 class Quotationrfq(models.TransientModel):
     _name = 'rfq.diadema.wizard'
-    _description = "description"
 
     def _get_prestamo(self):
         contexto = self._context

@@ -6,7 +6,6 @@ from odoo import api, fields, models
 
 class WizardSign(models.TransientModel):
     _name = 'sign_documents.sign.wizard'
-    _description = "description"
 
 
     def print_report(self):

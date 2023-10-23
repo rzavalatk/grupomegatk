@@ -66,8 +66,8 @@
       </div>
     </template>
 
-    <!-- <template id="conciliacion_print">
-      <t t-call="conciliacion_bancaria.external_layouts_concilacion">
+    <template id="conciliacion_print">
+      <t t-call="conciliacion_bancaria.external_layout_concilacion">
         <div class="page">
           <div class="oe_structure"/>
           <table class="table table-sm o_main_table" name="invoice_line_table" style="font-size:12px;border:1px solid black;">
@@ -76,7 +76,7 @@
                 <th class="text-left" style="padding: 2px; width:16%;border:1px solid black;">Movimiento</th>
                 <th class="text-center" style="padding: 2px; width:20%;border:1px solid black;">Descripción</th>
                 <th class="text-center" style="padding: 2px; width:12%;border:1px solid black;">Fecha</th> 
-                <th class="text-center" style="padding: 2px; width:15%;border:1px solid black;">Crédito</th>
+                <!--<th class="text-center" style="padding: 2px; width:15%;border:1px solid black;">Crédito</th>-->
                 <th class="text-center" style="padding: 2px; width:12%;border:1px solid black;">Debe</th>
                 <th class="text-center" style="padding: 2px; width:12%;border:1px solid black;">Haber</th>
                 <th class="text-center" style="padding: 2px; width:15%;border:1px solid black;">Moneda</th>
@@ -92,9 +92,9 @@
                   <td class="text-left" style="padding: 2px; border:1px solid black;">
                      <span t-field="l.name"/>
                   </td>
-                  <td class="text-right" style="padding: 2px; border:1px solid black;">
+                  <!--<td class="text-right" style="padding: 2px; border:1px solid black;">
                   <span t-field="l.debit"/>
-                  </td>
+                  </td>-->
                   <td class="text-right" style="padding: 2px; border:1px solid black;">
                         <span t-field="l.date"/>
                   </td>
@@ -116,6 +116,6 @@
           </table>
         </div> 
       </t>
-    </template> -->
+    </template>
   </data>
 </odoo>

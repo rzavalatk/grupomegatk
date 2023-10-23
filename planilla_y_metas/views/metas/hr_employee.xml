@@ -6,7 +6,7 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
-                <xpath expr="//div[@name='button_box']" position="before">
+                <xpath expr="//button[@name='toggle_active']" position="after">
                     <script type="text/javascript" src="/planilla_y_metas/static/src/js/xls.js"/>
                     <button name="go_to_assign_metas" type="object" class="oe_stat_button" icon="fa-check">
                         Evaluar metas

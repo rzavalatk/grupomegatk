@@ -26,7 +26,6 @@
         'reports/external_layout_standard_giftcard.xml',
         'reports/giftcard_print_view.xml',
         'reports/voucher_report_view.xml',
-        'data/giftcard_data.xml',
         "security/groups.xml",
         'security/ir.model.access.csv',
         'wizard/wizard_giftcard_cobrar.xml',

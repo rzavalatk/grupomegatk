@@ -21,18 +21,17 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
-#@api.model
+@api.model
 def _lang_get(self):
     return self.env['res.lang'].sudo().get_installed()
 
 class OperatorsUser(models.TransientModel):
     _name = 'operators.user'
-    _description = "description"
     
     name = fields.Char("Name")
     user_ids = fields.One2many('operators.user.line','operators_id', string="Users")
     
-    #@api.multi
+    @api.multi
     def action_add_user(self):
         user_check = self.env['operators.user.line'].sudo().search([('check_box','=',True),('id','in',self.user_ids.ids)])
         channel_id = self.env['im_livechat.channel'].sudo().browse(self._context.get('active_id'))
@@ -46,7 +45,6 @@ class OperatorsUser(models.TransientModel):
         
 class OperatorsUserLine(models.TransientModel):
     _name = 'operators.user.line'
-    _description = "description"
     
     check_box = fields.Boolean("Select")
     user_id = fields.Many2one('res.users','User')
@@ -54,7 +52,7 @@ class OperatorsUserLine(models.TransientModel):
     login = fields.Char('Login')
     language =  fields.Selection(_lang_get, string='Language')
     
-    #@api.onchange('user_id')
+    @api.onchange('user_id')
     def _onchange_user_id(self):
         self.login = self.user_id.login
         self.language = self.user_id.lang

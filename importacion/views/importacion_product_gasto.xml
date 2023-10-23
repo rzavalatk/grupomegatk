@@ -8,6 +8,7 @@
       <field name="arch" type="xml">
         <form string = "Form Import">
           <sheet>
+            <tree>
               <group name="x_datos0">
                 <group name="x_1">
                   <field name="name"/>
@@ -18,6 +19,7 @@
                   <field name="descripcion"/>
                 </group>               
               </group>
+            </tree>
           </sheet>
         </form>
       </field>

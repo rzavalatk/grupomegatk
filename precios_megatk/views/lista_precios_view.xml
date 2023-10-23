@@ -25,7 +25,7 @@
             <field name="arch" type="xml">
                 <form string = "Lista Precios">
                     <sheet>
-                        
+                        <tree>
                             <group name="x_datos0">
                                 <group name="x_1">
                                     <field name="name"/>
@@ -36,7 +36,7 @@
                                     <field name="descuento"/>
                                 </group>
                             </group>
-                        
+                        </tree>
                     </sheet>
                 </form>
             </field>

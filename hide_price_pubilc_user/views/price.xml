@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!--<template id="custom_price_website" name="custom price" inherit_id="website_sale.product_price">
+        <template id="custom_price_website" name="custom price" inherit_id="website_sale.product_price">
             <xpath expr="//div[@class='product_price mt16']" position="replace">
                 <div>
                     <h4 class="oe_price_h4 css_editable_mode_hidden">
@@ -10,6 +10,6 @@
                     </h4>
                 </div>
             </xpath>
-        </template> -->
+        </template>
     </data>
 </odoo>

@@ -6,7 +6,6 @@ from odoo.exceptions import Warning
 class ProductPonderacion(models.Model):
 	_name = 'product.ponderacion'
 	_order = "fecha_recepcion desc"
-	_description = "description"
 
 	product_id = fields.Many2one("product.template", "Producto", required=True)
 	fecha_recepcion = fields.Datetime(string='Ingreso')

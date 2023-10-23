@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  
+  <data>
     <template id="check_print">
       <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
@@ -40,5 +40,5 @@
           </div>
         </div>  
     </template>
-  
+  </data>
 </odoo>
