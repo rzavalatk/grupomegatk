@@ -84,14 +84,13 @@ class Debit(models.Model):
 		for db in deb_obj:
 			db.write({'number': n})
 
-	@api.multi
+	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated':
 				raise Warning(_('No puede eliminar registros contabilizados'))
 		return super(Debit, self).unlink()
 
-	@api.one
 	@api.depends('debit_line.amount', 'total')
 	def _compute_rest_credit(self):
 		debit_line = 0
@@ -107,7 +106,7 @@ class Debit(models.Model):
 					debit_line += 0
 			self.total_debitos = debit_line
 			self.total_creditos = credit_line
-			self.rest_credit = self.total - ( round(debit_line,2) - credit_line)
+			self.rest_credit = self.total - (debit_line - credit_line)
 		else:
 			for lines in self.debit_line:
 				if lines.move_type == 'debit':
@@ -179,7 +178,7 @@ class Debit(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	@api.multi
+	#@api.model_create_multi
 	def action_validate(self):
 		if not self.number_calc:
 			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
@@ -234,23 +233,23 @@ class Debit(models.Model):
 			'debit': 0.0,
 			'credit': self.total * self.currency_rate,
 			'name': self.name,
-			'account_id': self.journal_id.default_credit_account_id.id,
+			'account_id': self.journal_id.default_account_id.id,
 			'date': self.date,
 		}
 		if self.currency_id:
-			if self.journal_id.default_credit_account_id.currency_id :
-				if self.journal_id.default_credit_account_id.currency_id  == self.currency_id:
+			if self.journal_id.default_account_id.currency_id :
+				if self.journal_id.default_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
 						vals_haber["amount_currency"] = 0.0
 					else:
 						vals_haber["currency_id"] = self.currency_id.id
 						vals_haber["amount_currency"] = self.total * -1
-				elif self.journal_id.default_credit_account_id.currency_id  == self.company_id.currency_id:
+				elif self.journal_id.default_account_id.currency_id  == self.company_id.currency_id:
 					vals_haber["currency_id"] = self.currency_id.id
 					vals_haber["amount_currency"] = self.total * -1
 				else:
-					vals_haber["currency_id"] = self.journal_id.default_credit_account_id.currency_id.id
-					tasa = self.journal_id.default_credit_account_id.currency_id .with_context(date=self.date)
+					vals_haber["currency_id"] = self.journal_id.default_account_id.currency_id.id
+					tasa = self.journal_id.default_account_id.currency_id .with_context(date=self.date)
 					vals_haber["amount_currency"] = self.total * tasa.rate * -1
 			else:
 				if self.currency_id == self.company_id.currency_id:
@@ -341,23 +340,23 @@ class Debit(models.Model):
 			'debit': self.total * self.currency_rate,
 			'credit': 0.0,
 			'name': self.name,
-			'account_id': self.journal_id.default_credit_account_id.id,
+			'account_id': self.journal_id.default_account_id.id,
 			'date': self.date,
 		}
 		if self.currency_id:
-			if self.journal_id.default_credit_account_id.currency_id :
-				if self.journal_id.default_credit_account_id.currency_id  == self.currency_id:
+			if self.journal_id.default_account_id.currency_id :
+				if self.journal_id.default_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
 						vals_debe["amount_currency"] = 0.0
 					else:
 						vals_debe["currency_id"] = self.currency_id.id
 						vals_debe["amount_currency"] = self.total
-				elif self.journal_id.default_credit_account_id.currency_id  == self.company_id.currency_id:
+				elif self.journal_id.default_account_id.currency_id  == self.company_id.currency_id:
 					vals_debe["currency_id"] = self.currency_id.id
 					vals_debe["amount_currency"] = self.total
 				else:
-					vals_debe["currency_id"] = self.journal_id.default_credit_account_id.currency_id.id
-					tasa = self.journal_id.default_credit_account_id.currency_id .with_context(date=self.date)
+					vals_debe["currency_id"] = self.journal_id.default_account_id.currency_id.id
+					tasa = self.journal_id.default_account_id.currency_id .with_context(date=self.date)
 					vals_debe["amount_currency"] = self.total * tasa.rate
 			else:
 				if self.currency_id == self.company_id.currency_id:
@@ -443,18 +442,18 @@ class Debit(models.Model):
 		}
 		return values
 
-	@api.multi
+	#@api.model_create_multi
 	def action_anulate_debit(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
 			move.unlink()
 		self.write({'state': 'anulated'})
 
-	@api.multi
+	#@api.model_create_multi
 	def action_draft(self):
 		self.write({'state': 'draft'})
 
-	@api.multi
+	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		#self.update_seq()
@@ -463,14 +462,14 @@ class Debit(models.Model):
 
 class Debitline(models.Model):
 	_name = 'banks.debit.line'
+	_description = "description"
+
+
 
 	@api.onchange("account_id")
 	def onchangecuenta(self):
 		if self.debit_id.doc_type == 'credit' or self.debit_id.doc_type == 'deposit':
 			self.move_type = 'credit'
-	
-	
-
 
 	debit_id = fields.Many2one('banks.debit', 'Check')
 	partner_id = fields.Many2one('res.partner', 'Empresa')
@@ -480,8 +479,3 @@ class Debitline(models.Model):
 	currency_id = fields.Many2one('res.currency', string='Currency')
 	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica")
 	move_type = fields.Selection([('debit', 'Débito'), ('credit', 'Crédito')], 'Débito/Crédito', default='debit', required=True)
-
-	@api.onchange('amount')
-	def _onchange_amount(self):
-		if self.amount:
-			self.amount = round(self.amount, 2)

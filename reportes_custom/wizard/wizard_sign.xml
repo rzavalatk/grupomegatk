@@ -35,7 +35,6 @@
             <field name="name">Firmar</field>
             <field name="res_model">sign_documents.sign.wizard</field>
             <field name="target">new</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
     </data>

@@ -4,7 +4,7 @@
         <record id="crm_lead_field_tag_id_required" model="ir.ui.view">
             <field name="name">crm.lead.field.tag.id.required</field>
             <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='tag_ids']" position="attributes">
                     <attribute name="required">1</attribute>

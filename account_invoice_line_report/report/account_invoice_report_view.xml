@@ -5,7 +5,7 @@
 
     <record id="view_invoice_report_tree_info" model="ir.ui.view">
         <field name="name">account.invoice.report.line.tree.info</field>
-        <field name="model">account.invoice.report.line</field>
+        <field name="model">account.move.report.line</field>
         <field name="arch" type="xml">
             <tree string="Producto facturado" create="false" default_order='date desc'>
                 <field name="date"/>
@@ -25,7 +25,7 @@
 
     <record id="view_account_invoice_report_search_p" model="ir.ui.view">
         <field name="name">ventas.search.view</field>
-        <field name="model">account.invoice.report.line</field>
+        <field name="model">account.move.report.line</field>
         <field name="arch" type="xml">
             <search string="venta de productos">
                 <field name="marca_id" string="Marca"/>
@@ -48,8 +48,7 @@
 
     <record id="action_account_invoice_line_report" model="ir.actions.act_window">
         <field name="name">Producto vendido</field>
-        <field name="res_model">account.invoice.report.line</field>
-        <field name="view_type">form</field>
+        <field name="res_model">account.move.report.line</field>
         <field name="view_mode">tree</field>
         <field name="domain">[('state', 'not in', ['draft', 'cancel']),('type','in', ['out_invoice','out_refund'])]</field>
         <field name="search_view_id" ref="view_account_invoice_report_search_p"/>
@@ -59,7 +58,7 @@
     <!-- Reglas de registro -->
         <record id="ventas_line_rule" model="ir.rule">
             <field name="name">Ventas linae</field>
-            <field name="model_id" ref="model_account_invoice_report_line"/>
+            <field name="model_id" ref="model_account_move_report_line"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

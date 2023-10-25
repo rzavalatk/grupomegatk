@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
+	
 		<template id="check_print">
 			<t t-call="report.html_container">
 				<t t-foreach="docs" t-as="o">
@@ -33,7 +33,7 @@ tr.box {
 
 <table style="width:70%; font-size:14px; border:1px; padding:3px 0px 0px 0px"> 
 	<tbody>	
-		<!--<t t-if="format(o.journal_id.id) == 1">
+		<t t-if="format(o.journal_id.id) == 1">
 						<tr style="width:100%; padding:0px 0px 0px 0px"><td>
 							<table style="width:100%; font-size:12px; padding:0px 0px 4px 0px"> 
 						   		<tbody><tr>
@@ -42,7 +42,7 @@ tr.box {
 							</table>
 						      </td>
 						</tr>
-		</t>--->
+		</t>
 		<tr>	
 			<td style="width:100%;">	
 				<t t-if="format(o.journal_id.id) == 1">		
@@ -248,6 +248,6 @@ tr.box {
 					</t>
 				
 			</t>
-		</template>
-	</data>
+		</template> 
+	
 </openerp>

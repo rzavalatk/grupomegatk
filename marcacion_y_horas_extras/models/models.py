@@ -14,6 +14,7 @@ class ModuleEmployees(models.Model):
 
 class ModuleMarkings(models.Model):
     _name = "hr.employee.markings"
+    _description = "description"
 
     def _name_employee(self):
         self.name = self.employee.name
@@ -29,7 +30,7 @@ class ModuleMarkings(models.Model):
         dateTimeDifference = dateTimeB - dateTimeA
         return (datetime.datetime.min + dateTimeDifference).time() if typ == False else  dateTimeDifference
     
-    def hour_extra(self,enter,exit):
+    """def hour_extra(self,enter,exit):
         try:
             ref_hour_enter = time(8,6,0)
             ref_hour_exit = time(17,6,0)
@@ -42,7 +43,7 @@ class ModuleMarkings(models.Model):
             pre_final = self._diff_hours(ref_hour,dateTimeDifference)
             return pre_final
         except:
-            return "No hay horas"
+            return "No hay horas"""
 
     name = fields.Char(compute=_name_employee)
     employee = fields.Many2one("hr.employee", string="Empleado")
@@ -50,7 +51,7 @@ class ModuleMarkings(models.Model):
     hour = fields.Char(string="Hora", default="00:00:00")
     
     
-    @api.one
+    #@api.one
     def _search_in_out(self,refere):
         employee = self.env['hr.employee.markings'].search(['&',('employee','=',self.employee.id),('date','=',self.date)])
         res = {}
@@ -111,7 +112,7 @@ class ModuleMarkings(models.Model):
                 return True
             
 
-    @api.model
+    #@api.model
     def open_wizard(self):
         return {
             'name': "Ingreso masivo de marcaciones",
@@ -120,11 +121,11 @@ class ModuleMarkings(models.Model):
             'views': [[False, 'form']],
             'target': "new",
             'view_mode': "form",
-            'view_type': "form",
+            #'view_type': "form",
         }
     
-    @api.model
-    def open_generate_hours_xtra(self):
+    #@api.model
+    """def open_generate_hours_xtra(self):
         return {
             'name': "Gererar horas extra",
             'type': "ir.actions.act_window",
@@ -132,10 +133,10 @@ class ModuleMarkings(models.Model):
             'views': [[False, 'form']],
             'target': "new",
             'view_mode': "form",
-            'view_type': "form",
-        }
+           #'view_type': "form",
+        }"""
         
-    @api.model
+    #@api.model
     def open_generate_camaron_cuatrero(self):
         return {
             'name': "Llegadas tarde",
@@ -144,10 +145,10 @@ class ModuleMarkings(models.Model):
             'views': [[False, 'form']],
             'target': "new",
             'view_mode': "form",
-            'view_type': "form",
+            #'view_type': "form",
         }
 
-    @api.model
+    #@api.model
     def csv_download(self,filter=[]):
         data = self.env['hr.employee.markings'].search(filter)
         res = data.export_data(

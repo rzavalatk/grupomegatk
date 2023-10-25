@@ -5,6 +5,7 @@ import datetime
 
 class WizardInMarking(models.TransientModel):
     _name = 'making.inside'
+    _description = "description"
 
     marking_ids = fields.Many2many(
         'hr.employee', 'user_id', string='Empleados')

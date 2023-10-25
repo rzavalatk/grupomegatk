@@ -20,6 +20,7 @@ class Lots(models.Model):
         else:
             return res
 
+    
     @api.onchange('product_id')
     def _onchange_product_id(self):
         self.company_id = self.product_id.company_id.id

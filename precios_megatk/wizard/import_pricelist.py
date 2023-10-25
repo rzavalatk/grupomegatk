@@ -9,13 +9,13 @@ from odoo.exceptions import except_orm, Warning
 
 class ImportInventory(models.TransientModel):
     _name = "lista.precios.import.megatk"
+    _description = "description"
 
 
     data = fields.Binary('Documento', required=True)
     delimeter = fields.Char('Delimeter', default=',', help='Default delimeter is ","')
 
 
-    @api.one
     def action_import(self):
         ctx = self._context
         import_obj = self.env["lista.precios.megatk"]

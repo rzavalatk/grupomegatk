@@ -49,7 +49,7 @@
               </button>
             </div>
             <group>
-              <h1> <field name="name" attrs="{'readonly': True}"/></h1>
+              <h1> <field name="giftcard_number" attrs="{'readonly': True}"/></h1>
             </group>
             <group>
               <group>
@@ -73,12 +73,12 @@
       <field name="model">giftcard</field>
       <field name="arch" type="xml">
         <kanban class="o_hr_employee_kanban center-block">
-          <field name="name"/>
+          <field name="giftcard_number"/>
           <separator/>
           <templates>
             <t t-name="kanban-box">
               <div style="height:90px" class="oe_kanban_global_click">
-                <b>Número: </b> <field name="name"/>
+                <b>Número: </b> <field name="giftcard_number"/>
                 <br/>
                 <b>Cliente: </b> <field name="partner_id"/>
                 <br/>
@@ -143,14 +143,14 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">giftcard.detalle</field>
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="giftcard_detalle_tree_view1"/>
+      <!-- <field name="view_id" ref="giftcard_detalle_tree_view1"/> -->
       <field name="context">{"search_default_monto":1}</field>  
     </record>
 
     <record model="ir.ui.view" id="gift_card_detalle_search">
     <field name="name">giftcard.detalle.search</field>
     <field name="model">giftcard.detalle</field>
-    <field name="view_id" ref="giftcard_detalle_tree_view1"/>
+    <!-- <field name="view_id" ref="giftcard_detalle_tree_view1"/> -->
     <field name="arch" type="xml">
       <search string = 'search'>
         <filter string="hoy" name="monto" domain="[('monto','>',0),('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>

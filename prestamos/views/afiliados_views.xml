@@ -34,10 +34,10 @@
               	<field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
             	</button>
         		</div>
-						<field name="imagen" widget='image' class="oe_avatar"/>
+						<!-- <field name="imagen" widget='image' class="oe_avatar"/> -->
 						<div class="oe_title">
               <label class="oe_edit_only" for="res_partner_prov_id" string="Afiliado"/>
-              <h2><field name="res_partner_prov_id" widget="res_partner_many2one" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0, 'show_vat': True}" domain="[('supplier','=',True)]"
+              <h2><field name="res_partner_prov_id" widget="res_partner_many2one" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0, 'show_vat': True}"
                     placeholder="Name, TIN, Email, or Reference"/></h2>
               <label class="oe_edit_only" for="cuenta" string="Número de cuenta"/>
                 <field name="cuenta"/>
@@ -110,14 +110,14 @@
 			<field name="arch" type="xml">
       	<kanban class="o_hr_employee_kanban center-block">
 					<field name="id"/>
-					<field name="imagen"/>
+					<!--<field name="imagen"/> -->
 					<field name="name_mostrar"/>
 					<field name="cuenta"/>
 					<separator/>
 					<templates>
 			      <t t-name="kanban-box">
 			      	<div style="height:100px" class="oe_kanban_global_click">
-					 		<img class="o_kanban_image" t-att-src="kanban_image('prestamos.afiliados', 'imagen', record.id.raw_value)" t-att-alt="record.name"/>
+					 		<!-- <img class="o_kanban_image" t-att-src="kanban_image('prestamos.afiliados', 'imagen', record.id.raw_value)" t-att-alt="record.name"/> -->
 	              	<b>Nombre: </b> <field name="name_mostrar"/>
 		             	<br/>
 	              	<b>Cuenta: </b> <field name="cuenta"/>

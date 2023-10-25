@@ -7,6 +7,7 @@ import pytz
 
 class DeductionsEmployee(models.Model):
     _name = "hr.employee.deductions"
+    _description = "description"
 
     name = fields.Char("Deducción")
     period = fields.Integer("Periodo")
@@ -23,6 +24,7 @@ class DeductionsEmployee(models.Model):
 
 class FileEmployee(models.Model):
     _name = "hr.employee.file"
+    _description = "description"
 
     name = fields.Many2one("hr.employee", "Empleado")
     base_salary = fields.Float("Salario Base")
@@ -37,6 +39,7 @@ class FileEmployee(models.Model):
 
 class Spreadsheet(models.Model):
     _name = "hr.employee.spreadsheet"
+    _description = "description"
 
     meses = ["","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
              "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]

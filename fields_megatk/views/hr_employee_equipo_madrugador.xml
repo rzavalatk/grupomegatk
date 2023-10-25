@@ -2,14 +2,15 @@
 <odoo>
 	<data>
 	   	<!-- Form View -->
-	    <record model="ir.ui.view" id="hr_employe_madrugador_mega_form_view">
+	    
+		
+		<record model="ir.ui.view" id="hr_employe_madrugador_mega_form_view">
 	      	<field name="name">hr.employee.madrugador.rmega.form.view</field>
 	      	<field name="model">hr.employee.equipo.madrugador</field>
 	      	<field name="arch" type="xml">
 	        	<form string = "Form Import">
 	          		<sheet>
-	            		<tree>
-	              			<group name="x_datos0">
+	            		<group name="x_datos0">
 				                <group name="x_1">
 				                  	<field name="name"/>
 				                </group>
@@ -20,7 +21,7 @@
 	              			<group>
 	              				<field name="employe_ids" widget="many2many" domain="[('equipo_madrug_id', '=', False)]"/>
 	              			</group>
-	            		</tree>
+	            		
 	          		</sheet>
 	        	</form>
 	      	</field>

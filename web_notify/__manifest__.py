@@ -6,7 +6,7 @@
     'name': 'Web Notify',
     'summary': """
         Send notification messages to user""",
-    'version': '12.0.1.0.1',
+    'version': '14.0.1.0.1',
     'license': 'AGPL-3',
     'author': 'ACSONE SA/NV,'
               'AdaptiveCity,'
@@ -23,5 +23,9 @@
     'demo': [
         'views/res_users_demo.xml'
     ],
+    'assets': {
+        'web_notify/static/src/js/web_client.js',
+        'web_notify/static/src/scss/webclient.scss'
+},
     'installable': True,
 }

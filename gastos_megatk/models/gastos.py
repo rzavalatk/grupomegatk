@@ -9,10 +9,9 @@ class LiquidacionGastos(models.Model):
     _name = "gastos.megatk"
     _inherit = ['mail.thread','mail.activity.mixin']
     _order = 'create_date desc'
+    _description = "description"
 
-
-
-    @api.multi
+    #@api.model_create_multi
     def action_close_dialog(self):
         super(LiquidacionGastos, self).action_close_dialog()
         
@@ -22,8 +21,7 @@ class LiquidacionGastos(models.Model):
         if self.empleado_solicitud:
             self.cuenta_anticipo_id = self.empleado_solicitud.account_id.id
 
-    @api.one
-    @api.depends('detalle_gastos_ids.monto')
+    #@api.depends('detalle_gastos_ids.monto')
     def get_totalgastos(self):
         for gs in self:
             for line in gs.detalle_gastos_ids:
@@ -43,7 +41,7 @@ class LiquidacionGastos(models.Model):
                 gs.activar_caja = True
                 gs.activar_cuenta_gasto = True
 
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         for gastos in self:
             if gastos.state == 'pendiente' or gastos.state == 'aprobado' or gastos.state == 'desembolso' or gastos.state =='liquidado':
@@ -55,7 +53,7 @@ class LiquidacionGastos(models.Model):
     fecha_inicio = fields.Date("Fecha de inicio", required=True, track_visibility='onchange')
     fecha_final = fields.Date("Fecha final", required=True, track_visibility='onchange')
     fecha_aprobacion = fields.Date("Fecha de Aprobación", readonly=True, track_visibility='onchange')
-    empleado_solicitud = fields.Many2one("res.partner", "Solicitante", required=True, track_visibility='onchange')
+    empleado_solicitud = fields.Many2one("res.partner", string="Solicitante", required=True, track_visibility='onchange')
     #line_ids = fields.One2many("stock.requisition.line", "obj_parent", "Lineas")
     state = fields.Selection( [('draft', 'Borrador'),  ('pendiente', 'Pendiente de aprobacíón'), ('aprobado', 'Aprobado'), ('desembolso', 'Desembolsado'),
         ('liquidado', 'Liquidado'), ('rechazado', 'Rechazado')], string="Estado", default='draft')
@@ -101,26 +99,25 @@ class LiquidacionGastos(models.Model):
         if self.banco_debit_id:
             self.monto_anticipo = self.banco_debit_id.total
 
-    @api.multi
+    #@api.model_create_multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
             raise Warning(_('No existe detalle de gastos'))
         self.write({'state': 'pendiente'})
 
-    @api.multi
+    #@api.model_create_multi    
     def rechazar_gastos(self):
         self.write({'state': 'rechazado'})
         
     def rechazar_gastos_admin(self):
         self.rechazar_gastos()
 
-    @api.multi
+    #@api.model_create_multi
     def aprobar_gastos(self):
         self.write({'state': 'aprobado'})
         self.fecha_aprobacion = datetime.now().date()
 
-
-    @api.multi
+    #@api.model_create_multi
     def cancelar_liquidados(self):
         for move in self.move_id:
             move.write({'state': 'draft'})
@@ -129,7 +126,7 @@ class LiquidacionGastos(models.Model):
             line.estado_parent = True
         self.write({'state': 'desembolso'})
 
-    @api.multi
+    #@api.model_create_multi
     def liquidar_gastos(self):
         #if self.total_gastos <= 0:
             #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
@@ -232,11 +229,11 @@ class LiquidacionGastos(models.Model):
         self.move_id = id_move.id
         self.write({'state': 'liquidado'})
 
-    @api.multi
+    #@api.model_create_multi
     def back_draft(self):
         self.write({'state': 'draft'})
 
-    @api.multi
+    #@api.model_create_multi
     def desembolsar_gasto(self):
         if not self.banco_id or self.banco_debit_id:
             raise Warning(_('No se ha asignado cheque o transferencia a esta solicitud de gastos'))
@@ -244,7 +241,7 @@ class LiquidacionGastos(models.Model):
             line.estado_parent = True
         self.write({'state': 'desembolso'})
 
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         if self.state == 'pendiente' or self.state == 'aprobado' or self.state == 'desembolso' or self.state =='liquidado':
             raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
@@ -253,6 +250,7 @@ class LiquidacionGastos(models.Model):
 
 class LineaGastos(models.Model):
     _name = "gastos.lineas.megatk"
+    _description = "description"
 
     obj_parent = fields.Many2one("gastos.megatk", "Gasto")
     gasto_id = fields.Many2one("gastos.megatk.conceptos", "Tipo de gasto")
@@ -262,7 +260,7 @@ class LineaGastos(models.Model):
     monto_comprobante = fields.Float("Monto a liquidar")
     estado_parent = fields.Boolean("Flag")
 
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         if self.obj_parent.state == 'pendiente' or self.obj_parent.state == 'aprobado' or self.obj_parent.state == 'desembolso' or self.obj_parent.state =='liquidado':
             raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))

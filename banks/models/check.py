@@ -11,8 +11,9 @@ class Check(models.Model):
 	_rec_name = 'number'
 	_inherit = ['mail.thread']
 	_order = 'date desc, number desc'
+	_description = "description"
 
-	@api.multi
+	#@api.model_create_multi
 	def print_chek(self):
 		if not self.princhek:
 			self.princhek = True
@@ -241,7 +242,6 @@ class Check(models.Model):
 		self.numero_chek = numer[indixe:indixe+8]
 
 		
-	@api.one
 	def get_msg_number(self):
 		if self.journal_id and self.state == 'draft':
 			flag = False
@@ -313,21 +313,20 @@ class Check(models.Model):
 				}))
 			self.check_lines = lineas
 
-
 	@api.model
 	def create(self, vals):
 		vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
 		check = super(Check, self).create(vals)
 		return check
 
-	@api.multi
+	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated' or move.state == 'anulated':
 				raise Warning(_('No puede eliminar registros contabilizados'))
 		return super(Check, self).unlink()
 
-	@api.one
+
 	@api.depends('check_lines.amount', 'total')
 	def _compute_rest_credit(self):
 		debit_line = 0
@@ -352,12 +351,11 @@ class Check(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-
-	@api.multi
+	#@api.model_create_multi
 	def set_borrador(self):
 		self.write({'state': 'draft'})
 
-	@api.multi
+	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
@@ -365,7 +363,7 @@ class Check(models.Model):
 			#self.update_seq()
 			self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
-	@api.multi
+	#@api.model_create_multi
 	def action_anulate_cheque(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
@@ -373,11 +371,11 @@ class Check(models.Model):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
 
-	@api.multi
+	#@api.model_create_multi
 	def action_validate(self):
 		if not self.cheque_anulado:
 			if not self.number_calc:
-				 raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
+				raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
 		if not self.check_lines:
 			raise Warning(_("No existen detalles de movimientos a registrar"))
 		if self.total < 0:
@@ -399,24 +397,24 @@ class Check(models.Model):
 			'debit': 0.0,
 			'credit': self.total * self.currency_rate,
 			'name': self.name,
-			'account_id': self.journal_id.default_credit_account_id.id,
+			'account_id': self.journal_id.default_account_id.id,
 			'date': self.date,
 			#'company_id': self.company_id.id,
 		}
 		if self.currency_id:
-			if self.journal_id.default_credit_account_id.currency_id :
-				if self.journal_id.default_credit_account_id.currency_id  == self.currency_id:
+			if self.journal_id.default_account_id.currency_id :
+				if self.journal_id.default_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
 						vals_credit["amount_currency"] = 0.0
 					else:
 						vals_credit["currency_id"] = self.currency_id.id
 						vals_credit["amount_currency"] = self.total * -1
-				elif self.journal_id.default_credit_account_id.currency_id  == self.company_id.currency_id:
+				elif self.journal_id.default_account_id.currency_id  == self.company_id.currency_id:
 					vals_credit["currency_id"] = self.currency_id.id
 					vals_credit["amount_currency"] = self.total * -1
 				else:
-					vals_credit["currency_id"] = self.journal_id.default_credit_account_id.currency_id.id
-					tasa = self.journal_id.default_credit_account_id.currency_id .with_context(date=self.date)
+					vals_credit["currency_id"] = self.journal_id.default_account_id.currency_id.id
+					tasa = self.journal_id.default_account_id.currency_id .with_context(date=self.date)
 					vals_credit["amount_currency"] = self.total * tasa.rate * -1
 			else:
 				if self.currency_id == self.company_id.currency_id:
@@ -497,6 +495,7 @@ class Check(models.Model):
 			'ref': self.name,
 			'line_ids': lineas,
 			'state': 'posted',
+			'doc_type': self.doc_type,
 		}
 
 		if self.move_id:
@@ -516,6 +515,7 @@ class Check(models.Model):
 
 class check_line(models.Model):
 	_name = 'banks.check.line'
+	_description = "description"
 
 	check_id = fields.Many2one('banks.check', 'Check')
 	partner_id = fields.Many2one('res.partner', 'Empresa', domain="[('company_id', '=', parent.company_id)]")

@@ -8,12 +8,13 @@ import pytz
 
 class WizarCamaronCuatrero(models.TransientModel):
     _name = "camaro.cuatrero"
+    _description = "description"
 
     date_init = fields.Date("Fecha inicial", required=True)
     date_end = fields.Date("Fecha final", required=True)
     tipo_reporte = fields.Selection([
-        (1, "Llegadas tarde"),
-        (2, "Posibles Cuatreros"),
+        ("1", "Llegadas tarde"),
+        ("2", "Posibles Cuatreros"),
     ], string="Tipo de reporte", required=True)
 
     def _rangeDate(self, dateInit, dateEnd):
@@ -74,7 +75,7 @@ class WizarCamaronCuatrero(models.TransientModel):
             }
 
 
-class WizardHourXtra(models.TransientModel):
+"""class WizardHourXtra(models.TransientModel):
     _name = "hours.xtras"
 
     employee_ids = fields.Many2many(
@@ -88,7 +89,7 @@ class WizardHourXtra(models.TransientModel):
             return False
         return True
 
-    @api.model
+    #@api.model
     def dat_form_custom(self, vals):
         data = self.env["hr.employee.markings"].search(
             [
@@ -110,4 +111,4 @@ class WizardHourXtra(models.TransientModel):
                 "Horas extra": diff
             }
             data_res.append(temp)
-        return data_res
+        return data_res"""

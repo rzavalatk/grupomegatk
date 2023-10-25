@@ -7,13 +7,14 @@ import pytz
 
 class WizardSolicitarPermiso(models.TransientModel):
     _name = 'hr.employee.permisos.wizard'
+    _description = "description"
 
     fecha_inicio = fields.Datetime(string='Desde', required=True, ) 
     fecha_fin = fields.Datetime(string='Hasta', required=True, )
     cargo = fields.Selection([('vaciones', 'Vacaciones'),('deduccion', 'Dedución de sueldo'),('sincargo', 'Sin cargo'),('incapacidad', 'Incapacidad')], default= 'vaciones', copy=False, required=True, track_visibility='onchange')
     reporto = fields.Selection([('anticipado', 'Anticipado'),('llamada', 'Llamada'),('mensaje', 'Mensaje'),('noreporto', 'No reporto')], default= 'anticipado', copy=False, required=True, track_visibility='onchange')
     employe_ids = fields.Many2many(comodel_name='hr.employee', string='Solicitantes', required=True, relation='x_permisos_empleados', column1="employe_id", column2="permiso_id")
-    stock_pick_ids = fields.Many2many(comodel_name="stock.picking",relation="x_stockpicking_impor_product_mega",column1="stock_picking_id", column2="import_mega_id", string="Transferencias",required=True,)
+    #stock_pick_ids = fields.Many2many(comodel_name="stock.picking",relation="x_stockpicking_import_product_mega",column1="stock_picking_id_permisos", column2="import_mega_id_permisos", string="Transferencias",required=True,)
     justificacion = fields.Text('Motivo' ,copy=False,)
     dias = fields.Integer(string='Días', default=1,)
     horas = fields.Integer(string='Horas', default=0,)

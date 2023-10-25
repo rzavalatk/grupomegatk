@@ -35,4 +35,6 @@ in the list view except for the admin user
         'view/disable_export_view.xml',
     ],
     'auto_install': False,
+    
+
 }

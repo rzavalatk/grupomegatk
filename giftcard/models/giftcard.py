@@ -21,30 +21,29 @@ class GiftCard(models.Model):
 			else:
 				if self.company_id:
 					self.currency_id = self.company_id.currency_id.id
-	@api.model
+	
 	def _codigo(self):
 		cod = datetime.now()
 		codigo = str(cod.day) + str(cod.month) + str(cod.year) + str(cod.hour) + str(cod.minute) + str(cod.second) + str(random.randrange(0, 9))
 		return  codigo
 
-	@api.model
-	def create(self, values):
-		cod = datetime.now()
-		codigo = str(cod.day) + str(cod.month) + str(cod.year) + str(cod.hour) + str(cod.minute) + str(cod.second) + str(random.randrange(0, 9))
-		values = {'name': codigo}
-		"""Override default Odoo create function and extend."""
-		# Do your custom logic here
-		return super(GiftCard, self).create(values)
+	@api.model_create_multi
+	def create(self, values_list):
+		for vals in values_list:
+			if vals.get('giftcard_number', ('50000')) == ('50000'):
+				vals['giftcard_number'] = self.env['ir.sequence'].next_by_code('giftcard.number')
+		return super().create(values_list)
 
-	@api.one
+	
 	def get_fecha(self):
 		self.fecha_actual = datetime.now()
 		
 	name = fields.Char('Número', copy=False,)
 	fechaval = fields.Datetime('Fecha validación', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
-	saldo = fields.Float('Saldo', copy=False,)
+	saldo = fields.Float('Saldo:', copy=False,)
+	giftcard_number = fields.Char(string="Numero de giftcard", default="50000", copy=False, required=True, readonly=True)
 	pago = fields.Float('pago', copy=False,)
-	partner_id = fields.Many2one('res.partner', 'Cliente', domain=[('customer','=',True)], copy=False,)
+	partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_customer','=', True)], copy=False,)
 	currency_id = fields.Many2one("res.currency", "Moneda", track_visibility='onchange', copy=False,)
 	state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'),('validado', 'Validado'),('finalizado', 'Finalizado')], string="Estado", default='draft',copy=False, track_visibility='onchange',)
 	company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id,readonly=True, states={'draft': [('readonly', False)]},)
@@ -61,6 +60,7 @@ class GiftCard(models.Model):
 
 	def back_draft(self):
 		self.write({'state': 'draft'})
+
 
 class GiftCardDetalle(models.Model):
 	_name = 'giftcard.detalle'

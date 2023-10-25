@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 class reporte(models.AbstractModel):
 	_name = 'report.banks.mcheck_print'
+	_description = "description"
 
 	def render_html(self, cr, uid, ids, data=None, context=None):
 		self.cr = cr

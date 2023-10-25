@@ -9,6 +9,7 @@ class LiquidacionTarjetas(models.Model):
     _name = "gastos.tarjeta.megatk"
     _inherit = ['mail.thread','mail.activity.mixin']
     _order = 'create_date desc'
+    _description = "description"
     
 
     @api.onchange("currency_id")
@@ -22,7 +23,6 @@ class LiquidacionTarjetas(models.Model):
                 self.currency_rate = 1
                 self.es_moneda_base = True
 
-    @api.one
     @api.depends('detalle_gastos_ids.monto')
     def get_totalgastos(self):
         for gs in self:
@@ -53,17 +53,17 @@ class LiquidacionTarjetas(models.Model):
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
     cotizaciones_ids = fields.Many2many(comodel_name="sale.order",relation="gastos_tarjetas_sale_order",column1="tarjetas_ids",column2="sale_order_ids",string="Cotización")
 
-    @api.multi
+    #@api.model_create_multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
             raise Warning(_('No existe detalle de gastos'))
         self.write({'state': 'pendiente'})
 
-    @api.multi
+    #@api.model_create_multi
     def rechazar_gastos(self):
         self.write({'state': 'rechazado'})
 
-    @api.multi
+    #@api.model_create_multi
     def liquidar_gastos(self):
         #if self.total_gastos <= 0:
             #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
@@ -104,13 +104,11 @@ class LiquidacionTarjetas(models.Model):
         self.debito_id = id_move.id
         self.write({'state': 'liquidado'})
 
-
-    @api.multi
+    #@api.model_create_multi
     def back_draft(self):
         self.write({'state': 'draft'})
 
-
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         if self.state == 'pendiente' or self.state == 'aprobado'  or self.state =='liquidado':
             raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
@@ -118,6 +116,7 @@ class LiquidacionTarjetas(models.Model):
 
 class LineaGastos(models.Model):
     _name = "gastos.tarjeta.lineas.megatk"
+    _description = "description"
 
     obj_parent = fields.Many2one("gastos.tarjeta.megatk", "Gasto")
     name = fields.Char("Descripción")

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
+    
         <record id="checks_paper_format" model="report.paperformat">
             <field name="name">alistosm</field>
             <field name="default" eval="True"/>
@@ -16,6 +16,6 @@
             <field name="header_spacing">10</field>
             <field name="dpi">100</field>
         </record>
-    </data>
+    
 </openerp>
 

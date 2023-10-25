@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class WizardAporteCapital(models.TransientModel):
     _name = 'prestamos.aporte.capital'
+    _description = "description"
     
     abono = fields.Float("Monto a pagar")
     date = fields.Date("Fecha de pago", default=lambda self : fields.Date.today())

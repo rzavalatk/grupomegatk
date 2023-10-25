@@ -72,7 +72,6 @@
       <field name="name">Metas</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">hr.employee.metas</field>
-      <field name="view_type">form</field>
       <field name="view_mode">tree,form</field>
     </record>
     <!-- Form View -->
@@ -82,7 +81,7 @@
       <field name="arch" type="xml">
         <form string = "Form Import">
           <sheet>
-            <tree>
+            
               <group name="x_datos0" col="3">
                 <group name="x_1">
                   <field name="name"/>
@@ -97,7 +96,7 @@
               <group>
                 <field name="employe_ids" widget="many2many" domain="[('equipo_metas_id', '=', False)]"/>
               </group>
-            </tree>
+            
           </sheet>
         </form>
       </field>
@@ -168,7 +167,6 @@
     <field name="name">Metas por equipo</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hr.employee.equipo.metas</field>
-    <field name="view_type">form</field>
     <field name="view_mode">kanban,tree,form</field>
   </record>
 

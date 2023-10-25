@@ -5,14 +5,14 @@ from odoo.exceptions import UserError
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
 
-	@api.multi
+	#@api.model_create_multi
 	def unlink(self):
 		for line in self:
 			if line.state == 'done':
 				raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
 			return super(StockPicking, self).unlink()
 
-	@api.multi
+	#@api.model_create_multi
 	def button_validate(self):
 		message=''
 		if self.picking_type_id.code == 'internal' or self.picking_type_id.code == 'outgoing':
@@ -34,7 +34,7 @@ class StockPicking(models.Model):
 				raise UserError(_(message))
 		return super(StockPicking, self).button_validate()
 
-	@api.multi
+	#@api.model_create_multi
 	def button_borrador(self):
 		self.write({'state': 'draft'})
 		for move in self.move_lines:

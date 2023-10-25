@@ -31,17 +31,24 @@
 <record model="ir.actions.act_window" id="gastos_megatk_conceptos_action">
 <field name="name">Tipos de gastos</field>
 <field name="res_model">gastos.megatk.conceptos</field>
-<field name="view_type">form</field>
-<field name="view_model">tree,form</field>
+<field name="view_mode">tree,form</field>
 </record>
    <!-- Fin de Action de Contratos -->
      <!--  Menu Principal de contratos-->
 
 
-<menuitem  id="submenu_gastos_configuracion" name="Configuración" parent="menu_principal_gastos" sequence="100"/>
+<menuitem  
+	id="submenu_gastos_configuracion" 
+	name="Configuración" 
+	parent="menu_principal_gastos" 
+	sequence="100"/>
 
-<menuitem  id="menu_conceptos" name="Tipo de gastos" action="gastos_megatk_conceptos_action" 
-parent="submenu_gastos_configuracion"  sequence="100"/>
+<menuitem  
+	id="menu_conceptos" 
+	name="Tipo de gastos" 
+	action="gastos_megatk_conceptos_action" 
+	parent="submenu_gastos_configuracion"  
+	sequence="100"/>
 
 
  </data>

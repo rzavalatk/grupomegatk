@@ -13,7 +13,6 @@ class AuditlogAutovacuum(models.TransientModel):
     _name = 'auditlog.autovacuum'
     _description = "Auditlog - Delete old logs"
 
-    @api.model
     def autovacuum(self, days):
         """Delete all logs older than ``days``. This includes:
             - CRUD logs (create, read, write, unlink)

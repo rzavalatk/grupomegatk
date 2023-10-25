@@ -16,7 +16,7 @@ class Settings(models.TransientModel):
             "account_id": data['account_id'],
         }
 
-    @api.model
+    #@api.model
     def get_values(self):
         res = super(Settings, self).get_values()
         IrValues = self.env['ir.config_parameter'].sudo()
@@ -25,7 +25,7 @@ class Settings(models.TransientModel):
         res.update(journal_id=journal_id,account_id=account_id)
         return res
 
-    @api.multi
+    #@api.model_create_multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
         IrValues.set_param('invoice_consignment.journal_id_'+str(self.env.user.company_id.id), self.journal_id.id)

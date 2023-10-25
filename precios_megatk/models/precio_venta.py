@@ -7,6 +7,7 @@ from odoo.exceptions import Warning
 class Precioproducto(models.Model):
     _name = "lista.precios.producto"
     _order = 'name asc'
+    _description = "description"
 
     name = fields.Many2one("lista.precios.tipo.descuento", "Margen", required=True,)
     product_id = fields.Many2one("product.template", "Producto", required=True)

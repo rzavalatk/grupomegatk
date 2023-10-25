@@ -15,7 +15,6 @@
         <record id="crm_todoist_users_action_view" model="ir.actions.act_window">
             <field name="name">Usiarios Todoist</field>
             <field name="res_model">todoist.users</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 

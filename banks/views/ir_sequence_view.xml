@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+	<data> 
 	  <record model="ir.ui.view" id="ir_sequence_vitt_config">
       	<field name="name">ir.sequence.vitt.view.inh</field>
       	<field name="model">ir.sequence</field>

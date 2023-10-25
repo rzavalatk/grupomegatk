@@ -28,11 +28,9 @@ class AuditlogtHTTPSession(models.Model):
                 httpsession.user_id and httpsession.user_id.name or '?',
                 fields.Datetime.to_string(tz_create_date))
 
-    @api.multi
     def name_get(self):
         return [(session.id, session.display_name) for session in self]
 
-    @api.model
     def current_http_session(self):
         """Create a log corresponding to the current HTTP user session, and
         returns its ID. This method can be called several times during the

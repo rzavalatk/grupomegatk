@@ -44,5 +44,10 @@
     <field name="name">Liquidar gastos</field>
 </record>
 
+<record id="grupo_gastos_personal_desembolso" model="res.groups">
+<field name="category_id" ref="module_gastos_personales"/>
+    <field name="name">desembolsar gastos</field>
+</record>
+
 </data>
 </odoo>

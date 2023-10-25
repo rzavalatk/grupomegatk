@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+	
 	<data>
-		<record model="ir.ui.view" id="crm_campo_megatk_view_inh">
+		<!--<record model="ir.ui.view" id="crm_campo_megatk_view_inh">
 	  		<field name="name">crm.lead.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
-	  		<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter" />
+	  		<field name="inherit_id" ref="crm.crm_lead_view_form" />
 				<field name="arch" type="xml">
-					<field name="lost_reason" position="after">
-						<field name="id" string='Ticket'/>
-		      </field>
+						<xpath expr="//form/sheet/group/group/field[@name='lost_reason']" position="after">
+							<field name="id" string="Ticket"/>
+						</xpath>
 				</field>
-	   	</record>
+	   	</record>-->
 	   	<record model="ir.ui.view" id="crm_kanban_campo_megatk_view_inh">
 	  		<field name="name">crm.kanban.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
-				<field name="arch" type="xml">
+				<field name="arch" type="xml"> 	
 					<field name="name" position="before">
 						<div>
 	            <strong class="o_kanban_record_title">Ticket <field name="id"/></strong>
@@ -28,12 +29,12 @@
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
 				<field name="arch" type="xml">
-					<field name="create_date" position="after">
+					<field name="name" position="before">
 	          	<field name="id" string="Ticket"/>
 	        </field>
 			</field>
    		</record>
-   		<record model="ir.ui.view" id="crm_case_form_campo_megatk_view_inh">
+   		<!--<record model="ir.ui.view" id="crm_case_form_campo_megatk_view_inh">
 	  		<field name="name">crm.case.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_form_view_leads" />
@@ -79,12 +80,11 @@
 				    </page>
 				  </xpath>
 			</field>
- 		</record>
-
+ 		</record> -->
    		<record model="ir.ui.view" id="crm_form_campo_megatk_view_inh">
 	  		<field name="name">crm.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
-	  		<field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+	  		<field name="inherit_id" ref="crm.crm_lead_view_form" />
 				<field name="arch" type="xml">
 					<header>
         		<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" attrs='{"invisible": [["tipo_soporte","=","llamada"]]}'/>  
@@ -92,12 +92,12 @@
 					<field name="name" position="before">
 		      	<h1>Ticket: <field name="id"/></h1>
 		      </field>
-		      <xpath expr="//form[1]/sheet[1]/div[4]/h1[1]/field[@name='name']" position="attributes">
+		      <xpath expr="//form/sheet/div/h1/field[@name='name']" position="attributes">
 				    <attribute name="attrs">{}</attribute>
 				    <attribute name="readonly">1</attribute>
 				    <attribute name="required">1</attribute>
 				  </xpath>
-		      <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+		      <xpath expr="//form/sheet/notebook" position="inside">
 				    <page name="soportetecnico" string="Soporte Tecnico">
 					     <group name="soporte">
 					        <group name="data1">
@@ -108,8 +108,8 @@
 					        	<field name="proposito" attrs='{"invisible": [("tipo_soporte", "not in", ["visita", "visita_sin_costo", "llamada"])]}'/>
 					        </group>	
 					        <group name="data2">
-					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
-					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": ["|", "|", ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
+					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": [ ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
+					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": [ ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
 					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"]]}'/>
 					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
@@ -148,6 +148,8 @@
   				</xpath>
 			</field>
  		</record>
+
+
  		
  		<record model="ir.ui.view" id="crm_form_simple_megatk_view_inh">
 	  		<field name="name">crm.simple.campomegatk.view</field>
@@ -163,6 +165,23 @@
 	      		</field>
 			</field>
 	   	</record>
+
+		<record id="crm_lead_tipo_view_form" model="ir.ui.view">
+			<field name="name">crm_lead_tipo.view.form</field>
+			<field name="model">crm.lead.tipo</field>
+			<field name="arch" type="xml">
+				<form string="Titulo oportunidad">
+					<sheet>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="active" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
 	   	
  		<record model="ir.actions.act_window" id="action_crm_lead_marca">
 			<field name="name">Marcas</field>

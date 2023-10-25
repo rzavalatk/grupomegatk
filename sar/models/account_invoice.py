@@ -13,10 +13,10 @@ TYPE2JOURNAL = {
 }
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
-    @api.multi
+    #@api.model_create_multi
     @api.depends("company_id")
     def _default_fiscal_validated(self, company_id):
         if company_id:
@@ -26,29 +26,30 @@ class AccountInvoice(models.Model):
             else:
                 return False
 
-    @api.one
-    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
-                 'currency_id', 'company_id', 'date_invoice', 'type', 'date')
-    def _compute_amount_vt(self):
+    @api.depends('line_ids.price_subtotal', 'line_ids.price_total',
+                 'currency_id', 'company_id', 'invoice_date', 'move_type', 'date')
+    def _compute_price_total_vt(self):
         descuento = 0
         exento = 0
         gravado = 0
         subtotal = 0
         isv = 0
-        for line in self.invoice_line_ids:
+        for line in self.line_ids:
             descuento = descuento + ((line.price_unit * line.quantity) * (line.discount / 100))
             subtotal = subtotal + line.price_subtotal
-            isv = isv + line.price_tax
-            if line.price_tax == 0:
-                exento = exento + line.price_subtotal
-            else:
-                gravado = gravado + line.price_subtotal
+            for tax in line.tax_ids:  # Iterar sobre los impuestos aplicados en la línea
+                isv = isv + tax.amount
+
+                if tax.amount == 0:
+                    exento = exento + line.price_subtotal
+                else:
+                    gravado = gravado + line.price_subtotal
 
         self.descuento = descuento
         self.exento = exento
         self.gravado = gravado
 
-    @api.multi
+    @api.model_create_multi
     @api.depends("journal_id")
     def _default_sequence(self, journal_id):
         flag = 0
@@ -57,7 +58,7 @@ class AccountInvoice(models.Model):
             ('active', '=', True),
             ('journal_id', '=', journal_id),
             '|',
-            ('code', '=', self.type),
+            ('code', '=', self.move_type),
             ('code', '=', 'in_refund'),
             '|',
             ('user_ids', 'in', self.user_id.id),
@@ -70,28 +71,27 @@ class AccountInvoice(models.Model):
             return self.env['ir.sequence'].search(domain)
 
     fiscal_control = fields.Boolean('Fiscal Control', help='If is a Fiscal Document')
-    amount_total_text = fields.Char("Amount Total", compute = 'get_totalt', default='Cero')
+    price_total_total_text = fields.Char("price_total", compute = 'get_totalt', default='Cero')
     # Unique number of the invoice, computed automatically when the invoice is created
     internal_number = fields.Char(string='Número interno', default=False, help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
-                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
+                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
     x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A");
     x_registro_exonerado = fields.Char("Registro exonerado", default="N/A");
     x_registro_sag = fields.Char("Registro del SAG", default="N/A");
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
-    descuento = fields.Monetary(string='Descuento', store=True, readonly=True, compute='_compute_amount_vt')
-    exento = fields.Monetary(string='Exento', store=True, readonly=True, compute='_compute_amount_vt')
-    gravado = fields.Monetary(string='Gravado', store=True, readonly=True, compute='_compute_amount_vt')
+    descuento = fields.Monetary(string='Descuento', store=True, readonly=True, compute='_compute_price_total_vt')
+    exento = fields.Monetary(string='Exento', store=True, readonly=True, compute='_compute_price_total_vt')
+    gravado = fields.Monetary(string='Gravado', store=True, readonly=True, compute='_compute_price_total_vt')
     
-    @api.one
     @api.depends('journal_id')
     def get_totalt(self):
-        self.amount_total_text=''
+        self.price_total_total_text=''
 
         if self.currency_id:
-            self.amount_total_text=self.to_word(self.amount_total,self.currency_id.name)
+            self.price_total_total_text=self.to_word(self.price_total_total,self.currency_id.name)
         else:
-            self.amount_total_text =self.to_word(self.amount_total,self.user_id.company_id.currency_id.name)
+            self.price_total_total_text =self.to_word(self.price_total_total,self.user_id.company_id.currency_id.name)
         return True
 
     def to_word(self,number, mi_moneda):
@@ -154,18 +154,18 @@ class AccountInvoice(models.Model):
             {'country': u'Reino Unido', 'currency': 'GBP', 'singular': u'LIBRA', 'plural': u'LIBRAS', 'symbol': u'£'}
             )
         if mi_moneda != None:
-        	try:
-        		moneda = list(filter(lambda x: x['currency'] == mi_moneda, MONEDAS))
-        		moneda = moneda[0]
-        		if number < 2:
-        			moneda = moneda['singular']
-        		else:
-        			moneda = moneda['plural']
-        	except:
-        		return "Tipo de moneda inválida"
+            try:
+                moneda = list(filter(lambda x: x['currency'] == mi_moneda, MONEDAS))
+                moneda = moneda[0]
+                if number < 2:
+                    moneda = moneda['singular']
+                else:
+                    moneda = moneda['plural']
+            except:
+                return "Tipo de moneda inválida"
         else:
-        	moneda = ""
-		        
+            moneda = ""
+                
         converted = ''
         if not (0 < number < 999999999):
             return 'No es posible convertir el numero a letras'
@@ -279,8 +279,7 @@ class AccountInvoice(models.Model):
             s = s[:i] +  ',' + s[i:]
         return s
 
-    @api.model
-    def create(self, vals):
+    """def create(self, vals):
         if not vals.get("sequence_ids"):
             vals["fiscal_control"] = 0
             vals["sequence_ids"] = 0
@@ -300,29 +299,30 @@ class AccountInvoice(models.Model):
                     ('is_fiscal_sequence', '=', True),
                     ('active', '=', True),
                     ('journal_id', '=', vals.get("journal_id")),
-                    ('code', '=', vals.get("type"))]
+                    ('code', '=', vals.get("move_type"))]
                 sequence = self.env["ir.sequence"].search(domain)
                 for count in sequence:
                     flag += 1
                 if flag == 1:
                     vals["sequence_ids"] = self.env['ir.sequence'].search(domain).id
-        invoice = super(AccountInvoice, self).create(vals)
-        return invoice
+        invoice = super(AccountMove, self).create(vals)
+        return invoice"""
+    
     @api.onchange('journal_id')
     def _onchange_journal_inh(self):
         self.fiscal_control = self._default_fiscal_validated(self.company_id.id)
         self.sequence_ids = self._default_sequence(self.journal_id.id)
 
-    @api.multi
+    @api.model_create_multi
     def action_date_assign(self):
-        res = super(AccountInvoice, self).action_date_assign()
+        res = super(AccountMove, self).action_date_assign()
         if self.state:
-            if not self.date_invoice:
-                self.date_invoice=date.today()
+            if not self.invoice_date:
+                self.invoice_date=date.today()
             if self.sequence_ids:
-                if not self.date_invoice:
+                if not self.invoice_date:
                     raise Warning(_('No existe fecha establecida para esta factura'))
-                if self.date_invoice > self.sequence_ids.expiration_date:
+                if self.invoice_date > self.sequence_ids.expiration_date:
                     raise Warning(_('The Expiration Date for this fiscal sequence is %s ') % (self.sequence_ids.expiration_date))
                 if self.sequence_ids.vitt_number_next_actual > self.sequence_ids.max_value:
                     raise Warning(_('The range of sequence numbers is finished'))
@@ -347,11 +347,11 @@ class AccountInvoice(models.Model):
         #    ]
         #    self.journal_id = self.env['account.journal'].search(domain).id
 
-    @api.multi
+    @api.model_create_multi
     def action_move_create(self):
-        res = super(AccountInvoice, self).action_move_create()
+        res = super(AccountMove, self).action_move_create()
         for inv in self:
-            if inv.move_id and inv.type == 'out_invoice' or inv.type == 'out_refund':
+            if inv.move_id and inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
                 if not inv.internal_number:
                     if self.fiscal_control and self.sequence_ids:
                         new_name = self.sequence_ids.with_context(ir_sequence_date=inv.move_id.date).next_by_id()
@@ -361,14 +361,14 @@ class AccountInvoice(models.Model):
                     inv.move_id.write({'name': inv.internal_number})
         return res
 
-    @api.onchange('cash_rounding_id', 'invoice_line_ids', 'tax_line_ids', 'amount_total')
+    @api.onchange('cash_rounding_id', 'invoice_line_ids', 'tax_line_ids', 'price_total_total')
     def _onchange_cash_rounding_vt(self):
         descuento = 0
         exento = 0
         gravado = 0
         for line in self.invoice_line_ids:
             descuento = descuento + ((line.price_unit * line.quantity) * (line.discount / 100))
-            if line.price_tax == 0:
+            if line.tax_ids.amount == 0:
                 exento = exento + line.price_subtotal
             else:
                 gravado = gravado + line.price_subtotal

@@ -8,13 +8,32 @@ class AccountPayment(models.Model):
     _name = "account.payment.invoices.custom"
     _order = 'effective_date asc'
     _inherit = ['mail.thread']
+    _description = "description"
+    
+    def _get_diferencia(self):
+            if self.line_ids:
+                line_amount = 0.0
+                for linea in self.line_ids:
+                    line_amount += linea.monto_pago
+                    
+                self.diferencia = self.amount - line_amount
 
-    def get_diferencia(self):
-        if self.invoice_ids:
-            line_amount = 0.0
-            for linea in self.invoice_ids:
-                line_amount += linea.monto_pago
-            self.diferencia = self.amount - line_amount
+    bank_reference = fields.Char('Referencia de pago', required=True)
+    journal_id = fields.Many2one("account.journal", "Banco", required=True, states={'draft': [('readonly', False)]}, domain=[('type', '=', 'bank')])
+    effective_date = fields.Date('Fecha efectiva', help='Fecha del deposito del cheque', required=True, states={'draft': [('readonly', False)]})
+    line_ids = fields.One2many('account.payment.line.custom', 'pago_id', string="Facturas", readonly=False, states={'draft': [('readonly', False)]})
+    partner_id = fields.Many2one("res.partner", "Cliente", required=True, states={'draft': [('readonly', False)]})
+    amount = fields.Float("Monto a pagar", required=True, states={'draft': [('readonly', False)]})
+    date = fields.Date("Fecha de registro", required=True, states={'draft': [('readonly', False)]})
+    name = fields.Char("Referencia", default= "/")
+    move_id = fields.Many2one('account.move', 'Asiento Contable', ondelete='restrict', readonly=True)
+    state = fields.Selection([('draft', 'Borrador'), ('paid', 'Pagado'), ('cancel', 'Cancelado')], string='Estado', index=True, readonly=True, default='draft')
+    notes = fields.Text("Notas")
+    diferencia = fields.Float("Diferencia", compute=_get_diferencia)
+    currency_id = fields.Many2one('res.currency', string='Moneda')
+    company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
+    es_moneda_base = fields.Boolean("Es moneda base")
+    currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
     @api.onchange("currency_id")
     def onchangecurrency(self):
@@ -38,33 +57,21 @@ class AccountPayment(models.Model):
     def get_name_seq_cliente(self):
         self.name = self.env['ir.sequence'].get('pago')
 
-    bank_reference = fields.Char('Referencia de pago', required=True)
-    journal_id = fields.Many2one("account.journal", "Banco", required=True, states={'draft': [('readonly', False)]}, domain=[('type', '=', 'bank')])
-    effective_date = fields.Date('Fecha efectiva', help='Fecha del deposito del cheque', required=True, states={'draft': [('readonly', False)]})
-    invoice_ids = fields.One2many('account.payment.line.custom', 'pago_id', string="Facturas", readonly=False, states={'draft': [('readonly', False)]})
-    partner_id = fields.Many2one("res.partner", "Cliente", required=True, states={'draft': [('readonly', False)]})
-    amount = fields.Float("Monto a pagar", required=True, states={'draft': [('readonly', False)]})
-    date = fields.Date("Fecha de registro", required=True, states={'draft': [('readonly', False)]})
-    name = fields.Char("Referencia", default= "/")
-    move_id = fields.Many2one('account.move', 'Asiento Contable', ondelete='restrict', readonly=True)
-    state = fields.Selection([('draft', 'Borrador'), ('paid', 'Pagado'), ('cancel', 'Cancelado')], string='Estado', index=True, readonly=True, default='draft')
-    notes = fields.Text("Notas")
-    diferencia = fields.Float("Diferencia", compute=get_diferencia)
-    currency_id = fields.Many2one('res.currency', string='Moneda')
-    company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
-    es_moneda_base = fields.Boolean("Es moneda base")
-    currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
+    """def create(self, vals):
+        vals["name"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
+        check = super(BanksPayment, self).create(vals)
+        return check"""
 
-    @api.multi
+    #@api.model_create_multi
     def get_invoices(self):
-        invoice_ids = self.env["account.invoice"].search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open'), 
-            ('currency_id', '=', self.currency_id.id), ('type','=','out_invoice')])
-        facturas = self.env["account.payment.line.custom"]
-        if not invoice_ids:
+        line_ids = self.env["account.move"].search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open'), ('currency_id', '=', self.currency_id.id), ('type','=','in_invoice')])
+        facturas = self.env["banks.payment.line.custom"]
+        if not line_ids:
             raise Warning(_('No existen facturas para este cliente'))
+        
         dict_invoices = {}
-        self.invoice_ids.unlink()
-        for invoice in invoice_ids:
+        self.line_ids.unlink()
+        for invoice in line_ids:
             vals = {
                 'pago_id': self.id,
                 'partner_id': self.partner_id.id,
@@ -79,14 +86,14 @@ class AccountPayment(models.Model):
             }
             facturas.create(vals)
 
-    @api.multi
+    #@api.model_create_multi
     def post_payment(self):
         if self.amount <= 0:
             raise Warning(_('El monto debe de ser mayor que cero'))
-        if not self.invoice_ids:
+        if not self.line_ids:
             raise Warning(_('No existen facturas para registrar pagos'))
         total_line = 0
-        for linea in self.invoice_ids:
+        for linea in self.line_ids:
             total_line += linea.monto_pago
         if not round(total_line, 2) == round(self.amount, 2):
             raise Warning(_('Existen diferencias, verifique el monto de las facturas'))
@@ -94,9 +101,9 @@ class AccountPayment(models.Model):
         lineas = []
         to_reconcile_ids = {}
         to_reconcile_lines = self.env['account.move.line']
-        for factura in self.invoice_ids:
+        for factura in self.line_ids:
             if factura.currency_id != self.currency_id:
-                 raise Warning(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
+                raise Warning(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
             if factura.monto_pago > 0:
                 vals_interes = {
                     'debit': 0.0,
@@ -107,37 +114,37 @@ class AccountPayment(models.Model):
                     'date': self.effective_date,
                     'invoice_id': factura.invoice_id.id,
                 }
-                if self.journal_id.currency_id:
-                    vals_interes["currency_id"] = self.currency_id.id
-                    vals_interes["amount_currency"] = factura.monto_pago 
-                lineas.append((0, 0, vals_interes))
-                movelines = factura.invoice_id.move_id.line_ids
-                for line in movelines:
-                    if line.account_id.id == factura.invoice_id.account_id.id:
-                        to_reconcile_lines += line
+            if self.journal_id.currency_id:
+                vals_interes["currency_id"] = self.currency_id.id
+                vals_interes["amount_currency"] = factura.monto_pago 
+            lineas.append((0, 0, vals_interes))
+            movelines = factura.invoice_id.move_id.line_ids
+            for line in movelines:
+                if line.account_id.id == factura.invoice_id.account_id.id:
+                    to_reconcile_lines += line
         vals_banco = {
-                'debit': self.amount * self.currency_rate,
-                'credit': 0.0,
-                'amount_currency': 0.0,
-                'name': 'Pago de prestamo',
-                'account_id': self.journal_id.default_debit_account_id.id,
-                'partner_id': self.partner_id.id,
-                'date': self.effective_date,
-                'invoice_id': factura.invoice_id.id,
+            'debit': self.amount * self.currency_rate,
+            'credit': 0.0,
+            'amount_currency': 0.0,
+            'name': 'Pago de prestamo',
+            'account_id': self.journal_id.default_debit_account_id.id,
+            'partner_id': self.partner_id.id,
+            'date': self.effective_date,
+            'invoice_id': factura.invoice_id.id,
         }
         if self.journal_id.currency_id:
-            vals_interes["currency_id"] = self.currency_id.id
-            vals_interes["amount_currency"] = self.amount * -1
+            vals_banco["currency_id"] = self.currency_id.id
+            vals_banco["amount_currency"] = self.amount * -1
         lineas.append((0, 0, vals_banco))
         values = {
             'journal_id': self.journal_id.id,
             'date': self.effective_date,
             'ref': 'Pago de facturas',
             'line_ids': lineas,
-        }
+            }
         id_move = account_move.create(values)
         if id_move:
-            for invs in self.invoice_ids:
+            for invs in self.line_ids:
                 if invs.monto_pago > 0:
                     self.reconciliar(invs.invoice_id.id, id_move.id)
             self.write({'move_id': id_move.id, 'state': 'paid'})
@@ -161,6 +168,7 @@ class AccountPayment(models.Model):
 
 class Payemtline(models.Model):
     _name = "account.payment.line.custom"
+    _description = "description"
 
     pago_id = fields.Many2one("account.payment.invoices.custom", "Pago")
     partner_id = fields.Many2one("res.partner", "Cliente")
@@ -168,20 +176,20 @@ class Payemtline(models.Model):
     date_invoice = fields.Date('Fecha de factura')
     date_due = fields.Date('Fecha de vencimiento')
     name = fields.Char("Referencia")
-    invoice_id = fields.Many2one('account.invoice', string="Invoices", readonly=False)
+    invoice_id = fields.Many2one('account.move', string="Invoices", readonly=False)
     amount_total = fields.Float("Total de factura")
     residual = fields.Float("Saldo de pendiente")
     monto_pago = fields.Float("Monto a pagar")
     state = fields.Selection([
-            ('draft', 'Draft'),
-            ('proforma', 'Pro-forma'),
-            ('proforma2', 'Pro-forma'),
-            ('open', 'Open'),
-            ('paid', 'Paid'),
-            ('cancel', 'Cancelled'),
-        ], string='Status', index=True, readonly=True, default='draft')
+        ('draft', 'Draft'),
+        ('proforma', 'Pro-forma'),
+        ('proforma2', 'Pro-forma'),
+        ('open', 'Open'),
+        ('paid', 'Paid'),
+        ('cancel', 'Cancelled'),
+    ], string='Status', index=True, readonly=True, default='draft')
     currency_id = fields.Many2one('res.currency', string='Moneda', related="invoice_id.currency_id")
-    
+
     @api.onchange("monto_pago")
     def validated_amount(self):
         if self.monto_pago > self.residual:

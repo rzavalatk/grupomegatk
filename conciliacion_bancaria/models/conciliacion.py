@@ -42,7 +42,6 @@ class ConciliacionBancaria(models.Model):
     saldo_inicial = fields.Float(string="Saldo Inicial")
 
 
-    @api.one
     @api.depends('conciliacion_line.debe', 'conciliacion_line.haber', 'saldo_final', 'saldo_inicial')
     def _compute_rest_credit(self):
         for concil in self:
@@ -144,6 +143,7 @@ class ConciliacionBancaria(models.Model):
 
 class Debitline(models.Model):
     _name = 'conicliacion.bancaria.line'
+    _description = "description"
 
     conciliacion_id = fields.Many2one('conicliacion.bancaria', 'Conciliación')
     move_id = fields.Many2one("account.move", "Movimiento")

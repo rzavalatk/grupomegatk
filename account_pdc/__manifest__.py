@@ -3,7 +3,7 @@
 ##############################################################################
 {
     'name': 'Gestión de Pago de clientes',
-    'version': '10.0.1.0',
+    'version': '14.0.1.0',
     'author': 'César Alejandro Rodriguez',
     'company': 'Honduras Open Spurce',
     'category': 'Accounting',

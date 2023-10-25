@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <record id="account_invoice_expire_tree" model="ir.ui.view">
-            <field name="name">account.invoice.expire.tree</field>
-            <field name="model">account.invoice.expire</field>
+        <record id="account_move_expire_tree" model="ir.ui.view">
+            <field name="name">account.move.expire.tree</field>
+            <field name="model">account.move.expire</field>
             <field name="arch" type="xml">
                 <tree string="Facturas Vencidas">
                     <field name="name" />
@@ -14,9 +14,9 @@
             </field>
         </record>
 
-        <record id="account_invoice_expire_view_form" model="ir.ui.view">
-            <field name="name">account.invoice.expire.view.form</field>
-            <field name="model">account.invoice.expire</field>
+        <record id="account_move_expire_view_form" model="ir.ui.view">
+            <field name="name">account.move.expire.view.form</field>
+            <field name="model">account.move.expire</field>
             <field name="arch" type="xml">
                 <form string="Facturas Vencidas">
                     <header>
@@ -65,15 +65,15 @@
                             <page string="Facturas">
                                 <field name="facturas_ids" nolabel="1" readonly="1">
                                     <tree string="Facturas">
-                                        <field name="partner_id" string="Cliente" />
-                                        <field name="date_invoice" string="Fecha" />
-                                        <field name="date_due" string="Fecha" />
-                                        <field name="number" />
+                                       <field name="partner_id" string="Cliente" />
+                                        <field name="invoice_date" string="Fecha" />
+                                        <field name="name" />
                                         <field name="user_id" />
-                                        <field name="amount_total_signed" string="Total" sum="Total"/>
-                                        <field name="residual" string="Saldo" sum="Total" />
+                                        <field name="amount_untaxed_signed" string="Total sin impuesto" sum="Total" />
+                                        <field name="amount_tax" string="Impuesto" sum="Total" />
+                                        <field name="amount_total" string="Total" sum="Total"/>
+                                        <field name="amount_residual" string="Saldo" sum="Total" />
                                         <field name="state" />
-                                        <field name="state_expired" />
                                     </tree>
                                 </field>
                             </page>
@@ -81,12 +81,12 @@
                                 <field name="facturas_ids_customers" nolabel="1" readonly="1">
                                     <tree string="Facturas">
                                         <field name="partner_id" string="Cliente" />
-                                        <field name="date_invoice" string="Fecha" />
-                                        <field name="date_due" string="Fecha" />
-                                        <field name="number" />
+                                        <field name="invoice_date" string="Fecha" />
+                                        <field name="invoice_date_due" string="Fecha" />
+                                        <field name="name" />
                                         <field name="user_id" />
                                         <field name="amount_total_signed" string="Total" sum="Total"/>
-                                        <field name="residual" string="Saldo" sum="Total" />
+                                        <field name="amount_residual" string="Saldo" sum="Total" />
                                         <field name="state" />
                                         <field name="state_expired" />
                                     </tree>
@@ -100,10 +100,9 @@
 
         <record id="account_invoice_expire_action" model="ir.actions.act_window">
             <field name="name">Facturas Vencidas</field>
-            <field name="res_model">account.invoice.expire</field>
+            <field name="res_model">account.move.expire</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_type">form</field>
         </record>
 
         <!-- <record id="account_invoice_expire_line_action" model="ir.actions.act_window">

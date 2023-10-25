@@ -34,11 +34,9 @@ class AuditlogHTTPRequest(models.Model):
                 httprequest.name or '?',
                 fields.Datetime.to_string(tz_create_date))
 
-    @api.multi
     def name_get(self):
         return [(request.id, request.display_name) for request in self]
 
-    @api.model
     def current_http_request(self):
         """Create a log corresponding to the current HTTP request, and returns
         its ID. This method can be called several times during the
