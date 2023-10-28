@@ -26,6 +26,6 @@
         'views/hr_views.xml',
         'views/hr_employee_equipo_metas.xml',
         'views/hr_metas.xml',
-        'security/security.xml',
+        'security/security.xml', 
     ]
 }
