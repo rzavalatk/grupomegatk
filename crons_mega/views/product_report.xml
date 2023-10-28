@@ -83,7 +83,6 @@
             id="product_report_menu"
             name="Reporte de Marcas"
             action="product_report_action"
-            groups="planilla_y_metas.admin_functions"
             parent="account.account_reports_management_menu"
             sequence="23"/>
     </data>

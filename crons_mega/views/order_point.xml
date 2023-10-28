@@ -71,7 +71,6 @@
             id="orderpoint_review_rules_menu" 
             name="Revisar Reglas de Abastecimiento" 
             action="orderpoint_review_rules_action" 
-            groups="planilla_y_metas.admin_functions" 
             parent="stock.menu_stock_inventory_control" 
             sequence="16" 
         />
