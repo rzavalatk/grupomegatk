@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <record id="res_partner_limits_vandedor" model="ir.ui.view">
+        <!--<record id="res_partner_limits_vandedor" model="ir.ui.view">
             <field name="name">res.partner.limits.vandedor</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
@@ -12,7 +12,7 @@
                 </xpath>
                 
             </field>
-        </record>
+        </record>-->
 
         <record id="account_move_limits_vandedor" model="ir.ui.view">
             <field name="name">account.move.limits.vandedor</field>
