@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_draft']" position="after">
                     <button string="Probar" name="get_payments_today" type="object" class="oe_highlight"/>
-                </xpath>
+                </xpath> 
             </field>
         </record>
     </data>
