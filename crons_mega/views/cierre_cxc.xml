@@ -118,6 +118,6 @@
             <field name="code">action=model.go_to_view_tree()</field>
         </record>
 
-        <menuitem id="account_cierre_cxc_menu" name="Cierre Diario CXC" action="account_cierre_cxc_action" groups="planilla_y_metas.admin_functions" parent="account.menu_finance_receivables" sequence="16" />
+        <menuitem id="account_cierre_cxc_menu" name="Cierre Diario CXC" action="account_cierre_cxc_action" parent="account.menu_finance_receivables" sequence="16" />
     </data>
 </odoo>

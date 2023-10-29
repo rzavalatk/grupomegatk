@@ -113,7 +113,7 @@
             <field name="view_type">form</field>
         </record> -->
 
-        <menuitem id="account_invoice_expire_menu" name="Facturas Vencidas" action="account_invoice_expire_action" groups="planilla_y_metas.admin_functions" parent="account.account_management_menu" sequence="11"/>
+        <menuitem id="account_invoice_expire_menu" name="Facturas Vencidas" action="account_invoice_expire_action" parent="account.account_management_menu" sequence="11"/>
         <!-- <menuitem id="account_invoice_expire_line_menu" name="Facturas Vencidas Lineas" action="account_invoice_expire_line_action" groups="planilla_y_metas.admin_functions" parent="account.account_management_menu" sequence="12"/> -->
     </data>
 </odoo>
