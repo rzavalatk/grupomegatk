@@ -63,7 +63,7 @@ class Saleline(models.Model):
                                     line.precio_id = lista.id
 
     #@api.model
-    def create(self, values):
+    """def create(self, values):
         line = super(Saleline, self).create(values)
         preciolista = self.env['lista.precios.producto']
         preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
@@ -72,8 +72,33 @@ class Saleline(models.Model):
             porcentaje=round(porcentaje,2)
             if porcentaje >= lista.descuento:
                 line.precio_id = lista.id
-        return line
-    
+        return line"""
+        
+    @api.model_create_multi
+    def create(self, values):
+        lines = super(Saleline, self).create(values)
+        preciolista = self.env['lista.precios.producto']
+        
+        for line in lines:
+            preciodefaul = preciolista.search([('product_id.id', '=', line.product_id.product_tmpl_id.id)])
+            
+            # Inicializa las variables para el mejor resultado
+            best_discount = -1
+            best_price_id = None
+            
+            for lista in preciodefaul:
+                porcentaje = (((line.price_unit - line.product_id.list_price) * 100) / line.product_id.list_price)
+                porcentaje = round(porcentaje, 2)
+                if porcentaje >= lista.descuento:
+                    if lista.descuento > best_discount:
+                        best_discount = lista.descuento
+                        best_price_id = lista.id
+            
+            if best_price_id:
+                line.precio_id = best_price_id
+            
+        return lines
+
     #@api.model_create_multi
     def write(self, values):
         super(Saleline, self).write(values)
