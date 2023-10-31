@@ -18,7 +18,7 @@
     'depends': ['base','account','sale'],
 
     'data': [
-        
+        'security/groups.xml',
         'views/account_payment_term.xml',
     ],
 }

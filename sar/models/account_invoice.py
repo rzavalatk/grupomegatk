@@ -45,9 +45,9 @@ class AccountMove(models.Model):
                 else:
                     gravado = gravado + line.price_subtotal
 
-        self.descuento = descuento
+        #self.descuento = descuento
         self.exento = exento
-        self.gravado = gravado
+        #self.gravado = gravado
 
     @api.model_create_multi
     @api.depends("journal_id")
@@ -89,9 +89,9 @@ class AccountMove(models.Model):
         self.price_total_total_text=''
 
         if self.currency_id:
-            self.price_total_total_text=self.to_word(self.price_total_total,self.currency_id.name)
+            self.price_total_total_text=self.to_word(self.amount_total,self.currency_id.name)
         else:
-            self.price_total_total_text =self.to_word(self.price_total_total,self.user_id.company_id.currency_id.name)
+            self.price_total_total_text =self.to_word(self.amount_totall,self.user_id.company_id.currency_id.name)
         return True
 
     def to_word(self,number, mi_moneda):
@@ -355,10 +355,10 @@ class AccountMove(models.Model):
                 if not inv.internal_number:
                     if self.fiscal_control and self.sequence_ids:
                         new_name = self.sequence_ids.with_context(ir_sequence_date=inv.move_id.date).next_by_id()
-                        inv.move_id.write({'name': new_name})
+                        inv.move_id.write({'name': self.invoice_date})
                         inv.write({'internal_number': new_name})
                 else:
-                    inv.move_id.write({'name': inv.internal_number})
+                    inv.move_id.write({'name': inv.move_id.date})
         return res
 
     @api.onchange('cash_rounding_id', 'invoice_line_ids', 'tax_line_ids', 'price_total_total')
