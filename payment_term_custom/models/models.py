@@ -13,8 +13,8 @@ class Facturas(models.Model):
     _inherit = "account.move"
     
     #@api.one
-    #def _payment_term_compute(self):
-    #    self.payment_term_compute = self.payment_term.sudo().name
+    def _payment_term_compute(self):
+        self.payment_term_compute = self.payment_term.sudo().name
         
     
     payment_term_compute = fields.Char("Plazo de pago(computado)",compute=_payment_term_compute)
