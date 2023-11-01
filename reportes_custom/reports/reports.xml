@@ -3,7 +3,7 @@
 	<data>
 		<report
 			id="account_factura_custom"
-			model="account.invoice"
+			model="account.move"
 			string="Factura"
 			name="reportes_custom.factura_custom_print_view"
 			file="reportes_custom.factura_custom_print_view"
@@ -13,7 +13,7 @@
 
 		<report
 			id="account_factura_custom_printex"
-			model="account.invoice"
+			model="account.move"
 			string="Factura printex"
 			name="reportes_custom.factura_custom_printe_view"
 			file="reportes_custom.factura_custom_printe_view"
@@ -23,7 +23,7 @@
 
 		<report
 			id="account_factura_pos_custom"
-			model="account.invoice"
+			model="account.move"
 			string="Factura Contado"
 			name="reportes_custom.factura_pos_custom_print_view"
 			file="reportes_custom.factura_pos_custom_print_view"

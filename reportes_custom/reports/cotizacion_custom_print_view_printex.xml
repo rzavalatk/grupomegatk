@@ -40,7 +40,7 @@
 										<td></td>
 									</tr>
 									<tr>
-										<td style="padding: 2px; border: 1px solid #165843; text-align: center; vertical-align: middle; width:75px; font-family:'Times New Roman'; font-size:12pt; color: #165843;"><span t-field="o.sudo().payment_term_id"/></td>
+										<td style="padding: 2px; border: 1px solid #165843; text-align: center; vertical-align: middle; width:75px; font-family:'Times New Roman'; font-size:12pt; color: #165843;"><span t-field="o.sudo().invoice_payment_term_id"/></td>
 										<td></td>
 										<td></td>
 									</tr>

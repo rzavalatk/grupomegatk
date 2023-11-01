@@ -27,7 +27,7 @@
             
           </div>
             <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">FACTURA COMERCIAL</p>
-            <div t-if="o.type == 'out_invoice' and (o.state != 'draft' and o.state != 'cancel')">
+            <div t-if="o.move_type == 'out_invoice' and (o.state != 'draft' and o.state != 'cancel')">
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                   <p><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
                   <p><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <span t-field="o.date_invoice"/>
+                    <span t-field="o.invoice_date"/>
                   </td>
               <!--
                     <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
@@ -61,16 +61,16 @@
                 </tr>
                 <tr>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <span t-field="o.sudo().payment_term_id"/>
+                    <span t-field="o.sudo().invoice_payment_term_id"/>
                   </td>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <div t-if="o.origin" >
-                      <span t-field="o.origin"/>
+                    <div t-if="o.invoice_origin" >
+                      <span t-field="o.invoice_origin"/>
                     </div>
                   </td>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                    <div t-if="o.date_due and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
-                      <span t-field="o.date_due"/>
+                    <div t-if="o.invoice_date_due and o.move_type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
+                      <span t-field="o.invoice_date_due"/>
                     </div>
                   </td>
                   <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
@@ -90,14 +90,14 @@
         <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
         <div class="page" style='margin-left:-15; '>
             <p style="font-family:'Arial'; font-size:72pt;  font-weight: bold;text-align: center;"><span t-field="o.company_id.name"/></p>
-            <div t-if="o.type == 'out_invoice' and (o.state != 'draft' and o.state != 'cancel')">
+            <div t-if="o.move_type == 'out_invoice' and (o.state != 'draft' and o.state != 'cancel')">
               <div style="font-size:36pt; font-family:'Arial'; line-height: 0.9; text-align: center;">
                   <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
               </div>
               <br/>
               <div style="font-size:36pt; font-family:'Arial'; line-height: 0.7;">
                 <p t-if="o.number"><b>Factura: </b><span t-field="o.number"/></p>
-                <p t-if="o.date_invoice"><b>Fecha: </b> <span t-field="o.date_invoice"/></p>
+                <p t-if="o.invoice_date"><b>Fecha: </b> <span t-field="o.invoice_date"/></p>
               </div>
               <br/>
               <div style="font-size:34pt; font-family:'Arial'; line-height: 0.7;">
@@ -154,8 +154,8 @@
                           <span t-field="l.discount"/>
                       </td>
                       <td>
-                          <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
-                          <t t-if="not l.invoice_line_tax_ids" >
+                          <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_ids))"/>
+                          <t t-if="not l.tax_ids" >
                             <t t-set="_exento_total" t-value="_exento_total + l.price_subtotal"/>
                           </t>
                       </td>
@@ -231,7 +231,7 @@
                             </tr>
                             <t t-foreach="o.amount_by_group" t-as="amount_by_group">
                                 <tr>
-                                    <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                    <t t-if="len(o.line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
                                         <td style="padding:1px !important; margin:1px !important;"><strong t-esc="amount_by_group[0]"/></td>
                                         <td class="text-right" style="padding:1px !important; margin:1px !important;">
                                             <span t-esc="amount_by_group[3]"/>
@@ -269,7 +269,7 @@
             
             <br/>
             <p style="text-align: center; font-weight: normal;font-size: 34pt;">
-                Son: <span t-field="o.amount_total_text"/>
+                Son: <span t-field="o.amount_total"/>
             </p>
             <br/>
             <p style="text-align: center; font-weight: normal;font-size: 28pt;">
@@ -287,15 +287,15 @@
               </p>
             </div>
             <br/>
-            <p t-if="o.sudo().payment_term_id" style="text-align: center; font-weight: normal;font-size: 34pt;">
-                <span t-field="o.sudo().payment_term_id.note"/>
+            <p t-if="o.sudo().invoice_payment_term_id" style="text-align: center; font-weight: normal;font-size: 34pt;">
+                <span t-field="o.sudo().invoice_payment_term_id.note"/>
             </p>
             <p t-if="o.fiscal_position_id.note" style="text-align: center; font-weight: normal;font-size: 34pt;">
                 <span t-field="o.fiscal_position_id.note"/>
             </p>
             <br/>
-            <p t-if="o.comment" style="text-align: center; font-size: 30pt;">
-                  <br></br><span t-field="o.comment"/>
+            <p t-if="o.ref" style="text-align: center; font-size: 30pt;">
+                  <br></br><span t-field="o.ref"/>
                 </p> 
           <br/><br/>
             <div style="border-top: 1px solid rgb(13, 143, 210); text-align: center; font-weight: normal;font-size: 32pt;">
