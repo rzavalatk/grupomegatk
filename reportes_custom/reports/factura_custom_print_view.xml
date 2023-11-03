@@ -78,7 +78,7 @@
                   </div>
                 </td>
                 <td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-                  <div t-if="o.invoice_date_due and o.move_type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
+                  <div >
                     <span t-field="o.invoice_date_due"/>
                   </div>
                 </td>
