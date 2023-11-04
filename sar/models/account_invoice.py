@@ -100,9 +100,10 @@ class AccountMove(models.Model):
     @api.onchange('sequence_ids')
     def _compute_internal_number(self):
         for inv in self:
-            if not inv.internal_number:
-                new_name = self.sequence_ids.next_by_id()
-                inv.write({'internal_number': new_name})
+            if inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
+                if not inv.internal_number:
+                    new_name = self.sequence_ids.next_by_id()
+                    inv.write({'internal_number': new_name})
                     
 
     fiscal_control = fields.Boolean(
@@ -110,7 +111,7 @@ class AccountMove(models.Model):
     price_total_total_text = fields.Char(
         "price_total", compute='get_totalt', default='Cero')
     # Unique number of the invoice, computed automatically when the invoice is created
-    internal_number = fields.Char(string='Número interno', default=False,
+    internal_number = fields.Char(string='Número interno', default=False,states={'draft': [('readonly', False)]},
                                   help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
                                    domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
@@ -138,35 +139,7 @@ class AccountMove(models.Model):
                 self.amount_totall, self.user_id.company_id.currency_id.name)
         return True
     
-    """@api.model
-    def obtener_numero_secuencia_por_id(self, sequence_ids):
-        secuencia = self.env['ir.sequence'].browse(sequence_ids)
-        if secuencia:
-            return secuencia.get_next_char(sequence_ids)
-        else:
-            return None
-        
-    @api.model
-    @api.onchange('sequence_ids')
-    def _onchange_sequence_ids(self):
-        self.internal_number = self.obtener_numero_secuencia_por_id(self.sequence_ids)"""
-        
-    def button_confirm(self):            
-        res = super(AccountMove, self).button_confirm()
-        for inv in self:
-            _logger.info("El valor de my_variable es: %s", inv.move_type)
-            if inv.move_id and inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
-                if not inv.internal_number:
-                    if self.fiscal_control and self.sequence_ids:
-                        new_name = self.sequence_ids.with_context(
-                            ir_sequence_date=inv.move_id.date).next_by_id()
-                        inv.move_id.write({'name': self.invoice_date})
-                        inv.write({'internal_number': new_name})
-                        print("Este es un mensaje de depuración")
-                else:
-                    inv.move_id.write({'name': inv.move_id.date})
-        return res
-
+    
     def to_word(self, number, mi_moneda):
         valor = number
         number = int(number)
