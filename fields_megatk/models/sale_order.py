@@ -41,12 +41,12 @@ class SaleorderLine(models.Model):
     x_series = fields.Text("Series")
     
 
-    #@api.model_create_multi
-    #def _prepare_invoice_line(self, qty):
-    #    values = super(SaleorderLine, self)._prepare_invoice_line(qty)
-    #    values['x_user_id'] = self.x_user_id.id
-    #    values['x_series'] = self.x_series
-    #    return values
+    """@api.model_create_multi
+    def _prepare_invoice_line(self, qty):
+        values = super(SaleorderLine, self)._prepare_invoice_line(qty)
+        values['x_user_id'] = self.x_user_id.id
+        values['x_series'] = self.x_series
+        return values"""
 
     #@api.model_create_multi
     @api.onchange('product_id')

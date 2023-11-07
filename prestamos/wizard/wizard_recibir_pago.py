@@ -6,14 +6,14 @@ from odoo.exceptions import Warning
 
 class WizardGenerarCuota(models.TransientModel):
 	_name = 'prestamos.cuota.wizard.cheque'
-	_description = "description"
+	_description = "Generar cuotas de prestamos"
 
 	monto = fields.Float("Total del pago",  required=True)
 	fecha_pagado = fields.Date(string='Fecha de pago',copy=False,required=True)
 	moratorio = fields.Boolean(string='Cobrar mora',default=True)
 
-	@api.model_create_multi
-	def ingresar_pago(self):
+	@api.model
+	def ingresar_pago(self, monto):
 		ctx = self._context
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 

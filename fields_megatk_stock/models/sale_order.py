@@ -67,18 +67,16 @@ class SaleOrder(models.Model):
 class Invoice(models.Model):
     _inherit = "account.move"
 
-    #@api.model_create_multi
-    def unlink(self):
+    @api.model
+    def custom_unlink(self):
         for invoice in self:
-            if invoice.move_name:
+            if invoice.name:
                 company = self.env.user.company_id.id
-                invoice_searh = self.env['account.move']
-                resul_invoice = invoice_searh.search(
+                invoice_search = self.env['account.move']
+                result_invoice = invoice_search.search(
                     [('internal_number', '=', invoice.internal_number), ('company_id', '=', company)])
-                if len(resul_invoice) > 1:
+                if len(result_invoice) > 1:
                     invoice.write({'move_name': ''})
                 else:
-                    raise UserError(
-                        _('No se puede eliminar una factura que ya fue validada.'))
-
+                    raise UserError(_('No se puede eliminar una factura que ya fue validada.'))
         return super(Invoice, self).unlink()
