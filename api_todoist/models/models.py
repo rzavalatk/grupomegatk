@@ -62,7 +62,7 @@ class TodoistUsers(models.Model):
 class MailActivity(models.Model):
     _inherit = "mail.activity"
 
-    #@api.model_create_multi
+    @api.model_create_multi
     def create(self, values):
         try:
             model = self.env['ir.model'].browse(values['res_model_id']).model

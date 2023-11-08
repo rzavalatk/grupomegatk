@@ -75,8 +75,8 @@ class PrestamosCuotas(models.Model):
             raise UserError(_('Please define an accounting sales journal for this company.'))
         val_encabezado = {
             'name': '',
-            'type': 'out_invoice',
-            'account_id': self.cuotas_prestamo_id.res_partner_id.property_account_receivable_id.id,
+            'move_type': 'out_invoice',
+            'invoice_line_ids': self.cuotas_prestamo_id.res_partner_id.property_account_receivable_id.id,
             'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
             'journal_id': journal_id,
             'currency_id': self.cuotas_prestamo_id.currency_id.id,

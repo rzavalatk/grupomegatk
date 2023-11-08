@@ -67,7 +67,7 @@ class Vittbankstransferences(models.Model):
 	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated' or move.state == 'anulated':
@@ -83,18 +83,18 @@ class Vittbankstransferences(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def action_anulate_debit(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
 			move.unlink()
 		self.write({'state': 'anulated'})
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def action_draft(self):
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def action_validate(self):
 		if not self.number_calc:
 			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))

@@ -35,7 +35,7 @@ class CrmLead(models.Model):
         self.categoria_id=False
         self.modelo_id=False
 
-    #@api.model_create_multi
+    @api.model_create_multi
     def write(self, values):
         if not self.fecha_movimiento:
             if self.create_uid.id != self.env.user.id:
@@ -43,7 +43,7 @@ class CrmLead(models.Model):
                 values['fecha_movimiento'] = datetime.now()
         return super(CrmLead, self).write(values)
 
-    #@api.model_create_multi
+    @api.model_create_multi
     def _message_post_after_hook(self, message, *args, **kwargs):
         self.observacion_visita = message.body
         return super(CrmLead, self)._message_post_after_hook(message,*args, **kwargs)

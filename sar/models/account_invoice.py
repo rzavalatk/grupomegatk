@@ -419,7 +419,6 @@ class AccountMove(models.Model):
     def action_move_create(self):
         res = super(AccountMove, self).action_move_create()
         for inv in self:
-            _logger.info("El valor de my_variable es: %s", inv.move_type)
             if inv.move_id and inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
                 if not inv.internal_number:
                     if self.fiscal_control and self.sequence_ids:

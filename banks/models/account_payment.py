@@ -102,13 +102,13 @@ class BanksPayment(models.Model):
 				self.currency_id = self.company_id.currency_id.id
 
 
-	#@api.model
+	@api.model
 	def create(self, vals):
 		vals["name"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
 		check = super(BanksPayment, self).create(vals)
 		return check
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def get_invoices(self):
 		invoice_ids = self.env["account.invoice"].search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open'), 
 			('currency_id', '=', self.currency_id.id), ('type','=','in_invoice')])
@@ -132,7 +132,7 @@ class BanksPayment(models.Model):
 			}
 			facturas.create(vals)
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	def post_payment(self):
 		if self.amount <= 0:
 			raise Warning(_('El monto debe de ser mayor que cero'))

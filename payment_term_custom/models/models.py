@@ -66,7 +66,7 @@ class Sales(models.Model):
             return False
     
     
-    #@api.model
+    @api.model
     def write(self, vals):
         if self._exist_index('payment_term', vals):
             del vals['payment_term']  # Eliminar la clave 'payment_term' del diccionario vals

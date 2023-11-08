@@ -85,7 +85,7 @@ class Wizardgenerarmovimiento(models.TransientModel):
                 self.currency_rate = 1
                 self.es_moneda_base = True
 
-    #@api.model_create_multi
+    @api.model_create_multi
     def action_validate(self):
         if not self.wizard_ids:
             raise Warning(_("No existen detalles de movimientos a registrar"))

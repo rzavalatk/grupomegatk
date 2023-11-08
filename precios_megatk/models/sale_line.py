@@ -74,7 +74,7 @@ class Saleline(models.Model):
                 line.precio_id = lista.id
         return line"""
         
-    @api.model_create_multi
+    @api.model
     def create(self, values):
         lines = super(Saleline, self).create(values)
         preciolista = self.env['lista.precios.producto']

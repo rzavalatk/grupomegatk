@@ -17,7 +17,6 @@ class Quotationrfq(models.TransientModel):
 
     def get_currency(self):
         return self.env.user.company_id.currency_id.id
-
     def get_total(self):
         self.monto_pagado_total = self.monto + self.mora_pagar
 

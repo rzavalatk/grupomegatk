@@ -38,7 +38,7 @@ class AccountMoveLine(models.Model):
                                     porcentaje = round(porcentaje, 2)
                                     if porcentaje >= lista.descuento:
                                         line.precio_id = lista.id
-    """@api.model_create_multi
+    """@api.model
     def create(self, values):
         line = super(AccountMoveLine, self).create(values)
         preciolista = self.env['lista.precios.producto']
@@ -50,7 +50,7 @@ class AccountMoveLine(models.Model):
                 line.precio_id = lista.id
         return line"""
     
-    """@api.model_create_multi
+    """@api.model
     def write(self, values):
         #super(AccountMoveLine, self).write(values)
         for line in self:

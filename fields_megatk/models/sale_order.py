@@ -48,7 +48,7 @@ class SaleorderLine(models.Model):
         values['x_series'] = self.x_series
         return values"""
 
-    #@api.model_create_multi
+    @api.model_create_multi
     @api.onchange('product_id')
     def product_id_change1(self):
         self.x_user_id = self.obj_padre.id

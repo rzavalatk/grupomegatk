@@ -4,7 +4,7 @@ from odoo import models, fields, api
 class Vendors(models.Model):
     _inherit = "sale.order"
     
-    #@api.model
+    @api.model
     def create(self,vals):
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
         if ids is not None and self.env.user.id in ids:
@@ -21,7 +21,7 @@ class Vendors(models.Model):
 class VendorsInvoices(models.Model):
     _inherit = "account.move"
     
-    #@api.model
+    @api.model
     def create(self,vals):
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
         if ids is not None and self.env.user.id in ids:

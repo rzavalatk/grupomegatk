@@ -7,7 +7,7 @@ class PaymentInvoice(models.TransientModel):
 	_name = "banks.invoice.payment.supplier"
 	_description = "description"
 
-	#@api.model
+	@api.model
 	def _get_invoice_number(self):
 		ctx = self._context
 		if 'active_id' in ctx:
@@ -39,7 +39,7 @@ class PaymentInvoice(models.TransientModel):
 		if self.journal_id and self.doc_type:
 			self.get_msg_number()
 	
-	#@api.model
+	@api.model
 	def _get_amount(self):
 		ctx = self._context
 		if 'active_id' in ctx:
@@ -58,7 +58,7 @@ class PaymentInvoice(models.TransientModel):
 	msg = fields.Char(compute=get_msg_number)
 	ref = fields.Char("Referencia de pago", required=True)
 
-	#@api.model
+	@api.model
 	def action_pago(self):
 		self.get_msg_number()
 		obj_pago = self.env["banks.payment.invoices.custom"]

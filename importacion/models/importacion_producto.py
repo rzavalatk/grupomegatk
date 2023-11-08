@@ -12,7 +12,7 @@ class ImportacionProducto(models.Model):
 
 	name = fields.Char(string="Name")
 	descripcion = fields.Char("Descripción")
-	stock_pick_ids = fields.Many2many(comodel_name="stock.picking",relation="x_stockpicking_impor_product_mega",column1="stock_picking_id",column2="import_mega_id",string="Transferencias",required=False,)
+	stock_pick_ids = fields.Many2many(comodel_name="stock.picking", string="Transferencias",required=False,)
 	import_line_id = fields.One2many("import.product.mega.line.purchase", "import_product_id", "Detalle de transferencia")
 	import_gsto_id = fields.One2many("import.product.mega.line.gasto", "import_product_id", "Detalle de transferencia")
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id)
@@ -128,7 +128,7 @@ class ImportacionProducto(models.Model):
 					'date': date.today()
 					})
 
-	#@api.model_create_multi
+	@api.model_create_multi
 	@api.onchange('stock_pick_ids')
 	def _onchange_stock_pick_ids(self):
 		recepciones=self.stock_pick_ids
@@ -184,7 +184,7 @@ class ImportacionProducto(models.Model):
 	
 class LinePurchaseImport(models.Model):
 	_name = 'import.product.mega.line.purchase'
-	_description = "description"
+	_description = "descripcion de detalles de la ponderación"
 
 	import_product_id = fields.Many2one('import.product.mega', string='Impor Product Reference', index=True, required=True, ondelete='cascade')
 	name = fields.Text(string='Descripción', required=True)

@@ -98,7 +98,7 @@ class Fiscal_sequence(models.Model):
         except :
             return False
 
-    @api.model_create_multi
+    @api.model
     def create(self, vals):
         res = super(Fiscal_sequence, self).create(vals)
         if not vals[0]['journal_id']:
