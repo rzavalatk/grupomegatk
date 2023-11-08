@@ -3,6 +3,8 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
 from odoo.addons import decimal_precision as dp
+from datetime import datetime
+
 import math
 import logging
 import json
@@ -384,6 +386,8 @@ class Prestamos(models.Model):
                 mes = 1
                 year = year + 1
             fecha_pago = self.generar_fechas_cuotas(year, mes, dia)
+            
+            #formatted_date = datetime.strptime(fecha_pago, '%Y/%m/%d').strftime('%Y-%m-%d')
             valores = {
                 'name': 'Cuota ' + str(x),
                 'cuotas_prestamo_id': self.id,
@@ -466,13 +470,13 @@ class Prestamos(models.Model):
         fecha_pago = {}
 
         if self.comprobar_fecha(year, mes, dia):
-            fecha_pago = str(year) + '/' + str(mes) + '/' + str(dia)
+            fecha_pago = str(year) + '-' + str(mes) + '-' + str(dia)
         elif self.comprobar_fecha(year, mes, dia-1):
-            fecha_pago = str(year) + '/' + str(mes) + '/' + str(dia-1)
+            fecha_pago = str(year) + '-' + str(mes) + '-' + str(dia-1)
         elif self.comprobar_fecha(year, mes, dia-2):
-            fecha_pago = str(year) + '/' + str(mes) + '/' + str(dia-2)
+            fecha_pago = str(year) + '-' + str(mes) + '-' + str(dia-2)
         else:
-            fecha_pago = str(year) + '/' + str(mes) + '/' + str(dia-3)
+            fecha_pago = str(year) + '-' + str(mes) + '-' + str(dia-3)
         return fecha_pago
 
     def comprobar_fecha(self, a, m, d):

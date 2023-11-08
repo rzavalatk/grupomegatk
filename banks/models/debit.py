@@ -84,7 +84,7 @@ class Debit(models.Model):
 		for db in deb_obj:
 			db.write({'number': n})
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated':
@@ -178,7 +178,7 @@ class Debit(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_validate(self):
 		if not self.number_calc:
 			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
@@ -442,18 +442,18 @@ class Debit(models.Model):
 		}
 		return values
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_anulate_debit(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
 			move.unlink()
 		self.write({'state': 'anulated'})
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_draft(self):
 		self.write({'state': 'draft'})
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		#self.update_seq()

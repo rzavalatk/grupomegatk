@@ -10,7 +10,7 @@ class WizardTemplatebanks(models.TransientModel):
 
     name = fields.Char("Nombre de plantilla", required=True)
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def set_template(self):
         obj_template = self.env["banks.template"]
         ctx = self._context

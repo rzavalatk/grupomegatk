@@ -78,7 +78,7 @@ class PrestamosCuotas(models.Model):
             'move_type': 'out_invoice',
             'invoice_line_ids': self.cuotas_prestamo_id.res_partner_id.property_account_receivable_id.id,
             'partner_id': self.cuotas_prestamo_id.res_partner_id.id,
-            'journal_id': journal_id,
+            #'journal_id': journal_id,
             'currency_id': self.cuotas_prestamo_id.currency_id.id,
             'company_id': company_id,
             'user_id': self.env.user.id,

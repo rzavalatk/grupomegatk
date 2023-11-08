@@ -34,7 +34,7 @@ class AccountJournal(models.Model):
         self.check_printing_payment_method_selected = any(
             pm.code in ['check_printing', 'pdc'] for pm in self.outbound_payment_method_ids)
     
-    @api.model_create_multi
+    #@api.model_create_multi
     def _enable_pdc_on_bank_journals(self):
         """ Enables check printing payment method and add a check sequence on bank journals.
             Called upon module installation via data file.

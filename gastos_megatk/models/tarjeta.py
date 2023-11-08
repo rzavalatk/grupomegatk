@@ -53,17 +53,17 @@ class LiquidacionTarjetas(models.Model):
     currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
     cotizaciones_ids = fields.Many2many(comodel_name="sale.order",relation="gastos_tarjetas_sale_order",column1="tarjetas_ids",column2="sale_order_ids",string="Cotización")
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
             raise Warning(_('No existe detalle de gastos'))
         self.write({'state': 'pendiente'})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def rechazar_gastos(self):
         self.write({'state': 'rechazado'})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def liquidar_gastos(self):
         #if self.total_gastos <= 0:
             #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
@@ -104,11 +104,11 @@ class LiquidacionTarjetas(models.Model):
         self.debito_id = id_move.id
         self.write({'state': 'liquidado'})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def back_draft(self):
         self.write({'state': 'draft'})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def unlink(self):
         if self.state == 'pendiente' or self.state == 'aprobado'  or self.state =='liquidado':
             raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))

@@ -8,7 +8,7 @@ class SequenceJournal(models.TransientModel):
     _name = "vitt.banks.journal.settings"
     _description = "Journal Settings"
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def get_journal(self):
         context = dict(self._context or {})
         active_model = context.get('active_model')

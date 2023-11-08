@@ -128,7 +128,7 @@ class ImportacionProducto(models.Model):
 					'date': date.today()
 					})
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	@api.onchange('stock_pick_ids')
 	def _onchange_stock_pick_ids(self):
 		recepciones=self.stock_pick_ids

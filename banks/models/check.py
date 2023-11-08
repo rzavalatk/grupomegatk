@@ -13,7 +13,7 @@ class Check(models.Model):
 	_order = 'date desc, number desc'
 	_description = "description"
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def print_chek(self):
 		if not self.princhek:
 			self.princhek = True
@@ -319,7 +319,7 @@ class Check(models.Model):
 		check = super(Check, self).create(vals)
 		return check
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated' or move.state == 'anulated':
@@ -351,11 +351,11 @@ class Check(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def set_borrador(self):
 		self.write({'state': 'draft'})
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
@@ -363,7 +363,7 @@ class Check(models.Model):
 			#self.update_seq()
 			self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_anulate_cheque(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
@@ -371,7 +371,7 @@ class Check(models.Model):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
 
-	@api.model_create_multi
+	#@api.model_create_multi
 	def action_validate(self):
 		if not self.cheque_anulado:
 			if not self.number_calc:

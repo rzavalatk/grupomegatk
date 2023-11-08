@@ -126,12 +126,12 @@ class CrmVisits(models.Model):
             'res_id': self.opportunity_id.id, 
         }
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def open_wizard(self):
         current_website = self.env['website'].get_current_website()
         return current_website.id
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def create_chance(self):
         vals = {
             "user_id": self.user_id.id,

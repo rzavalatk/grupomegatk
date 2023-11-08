@@ -21,7 +21,7 @@ class AccountMoveLine(models.Model):
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     x_series = fields.Text("Series")
 
-    @api.model_create_multi
+   
     @api.onchange('product_id')
     def product_id_change1(self):
         if self.move_id:
