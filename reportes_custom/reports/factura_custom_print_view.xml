@@ -350,7 +350,7 @@
             <br></br>
 
             <p style="font-weight: normal;font-size: 15.5px;">
-                Son: <span t-field="o.amount_total"/>
+                Son: <span t-field="o.num_word"/>
             </p>
             
             <p t-if="o.sudo().invoice_payment_term_id">
