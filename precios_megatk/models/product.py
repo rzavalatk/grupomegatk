@@ -15,7 +15,7 @@ class Product(models.Model):
 
     #@api.model_create_multi
     def write(self, values):
-        #super(Product, self).write(values)
+        super(Product, self).write(values)
         if "x_comisiones" in values:
             porecio_product = self.env['lista.precios.producto']
             preciodefaul = porecio_product.search( [('product_id.id', '=', self.id)])
