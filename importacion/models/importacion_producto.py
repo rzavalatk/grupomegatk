@@ -12,7 +12,7 @@ class ImportacionProducto(models.Model):
 
 	name = fields.Char(string="Name")
 	descripcion = fields.Char("Descripción")
-	stock_pick_ids = fields.Many2many(comodel_name="stock.picking", string="Transferencias",required=False,)
+	stock_pick_ids = fields.Many2many(comodel_name="stock.picking", relation="x_stockpicking_impor_product_mega",column1="stock_picking_id",column2="import_mega_id", string="Transferencias",required=False,)
 	import_line_id = fields.One2many("import.product.mega.line.purchase", "import_product_id", "Detalle de transferencia")
 	import_gsto_id = fields.One2many("import.product.mega.line.gasto", "import_product_id", "Detalle de transferencia")
 	currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id)
@@ -131,30 +131,31 @@ class ImportacionProducto(models.Model):
 	#@api.model_create_multi
 	@api.onchange('stock_pick_ids')
 	def _onchange_stock_pick_ids(self):
-		recepciones=self.stock_pick_ids
-		ponderaciones = self.env["import.product.mega.line.purchase"]
-		dict_invoices = {}
-		self.import_line_id = False
-		for recepcion in recepciones:
-			lineas_recesion = self.env['stock.move'].search([('picking_id','=',recepcion.id)])
-			for lineas in lineas_recesion:
+		self.import_line_id = [(5, 0, 0)]  # Elimina todas las líneas existentes
+		for recepcion in self.stock_pick_ids:
+			for lineas in recepcion.move_lines:
 				subtotal = lineas.quantity_done * lineas.price_unit
 				tax = subtotal * lineas.tax_id.amount / 100
 				total = tax + subtotal
 				vals = {
-						'import_product_id': self.id,
-						'product_id': lineas.product_id.product_tmpl_id.id,
-						'name': lineas.name,
-						'price_total': total,
-						'price_tax': tax,
-						'taxes_id': lineas.tax_id,
-						'price_unit': lineas.price_unit,
-						'price_subtotal': subtotal,
-						'currency_id': self.currency_id.id,
-						'quantity': lineas.quantity_done,
-						'company_id': self.company_id.id,
-						'fecha_done': lineas.date,}
-				ponderaciones.new(vals)
+					'import_product_id': self.id,
+					'product_id': lineas.product_id.product_tmpl_id.id,
+					'name': lineas.name,
+					'price_total': total,
+					'price_tax': tax,
+					'taxes_id': [(6, 0, lineas.tax_id.ids)],
+					'price_unit': lineas.price_unit,
+					'price_subtotal': subtotal,
+					'currency_id': self.currency_id.id,
+					'quantity': lineas.quantity_done,
+					'company_id': self.company_id.id,
+					'fecha_done': lineas.date,
+				}
+				self.import_line_id += self.env['import.product.mega.line.purchase'].new(vals)
+
+    
+    
+    
 
 	@api.depends('import_line_id.price_total')
 	def _amount_all(self):

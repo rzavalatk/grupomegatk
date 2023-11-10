@@ -49,8 +49,7 @@
       <field name="model">import.product.mega</field>
       <field name="arch" type="xml">
         <form string = "Form Import">
-          
-          <sheet><header> 
+          <header> 
             <button name="back_draft" type="object" string="Volver a borrador" 
               state="cancelado" class="oe_highlight"/>
             <button name="cancelar_impor" type="object" string="Cancelar" 
@@ -59,6 +58,7 @@
               class="oe_highlight" confirm='¿Desea validar la ponderación?'/>
             <field name="state" widget="statusbar" nolabel="1"/>  
           </header>
+          <sheet>
             <div class="oe_button_box" name="button_box" states="validado">
               <button class="oe_stat_button"
                 icon="fa-strikethrough"
