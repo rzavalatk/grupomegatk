@@ -72,7 +72,7 @@ class PaymentInvoice(models.TransientModel):
 			invoice_ids = {
 				'partner_id': inv.partner_id.id,
 				'number': inv.number,
-				'date_invoice': inv.date_invoice,
+				'invoice_date': inv.invoice_date,
 				'date_due': inv.date_due,
 				'name': inv.name,
 				'invoice_id': inv.id,

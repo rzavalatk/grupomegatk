@@ -132,7 +132,7 @@ class Debit(models.Model):
 	rate = fields.Float("Tasa de Cambio")
 	state = fields.Selection([('draft', 'Borrador'), ('validated', 'Validado'), ('anulated', "Anulado")], string="Estado", default='draft')
 	number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
-	msg = fields.Char("Error de configuración", compute=get_msg_number)
+	msg = fields.Char("Error de configuración", )
 	rest_credit = fields.Float('Diferencia', compute=_compute_rest_credit)
 	move_id = fields.Many2one('account.move', 'Apunte Contable', copy=False)
 	number = fields.Char("Número", copy=False)
@@ -178,7 +178,7 @@ class Debit(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	#@api.model_create_multi
+	#@api.one
 	def action_validate(self):
 		if not self.number_calc:
 			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
@@ -330,7 +330,7 @@ class Debit(models.Model):
 			'date': self.date,
 			'ref': self.name,
 			'line_ids': lineas,
-			'state': 'posted',
+			'state': 'draft',
 		}
 		return values
 
@@ -438,7 +438,7 @@ class Debit(models.Model):
 			'date': self.date,
 			'ref': self.name,
 			'line_ids': lineas,
-			'state': 'posted',
+			'state': 'draft',
 		}
 		return values
 
