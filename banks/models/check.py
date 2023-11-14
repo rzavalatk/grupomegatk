@@ -242,19 +242,65 @@ class Check(models.Model):
 		self.numero_chek = numer[indixe:indixe+8]
 
 		
-	def get_msg_number(self):
+	"""def get_msg_number(self):
 		if self.journal_id and self.state == 'draft':
 			flag = False
 			if not self.cheque_anulado:
 				for seq in self.journal_id.secuencia_ids:
-					if seq.move_type == self.doc_type:
+					#if seq.move_type == self.doc_type:
+					if seq.move_type:
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
 						flag = True
 					if not flag:
 						self.msg = "No existe numeración para este banco, verifique la configuración"
 						self.number_calc = ""
 					else:
-						self.msg = ""
+						self.msg = """""
+    
+	def get_msg_number(self):
+		if self.journal_id and self.state == 'draft':
+			flag = False
+			if not self.cheque_anulado:
+				for seq in self.journal_id.secuencia_ids:
+					if seq.move_type:
+						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
+						flag = True
+				if not flag:
+					self.msg = "No existe numeración para este banco, verifique la configuración"
+					self.number_calc = ""
+				else:
+					self.msg = ""
+			else:
+				# ¿Qué debe suceder si self.cheque_anulado es True?
+				# Asegúrate de manejar este caso según tus requisitos.
+				pass
+		else:
+			# ¿Qué debe suceder si self.journal_id no está definido o self.state no es 'draft'?
+			# Asegúrate de manejar estos casos según tus requisitos.
+			pass
+
+	def get_number_calc(self):
+		if self.journal_id and self.state == 'draft':
+			flag = False
+			if not self.cheque_anulado:
+				for seq in self.journal_id.secuencia_ids:
+					if seq.move_type:
+						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
+						flag = True
+						break  # Agregamos un break para salir del bucle cuando encontramos una secuencia válida
+				if not flag:
+					self.msg = "No existe numeración para este banco, verifique la configuración"
+					self.number_calc = ""
+				else:
+					self.msg = ""
+			else:
+				self.msg = "El cheque está anulado"  # Mensaje adicional si el cheque está anulado
+		else:
+			#self.msg = "No se puede calcular el número en estado diferente a borrador o sin un banco asociado"
+			self.number_calc = ""
+			self.msg = ""
+
+
 
 	def get_char_seq(self, journal_id, doc_type):
 		jr = self.env["account.journal"].search([('id', '=', journal_id)])
@@ -276,8 +322,8 @@ class Check(models.Model):
 	currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 	difference = fields.Float(string='Diferencia', compute='_compute_rest_credit')
 	doc_type = fields.Selection([('check', 'Cheque'), ('transference', 'Transferencia')], string='Tipo de Transacción', required=True)
-	msg = fields.Char("Error de configuración", compute=get_msg_number)
-	number_calc = fields.Char("Número de Transacción", compute=get_msg_number)
+	msg = fields.Char("Error de configuración", compute=get_number_calc)
+	number_calc = fields.Char("Número de Transacción", compute=get_number_calc)
 	move_id = fields.Many2one('account.move', 'Apunte Contable', copy=False)
 	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
@@ -296,7 +342,7 @@ class Check(models.Model):
 			self.name = self.plantilla_id.pagar_a
 			self.memo = self.plantilla_id.memo
 			self.total = self.plantilla_id.total
-			self.doc_type = self.plantilla_id.doc_type
+			#self.doc_type = self.plantilla_id.doc_type
 			self.currency_id = self.plantilla_id.currency_id.id
 			self.es_moneda_base = self.plantilla_id.es_moneda_base
 			lineas = []
@@ -494,8 +540,8 @@ class Check(models.Model):
 			'date': self.date,
 			'ref': self.name,
 			'line_ids': lineas,
-			'state': 'posted',
-			'doc_type': self.doc_type,
+			'state': 'draft',
+			#'doc_type': self.doc_type,
 		}
 
 		if self.move_id:
