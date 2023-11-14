@@ -30,8 +30,8 @@ class Account(models.Model):
 						else:
 							raise Warning(_('Cuenta analítica requerida en la línea con cuenta: ' + account.code + ' ' + account.name + ' descripción: ' + values['name']))
 		
-		return super(AccountMove, self).create(values)
-	"""
+		return super(AccountMove, self).create(values)"""
+	
 
 
 
