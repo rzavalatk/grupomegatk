@@ -7,7 +7,7 @@ class Account(models.Model):
 	
 	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica",)
 
-class AccountMove(models.Model):
+"""class AccountMove(models.Model):
 	_inherit = "account.move.line"
 
 	@api.model
@@ -31,7 +31,7 @@ class AccountMove(models.Model):
 							raise Warning(_('Cuenta analítica requerida en la línea con cuenta: ' + account.code + ' ' + account.name + ' descripción: ' + values['name']))
 		
 		return super(AccountMove, self).create(values)
-	
+	"""
 
 
 
