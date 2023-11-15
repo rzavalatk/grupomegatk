@@ -30,7 +30,7 @@ class Vittbankstransferences(models.Model):
         if self.journal_id_out and self.state == 'draft' and self.number == False:
             flag = False
             for seq in self.journal_id_out.secuencia_ids:
-                if seq.move_type:
+                if seq.move_type == 'transference_banks':
                     self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
                     self.msg = ""
                     flag = True

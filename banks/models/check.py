@@ -262,7 +262,7 @@ class Check(models.Model):
 			flag = False
 			if not self.cheque_anulado:
 				for seq in self.journal_id.secuencia_ids:
-					if seq.move_type:
+					if seq.move_type == self.doc_type:
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
 						flag = True
 				if not flag:
@@ -284,7 +284,7 @@ class Check(models.Model):
 			flag = False
 			if not self.cheque_anulado:
 				for seq in self.journal_id.secuencia_ids:
-					if seq.move_type:
+					if seq.move_type == self.doc_type:
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
 						flag = True
 						break  # Agregamos un break para salir del bucle cuando encontramos una secuencia válida
