@@ -35,7 +35,7 @@ class Authorization(models.Model):
                 #'target': 'new',
                 #'context': ctx}
 
-    """@api.model_create_multi
+    @api.model_create_multi
     def _update_ir_sequence(self):
         for fiscal_sequence in self.fiscal_sequence_regime_ids:
             if fiscal_sequence.sequence_id:
@@ -47,7 +47,7 @@ class Authorization(models.Model):
     def write(self, vals):
         res = super(Authorization, self).write(vals)
         res = self._update_ir_sequence()
-        return res"""
+        return res
 
 
 class Fiscal_sequence(models.Model):

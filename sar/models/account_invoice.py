@@ -101,8 +101,8 @@ class AccountMove(models.Model):
     def _compute_internal_number(self):
         for inv in self:
             if inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
-                if not inv.internal_number:
-                    new_name = self.sequence_ids.next_by_id()
+                if not inv.internal_number and inv.sequence_ids:
+                    new_name = inv.sequence_ids.next_by_id()
                     inv.write({'internal_number': new_name})
                     
 
