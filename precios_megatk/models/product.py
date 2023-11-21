@@ -48,9 +48,9 @@ class ProductProduct(models.Model):
         for list_precio in self.product_tmpl_id.x_comisiones:
             list_precio.write({'precio_publico': self.lst_price, 'precio_descuento': self.lst_price + ((self.lst_price*list_precio.x_descuento)/100)})
 
-    @api.model
+    #@api.model
     def write(self, values):
-        #super(ProductProduct, self).write(values)
+        super(ProductProduct, self).write(values)
         if "x_comisiones" in values:
             porecio_product = self.env['lista.precios.producto']
             preciodefaul = porecio_product.search( [('product_id.id', '=', self.product_tmpl_id.id)])
