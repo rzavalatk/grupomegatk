@@ -7,14 +7,9 @@
 			<field name="model">account.journal</field>
 			<field name="inherit_id" ref="account.view_account_journal_form"/> 
 			<field name="arch" type="xml">
-				<xpath expr="//form/sheet/div[not(@name)]" position="after">
-				    <field name="logo" class="oe_avatar" widget="image"/>
-			  	</xpath>
-				<xpath expr="//field[@name='default_account_id']" position="after" string='Allow Multi-Sequence'>
-					<field name="multi_seq_banks" attrs="{'invisible': [('type','not in',['bank','cash'])]}"/>
-				</xpath>
-				<xpath expr="//page[@name='advanced_settings']" position="after">
-					<page string="Transacciones Bancarias" attrs="{'invisible': [('multi_seq_banks','!=',True)]}" >
+
+				<notebook position="inside">
+					<page string="Transacciones Bancarias"  >
 								
 							<field name="secuencia_ids" >
 								<tree>
@@ -26,7 +21,7 @@
 							</field>
 						
 					</page>
-				</xpath>
+				</notebook>
 
 			</field>
 		</record>	

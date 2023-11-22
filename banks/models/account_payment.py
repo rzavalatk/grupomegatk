@@ -172,7 +172,7 @@ class BanksPayment(models.Model):
 				'debit': 0.0,
 				'credit': self.amount * self.currency_rate,
 				'name': 'Pago de prestamo',
-				'account_id': self.journal_id.default_credit_account_id.id,
+				'account_id': self.journal_id.default_account_id.id,
 				'partner_id': self.partner_id.id,
 				'date': self.effective_date or self.date,
 				'invoice_id': factura.invoice_id.id,
