@@ -21,7 +21,7 @@ class Payment(models.Model):
 class ModelCompras(models.Model):
     _inherit = 'purchase.order'
 
-    cubing = fields.Float("Cubicaje total")
+    cubing = fields.Float(string="Cubicaje Total",)
     weight = fields.Float("Peso total")
     code_reference = fields.Char("Código de Referencia")
     origin_city = fields.Char("Ciudad de origen")

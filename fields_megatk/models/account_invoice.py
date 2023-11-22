@@ -7,6 +7,9 @@ class Account_Move(models.Model):
     _inherit = "account.move"
 
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
+    invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
+        check_company=True,
+        readonly=False, required=False,)
     
     #mostrar boton en factura de borrados
     def go_draft(self):

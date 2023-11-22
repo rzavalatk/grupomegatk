@@ -6,11 +6,13 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="cubing" />
-                    <field name="weight" />
-                    <field name="code_reference" />
-                    <field name="origin_city" />
+                <xpath expr="//form/sheet/notebook/page[@name='purchase_delivery_invoice']/group/group/field[@name='fiscal_position_id']" position="after">
+                    
+                        <field name="cubing"/>
+                        <field name="weight" />
+                        <field name="code_reference" />
+                        <field name="origin_city" />
+                    
                 </xpath>
             </field>
         </record>
