@@ -21,7 +21,7 @@ class Account_Move(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
+    x_user_id = fields.Many2one('res.users', default=lambda self: self.invoice_user_id, string='Responsable')
     x_series = fields.Text("Series")
 
    
