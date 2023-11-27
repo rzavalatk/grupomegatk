@@ -18,14 +18,13 @@ class Account_Move(models.Model):
         })
     
     
-class AccountMoveLine(models.Model):
+class AccountInvoiceLine(models.Model):
     _inherit = "account.move.line"
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.invoice_user_id, string='Responsable')
+    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsible')
+    obj_padre = fields.Many2one(related="move_id.user_id", string="ResponsibleTem")
     x_series = fields.Text("Series")
 
-   
     @api.onchange('product_id')
     def product_id_change1(self):
-        if self.move_id:
-            self.x_user_id = self.move_id.user_id.id
+        self.x_user_id = self.obj_padre.id
