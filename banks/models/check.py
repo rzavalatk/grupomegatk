@@ -305,7 +305,7 @@ class Check(models.Model):
 	def get_char_seq(self, journal_id, doc_type):
 		jr = self.env["account.journal"].search([('id', '=', journal_id)])
 		for seq in jr.secuencia_ids:
-			if seq.move_type == doc_type:
+			if seq.move_type == "Cheques":
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)
 
 	journal_id = fields.Many2one("account.journal", "Banco", required=True)

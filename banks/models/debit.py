@@ -56,7 +56,7 @@ class Debit(models.Model):
 	def get_char_seq(self, journal_id, doc_type):
 		jr = self.env["account.journal"].search([('id', '=', journal_id)])
 		for seq in jr.secuencia_ids:
-			if seq.move_type == doc_type:
+			if seq.move_type == "Débitos":
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)
 
 	def get_msg_number(self):
