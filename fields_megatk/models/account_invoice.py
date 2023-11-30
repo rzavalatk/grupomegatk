@@ -32,7 +32,7 @@ class Account_Move(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.move_id.invoice_user_id, string='Responsable')
+    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="move_id.invoice_user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
 
