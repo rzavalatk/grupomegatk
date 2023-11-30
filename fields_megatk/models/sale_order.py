@@ -36,17 +36,23 @@ class Saleorder(models.Model):
 class SaleorderLine(models.Model):
     _inherit = "sale.order.line"
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
+    x_user_id = fields.Many2one('res.users', string='Responsable')
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
     
 
-    """@api.model_create_multi
-    def _prepare_invoice_line(self, qty):
-        values = super(SaleorderLine, self)._prepare_invoice_line(qty)
+    
+    """def _prepare_invoice_line(self, optional_values):
+        values = super()._prepare_invoice_line(optional_values)
         values['x_user_id'] = self.x_user_id.id
         values['x_series'] = self.x_series
         return values"""
+    
+    """@api.onchange('x_user_id')
+    def onchange_x_user_id(self):
+        # Puedes realizar acciones adicionales aquí si es necesario
+        self.x_user_id = x_user_id"""
+    
 
     """@api.model_create_multi"""
     @api.onchange('product_id')

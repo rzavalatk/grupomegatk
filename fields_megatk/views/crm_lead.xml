@@ -86,67 +86,14 @@
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_lead_view_form" />
 				<field name="arch" type="xml">
-					<header>
-        		<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" attrs='{"invisible": [["tipo_soporte","=","llamada"]]}'/>  
-        	</header>
-					<field name="name" position="before">
-		      	<h1>Ticket: <field name="id"/></h1>
-		      </field>
-		      <xpath expr="//form/sheet/div/h1/field[@name='name']" position="attributes">
-				    <attribute name="attrs">{}</attribute>
-				    <attribute name="readonly">1</attribute>
-				    <attribute name="required">1</attribute>
-				  </xpath>
-		      <xpath expr="//form/sheet/notebook" position="inside">
-				    <page name="soportetecnico" string="Soporte Tecnico">
-					     <group name="soporte">
-					        <group name="data1">
-					        	<field name="tipo_soporte"/> 
-					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
-					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-								<field name="tipo_visita_sin_costo" attrs='{"invisible": [["tipo_soporte","!=","visita_sin_costo"]]}'/>
-					        	<field name="proposito" attrs='{"invisible": [("tipo_soporte", "not in", ["visita", "visita_sin_costo", "llamada"])]}'/>
-					        </group>	
-					        <group name="data2">
-					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": [ ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
-					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"], ["tipo_soporte","!=","llamada"]], "required": [ ("tipo_soporte", "=", "visita"), ("tipo_soporte", "=", "visita_sin_costo")]}'/>
-					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"], ["tipo_soporte","!=","visita_sin_costo"]]}'/>
-					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
-					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
-					        </group>	
-					    </group>
-					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'>
-					        <group name="data3">
-					        	<field name="marca_id"/>
-					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
-					        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
-					        </group>	
-					        <group name="data4">
-					        	<field name="fallas"/>
-					      	<field name="informe_tecnico"/>
-					      	<field name="observacion_visita" invisible='1'/>
-					        </group>	
-					    </group>
-				    </page>
-				  </xpath>
-				  <xpath expr="//field[@name='campaign_id']" position="attributes">
-				    <attribute name="attrs">{}</attribute>
-				    <attribute name="invisible">1</attribute>
-				  </xpath>
-				  <xpath expr="//field[@name='medium_id']" position="attributes">
-				    <attribute name="attrs">{}</attribute>
-				    <attribute name="invisible">1</attribute>
-				  </xpath>
-				  <xpath expr="//field[@name='source_id']" position="attributes">
-				    <attribute name="attrs">{}</attribute>
-				    <attribute name="invisible">1</attribute>
-				  </xpath>
-				  <xpath expr="//field[@name='source_id']" position="after">
-    				<field name="producto1"/>
-    				<field name="producto2"/>
-    				<field name="producto3"/>
-  				</xpath>
-			</field>
+				
+				<xpath expr="//form/sheet/notebook/page[@name='extra']" position="after">
+					<page name="soporte_tecnico" string="Soporte Tecnico">
+						
+					</page>
+				</xpath>
+				  	
+				</field>
  		</record>
 
 

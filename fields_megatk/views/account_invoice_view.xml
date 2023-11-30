@@ -10,18 +10,33 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="invoice_payment_term_id"/>
                 </xpath>
+
+                <xpath expr="//field[@name='invoice_date']" position="after">
+                    <field name="invoice_date_due"/>
+                </xpath>
+
+
+
+                
                 <xpath expr="//button[@name='action_post']" position="after">
                     <button string="Borrador" groups="sign_orders.group_admins" name="go_draft" type="object"/>
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='sale_info_group']/field[@name='partner_bank_id']" position="before">
                     <field name="x_comision"/>
                 </xpath>
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_account_id']" position="after">
-                    <field name="x_user_id" groups="base.group_user"/>
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
+                    <field name="x_user_id" groups="base.group_user" options="{'no_create': False}" force_save="1" />
                 </xpath>
+
                 <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
                     <field name="x_series" groups="base.group_user"/>
                 </xpath>
+
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='company_id']" position="after">
+                    <field name="x_user_id" invisible="1"/>
+                    <field name="x_series" invisible="1"/>
+                </xpath>
+
                 <!-- <xpath expr="//field[@name='analytic_tag_ids']" position="attributes">
                     <attribute name="attrs">{}</attribute>
                     <attribute name="invisible">1</attribute>
