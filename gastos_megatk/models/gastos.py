@@ -24,22 +24,23 @@ class LiquidacionGastos(models.Model):
     @api.depends('detalle_gastos_ids.monto')
     def get_totalgastos(self):
         for gs in self:
-            for line in gs.detalle_gastos_ids:
-                gs.total_solicitado += line.monto
-                gs.total_gastos += line.monto_comprobante
+            gs.total_solicitado = sum(line.monto for line in gs.detalle_gastos_ids)
+            gs.total_gastos = sum(line.monto_comprobante for line in gs.detalle_gastos_ids)
             gs.total_diferencia = gs.total_gastos - gs.monto_anticipo
+
             if gs.total_diferencia == 0:
                 gs.activar_cuenta_cxc = False
                 gs.activar_caja = False
                 gs.activar_cuenta_gasto = True
-            if gs.total_diferencia < 0:
+            elif gs.total_diferencia < 0:
                 gs.activar_cuenta_cxc = True
                 gs.activar_caja = False
                 gs.activar_cuenta_gasto = True
-            if gs.total_diferencia > 0 :
+            elif gs.total_diferencia > 0:
                 gs.activar_cuenta_cxc = False
                 gs.activar_caja = True
                 gs.activar_cuenta_gasto = True
+
 
     #@api.model_create_multi
     def unlink(self):
