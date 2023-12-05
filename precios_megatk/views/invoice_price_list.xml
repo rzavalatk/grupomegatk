@@ -9,8 +9,14 @@
 		<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="before">
 	 		<field name="nombreproducto" invisible="1"/>
 	 		<field name="precio_id" domain='[("product_id.name","=",nombreproducto)]' options="{'no_create': True}"/>
+			<field name="precio_ids" domain='[("product_id.name","=",nombreproducto)]' options="{'no_create': True}" invisible="1"/>
 			<field name="lista_precio" invisible="1"/>
 		</xpath>
+
+		<xpath expr="//field[@name='line_ids']/tree/field[@name='company_id']" position="after">
+                    <field name="precio_id" invisible="1"/>
+                    <field name="precio_ids" invisible="1"/>
+                </xpath>
   
   	</field>
 </record>

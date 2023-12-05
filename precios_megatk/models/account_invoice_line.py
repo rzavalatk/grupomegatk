@@ -7,10 +7,11 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     precio_id = fields.Many2one("lista.precios.producto", "Lista de Precio")
+    precio_ids = fields.Many2one("lista.precios.producto", "Lista de Precio")
     nombreproducto = fields.Char(related='product_id.name')
     lista_precio = fields.Char("Lista de Precio", readonly=True,)
     
-    """@api.onchange('precio_id')
+    @api.onchange('precio_id')
     def _onchange_precio_id(self):
         if self.precio_id:
             self.price_unit = self.precio_id.precio
@@ -37,8 +38,8 @@ class AccountMoveLine(models.Model):
                                                   line.product_id.list_price)
                                     porcentaje = round(porcentaje, 2)
                                     if porcentaje >= lista.descuento:
-                                        line.precio_id = lista.id"""
-    """@api.model
+                                        line.precio_id = lista.id
+    
     def create(self, values):
         line = super(AccountMoveLine, self).create(values)
         preciolista = self.env['lista.precios.producto']
@@ -48,9 +49,9 @@ class AccountMoveLine(models.Model):
             porcentaje = round(porcentaje, 2)
             if porcentaje >= lista.descuento:
                 line.precio_id = lista.id
-        return line"""
+        return line
     
-    """@api.model
+    
     def write(self, values):
         #super(AccountMoveLine, self).write(values)
         for line in self:
@@ -62,6 +63,6 @@ class AccountMoveLine(models.Model):
                 #if porcentaje >= lista.descuento:
                 #    values['precio_id'] = int(lista.id)
         return super(AccountMoveLine, self).write(values)
-"""
+
 
    
