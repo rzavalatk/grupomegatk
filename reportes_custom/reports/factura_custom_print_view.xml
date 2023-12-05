@@ -333,10 +333,10 @@
                     </t>
                     <t>
                         <tr class="border-black">
-                            <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Deuda</strong></td>
+                            <!-- <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Deuda</strong></td>
                             <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
                                  <span t-field="o.amount_residual"/>
-                            </td>
+                            </td> -->
                         </tr>
                     </t>
                   </table>

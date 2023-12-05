@@ -48,7 +48,7 @@
               <!--
                     <td t-if="o.number &lt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
                     <td t-if="o.number &gt; '00030000'" style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td>-->
-                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.internal_number"/></td>
+                    <td style="padding: 6px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td>
                 </tr>
               </table>
             </div>  
@@ -96,7 +96,7 @@
               </div>
               <br/>
               <div style="font-size:36pt; font-family:'Arial'; line-height: 0.7;">
-                <p t-if="o.internal_number"><b>Factura: </b><span t-field="o.internal_number"/></p>
+                <p t-if="o.number"><b>Factura: </b><span t-field="o.number"/></p>
                 <p t-if="o.invoice_date"><b>Fecha: </b> <span t-field="o.invoice_date"/></p>
               </div>
               <br/>
@@ -114,9 +114,9 @@
                 <p t-if="o.partner_id.vat"><b>RTN:</b> <span t-field="o.partner_id.vat"/></p>
               </div>
             </div>
-             <div name="reference" t-if="o.ref">
+             <div name="reference" t-if="o.reference">
                 <strong>Reference:</strong>
-                <p t-field="o.ref"/>
+                <p t-field="o.reference"/>
             </div>
           
             <!--Is there a discount on at least one line? -->
