@@ -377,7 +377,7 @@ class AccountMove(models.Model):
             self.company_id.id)
         self.sequence_ids = self._default_sequence(self.journal_id.id)
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def action_date_assign(self):
         res = super(AccountMove, self).action_date_assign()
         if self.state:
@@ -415,7 +415,7 @@ class AccountMove(models.Model):
         #    ]
         #    self.journal_id = self.env['account.journal'].search(domain).id
 
-    @api.model
+    #@api.model
     def action_move_create(self):
         res = super(AccountMove, self).action_move_create()
         for inv in self:

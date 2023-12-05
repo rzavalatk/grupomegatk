@@ -16,7 +16,7 @@ class Authorization(models.Model):
     active = fields.Boolean("Activo", default=True)
     fiscal_sequence_regime_ids = fields.One2many('sar.fiscal.sequence.regime', 'authorization_code_id')
 
-    @api.model
+    #@api.model
     def create(self, vals):
         res = super(Authorization, self).create(vals)
         if vals.get("start_date") > vals.get("expiration_date"):
@@ -35,7 +35,7 @@ class Authorization(models.Model):
                 #'target': 'new',
                 #'context': ctx}
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def _update_ir_sequence(self):
         for fiscal_sequence in self.fiscal_sequence_regime_ids:
             if fiscal_sequence.sequence_id:
@@ -43,7 +43,7 @@ class Authorization(models.Model):
                 fiscal_sequence.sequence_id.write(sequence_vals)
         return True
     
-    @api.model_create_multi
+    #@api.model_create_multi
     def write(self, vals):
         res = super(Authorization, self).write(vals)
         res = self._update_ir_sequence()
@@ -70,7 +70,7 @@ class Fiscal_sequence(models.Model):
             res = prefix + str(number).zfill(padding)
         return res
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def _update_ir_sequence(self):
         if self.sequence_id:
             sequence_vals = {'vitt_min_value': self.build_numbers(self._from),
@@ -86,7 +86,7 @@ class Fiscal_sequence(models.Model):
         if self.actived and not self.sequence_id.active:
             self.sequence_id.write({'active': True})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def write(self, vals):
         super(Fiscal_sequence, self).write(vals)
         self._update_ir_sequence()
@@ -98,7 +98,7 @@ class Fiscal_sequence(models.Model):
         except :
             return False
 
-    @api.model
+    #@api.model
     def create(self, vals):
         res = super(Fiscal_sequence, self).create(vals)
         if not vals[0]['journal_id']:
