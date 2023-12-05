@@ -15,9 +15,7 @@
                     <field name="invoice_date_due"/>
                 </xpath>
 
-
-
-                
+         
                 <xpath expr="//button[@name='action_post']" position="after">
                     <button string="Borrador" groups="sign_orders.group_admins" name="go_draft" type="object"/>
                 </xpath>

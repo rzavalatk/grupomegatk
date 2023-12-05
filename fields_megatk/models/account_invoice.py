@@ -17,17 +17,12 @@ class Account_Move(models.Model):
             'state': 'draft'
         })
     
-    
-"""class AccountInvoiceLine(models.Model):
-    _inherit = "account.move.line"
+    @api.onchange('date_due')
+    def update_move_lines(self):
+        for move in self:
+            for line in move.line_ids:
+                line.date_maturity = move.date_due
 
-    x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
-    obj_padre = fields.Many2one(related="move_id.user_id", string="ResponsableTem")
-    x_series = fields.Text("Series")
-
-    @api.onchange('product_id')
-    def product_id_change1(self):
-        self.x_user_id = self.obj_padre.id"""
     
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
@@ -35,6 +30,9 @@ class AccountMoveLine(models.Model):
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="move_id.invoice_user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
+    
+    #date_maturity = fields.Date(string='Due Date', index=True, tracking=True, related='move_id.date_due',
+    #    help="This field is used for payable and receivable journal entries. You can put the limit date for the payment of this line.")
 
     @api.onchange('product_id')
     def product_id_change1(self):
