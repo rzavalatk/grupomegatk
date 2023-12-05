@@ -72,7 +72,7 @@
                             <page string="Detalle de Transacción">
                                 <field name="check_lines" attrs="{'readonly': [('state','!=','draft')]}">
                                     <tree editable="top">
-                                        <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+                                        <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id)]"/>
                                         <field name="name"/>
                                         <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}" />
                                         <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
@@ -126,7 +126,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <!--<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>-->
             </record>
 
         <record id="action_check" model="ir.actions.act_window">

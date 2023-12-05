@@ -93,7 +93,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">[('company_id','=',[user.company_id.id])]</field>
             </record>
 
         <record id="action_banks_trasferences" model="ir.actions.act_window">
