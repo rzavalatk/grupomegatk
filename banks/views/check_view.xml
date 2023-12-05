@@ -72,7 +72,7 @@
                             <page string="Detalle de Transacción">
                                 <field name="check_lines" attrs="{'readonly': [('state','!=','draft')]}">
                                     <tree editable="top">
-                                        <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id)]"/>
+                                        <field name="account_id" options="{'no_create': True}" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
                                         <field name="name"/>
                                         <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}" />
                                         <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
@@ -118,7 +118,6 @@
             </tree>
             </field>
         </record>
-
         <!-- Reglas de registro -->
             <record id="rule_banco_cheque" model="ir.rule">
             <field name="name">Cheque</field>

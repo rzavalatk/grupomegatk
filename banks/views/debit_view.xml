@@ -49,7 +49,7 @@
                         <page string="Detalle de Transacción">
                             <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
                                 <tree editable="bottom">
-                                <field name="account_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]" options="{'no_create': True}"/>
                                 <field name="name"/>
                                 <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
                                 <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
@@ -72,7 +72,7 @@
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
             </form>
-        </field>[('company_id', '=', parent.company_id)]
+        </field>
     </record> 
 
     <record model="ir.ui.view" id="banks_debit_view_tree">
@@ -112,22 +112,6 @@
             </search>
         </field>
     </record>
-
-    <record model="ir.ui.view" id="debit_bank_account">
-        <field name="name">debit.bank.account</field>
-        <field name="model">banks.debit</field>
-        <field name="inherit_id" ref="studio_customization.odoo_studio_debito_b_31081377-f520-4a2c-a0d3-6ae7d704e4ca"/>
-        <field name="arch" type="xml">
-            
-            <xpath expr="//field[@name='account_id']" position="attributes">
-                <attribute name="domain">[('company_id', '=', parent.company_id)]</attribute>
-            </xpath>
-    
-        </field>
-    </record>
-
-    
-
     <!-- Reglas de registro -->
         <record id="rule_banco_debitos" model="ir.rule">
         <field name="name">Debito</field>
