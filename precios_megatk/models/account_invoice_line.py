@@ -10,7 +10,7 @@ class AccountMoveLine(models.Model):
     nombreproducto = fields.Char(related='product_id.name')
     lista_precio = fields.Char("Lista de Precio", readonly=True,)
     
-    @api.onchange('precio_id')
+    """@api.onchange('precio_id')
     def _onchange_precio_id(self):
         if self.precio_id:
             self.price_unit = self.precio_id.precio
@@ -37,7 +37,7 @@ class AccountMoveLine(models.Model):
                                                   line.product_id.list_price)
                                     porcentaje = round(porcentaje, 2)
                                     if porcentaje >= lista.descuento:
-                                        line.precio_id = lista.id
+                                        line.precio_id = lista.id"""
     """@api.model
     def create(self, values):
         line = super(AccountMoveLine, self).create(values)
