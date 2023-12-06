@@ -9,8 +9,10 @@ class WizardSolicitarPermiso(models.TransientModel):
     _name = 'hr.employee.permisos.wizard'
     _description = "description"
 
-    fecha_inicio = fields.Datetime(string='Desde', required=True, ) 
+    fecha_inicio = fields.Datetime(string='Desde', required=True, )
+    fecha_inicio_txt = fields.Char(string='Desde' ) 
     fecha_fin = fields.Datetime(string='Hasta', required=True, )
+    fecha_fin_txt = fields.Char(string='Hasta')
     cargo = fields.Selection([('vaciones', 'Vacaciones'),('deduccion', 'Dedución de sueldo'),('sincargo', 'Sin cargo'),('incapacidad', 'Incapacidad')], default= 'vaciones', copy=False, required=True, track_visibility='onchange')
     reporto = fields.Selection([('anticipado', 'Anticipado'),('llamada', 'Llamada'),('mensaje', 'Mensaje'),('noreporto', 'No reporto')], default= 'anticipado', copy=False, required=True, track_visibility='onchange')
     employe_ids = fields.Many2many(comodel_name='hr.employee', string='Solicitantes', required=True, relation='x_permisos_empleados', column1="employe_id", column2="permiso_id")
@@ -151,7 +153,7 @@ class WizardSolicitarPermiso(models.TransientModel):
                     'reporto': self.reporto,
                     'employe_id': employe.id,
                     'justificacion': self.justificacion,
-                    'state': 'aprobado',
+                    'state': 'pendiente',
                     'dias': self.dias,
                     'horas': self.horas,
                     'minutos': self.minutos,
@@ -160,6 +162,6 @@ class WizardSolicitarPermiso(models.TransientModel):
                     'por_empresa': True,
                 }
                 permiso_id = obj_permiso.create(valores)
-                permiso_id.aprobar('general')
+                #permiso_id.aprobar('general')
         else:
             raise Warning(_('Las fechas no deben ser iguales'))

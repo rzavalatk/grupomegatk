@@ -16,7 +16,31 @@
           <xpath expr="//field[@name='user_id']" position="after">
             <field name="fecha_ingreso"/>
           </xpath>
+
+          <xpath expr="//form/header/button[@name='1113']" position="after">
+        
+            <button name="%(action_permisos_wizard)d" type="action" string="Permiso General" class="oe_highlight" />  
+         
+        </xpath>
+
+        <xpath expr="//div[@name='button_box']" position="inside">
+          <button class="oe_stat_button"
+            icon="fa-list"
+            type="action" 
+            name="%(action_emplyee_permiso_personal)d"
+            string="Permisos">
+          </button>
+        </xpath>
+
         </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_emplyee_permiso_personal">
+      <field name="name">Permisos</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">hr.employee.permisos</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('employe_id','=',active_id)]</field>
     </record>
 
     <record model="ir.ui.view" id="hr_permiso_view_kanban_inh">
@@ -24,8 +48,8 @@
       <field name="model">hr.employee</field>
       <field name="inherit_id" ref="hr.hr_kanban_view_employees" />
         <field name="arch" type="xml">
-          <xpath expr="//kanban/templates/t/div/div/div/div/strong" position="after">
-            <strong class="o_kanban_record_title">
+          <xpath expr="//kanban/templates/t/div/div/div/div/strong" position="inside">
+            <strong>
               <b>Días: </b><field name="permisos_dias"/>
               <b>Horas: </b><field name="permisos_horas"/>
               <b>Minutos: </b><field name="permisos_minutos"/>
