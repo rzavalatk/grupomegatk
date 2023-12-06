@@ -153,7 +153,7 @@ class WizardSolicitarPermiso(models.TransientModel):
                     'reporto': self.reporto,
                     'employe_id': employe.id,
                     'justificacion': self.justificacion,
-                    'state': 'pendiente',
+                    'state': 'aprobado',
                     'dias': self.dias,
                     'horas': self.horas,
                     'minutos': self.minutos,

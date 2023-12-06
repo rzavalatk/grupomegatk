@@ -2,6 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_permiso_admin,permisos,model_hr_employee_permisos,permiso_admin,1,1,1,1
 access_permiso_jefe,permisos,model_hr_employee_permisos,permiso_jefe,1,1,1,1
 access_permiso_user,permisos,model_hr_employee_permisos,permiso_user,1,1,1,0
-access_permiso_user_wizard,permisos,model_hr_employee_permisos_wizard,permiso_user,1,1,1,0
-access_permiso_user_wizard,permisos,model_hr_employee_permisos_wizard,permiso_jefe,1,1,1,1
 access_permiso_user_wizard,permisos,model_hr_employee_permisos_wizard,permiso_admin,1,1,1,1
