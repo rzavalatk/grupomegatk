@@ -31,6 +31,21 @@ class Saleorder(models.Model):
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('30','30 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
     #CAMPO EN OTRA INFORMACIÓN
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
+    
+    def action_confirm(self):
+        res = super(Saleorder, self).action_confirm()
+        
+        for order in self:
+            for line in order.order_line:
+                # Lógica para crear la factura y líneas de factura
+                # ...
+
+                # Establecer el campo personalizado en la línea de movimiento de cuenta
+                move_line_vals = self.env['account.move']._prepare_move_line_vals(line)
+                # Continuar con la creación de la línea de movimiento de cuenta
+                # ...
+        
+        return res
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
@@ -47,6 +62,8 @@ class SaleorderLine(models.Model):
         values['x_user_id'] = self.x_user_id.id
         values['x_series'] = self.x_series
         return values"""
+        
+          
     
     """@api.onchange('x_user_id')
     def onchange_x_user_id(self):
