@@ -31,5 +31,7 @@
         'reports/stock_picking_custom_print_view_pos.xml',
         'wizard/wizard_sign.xml',
         'views/stock.xml',
+        'security/groups.xml',
+        'security/ir.model.access.csv'
     ],
 }

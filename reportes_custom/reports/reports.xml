@@ -61,7 +61,7 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
-		<report
+		<!--<report
 			id="stock_picking_custom"
 			model="stock.picking"
 			menu="False"
@@ -70,12 +70,33 @@
 			file="reportes_custom.stock_picking_custom_print_view"
 			report_type="qweb-pdf"
 			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>-->
+
+		<report
+			id="stock_picking_custom"
+			model="stock.picking"
+			string="Orden de entrega"
+			name="reportes_custom.stock_picking_custom_print_view"
+			file="reportes_custom.stock_picking_custom_print_view"
+			report_type="qweb-pdf"
+			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+
+		<!--<report
+			id="stock_picking_custom_pos"
+			model="stock.picking"
+			menu="False"
+			string="Orden de entraga pos"
+			name="reportes_custom.stock_picking_custom_print_view_pos"
+			file="reportes_custom.stock_picking_custom_print_view_pos"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_pos"
+		/>-->
 
 		<report
 			id="stock_picking_custom_pos"
 			model="stock.picking"
-			menu="False"
 			string="Orden de entraga pos"
 			name="reportes_custom.stock_picking_custom_print_view_pos"
 			file="reportes_custom.stock_picking_custom_print_view_pos"

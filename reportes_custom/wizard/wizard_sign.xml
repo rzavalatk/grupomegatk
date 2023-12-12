@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <footer>
-                        <button string="Gurardar" name="print_report" type="object" disabled="True" id='write' class="btn-primary"/>
+                        <button string="Gurardar" name="print_report" type="object" id='write' class="btn-primary"/>
                         <button string="Cancelar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>

@@ -7,7 +7,7 @@ import base64
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def print_report(self):
         context = self.env.context
         id = context['active_id']
