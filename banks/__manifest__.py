@@ -22,7 +22,7 @@
         "views/debit_view.xml",
         "views/account.xml",
         "views/banks_transferences_view.xml",
-        "views/config_journal_view.xml",
+        #"views/config_journal_view.xml",
         "views/check_view.xml",
         "views/payment_view.xml",
         "views/account_payment_view.xml",
