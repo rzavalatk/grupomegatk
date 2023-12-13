@@ -31,30 +31,16 @@ class Account_Move(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    x_user_id = fields.Many2one('res.users', string='Responsable')
+    x_user_id = fields.Many2one('res.users', compute='_compute_responsable_cotizacion', string='Responsable')
     obj_padre = fields.Many2one(related="move_id.invoice_user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
-    
-    def _prepare_move_line_vals(self, order_line):
-        vals = super(AccountMoveLine, self)._prepare_move_line_vals(order_line)
-        vals['x_user_id'] = order_line.x_user_id
-        vals['x_series'] = order_line.x_series
-        return vals
     
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
         for line in self:
             if line.move_id.invoice_origin and line.move_id.move_type == "out_invoice":
                 cotizacion = self.env['sale.order'].search([('name', '=', line.move_id.invoice_origin)], limit=1)
-                #line.x_user_id = cotizacion.user_id if cotizacion.user_id else False
-                
-                for lines in line:
-                    for product in cotizacion.order_line:
-                        if lines.product_id.id == product.product_id.id:
-                            lines.x_user_id = product.x_user_id
-                
-                _logger.info("Este es un mensaje informativo.")
-                _logger.info(line)
+                line.x_user_id = cotizacion.user_id if cotizacion.user_id else False
                 """for lines in cotizacion.order_line:
                     line.x_user_id = lines.x_user_id if line.product_id.id == cotizacion.order_line.product_id.id else False"""
             else:
@@ -81,7 +67,4 @@ class AccountMoveLine(models.Model):
         self.x_user_id = self.obj_padre.id
         self.x_series = self.product_id.name
 
-    """@api.onchange('name')
-    def _onchange_name(self):
-        if self.name:
-            self.account_id = False  # Puedes establecer el valor que desees aquí"""
+   
