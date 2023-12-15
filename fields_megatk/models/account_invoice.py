@@ -34,6 +34,12 @@ class AccountMoveLine(models.Model):
     x_user_id = fields.Many2one('res.users', compute='_compute_responsable_cotizacion', string='Responsable')
     obj_padre = fields.Many2one(related="move_id.invoice_user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
+    fecha_vencimiento_report = fields.Char(string='referencia de factura/Fecha de vencimiento (Reporte)', compute='_compute_fecha_vencimiento', )
+    terminos_pago_report = fields.Char(string='referencia de factura/Terminos pago (Reporte)', compute='_compute_terminos_pago', )
+    referencia_pago_report = fields.Char(string='referencia de factura/pago (Reporte)', compute='_compute_ref_pago', )
+    fecha_pago_report = fields.Char(string='referencia de factura/fecha de pago (Reporte)', compute='_compute_ref_pago', )
+    nombre_empresa_report = fields.Char(string='referencia de factura/Empresa (Reporte)', compute='_compute_ref_empresa', )
+    numero_interno_report = fields.Char(string='referencia de factura/Numero Interno (Reporte)', compute='_compute_ref_empresa', )
     
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
@@ -45,6 +51,31 @@ class AccountMoveLine(models.Model):
                     line.x_user_id = lines.x_user_id if line.product_id.id == cotizacion.order_line.product_id.id else False"""
             else:
                 line.x_user_id = self.env.user
+                
+    @api.depends('move_id.invoice_date_due')
+    def _compute_fecha_vencimiento(self):
+        for line in self:
+            line.fecha_vencimiento_report = line.move_id.invoice_date_due
+    
+    @api.depends('move_id.invoice_payment_term_id')
+    def _compute_terminos_pago(self):
+        for line in self:
+            line.terminos_pago_report = line.move_id.invoice_payment_term_id.display_name
+    
+    @api.depends('move_id.invoice_payments_widget')
+    def _compute_ref_pago(self):
+        
+        for line in self:
+            payments_ref = self.env['account.payment'].search([('ref', '=', line.move_id.name)], limit=1)
+            line.referencia_pago_report = payments_ref.name
+            line.fecha_pago_report = payments_ref.date
+            
+    @api.depends('move_id.partner_id')
+    def _compute_ref_empresa(self):
+        for line in self:
+            line.nombre_empresa_report = line.move_id.partner_id.name
+            line.numero_interno_report = line.move_id.internal_number
+    
                 
     '''@api.depends('move_id.invoice_origin')
     def _compute_serie(self):
