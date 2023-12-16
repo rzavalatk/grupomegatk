@@ -9,7 +9,7 @@ class HrPermisos(models.Model):
 	_name = 'hr.employee.permisos'
 	_order = "id desc"
 	_inherit = ['mail.thread', 'mail.activity.mixin']
-	_description = "description"
+	_description = "Permisos Generales"
 
 	#@api.model
 	def solicitante(self):
