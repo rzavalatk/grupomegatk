@@ -62,13 +62,32 @@ class AccountMoveLine(models.Model):
         for line in self:
             line.terminos_pago_report = line.move_id.invoice_payment_term_id.display_name
     
-    @api.depends('move_id.invoice_payments_widget')
+    """@api.depends('move_id.invoice_payments_widget')
     def _compute_ref_pago(self):
         
         for line in self:
             payments_ref = self.env['account.payment'].search([('ref', '=', line.move_id.name)], limit=1)
             line.referencia_pago_report = payments_ref.name
-            line.fecha_pago_report = payments_ref.date
+            line.fecha_pago_report = payments_ref.date"""
+            
+    @api.depends('move_id.invoice_payments_widget')
+    def _compute_ref_pago(self):
+        # Obtener todas las referencias y fechas de pago únicas en una sola búsqueda
+        payments_refs = self.env['account.payment'].search([
+            ('ref', 'in', self.mapped('move_id.name'))
+        ])
+
+        # Crear un diccionario de referencias de pago y fechas de pago para facilitar el acceso
+        payments_data = {payment.ref: (payment.name, payment.date) for payment in payments_refs}
+
+        for line in self:
+            # Obtener la referencia de pago y la fecha de pago desde el diccionario
+            payment_info = payments_data.get(line.move_id.name)
+            
+            # Asignar valores a los campos calculados
+            line.referencia_pago_report = payment_info[0] if payment_info else False
+            line.fecha_pago_report = payment_info[1] if payment_info else False
+
             
     @api.depends('move_id.partner_id')
     def _compute_ref_empresa(self):
