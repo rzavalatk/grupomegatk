@@ -14,11 +14,11 @@ class Saleline(models.Model):
     lista_precio = fields.Char("Lista de Precio",)
 
    
-    """def _prepare_invoice_line(self, optional_values):
-        values = super(Saleline, self)._prepare_invoice_line(optional_values)
+    def _prepare_invoice_line(self, **optional_values):
+        values = super(Saleline, self)._prepare_invoice_line(**optional_values)
         values['precio_id'] = self.precio_id.id
         values['lista_precio'] = self.lista_precio
-        return values"""
+        return values
     
 
     @api.onchange("precio_id")
