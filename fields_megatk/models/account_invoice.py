@@ -31,7 +31,7 @@ class Account_Move(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    x_user_id = fields.Many2one('res.users', compute='_compute_responsable_cotizacion', string='Responsable')
+    x_user_id = fields.Many2one('res.users',  string='Responsable')
     obj_padre = fields.Many2one(related="move_id.invoice_user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
     fecha_vencimiento_report = fields.Char(string='referencia de factura/Fecha de vencimiento (Reporte)', compute='_compute_fecha_vencimiento', )
