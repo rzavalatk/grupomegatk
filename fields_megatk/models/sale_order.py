@@ -32,6 +32,7 @@ class Saleorder(models.Model):
     #CAMPO EN OTRA INFORMACIÓN
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
     
+    
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
@@ -40,17 +41,15 @@ class SaleorderLine(models.Model):
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
-    
 
-    
-    """def _prepare_invoice_line(self, optional_values):
-        values = super()._prepare_invoice_line(optional_values)
+    def _prepare_invoice_line(self, **optional_values):
+        invoice_item_sequence = 0
+        values = super(SaleorderLine, self)._prepare_invoice_line(**optional_values)
         values['x_user_id'] = self.x_user_id.id
         values['x_series'] = self.x_series
-        return values"""
+        return values
         
-          
-    
+
     """@api.onchange('x_user_id')
     def onchange_x_user_id(self):
         # Puedes realizar acciones adicionales aquí si es necesario
