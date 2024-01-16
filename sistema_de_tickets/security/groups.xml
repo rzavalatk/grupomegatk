@@ -7,9 +7,16 @@
             <field name="sequence">4</field>
     	</record>
     	
+        <record id="sorteo_manager" model="res.groups">
+    		<field name="category_id" ref="module_category_tickets"/>
+            <field name="name">Responsable</field>
+        </record>
+
         <record id="tickets_manager" model="res.groups">
     		<field name="category_id" ref="module_category_tickets"/>
             <field name="name">Responsable</field>
         </record>
+
+        
     </data>
 </odoo>
