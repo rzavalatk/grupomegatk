@@ -9,12 +9,12 @@
     	
         <record id="sorteo_manager" model="res.groups">
     		<field name="category_id" ref="module_category_tickets"/>
-            <field name="name">Responsable</field>
+            <field name="name">Responsable Sorteo</field>
         </record>
 
         <record id="tickets_manager" model="res.groups">
     		<field name="category_id" ref="module_category_tickets"/>
-            <field name="name">Responsable</field>
+            <field name="name">Responsable Tickets</field>
         </record>
 
         
