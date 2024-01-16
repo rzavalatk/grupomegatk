@@ -1,0 +1,60 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_sorteo_sorteo_form" model="ir.ui.view">
+            <field name="name">sorteo.sorteo.form</field>
+            <field name="model">sorteo.sorteo</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group name="datos-1" string="Datos">
+                            <field name="name"/>
+                            <field name="compañia"/>
+                            <field name="sequence_id"/>
+                            <field name="encargado_id"/>
+                            <field name="premios"/>
+                        </group>
+                        <group name="datos-2" string="Fecha">
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final"/>
+                            <field name="fecha_sorteo"/>
+                        </group>
+                    </group>
+                    
+
+                    <notebook>
+                        <page name="tickets" string="Tickets">
+                            <field name="tickets"/>
+                        </page>
+                    </notebook>
+                        
+                </form>
+            </field>
+        </record>
+
+        <record id="sorteo_sorteo_view_tree" model="ir.ui.view">
+            <field name="name">sorteo_sorteo.view.tree</field>
+            <field name="model">sorteo.sorteo</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="compañia"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_final"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sorteo_sorteo_action" model="ir.actions.act_window">
+            <field name="name">Sorteos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sorteo.sorteo</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+
+        <menuitem id="action_sorteo_sorteo_menu" name="Sorteos" action="sorteo_sorteo_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="17"/>
+
+    </data>
+</odoo>

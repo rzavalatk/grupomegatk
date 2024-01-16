@@ -1,0 +1,55 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_sorteo_ticket_form" model="ir.ui.view">
+            <field name="name">sorteo.ticket.form</field>
+            <field name="model">sorteo.ticket</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group >
+                           <group name="datos_ticket" string="Datos Ticket">
+                                <field name="name"/>
+                                <field name="sorteo"/>
+                                <field name="move_id"/>
+                                <field name="fecha"/>
+                            </group>
+                            <group name="datos_cliente" string="Datos cliente">
+                                <field name="customer_id"/>
+                                <field name="email"/>
+                                <field name="telefono"/>
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="sorteo_ticket_view_tree" model="ir.ui.view">
+            <field name="name">sorteo_ticket.view.tree</field>
+            <field name="model">sorteo.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="move_id"/>
+                    <field name="customer_id"/>
+                    <field name="email"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sorteo_ticket_action" model="ir.actions.act_window">
+            <field name="name">Tickets</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sorteo.ticket</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+
+        <!--<menuitem id="action_sorteo_ticket_menu" name="Tickets" action="sorteo_ticket_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="18"/>-->
+
+
+    </data>
+</odoo>

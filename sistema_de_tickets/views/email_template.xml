@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>    
+    <record id="email_template_ticket" model="mail.template">
+      <field name="name">Ticket Sorteo Maquira/Meditek</field>
+      <field name="model_id" ref="model_sorteo_ticket"/>
+      <field name="subject">Ticket para sorteo Maquira/Meditek (${object.name}) creado.</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <div class="page">
+            Estimado Sr(a) <b>${object.employe_id.name}</b>.<br/><br/><br/>
+
+            La solicitud de su permiso fue enviada exitosamente.
+          </div>  
+        </div>
+      </field>
+    </record>
+
+  </data>
+</odoo>

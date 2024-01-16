@@ -33,6 +33,7 @@ class Saleorder(models.Model):
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
     
     
+    
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):

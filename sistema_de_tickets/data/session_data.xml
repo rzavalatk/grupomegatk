@@ -1,0 +1,17 @@
+
+<odoo>
+
+    <data>
+        <record id="sequence_session" model="ir.sequence">
+            <field name="name">Sorteo Ticket Sequence</field>
+            <field name="code">ticket.sequence</field>
+            <field name="active">true</field>
+            <field name="prefix">Ticket/</field> <!-- Se Puede personalizar el prefijo según necesidades -->
+            <field name="padding">3</field> <!-- Se Puede ajustar el relleno según necesidades -->
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+    </data>
+    
+
+</odoo>

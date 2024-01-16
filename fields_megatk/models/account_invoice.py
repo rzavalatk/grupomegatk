@@ -8,13 +8,18 @@ _logger = logging.getLogger(__name__)
 
 #Campo de comisión pagada en las facturas
 class Account_Move(models.Model):
-    _inherit = "account.move"
-
+    _inherit = 'account.move'
+    
+    
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
         check_company=True,
         readonly=False, required=False,)
     
+    sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
+    x_student = fields.Boolean(string='Es Estudiante', default=False)
+    
+   
     #mostrar boton en factura de borrados
     def go_draft(self):
         self.write({
@@ -26,6 +31,52 @@ class Account_Move(models.Model):
         for move in self:
             for line in move.line_ids:
                 line.date_maturity = move.date_due
+                
+    def action_post(self):
+        res = super(Account_Move, self).action_post()
+        self.generate_tickets()
+        return res
+
+    def generate_tickets(self):
+        tickets = []
+        flag = False
+        
+        if self.sorteo_id:
+            if self.amount_total > 1000:
+                tickets.append({'ticket': "ticket 1"})
+                #_logger.warning("Generando ticket 1")
+
+            for move_line in self.line_ids:
+                if not flag:
+                    if move_line.product_id.marca_id.name == 'MAQUIRA':
+                        tickets.append({'ticket': "ticket 2"})
+                        #_logger.debug("Generando ticket 2")
+                        flag = True
+            
+            if self.x_student:
+                tickets.append({'ticket': "ticket 3"})
+        
+
+            # Limitar a un máximo de 3 tickets por compra
+            tickets = tickets[:3]
+
+            # Crear los registros de tickets
+            for ticket_data in tickets:
+                # Cambiar 'move_line_id' por 'name' o algún otro campo significativo
+                self.env['sorteo.ticket'].create({
+                    'move_id': self.id,
+                    'name': self.sorteo_id.sequence_id.prefix + '%%0%sd' % self.sorteo_id.sequence_id.padding % self.sorteo_id.sequence_id.number_next_actual,
+                    'sorteo': self.sorteo_id.id,
+                    'customer_id': self.partner_id.id,
+                    'fecha': self.invoice_date,
+                })
+                
+                # Incrementa el número de la secuencia para el próximo ticket
+                self.sorteo_id.sequence_id.sudo().write({'number_next_actual': self.sorteo_id.sequence_id.number_next_actual + 1})
+            
+        
+        
+        
 
     
 class AccountMoveLine(models.Model):
