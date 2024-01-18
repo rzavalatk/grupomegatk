@@ -32,6 +32,11 @@ class Saleorder(models.Model):
     #CAMPO EN OTRA INFORMACIÓN
     x_consignacion = fields.Selection([('si','SI'),('no','NO')], string='Consignación', default='no')
     
+    x_contacto = fields.Char('Contacto de referencia')
+    
+    sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
+    x_student = fields.Boolean(string='Es Estudiante', default=False)
+    
     
     
 

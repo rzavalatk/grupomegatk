@@ -11,6 +11,12 @@ class Account_Move(models.Model):
     _inherit = 'account.move'
     
     
+    def _compute_contacto(self):
+        cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
+        self.x_contacto = cotizacion.x_contacto
+        self.sorteo_id = cotizacion.sorteo_id.id
+        self.x_student = cotizacion.x_student
+    
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
         check_company=True,
@@ -18,6 +24,8 @@ class Account_Move(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
+    
+    x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
     
    
     #mostrar boton en factura de borrados
@@ -46,12 +54,12 @@ class Account_Move(models.Model):
                 tickets.append({'ticket': "ticket 1"})
                 #_logger.warning("Generando ticket 1")
 
-            for move_line in self.line_ids:
-                if not flag:
-                    if move_line.product_id.marca_id.name == 'MAQUIRA':
-                        tickets.append({'ticket': "ticket 2"})
-                        #_logger.debug("Generando ticket 2")
-                        flag = True
+                for move_line in self.line_ids:
+                    if not flag:
+                        if move_line.product_id.marca_id.name == 'MAQUIRA':
+                            tickets.append({'ticket': "ticket 2"})
+                            #_logger.debug("Generando ticket 2")
+                            flag = True
             
             if self.x_student:
                 tickets.append({'ticket': "ticket 3"})
