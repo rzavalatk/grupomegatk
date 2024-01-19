@@ -26,6 +26,9 @@
                         <page name="tickets" string="Tickets">
                             <field name="tickets"/>
                         </page>
+                        <page name="fechas" string="Fechas festivas">
+                            <field name="fechas_festivas"/>
+                        </page>
                     </notebook>
                         
                 </form>

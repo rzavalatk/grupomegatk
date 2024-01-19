@@ -22,6 +22,7 @@
         'data/session_data.xml',
         'views/sorteo_ticket_view.xml',
         'views/sorteo_sorteo_view.xml',
+        'views/fechas_festivas_view.xml',
         
     ],
     'installable': True,

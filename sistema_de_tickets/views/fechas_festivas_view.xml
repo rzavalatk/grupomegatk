@@ -1,0 +1,39 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_sorteo_fechas_form" model="ir.ui.view">
+            <field name="name">sorteo.fechas.form</field>
+            <field name="model">sorteo.fecha_festiva</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group name="datos-1" string="Datos">
+                            <field name="name"/>
+                            <field name="fecha"/>
+                            
+                        </group>
+                        
+                    </group>
+                        
+                </form>
+            </field>
+        </record>
+
+        <record id="sorteo_fechas_view_tree" model="ir.ui.view">
+            <field name="name">sorteo_fechas.view.tree</field>
+            <field name="model">sorteo.fecha_festiva</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="fecha"/>
+                </tree>
+            </field>
+        </record>
+
+    
+
+        
+
+       
+    </data>
+</odoo>

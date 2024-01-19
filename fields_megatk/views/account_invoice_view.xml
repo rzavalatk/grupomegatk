@@ -89,6 +89,20 @@
             </field>
         </record>
 
-        
+        <record id="account_move_search_inherit" model="ir.ui.view">
+            <field name="name">account.move.search.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <!-- Realiza tus modificaciones en la vista de búsqueda aquí -->
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="internal_number"/>
+                    
+                </xpath>
+
+                
+            </field>
+        </record>
+
 	</data>	
 </odoo>
