@@ -104,7 +104,7 @@ class WizardGenerarCheque(models.TransientModel):
                 'journal_id': self.banco_id.id,
                 'date' : self.fecha,
                 'total': self.monto,
-                'memo': self.name,
+                'name': self.name,
                 'es_moneda_base': self.es_moneda_base,
                 'currency_rate': self.currency_rate,
                 'currency_id': self.currency_id.id,
