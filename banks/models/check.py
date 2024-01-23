@@ -325,7 +325,7 @@ class Check(models.Model):
 	msg = fields.Char("Error de configuración", compute=get_number_calc)
 	number_calc = fields.Char("Número de Transacción", compute=get_number_calc)
 	move_id = fields.Many2one('account.move', 'Apunte Contable', copy=False)
-	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
+	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.company, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
 	plantilla_id = fields.Many2one("banks.template", "Plantilla",copy=False)
 	cheque_anulado = fields.Boolean("Cheque anulado", copy=False)

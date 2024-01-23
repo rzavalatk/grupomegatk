@@ -79,7 +79,7 @@ class Vittbankstransferences(models.Model):
     move_id = fields.Many2one(
         'account.move', 'Apunte Contable', readonly=True, copy=False)
     company_id = fields.Many2one(
-        "res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
+        "res.company", "Empresa", default=lambda self: self.env.company, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
 
     # @api.model_create_multi

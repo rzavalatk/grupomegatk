@@ -83,7 +83,7 @@ class BanksPayment(models.Model):
 	diferencia = fields.Float("Diferencia", compute=get_diferencia)
 	doc_type = fields.Selection([('check', 'Cheque'), ('transference', 'Transferencia'), ('otro', 'Otro')], string='Tipo de Transacción', required=True)
 	msg = fields.Char("Error de configuración", compute=get_msg_number)
-	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.user.company_id, required=True)
+	company_id = fields.Many2one("res.company", "Empresa", default=lambda self: self.env.company, required=True)
 	es_moneda_base = fields.Boolean("Es moneda base")
 	currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
 
