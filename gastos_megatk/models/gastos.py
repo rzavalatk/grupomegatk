@@ -223,7 +223,7 @@ class LiquidacionGastos(models.Model):
             'date': self.fecha_liquidacion,
             'ref': self.name,
             'line_ids': lineas,
-            'state': 'posted',
+            'state': 'draft',
         }
         id_move = account_move.create(values)
         id_move.post()
