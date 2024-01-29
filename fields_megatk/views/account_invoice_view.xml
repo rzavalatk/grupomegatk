@@ -97,7 +97,6 @@
                 <!-- Realiza tus modificaciones en la vista de búsqueda aquí -->
                 <xpath expr="//field[@name='name']" position="before">
                     <field name="internal_number"/>
-                    <field name="partner_id" />
                     
                 </xpath>
 
