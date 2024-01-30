@@ -4,7 +4,7 @@ from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
-
+import math
 
 #Campo de comisión pagada en las facturas
 class Account_Move(models.Model):
@@ -55,11 +55,12 @@ class Account_Move(models.Model):
             if self.sorteo_id.fecha_inicio <= self.invoice_date <= self.sorteo_id.fecha_final:
                 
                 if self.amount_total > 1000:
-                    tickets.append({'ticket': "ticket 1"})
+                    
+                    ticketsXcompra = math.floor(self.amount_total / 1000)
                     
                     for fechas in self.sorteo_id.fechas_festivas:
                         if self.invoice_date == fechas.fecha:
-                            tickets.append({'ticket': "ticket 4"})
+                            ticketsXcompra = ticketsXcompra * 2
                             dia_festivo = True
                             break
                     
@@ -68,26 +69,17 @@ class Account_Move(models.Model):
                     for move_line in self.line_ids:
                         if not flag:
                             if move_line.product_id.marca_id.name == 'MAQUIRA':
-                                tickets.append({'ticket': "ticket 2"})
+                                ticketsXcompra = ticketsXcompra * 2
                                 #_logger.debug("Generando ticket 2")
                                 if self.x_student:
-                                    tickets.append({'ticket': "ticket 3"})
+                                    ticketsXcompra = ticketsXcompra * 3
+                                    
                                 flag = True
                                 
-                    
-                
-                
-            
-
                 # Limitar a un máximo de 3 tickets por compra si no es dia festivo
                 
-                if not dia_festivo:
-                    tickets = tickets[:3]
-                else:
-                    tickets = tickets[:4]
-
-                # Crear los registros de tickets
-                for ticket_data in tickets:
+                for i in range(ticketsXcompra):
+                
                     # Cambiar 'move_line_id' por 'name' o algún otro campo significativo
                     self.env['sorteo.ticket'].create({
                         'move_id': self.id,
@@ -99,7 +91,7 @@ class Account_Move(models.Model):
                     
                     # Incrementa el número de la secuencia para el próximo ticket
                     self.sorteo_id.sequence_id.sudo().write({'number_next_actual': self.sorteo_id.sequence_id.number_next_actual + 1})
-            
+                
         
         
         
