@@ -10,7 +10,7 @@
             <tree string="Producto facturado" create="false" default_order='date desc'>
                 <field name="date"/>
                 <field name="number"/>
-                <field name="user_id"/>
+                <field name="invoice_user_id"/>
                 <field name="partner_id"/>
                 <field name="marca_id"/>
                 <field name="product_id"/>
@@ -32,14 +32,14 @@
                 <field name="number" string="Factura #"/>
                 <field name="partner_id" string="Cliente"/>
                 <field name="product_id" string="Producto"/>
-                <filter string="Factura" name='factu_report' domain="[('type','=','out_invoice')]"/>
-                <filter string="Nota de credito" name='credit_report' domain="[('type','=','out_refund')]"/>
+                <filter string="Factura" name='factu_report' domain="[('move_type','=','out_invoice')]"/>
+                <filter string="Nota de credito" name='credit_report' domain="[('move_type','=','out_refund')]"/>
                 <separator/>
                 <filter string="Abiertas" name='state_open' domain="[('state','in',['open'])]"/>
                 <filter string="Cerradas" name='state_paid' domain="[('state','in',['paid'])]"/>
                 <separator/>
                 <filter string="Marca" name='group_marca' context="{'group_by':'marca_id'}"/>
-                <filter string="Responsable" name="invoicedate" context="{'group_by':'user_id'}"/>
+                <filter string="Responsable" name="invoicedate" context="{'group_by':'invoice_user_id'}"/>
                 <filter string="Cliente" name="customer" context="{'group_by':'partner_id'}"/>
                 <filter string="Fecha" name="date" context="{'group_by':'date'}"/>
             </search>
@@ -50,7 +50,7 @@
         <field name="name">Producto vendido</field>
         <field name="res_model">account.move.report.line</field>
         <field name="view_mode">tree</field>
-        <field name="domain">[('state', 'not in', ['draft', 'cancel']),('type','in', ['out_invoice','out_refund'])]</field>
+        <field name="domain">[('state', 'not in', ['draft', 'cancel']),('move_type','in', ['out_invoice','out_refund'])]</field>
         <field name="search_view_id" ref="view_account_invoice_report_search_p"/>
         <field name="context">{"search_default_factu_report":1}</field>
     </record>
@@ -63,7 +63,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
         </record>
 
     <menuitem action="action_account_invoice_line_report" id="menu_action_account_invoice_line_report" parent="account.menu_finance_receivables" sequence="125"/>

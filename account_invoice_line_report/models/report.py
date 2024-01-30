@@ -10,8 +10,8 @@ class AccountInvoiceReport(models.Model):
 	_auto = False
 	_rec_name = 'date'
 	
-	#@api.model_create_multi
-	@api.depends('currency_id', 'date', 'price_total', 'price_average', 'residual')
+	@api.model_create_multi
+	@api.depends('currency_id', 'date', 'price_total', 'price_average', 'amount_residual')
 	def _compute_amounts_in_user_currency(self):
 		"""Compute the amounts in the currency of the user
 		"""
@@ -25,7 +25,7 @@ class AccountInvoiceReport(models.Model):
 			company = record.company_id
 			record.user_currency_price_total = base_currency_id._convert(record.price_total, user_currency_id, company, date)
 			record.user_currency_price_average = base_currency_id._convert(record.price_average, user_currency_id, company, date)
-			record.user_currency_residual = base_currency_id._convert(record.residual, user_currency_id, company, date)
+			record.user_currency_amount_residual = base_currency_id._convert(record.amount_residual, user_currency_id, company, date)
 
 	number = fields.Char('Factura #', readonly=True)
 	date = fields.Date(readonly=True, string="Fecha")
@@ -42,7 +42,7 @@ class AccountInvoiceReport(models.Model):
 	partner_id = fields.Many2one('res.partner', string='Cliente', readonly=True)
 	commercial_partner_id = fields.Many2one('res.partner', string='Partner Company', help="Commercial Entity")
 	company_id = fields.Many2one('res.company', string='Company', readonly=True)
-	user_id = fields.Many2one('res.users', string='Responsable', readonly=True)
+	invoice_user_id = fields.Many2one('res.users', string='Responsable', readonly=True)
 	price_total = fields.Float(string='Sub total', readonly=True)
 	user_currency_price_total = fields.Float(string="Total Without Tax in Currency", compute='_compute_amounts_in_user_currency', digits=0)
 	price_average = fields.Float(string='P.U.', readonly=True, group_operator="avg")
@@ -50,7 +50,7 @@ class AccountInvoiceReport(models.Model):
 	currency_rate = fields.Float(string='Currency Rate', readonly=True, group_operator="avg", groups="base.group_multi_currency")
 	nbr = fields.Integer(string='Line Count', readonly=True)  # TDE FIXME master: rename into nbr_lines
 	invoice_origin = fields.Many2one('account.move', readonly=True)
-	type = fields.Selection([
+	move_type = fields.Selection([
 		('out_invoice', 'Customer Invoice'),
 		('in_invoice', 'Vendor Bill'),
 		('out_refund', 'Customer Credit Note'),
@@ -62,11 +62,11 @@ class AccountInvoiceReport(models.Model):
 		('paid', 'Paid'),
 		('cancel', 'Cancelled')
 		], string='Invoice Status', readonly=True)
-	date_due = fields.Date(string='Due Date', readonly=True)
+	invoice_date_due = fields.Date(string='Due Date', readonly=True)
 	account_id = fields.Many2one('account.account', string='Receivable/Payable Account', readonly=True, domain=[('deprecated', '=', False)])
 	account_line_id = fields.Many2one('account.account', string='Revenue/Expense Account', readonly=True, domain=[('deprecated', '=', False)])
 	partner_bank_id = fields.Many2one('res.partner.bank', string='Bank Account', readonly=True)
-	residual = fields.Float(string='Due Amount', readonly=True)
+	amount_residual = fields.Float(string='Due Amount', readonly=True)
 	user_currency_residual = fields.Float(string="Total Residual", compute='_compute_amounts_in_user_currency', digits=0)
 	country_id = fields.Many2one('res.country', string="Partner Company's Country")
 	account_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Account', groups="analytic.group_analytic_accounting")
@@ -76,14 +76,14 @@ class AccountInvoiceReport(models.Model):
 
 	_depends = {
 		'account.move': [
-			'account_id', 'amount_total_company_signed', 'commercial_partner_id', 'company_id',
-			'currency_id', 'date_due', 'date_invoice', 'fiscal_position_id',
-			'journal_id', 'number', 'partner_bank_id', 'partner_id', 'payment_term_id',
-			'residual', 'state', 'type', 'user_id',
+			'amount_total_signed', 'commercial_partner_id', 'company_id',
+			'currency_id', 'invoice_date_due', 'fiscal_position_id',
+			'journal_id', 'name', 'partner_bank_id', 'partner_id', 'invoice_payment_term_id',
+			'amount_residual', 'state', 'move_type',
 		],
 		'account.move.line': [
-			'account_id', 'invoice_origin', 'product_id',
-			'quantity', 'product_uom_id', 'account_analytic_id',
+			'account_id', 'move_id', 'product_id',
+			'quantity', 'product_uom_id', 'analytic_account_id',
 		],
 		'product.product': ['product_tmpl_id'],
 		'product.template': ['categ_id'],
@@ -97,7 +97,7 @@ class AccountInvoiceReport(models.Model):
 		select_str = """
 			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id, sub.analytic_account_id,
 				sub.invoice_payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
-				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr, sub.invoice_origin, sub.move_type, sub.state,
+				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr,  sub.move_type, sub.state,
 				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
 				sub.product_qty, sub.price_total as price_total, sub.price_average as price_average, sub.amount_total / COALESCE(cr.rate, 1) as amount_total,
 				COALESCE(cr.rate, 1) as currency_rate, sub.residual as residual, sub.commercial_partner_id as commercial_partner_id
