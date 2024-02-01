@@ -172,7 +172,9 @@ class CXCLine(models.Model):
     _description = "description"
     
     def _name_(self):
-        self.name = self.account_id.name
+        
+        for record in self:
+            self.name = record.account_id.name
 
     
     cierre_cxc_id = fields.Many2one("account.cierre.cxc")

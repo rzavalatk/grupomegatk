@@ -156,7 +156,7 @@ class CierreDiario(models.Model):
             '&',
             '&',
             '&',
-            ('payment_date', '=', self.date),
+            ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
             ('region', '=', self.region),
             ('partner_type', '=', 'customer'),
@@ -170,11 +170,11 @@ class CierreDiario(models.Model):
             '&',
             '&',
             # '&',
-            ('date_invoice', '=', self.date),
+            ('invoice_date', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
             # ('user_id','in',users_ids),
             ('team_id', 'in', canales_ids),
-            ('type', '=', 'out_invoice'),
+            ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
             # ('de_consignacion', '=', False),
@@ -190,16 +190,16 @@ class CierreDiario(models.Model):
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
                     acumulado_factura = 0 # lo acumulado de facturas
                     # recorrer facturas de los pagos
-                    for factura in pago.invoice_ids.sudo().ids:
+                    for factura in pago.move_id.sudo().ids:
                         if factura not in ids_facturas:
                             factura_id = self.env['account.move'].sudo().browse(
                                 factura)
                             self.register_ids(factura_id, 'facturas de pagos')
-                            if factura_id.date_invoice == self.date:
+                            if factura_id.invoice_date == self.date:
                                 try:
-                                    payments_widget = json.loads(factura_id.payments_widget)['content']
+                                    payments_widget = json.loads(factura_id.invoice_payments_widget)['content']
                                 except:
-                                    raise Warning(f'Valor de payments_widget {factura_id.payments_widget} de factura {factura_id.number} con id {factura_id.id}')
+                                    raise Warning(f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
                                 
                                 for pay in payments_widget:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
@@ -209,14 +209,14 @@ class CierreDiario(models.Model):
                                                 mas_de_un_pago_factura[factura_id.internal_number]
                                                 temp = mas_de_un_pago_factura[factura_id.internal_number] -1
                                                 if temp <= 0:
-                                                    if 'Crédito' not in factura_id.payment_term_id.sudo().name:
+                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
                                                         ids_facturas = ids_facturas + [factura_id.id]
                                                 else:
                                                     mas_de_un_pago_factura[factura_id.internal_number] = temp
                                             except:
                                                 mas_de_un_pago_factura[factura_id.internal_number] = len(payments_widget) - 1
                                         else:
-                                            if 'Crédito' not in factura_id.payment_term_id.sudo().name:
+                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
                                                 ids_facturas = ids_facturas + [factura_id.id]
                                             
                     self.write({
@@ -228,14 +228,14 @@ class CierreDiario(models.Model):
                     # ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
-            if factura.state == 'open' and factura.payment_term_id.sudo().name == 'Contado':
+            if factura.state == 'open' and factura.invoice_payment_term_id.sudo().name == 'Contado':
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
 
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.payment_term_id.sudo().name != 'Contado':
+                if factura.invoice_payment_term_id.sudo().name != 'Contado':
                     for item in self.cierre_line_ids:
                         if item.credito:
                             self.write({
@@ -296,7 +296,7 @@ class CierreDiario(models.Model):
                     ids.append(obj.id)
             for i in ids:
                 principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
-                cc_mega = "eduron@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
@@ -304,10 +304,11 @@ class CierreDiario(models.Model):
                 cierre.procesar_cierre()
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
-                    if cierre.company_id.sudo().id == 12:
-                        cc_mega += ",kpadilla@meditekhn.com"
+                    #if cierre.company_id.sudo().id == 12:
+                    #    cc_mega += ",kpadilla@meditekhn.com"
                     if cierre.sudo().region == 'San Pedro Sula':
-                        cc_mega += ",idubon@megatk.com"
+                        cc_mega += ",vmoran@megatk.com"
+                        cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
                     cierre.send_email(principal_emails,cc_mega)
                 if cierre.company_id.sudo().id in [9]:
@@ -332,21 +333,21 @@ class CierreDiarioLine(models.Model):
     _name = "account.cierre.line"
     _description = "description"
 
-    def _name_(self):
-        if self.credito:
-            self.name = "Al credito"
-        else:
-            self.name = self.journal_id.name
-
+    @api.depends('cobrado', 'facturado', 'credito')
     def _total(self):
-        total = self.cobrado + self.facturado
-        if self.credito:
-            total = 0
-        # if total < 0:
-        #     total = total * (-1)
-        # elif total == 0:
-        #     total = self.cobrado
-        self.total = round(total, 2)
+        for record in self:
+            total = record.cobrado + record.facturado
+            if record.credito:
+                total = 0
+            record.total = round(total, 2)
+
+    @api.depends('credito', 'journal_id.name')
+    def _name_(self):
+        for record in self:
+            if record.credito:
+                record.name = "Al credito"
+            else:
+                record.name = record.journal_id.name
 
     name = fields.Char("Nombre", compute=_name_)
     cierre_id = fields.Many2one("account.cierre")

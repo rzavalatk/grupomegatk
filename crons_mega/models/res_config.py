@@ -3,6 +3,10 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
@@ -17,13 +21,13 @@ class Settings(models.TransientModel):
         "product.marca", "setting_id", string="Marcas")
     
     def get_values_journal_ids(self,company):
-        self.company_cierre = company
+        self.write({'company_cierre': company})
         obj = self.get_values()
         return obj['journal_ids'][0][2]
     
     def get_values_account_ids_cron_mega(self,company):
         try:
-            self.company_cierre = company
+            self.write({'company_cierre': company})
             obj = self.get_values()
             return obj['account_ids_cron_mega'][0][2]
         
@@ -52,12 +56,15 @@ class Settings(models.TransientModel):
             marcas = []
             marcas_ids = []
             
+            
+            
             try:
                 marca_ids = marca_ids.replace('[','')
                 marca_ids = marca_ids.replace(']','')
                 marca_ids = marca_ids.split(',')
                 for item in marca_ids:
                     marcas_ids.append(int(item))
+                    _logger.warning(item)
                 if marcas_ids:
                     marcas = [(6, 0, marcas_ids)]
             except:

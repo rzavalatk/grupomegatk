@@ -9,7 +9,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
         </record>
 
         <!--<record id="account_invoice_expire_rule" model="ir.rule">
@@ -29,7 +29,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
         </record>   
 
         <record id="orderpoint_review_rules_rule" model="ir.rule">
@@ -39,7 +39,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
         </record>    
     
     </data>
