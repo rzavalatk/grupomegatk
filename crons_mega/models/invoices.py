@@ -6,7 +6,7 @@ import pytz
 import time
 import json
 
-"""
+
 class Factura(models.Model):
     _inherit = "account.move"
 
@@ -20,23 +20,23 @@ class Factura(models.Model):
         ("2do Aviso", "2do Aviso")
     ], default="none", string="Estado Aviso")
 
-
+"""
 class FacturasAVencer(models.Model):
     _name = "account.move.expire"
     _order = "create_date desc"
 
-    def _name_(self):
-        self.name = self.company_id.name + \
-            " - " + self.date.strftime("%d/%m/%Y")
+    #def _name_(self):
+    #    self.name = self.company_id.name + \
+    #        " - " + self.date.strftime("%d/%m/%Y")
 
-    name = fields.Char(compute=_name_)
+    #name = fields.Char(compute=_name_)
     date = fields.Date("Fecha")
     company_id = fields.Many2one(
-        "res.company", "Compañia", default=lambda self: self.env.user.company_id.id)
-    invoice_expire_line = fields.One2many(
-        "invoice.expire.line", "invoice_expire_id", "Facturas")
-    facturas_ids_customers = fields.One2many(
-        "account.move", "expire_customer_id", "Facturas Vencidas")
+        "res.company", "Compañia")
+    #invoice_expire_line = fields.One2many(
+    #    "invoice.expire.line", "invoice_expire_id", "Facturas")
+    #facturas_ids_customers = fields.One2many(
+    #    "account.move", "expire_customer_id", "Facturas Vencidas")
     facturas_ids = fields.One2many("account.move", "Facturas")
     state = fields.Selection([
         ("draft", "Borrador"),
@@ -46,6 +46,7 @@ class FacturasAVencer(models.Model):
         ("cancel", "Cancelado")
     ], string="Estado", default="draft")
 
+    
     def volver_borrador(self):
         self.write({
             'state': 'draft'
@@ -68,7 +69,7 @@ class FacturasAVencer(models.Model):
             'invoice_expire_line': [(5, 0, [])],
             'state': 'cancel'
         })
-
+    
     def init_review(self):
         dias_7 = self.date + timedelta(days=-7)
         dias_14 = self.date + timedelta(days=-14)
@@ -125,7 +126,7 @@ class FacturasAVencer(models.Model):
             'state': 'init',
             'facturas_ids_customers': [(6, 0, ids_customers)]
         })
-
+    
     def _exist_id(self, id, list):
         for item in list:
             try:
@@ -213,7 +214,7 @@ class FacturasAVencer(models.Model):
                 time.sleep(1)
                 vencidas.enviar_facturas_vencidas()
 
-
+    """
 class FacturaVencerLine(models.Model):
     _name = "invoice.expire.line"
     _order = "create_date desc"
@@ -287,4 +288,4 @@ class FacturaVencerLine(models.Model):
                     self.id, email_values=email_values, force_send=True)
         return True
         
-        """
+       
