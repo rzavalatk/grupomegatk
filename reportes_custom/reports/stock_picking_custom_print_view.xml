@@ -73,10 +73,14 @@
                 </div>
               </td>
               <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-
+                <div t-if="o.date_deadline">
+                  <span t-field="o.date_deadline"/>
+                </div>
               </td>
               <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-
+                 <div t-if="o.user_id">
+                  <span t-field="o.user_id"/>
+                </div>
               </td>
 
             </tr>
