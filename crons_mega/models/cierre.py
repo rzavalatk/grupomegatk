@@ -19,7 +19,6 @@ class CierreDiario(models.Model):
     _description = "description"
 
     regions_list = [
-        ("Nicaragua", "NIC"),
         ("San Pedro Sula", "SPS"),
         ("Tegucigalpa", "TGU"),
     ]
@@ -278,7 +277,7 @@ class CierreDiario(models.Model):
             ids = []
             for i in company_ids:
                 if i != 12:
-                    j = 1
+                    j = 0
                     while j < 3:
                         obj = self.create({
                             'date': today,
@@ -287,13 +286,13 @@ class CierreDiario(models.Model):
                         })
                         ids.append(obj.id)
                         j += 1
-                else:
+                """else:
                     obj = self.create({
                         'date': today,
                         'company_id': i,
                         'region': self.regions_list[0][0]
                     })
-                    ids.append(obj.id)
+                    ids.append(obj.id)"""
             for i in ids:
                 principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
                 cc_mega = "yalvarado@megatk.com"
