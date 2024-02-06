@@ -145,9 +145,9 @@ class CierreDiario(models.Model):
     #     })
 
     def procesar_cierre(self):
-        if self.region == self.regions_list[2][0]:
+        if self.region == self.regions_list[1][0]:
             canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[1][0]:
+        elif self.region == self.regions_list[0][0]:
             canales_ids = [43, 41, 46, 58, 44]
         else:
             canales_ids = [50, 49]
