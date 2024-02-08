@@ -278,7 +278,7 @@ class CierreDiario(models.Model):
             for i in company_ids:
                 if i != 12:
                     j = 0
-                    while j < 3:
+                    while j < 2:
                         obj = self.create({
                             'date': today,
                             'company_id': i,
