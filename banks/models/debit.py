@@ -328,7 +328,7 @@ class Debit(models.Model):
 		values = {
 			'journal_id': self.journal_id.id,
 			'date': self.date,
-			'ref': self.number,
+			'ref': self.name,
 			'line_ids': lineas,
 			'state': 'draft',
 		}
