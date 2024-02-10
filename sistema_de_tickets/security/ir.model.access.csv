@@ -2,3 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sorteo_tickets_manager,sorteo_ticket,model_sorteo_ticket,tickets_manager,1,1,1,1
 access_sorteo_sorteo_manager,sorteo_sorteo,model_sorteo_sorteo,sorteo_manager,1,1,1,1
 access_sorteo_fecha_festiva_manager,sorteo_fecha_festiva,model_sorteo_fecha_festiva,sorteo_manager,1,1,1,1
+access_sorteo_products_manager,sorteo_products,model_sorteo_products,sorteo_manager,1,1,1,1
+access_sorteo_marcas_manager,sorteo_marcas,model_sorteo_marcas,sorteo_manager,1,1,1,1
+

@@ -21,5 +21,7 @@ class SorteoSorteo(models.Model):
     tickets = fields.One2many('sorteo.ticket', 'sorteo', string='Tickets del Sorteo', help='Tickets relacionados con este sorteo')
     
     fechas_festivas = fields.Many2many('sorteo.fecha_festiva', string='Fechas Festivas')
+    productos = fields.Many2many('sorteo.products', string='Productos')
+    marcas = fields.Many2many('sorteo.marcas', string='Marcas')
 
     

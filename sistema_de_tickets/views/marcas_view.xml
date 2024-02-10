@@ -1,0 +1,41 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_sorteo_marcas_form" model="ir.ui.view">
+            <field name="name">sorteo.marcas.form</field>
+            <field name="model">sorteo.marcas</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group name="datos-1" string="Datos">
+                            <field name="marcas"/>
+                            <field name="fecha_inicial"/>
+                            <field name="fecha_final"/>
+                            
+                        </group>
+                        
+                    </group>
+                        
+                </form>
+            </field>
+        </record>
+
+        <record id="sorteo_marcas_view_tree" model="ir.ui.view">
+            <field name="name">sorteo_marcas.view.tree</field>
+            <field name="model">sorteo.marcas</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="marcas"/>
+                    <field name="fecha_inicial"/>
+                    <field name="fecha_final"/>
+                </tree>
+            </field>
+        </record>
+
+    
+
+        
+
+       
+    </data>
+</odoo>

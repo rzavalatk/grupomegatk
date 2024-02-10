@@ -23,6 +23,8 @@
         'views/sorteo_ticket_view.xml',
         'views/sorteo_sorteo_view.xml',
         'views/fechas_festivas_view.xml',
+        'views/products_view.xml',
+        'views/marcas_view.xml',
         
     ],
     'installable': True,

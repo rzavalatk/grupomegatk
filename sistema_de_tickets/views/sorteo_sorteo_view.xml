@@ -29,6 +29,12 @@
                         <page name="fechas" string="Fechas festivas">
                             <field name="fechas_festivas"/>
                         </page>
+                        <page name="productos" string="Productos">
+                            <field name="productos"/>
+                        </page>
+                        <page name="marcas" string="Marcas">
+                            <field name="marcas"/>
+                        </page>
                     </notebook>
                         
                 </form>
