@@ -161,7 +161,7 @@ class HrPermisos(models.Model):
 		if self.dias != 0 or self.minutos != 0 or self.horas != 0:
 			if not self.name:
 				if not self.sequence_id.id:
-					obj_sequence = self.env["ir.sequence"].search([('name','=','permisos')])
+					obj_sequence = self.env["ir.sequence"].search([('name','=','permisos')], limit=1)
 					if not obj_sequence.id:
 						values = {'name': 'permisos',
 							'prefix': 'Permiso ',
