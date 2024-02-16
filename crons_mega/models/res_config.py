@@ -11,8 +11,7 @@ _logger = logging.getLogger(__name__)
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    company_cierre = []
-    puntero = 0
+    company_cierre = 0
     journal_ids = fields.Many2many(
         "account.journal", "alias_id", string="Diarios de cierre")
     teams_sps = fields.Char("Canales de SPS")
@@ -21,21 +20,10 @@ class Settings(models.TransientModel):
     marca_ids = fields.Many2many(
         "product.marca", "setting_id", string="Marcas")
     
-    def get_values_journal_ids(self, company):
-        
-        _logger.warning("Este es el ID: "+str(company))
-        _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
-        
-    
-        self.company_cierre.append(company)
-        #self.write({'company_cierre': company})
-        
-        _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))   
-        
+    def get_values_journal_ids(self,company):
+        self.write({'company_cierre': company})
         obj = self.get_values()
         return obj['journal_ids'][0][2]
-        
-
     
     def get_values_account_ids_cron_mega(self,company):
         try:
@@ -61,14 +49,12 @@ class Settings(models.TransientModel):
             res = super(Settings, self).get_values()
             IrValues = self.env['ir.config_parameter'].sudo()
             marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
-            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre[0]))
-            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre[0])) 
+            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre))
+            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre)) 
             lines = []
             lines_account = []
             marcas = []
             marcas_ids = []
-            
-            #_logger.warning("Este es el ID en get_values: "+str(company))
             
             
             
@@ -115,7 +101,6 @@ class Settings(models.TransientModel):
         except Exception as e:
             pass
             # raise Warning(_(f'Error: {e}'))
-        self.company_cierre.pop(0)
         return res
 
     #@api.model_create_multi
