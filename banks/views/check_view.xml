@@ -114,6 +114,7 @@
                 <field name="total" sum="total"/>
                 <field name="currency_id"/>
                 <field name="state"/>
+                <field name="move_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </tree>
             </field>
