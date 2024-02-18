@@ -6,6 +6,12 @@ import pytz
 import time
 import json
 
+import logging
+import math
+
+
+_logger = logging.getLogger(__name__)
+
 
 class Facturas(models.Model):
     _inherit = "account.move"
@@ -36,7 +42,7 @@ class CierreDiario(models.Model):
 
     def _total_cobrado(self):
         self.total_cobrado = self._recorrec_lines("cobrado")
-        
+
     def _total(self):
         self.total = self._recorrec_lines("total")
 
@@ -151,6 +157,7 @@ class CierreDiario(models.Model):
             canales_ids = [43, 41, 46, 58, 44]
         else:
             canales_ids = [50, 49]
+
         pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
@@ -162,6 +169,10 @@ class CierreDiario(models.Model):
             ('state', '=', 'posted'),
         ])
         self.register_ids(pagos, 'pagos')
+
+        _logger.warning('Arreglo de Pagos : ' + str(pagos))
+        # 1
+
         facturas = self.env['account.move'].sudo().search([
             '&',
             '&',
@@ -179,45 +190,61 @@ class CierreDiario(models.Model):
             # ('de_consignacion', '=', False),
         ])
         self.register_ids(facturas, 'facturas')
+        _logger.warning('Arreglo de facturas : ' + str(facturas))
+        # 1
+
         mas_de_un_pago_factura = {}
         ids_facturas = []
+
         # Recorrer los pagos
         for pago in pagos:
             # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    acumulado_factura = 0 # lo acumulado de facturas
+                    acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
+                        #_logger.warning('Prueba 1 . factura : '+ str(factura))
+                        #_logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
+
                         if factura not in ids_facturas:
-                            factura_id = self.env['account.move'].sudo().browse(
-                                factura)
+                            factura_move= self.env['account.move'].sudo().browse(factura)
+                            factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                             self.register_ids(factura_id, 'facturas de pagos')
+                            #_logger.warning(factura_id.date)
+
                             if factura_id.invoice_date == self.date:
                                 try:
-                                    payments_widget = json.loads(factura_id.invoice_payments_widget)['content']
+                                    payments_widget = json.loads(
+                                        factura_id.invoice_payments_widget)['content']
+                                    _logger.warning(
+                                        'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
                                 except:
-                                    raise Warning(f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-                                
+                                    raise Warning(
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+
                                 for pay in payments_widget:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
                                         acumulado_factura += pay['amount']
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
-                                                temp = mas_de_un_pago_factura[factura_id.internal_number] -1
+                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
                                                 if temp <= 0:
                                                     if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                        ids_facturas = ids_facturas + [factura_id.id]
+                                                        ids_facturas = ids_facturas + \
+                                                            [factura_id.id]
                                                 else:
                                                     mas_de_un_pago_factura[factura_id.internal_number] = temp
                                             except:
-                                                mas_de_un_pago_factura[factura_id.internal_number] = len(payments_widget) - 1
+                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
+                                                    payments_widget) - 1
                                         else:
                                             if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                ids_facturas = ids_facturas + [factura_id.id]
-                                            
+                                                ids_facturas = ids_facturas + \
+                                                    [factura_id.id]
+
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
                             'facturado': acumulado_factura + item.facturado,
@@ -303,16 +330,16 @@ class CierreDiario(models.Model):
                 cierre.procesar_cierre()
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
-                    #if cierre.company_id.sudo().id == 12:
+                    # if cierre.company_id.sudo().id == 12:
                     #    cc_mega += ",kpadilla@meditekhn.com"
                     if cierre.sudo().region == 'San Pedro Sula':
                         cc_mega += ",vmoran@megatk.com"
                         cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
-                    cierre.send_email(principal_emails,cc_mega)
+                    cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
-                    cierre.send_email(principal_emails,cc_meditek)
+                    cierre.send_email(principal_emails, cc_meditek)
                 time.sleep(1)
 
     def go_to_view_tree(self):
