@@ -26,7 +26,9 @@ class Settings(models.TransientModel):
         _logger.warning("Este es el ID: "+str(company))
         _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
         
-    
+        if self.company_cierre:
+            self.company_cierre.pop(0)
+        
         self.company_cierre.append(company)
         #self.write({'company_cierre': company})
         
@@ -115,7 +117,10 @@ class Settings(models.TransientModel):
         except Exception as e:
             pass
             # raise Warning(_(f'Error: {e}'))
-        self.company_cierre.pop(0)
+        
+        if self.company_cierre:
+            self.company_cierre.pop(0)
+            
         #self.company_cierre.append(1)
         return res
 
