@@ -116,7 +116,7 @@ class Settings(models.TransientModel):
             pass
             # raise Warning(_(f'Error: {e}'))
         self.company_cierre.pop(0)
-        self.company_cierre.append(1)
+        #self.company_cierre.append(1)
         return res
 
     #@api.model_create_multi
