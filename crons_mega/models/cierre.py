@@ -215,14 +215,14 @@ class CierreDiario(models.Model):
                             #_logger.warning(factura_id.date)
 
                             if factura_id.invoice_date == self.date:
-                                try:
-                                    payments_widget = json.loads(
-                                        factura_id.invoice_payments_widget)['content']
-                                    _logger.warning(
-                                        'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
-                                except:
+                                #try:
+                                payments_widget = json.loads(
+                                    factura_id.invoice_payments_widget)['content']
+                                _logger.warning(
+                                    'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
+                                """except:
                                     raise Warning(
-                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')"""
 
                                 for pay in payments_widget:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
