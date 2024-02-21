@@ -18,7 +18,7 @@ class Account_Move(models.Model):
         self.x_contacto = cotizacion.x_contacto
         self.sorteo_id = cotizacion.sorteo_id.id
         self.x_student = cotizacion.x_student
-    
+        
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
         check_company=True,
@@ -28,6 +28,8 @@ class Account_Move(models.Model):
     x_student = fields.Boolean(string='Es Estudiante', default=False)
     
     x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
+    
+    n_tickets_acum = fields.Integer('Tickets')
     
    
     #mostrar boton en factura de borrados
@@ -109,7 +111,10 @@ class Account_Move(models.Model):
                     
                     # Incrementa el número de la secuencia para el próximo ticket
                     self.sorteo_id.sequence_id.sudo().write({'number_next_actual': self.sorteo_id.sequence_id.number_next_actual + 1})
-            
+        
+        tickets = self.env['sorteo.ticket'].search([('customer_id', '=', self.partner_id.id)],)
+        self.n_tickets_acum = len(tickets)
+        _logger.warning(tickets)   
         
         
         

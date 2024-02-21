@@ -30,6 +30,8 @@
                 <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='sale_info_group']/field[@name='partner_bank_id']" position="after">
                     <field name="sorteo_id"/>
                     <field name="x_student" />
+                    <field name="n_tickets_acum" readonly="True" />
+                    
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
