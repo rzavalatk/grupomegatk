@@ -360,8 +360,6 @@
                 <span t-field="o.fiscal_position_id.note"/>
             </p>
 
-            <br></br>
-            <br></br>
             <t t-if="o.sorteo_id">
               <p style="font-weight: normal;font-size: 15.5px;">
                 Su total de tickets acumulados son: <span t-field="o.n_tickets_acum"/>
