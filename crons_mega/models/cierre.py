@@ -257,7 +257,7 @@ class CierreDiario(models.Model):
                     # ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
-            if factura.state == 'open' and factura.invoice_payment_term_id.sudo().name == 'Contado':
+            if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
