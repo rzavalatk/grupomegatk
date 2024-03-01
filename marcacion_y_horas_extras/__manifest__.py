@@ -21,4 +21,10 @@
         'views/view.xml',
     ],
     'qweb': ['static/src/xml/tree_view_button.xml'],
+    'qweb_template_dict': {
+        'backend': [
+            '/marcacion_y_horas_extras/static/src/js/controlle.js',
+            '/marcacion_y_horas_extras/static/src/js/excelxml.js',
+        ],
+    },
 }

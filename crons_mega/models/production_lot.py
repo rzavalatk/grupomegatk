@@ -8,7 +8,7 @@ import pytz
 
 
 class Lots(models.Model):
-    _inherit = "stock.production.lot"
+    _inherit = "stock.lot"
 
     company_id = fields.Many2one("res.company", "Compañia")
 
@@ -57,7 +57,7 @@ class Lots(models.Model):
         admin = self.env['res.users'].browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = dt.now(user_tz)
-        lots = self.env['stock.production.lot'].search([])
+        lots = self.env['stock.lot'].search([])
         products = []
         products_by_expired = []
         for item in lots:

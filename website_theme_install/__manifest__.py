@@ -8,5 +8,10 @@
         'views/views.xml',
     ],
     'depends': ['website'],
+    'qweb_template_dict': {
+        'backend': [
+            '/website_theme_install/static/src/less/website_theme_install.less',
+        ],
+    },
     'auto_install': True,
 }

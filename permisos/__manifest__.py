@@ -18,7 +18,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr','web_notify'],
+    'depends': ['base','hr'],
 
     # always loaded
     'data': [

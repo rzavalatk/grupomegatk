@@ -18,6 +18,6 @@
     'depends': ['base','account_reports'],
 
     'data': [
-        'views/account_acoount.xml'
+        #'views/account_acoount.xml'
     ],
 }

@@ -25,4 +25,9 @@
         'views/assets.xml',
         # 'views/journal.xml',
     ],
+    'qweb_template_dict': {
+        'backend': [
+            'static/js/account_comisiones.js',
+        ],
+    },
 }

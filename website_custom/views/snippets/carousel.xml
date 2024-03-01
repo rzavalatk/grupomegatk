@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <!-- Assets -->
-        <template id="carousel_frontend" inherit_id="website.assets_frontend" name="Carousel">
+        <template id="carousel_frontend" name="Carousel">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/website_custom/static/src/js/snippets/carousel.js"/>
                 <link rel="stylesheet" type="text/scss" href="/website_custom/static/src/css/styles.css"/>

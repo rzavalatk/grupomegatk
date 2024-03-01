@@ -83,7 +83,7 @@ class AccountInvoiceReport(models.Model):
 		],
 		'account.move.line': [
 			'account_id', 'move_id', 'product_id',
-			'quantity', 'product_uom_id', 'analytic_account_id',
+			'quantity', 'product_uom_id',
 		],
 		'product.product': ['product_tmpl_id'],
 		'product.template': ['categ_id'],
@@ -95,7 +95,7 @@ class AccountInvoiceReport(models.Model):
 
 	def _select(self):
 		select_str = """
-			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id, sub.analytic_account_id,
+			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id,
 				sub.invoice_payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
 				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr,  sub.move_type, sub.state,
 				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
@@ -109,7 +109,7 @@ class AccountInvoiceReport(models.Model):
 				SELECT ail.id AS id,
 					ai.invoice_date AS date,
 					ai.name as number,
-					ail.product_id, ai.partner_id, ai.invoice_payment_term_id, ail.analytic_account_id,
+					ail.product_id, ai.partner_id, ai.invoice_payment_term_id, 
 					u2.name AS uom_name,
 					ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.invoice_user_id, ai.company_id,
 					1 AS nbr,
@@ -164,7 +164,7 @@ class AccountInvoiceReport(models.Model):
 
 	def _group_by(self):
 		group_by_str = """
-				GROUP BY ail.id, ail.product_id, ail.analytic_account_id, ai.invoice_date, ai.id,
+				GROUP BY ail.id, ail.product_id, ai.invoice_date, ai.id,
 					ai.partner_id, ai.invoice_payment_term_id, u2.name, u2.id, ai.currency_id, ai.journal_id,
 					ai.fiscal_position_id, ai.invoice_user_id, ai.company_id, ai.id, ai.move_type, invoice_type.sign, ai.state, pt.categ_id, 
 					pt.marca_id, pt.x_costo_real, ai.invoice_date_due, ail.account_id, ai.partner_bank_id, ai.amount_residual_signed,

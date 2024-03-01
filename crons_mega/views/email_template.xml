@@ -138,7 +138,7 @@
 
         <record id="email_template_product_expirated" model="mail.template">
             <field name="name">Producto por expirar</field>
-            <field name="model_id" ref="model_stock_production_lot"/>
+            <field name="model_id" ref="model_stock_lot"/>
             <field name="subject">Productos por vencer</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>

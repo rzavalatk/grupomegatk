@@ -18,14 +18,21 @@
         'base',
     ],
     'data': [
-        'views/web_notify.xml'
+        #'views/web_notify.xml'
     ],
     'demo': [
         'views/res_users_demo.xml'
     ],
-    'assets': {
-        'web_notify/static/src/js/web_client.js',
-        'web_notify/static/src/scss/webclient.scss'
-},
+    
+    'qweb_template_dict': {
+        'backend': [
+            
+            '/web_notify/static/src/scss/webclient.scss',
+        ],
+        'frontend': [
+            '/web_notify/static/src/js/web_client.js',
+            
+        ],
+    },
     'installable': True,
 }

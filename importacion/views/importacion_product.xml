@@ -90,7 +90,7 @@
                     attrs="{'readonly': [('state','!=','draft')]}"/>
                   <field name="res_country_state" domain="
                     [('country_id','=',res_country)]" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="company_id" groups="base.group_multi_company" attrs="
+                  <field name="company_id" attrs="
                     {'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
                   <field name="currency_id" invisible='0' options="{'no_create': True}"
                    attrs="{'readonly': [('state','!=','draft')]}"/>
@@ -150,7 +150,7 @@
           <field name="name" string='Nombre'/>
           <field name="date" />
           <field name="res_parner_id"/>
-          <field name="company_id" groups="base.group_multi_company" string='Compañia'/>
+          <field name="company_id" string='Compañia'/>
           <field name="state"/>
         </tree>
       </field>
@@ -170,7 +170,7 @@
       <field name="perm_write" eval="True"/>
       <field name="perm_create" eval="True"/>
       <field name="perm_unlink" eval="True"/>
-      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+      <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
     </record>
     <!-- Search View -->
     <record id="import_product_mega_search_view" model="ir.ui.view">

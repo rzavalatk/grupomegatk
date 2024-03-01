@@ -15,7 +15,8 @@ class WizardGenerarDeposito(models.TransientModel):
 		return obj_prestamo.currency_id.id
 
 	monto = fields.Float(string='Monto', required=True,)
-	pagos = fields.Many2one("account.account", "Recibir depósito", required=True, domain="[ ('user_type_id.type', '=', 'liquidity')]")
+	#pagos = fields.Many2one("account.account", "Recibir depósito", required=True, domain="[ ('user_type_id.type', '=', 'liquidity')]")
+	pagos = fields.Many2one("account.account", "Recibir depósito", required=True,)
 	description = fields.Char('Descripción', required=True,)
 	fecha = fields.Date(string='Fecha', required=True,)
 	fechavence = fields.Date(string='Vence', required=True,)

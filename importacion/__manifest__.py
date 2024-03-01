@@ -23,13 +23,11 @@
 
     # always loaded
     'data': [
-        'security/groups.xml',
         'security/ir.model.access.csv',
         'views/importacion_product.xml',
         'views/stock_picking_import.xml',
         'views/importacion_product_gasto.xml',
         'views/product_view.xml',
-        
     ],
     # only loaded in demonstration mode
     'application': True,

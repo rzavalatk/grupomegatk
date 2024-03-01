@@ -2,7 +2,7 @@
 
 from odoo import models, fields, api, _
 
-
+#Campos que se asignan al formulario de bancos
 class AccountJournal(models.Model):
 	_inherit = "account.journal"
 
