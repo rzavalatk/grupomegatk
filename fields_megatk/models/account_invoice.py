@@ -18,7 +18,8 @@ class Account_Move(models.Model):
     #mostrar boton en factura de borrados
     def go_draft(self):
         self.write({
-            'state': 'draft'
+            'state': 'draft',
+            'is_move_sent': False
         })
     
     @api.onchange('date_due')
