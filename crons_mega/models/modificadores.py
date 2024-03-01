@@ -36,7 +36,7 @@ class CustomAccountMove(models.Model):
             WHERE line.move_id IN %s
             GROUP BY line.move_id, currency.decimal_places
             HAVING ROUND(SUM(line.debit - line.credit), currency.decimal_places) != 0.0;
-        ''', [tuple(self.ids)])
+        ''', [self.ids])
 
         query_res = self._cr.fetchall()
         if query_res:
