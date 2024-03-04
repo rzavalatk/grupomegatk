@@ -27,7 +27,7 @@
 					</div>
 				</div>
 
-				<div style="float: right; margin-top: -450px;">
+				<div style="float: right; margin-top: -470px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
 							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
 								<t t-if="o.x_consignacion == 'no'">
@@ -45,7 +45,7 @@
 						</p>
 				</div>
 
-				<div style="float: right;margin-top: 0px;">
+				<div style="float: right;margin-top: -150px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
@@ -65,7 +65,7 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:0px;">
+					<div style="margin-top:20px;">
 					  <div style ='font-size:11pt;'>
 					    <div t-if="o.company_id.name =='MEDITEK'">
 					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
