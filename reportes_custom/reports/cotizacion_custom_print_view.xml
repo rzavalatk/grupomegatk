@@ -4,7 +4,7 @@
 		<template id="cotizacion_custom_print_view">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
-					<t t-call="reportes_custom.external_layout_cotizacion_custom" />
+					
 					<t t-call="reportes_custom.cotizacion_odoo_custom" t-lang="o.partner_id.lang"/>
 				</t>
 			</t>
