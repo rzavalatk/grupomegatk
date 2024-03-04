@@ -4,7 +4,6 @@
 		<template id="cotizacion_custom_print_view">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
-					
 					<t t-call="reportes_custom.cotizacion_odoo_custom" t-lang="o.partner_id.lang"/>
 				</t>
 			</t>
@@ -12,7 +11,39 @@
 
 		<template id="external_layout_cotizacion_custom">
 			<div class="header">
-				
+				<div class="row" style="margin-top: -155px;">
+					<div class="col-xs-3 mb4">
+						<img t-if="o.company_id.logo" style="max-height: 100px;"/>
+             		
+						<div style="margin-top: -150px;color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+							FACTURAR A: 
+						</div>
+						<div style="width: 150px !important;">
+							<div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+								<address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+								<div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div style="float: right; margin-top: -320px;">
+					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
+							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+								<t t-if="o.x_consignacion == 'no'">
+										<span t-if="o.state not in ['draft','sent']">COTIZACIÓN</span>
+										<span t-if="o.state in ['draft','sent']">COTIZACIÓN </span>
+								</t>
+								<t t-if="o.x_consignacion == 'si'">
+									<span>CONSIGNACIÓN</span>
+								</t>
+							</t>
+							
+							<t t-if="env.context.get('proforma', False) or is_pro_forma">
+									<span>FACTURA PROFORMA</span>
+							</t>
+						</p>
+				</div>
 
 				<div style="float: right;margin-top: -200px;">
 					<div style="float: right;">
