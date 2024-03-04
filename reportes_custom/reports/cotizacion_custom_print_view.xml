@@ -11,7 +11,7 @@
 
 		<template id="external_layout_cotizacion_custom">
 			<div class="header">
-				<div class="row" style="margin-top: 155px;">
+				<div class="row" style="margin-top: 300px;">
 					<div class="col-xs-3 mb4">
 						<img t-if="o.company_id.logo" style="max-height: 100px;margin-top: 20px;"/>
              		
@@ -27,7 +27,7 @@
 					</div>
 				</div>
 
-				<div style="float: right; margin-top: 20px;">
+				<div style="float: right; margin-top: -320px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
 							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
 								<t t-if="o.x_consignacion == 'no'">

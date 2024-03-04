@@ -10,11 +10,25 @@ _logger = logging.getLogger(__name__)
 class Account_Move(models.Model):
     _inherit = "account.move"
 
+    def _compute_contacto(self):
+        cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
+        self.x_contacto = cotizacion.x_contacto
+        self.sorteo_id = cotizacion.sorteo_id.id
+        self.x_student = cotizacion.x_student
+        
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
         check_company=True,
         readonly=False, required=False,)
     
+    sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
+    x_student = fields.Boolean(string='Es Estudiante', default=False)
+    
+    x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
+    
+    n_tickets_acum = fields.Integer('Tickets')
+    
+   
     #mostrar boton en factura de borrados
     def go_draft(self):
         self.write({
@@ -26,7 +40,79 @@ class Account_Move(models.Model):
         for move in self:
             for line in move.line_ids:
                 line.date_maturity = move.date_due
+                
+    def action_post(self):
+        res = super(Account_Move, self).action_post()
+        self.generate_tickets()
+        return res
 
+    def generate_tickets(self):
+        tickets = 0
+        flag = False
+        dia_festivo = False
+        
+        if self.sorteo_id and self.sorteo_id.compañia.id == self.company_id.id:
+            
+            if self.sorteo_id.fecha_inicio <= self.invoice_date <= self.sorteo_id.fecha_final:
+                
+                if self.amount_total >= 1000:
+                    #({'ticket': "ticket x1"})
+                    
+                    tickets = math.floor(self.amount_total / 1000)
+
+                    
+                    for fechas in self.sorteo_id.fechas_festivas:
+                        if self.invoice_date == fechas.fecha:
+                            #({'ticket': "ticket x2"})
+                            tickets = tickets * 2
+                            flag = True
+                            dia_festivo = True
+                            break
+                    
+                    #_logger.warning("Generando ticket 1")
+
+                    for move_line in self.line_ids:
+                        if not flag:
+                            for marca in self.sorteo_id.marcas:
+                                if not flag:
+                                    if move_line.product_id.marca_id.name == marca.marcas.name:
+                                        
+                                        if marca.fecha_inicial <= self.invoice_date <= marca.fecha_final:
+                                            #({'ticket': "ticket x2"})
+                                            tickets = tickets* 2
+                                            flag = True
+                                            break
+                                
+                            for producto in self.sorteo_id.productos:
+                                if not flag:
+                                    if move_line.product_id.name == producto.product.name:
+                                        if producto.fecha_inicial <= self.invoice_date <= producto.fecha_final:
+                                            tickets = tickets* 2
+                                            flag = True
+                                            break
+                                    
+                    if self.x_student:
+                        #({'ticket': "ticket 3"})
+                        tickets = tickets * 3
+
+                # Crear los registros de tickets
+                for ticket_data in range(tickets):
+                    # Cambiar 'move_line_id' por 'name' o algún otro campo significativo
+                    self.env['sorteo.ticket'].create({
+                        'move_id': self.id,
+                        'name': self.sorteo_id.sequence_id.prefix + '%%0%sd' % self.sorteo_id.sequence_id.padding % self.sorteo_id.sequence_id.number_next_actual,
+                        'sorteo': self.sorteo_id.id,
+                        'customer_id': self.partner_id.id,
+                        'fecha': self.invoice_date,
+                    })
+                    
+                    # Incrementa el número de la secuencia para el próximo ticket
+                    self.sorteo_id.sequence_id.sudo().write({'number_next_actual': self.sorteo_id.sequence_id.number_next_actual + 1})
+        
+        tickets = self.env['sorteo.ticket'].search([('customer_id', '=', self.partner_id.id)],)
+        self.n_tickets_acum = len(tickets)
+        _logger.warning(tickets)   
+        
     
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
