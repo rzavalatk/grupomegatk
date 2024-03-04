@@ -13,9 +13,9 @@
 			<div class="header">
 				<div class="row" style="margin-top: 155px;">
 					<div class="col-xs-3 mb4">
-						<img t-if="o.company_id.logo" style="max-height: 100px;"/>
+						<img t-if="o.company_id.logo" style="max-height: 100px;margin-top: 20px;"/>
              		
-						<div style="margin-top: 150px;color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+						<div style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
 							FACTURAR A: 
 						</div>
 						<div style="width: 150px !important;">
@@ -27,7 +27,7 @@
 					</div>
 				</div>
 
-				<div style="float: right; margin-top: 320px;">
+				<div style="float: right; margin-top: 20px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
 							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
 								<t t-if="o.x_consignacion == 'no'">
@@ -45,7 +45,7 @@
 						</p>
 				</div>
 
-				<div style="float: right;margin-top: 200px;">
+				<div style="float: right;margin-top: 50px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
@@ -65,7 +65,7 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:170px;">
+					<div style="margin-top:60px;">
 					  <div style ='font-size:11pt;'>
 					    <div t-if="o.company_id.name =='MEDITEK'">
 					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
