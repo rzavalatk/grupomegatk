@@ -286,7 +286,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Subtotal</strong></td>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
                       <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
                         <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                       </td>
