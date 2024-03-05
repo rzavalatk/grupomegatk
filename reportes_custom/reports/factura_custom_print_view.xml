@@ -13,9 +13,9 @@
       <div class="header">
         <div class="row" style="margin-top: 0px;">
           <div class="col-xs-3 mb4">
-            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: 200px; margin-botton: 0px; padding-top: 0px; padding: 0px;" alt="Logo"/>
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: 50px; margin-botton: 0px; padding-top: 0px; padding: 0px;" alt="Logo"/>
                 
-            <div style="position: absolute; top: 8px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+            <div style="position: absolute; top: 58px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
 							FACTURAR A: 
 						</div>
             <div style="width: 150px !important; position: absolute; top: 180px;">
