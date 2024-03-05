@@ -229,27 +229,14 @@
                                     <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                                 </td>
                             </tr>
-                            <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                                <tr>
-                                    <t t-if="len(o.line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                        <td style="padding:1px !important; margin:1px !important;"><strong t-esc="amount_by_group[0]"/></td>
-                                        <td class="text-right" style="padding:1px !important; margin:1px !important;">
-                                            <span t-esc="amount_by_group[3]"/>
-                                        </td>
-                                    </t>
-                                    <t t-else="">
-                                        <td style="padding:1px !important; margin:1px !important;">
-                                            <span t-esc="amount_by_group[0]"/>
-                                            <span>&amp;nbsp;<span>on</span>
-                                                <t t-esc="amount_by_group[4]"/>
-                                            </span>
-                                        </td>
-                                        <td class="text-right" style="padding:1px !important; margin:1px !important;">
-                                            <span t-esc="amount_by_group[3]"/>
-                                        </td>
-                                    </t>
-                                </tr>
-                            </t>
+
+                            <tr>
+                                <td style=" padding:1px !important; margin:1px !important;"><strong>ISV 15%</strong></td>
+                                <td class="text-right" style="padding:1px !important; margin:1px !important;">
+                                    <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                            </tr>
+                            
                             <tr>
                                 <td style=" padding:1px !important; margin:1px !important;"><strong>ISV 18%</strong></td>
                                 <td class="text-right" style="padding:1px !important; margin:1px !important;">
