@@ -54,10 +54,10 @@ class ConciliacionBancaria(models.Model):
                     if lines.haber > 0.0:
                         credit_line += lines.haber
 
-            if concil.account_id.user_type_id.name == 'Tarjeta de Crédito':
+            if concil.account_id.account_type.name == 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_inicial - (debit_line - credit_line + concil.saldo_final)
 
-            if concil.account_id.user_type_id.name != 'Tarjeta de Crédito':
+            if concil.account_id.account_type.name != 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line)
 
     def action_validate(self):
