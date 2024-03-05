@@ -222,25 +222,15 @@
 											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
 												<span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
 											</td>
+										</tr> 
+										
+										<tr class="border-black1">
+											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
+											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
+												<span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
+											</td>
 										</tr>
-										<t t-foreach="o.amount_by_group" t-as="amount_by_group">
-											<tr>
-												<t t-if="amount_by_group[3] == 1 and o.amount_untaxed == amount_by_group[2]">
-													<td style="font-family:'Arial'; font-size:14pt;  font-weight: bold;"><span t-esc="amount_by_group[0]"/></td>
-													<td class="text-right" style="font-family:'Arial'; font-size:14pt;">
-														<span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
-													</td>
-												</t>
-												<t t-else="">
-													<td style="font-family:'Arial'; font-size:14pt;  font-weight: bold;">
-														<span t-esc="amount_by_group[0]"/><span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/></span>
-													</td>
-													<td class="text-right" style="font-family:'Arial'; font-size:14pt;">
-														<span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
-													</td>
-												</t>
-											</tr>
-										</t>
+
 										<tr class="border-black1">
 											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>Total</strong></td>
 											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;">
