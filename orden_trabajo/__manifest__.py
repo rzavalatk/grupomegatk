@@ -4,6 +4,7 @@
     "author": "Romel Zavala",
     "description": "Orden de Trabajo",
     "category": "Uncategorized",
+    "license": "LGPL-3",
     "depends": ["base",
         "base_import",
         "sale",

@@ -4,6 +4,7 @@
     "author": "Romel Zavala",
     "description": "Campos megatk ",
     "category": "Sale",
+    "license": "LGPL-3",
     "depends": ["base",
         "crm",
        	"sale",

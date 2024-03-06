@@ -9,6 +9,7 @@
     """,
     'author': "César Alejandro Rodriguez Castillo",
     'category': 'Accounting',
+    "license": "LGPL-3",
     'version': '0.1',
     'depends': ['base', 'account', 'analytic', 'purchase'],
     'data': [

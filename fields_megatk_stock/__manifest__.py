@@ -4,6 +4,7 @@
     "author": "Romel Zavala",
     "description": "Campos megatk, no facturar cero ni negativos(Cotización, Facturación)",
     "category": "Sale",
+    "license": "LGPL-3",
     "depends": ["base",
         "fields_megatk",
         "precios_megatk",

@@ -13,9 +13,10 @@
 
     'author': "Alejandro Zelaya",
     'contributors': [
-        'Ingeniero David Zuniga - dalzubri.netlify.app',
+        'David Zuniga - dalzubri.netlify.app',
     ],
     'website': "azelaya@megatk.com",
+    "license": "LGPL-3",
 
     'category': 'Usuarios',
     'version': '0.1',

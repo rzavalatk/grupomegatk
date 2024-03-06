@@ -12,6 +12,7 @@
 
     'author': "Alejandro Zelaya",
     'website': "azelaya@mehatk.com",
+    "license": "LGPL-3",
 
     'category': 'Crm',
     'version': '0.1',
