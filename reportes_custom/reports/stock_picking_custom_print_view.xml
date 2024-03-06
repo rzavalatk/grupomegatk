@@ -14,7 +14,7 @@
       <div class="header">
         <div class="row" style="margin-top: -160px;">
           <div class="col-xs-3 mb4">
-            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: -100px; margin-button: 0px;" alt="Logo"/>
           </div>
 
         </div>
