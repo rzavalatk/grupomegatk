@@ -3,7 +3,7 @@
 <data>
 
     <record id="debit_form_view" model="ir.ui.view">
-        <field name="name">Debito Bancario</field>
+        <field name="name">banks.debit.form</field>
         <field name="model">banks.debit</field>
         <field name="arch" type="xml">
             <form string="Debits">
