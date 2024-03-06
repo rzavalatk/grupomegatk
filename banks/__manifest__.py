@@ -19,7 +19,7 @@
         "views/main_menu_view.xml", 
         "wizard/journal_settings_view.xml",
         "views/ir_sequence_view.xml",
-        #"views/debit_view.xml",
+        "views/debit_view.xml",
         "views/account.xml",
         "views/banks_transferences_view.xml",
         "views/config_journal_view.xml",
