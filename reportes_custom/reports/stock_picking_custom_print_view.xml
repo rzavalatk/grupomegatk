@@ -152,7 +152,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr t-foreach="o.move_lines" t-as="move">
+            <tr t-foreach="o.move_ids" t-as="move">
               <td style='padding: 2px;'>
                 <span t-field="move.x_codigo"/>
               </td>
