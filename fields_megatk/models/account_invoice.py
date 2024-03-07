@@ -10,11 +10,11 @@ _logger = logging.getLogger(__name__)
 class Account_Move(models.Model):
     _inherit = "account.move"
 
-    def _compute_contacto(self):
+    """def _compute_contacto(self):
         cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
         self.x_contacto = cotizacion.x_contacto
         self.sorteo_id = cotizacion.sorteo_id.id
-        self.x_student = cotizacion.x_student
+        self.x_student = cotizacion.x_student"""
         
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
@@ -24,7 +24,7 @@ class Account_Move(models.Model):
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
     
-    x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
+    #x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
     
     n_tickets_acum = fields.Integer('Tickets')
     
