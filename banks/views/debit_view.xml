@@ -2,7 +2,79 @@
 <odoo>
 <data>
 
-    
+    <record id="debit_form_view" model="ir.ui.view">
+        <field name="name">banks.debit.form</field>
+        <field name="model">banks.debit</field>
+        <field name="arch" type="xml">
+            <form string="Debits">
+                <header>
+                    <button name="action_draft" type="object" string="Cambiar a Borrador" states="anulated" class="oe_highlight"/>
+                    <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
+                    <button name="action_anulate_debit" type="object" string="Romper conciliación" groups="banks.banks_anular_registros"
+                    confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    
+                    <h1>
+                        <field name="number_calc" readonly='1' attrs="{'invisible': [('state','!=','draft')]}"/>
+                        <field name="number" readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
+                    </h1>
+                    <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
+                    <group colspan="4">
+                        <group cols="2">
+                            <!--<field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>-->
+                            <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="journal_id" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+                            <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group cols="2">
+                            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="currency_id" options="{'no_create': True}"/>
+                            <field name="doc_type" invisible="1"/>
+                            <field name="es_moneda_base" invisible="1"/>
+                            <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
+                            <field name="plantilla_id" invisible="1" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}"  
+                                domain="[('doc_type', '=', doc_type)]"/> 
+                        </group>
+                    </group>
+                    <group colspan="4">
+                        <group col="2">
+                            <field name="namea" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group col="2">
+                            <field name="name"  attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detalle de Transacción">
+                            <field name="debit_line" attrs="{'readonly': [('state','!=','draft')]}">
+                                <tree editable="bottom">
+                                <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]" options="{'no_create': True}"/>
+                                <field name="name"/>
+                                <field name="partner_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="analytic_id" domain="[('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="amount"/>
+                                <field name="move_type"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Apuntes Contables" attrs="{'invisible': [('state','!=','validated')]}">
+                            <group>
+                                <field name="move_id" readonly="1" widget="many2one_tree" options="{'middle_node_select': False}"  />
+                            </group>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="rest_credit" widget="monetary" options="{'currency_field': 'currency_id'}"/>                      
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record> 
 
     <record model="ir.ui.view" id="banks_debit_view_tree">
         <field name="name">banks.debit.tree</field>
