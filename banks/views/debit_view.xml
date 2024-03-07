@@ -74,6 +74,7 @@
                 </div>
             </form>
         </field>
+        <field name="reload" eval="True"/>
     </record> 
 
     <record model="ir.ui.view" id="banks_debit_view_tree">
