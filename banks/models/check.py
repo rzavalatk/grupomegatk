@@ -541,7 +541,7 @@ class Check(models.Model):
 			'ref': self.name,
 			'line_ids': lineas,
 			'state': 'draft',
-			'doc_type': self.doc_type,
+			#'doc_type': self.doc_type,
 		}
 
 		if self.move_id:
