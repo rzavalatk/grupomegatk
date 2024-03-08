@@ -65,10 +65,10 @@ class CierreDiario(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', readonly=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     total_facturado = fields.Monetary(
-        "Total Facturado", compute=_total_facturado).format('0,0.00');
+        "Total Facturado", compute=_total_facturado)
     facturas_ids = fields.One2many("account.move", "cierre_id", "Facturas")
-    total_cobrado = fields.Monetary("Total Cobrado", compute=_total_cobrado).format('0,0.00');
-    total = fields.Monetary("Total Cobrado", compute=_total).format('0,0.00');
+    total_cobrado = fields.Monetary("Total Cobrado", compute=_total_cobrado)
+    total = fields.Monetary("Total Cobrado", compute=_total)
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
