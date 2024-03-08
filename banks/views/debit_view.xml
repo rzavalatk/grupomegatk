@@ -2,8 +2,8 @@
 <odoo>
 <data>
 
-    <record id="debits_form_view" model="ir.ui.view">
-        <field name="name">banks.debits.form</field>
+    <record id="debit_form_view" model="ir.ui.view">
+        <field name="name">banks.debit.form</field>
         <field name="model">banks.debit</field>
         <field name="arch" type="xml">
             <form string="Debits">
@@ -74,7 +74,6 @@
                 </div>
             </form>
         </field>
-        
     </record> 
 
     <record model="ir.ui.view" id="banks_debit_view_tree">
