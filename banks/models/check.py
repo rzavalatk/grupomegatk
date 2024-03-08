@@ -478,7 +478,7 @@ class Check(models.Model):
 					'account_id': line.account_id.id,
 					'date': self.date,
 					'partner_id': line.partner_id.id,
-					'analytic_account_id': line.analytic_id.id,
+					#'analytic_account_id': line.analytic_id.id,
 				}
 				if self.currency_id:
 					if line.account_id.currency_id:
@@ -510,7 +510,7 @@ class Check(models.Model):
 					'account_id': line.account_id.id,
 					'date': self.date,
 					'partner_id': line.partner_id.id,
-					'analytic_account_id': line.analytic_id.id,
+					#'analytic_account_id': line.analytic_id.id,
 				}
 				if self.currency_id:
 					if line.account_id.currency_id:
