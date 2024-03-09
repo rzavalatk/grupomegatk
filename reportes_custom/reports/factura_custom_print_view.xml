@@ -31,7 +31,11 @@
           <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_refund'">Vendor Credit Note</span>
           <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'">FACTURA PROVEEDOR</span>
           <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice'">FACTURA COMERCIAL</span>
-          <div t-if="o.move_type == 'out_invoice'">
+          <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
+                <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
+                <p><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
+                </div>
+          <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
@@ -41,7 +45,7 @@
               </div> 
             </t>
           </div>
-          <div t-if="o.move_type == 'out_refund'">
+          <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
@@ -107,29 +111,29 @@
       
       <div class="footer" style='font-size:10pt !important;'>
         <div style="border-top: 1px solid rgb(13, 143, 210);">
-          <ul style="text-align: center;" class="list-inline mb4">
-            <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+          <ul style="text-align: center; margin-top:-2px;" class="list-inline mb4">
+            <li t-if="o.company_id.street">Oficina Principal: <span t-field="o.company_id.street"/></li>
           </ul>
-          <ul style="text-align: center;" class="list-inline mb4">
-            <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+          <ul style="text-align: center; margin-top:-3px;" class="list-inline mb4">
+            <li t-if="o.company_id.street2">Sucursal San Pedro Sula: <span t-field="o.company_id.street2"/></li>
           </ul>
-          <ul style="text-align: center;" class="list-inline mb4">
+          <ul style="text-align: center; margin-top:-3px;" class="list-inline mb4">
             <li>
-              <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
-              <t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></t>
-              <t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></t>
-              <t t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+              <t t-if="o.company_id.phone">Telefono: <span t-field="o.company_id.phone"/></t>
+              <t t-if="o.company_id.email">Correo: <span t-field="o.company_id.email"/></t>
+              <t t-if="o.company_id.website">Web: <span t-field="o.company_id.website"/></t>
+              <t t-if="o.company_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
             </li>
           </ul>
-          <div style='float:left'>
-            Original-Cliente&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;Copia-Emisor
+          <div style='float:left; margin-top:-3px;'>
+            Original-Cliente&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;Copia-Obligado Tributario Emisor
           </div>
           <div style="text-align: right;" class="text-muted">
             Pag. <span class="page"/> / <span class="topage"/>
           </div>
 
           <div name="financial_infos">
-            <span t-field="user.company_id.report_footer"/>
+            <span t-field="o.company_id.report_footer"/>
           </div>
 
         </div>
@@ -176,7 +180,7 @@
                   <t t-else="" >0.00</t>
                 </td>
                 <td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
-                  <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_ids))"/>
+                  <span t-esc="', '.join(map(lambda x: (x.name), l.tax_ids))"/>
                   <t t-if="not l.tax_ids" >
                     <t t-set="_exento_total" t-value="_exento_total + l.price_subtotal"/>
                   </t>
@@ -220,11 +224,14 @@
                   N° Orden de Compra Exenta&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_compra_exenta"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>&amp;nbsp;&amp;nbsp; 
                 </p>
                 <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
-                  N° Registro Exonerado &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_registro_exonerado"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>&amp;nbsp;&amp;nbsp; 
+                  N° Constancia de Registro Exonerado &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_registro_exonerado"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>&amp;nbsp;&amp;nbsp; 
                 </p>
                 <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
                   N° Registro del SAG &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_registro_sag"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>
-                </p>  
+                </p>
+                <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
+                  N° Diplomático     &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_registro_diplomatico"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>
+                </p>   
               </div>
               <div id="total" class="row" style='float:right !important;'>
                 <div>
