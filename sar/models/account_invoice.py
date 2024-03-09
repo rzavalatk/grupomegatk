@@ -118,6 +118,7 @@ class AccountMove(models.Model):
     x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A")
     x_registro_exonerado = fields.Char("Registro exonerado", default="N/A")
     x_registro_sag = fields.Char("Registro del SAG", default="N/A")
+    x_registro_diplomatico = fields.Char("N° Diplomático", default="N/A")
     x_comision = fields.Selection(
         [('1', 'SI'), ('2', 'NO')], string='Comisión Pagada', required=True, default='2')
     descuento = fields.Monetary(

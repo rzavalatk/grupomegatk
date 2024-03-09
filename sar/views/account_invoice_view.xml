@@ -56,6 +56,7 @@
             <field name="x_compra_exenta"/>
             <field name="x_registro_exonerado"/>
             <field name="x_registro_sag"/>
+            <field name="x_registro_diplomatico" />
             <field name="x_comision" invisible = '1' />
         </xpath>
     </field>
