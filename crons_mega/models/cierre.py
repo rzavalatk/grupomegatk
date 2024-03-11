@@ -205,8 +205,8 @@ class CierreDiario(models.Model):
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
-                        #_logger.warning('Prueba 1 . factura : '+ str(factura))
-                        #_logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
+                        _logger.warning('Prueba 1 . factura : '+ str(factura))
+                        _logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
 
                         if factura not in ids_facturas:
                             factura_move= self.env['account.move'].sudo().browse(factura)
