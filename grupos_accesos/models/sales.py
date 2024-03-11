@@ -18,7 +18,7 @@ class Vendors(models.Model):
         res = super(Vendors,self).create(vals)
         return res
     
-class VendorsInvoices(models.Model):
+"""class VendorsInvoices(models.Model):
     _inherit = "account.move"
     
     #@api.model
@@ -33,7 +33,7 @@ class VendorsInvoices(models.Model):
                         for i in vals[item]:
                             i[2]['x_user_id'] = partner_id.user_id.id
         res = super(VendorsInvoices,self).create(vals)
-        return res
+        return res """
 
 class DefaultVendor(models.Model):
     _inherit = "res.partner"
