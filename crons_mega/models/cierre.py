@@ -217,7 +217,7 @@ class CierreDiario(models.Model):
                             if factura_id.invoice_date == self.date:
                                 try:
                                     if factura_id.state != 'cancel':
-                                        _logger.warning("Pase: "+factura_id.invoice_payments_widget['content'])
+                                        _logger.warning("Pase: "+factura_id.invoice_payments_widget['content'][0])
                                         payments_widget = factura_id.invoice_payments_widget['content']
                                         _logger.warning("Payments: " + payments_widget)
                                         _logger.warning(
