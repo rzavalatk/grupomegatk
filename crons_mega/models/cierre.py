@@ -218,9 +218,19 @@ class CierreDiario(models.Model):
                                 try:
                                     if factura_id.state != 'cancel':
                                         _logger.warning("Pase")
-                                        payments_widget = json.loads(
-                                            factura_id.invoice_payments_widget)['content']
-                                        _logger.warning("Payments: " + payments_widget)
+                                        #payments_widget = json.loads(
+                                        #    factura_id.invoice_payments_widget)['content']
+                                        if factura_id and factura_id.invoice_payments_widget and isinstance(factura_id.invoice_payments_widget, str):
+                                            try:
+                                                payments_widget = json.loads(factura_id.invoice_payments_widget)['content']
+                                            except (json.JSONDecodeError, KeyError) as e:
+                                                # Maneje errores de análisis JSON o errores de clave (por ejemplo, registre el error o proporcione un valor predeterminado)
+                                                _logger.warning("Error al decodificar JSON:")
+                                        else:
+                                            # Maneje el caso en el que el atributo falte o no tenga un formato de cadena
+                                            _logger.warning("Advertencia: invoice_payments_widget no encontrado o formato inválido")
+
+                                        #_logger.warning("Payments: " + payments_widget)
                                         _logger.warning(
                                             'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
                                     else:
