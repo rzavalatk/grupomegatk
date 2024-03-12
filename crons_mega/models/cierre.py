@@ -219,9 +219,10 @@ class CierreDiario(models.Model):
                                     if factura_id.state != 'cancel':
                                         _logger.warning("Pase")
                                         payments_widget = json.loads(
-                                            factura_id.invoice_payments_widget)
+                                            factura_id.invoice_payments_widget)['content']
+                                        _logger.warning("Payments: " + payments_widget)
                                         _logger.warning(
-                                            'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)))
+                                            'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
                                     else:
                                         payments_widget = []
                                 except:
