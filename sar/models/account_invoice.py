@@ -89,13 +89,13 @@ class AccountMove(models.Model):
                         inv.write({'internal_number': new_name})
                         self.internal_number = new_name"""
 
-    """def button_confirm(self):
+    def button_confirm(self):
         for invoice in self:
-            if invoice.type in ('out_invoice', 'out_refund'):
+            if invoice.move_type in ('out_invoice', 'out_refund'):
                 sequence = self.env['ir.sequence'].next_by_id(
                     invoice.sequence_ids.id)
                 invoice.internal_number = sequence
-        return super(AccountMove, self).button_confirm()"""
+        return super(AccountMove, self).button_confirm()
 
     @api.onchange('sequence_ids')
     def _compute_internal_number(self):
