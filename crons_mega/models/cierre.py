@@ -221,8 +221,7 @@ class CierreDiario(models.Model):
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
                                         _logger.warning("Payments: " + str(payments_list))
-                                        _logger.warning(
-                                            'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
+
                                     else:
                                         payments_widget = []
                                 except:
