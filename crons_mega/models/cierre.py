@@ -218,8 +218,9 @@ class CierreDiario(models.Model):
                                 try:
                                     if factura_id.state != 'cancel':
                                         _logger.warning("Pase: "+factura_id.invoice_payments_widget['content'][0])
-                                        payments_widget = factura_id.invoice_payments_widget['content']
-                                        _logger.warning("Payments: " + payments_widget)
+                                        payments_widget = factura_id.invoice_payments_widget
+                                        payments_list = payments_widget["content"]
+                                        _logger.warning("Payments: " + payments_list)
                                         _logger.warning(
                                             'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
                                     else:
@@ -229,7 +230,7 @@ class CierreDiario(models.Model):
                                     raise Warning(
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
-                                for pay in payments_widget:
+                                for pay in payments_list:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
                                         acumulado_factura += pay['amount']
                                         if len(payments_widget) > 1:
