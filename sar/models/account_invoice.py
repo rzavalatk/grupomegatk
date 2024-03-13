@@ -67,7 +67,6 @@ class AccountMove(models.Model):
             ('code', '=', self.move_type),
             ('code', '=', 'in_refund'),
             '|',
-            ('user_ids', 'in', self.user_id.id),
             ('user_ids', 'in', False),
         ]
         sequence = self.env['ir.sequence'].search(domain)
