@@ -11,7 +11,7 @@
             <attribute name="groups">base.group_system</attribute>
         </xpath>
 
-        <field name="invoice_payment_term_id" position="after">
+        <field name="invoice_payment_term_id" position="before">
             <field name="fiscal_control" invisible="1"/>
             <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
     'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
