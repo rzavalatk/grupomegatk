@@ -11,13 +11,13 @@
             <attribute name="groups">base.group_system</attribute>
         </xpath>
 
-        <field name="invoice_payment_term_id" position="before">
-            <field name="fiscal_control" invisible="1" default="True"/>
+        
+
+        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='company_id']" position="after">
+            <field name="fiscal_control" />
             <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
     'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
-        </field>
-
-        
+        </xpath>
 
         <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='company_id']" position="after">
             <field name="internal_number" groups="base.group_system"/>
