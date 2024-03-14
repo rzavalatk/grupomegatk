@@ -330,7 +330,7 @@ class Debit(models.Model):
 			'date': self.date,
 			'ref': self.name,
 			'line_ids': lineas,
-			'state': 'posted',
+			'state': 'draft',
 		}
 		return values
 
@@ -438,7 +438,7 @@ class Debit(models.Model):
 			'date': self.date,
 			'ref': self.name,
 			'line_ids': lineas,
-			'state': 'posted',
+			'state': 'draft',
 		}
 		return values
 
