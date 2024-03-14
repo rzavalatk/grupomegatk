@@ -90,13 +90,13 @@
 					<!--<header>
 						<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" attrs="{"invisible": [["tipo_soporte","=","llamada"]]}"/>
 					</header>-->
-					<!--<field name="name" position="before">
+					<field name="name" position="before">
 						<h1>
 							Ticket:
 							<field name="id"/>
 						</h1>
 					</field>
-					<xpath expr="//form[1]/sheet[1]/div[4]/h1[1]/field[@name='name']" position="attributes">
+					<!--<xpath expr="//form[1]/sheet[1]/div[4]/h1[1]/field[@name='name']" position="attributes">
 						<attribute name="attrs">{}</attribute>
 						<attribute name="readonly">1</attribute>
 						<attribute name="required">1</attribute>
