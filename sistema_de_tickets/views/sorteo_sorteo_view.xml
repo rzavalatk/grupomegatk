@@ -9,7 +9,7 @@
                     <group>
                         <group name="datos-1" string="Datos">
                             <field name="name"/>
-                            <field name="compañia"/>
+                            <field name="compania"/>
                             <field name="sequence_id"/>
                             <field name="encargado_id"/>
                             <field name="premios"/>
