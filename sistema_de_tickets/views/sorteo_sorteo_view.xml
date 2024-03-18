@@ -47,7 +47,7 @@
             <field name="arch" type="xml">
                 <tree string="">
                     <field name="name"/>
-                    <field name="compañia"/>
+                    <field name="compania"/>
                     <field name="fecha_inicio"/>
                     <field name="fecha_final"/>
                 </tree>
