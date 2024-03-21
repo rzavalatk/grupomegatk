@@ -22,7 +22,7 @@ class Facturas(models.Model):
 class CierreDiario(models.Model):
     _name = "account.cierre"
     _order = "create_date desc"
-    _description = "description"
+    _description = "Account Cierre"
 
     regions_list = [
         ("San Pedro Sula", "SPS"),
