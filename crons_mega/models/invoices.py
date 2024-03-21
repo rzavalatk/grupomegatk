@@ -6,7 +6,7 @@ import pytz
 import time
 import json
 
-"""
+
 class Factura(models.Model):
     _inherit = "account.move"
 
@@ -287,4 +287,4 @@ class FacturaVencerLine(models.Model):
                     self.id, email_values=email_values, force_send=True)
         return True
         
-        """
+        

@@ -14,7 +14,6 @@
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     'version': '0.1',
-    "license": "LGPL-3",
 
     'depends': ['base','account'],
 
@@ -26,9 +25,4 @@
         'views/assets.xml',
         # 'views/journal.xml',
     ],
-    'qweb_template_dict': {
-        'backend': [
-            'static/js/account_comisiones.js',
-        ],
-    },
 }
