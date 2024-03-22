@@ -140,11 +140,11 @@ class Comisiones(models.Model):
 
     def init_comisiones(self):
         invoices_ids = self.env['account.move'].search(['&', '&', '&', '&',
-            ('date_invoice', '<=', self.date),
+            ('invoice_date', '<=', self.date),
             ('user_id', 'in', self.users_ids.ids),
             ('move_type', '=', 'out_invoice'),
             ('x_comision', '=', '2'),
-            ('state', '=', 'paid'),
+            ('payment_state', '=', 'paid'),
         ])
         for item in invoices_ids:
             for line in item.invoice_line_ids:
