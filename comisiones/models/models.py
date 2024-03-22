@@ -50,7 +50,8 @@ class ComisionesLine(models.Model):
 
 
     def _comision_pagar(self):
-        self.comision_pagar = self.forma_comision * (self.pocentaje_pago/100)
+        for linea in self:
+            linea.comision_pagar = linea.forma_comision * (linea.pocentaje_pago/100)
         
 
     comision_id = fields.Many2one("account.comisiones")
