@@ -47,12 +47,18 @@ class ComisionesLine(models.Model):
             for item in linea.vencimiento:
                 if linea.antiguedad_pago >= item['from'] and linea.antiguedad_pago <= item['to']:
                     linea.pocentaje_pago = item['pay']
-
+                    break  # Se sale del bucle interno si se encuentra una coincidencia
+            else:
+                # Si no se encuentra una coincidencia, se asigna un valor predeterminado
+                linea.pocentaje_pago = 0.0
 
     def _comision_pagar(self):
         for linea in self:
+            if not linea.pocentaje_pago:
+                # Se puede agregar un mensaje de error aquí
+                continue
             linea.comision_pagar = linea.forma_comision * (linea.pocentaje_pago/100)
-        
+
 
     comision_id = fields.Many2one("account.comisiones")
     user_id = fields.Many2one("res.users", "Comercial")
