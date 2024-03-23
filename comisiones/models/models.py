@@ -51,9 +51,6 @@ class ComisionesLine(models.Model):
 
     def _comision_pagar(self):
         for linea in self:
-            if not linea.pocentaje_pago:
-                # Se puede agregar un mensaje de error aquí
-                continue
             linea.comision_pagar = linea.forma_comision * (linea.pocentaje_pago/100)
         
 
