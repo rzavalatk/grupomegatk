@@ -48,9 +48,9 @@ class ComisionesLine(models.Model):
                 if linea.antiguedad_pago >= item['from'] and linea.antiguedad_pago <= item['to']:
                     linea.pocentaje_pago = item['pay']
                     break  # Se sale del bucle interno si se encuentra una coincidencia
-            else:
-                # Si no se encuentra una coincidencia, se asigna un valor predeterminado
-                linea.pocentaje_pago = 0.0
+                else:
+                    # Si no se encuentra una coincidencia, se asigna un valor predeterminado
+                    linea.pocentaje_pago = 0.0
 
     def _comision_pagar(self):
         for linea in self:
