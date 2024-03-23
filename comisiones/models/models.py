@@ -4,6 +4,10 @@ from odoo import models, api, fields
 from datetime import datetime as dt
 import datetime
 import pytz
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 
 class Usuarios(models.Model):
@@ -51,6 +55,7 @@ class ComisionesLine(models.Model):
 
     def _comision_pagar(self):
         for linea in self:
+            _logger.warning('Prueba comisiones : forma_comision='+ str(linea.forma_comision) + 'porccentaje='+str(linea.pocentaje_pago))
             linea.comision_pagar = linea.forma_comision * (linea.pocentaje_pago/100)
         
 
