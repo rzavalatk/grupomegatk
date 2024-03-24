@@ -36,9 +36,6 @@ class Saleorder(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
-    
-    
-    
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):

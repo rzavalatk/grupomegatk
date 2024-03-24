@@ -4,6 +4,10 @@ from odoo import models, api, fields
 from datetime import datetime as dt
 import datetime
 import pytz
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 
 class Usuarios(models.Model):
@@ -43,13 +47,16 @@ class ComisionesLine(models.Model):
     }]
     
     def _pocentaje_pago(self):
-        for item in self.vencimiento:
-            if self.antiguedad_pago >= item['from'] and self.antiguedad_pago <= item['to']:
-                self.pocentaje_pago = item['pay']
+        for linea in self:
+            for item in linea.vencimiento:
+                if linea.antiguedad_pago >= item['from'] and linea.antiguedad_pago <= item['to']:
+                    linea.pocentaje_pago = item['pay']
 
 
     def _comision_pagar(self):
-        self.comision_pagar = self.forma_comision * (self.pocentaje_pago/100)
+        for linea in self:
+            _logger.warning('Prueba comisiones : forma_comision='+ str(linea.forma_comision) + 'porccentaje='+str(linea.pocentaje_pago))
+            linea.comision_pagar = linea.forma_comision * (linea.pocentaje_pago/100)
         
 
     comision_id = fields.Many2one("account.comisiones")
@@ -138,11 +145,11 @@ class Comisiones(models.Model):
 
     def init_comisiones(self):
         invoices_ids = self.env['account.move'].search(['&', '&', '&', '&',
-            ('date_invoice', '<=', self.date),
+            ('invoice_date', '<=', self.date),
             ('user_id', 'in', self.users_ids.ids),
-            ('type', '=', 'out_invoice'),
+            ('move_type', '=', 'out_invoice'),
             ('x_comision', '=', '2'),
-            ('state', '=', 'paid'),
+            ('payment_state', '=', 'partial'),
         ])
         for item in invoices_ids:
             for line in item.invoice_line_ids:

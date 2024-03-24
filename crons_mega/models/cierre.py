@@ -13,6 +13,7 @@ import math
 _logger = logging.getLogger(__name__)
 
 
+
 class Facturas(models.Model):
     _inherit = "account.move"
 
@@ -22,7 +23,7 @@ class Facturas(models.Model):
 class CierreDiario(models.Model):
     _name = "account.cierre"
     _order = "create_date desc"
-    _description = "description"
+    _description = "Account Cierre"
 
     regions_list = [
         ("San Pedro Sula", "SPS"),
@@ -212,22 +213,24 @@ class CierreDiario(models.Model):
                             factura_move= self.env['account.move'].sudo().browse(factura)
                             factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                             self.register_ids(factura_id, 'facturas de pagos')
-                            #_logger.warning(factura_id.date)
+                            _logger.warning(factura_id.invoice_date)
 
                             if factura_id.invoice_date == self.date:
                                 try:
                                     if factura_id.state != 'cancel':
-                                        payments_widget = json.loads(
-                                            factura_id.invoice_payments_widget)['content']
-                                        _logger.warning(
-                                            'payme7nts widget: ' + str(json.loads(factura_id.invoice_payments_widget)['content']))
+                                        _logger.warning("Pase: ")
+                                        payments_widget = factura_id.invoice_payments_widget
+                                        payments_list = payments_widget["content"]
+                                        _logger.warning("Payments: " + str(payments_list))
+
                                     else:
                                         payments_widget = []
                                 except:
+                                    _logger.warning('Error . factura : '+ str(factura))
                                     raise Warning(
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
-                                for pay in payments_widget:
+                                for pay in payments_list:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
                                         acumulado_factura += pay['amount']
                                         if len(payments_widget) > 1:

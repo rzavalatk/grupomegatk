@@ -11,14 +11,14 @@
 
     <template id="external_layout_factura_custom">
       <div class="header">
-        <div class="row" style="margin-top: -155px;">
+        <div class="row" style="margin-top: 0px;">
           <div class="col-xs-3 mb4">
-            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; top: -110px; padding-top: 0px; padding: 0px;" alt="Logo"/>
                 
-            <div style="margin-top: -150px;color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
-              FACTURAR A : 
-            </div>
-            <div style="width: 150px !important;">
+            <div style="position: absolute; top: 150px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+							FACTURAR A: 
+						</div>
+            <div style="width: 130px !important; position: absolute; top: 173px;">
               <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
                 <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
                 <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
@@ -26,22 +26,22 @@
             </div>
           </div>
         </div>
-        <div style="float: right; margin-top: -320px;">
-          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: end;" t-if="o.move_type == 'out_refund'">NOTA DE CREDITO</span>
-          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_refund'">Vendor Credit Note</span>
-          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'">FACTURA PROVEEDOR</span>
-          <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice'">FACTURA COMERCIAL</span>
+        <div style="float: right; margin-top: 25px;">
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_refund'">NOTA DE CREDITO</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_refund'">Vendor Credit Note</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'">FACTURA PROVEEDOR</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice'">FACTURA COMERCIAL</span>
           <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
-                <p><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
+                <p style="margin-top: -20px"><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
                 </div>
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
-                <p><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
-                <p><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
-                <p><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
-                <p><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
+                <p style="margin-top: -7px"><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
+                <p style="margin-top: -20px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
+                <p style="margin-top: -20px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
+                <p style="margin-top: -20px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
               </div> 
             </t>
           </div>
@@ -56,7 +56,7 @@
             </t>
           </div>
         </div>
-        <div style="float: right;margin-top: -100px;">
+        <div style="float: right; margin-top: 10px; margin-left: 50px;">
           <div style="float: right;">
             <table style="text-align: center; width:330px">
               <tr>
@@ -74,7 +74,7 @@
               </tr>
             </table>
           </div>  
-          <div style="margin-top:95px;">
+          <div style="float: right; margin-top: 20px; margin-left: 50px;">
             <table style="text-align: center;">
               <tr>
                 <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
@@ -231,7 +231,7 @@
                 </p>
                 <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
                   N° Diplomático     &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_registro_diplomatico"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>
-                </p>   
+                </p>  
               </div>
               <div id="total" class="row" style='float:right !important;'>
                 <div>
@@ -292,29 +292,13 @@
                         <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                       </td>
                     </tr>
-                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                      <tr>
-                        <t t-if="len(o.line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                          <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
-                            <span t-esc="amount_by_group[0]"/>
-                          </td>
-                          <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                            <span t-esc="amount_by_group[3]"/>
-                          </td>
-                        </t>
-                        <t t-else="">
-                          <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
-                            <span t-esc="amount_by_group[0]"/>
-                            <span>&amp;nbsp;<span>on</span>
-                                <t t-esc="amount_by_group[4]"/>
-                            </span>
-                          </td>
-                          <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                            <span t-esc="amount_by_group[3]"/>
-                          </td>
-                        </t>
-                      </tr>
-                    </t>
+                    <tr>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                      </td>
+                    </tr>
+                    
                     <tr>
                       <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
                         <strong>ISV 18%</strong>

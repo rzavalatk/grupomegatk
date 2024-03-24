@@ -183,7 +183,7 @@ class HrPermisos(models.Model):
 				'note': _('Solicitación de permiso'),
 				'res_id': self.id,
 				'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
-				'user_id': self.sudo().employe_id.parent_id.user_id.id or false,
+				'user_id': self.sudo().employe_id.parent_id.user_id.id,
 			})
 			activity._onchange_activity_type_id()
 			self.write({'state': 'pendiente'})

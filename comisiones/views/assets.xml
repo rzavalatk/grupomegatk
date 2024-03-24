@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data noupdate="1">
-        <template id="account_comisiones_assets_js" name="account.comisiones.assets.js" inherit_id="web.assets_backend">
+        <template id="account_comisiones_assets_js" name="account.comisiones.assets.js">
             <xpath expr="." position="inside"> 
                   <script type="text/javascript" src="/comisiones/static/src/js/account_comisiones.js"/>
             </xpath> 

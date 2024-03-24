@@ -4,6 +4,7 @@
     'summary': 'Lineas de facturas validadas ',
     'version': '14.0',
     'category': 'Account',
+    "license": "LGPL-3",
     'author': 'Romel Zavala',
     'depends': [
         'account', 'fields_megatk',

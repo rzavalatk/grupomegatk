@@ -14,6 +14,7 @@
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     'version': '0.1',
+    "license": "LGPL-3",
     'depends': ['base','account','fields_megatk'],
     'data': [
         'wizard/wizard.xml',
@@ -22,7 +23,7 @@
         #'views/account_invoice.xml',
         'views/cierre_diario_cron.xml',
         #'views/invoice_expire_cron.xml',
-        'views/product_expired_cron.xml',
+        #'views/product_expired_cron.xml',
         'views/report_marca_cron.xml',
         'views/cierre.xml',
         'views/order_point.xml',

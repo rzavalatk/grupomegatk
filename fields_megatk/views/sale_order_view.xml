@@ -22,17 +22,16 @@
 					<field name="analytic_account_id" position="after">
 							<field name="x_consignacion"/>
 		            </field>
-				    <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='analytic_tag_ids']" position="attributes">
+				    <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='analytic_distribution']" position="attributes">
 					    <attribute name="attrs">{}</attribute>
 					    <attribute name="invisible">1</attribute>
 					</xpath>
 
-					  
-
 					<field name="tag_ids" position="after">
 						<field name="sorteo_id"/>
 						<field name="x_student" />
-		            </field>   
+		            </field>
+
 				</field>
 	   	</record>
 

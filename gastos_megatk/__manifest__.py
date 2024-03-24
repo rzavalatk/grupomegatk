@@ -4,6 +4,7 @@
     "version": "14",
     "category": "accounting",
     "author": "César Alejandro Rodriguez",
+    "license": "LGPL-3",
     "depends": [
         "base",
         "account",

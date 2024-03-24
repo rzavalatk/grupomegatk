@@ -200,10 +200,10 @@ class Vittbankstransferences(models.Model):
             line = moveline.search([('move_id', '=', self.move_id.id)])
             line.unlink()
             self.move_id.write(values)
-            self.move_id.line_ids.create_analytic_lines()
+            self.move_id.line_ids._create_analytic_lines()
             return self.move_id.id
         else:
             id_move = account_move.create(values)
             id_move.write({'name': str(self.number)})
-            id_move.line_ids.create_analytic_lines()
+            id_move.line_ids._create_analytic_lines()
             return id_move.id

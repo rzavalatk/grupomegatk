@@ -42,6 +42,17 @@
                 'wizards/operators_user.xml',
             ],
     'images':['static/description/multi_chatbot_connector.png'],
+    'qweb_template_dict': {
+        'backend': [
+            '/multi_chatbot_connector/static/src/js/composer.js',
+        ],
+        'frontend': [
+            '/multi_chatbot_connector/static/src/css/style.css',
+            '/multi_chatbot_connector/static/src/css/jquery-confirm.min.css',
+            '/multi_chatbot_connector/static/src/js/im_livechat.js',
+            '/multi_chatbot_connector/static/src/js/jquery-confirm.min.js',
+        ],
+    },
     'installable': True,
     'auto_install': False,
     'price': 299.00,

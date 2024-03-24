@@ -14,6 +14,7 @@
     'version': '1.0',
     'maintainer': '',
     'contributors': '',
+    "license": "LGPL-3",
     'category': 'Extra Tools',
     'depends': ['base', 'sale', "product", "fields_megatk"],
     'data': [

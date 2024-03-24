@@ -38,27 +38,27 @@
                     <field name="x_user_id" groups="base.group_user" options="{'no_create': False}" force_save="1" />
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="fecha_vencimiento_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1" />
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="terminos_pago_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1" />
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="referencia_pago_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1" />
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="fecha_pago_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1" />
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="nombre_empresa_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1"/>
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='analytic_distribution']" position="after">
                     <field name="numero_interno_report" groups="base.group_user" options="{'no_create': False}" force_save="1" invisible="1"/>
                 </xpath>
 
@@ -90,21 +90,5 @@
                 </xpath> 
             </field>
         </record>
-
-        <record id="account_move_search_inherit" model="ir.ui.view">
-            <field name="name">account.move.search.inherit</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
-            <field name="arch" type="xml">
-                <!-- Realiza tus modificaciones en la vista de búsqueda aquí -->
-                <xpath expr="//field[@name='name']" position="before">
-                    <field name="internal_number"/>
-                    
-                </xpath>
-
-                
-            </field>
-        </record>
-
 	</data>	
 </odoo>

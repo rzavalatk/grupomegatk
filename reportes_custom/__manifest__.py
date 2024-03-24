@@ -13,9 +13,10 @@
     # for the full list
     'category': 'Uncategorized',
     'version': "12.0.1.0.0",
+    "license": "LGPL-3",
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fields_megatk','fields_megatk_stock','web_notify'],
+    'depends': ['base','fields_megatk','fields_megatk_stock'],
 
     # always loaded
     'data': [

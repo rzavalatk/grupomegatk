@@ -14,7 +14,7 @@
     'website': "azelaya@megatk.com",
     'category': 'user',
     'version': '0.1',
-
+    "license": "LGPL-3",
     'depends': ['base','website','banks'],
 
     'data': [
@@ -38,4 +38,16 @@
         'security/security.xml',
         'static/src/xml/logos_base64.xml',
     ],
+    'qweb_template_dict': {
+        'backend': [
+            '',
+        ],
+        'frontend': [
+            '/website_custom/static/src/js/controller.js',
+            '/website_custom/static/src/css/styles.css',
+            '/website_custom/static/src/js/snippets/carousel.js',
+            '/website_custom/static/src/js/snippets/video_web.js',
+            ''
+        ],
+    },
 }

@@ -10,6 +10,7 @@
 
     'author': "Romel Leonel Zavala",
     'website': "http://megaktk.net",
+    "license": "LGPL-3",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
@@ -24,7 +25,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         "views/res_users_view.xml",
-        "views/stock_inventary.xml",
+        #"views/stock_inventary.xml",
         "views/res_partner.xml"
     ],
     # only loaded in demonstration mode

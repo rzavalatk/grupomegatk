@@ -6,14 +6,35 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_move_form" />
     <field name="arch" type="xml">
-        <field name="ref" position="after">
-            <field name="fiscal_control" invisible="1"/>
+        
+        <xpath expr="//field[@name='user_id']" position="attributes">
+            <attribute name="groups">base.group_system</attribute>
+        </xpath>
+
+        
+
+        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='company_id']" position="before">
+            <field name="fiscal_control" default="True"/>
             <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
     'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
-        </field>
-        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group/field[@name='company_id']" position="after">
+        </xpath>
+
+        <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='company_id']" position="after">
             <field name="internal_number" groups="base.group_system"/>
         </xpath>
+
+        
+
+        <field name="tax_totals" position="before">
+            <field name="amount_untaxed"/>
+            <field name="amount_tax"/>
+            <field name="amount_total"/>
+        </field>
+
+        <xpath expr="//field[@name='tax_totals']" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </xpath>
+
         <xpath expr="//field[@name='amount_untaxed']" position="attributes">
             <attribute name="string">Sub Total</attribute>
         </xpath>
@@ -66,7 +87,7 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_account_invoice_filter"/>
     <field name="arch" type="xml">
-        <filter name="unpaid" position="after">
+        <filter name="open" position="after">
             <filter string="Cancelled Invoices" domain="[('state','=','cancel')]" name="invoice_cancelled"/>
         </filter>
     </field>

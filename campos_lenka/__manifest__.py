@@ -11,6 +11,7 @@
 
     'author': "Romel Zavala",
     'website': "http://www.megatk.net",
+    "license": "LGPL-3",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml

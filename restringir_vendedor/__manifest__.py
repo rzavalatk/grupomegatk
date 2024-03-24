@@ -13,6 +13,7 @@
     'author': "Alejandro Zelaya",
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
+    "license": "LGPL-3",
     'version': '0.1',
     'depends': ['base','crm','sale'],
     'data': [

@@ -10,6 +10,7 @@
     'author': "César Alejandro Rodriguez Castillo",
     'category': 'Banking',
     'version': '0.1',
+    "license": "LGPL-3",
     'depends': ['base', 'account', 'banks','formatos_papel_mega'],
     'data': [
         "security/groups.xml",

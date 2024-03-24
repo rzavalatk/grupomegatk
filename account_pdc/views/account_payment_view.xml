@@ -18,7 +18,7 @@
     </h1>
     <group>
     <group>
-        <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+        <field name="company_id" attrs="{'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
         <field name="partner_id" attrs="{'readonly': [('state','=','paid')]}" options="{'no_create': True}"  domain="[('company_id', '=', company_id)]"/>
         <field name="journal_id" widget='selection' attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
         <field name="amount" attrs="{'readonly': [('state','!=','draft')]}"/>

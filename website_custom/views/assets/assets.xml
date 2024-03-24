@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <!-- Assets -->
-        <template id="website_custom_frontend" inherit_id="website.assets_frontend" name="Breadcum custom">
+        <template id="website_custom_frontend" name="Breadcum custom">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/website_custom/static/src/js/controller.js"/>
                 <link rel="stylesheet" type="text/scss" href="/website_custom/static/src/css/styles.css"/>

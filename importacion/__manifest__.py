@@ -17,19 +17,18 @@
     # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
+    "license": "LGPL-3",
 
     # any module necessary for this one to work correctly
     'depends': ['base','purchase_stock','fields_megatk','stock'],
 
     # always loaded
     'data': [
-        'security/groups.xml',
         'security/ir.model.access.csv',
         'views/importacion_product.xml',
         'views/stock_picking_import.xml',
         'views/importacion_product_gasto.xml',
         'views/product_view.xml',
-        
     ],
     # only loaded in demonstration mode
     'application': True,

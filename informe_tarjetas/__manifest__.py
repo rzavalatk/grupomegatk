@@ -14,10 +14,11 @@
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     'version': '0.1',
+    "license": "LGPL-3",
 
     'depends': ['base','account_reports'],
 
     'data': [
-        'views/account_acoount.xml'
+        #'views/account_acoount.xml'
     ],
 }

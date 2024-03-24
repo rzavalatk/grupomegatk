@@ -133,7 +133,7 @@ class ImportacionProducto(models.Model):
 	def _onchange_stock_pick_ids(self):
 		self.import_line_id = [(5, 0, 0)]  # Elimina todas las líneas existentes
 		for recepcion in self.stock_pick_ids:
-			for lineas in recepcion.move_lines:
+			for lineas in recepcion.move_ids:
 				subtotal = lineas.quantity_done * lineas.price_unit
 				tax = subtotal * lineas.tax_id.amount / 100
 				total = tax + subtotal

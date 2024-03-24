@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <record id="stock_production_lot_add_company_1" model="ir.ui.view">
-            <field name="name">stock.production.lot.add.company</field>
-            <field name="model">stock.production.lot</field>
+            <field name="name">stock.lot.add.company</field>
+            <field name="model">stock.lot</field>
             <field name="inherit_id" ref="stock.view_production_lot_form"/>
             <field name="arch" type="xml">
                 <!-- <xpath expr="//form[1]//sheet[1]" position="before">
@@ -18,8 +18,8 @@
         </record>
 
         <record id="stock_production_lot_view_search_inherit" model="ir.ui.view">
-            <field name="name">stock.production.lot.view.search</field>
-            <field name="model">stock.production.lot</field>
+            <field name="name">stock.lot.view.search</field>
+            <field name="model">stock.lot</field>
             <field name="inherit_id" ref="stock.search_product_lot_filter"/>
             <field name="arch" type="xml">
                 <xpath expr="//filter[@name='group_by_product']" position="before">

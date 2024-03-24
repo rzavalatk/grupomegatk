@@ -14,15 +14,15 @@
       <div class="header">
         <div class="row" style="margin-top: -160px;">
           <div class="col-xs-3 mb4">
-            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: 50px; margin-button: 0px;" alt="Logo"/>
           </div>
 
         </div>
-        <div style="float: right; margin-top: -270px;">
+        <div style="float: right; margin-top: -150px; ">
           <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
         </div>
 
-        <div style="float: right; margin-top: -230px;">
+        <div style="float: right;margin-top: -30px;">
           <div style="float: right;">
             <table style="text-align: center; width:330px">
               <tr>
@@ -42,10 +42,10 @@
         </div>
 
         <div>
-          <div style="margin-top: -145px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+          <div style="position: absolute; top: 8px; margin-top: 30px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
               FACTURAR A: 
           </div>
-          <div style="width: 150px !important;">
+          <div style="width: 150px !important; position: absolute; top: 310px;">
             <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 120px;'>
               <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
               <div t-if="o.partner_id.vat" class="mt16">
@@ -55,7 +55,7 @@
             </div>
           </div>
         </div>
-        <div style="float: right;">
+        <div style="float: right; margin-top:45px; ">
           <table style="text-align: center;">
             <tr>
               <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">TERMINOS</td>
@@ -152,7 +152,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr t-foreach="o.move_lines" t-as="move">
+            <tr t-foreach="o.move_ids" t-as="move">
               <td style='padding: 2px;'>
                 <span t-field="move.x_codigo"/>
               </td>

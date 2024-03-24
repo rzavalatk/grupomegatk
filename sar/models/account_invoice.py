@@ -66,9 +66,7 @@ class AccountMove(models.Model):
             '|',
             ('code', '=', self.move_type),
             ('code', '=', 'in_refund'),
-            '|',
-            ('user_ids', 'in', self.user_id.id),
-            ('user_ids', 'in', False),
+            
         ]
         sequence = self.env['ir.sequence'].search(domain)
         for count in sequence:
@@ -89,13 +87,13 @@ class AccountMove(models.Model):
                         inv.write({'internal_number': new_name})
                         self.internal_number = new_name"""
 
-    """def button_confirm(self):
+    def button_confirm(self):
         for invoice in self:
-            if invoice.type in ('out_invoice', 'out_refund'):
+            if invoice.move_type in ('out_invoice', 'out_refund'):
                 sequence = self.env['ir.sequence'].next_by_id(
                     invoice.sequence_ids.id)
                 invoice.internal_number = sequence
-        return super(AccountMove, self).button_confirm()"""
+        return super(AccountMove, self).button_confirm()
 
     @api.onchange('sequence_ids')
     def _compute_internal_number(self):
@@ -113,8 +111,10 @@ class AccountMove(models.Model):
     # Unique number of the invoice, computed automatically when the invoice is created
     internal_number = fields.Char(string='Número interno', default=False,states={'draft': [('readonly', False)]},
                                   help="Unique number of the invoice, computed automatically when the invoice is created.", copy=False)
+    #sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
+     #                              domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id.id)]")
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
-                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id)]")
+                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False)]")
     x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A")
     x_registro_exonerado = fields.Char("Registro exonerado", default="N/A")
     x_registro_sag = fields.Char("Registro del SAG", default="N/A")

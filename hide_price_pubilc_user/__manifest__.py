@@ -12,6 +12,7 @@
 
     'author': "Alejandro Zelaya",
     'website': "azelaya@megatk.com",
+    "license": "LGPL-3",
 
     'category': 'Users',
     'version': '0.1',

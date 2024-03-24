@@ -10,6 +10,7 @@
     'author': "Alejandro Zelaya",
     'website': "azelaya@megatk.com",
     'category': 'employees',
+    "license": "LGPL-3",
     'version': '0.1',
     'depends': ['base','hr','fields_megatk'],
     'data': [

@@ -1,19 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <record id="payment_custom_sale_order" model="ir.ui.view">
-            <field name="name">payment.custom.sale.order</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='payment_term_id']" position="after">
-                    <field name="payment_term" />
-                </xpath>
-                <xpath expr="//field[@name='payment_term_id']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                </xpath>
-            </field>
-        </record>
+        
 
         <record id="account_payment_term_new_field_public" model="ir.ui.view">
             <field name="name">account.payment.term.new.field.public</field>
@@ -26,14 +14,14 @@
             </field>
         </record>
 
-        <template id="peyment_term_sudo_permission_sale" name="peyment.term.sudo.permission.sale" inherit_id="sale.report_saleorder_document">
+        <!--<template id="peyment_term_sudo_permission_sale" name="peyment.term.sudo.permission.sale" inherit_id="sale.report_saleorder_document">
             <xpath expr="//t/t/div/p[2]" position="attributes">
                 <attribute name="t-if">doc.sudo().payment_term_id.note</attribute>
             </xpath>
             <xpath expr="//t/t/div/p[2]/span" position="attributes">
                 <attribute name="t-field">doc.sudo().payment_term_id.note</attribute>
             </xpath>
-        </template>
+        </template>-->
 
         <!--<template id="peyment_term_sudo_permission_invoice" name="peyment.term.sudo.permission.invoice" inherit_id="account.report_invoice_document_with_payments">
             <xpath expr="//t/t/div/p[3]/span" position="attributes">

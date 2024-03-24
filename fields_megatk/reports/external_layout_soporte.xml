@@ -5,7 +5,7 @@
 			<div class="header">
 				<div class="row" style="margin-top: -90px;">
 					<div class="col-xs-3 mb4">
-						<img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 250px;"/>
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px;" alt="Logo"/>
 					</div>
 				
 				</div>

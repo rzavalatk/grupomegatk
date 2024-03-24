@@ -5,7 +5,7 @@
             <field name="name">res.partner.limits.vandedor</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>
+            <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/notebook/page/group/group/field[@name='user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
@@ -18,10 +18,11 @@
             <field name="name">account.move.limits.vandedor</field>
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>
+            <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
                 </xpath>
                 <!--<xpath expr="//field[@name='x_user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
@@ -33,14 +34,16 @@
             <field name="name">sale.order.edit.responsable</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>
+            <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
                 </xpath>
-                <xpath expr="//field[@name='x_user_id']" position="attributes">
+                <!--<xpath expr="//field[@name='x_user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
-                </xpath>
+                    <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
+                </xpath>-->
             </field>
         </record>
 

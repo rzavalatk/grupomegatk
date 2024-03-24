@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-acces_importacion.model_import_gasto_mega_manager,import.gasto.manager,model_import_gasto_mega,importacion_manager,1,1,1,1
-acces_importacion.model_import_product_mega_manager,import.product.mega.manager,model_import_product_mega,importacion_manager,1,1,1,1
-acces_importacion.model_import_product_mega_line_purchase_manager,import.product.mega.line.purchase.manager,model_import_product_mega_line_purchase,importacion_manager,1,1,1,1
-acces_importacion.model_import_product_mega_line_gasto_manager,import.product.mega.line.gasto.manager,model_import_product_mega_line_gasto,importacion_manager,1,1,1,1
-acces_importacion.model_product_ponderacion_manager,product.ponderacion.manager,model_product_ponderacion,importacion_manager,1,1,1,1
+acces_importacion.model_import_gasto_mega_manager,import.gasto.manager,importacion.model_import_gasto_mega,stock.group_stock_manager,1,1,1,1
+acces_importacion.model_import_product_mega_manager,import.product.mega.manager,importacion.model_import_product_mega,stock.group_stock_manager,1,1,1,1
+acces_importacion.model_import_product_mega_line_purchase_manager,import.product.mega.line.purchase.manager,importacion.model_import_product_mega_line_purchase,stock.group_stock_manager,1,1,1,1
+acces_importacion.model_import_product_mega_line_gasto_manager,import.product.mega.line.gasto.manager,importacion.model_import_product_mega_line_gasto,stock.group_stock_manager,1,1,1,1
+acces_importacion.model_product_ponderacion_manager,product.ponderacion.manager,importacion.model_product_ponderacion,stock.group_stock_manager,1,1,1,1

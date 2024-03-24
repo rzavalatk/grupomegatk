@@ -23,7 +23,7 @@
 
                 <xpath expr="//page[@name='hr_settings']" position="after">
                     <page string="Metas">
-                        <group groups="base.group_system">
+                        <group >
                             <div class="oe_button_box" style="padding-top: 8px;" name="button_box">
                                 <label for="toggle_active_meta" string="Metas: "/>
                                 <button name="toggle_active_meta" type="object" style="text-align:center" class="oe_stat_button">

@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <!-- Assets -->
-        <template id="video_web_frontend" inherit_id="website.assets_frontend" name="video.web.frontend">
+        <template id="video_web_frontend" name="video.web.frontend">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/website_custom/static/src/js/snippets/video_web.js"/>
             </xpath>

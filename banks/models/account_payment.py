@@ -9,7 +9,7 @@ class BanksPayment(models.Model):
 	_name = "banks.payment.invoices.custom"
 	_order = 'effective_date asc'
 	_inherit = ['mail.thread']
-	_description = "description"
+	_description = "Account Payment / banks"
 
 	def get_sequence(self):
 		if self.journal_id:

@@ -30,7 +30,7 @@ class ConciliacionBancaria(models.Model):
 
     company_id = fields.Many2one("res.company", "Compañia", required=True, track_visibility='onchange', default=lambda self: self.env.user.company_id)
     #('reconcile', '=', True),
-    account_id = fields.Many2one("account.account", "Banco", track_visibility='onchange', required=True, domain="[ ('user_type_id.type', '=', 'liquidity')]")
+    account_id = fields.Many2one("account.account", "Banco", track_visibility='onchange', required=True,)
     currency_id = fields.Many2one("res.currency", "Moneda", track_visibility='onchange')
     date = fields.Date(string="Fecha Final", help="Effective date for accounting entries", required=True, track_visibility='onchange')
     saldo_final = fields.Float(string='Saldo Final')
@@ -54,10 +54,10 @@ class ConciliacionBancaria(models.Model):
                     if lines.haber > 0.0:
                         credit_line += lines.haber
 
-            if concil.account_id.user_type_id.name == 'Tarjeta de Crédito':
+            if concil.account_id.account_type == 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_inicial - (debit_line - credit_line + concil.saldo_final)
 
-            if concil.account_id.user_type_id.name != 'Tarjeta de Crédito':
+            if concil.account_id.account_type != 'Tarjeta de Crédito':
                 concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line)
 
     def action_validate(self):

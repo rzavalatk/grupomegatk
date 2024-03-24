@@ -2,17 +2,14 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import logging
-import math
-
 
 _logger = logging.getLogger(__name__)
 
 
 #Campo de comisión pagada en las facturas
 class Account_Move(models.Model):
-    _inherit = 'account.move'
-    
-    
+    _inherit = "account.move"
+
     def _compute_contacto(self):
         cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
         self.x_contacto = cotizacion.x_contacto
@@ -116,9 +113,6 @@ class Account_Move(models.Model):
         self.n_tickets_acum = len(tickets)
         _logger.warning(tickets)   
         
-        
-        
-
     
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"

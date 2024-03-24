@@ -21,7 +21,7 @@ class Settings(models.TransientModel):
             pass
             #raise Warning(_(f'Error: {e}'))
         
-    @api.model
+    #@api.model
     def get_values(self):
         res = super(Settings, self).get_values()
         IrValues = self.env['ir.config_parameter'].sudo()

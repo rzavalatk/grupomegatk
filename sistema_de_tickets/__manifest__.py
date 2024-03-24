@@ -14,7 +14,7 @@
     'website': "dalzubri-netlify.app",
     'category': 'Aplicaciones',
     'version': '0.1',
-
+    "license": "LGPL-3",
     'depends': ['base'],
     'data': [
         'security/groups.xml',

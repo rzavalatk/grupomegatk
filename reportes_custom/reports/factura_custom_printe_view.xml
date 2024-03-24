@@ -13,18 +13,19 @@
       <div class="header">
         <div class="row" style="margin-top: -155px;">
           <div class="col-xs-3 mb4">
-            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 450px;"/>
-                
-            <div style="margin-top: -150px;color: #027A02; background: rgb(201,224,201); padding: 2px; border: 1px solid rgb(143,193,142); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
-              FACTURAR A: 
-            </div>
-            <div style="width: 150px !important;">
-              <div name="invoice_address" class="col-xs-2" style='color: #027A02; border: 1px solid rgb(143,193,142); min-width: 450px; height: 138px;'>
-                <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
-                <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
-              </div>
-            </div>
-          </div>
+						<!--<img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 100px;"/>-->
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: -100px; margin-button: 0px;" alt="Logo"/>
+             		
+						<div style="position: absolute; top: 8px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+							FACTURAR A: 
+						</div>
+						<div style="width: 150px !important; position: absolute; top: 180px;">
+							<div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+								<address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+								<div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+							</div>
+						</div>
+					</div>
         </div>
         <div style="float: right; margin-top: -320px;">
           <span style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_refund'">NOTA DE CREDITO</span>
@@ -275,29 +276,12 @@
                         <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                       </td>
                     </tr>
-                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                      <tr>
-                        <t t-if="len(o.line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                          <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
-                            <span t-esc="amount_by_group[0]"/>
-                          </td>
-                          <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                            <span t-esc="amount_by_group[3]"/>
-                          </td>
-                        </t>
-                        <t t-else="">
-                          <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
-                            <span t-esc="amount_by_group[0]"/>
-                            <span>&amp;nbsp;<span>on</span>
-                                <t t-esc="amount_by_group[4]"/>
-                            </span>
-                          </td>
-                          <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
-                            <span t-esc="amount_by_group[3]"/>
-                          </td>
-                        </t>
-                      </tr>
-                    </t>
+                    <tr class="border-black1">
+											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
+											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
+												<span t-field="o.amount_tax"/>
+											</td>
+										</tr>
                     <tr>
                       <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
                         <strong>ISV 18%</strong>
