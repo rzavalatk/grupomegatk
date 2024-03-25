@@ -477,5 +477,5 @@ class Debitline(models.Model):
 	name = fields.Char('Descripción')
 	amount = fields.Float('Monto', required=True)
 	currency_id = fields.Many2one('res.currency', string='Currency')
-	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica")
+	analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica", domain="[('company_id', '=', parent.company_id)]")
 	move_type = fields.Selection([('debit', 'Débito'), ('credit', 'Crédito')], 'Débito/Crédito', default='debit', required=True)
