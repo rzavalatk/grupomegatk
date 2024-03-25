@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+"""from odoo import models, fields, api, _
 
 
 class Products(models.TransientModel):
@@ -11,7 +11,7 @@ class Products(models.TransientModel):
             product.write({
                 'product_tmpl_id': product.id,
             })
-
+"""
 
 
 
