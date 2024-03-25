@@ -5,15 +5,13 @@ class Products(models.TransientModel):
     _inherit = 'product.product'
     
     
-    def update_product_ids():
+    def update_product_ids(self):
         products = self.env['product.product'].search([])
         for product in products:
             product.write({
                 'product_tmpl_id': product.id,
             })
 
-    # Ejecutar el script
-    update_product_ids()
 
 
 
