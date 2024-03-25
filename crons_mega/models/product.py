@@ -1,8 +1,8 @@
-"""from odoo import models, fields, api, _
+from odoo import models, fields, api, _
 
 
 class Products(models.TransientModel):
-    _inherit = 'product.product'
+    _inherit = 'product.crons'
     
     
     def update_product_ids(self):
@@ -11,7 +11,7 @@ class Products(models.TransientModel):
             product.write({
                 'product_tmpl_id': product.id,
             })
-"""
+
 
 
 
