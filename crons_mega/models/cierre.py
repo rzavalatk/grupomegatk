@@ -226,7 +226,7 @@ class CierreDiario(models.Model):
                                         _logger.warning("Payments: " + str(payments_list))
 
                                     else:
-                                        payments_widget = []
+                                        payments_list = []
                                 except:
                                     _logger.warning('Error . factura : '+ str(factura))
                                     raise Warning(
