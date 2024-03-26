@@ -4,7 +4,7 @@
         <record id="email_template_cierre_diario_1" model="mail.template">
             <field name="name">Cierre Diario</field>
             <field name="model_id" ref="model_account_cierre"/>
-            <field name="subject">Facturación {{object.region}} {{object.region}} cierre</field>
+            <field name="subject">Facturación {{object.name}} {{object.region}} cierre</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="email_cc">${user.email_formatted | safe}</field>
@@ -70,11 +70,38 @@
                                     <t t-foreach="object.cierre_line_ids" t-as="row">
                                         <th><t t-out="row.name"/></th>
                                     </t>
+
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <th>Facturado</th>
+                                    <t t-foreach="object.cierre_line_ids" t-as="row">
+                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.facturado"/></th>
+                                    </t>
+
+                                    <th><t t-out="object.currency_id.symbol"/> <t t-out="object.total_facturado"/> </th>
+                                </tr>
+                                <tr>
+                                    <th>Cobrado Cxc</th>
+                                    <t t-foreach="object.cierre_line_ids" t-as="row">
+                                        <t t-if="row.credito">
+                                        
+                                            <th>No Aplica</th>
+                                        </t>
+                                        <t t-else="">
+                                            <th> <t t-out="row.currency_id.symbol"/> <t t-out="row.cobrado"/> </th>
+                                        </t>
+                                    </t>
+
+                                    <th> <t t-out="object.currency_id.symbol"/> <t t-out="object.total_cobrado"/> </th>
+                                </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    <t t-foreach="object.cierre_line_ids" t-as="row">
+                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.total"/> </th>
+                                    </t>
                                 </tr>
                             </tbody>
                         </table>
@@ -96,7 +123,17 @@
                             <th>Saldo</th>
                         </thead>
                         <tbody>
-                           
+                            <t t-foreach="object.facturas_ids" t-as="row">
+                            
+                                
+                                <tr>
+                                    <th><t t-out="row.partner_id.name"/></th>
+                                    <th><t t-out="row.number"/></th>
+                                    <th><t t-out="row.user_id.name"/></th>
+                                    <th><t t-out="row.amount_total_signed"/></th>
+                                    <th><t t-out="row.residual"/></th>
+                                </tr>
+                            </t>
                         </tbody>
                     </table>
                 </div>
