@@ -66,36 +66,15 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    {% for row in object.cierre_line_ids: %}
+                                   
+                                    <t t-foreach="object.cierre_line_ids" t-as="row">
                                         <th><t t-out="row.name"/></th>
-                                    {% endfor %}
+                                    
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>Facturado</th>
-                                    {% for row in object.cierre_line_ids: %}
-                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.facturado"/></th>
-                                    {% endfor %}
-                                    <th><t t-out="object.currency_id.symbol"/> <t t-out="object.total_facturado"/> </th>
-                                </tr>
-                                <tr>
-                                    <th>Cobrado Cxc</th>
-                                    {% for row in object.cierre_line_ids: %}
-                                        {% if row.credito: %}
-                                            <th>No Aplica</th>
-                                        {% else: %}
-                                            <th> <t t-out="row.currency_id.symbol"/> <t t-out="row.cobrado"/> </th>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <th> <t t-out="object.currency_id.symbol"/> <t t-out="object.total_cobrado"/> </th>
-                                </tr>
-                                <tr>
-                                    <th>Total</th>
-                                    {% for row in object.cierre_line_ids: %}
-                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.total"/> </th>
-                                    {% endfor %}
+                               
                                 </tr>
                             </tbody>
                         </table>
@@ -117,15 +96,7 @@
                             <th>Saldo</th>
                         </thead>
                         <tbody>
-                            % for row in object.facturas_ids:
-                            <tr>
-                                <th><t t-out="row.partner_id.name"/></th>
-                                <th><t t-out="row.number"/></th>
-                                <th><t t-out="row.user_id.name"/></th>
-                                <th><t t-out="row.amount_total_signed"/></th>
-                                <th><t t-out="row.residual"/></th>
-                            </tr>
-                            %endfor
+                           
                         </tbody>
                     </table>
                 </div>
