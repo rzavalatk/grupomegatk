@@ -209,14 +209,19 @@ class CierreDiario(models.Model):
                     for factura in pago.move_id.sudo().ids:
                         #_logger.warning('Prueba 1 . factura : '+ str(factura))
                         #_logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
+                        
+                        #Obtenemos el dato del pago
+                        factura_move= self.env['account.move'].sudo().browse(factura)
+                        
+                        #OBtenemos la factura relacionada al pago
+                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
+                        self.register_ids(factura_id, 'facturas de pagos')
+                        
+                        _logger.warning(factura_id.invoice_date)
+                        _logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
-                        if factura not in ids_facturas:
-                            factura_move= self.env['account.move'].sudo().browse(factura)
-                            factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                            self.register_ids(factura_id, 'facturas de pagos')
-                            _logger.warning(factura_id.invoice_date)
-                            _logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
-
+                        if factura_id not in ids_facturas:
+                            
                             if factura_id.invoice_date == self.date:
                                 try:
                                     if factura_id.state != 'cancel':
@@ -226,7 +231,7 @@ class CierreDiario(models.Model):
                                         _logger.warning("Payments: " + str(payments_list))
 
                                     else:
-                                        payments_list = []
+                                        payments_widget = []
                                 except:
                                     _logger.warning('Error . factura : '+ str(factura))
                                     raise Warning(
