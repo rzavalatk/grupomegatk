@@ -69,7 +69,7 @@
                                    
                                     <t t-foreach="object.cierre_line_ids" t-as="row">
                                         <th><t t-out="row.name"/></th>
-                                    
+                                    </t>
                                     <th>Total</th>
                                 </tr>
                             </thead>
