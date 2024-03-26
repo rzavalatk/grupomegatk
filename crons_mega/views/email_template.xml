@@ -4,10 +4,10 @@
         <record id="email_template_cierre_diario_1" model="mail.template">
             <field name="name">Cierre Diario</field>
             <field name="model_id" ref="model_account_cierre"/>
-            <field name="subject">Facturación {{object.region}} ${object.region} cierre</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
-            <field name="email_cc">${user.email_formatted | safe}</field>
+            <field name="subject">Facturación {{object.region}} {{object.region}} cierre</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
+            <field name="email_cc">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
@@ -59,14 +59,14 @@
                     }
                 </style>
                 <div class="page">
-                    <h1 class="texto_centro">${object.name}</h1>
-                    <h3 class="texto_centro">${object.region}</h3>
+                    <h1 class="texto_centro">{{object.name}}</h1>
+                    <h3 class="texto_centro">{{object.region}}</h3>
                     <div class="tabla_centrada">
                         <table>
                             <thead>
                                 <th></th>
                                     % for row in object.cierre_line_ids:
-                                <th>${row.name}</th>
+                                <th>{{row.name}}</th>
                                     %endfor
                                 <th>Total</th>
                             </thead>
@@ -74,9 +74,9 @@
                                 <tr>
                                     <th>Facturado</th>
                                         % for row in object.cierre_line_ids:
-                                    <th>${row.currency_id.symbol} ${row.facturado}</th>
+                                    <th>{{row.currency_id.symbol}} {{row.facturado}}</th>
                                         %endfor
-                                    <th>${object.currency_id.symbol} ${object.total_facturado}</th>
+                                    <th>{{object.currency_id.symbol}} {{object.total_facturado}}</th>
                                 </tr>
                                 <tr>
                                     <th>Cobrado Cxc</th>
@@ -84,15 +84,15 @@
                                             % if row.credito :
                                     <th>No Aplica</th>
                                             % else :
-                                    <th>${row.currency_id.symbol} ${row.cobrado}</th>
+                                    <th>{{row.currency_id.symbol}} {{row.cobrado}}</th>
                                             % endif
                                         %endfor
-                                    <th>${object.currency_id.symbol} ${object.total_cobrado}</th>
+                                    <th>{{object.currency_id.symbol}} {{object.total_cobrado}}</th>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
                                         % for row in object.cierre_line_ids:
-                                    <th>${row.currency_id.symbol} ${row.total}</th>
+                                    <th>{{row.currency_id.symbol}} {{row.total}}</th>
                                         %endfor
                                 </tr>
                             </tbody>
@@ -116,11 +116,11 @@
                         <tbody>
                             % for row in object.facturas_ids:
                             <tr>
-                                <th>${row.partner_id.name}</th>
-                                <th>${row.number}</th>
-                                <th>${row.user_id.name}</th>
-                                <th>${row.amount_total_signed}</th>
-                                <th>${row.residual}</th>
+                                <th>{{row.partner_id.name}}</th>
+                                <th>{{row.number}}</th>
+                                <th>{{row.user_id.name}}</th>
+                                <th>{{row.amount_total_signed}}</th>
+                                <th>{{row.residual}}</th>
                             </tr>
                             %endfor
                         </tbody>
@@ -140,9 +140,9 @@
             <field name="name">Producto por expirar</field>
             <field name="model_id" ref="model_stock_lot"/>
             <field name="subject">Productos por vencer</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
-            <field name="email_cc">${user.email_formatted | safe}</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
+            <field name="email_cc">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
@@ -206,7 +206,7 @@
                                 <th>Días por expirar/expirado</th>
                             </thead>
                             <tbody>
-                                ${ctx.get('body') | safe}
+                                {{ctx.get('body') | safe}}
                             </tbody>
                         </table>
                     </div>
@@ -224,10 +224,10 @@
         <record id="email_template_cierre_diario_cxc" model="mail.template">
             <field name="name">Cierre Diario Cxc</field>
             <field name="model_id" ref="model_account_cierre_cxc"/>
-            <field name="subject">Cuentas por cobrar ${object.name} cierre</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
-            <field name="email_cc">${user.email_formatted | safe}</field>
+            <field name="subject">Cuentas por cobrar {{object.name}} cierre</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
+            <field name="email_cc">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
@@ -279,7 +279,7 @@
                     }
                 </style>
                 <div class="page">
-                    <h1 class="texto_centro">${object.company_id.name}</h1>
+                    <h1 class="texto_centro">{{object.company_id.name}}</h1>
                     <h3 class="texto_centro"></h3>
                     <div class="tabla_centrada">
                         <table>
@@ -291,9 +291,9 @@
                             <tbody>
                                 % for row in object.cierre_cxc_line_ids:
                                 <tr>
-                                    <th>${row.name}</th>
-                                    <th>${row.debe}</th>
-                                    <th>${row.haber}</th>
+                                    <th>{{row.name}}</th>
+                                    <th>{{row.debe}}</th>
+                                    <th>{{row.haber}}</th>
                                 </tr>
                                 %endfor
                             </tbody>
@@ -314,42 +314,42 @@
             <field name="name">Facturas Vencidas</field>
             <field name="model_id" ref="model_invoice_expire_line"/>
             <field name="subject">Facturas Vencidas</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
                     border-color: #000;
                     border-width: 1px;
                     border-style: solid;
-                    }
+                    }}
 
                     .tamaño_del_cuadro {
                     width: 900px;
                     height: 300px;
                     margin: 0px;
                     padding: 0px;
-                    }
+                    }}
 
                     .texto_centro {
                     text-align: center;
-                    }
+                    }}
 
                     .tabla_centrada{
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    }
+                    }}
 
                     .th_total{
                         width: 25%;
-                    }
+                    }}
 
                     table {
                     width: 100%;
                     border: 1px solid #000;
                     background-color: black;
-                    }
+                    }}
 
                     th,
                     td {
@@ -360,11 +360,11 @@
                     border-collapse: collapse;
                     padding: 0.1em;
                     background-color: white;
-                    }
+                    }}
 
                     caption {
                     padding: 0.3em;
-                    }
+                    }}
                 </style>
                 <div class="page">
                     <p>
@@ -390,13 +390,13 @@
                             <tbody>
                                 % for row in object.facturas_ids:
                                 <tr>
-                                    <th>${row.partner_id.name}</th>
-                                    <th>${row.number}</th>
-                                    <th>${row.date_invoice}</th>
-                                    <th>${row.invoice_date_due}</th>
-                                    <th>${row.amount_total_signed}</th>
-                                    <th>${row.residual}</th>
-                                    <th>${row.state_expired}</th>
+                                    <th>{{row.partner_id.name}}</th>
+                                    <th>{{row.number}}</th>
+                                    <th>{{row.date_invoice}}</th>
+                                    <th>{{row.invoice_date_due}}</th>
+                                    <th>{{row.amount_total_signed}}</th>
+                                    <th>{{row.residual}}</th>
+                                    <th>{{row.state_expired}}</th>
                                 </tr>
                                 %endfor
                             </tbody>
@@ -425,42 +425,42 @@
             <field name="name">Facturas Vencidas para Clientes</field>
             <field name="model_id" ref="model_invoice_expire_line"/>
             <field name="subject">Facturas Vencidas</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
                     border-color: #000;
                     border-width: 1px;
                     border-style: solid;
-                    }
+                    }}
 
                     .tamaño_del_cuadro {
                     width: 900px;
                     height: 300px;
                     margin: 0px;
                     padding: 0px;
-                    }
+                    }}
 
                     .texto_centro {
                     text-align: center;
-                    }
+                    }}
 
                     .tabla_centrada{
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    }
+                    }}
 
                     .th_total{
                         width: 25%;
-                    }
+                    }}
 
                     table {
                     width: 100%;
                     border: 1px solid #000;
                     background-color: black;
-                    }
+                    }}
 
                     th,
                     td {
@@ -471,15 +471,15 @@
                     border-collapse: collapse;
                     padding: 0.1em;
                     background-color: white;
-                    }
+                    }}
 
                     caption {
                     padding: 0.3em;
-                    }
+                    }}
                 </style>
                 <div class="page">
                     <p>
-                        Estimado(a) ${object.partner_id.name},
+                        Estimado(a) {{object.partner_id.name}},
                     </p>
                     <br/>
                     <br/>
@@ -487,7 +487,7 @@
                         Este es un servicio con el fin de informarle que tiene una(s) Factura(s) vencida(s)
                     % if object.show_tabla:
                     % else :
-                        con ${object.time_due} dias de retraso
+                        con {{object.time_due}} dias de retraso
                     % endif
                     .
                     </p>
@@ -495,7 +495,7 @@
                         Proteja su imagen crediticia, favor realice su pago ahora.
                     </p>
                     <p>
-                        Más Información: <b>${object.company_id.phone}</b>
+                        Más Información: <b>{{object.company_id.phone}}</b>
                     </p>
                     % if object.show_tabla:
                     <div>
@@ -516,12 +516,12 @@
                                 <tbody>
                                     % for row in object.facturas_ids:
                                     <tr>
-                                        <th>${row.number}</th>
-                                        <th>${row.date_invoice}</th>
-                                        <th>${row.invoice_date_due}</th>
-                                        <th>${round(row.amount_total_signed,2)}</th>
-                                        <th>${round(row.residual,2)}</th>
-                                        <th>${object.rangeDate(row.date_invoice,object.invoice_expire_id.date)} días vencida </th>
+                                        <th>{{row.number}}</th>
+                                        <th>{{row.date_invoice}}</th>
+                                        <th>{{row.invoice_date_due}}</th>
+                                        <th>{{round(row.amount_total_signed,2)}}</th>
+                                        <th>{{round(row.residual,2)}}</th>
+                                        <th>{{object.rangeDate(row.date_invoice,object.invoice_expire_id.date)}} días vencida </th>
                                     </tr>
                                     %endfor
                                 </tbody>
@@ -537,7 +537,7 @@
                     <br/>
                     <div class="footer">
                         <p>Estamos para servirle,</p>
-                        <p><b>${object.company_id.name}</b></p>
+                        <p><b>{{object.company_id.name}}</b></p>
                         <span>**** Mensaje automático de Odoo, no responder. ****</span>
                     </div>
                 </div>
@@ -548,42 +548,42 @@
             <field name="name">Reporte Productos</field>
             <field name="model_id" ref="model_product_report"/>
             <field name="subject">Reporte de Marca</field>
-            <field name="email_from">${user.email_formatted | safe}</field>
-            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_from">{{user.email_formatted | safe}}</field>
+            <field name="email_to">{{user.email_formatted | safe}}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
                     border-color: #000;
                     border-width: 1px;
                     border-style: solid;
-                    }
+                    }}
 
                     .tamaño_del_cuadro {
                     width: 900px;
                     height: 300px;
                     margin: 0px;
                     padding: 0px;
-                    }
+                    }}
 
                     .texto_centro {
                     text-align: center;
-                    }
+                    }}
 
                     .tabla_centrada{
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    }
+                    }}
 
                     .th_total{
                         width: 25%;
-                    }
+                    }}
 
                     table {
                     width: 100%;
                     border: 1px solid #000;
                     background-color: black;
-                    }
+                    }}
 
                     th,
                     td {
@@ -594,11 +594,11 @@
                     border-collapse: collapse;
                     padding: 0.1em;
                     background-color: white;
-                    }
+                    }}
 
                     caption {
                     padding: 0.3em;
-                    }
+                    }}
                 </style>
                 <div class="page">
                 <h1 class="texto_centro">Reporte Detallado por Producto</h1>
@@ -613,10 +613,10 @@
                             <tbody>
                                 % for row in object.line_report:
                                 <tr>
-                                    <th>${row.product_id.name}</th>
-                                    <th>${row.product_id.marca_id.name}</th>
-                                    <th>${round(row.total_quantity,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(row.total_sold,2)}</th>
+                                    <th>{{row.product_id.name}}</th>
+                                    <th>{{row.product_id.marca_id.name}}</th>
+                                    <th>{{round(row.total_quantity,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(row.total_sold,2)}}</th>
                                 </tr>
                                 %endfor
                             </tbody>
@@ -643,14 +643,14 @@
                             <tbody>
                                 % for row in object.line_invoices:
                                 <tr>
-                                    <th>${row.invoice_id.partner_id.name}</th>
-                                    <th>${row.invoice_id.number}</th>
-                                    <th>${row.product_id.display_name}</th>
-                                    <th>${row.quantity}</th>
-                                    <th>${object.currency_id.symbol}. ${round(row.price_unit,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(row.price_subtotal,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(row.price_tax,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(row.price_total,2)}</th>
+                                    <th>{{row.invoice_id.partner_id.name}}</th>
+                                    <th>{{row.invoice_id.number}}</th>
+                                    <th>{{row.product_id.display_name}}</th>
+                                    <th>{{row.quantity}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(row.price_unit,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(row.price_subtotal,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(row.price_tax,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(row.price_total,2)}}</th>
                                 </tr>
                                 %endfor
                                 <tr>
@@ -659,9 +659,9 @@
                                     <th></th>
                                     <th></th>
                                     <th>Total Global</th>
-                                    <th>${object.currency_id.symbol}. ${round(object.sub_total,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(object.tax_total,2)}</th>
-                                    <th>${object.currency_id.symbol}. ${round(object.total,2)}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(object.sub_total,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(object.tax_total,2)}}</th>
+                                    <th>{{object.currency_id.symbol}}. {{round(object.total,2)}}</th>
                                 </tr>
                             </tbody>
                         </table>
