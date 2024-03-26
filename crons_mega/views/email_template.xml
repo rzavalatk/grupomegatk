@@ -59,8 +59,8 @@
                     }
                 </style>
                 <div class="page">
-                    <h1 class="texto_centro">{{object.name}}</h1>
-                    <h3 class="texto_centro">{{object.region}}</h3>
+                    <h1 class="texto_centro">${{object.name}}</h1>
+                    <h3 class="texto_centro">${{object.region}}</h3>
                     <div class="tabla_centrada">
                         <table>
                             <thead>
