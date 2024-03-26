@@ -203,6 +203,7 @@ class CierreDiario(models.Model):
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                    _logger.warning('id pago diario:' + str(pago.journal_id.sudo().id) + 'id item diario:'+ str(item.journal_id.sudo().id))
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
