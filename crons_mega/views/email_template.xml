@@ -59,50 +59,49 @@
                     }
                 </style>
                 <div class="page">
-    <h1 class="texto_centro">{{ object.name }}</h1>
-    <h3 class="texto_centro">{{ object.region }}</h3>
-    <div class="tabla_centrada">
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    {% for row in object.cierre_line_ids: %}
-                        <th>{{ row.name }}</th>
-                    {% endfor %}
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Facturado</th>
-                    {% for row in object.cierre_line_ids: %}
-                        <th>{{ row.currency_id.symbol }} {{ row.facturado }}</th>
-                    {% endfor %}
-                    <th>{{ object.currency_id.symbol }} {{ object.total_facturado }}</th>
-                </tr>
-                <tr>
-                    <th>Cobrado Cxc</th>
-                    {% for row in object.cierre_line_ids: %}
-                        {% if row.credito: %}
-                            <th>No Aplica</th>
-                        {% else: %}
-                            <th>{{ row.currency_id.symbol }} {{ row.cobrado }}</th>
-                        {% endif %}
-                    {% endfor %}
-                    <th>{{ object.currency_id.symbol }} {{ object.total_cobrado }}</th>
-                </tr>
-                <tr>
-                    <th>Total</th>
-                    {% for row in object.cierre_line_ids: %}
-                        <th>{{ row.currency_id.symbol }} {{ row.total }}</th>
-                    {% endfor %}
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
+                    <h1 class="texto_centro">{{ object.name }}</h1>
+                    <h3 class="texto_centro">{{ object.region }}</h3>
+                    <div class="tabla_centrada">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for row in object.cierre_line_ids: %}
+                                        <th>{{ row.name }}</th>
+                                    {% endfor %}
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Facturado</th>
+                                    {% for row in object.cierre_line_ids: %}
+                                        <th>{{ row.currency_id.symbol }} {{ row.facturado }}</th>
+                                    {% endfor %}
+                                    <th>{{ object.currency_id.symbol }} {{ object.total_facturado }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Cobrado Cxc</th>
+                                    {% for row in object.cierre_line_ids: %}
+                                        {% if row.credito: %}
+                                            <th>No Aplica</th>
+                                        {% else: %}
+                                            <th>{{ row.currency_id.symbol }} {{ row.cobrado }}</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <th>{{ object.currency_id.symbol }} {{ object.total_cobrado }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    {% for row in object.cierre_line_ids: %}
+                                        <th>{{ row.currency_id.symbol }} {{ row.total }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
                 <br/>
                 <br/>
                 <br/>
