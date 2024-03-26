@@ -60,14 +60,14 @@
                 </style>
                 <div class="page">
                     <h1 class="texto_centro">Cierre diario para <t t-out="object.name"/></h1>
-                    <h3 class="texto_centro">{{ object.region }}</h3>
+                    <h3 class="texto_centro"> <t t-out="object.region"/></h3>
                     <div class="tabla_centrada">
                         <table>
                             <thead>
                                 <tr>
                                     <th></th>
                                     {% for row in object.cierre_line_ids: %}
-                                        <th>{{ row.name }}</th>
+                                        <th><t t-out="row.name"/></th>
                                     {% endfor %}
                                     <th>Total</th>
                                 </tr>
@@ -76,9 +76,9 @@
                                 <tr>
                                     <th>Facturado</th>
                                     {% for row in object.cierre_line_ids: %}
-                                        <th>{{ row.currency_id.symbol }} {{ row.facturado }}</th>
+                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.facturado"/></th>
                                     {% endfor %}
-                                    <th>{{ object.currency_id.symbol }} {{ object.total_facturado }}</th>
+                                    <th><t t-out="object.currency_id.symbol"/> <t t-out="object.total_facturado"/> </th>
                                 </tr>
                                 <tr>
                                     <th>Cobrado Cxc</th>
@@ -86,15 +86,15 @@
                                         {% if row.credito: %}
                                             <th>No Aplica</th>
                                         {% else: %}
-                                            <th>{{ row.currency_id.symbol }} {{ row.cobrado }}</th>
+                                            <th> <t t-out="row.currency_id.symbol"/> <t t-out="row.cobrado"/> </th>
                                         {% endif %}
                                     {% endfor %}
-                                    <th>{{ object.currency_id.symbol }} {{ object.total_cobrado }}</th>
+                                    <th> <t t-out="object.currency_id.symbol"/> <t t-out="object.total_cobrado"/> </th>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
                                     {% for row in object.cierre_line_ids: %}
-                                        <th>{{ row.currency_id.symbol }} {{ row.total }}</th>
+                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.total"/> </th>
                                     {% endfor %}
                                 </tr>
                             </tbody>
@@ -119,11 +119,11 @@
                         <tbody>
                             % for row in object.facturas_ids:
                             <tr>
-                                <th>{{row.partner_id.name}}</th>
-                                <th>{{row.number}}</th>
-                                <th>{{row.user_id.name}}</th>
-                                <th>{{row.amount_total_signed}}</th>
-                                <th>{{row.residual}}</th>
+                                <th><t t-out="row.partner_id.name"/></th>
+                                <th><t t-out="row.number"/></th>
+                                <th><t t-out="row.user_id.name"/></th>
+                                <th><t t-out="row.amount_total_signed"/></th>
+                                <th><t t-out="row.residual"/></th>
                             </tr>
                             %endfor
                         </tbody>
