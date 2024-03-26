@@ -215,7 +215,7 @@ class CierreDiario(models.Model):
                             factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                             self.register_ids(factura_id, 'facturas de pagos')
                             _logger.warning(factura_id.invoice_date)
-                            _logger.warning('total pago: ' + str(factura_id.invoice_payments_widget.pay))
+                            _logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                             if factura_id.invoice_date == self.date:
                                 try:
