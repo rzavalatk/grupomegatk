@@ -5,9 +5,9 @@
             <field name="name">Cierre Diario</field>
             <field name="model_id" ref="model_account_cierre"/>
             <field name="subject">Facturación {{object.region}} {{object.region}} cierre</field>
-            <field name="email_from">{{user.email_formatted | safe}}</field>
-            <field name="email_to">{{user.email_formatted | safe}}</field>
-            <field name="email_cc">{{user.email_formatted | safe}}</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="email_cc">${user.email_formatted | safe}</field>
             <field name="body_html" type="html">
                 <style>
                     .cuadro {
