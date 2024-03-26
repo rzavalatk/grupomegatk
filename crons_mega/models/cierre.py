@@ -264,7 +264,7 @@ class CierreDiario(models.Model):
                             'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
-                    # ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
+                    ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
             if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
