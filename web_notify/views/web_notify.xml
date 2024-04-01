@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="assets_backend" name="web_notify assets" inherit_id="web.assets_backend">
+    <template id="assets_backend" name="web_notify assets">
         <link rel="stylesheet" type="text/scss" href="/web/static/src/scss/webclient.scss" position="after">
             <link rel="stylesheet" type="text/scss" href="/web_notify/static/src/scss/webclient.scss"/>
         </link>
