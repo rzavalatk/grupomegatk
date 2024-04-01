@@ -37,7 +37,7 @@ class StockPicking(models.Model):
 	#@api.model_create_multi
 	def button_borrador(self):
 		self.write({'state': 'draft'})
-		for move in self.move_lines:
+		for move in self.move_ids:
 			 move.write({'state': 'draft'})
 
 #class StockMoveLine(models.Model):
