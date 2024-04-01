@@ -219,6 +219,9 @@
                 </p>
                 <p t-if="o.ref" style="text-align: center;color:red">
                   <br></br><span t-field="o.ref"/>
+                </p>
+                <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
+                  N° Solicitud Orden de Compra Exenta&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_compra_exenta"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>&amp;nbsp;&amp;nbsp; 
                 </p>  
                 <p style="padding:1px !important; margin:1px !important; font-weight: normal;width:100%;font-size: 12px;">
                   N° Orden de Compra Exenta&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<u>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="o.x_compra_exenta"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</u>&amp;nbsp;&amp;nbsp; 
