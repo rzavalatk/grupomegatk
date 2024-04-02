@@ -10,7 +10,7 @@ class Vendors(models.Model):
         if ids is not None and self.env.user.id in ids:
                 partner_id = self.env['res.partner'].browse(self.partner_id.id)
                 if partner_id.user_id:
-                    vals['user_id'] = partner_id.user_id.id
+                    vals['user_id'] = partner_id.user_id
                     for item in vals:
                         if item == 'order_line':
                             for i in vals[item]:
