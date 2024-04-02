@@ -35,7 +35,7 @@ class Settings(models.TransientModel):
         _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))   
         
         obj = self.get_values()
-        return obj['journal_ids'][0][2]
+        return obj['journal_ids'][0][1]
         
 
     
