@@ -37,7 +37,7 @@ class Settings(models.TransientModel):
         _logger.warning("Este es journal_ids: "+str(obj['journal_ids']))   
         
         
-        return obj['journal_ids']
+        return obj['journal_ids'][0][0]
         
 
     
