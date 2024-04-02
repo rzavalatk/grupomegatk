@@ -32,9 +32,11 @@ class Settings(models.TransientModel):
         self.company_cierre.append(company)
         #self.write({'company_cierre': company})
         
-        _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))   
-        
         obj = self.get_values()
+        _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))
+        _logger.warning("Este es journal_ids: "+str(obj['journal_ids'][0][1]))   
+        
+        
         return obj['journal_ids'][0][1]
         
 
