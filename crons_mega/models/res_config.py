@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    company_cierre = 0
+    company_cierre = []
     puntero = 0
     journal_ids = fields.Many2many(
         "account.journal", "alias_id", string="Diarios de cierre")
@@ -26,12 +26,15 @@ class Settings(models.TransientModel):
         _logger.warning("Este es el ID: "+str(company))
         _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
         
-       
-        self.write({'company_cierre': company})
+        if self.company_cierre:
+            self.company_cierre.pop(0)
+        
+        self.company_cierre.append(company)
+        #self.write({'company_cierre': company})
         
         obj = self.get_values()
         _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))
-         
+        #_logger.warning("Este es journal_ids: "+str(obj['journal_ids']))   
         
         
         return obj['journal_ids'][0][2]
