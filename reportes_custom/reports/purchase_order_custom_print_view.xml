@@ -17,7 +17,7 @@
             </div>
             
           </div>
-          <div style="float: right; margin-top: 20px;">
+          <div style="float: right; margin-top: 60px;">
             <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE COMPRA</p>
           </div>
           
@@ -122,7 +122,7 @@
 
     <template id="purchase_order_odoo_custom">
   		<t t-call="reportes_custom.external_layout_purchase_order_custom">
-        <div class="page">
+        <div class="page" style="margin-top: 15px;">
           <div class="oe_structure"/>
           <table class="table table-sm o_main_table">
             <thead>
