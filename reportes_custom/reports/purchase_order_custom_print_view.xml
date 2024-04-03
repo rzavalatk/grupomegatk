@@ -21,7 +21,7 @@
             <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE COMPRA</p>
           </div>
           
-          <div style="float: right; margin-top: 60px;">
+          <div style="float: right; margin-top: 75px;">
             <div style="float: right;">
               <table style="text-align: center; width:330px">
                 <tr>
@@ -40,7 +40,7 @@
           
           <div>
             <div style="float: left;">
-              <div style="margin-top: 100px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
+              <div style="margin-top: 70px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
                 PROVEEDOR: 
               </div>
               <div style="width: 150px !important;">
@@ -51,7 +51,7 @@
               </div>
             </div>
             <div style="float: right;">
-              <div style="margin-top: 100px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
+              <div style="margin-top: 700px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:400px;">
                 ENVIAR A: 
               </div>
               <div style="width: 150px !important;">
@@ -61,7 +61,7 @@
               </div>
             </div>
           </div>
-          <div style="float: right; margin-top: 110px;">
+          <div style="float: right; margin-top: 40px;">
             
               <table style="text-align: center;">
                 <tr>
