@@ -11,7 +11,7 @@
 
     <template id="external_layout_purchase_order_custom">
       <div class="header">
-        <div class="row" style="margin-top: 20px;">
+        <div class="row" style="margin-top: 10px;">
             <div class="col-xs-3 mb4">
                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; top: -110px; padding-top: 0px; padding: 0px;" alt="Logo"/>
             </div>
