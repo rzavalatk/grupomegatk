@@ -11,17 +11,17 @@
 
     <template id="external_layout_purchase_order_custom">
       <div class="header">
-        <div class="row" style="margin-top: 40px;">
+        <div class="row" style="margin-top: 20px;">
             <div class="col-xs-3 mb4">
                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; top: -110px; padding-top: 0px; padding: 0px;" alt="Logo"/>
             </div>
             
           </div>
-          <div style="float: right; margin-top: 40px;">
+          <div style="float: right; margin-top: 20px;">
             <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE COMPRA</p>
           </div>
           
-          <div style="position: absolute; margin-top: 85px; left: 150px;">
+          <div style="float: right; margin-top: 85px; left: 150px;">
             <div style="float: right;">
               <table style="text-align: center; width:330px">
                 <tr>
