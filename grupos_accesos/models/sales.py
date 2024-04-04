@@ -5,7 +5,7 @@ class Vendors(models.Model):
     _inherit = "sale.order"
     
     #@api.model
-    def create(self,vals):
+"""    def create(self,vals):
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
         if ids is not None and self.env.user.id in ids:
                 partner_id = self.env['res.partner'].browse(self.partner_id.id)
@@ -18,7 +18,7 @@ class Vendors(models.Model):
         res = super(Vendors,self).create(vals)
         return res
     
-"""class VendorsInvoices(models.Model):
+class VendorsInvoices(models.Model):
     _inherit = "account.move"
     
     #@api.model
