@@ -74,7 +74,7 @@
                 <page string="Productos">
                     <field name="detalle_ids" attrs="{'readonly': [('state','!=','borrador')]}">
                         <tree editable="bottom" colors="red:precio_publico == 0"> 
-                            <field name="product_id" domain="[('company_id', '=', parent.company_id)]"/>
+                            <field name="product_id" />
                             <field name="precio_publico"/>
                             <field name="precio_descuento"/> 
                         </tree>
