@@ -17,5 +17,15 @@
         <field name="name">Conciliación Bancaria lectura</field>
     </record>
 
+    <record id="conciliacion_bancaria_line_manager" model="res.groups">
+		<field name="category_id" ref="module_category_conciliacion"/>
+        <field name="name">Manager Conciliación Line Bancaria </field>
+    </record>
+
+    <record id="conciliacion_bancaria_line_user" model="res.groups">
+		<field name="category_id" ref="module_category_conciliacion"/>
+        <field name="name">Conciliación Bancaria Line lectura</field>
+    </record>
+
 </data>
 </odoo>
