@@ -17,7 +17,7 @@
     'version': '0.1',
     'depends': ['base','account','sale'],
     'data': [
-        'views/account_invoice.xml',
+        #'views/account_invoice.xml',
         'views/sale_wizar_invoice.xml',
         'views/inherit_action_invoice.xml',
         'views/type_account.xml',

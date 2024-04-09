@@ -23,7 +23,7 @@
         "views/config_journal_view.xml",
         "views/config_authorization_code_view.xml",
         "views/ir_sequence_view.xml",
-        "views/account_invoice_view.xml",
+        #"views/account_invoice_view.xml",
     ],
     'demo': [
     ],

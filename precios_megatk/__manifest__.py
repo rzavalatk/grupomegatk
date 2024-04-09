@@ -23,7 +23,7 @@
         "views/lista_precios_view.xml",
         "views/sale_descuento.xml",
         "views/product_view.xml",
-        "views/invoice_price_list.xml",
+        #"views/invoice_price_list.xml",
     ],
     'demo': [
     ],

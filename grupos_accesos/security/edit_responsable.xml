@@ -14,21 +14,21 @@
             </field>
         </record>
 
-        <record id="account_move_limits_vandedor" model="ir.ui.view">
+        <!--<record id="account_move_limits_vandedor" model="ir.ui.view">
             <field name="name">account.move.limits.vandedor</field>
             <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="inherit_id" ref="account.view_move_form"/>-->
             <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
-            <field name="arch" type="xml">
+            <!--<field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                     <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
-                </xpath>
+                </xpath>-->
                 <!--<xpath expr="//field[@name='x_user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>-->
-            </field>
-        </record>
+            <!--</field>
+        </record>-->
 
         <record id="sale_order_edit_responsable" model="ir.ui.view">
             <field name="name">sale.order.edit.responsable</field>

@@ -27,7 +27,7 @@
     	"views/purchase_order_view.xml",
     	"views/product_view.xml",
     	"views/res_partner_view.xml",
-        "views/account_invoice_view.xml",
+        #"views/account_invoice_view.xml",
         "views/stock_picking_view.xml",
         "views/crm_lead.xml",
         "views/hr_view.xml",
