@@ -8,7 +8,7 @@
 			<field name="arch" type="xml">
 				<group name="x_datos_left" position="after">
 					<group name="x_datos_right">
-			        	<field name="x_ponderaciones" nolabel="1" colspan="3" />
+			        	<field name="x_ponderaciones"  colspan="3" />
 			        </group>
 			    </group>
 			</field>
@@ -22,7 +22,7 @@
 			<field name="arch" type="xml">
 				<group name="x_datos_left" position="after">
 					<group name="x_datos_right">
-			        	<field name="x_ponderaciones" nolabel="1" colspan="3" />
+			        	<field name="x_ponderaciones"  colspan="3" />
 			        </group>
 			    </group>
 			</field>
