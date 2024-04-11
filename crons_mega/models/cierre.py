@@ -239,6 +239,7 @@ class CierreDiario(models.Model):
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
                                 for pay in payments_list:
+                                    _logger.warning("Pase 4: ")
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
                                         acumulado_factura += pay['amount']
                                         _logger.warning("Amount: " + str(pay['amount']))
