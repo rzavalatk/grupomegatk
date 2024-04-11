@@ -241,6 +241,7 @@ class CierreDiario(models.Model):
                                 for pay in payments_list:
                                     _logger.warning("Pase 4: ")
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
+                                        _logger.warning("Pase 5: ")
                                         acumulado_factura += pay['amount']
                                         _logger.warning("Amount: " + str(pay['amount']))
                                         _logger.warning("Acumulado factura: " + str(acumulado_factura))
