@@ -11,7 +11,8 @@ _logger = logging.getLogger(__name__)
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    company_cierre = []
+    #company_cierre = []
+    company_cierre = {"company": 0}
     puntero = 0
     journal_ids = fields.Many2many(
         "account.journal", "alias_id", string="Diarios de cierre")
@@ -26,16 +27,11 @@ class Settings(models.TransientModel):
         _logger.warning("Este es el ID: "+str(company))
         _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
         
-        if self.company_cierre:
-            self.company_cierre.pop(0)
+        self.company_cierre["company"] = company
         
-        self.company_cierre.append(company)
         #self.write({'company_cierre': company})
         
         obj = self.get_values()
-        _logger.warning("Este es el ID de company_cierre 2: "+str(self.company_cierre))
-        #_logger.warning("Este es journal_ids: "+str(obj['journal_ids']))   
-        
         
         return obj['journal_ids'][0][2]
         
@@ -65,8 +61,8 @@ class Settings(models.TransientModel):
             res = super(Settings, self).get_values()
             IrValues = self.env['ir.config_parameter'].sudo()
             marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
-            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre[0]))
-            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre[0])) 
+            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre["company"]))
+            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre["company"])) 
             lines = []
             lines_account = []
             marcas = []
