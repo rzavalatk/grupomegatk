@@ -221,14 +221,15 @@ class CierreDiario(models.Model):
                         #_logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                         if factura_id not in ids_facturas:
-                            
+                            _logger.warning("Pase 1: ")
                             if factura_id.invoice_date == self.date:
+                                _logger.warning("Pase 2: ")
                                 try:
                                     if factura_id.state != 'cancel':
-                                        #_logger.warning("Pase: ")
+                                        _logger.warning("Pase 3: ")
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
-                                        #_logger.warning("Payments: " + str(payments_list))
+                                        _logger.warning("Payments: " + str(payments_list))
 
                                     else:
                                         payments_widget = []
