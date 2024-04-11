@@ -116,8 +116,6 @@ class Settings(models.TransientModel):
             pass
             # raise Warning(_(f'Error: {e}'))
         
-        if self.company_cierre:
-            self.company_cierre.pop(0)
             
         #self.company_cierre.append(1)
         return res
