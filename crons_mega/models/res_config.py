@@ -24,8 +24,8 @@ class Settings(models.TransientModel):
     
     def get_values_journal_ids(self, company):
         
-        _logger.warning("Este es el ID: "+str(company))
-        _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
+        #_logger.warning("Este es el ID: "+str(company))
+        #_logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
         
         self.company_cierre["company"] = company
         

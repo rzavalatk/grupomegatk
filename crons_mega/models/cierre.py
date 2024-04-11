@@ -217,29 +217,31 @@ class CierreDiario(models.Model):
                         factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                         self.register_ids(factura_id, 'facturas de pagos')
                         
-                        _logger.warning(factura_id.invoice_date)
-                        _logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
+                        #_logger.warning(factura_id.invoice_date)
+                        #_logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                         if factura_id not in ids_facturas:
                             
                             if factura_id.invoice_date == self.date:
                                 try:
                                     if factura_id.state != 'cancel':
-                                        _logger.warning("Pase: ")
+                                        #_logger.warning("Pase: ")
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
-                                        _logger.warning("Payments: " + str(payments_list))
+                                        #_logger.warning("Payments: " + str(payments_list))
 
                                     else:
                                         payments_widget = []
                                 except:
-                                    _logger.warning('Error . factura : '+ str(factura))
+                                    #_logger.warning('Error . factura : '+ str(factura))
                                     raise Warning(
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
                                 for pay in payments_list:
                                     if pay['date'] == str(self.date) and pay['account_payment_id'] == pago.id:
                                         acumulado_factura += pay['amount']
+                                        _logger.warning("Amount: " + str(pay['amount']))
+                                        _logger.warning("Acumulado factura: " + str(acumulado_factura))
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
