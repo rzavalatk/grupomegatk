@@ -128,7 +128,7 @@
                                 
                                 <tr>
                                     <th><t t-out="row.partner_id.name"/></th>
-                                    <th><t t-out="row.number"/></th>
+                                    <th><t t-out="row.name"/></th>
                                     <th><t t-out="row.user_id.name"/></th>
                                     <th><t t-out="row.amount_total_signed"/></th>
                                     <th><t t-out="row.residual"/></th>
