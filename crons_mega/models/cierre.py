@@ -221,12 +221,12 @@ class CierreDiario(models.Model):
                         #_logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                         if factura_id not in ids_facturas:
-                            _logger.warning("Pase 1: ")
+                            #_logger.warning("Pase 1: ")
                             if factura_id.invoice_date == self.date:
-                                _logger.warning("Pase 2: ")
+                                #_logger.warning("Pase 2: ")
                                 try:
                                     if factura_id.state != 'cancel':
-                                        _logger.warning("Pase 3: ")
+                                        #_logger.warning("Pase 3: ")
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
                                         _logger.warning("Payments: " + str(payments_list))
@@ -239,9 +239,9 @@ class CierreDiario(models.Model):
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
                                 for pay in payments_list:
-                                    _logger.warning("Pase 4: ")
+                                    #_logger.warning("Pase 4: ")
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
-                                        _logger.warning("Pase 5: ")
+                                        #_logger.warning("Pase 5: ")
                                         acumulado_factura += pay['amount']
                                         _logger.warning("Amount: " + str(pay['amount']))
                                         _logger.warning("Acumulado factura: " + str(acumulado_factura))
@@ -339,9 +339,9 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)"""
             for i in ids:
-                principal_emails = "dvasquez@megatk.com"
-                cc_mega = "dzuniga@megatk.com"
-                cc_meditek = "dzuniga@megatk.com"
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
+                cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
                 time.sleep(1)
@@ -350,9 +350,9 @@ class CierreDiario(models.Model):
                     time.sleep(1)
                     # if cierre.company_id.sudo().id == 12:
                     #    cc_mega += ",kpadilla@meditekhn.com"
-                    #if cierre.sudo().region == 'San Pedro Sula':
-                    #    cc_mega += ",vmoran@megatk.com"
-                    #    cc_meditek += "dgarcia@meditekhn.com"
+                    if cierre.sudo().region == 'San Pedro Sula':
+                        cc_mega += ",vmoran@megatk.com"
+                        cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
                     cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
