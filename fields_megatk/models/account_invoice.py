@@ -52,7 +52,8 @@ class Account_Move(models.Model):
         flag = False
         dia_festivo = False
         
-        if self.sorteo_id and self.sorteo_id.compañia.id == self.company_id.id:
+        #if self.sorteo_id and self.sorteo_id.compañia.id == self.company_id.id:
+        if self.sorteo_id:
             
             if self.sorteo_id.fecha_inicio <= self.invoice_date <= self.sorteo_id.fecha_final:
                 

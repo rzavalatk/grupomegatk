@@ -9,7 +9,7 @@
                     <group>
                         <group name="datos-1" string="Datos">
                             <field name="name"/>
-                            <field name="compañia"/>
+                            <!--<field name="compañia"/>-->
                             <field name="sequence_id"/>
                             <field name="encargado_id"/>
                             <field name="premios"/>
@@ -47,7 +47,7 @@
             <field name="arch" type="xml">
                 <tree string="">
                     <field name="name"/>
-                    <field name="compañia"/>
+                    <!--<field name="compañia"/>-->
                     <field name="fecha_inicio"/>
                     <field name="fecha_final"/>
                 </tree>

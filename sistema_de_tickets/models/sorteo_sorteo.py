@@ -10,7 +10,7 @@ class SorteoSorteo(models.Model):
     _description = 'Información para el sorteo'
 
     name = fields.Char(string='Nombre', required=True, copy=False,)
-    compañia = fields.Many2one('res.company', string='Compañia', required=True)
+    #compañia = fields.Many2one('res.company', string='Compañia', required=True)
     encargado_id = fields.Many2one('hr.employee', string='Encargado', store=True, ondelete='set null')
     sequence_id = fields.Many2one("ir.sequence", "Secuencia de Ticket")
     fecha_inicio = fields.Date(string='fecha de inicio', help='Fecha desde donde se empezara a contabilizar los tickets')
