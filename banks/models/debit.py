@@ -285,8 +285,9 @@ class Debit(models.Model):
 					line.analytic_id.id: 100.0,
 					# Agrega información adicional si es necesario
 				}
-    
-				vals_debit = {
+
+				if line.analytic_id:
+					vals_debit = {
 					'debit': line.amount * self.currency_rate,
 					'credit': 0.0,
 					'name': line.name or self.name,
@@ -295,6 +296,16 @@ class Debit(models.Model):
 					'partner_id': line.partner_id.id,
 					'analytic_distribution': analytic_distribution,
 				}
+				else:
+					vals_debit = {
+						'debit': line.amount * self.currency_rate,
+						'credit': 0.0,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						#'analytic_distribution': analytic_distribution,
+					}
 				
 				if self.currency_id:
 					if line.account_id.currency_id:
@@ -328,15 +339,27 @@ class Debit(models.Model):
 					line.analytic_id.id: 100.0,
 					# Agrega información adicional si es necesario
 				}
-				vals_credit = {
-					'debit': 0.0,
-					'credit': line.amount * self.currency_rate,
-					'name': line.name or self.name,
-					'account_id': line.account_id.id,
-					'date': self.date,
-					'partner_id': line.partner_id.id,
-					'analytic_distribution': analytic_distribution,
-				}
+    
+				if line.analytic_id:
+					vals_credit = {
+						'debit': 0.0,
+						'credit': line.amount * self.currency_rate,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						'analytic_distribution': analytic_distribution,
+					}
+				else:
+					vals_credit = {
+						'debit': 0.0,
+						'credit': line.amount * self.currency_rate,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						#'analytic_distribution': analytic_distribution,
+					}
 				if self.currency_id:
 					if line.account_id.currency_id:
 						if line.account_id.currency_id  == self.currency_id:
@@ -416,16 +439,28 @@ class Debit(models.Model):
 					# Agrega información adicional si es necesario
 				}
     
-				vals_debit = {
-					'debit': 0.0,
-					'credit': line.amount * self.currency_rate,
-					#'amount_currency': 0.0,
-					'name': line.name or self.name,
-					'account_id': line.account_id.id,
-					'date': self.date,
-					'partner_id': line.partner_id.id,
-					'analytic_distribution': analytic_distribution,
-				}
+				if line.analytic_id:
+					vals_debit = {
+						'debit': 0.0,
+						'credit': line.amount * self.currency_rate,
+						#'amount_currency': 0.0,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						'analytic_distribution': analytic_distribution,
+					}
+				else:
+					vals_debit = {
+						'debit': 0.0,
+						'credit': line.amount * self.currency_rate,
+						#'amount_currency': 0.0,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						#'analytic_distribution': analytic_distribution,
+					}
 				if self.currency_id:
 					if line.account_id.currency_id:
 						if line.account_id.currency_id  == self.currency_id:
@@ -457,16 +492,28 @@ class Debit(models.Model):
 					# Agrega información adicional si es necesario
 				}
     
-				vals_credit = {
-					'debit': line.amount * self.currency_rate,
-					'credit': 0.0,
-					#'amount_currency': 0.0,
-					'name': line.name or self.name,
-					'account_id': line.account_id.id,
-					'date': self.date,
-					'partner_id': line.partner_id.id,
-					'analytic_distribution': analytic_distribution,
-				}
+				if line.analytic_id:
+					vals_credit = {
+						'debit': line.amount * self.currency_rate,
+						'credit': 0.0,
+						#'amount_currency': 0.0,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						'analytic_distribution': analytic_distribution,
+					}
+				else:
+					vals_credit = {
+						'debit': line.amount * self.currency_rate,
+						'credit': 0.0,
+						#'amount_currency': 0.0,
+						'name': line.name or self.name,
+						'account_id': line.account_id.id,
+						'date': self.date,
+						'partner_id': line.partner_id.id,
+						#'analytic_distribution': analytic_distribution,
+					}
 				if self.currency_id:
 					if line.account_id.currency_id:
 						if line.account_id.currency_id  == self.currency_id:
