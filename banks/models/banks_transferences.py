@@ -139,7 +139,9 @@ class Vittbankstransferences(models.Model):
             if self.journal_id_out.default_account_id.currency_id:
                 if self.journal_id_out.default_account_id.currency_id == self.currency_id:
                     if self.currency_id == self.company_id.currency_id:
-                        vals_haber["amount_currency"] = 0.0
+                        #SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+                        #vals_haber["amount_currency"] = 0.0
+                        pass
                     else:
                         vals_haber["currency_id"] = self.currency_id.id
                         vals_haber["amount_currency"] = self.total * -1
@@ -153,7 +155,9 @@ class Vittbankstransferences(models.Model):
                     vals_haber["amount_currency"] = self.total * tasa.rate * -1
             else:
                 if self.currency_id == self.company_id.currency_id:
-                    vals_haber["amount_currency"] = 0.0
+                    #SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+                    #vals_haber["amount_currency"] = 0.0
+                    pass
                 else:
                     vals_haber["currency_id"] = self.currency_id.id
                     vals_haber["amount_currency"] = self.total * -1
@@ -168,7 +172,9 @@ class Vittbankstransferences(models.Model):
             if self.journal_id_in.default_account_id.currency_id:
                 if self.journal_id_in.default_account_id.currency_id == self.currency_id:
                     if self.currency_id == self.company_id.currency_id:
-                        vals_debe["amount_currency"] = 0.0
+                        #SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+                        #vals_debe["amount_currency"] = 0.0
+                        pass
                     else:
                         vals_debe["currency_id"] = self.currency_id.id
                         vals_debe["amount_currency"] = self.total
@@ -182,7 +188,9 @@ class Vittbankstransferences(models.Model):
                     vals_debe["amount_currency"] = self.total * tasa.rate
             else:
                 if self.currency_id == self.company_id.currency_id:
-                    vals_debe["amount_currency"] = 0.0
+                    #SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+                    #vals_debe["amount_currency"] = 0.0
+                    pass
                 else:
                     vals_debe["currency_id"] = self.currency_id.id
                     vals_debe["amount_currency"] = self.total

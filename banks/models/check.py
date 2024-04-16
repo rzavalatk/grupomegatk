@@ -451,7 +451,9 @@ class Check(models.Model):
 			if self.journal_id.default_account_id.currency_id :
 				if self.journal_id.default_account_id.currency_id  == self.currency_id:
 					if self.currency_id == self.company_id.currency_id:
-						vals_credit["amount_currency"] = 0.0
+						#SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+      					#vals_credit["amount_currency"] = 0.0
+						pass
 					else:
 						vals_credit["currency_id"] = self.currency_id.id
 						vals_credit["amount_currency"] = self.total * -1
@@ -464,13 +466,21 @@ class Check(models.Model):
 					vals_credit["amount_currency"] = self.total * tasa.rate * -1
 			else:
 				if self.currency_id == self.company_id.currency_id:
-					vals_credit["amount_currency"] = 0.0
+					#SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
+     				#vals_credit["amount_currency"] = 0.0
+					pass
 				else:
 					vals_credit["currency_id"] = self.currency_id.id
 					vals_credit["amount_currency"] = self.total * -1
 
 		for line in self.check_lines:
 			if line.move_type == 'debit':
+       
+				analytic_distribution = {
+					line.analytic_id.id: 100.0,
+					# Agrega información adicional si es necesario
+				}
+    
 				vals_debe = {
 					'debit': line.amount * self.currency_rate,
 					'credit': 0.0,
@@ -478,13 +488,14 @@ class Check(models.Model):
 					'account_id': line.account_id.id,
 					'date': self.date,
 					'partner_id': line.partner_id.id,
-					#'analytic_account_id': line.analytic_id.id,
+					'analytic_distribution': analytic_distribution,
 				}
 				if self.currency_id:
 					if line.account_id.currency_id:
 						if line.account_id.currency_id  == self.currency_id:
 							if self.currency_id == self.company_id.currency_id:
-								vals_debe["amount_currency"] = 0.0
+								#vals_debe["amount_currency"] = 0.0
+								pass
 							else:
 								vals_debe["currency_id"] = self.currency_id.id
 								vals_debe["amount_currency"] = line.amount
@@ -497,12 +508,19 @@ class Check(models.Model):
 							vals_debe["amount_currency"] = line.amount * tasa.rate
 					else:
 						if self.currency_id == self.company_id.currency_id:
-							vals_debe["amount_currency"] = 0.0
+							#vals_debe["amount_currency"] = 0.0
+							pass
 						else:
 							vals_debe["currency_id"] = self.currency_id.id
 							vals_debe["amount_currency"] = line.amount
 				lineas.append((0, 0, vals_debe))
 			if line.move_type == 'credit':
+       
+				analytic_distribution = {
+					line.analytic_id.id: 100.0,
+					# Agrega información adicional si es necesario
+				}
+    
 				vals_credit_line = {
 					'debit': 0.0,
 					'credit': line.amount * self.currency_rate,
@@ -510,13 +528,15 @@ class Check(models.Model):
 					'account_id': line.account_id.id,
 					'date': self.date,
 					'partner_id': line.partner_id.id,
-					#'analytic_account_id': line.analytic_id.id,
+					'analytic_distribution': analytic_distribution,
 				}
+    
 				if self.currency_id:
 					if line.account_id.currency_id:
 						if line.account_id.currency_id  == self.currency_id:
 							if self.currency_id == self.company_id.currency_id:
-								vals_credit_line["amount_currency"] = 0.0
+								#vals_credit_line["amount_currency"] = 0.0
+								pass
 							else:
 								vals_credit_line["currency_id"] = self.currency_id.id
 								vals_credit_line["amount_currency"] = line.amount * -1
@@ -529,7 +549,8 @@ class Check(models.Model):
 							vals_credit_line["amount_currency"] = line.amount * tasa.rate * -1
 					else:
 						if self.currency_id == self.company_id.currency_id:
-							vals_credit_line["amount_currency"] = 0.0
+							#vals_credit_line["amount_currency"] = 0.0
+							pass
 						else:
 							vals_credit_line["currency_id"] = self.currency_id.id
 							vals_credit_line["amount_currency"] = line.amount * -1
