@@ -74,7 +74,7 @@
               </tr>
             </table>
           </div>  
-          <div style="float: right; margin-top: 50px; margin-left: 50px;">
+          <div style="float: right; margin-top: 65px; margin-left: 50px;">
             <table style="text-align: center;">
               <tr>
                 <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
@@ -353,7 +353,7 @@
             <br></br>
             <br></br>
 
-            <p style="font-weight: normal;font-size: 15.5px; margin-top: 130px;">
+            <p style="font-weight: normal;font-size: 15.5px; margin-top: 150px;">
                 Son: <span t-field="o.num_word"/>
             </p>
             
