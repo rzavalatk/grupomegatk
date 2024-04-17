@@ -142,7 +142,7 @@
 
     <template id="factura_odoo_custom">
   		<t t-call="reportes_custom.external_layout_factura_custom">
-    		<div class="page">
+    		<div class="page" style="margin-top: 30px;">
           <!--Is there a discount on at least one line? -->
           <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
           <table class="table table-sm o_main_table" name="invoice_line_table">
