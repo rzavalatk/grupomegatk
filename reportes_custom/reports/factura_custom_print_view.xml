@@ -38,10 +38,10 @@
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
-                <p style="margin-top: -03px"><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
-                <p style="margin-top: -05px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
-                <p style="margin-top: -05px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
-                <p style="margin-top: -05px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
+                <p style="margin-top: -10px"><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
+                <p style="margin-top: -10px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
+                <p style="margin-top: -10px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
+                <p style="margin-top: -10px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
               </div> 
             </t>
           </div>
@@ -74,7 +74,7 @@
               </tr>
             </table>
           </div>  
-          <div style="float: right; margin-top: 30px; margin-left: 50px;">
+          <div style="float: right; margin-top: 25px; margin-left: 50px;">
             <table style="text-align: center;">
               <tr>
                 <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
