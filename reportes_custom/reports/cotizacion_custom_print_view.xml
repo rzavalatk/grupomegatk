@@ -14,12 +14,12 @@
 				<div class="row" >
 					<div class="col-xs-3 mb4">
 						<!--<img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 100px;"/>-->
-						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: -100px; margin-button: 0px;" alt="Logo"/>
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; margin-top: 0px; margin-button: 0px;" alt="Logo"/>
              		
-						<div style="position: absolute; top: 157px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+						<div style="position: absolute; top: 0px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
 							FACTURAR A: 
 						</div>
-						<div style="width: 150px !important; position: absolute; top: 180px;">
+						<div style="width: 150px !important; position: absolute; top: 0px;">
 							<div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
 								<address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
 								<div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 
-				<div style="float: right; margin-top: -200px;">
+				<div style="float: right; margin-top: 0px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
 							
 
@@ -48,7 +48,7 @@
 						</p>
 				</div>
 
-				<div style="float: right;margin-top: -150px;">
+				<div style="float: right;margin-top: 0px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
@@ -68,7 +68,7 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:120px;">
+					<div style="margin-top:0px;">
 					  <div style ='font-size:11pt;'>
 					    <div t-if="o.company_id.name =='MEDITEK'">
 					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
@@ -77,7 +77,7 @@
 					      CAI: 0164A4-3337C2-554799-E18564-042AAF-16
 					    </div>
 					  </div> 
-						<table style="text-align: center; margin-top:20px;">
+						<table style="text-align: center; margin-top:0px;">
 							<tr>
 								<td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
 								<td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">VALIDO</td>
