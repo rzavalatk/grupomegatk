@@ -33,15 +33,15 @@
           <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice'">FACTURA COMERCIAL</span>
           <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
-                <p style="margin-top: -20px"><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
+                <p style="margin-top: -10px"><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
                 </div>
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p style="margin-top: -7px"><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
-                <p style="margin-top: -20px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
-                <p style="margin-top: -20px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
-                <p style="margin-top: -20px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
+                <p style="margin-top: -10px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
+                <p style="margin-top: -05px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
+                <p style="margin-top: -0px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
               </div> 
             </t>
           </div>
