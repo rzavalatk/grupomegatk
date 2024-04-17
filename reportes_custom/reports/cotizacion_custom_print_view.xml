@@ -48,7 +48,7 @@
 						</p>
 				</div>
 
-				<div style="position: right;margin-top: 100px;">
+				<div style="float: right; margin-left:50px; margin-top: 100px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
