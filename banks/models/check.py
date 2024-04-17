@@ -492,7 +492,7 @@ class Check(models.Model):
 					'analytic_distribution': analytic_distribution,
 				}
 				else:
-					vals_debit = {
+					vals_debe = {
 						'debit': line.amount * self.currency_rate,
 						'credit': 0.0,
 						'name': line.name or self.name,
