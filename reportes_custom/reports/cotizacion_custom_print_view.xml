@@ -48,7 +48,7 @@
 						</p>
 				</div>
 
-				<div style="position: absolute; margin-left:50px; margin-top: 100px;">
+				<div style="position: absolute; margin-left:350px; margin-top: 100px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
@@ -68,7 +68,7 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:60px;">
+					<div style="margin-top:80px;">
 					  <div style ='font-size:11pt;'>
 					    <div t-if="o.company_id.name =='MEDITEK'">
 					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
