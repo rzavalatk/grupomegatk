@@ -55,9 +55,7 @@ class ConciliacionBancaria(models.Model):
                         credit_line += lines.haber
 
             if concil.account_id.account_type == 'liability_credit_card':
-                saldo_suma = concil.saldo_inicial + credit_line
-                saldo_resta = saldo_suma - debit_line
-                concil.difference = concil.saldo_final - saldo_resta
+                concil.difference = (concil.saldo_inicial + credit_line - debit_line) - concil.saldo_final
 
             if concil.account_id.account_type != 'liability_credit_card':
                 concil.difference = concil.saldo_final - (concil.saldo_inicial + debit_line - credit_line) 
