@@ -13,8 +13,9 @@ class Campos_clientes(models.Model):
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
     def create(self, vals):
+        res = super(Campos_clientes, self).create(vals)
         # Verificar existencia del NIF
         if not self.env['res.partner'].search([('vat', '=', vals.get('vat'))]):
-            return super(Campos_clientes, self).create(vals)
+            return res
         else:
             raise ValidationError("El RTN ya existe")
