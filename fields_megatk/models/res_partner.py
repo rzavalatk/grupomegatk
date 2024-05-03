@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 #CAMPOS EN FORMULARIO CONTACTO/VENTAS Y COMPRAS/VARIOS
 class Campos_clientes(models.Model):
@@ -11,3 +11,10 @@ class Campos_clientes(models.Model):
     
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
+    
+    def create(self, vals):
+        # Verificar existencia del NIF
+        if not self.env['res.partner'].search([('vat', '=', vals['vat'])]):
+            return super(Campos_clientes, self).create(vals)
+        else:
+            raise ValidationError("El RTN ya existe")
