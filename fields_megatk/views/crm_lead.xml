@@ -149,6 +149,9 @@
 						<field name="producto2"/>
 						<field name="producto3"/>
 					</xpath>
+					<xpath expr="//form[1]/sheet[1]/group[1]/group[not(@name)][1]/field[@name='tag_ids']" position="attributes">
+						<attribute name="options">{"color_field": "color", "no_create_edit": true, "no_create": true}</attribute>
+					</xpath>
 				  	
 				</field>
  		</record>
