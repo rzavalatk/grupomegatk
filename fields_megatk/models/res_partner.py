@@ -21,7 +21,7 @@ class Campos_clientes(models.Model):
             raise ValidationError("El RTN ya existe")"""
         
     def create(self, vals):
-        res = super(Campos_clientes, self).create(vals)
+        res = super(Campos_clientes, self).create(self, vals)
         if not vals[0]['vat']:
             raise Warning(_('Set a journal and a sequence'))
         return res
