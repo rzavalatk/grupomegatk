@@ -12,10 +12,16 @@ class Campos_clientes(models.Model):
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
-    def create(self, vals):
+    """def create(self, vals):
         res = super(Campos_clientes, self).create(vals)
         # Verificar existencia del NIF
         if not self.env['res.partner'].search([('vat', '=', vals.get('vat'))]):
             return res
         else:
-            raise ValidationError("El RTN ya existe")
+            raise ValidationError("El RTN ya existe")"""
+        
+    def create(self, vals):
+        res = super(ampos_clientes, self).create(vals)
+        if not vals[0]['vat']:
+            raise Warning(_('Set a journal and a sequence'))
+        return res
