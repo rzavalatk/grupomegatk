@@ -14,7 +14,7 @@ class Campos_clientes(models.Model):
     
     def create(self, vals):
         # Verificar existencia del NIF
-        if not self.env['res.partner'].search([('vat', '=', vals['vat'])]):
+        if not self.env['res.partner'].search([('vat', '=', vals.get('vat'))]):
             return super(Campos_clientes, self).create(vals)
         else:
             raise ValidationError("El RTN ya existe")
