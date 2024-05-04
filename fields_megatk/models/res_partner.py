@@ -18,6 +18,8 @@ class Campos_clientes(models.Model):
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
+    type_company = fields.Many2one('type.partner.company', string='Tipo de empresa')
+    
     def create(self, vals):
         
         # Verificar existencia del NIF
