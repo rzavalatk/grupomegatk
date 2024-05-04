@@ -13,7 +13,7 @@ class Departamentos(models.Model):
     #compañia = fields.Many2one('res.company', string='Compañia', required=True)
     codigo_postal = fields.Char(string='Nombre', required=True, copy=False,)
     
-    ciudades = fields.One2many('departamentos.ciudad', 'ciudad', string='Ciudades', help='Ciudades relacionados con este departamento')
+    ciudades = fields.One2many('departamentos.ciudad', 'departamento', string='Ciudades', help='Ciudades relacionados con este departamento')
     
     
 
