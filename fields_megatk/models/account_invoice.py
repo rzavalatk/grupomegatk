@@ -29,6 +29,9 @@ class Account_Move(models.Model):
     
     n_tickets_acum = fields.Integer('Tickets')
     
+    departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
+    ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain=[('departamento', '=', departamentos)])
+    
    
     #mostrar boton en factura de borrados
     def go_draft(self):
