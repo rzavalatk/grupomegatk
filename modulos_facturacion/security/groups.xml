@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_departamentos">
+            <field name="name">Gestión de Sistema de departamento</field>
+            <field name="description">Gestión de departamentos</field>
+            <field name="sequence">4</field>
+    	</record>
+    	
+        <record id="departamento_manager" model="res.groups">
+    		<field name="category_id" ref="module_category_departamentos"/>
+            <field name="name">Responsable Departamento</field>
+        </record>
+
+        <record id="ciudad_manager" model="res.groups">
+    		<field name="category_id" ref="module_category_departamentos"/>
+            <field name="name">Responsable Ciudad</field>
+        </record>
+
+        
+    </data>
+</odoo>
