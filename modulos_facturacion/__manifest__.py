@@ -17,6 +17,8 @@
     "license": "LGPL-3",
     'depends': ['base','account'],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/departamento_view.xml',
         'views/ciudad_view.xml',
     ],
