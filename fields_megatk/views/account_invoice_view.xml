@@ -11,7 +11,7 @@
 
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="departamentos"/>
-                    <field name="ciudad" domain="[('departamento', '=', departamentos)]"/>
+                    <field name="ciudad"/>
                     <field name="x_contacto"/>
                 </xpath>
 
