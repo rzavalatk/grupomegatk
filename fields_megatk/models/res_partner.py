@@ -2,6 +2,12 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
+import logging
+import math
+
+
+_logger = logging.getLogger(__name__)
+
 #CAMPOS EN FORMULARIO CONTACTO/VENTAS Y COMPRAS/VARIOS
 class Campos_clientes(models.Model):
     _inherit = "res.partner"

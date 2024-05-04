@@ -1,0 +1,52 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_departamento_form" model="ir.ui.view">
+            <field name="name">departamento.departamento.form</field>
+            <field name="model">departamentos.departamentos</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group name="datos-1" string="Datos">
+                            <field name="name"/>
+                            <!--<field name="compañia"/>-->
+                            <field name="codigo_postal"/>
+                        </group>
+                    </group>
+                    
+
+                    <notebook>
+                        <page name="ciudades" string="Ciudades">
+                            <field name="ciudades"/>
+                        </page>
+                    </notebook>
+                        
+                </form>
+            </field>
+        </record>
+
+        <record id="departamento_view_tree" model="ir.ui.view">
+            <field name="name">departamento.view.tree</field>
+            <field name="model">departamentos.departamentos</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <!--<field name="compañia"/>-->
+                    <field name="codigo_postal"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="departamentos_action" model="ir.actions.act_window">
+            <field name="name">Departamentos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">departamentos.departamentos</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+
+        <menuitem id="action_departamentos_departamentos_menu" name="Departamentos" action="departamentos_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="18"/>
+
+    </data>
+</odoo>
