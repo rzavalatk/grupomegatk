@@ -1,0 +1,46 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        <record id="view_ciudad_form" model="ir.ui.view">
+            <field name="name">deṕartamento.ciudad.form</field>
+            <field name="model">departamentos.ciudad</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group >
+                           <group name="datos_ticket" string="Datos Ticket">
+                                <field name="name"/>
+                                <field name="departamento"/>
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_ciudad_tree" model="ir.ui.view">
+            <field name="name">ciudad.view.tree</field>
+            <field name="model">departamentos.ciudad</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="departamento"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="ciudad_action" model="ir.actions.act_window">
+            <field name="name">Ciudades</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">departamentos.ciudad</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+
+        <!--<menuitem id="action_sorteo_ticket_menu" name="Tickets" action="sorteo_ticket_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="18"/>-->
+
+
+    </data>
+</odoo>
