@@ -21,6 +21,7 @@
         'security/ir.model.access.csv',
         'views/departamento_view.xml',
         'views/ciudad_view.xml',
+        'views/type_company_view.xml',
     ],
     'installable': True,
     'auto_install': False,

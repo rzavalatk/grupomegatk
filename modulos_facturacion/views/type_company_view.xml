@@ -1,0 +1,29 @@
+<!-- views/sorteo_ticket_view.xml -->
+<odoo>
+    <data>
+        
+        <record id="type_company_view_tree" model="ir.ui.view">
+            <field name="name">type.company.partner.view.tree</field>
+            <field name="model">type.partner.company</field>
+            <field name="arch" type="xml">
+                <tree string="Tipos de compañia" editable="bottom">
+                    <field name="name"/>
+                    <field name="compañia"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <record id="type_company_action" model="ir.actions.act_window">
+            <field name="name">Tipos de compañia</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">type.partner.company</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        
+
+        <menuitem id="action_type_company_menu" name="Tipos de compañias" action="type_company_action" parent="contacts.res_partner_menu_config" sequence="18"/>
+
+    </data>
+</odoo>
