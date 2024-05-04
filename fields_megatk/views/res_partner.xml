@@ -11,9 +11,7 @@
     				<field name="x_zonac"/>
   				</xpath>
 
-				<xpath expr="//field[@name='vat']" position="after">
-    				<field name="type_company"/>
-  				</xpath>
+				
 
 				
 			</data>
