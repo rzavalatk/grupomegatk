@@ -6,7 +6,7 @@ import requests
 
 
 class TypePartnerCompany(models.Model):
-    _name = 'type.partner.company'
+    _name = 'tpartner.company'
     _description = 'Tipos de empresas para clientes'
 
     name = fields.Char(string='Nombre', required=True, copy=False,)
