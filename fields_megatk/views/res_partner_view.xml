@@ -19,7 +19,9 @@
 						<field name="x_supplier"/>
 					</xpath>
 
-					
+					<!--<xpath expr="//field[@name='vat']" position="after">
+						<field name="type_company"/>
+					</xpath>-->
 
 					
 				</data>
