@@ -170,6 +170,8 @@
 			</field>
 	   	</record>
 
+		
+
 		<record id="crm_lead_tipo_view_form" model="ir.ui.view">
 			<field name="name">crm_lead_tipo.view.form</field>
 			<field name="model">crm.lead.tipo</field>
