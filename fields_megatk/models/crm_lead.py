@@ -39,19 +39,19 @@ class CrmLead(models.Model):
     def _onchange_name_opportunity(self):
         if self.partner_id and self.company_id:
             if self.tipo_id.id == 6:
-                self.name = "Proyectos / " + self.partner_id
+                self.name = "Proyectos / " + self.partner_id.name
             if self.tipo_id.id == 37:
-                self.name = "MDTKSA / " + self.partner_id
+                self.name = "MDTKSA / " + self.partner_id.name
             if self.tipo_id.id == 5:
-                self.name = "SPCHINE / " + self.partner_id
+                self.name = "SPCHINE / " + self.partner_id.name
             if self.tipo_id.id == 1:
-                self.name = "MGTK / " + self.partner_id
+                self.name = "MGTK / " + self.partner_id.name
             if self.tipo_id.id == 2:
-                self.name = "PRTX / " + self.partner_id
+                self.name = "PRTX / " + self.partner_id.name
             if self.tipo_id.id == 3:
-                self.name = "SPT / " + self.partner_id
+                self.name = "SPT / " + self.partner_id.name
             if self.tipo_id.id == 4:
-                self.name = "MDTK / " + self.partner_id
+                self.name = "MDTK / " + self.partner_id.name
             
     
     
