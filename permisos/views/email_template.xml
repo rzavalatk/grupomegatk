@@ -5,8 +5,8 @@
       <field name="name">Solicitud Permiso</field>
       <field name="model_id" ref="model_hr_employee_permisos"/>
       <field name="subject">Permiso solicitado ({{object.name}})</field>
-      <field name="email_from">{{user.email_formatted | safe}}</field>
-      <field name="email_to">{{user.email_formatted | safe}}</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <div class="page">
@@ -22,8 +22,8 @@
       <field name="name">Solicitud Permiso</field>
       <field name="model_id" ref="model_hr_employee_permisos"/>
       <field name="subject">Permiso Solicitado ({{object.name}})</field>
-      <field name="email_from">{{user.email_formatted | safe}}</field>
-      <field name="email_to">{{user.email_formatted | safe}}</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <div class="page">
@@ -56,8 +56,8 @@
       <field name="name">Solicitud Permiso Denegada</field>
       <field name="model_id" ref="model_hr_employee_permisos"/>
       <field name="subject">Permiso Denegado ({{object.name}})</field>
-      <field name="email_from">{{user.email_formatted | safe}}</field>
-      <field name="email_to">{{user.email_formatted | safe}}</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <div class="page">
@@ -73,8 +73,8 @@
       <field name="name">Solicitud Permiso aprobado</field>
       <field name="model_id" ref="model_hr_employee_permisos"/>
       <field name="subject">Permiso Aprobado ({{object.name}})</field>
-      <field name="email_from">{{user.email_formatted | safe}}</field>
-      <field name="email_to">{{user.email_formatted | safe}}</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <div class="page">
@@ -98,8 +98,8 @@
       <field name="name">Vaciones por ley</field>
       <field name="model_id" ref="model_hr_employee_permisos"/>
       <field name="subject">Vacaciones cargadas</field>
-      <field name="email_from">{{user.email_formatted | safe}}</field>
-      <field name="email_to">{{user.email_formatted | safe}}</field>
+      <field name="email_from">${user.email_formatted | safe}</field>
+      <field name="email_to">${user.email_formatted | safe}</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <div class="page">
