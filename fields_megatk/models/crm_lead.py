@@ -53,7 +53,6 @@ class CrmLead(models.Model):
             if self.tipo_id.id == 4:
                 self.name = "MDTK / " + self.partner_id.name
             
-    @api.depends('partner_id')
     def _compute_name(self):
         if self.partner_id and self.company_id:
             if self.tipo_id.id == 6:
@@ -70,6 +69,7 @@ class CrmLead(models.Model):
                 self.name = "SPT / " + self.partner_id.name
             if self.tipo_id.id == 4:
                 self.name = "MDTK / " + self.partner_id.name
+        return super(CrmLead, self)._compute_name()
                 
     def write(self, values):
         if not self.fecha_movimiento:
