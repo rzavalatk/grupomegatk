@@ -21,7 +21,7 @@ class AccountMoveLine(models.Model):
     def _onchange_price_unit_product_id(self):
         if self.move_id.move_type == 'out_invoice':
             allowed_emails = [
-                'lvilleda@printexhn.net', 'rzavala@megatk.com', 'lmoran@megatk.com', 'kromero@megatk.com',
+                'lvilleda@printexhn.net', 'rzavala@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com',
                 'eduron@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'
             ]
             if self.env.user.email not in allowed_emails:
