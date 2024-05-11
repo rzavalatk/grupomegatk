@@ -98,7 +98,7 @@ class Saleline(models.Model):
                     preciolista = self.env['lista.precios.producto']
                     preciodefaul = preciolista.search([('product_id', '=', line.product_id.product_tmpl_id.id)])
 
-                    if self.move_id.currency_id.name == 'HNL':
+                    if self.order_id.currency_id.name == 'HNL':
                         _logger.warning('Pase precios : ' + str("4"))
                         if line.price_unit < line.product_id.list_price:
                             _logger.warning('Pase precios : ' + str("5"))
