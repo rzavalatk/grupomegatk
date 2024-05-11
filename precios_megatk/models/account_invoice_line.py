@@ -2,6 +2,10 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import except_orm, Warning, RedirectWarning
 
+import logging
+import math
+
+_logger = logging.getLogger(__name__)
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -20,11 +24,14 @@ class AccountMoveLine(models.Model):
     @api.onchange('price_unit', 'product_id')
     def _onchange_price_unit_product_id(self):
         if self.move_id.move_type == 'out_invoice':
+            _logger.warning('Arreglo de facturas : ' + str("1"))
             allowed_emails = [
                 'lvilleda@printexhn.net', 'rzavala@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com',
-                'eduron@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'
+                'yalvarado@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'
             ]
+            
             if self.env.user.email not in allowed_emails:
+                _logger.warning('Arreglo de facturas : ' + str("2"))
                 for line in self:
                     if line.product_id:
                         preciolista = self.env['lista.precios.producto']
