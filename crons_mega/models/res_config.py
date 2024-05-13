@@ -37,7 +37,7 @@ class Settings(models.TransientModel):
         
 
     
-    def get_values_account_ids_cron_mega(self,company):
+    def get_values_account_ids_cron_mega(self, company):
         try:
             _logger.warning("Este es el ID: "+str(company))
             
