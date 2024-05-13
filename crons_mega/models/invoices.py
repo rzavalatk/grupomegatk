@@ -46,7 +46,7 @@ class FacturasAVencer(models.Model):
         ("cancel", "Cancelado")
     ], string="Estado", default="draft")
 
-    """def volver_borrador(self):
+    def volver_borrador(self):
         self.write({
             'state': 'draft'
         })
@@ -211,7 +211,7 @@ class FacturasAVencer(models.Model):
                 time.sleep(1)
                 vencidas.procesar_facturas()
                 time.sleep(1)
-                vencidas.enviar_facturas_vencidas()"""
+                vencidas.enviar_facturas_vencidas()
 
 
 class FacturaVencerLine(models.Model):
