@@ -42,7 +42,7 @@ class Settings(models.TransientModel):
             _logger.warning("Este es el ID: "+str(company))
             
             self.company_cierre["company"] = company
-            _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
+            _logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre["company"]))
             obj = self.get_values()
             return obj['account_ids_cron_mega'][0][2]
         
