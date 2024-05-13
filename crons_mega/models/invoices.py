@@ -7,7 +7,7 @@ import time
 import json
 
 
-class Factura(models.Model):
+"""class Factura(models.Model):
     _inherit = "account.move"
 
     #expire_id = fields.Many2one("account.move.expire")
@@ -18,7 +18,7 @@ class Factura(models.Model):
         ("none", "No Vencida"),
         ("1er Aviso", "1er Aviso"),
         ("2do Aviso", "2do Aviso")
-    ], default="none", string="Estado Aviso")
+    ], default="none", string="Estado Aviso")"""
 
 
 class FacturasAVencer(models.Model):
@@ -136,7 +136,7 @@ class FacturasAVencer(models.Model):
                     return True
         return False
 
-    """def procesar_facturas(self):
+    def procesar_facturas(self):
         vals = []
         vals2 = []
         for factura in self.facturas_ids_customers:
@@ -211,7 +211,7 @@ class FacturasAVencer(models.Model):
                 time.sleep(1)
                 vencidas.procesar_facturas()
                 time.sleep(1)
-                vencidas.enviar_facturas_vencidas()"""
+                vencidas.enviar_facturas_vencidas()
 
 
 class FacturaVencerLine(models.Model):
