@@ -138,6 +138,12 @@ class LiquidacionGastos(models.Model):
             raise Warning(_('No existe un diario establecido para generar la liquidación.'))
         for line in self.detalle_gastos_ids:
             line.estado_parent = False
+            
+        analytic_distribution = {
+            self.analytic_id.id: 100.0,
+            # Agrega información adicional si es necesario
+        }
+        
         account_move = self.env['account.move']
         lineas = []
         vals_credit_anticipo = {
@@ -158,7 +164,7 @@ class LiquidacionGastos(models.Model):
             'credit': 0.0,
             'name': self.name,
             'account_id': self.cuenta_gasto_id.id,
-            'analytic_account_id': self.analytic_id.id,
+            'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
             #'company_id': self.company_id.id,
@@ -172,7 +178,7 @@ class LiquidacionGastos(models.Model):
             'credit': 0.0,
             'name': self.name,
             'account_id': self.cuenta_gasto_id.id,
-            'analytic_account_id': self.analytic_id.id,
+            'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
             #'company_id': self.company_id.id,
@@ -199,7 +205,7 @@ class LiquidacionGastos(models.Model):
             'credit': 0.0,
             'name': self.name,
             'account_id': self.cuenta_gasto_id.id,
-            'analytic_account_id': self.analytic_id.id,
+            'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
             #'company_id': self.company_id.id,
@@ -226,7 +232,7 @@ class LiquidacionGastos(models.Model):
             'state': 'draft',
         }
         id_move = account_move.create(values)
-        id_move.post()
+        #id_move.post()
         self.move_id = id_move.id
         self.write({'state': 'liquidado'})
 
