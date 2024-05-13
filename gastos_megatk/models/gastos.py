@@ -139,10 +139,10 @@ class LiquidacionGastos(models.Model):
         for line in self.detalle_gastos_ids:
             line.estado_parent = False
             
-        """analytic_distribution = {
-            line.analytic_id.id: 100.0,
+        analytic_distribution = {
+            self.analytic_id.id: 100.0,
             # Agrega información adicional si es necesario
-        }"""
+        }
         
         account_move = self.env['account.move']
         lineas = []
