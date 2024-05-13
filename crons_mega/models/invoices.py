@@ -136,7 +136,7 @@ class FacturasAVencer(models.Model):
                     return True
         return False
 
-    def procesar_facturas(self):
+    """def procesar_facturas(self):
         vals = []
         vals2 = []
         for factura in self.facturas_ids_customers:
@@ -211,10 +211,10 @@ class FacturasAVencer(models.Model):
                 time.sleep(1)
                 vencidas.procesar_facturas()
                 time.sleep(1)
-                vencidas.enviar_facturas_vencidas()
+                vencidas.enviar_facturas_vencidas()"""
 
 
-"""class FacturaVencerLine(models.Model):
+class FacturaVencerLine(models.Model):
     _name = "invoice.expire.line"
     _order = "create_date desc"
 
@@ -285,6 +285,6 @@ class FacturasAVencer(models.Model):
                 }
                 template.send_mail(
                     self.id, email_values=email_values, force_send=True)
-        return True"""
+        return True
         
         
