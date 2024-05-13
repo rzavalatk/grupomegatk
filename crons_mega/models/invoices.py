@@ -36,7 +36,7 @@ class FacturasAVencer(models.Model):
     """invoice_expire_line = fields.One2many(
         "invoice.expire.line", "invoice_expire_id", "Facturas")
     facturas_ids_customers = fields.One2many(
-        "account.move", "expire_customer_id", "Facturas Vencidas")"""
+        "account.move", "expire_customer_id", "Facturas Vencidas")
     facturas_ids = fields.One2many("account.move", "Facturas")
     state = fields.Selection([
         ("draft", "Borrador"),
@@ -44,7 +44,7 @@ class FacturasAVencer(models.Model):
         ("proccess", "Proceso"),
         ("done", "Hecho"),
         ("cancel", "Cancelado")
-    ], string="Estado", default="draft")
+    ], string="Estado", default="draft")"""
 
     """def volver_borrador(self):
         self.write({
