@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="stock_historial_view_form" model="ir.ui.view">
+            <field name="name">stock_historial.view.form</field>
+            <field name="model">stock.history</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="movimiento_ids" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="stock_historal_view_tree" model="ir.ui.view">
+            <field name="name">stock_historal.view.tree</field>
+            <field name="model">stock.history</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="movimiento_ids" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_historial_action" model="ir.actions.act_window">
+            <field name="name">Reportes inventario</field>
+            <field name="res_model">stock.history</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                
+            </field>
+        </record>
+
+        <menuitem
+            id="stock_history_menu"
+            name="Inventario"
+            action="stock_historial_action"
+            parent="menu_reports_inventario"
+            sequence="10"/>
+
+    </data>
+</odoo>

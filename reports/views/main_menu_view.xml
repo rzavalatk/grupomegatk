@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_reports" name="Reportes" sequence="10" web_icon="reports,static/description/editar.png"/>
+        <menuitem id="menu_reports_inventario" name="Inventario" parent="menu_reports" sequence="20"/>
+    </data>
+</odoo>
+
