@@ -7,7 +7,7 @@ import time
 import json
 
 
-"""class Factura(models.Model):
+class Factura(models.Model):
     _inherit = "account.move"
 
     #expire_id = fields.Many2one("account.move.expire")
@@ -18,7 +18,7 @@ import json
         ("none", "No Vencida"),
         ("1er Aviso", "1er Aviso"),
         ("2do Aviso", "2do Aviso")
-    ], default="none", string="Estado Aviso")"""
+    ], default="none", string="Estado Aviso")
 
 
 class FacturasAVencer(models.Model):
@@ -29,7 +29,7 @@ class FacturasAVencer(models.Model):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
 
-    name = fields.Char(compute=_name_)
+    """name = fields.Char(compute=_name_)
     date = fields.Date("Fecha")
     company_id = fields.Many2one(
         "res.company", "Compañia", default=lambda self: self.env.user.company_id.id)
@@ -211,7 +211,7 @@ class FacturasAVencer(models.Model):
                 time.sleep(1)
                 vencidas.procesar_facturas()
                 time.sleep(1)
-                vencidas.enviar_facturas_vencidas()
+                vencidas.enviar_facturas_vencidas()"""
 
 
 class FacturaVencerLine(models.Model):
