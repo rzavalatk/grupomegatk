@@ -232,7 +232,7 @@ class LiquidacionGastos(models.Model):
             'state': 'draft',
         }
         id_move = account_move.create(values)
-        id_move.post()
+        #id_move.post()
         self.move_id = id_move.id
         self.write({'state': 'liquidado'})
 
