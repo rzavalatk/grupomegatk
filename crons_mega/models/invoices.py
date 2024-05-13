@@ -29,7 +29,7 @@ class FacturasAVencer(models.Model):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
 
-    """name = fields.Char(compute=_name_)
+    name = fields.Char(compute=_name_)
     date = fields.Date("Fecha")
     company_id = fields.Many2one(
         "res.company", "Compañia", default=lambda self: self.env.user.company_id.id)
@@ -46,7 +46,7 @@ class FacturasAVencer(models.Model):
         ("cancel", "Cancelado")
     ], string="Estado", default="draft")
 
-    def volver_borrador(self):
+    """def volver_borrador(self):
         self.write({
             'state': 'draft'
         })
