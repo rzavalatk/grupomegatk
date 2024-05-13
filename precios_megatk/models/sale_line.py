@@ -77,22 +77,37 @@ class Saleline(models.Model):
                                     line.precio_ids = lista.id"""
                                     
        #codigo original, quitar comentarios al arreglar el problema con el dominio en precio_id                             
-    @api.onchange("price_unit")
-    def validatepreciounit(self):
-        if self.env.user.email not in ('leon.89.25@gmail.com','lvilleda@printexhn.net','rzavala@megatk.com','lmoran@megatk.com','kromero@megatk.com','eduron@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+    @api.onchange('price_unit', 'product_id')
+    def _onchange_price_unit_product_id(self):
+        
+        #_logger.warning('Pase Precios : ' + str("1"))
+        allowed_emails = [
+            'rzavala@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com',
+            'yalvarado@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'
+        ]
+        
+        if self.env.user.email not in allowed_emails:
+            #_logger.warning('Pase precios : ' + str("2"))
             for line in self:
                 if line.product_id:
+                    #_logger.warning('Pase precios : ' + str("3"))
                     preciolista = self.env['lista.precios.producto']
-                    preciodefaul = preciolista.search( [('product_id.id', '=', line.product_id.product_tmpl_id.id)])
-                    if self.pricelist_id.currency_id.name == 'HNL':
+                    preciodefaul = preciolista.search([('product_id', '=', line.product_id.product_tmpl_id.id)])
+
+                    if self.order_id.currency_id.name == 'HNL':
+                        #_logger.warning('Pase precios : ' + str("4"))
+                        #_logger.warning('Pase precios : ' + str(line.price_unit))
+                        #_logger.warning('Pase precios : ' + str("4"))
                         if line.price_unit < line.product_id.list_price:
+                            #_logger.warning('Pase precios : ' + str("5"))
                             line.price_unit = line.product_id.list_price
                             for lista in preciodefaul:
-                                porcentaje = (((line.price_unit - line.product_id.list_price)*100)/line.product_id.list_price)
-                                porcentaje = round(porcentaje,2)
+                                porcentaje = (((line.price_unit - line.product_id.list_price) * 100) /
+                                                line.product_id.list_price)
+                                porcentaje = round(porcentaje, 2)
                                 if porcentaje >= lista.descuento:
+                                    #_logger.warning('Pase precios : ' + str("6"))
                                     line.precio_id = lista.id
-                                    
     """#TEMPORAL
     @api.onchange("price_unit")
     def validatepreciounit(self):
