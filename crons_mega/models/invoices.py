@@ -33,10 +33,10 @@ class FacturasAVencer(models.Model):
     date = fields.Date("Fecha")
     company_id = fields.Many2one(
         "res.company", "Compañia", default=lambda self: self.env.user.company_id.id)
-    invoice_expire_line = fields.One2many(
+    """invoice_expire_line = fields.One2many(
         "invoice.expire.line", "invoice_expire_id", "Facturas")
     facturas_ids_customers = fields.One2many(
-        "account.move", "expire_customer_id", "Facturas Vencidas")
+        "account.move", "expire_customer_id", "Facturas Vencidas")"""
     facturas_ids = fields.One2many("account.move", "Facturas")
     state = fields.Selection([
         ("draft", "Borrador"),
