@@ -5,6 +5,12 @@ import pytz
 import time
 import json
 
+import logging
+import math
+
+
+_logger = logging.getLogger(__name__)
+
 
 class CXC(models.Model):
     _name = "account.cierre.cxc"
@@ -63,7 +69,9 @@ class CXC(models.Model):
     
     def init_cierre_cxc(self):
         account_ids_setting = self.env["res.config.settings"].get_values_account_ids_cron_mega(self.company_id)
+        _logger.warning('Prueba 1 . account_ids_settings : '+ str(account_ids_setting))
         account_ids = self.env["account.account"].browse(account_ids_setting)
+        _logger.warning('Prueba 2 . account_ids : '+ str(account_ids))
         for item in account_ids:
             self.write({
                 'cierre_cxc_line_ids': [(0,0,{

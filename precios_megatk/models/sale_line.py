@@ -101,7 +101,7 @@ class Saleline(models.Model):
                     if self.order_id.currency_id.name == 'HNL':
                         _logger.warning('Pase precios : ' + str("4"))
                         _logger.warning('Pase precios : ' + str(line.price_unit))
-                        _logger.warning('Pase precios : ' + str(line.product_id.list_price))
+                        _logger.warning('Pase precios : ' + str("4"))
                         if line.price_unit < line.product_id.list_price:
                             _logger.warning('Pase precios : ' + str("5"))
                             line.price_unit = line.product_id.list_price
