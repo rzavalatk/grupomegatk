@@ -39,7 +39,9 @@ class Settings(models.TransientModel):
     
     def get_values_account_ids_cron_mega(self,company):
         try:
-            self.write({'company_cierre': company})
+            _logger.warning("Este es el ID: "+str(company))
+            
+            self.company_cierre["company"] = company
             obj = self.get_values()
             return obj['account_ids_cron_mega'][0][2]
         
