@@ -10,6 +10,8 @@
         'base'
     ],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/main_menu_view.xml',
         'views/stock_historial_view.xml',
     ],
