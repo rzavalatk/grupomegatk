@@ -53,7 +53,7 @@ class FacturasAVencer(models.Model):
 
     def cancel(self):
         for item in self.facturas_ids_customers:
-            if item.date_due.strftime("%Y-%m-%d") == self.date.strftime("%Y-%m-%d"):
+            if item.invoice_date_due.strftime("%Y-%m-%d") == self.date.strftime("%Y-%m-%d"):
                 item.write({
                     'warning_customer': False
                 })
@@ -79,9 +79,9 @@ class FacturasAVencer(models.Model):
             '&',
             ('company_id', '=', self.company_id.sudo().id),
             ('type', '=', 'out_invoice'),
-            ('state', '=', 'open'),
+            ('payment_state', '=', 'not_paid'),
             ('state_expired', 'in', ['none', '1er Aviso']),
-            ('date_due', 'in', [
+            ('invoice_date_due', 'in', [
                 dias_7.strftime("%Y-%m-%d"),
                 dias_14.strftime("%Y-%m-%d"),
             ])]
@@ -92,23 +92,23 @@ class FacturasAVencer(models.Model):
             '&',
             ('company_id', '=', self.company_id.sudo().id),
             ('type', '=', 'out_invoice'),
-            ('state', '=', 'open'),
+            ('payment_state', '=', 'not_paid'),
             ('state_expired', 'in', ['none', '1er Aviso', '2do Aviso']),
-            ('date_due', '<=',
+            ('invoice_date_due', '<=',
                 self.date.strftime("%Y-%m-%d")
              )
             ]
-        facturas_ids = self.env['account.invoice'].sudo().search(filtros)
-        facturas_ids_customers = self.env['account.invoice'].sudo().search(
+        facturas_ids = self.env['account.move'].sudo().search(filtros)
+        facturas_ids_customers = self.env['account.move'].sudo().search(
             filtros2)
         ids_customers = []
 
         for factura in facturas_ids:
-            if factura.date_due.strftime("%Y-%m-%d") == dias_7.strftime("%Y-%m-%d"):
+            if factura.invoice_date_due.strftime("%Y-%m-%d") == dias_7.strftime("%Y-%m-%d"):
                 factura.sudo().write({
                     'state_expired': '1er Aviso'
                 })
-            if factura.date_due.strftime("%Y-%m-%d") == dias_14.strftime("%Y-%m-%d"):
+            if factura.invoice_date_due.strftime("%Y-%m-%d") == dias_14.strftime("%Y-%m-%d"):
                 factura.sudo().write({
                     'state_expired': '2do Aviso'
                 })
@@ -118,7 +118,7 @@ class FacturasAVencer(models.Model):
         for factura in facturas_ids_customers:
             range_date = self.env['invoice.expire.line']
             if not "oc. " in factura.number:
-                if (range_date.rangeDate(factura.date_invoice,self.date) % 2) != 0:
+                if (range_date.rangeDate(factura.invoice_date_due,self.date) % 2) != 0:
                     ids_customers.append(factura.id)
          
         self.write({
@@ -140,7 +140,7 @@ class FacturasAVencer(models.Model):
         vals = []
         vals2 = []
         for factura in self.facturas_ids_customers:
-            if factura.date_due.strftime("%Y-%m-%d") == self.date.strftime("%Y-%m-%d"):
+            if factura.invoice_date_due.strftime("%Y-%m-%d") == self.date.strftime("%Y-%m-%d"):
                 factura.write({
                     'warning_customer': True
                 })
@@ -244,7 +244,7 @@ class FacturaVencerLine(models.Model):
     def _time_due(self):
         if not len(self.facturas_ids.ids) > 1:
             for invoice in self.facturas_ids:
-                self.time_due = self.rangeDate(invoice.date_due,self.invoice_expire_id.date)
+                self.time_due = self.rangeDate(invoice.invoice_date_due,self.invoice_expire_id.date)
 
     name = fields.Char("Nombre", compute=_name_)
     user_id = fields.Many2one("res.users", string="Comercial")
