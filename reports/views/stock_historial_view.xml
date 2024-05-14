@@ -9,7 +9,7 @@
                 <form string="">
                     <sheet>
                         <group>
-                            <field name="movimiento_ids" />
+                            <field name="name" />
                         </group>
                     </sheet>
                 </form>
@@ -21,7 +21,7 @@
             <field name="model">stock.history</field>
             <field name="arch" type="xml">
                 <tree string="">
-                    <field name="movimiento_ids" />
+                    <field name="name" />
                 </tree>
             </field>
         </record>
