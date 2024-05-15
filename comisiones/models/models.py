@@ -87,12 +87,17 @@ class Comisiones(models.Model):
             return False
 
     def _name_(self):
-        if len(self.users_ids) == 1:
-            user = self.env['res.users'].browse(self.users_ids[0])  # Busca el usuario por ID
-            self.name = user.name + " // " + str(self.date)
-        else:
-            self.name = self.company_id.name + " - " + self.type + " // " + str(self.date_init) + "-" + str(self.date_end)
+        try:
+            if len(self.users_ids) > 1:
+                    self.name = str(self.company_id.name + " - " + self.type + " // " + str(self.date_init) + "-" + str(self.date_end))
+            else:
+                user_id = {}
+                for item in self.users_ids:
+                    user_id = item
 
+                self.name = user_id.name + " // " + str(self.date)
+        except :
+            self.name = self.name
 
     name = fields.Char("Comisión", compute=_name_)
     company_id = fields.Many2one(
