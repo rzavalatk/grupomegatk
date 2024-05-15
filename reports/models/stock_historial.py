@@ -8,7 +8,7 @@ class StockHistory(models.TransientModel):
     
    #movimiento_ids = fields.Many2one('stock.quant', string='movimiento')
     name = fields.Char('name')
-    #quant_id = fields.Many2one('stock.quant', 'Quant')
+    quant_id = fields.One2many('stock.quant', 'Quant')
     product_id = fields.Many2one('product.product', 'Product')
     location_id = fields.Many2one('stock.location', 'Location')
     quantity = fields.Float('Quantity')
