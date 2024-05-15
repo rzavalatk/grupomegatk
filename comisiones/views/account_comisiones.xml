@@ -77,7 +77,8 @@
             <field name="arch" type="xml">
                 <search string="">
                     <field name="name" />
-                    <field name="date" />
+                    <field name="date_init" />
+                    <field name="date_end" />
                 </search>
             </field>
         </record>
