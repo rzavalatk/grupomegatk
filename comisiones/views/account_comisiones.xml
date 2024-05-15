@@ -60,7 +60,7 @@
                                         <field name="amount_tax" string="Impuesto" sum="Total" />
                                         <field name="amount_total" string="Total" sum="Total"/>
                                         <field name="amount_residual" string="Saldo" sum="Total" />
-                                        <field name="state" />
+                                        <field name="payment_state" />
 
                                     </tree>
                                 </field>
