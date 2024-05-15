@@ -87,17 +87,17 @@ class Comisiones(models.Model):
             return False
 
     def _name_(self):
-        try:
-            if len(self.users_ids) > 1:
-                    self.name = self.company_id.name + " - " + self.type + " // " + str(self.date)
-            else:
-                user_id = {}
-                for item in self.users_ids:
-                    user_id = item
+        #try:
+        if len(self.users_ids) > 1:
+                self.name = self.company_id.name + " - " + self.type + " // " + str(self.date)
+        else:
+            user_id = {}
+            for item in self.users_ids:
+                user_id = item
 
-                self.name = user_id.name + " // " + str(self.date)
-        except :
-            self.name = "Error: verifique 'Compañia', 'Tipo', 'Fecha' o 'Usuarios'"
+            self.name = user_id.name + " // " + str(self.date)
+        #except :
+            #self.name = "Error: verifique 'Compañia', 'Tipo', 'Fecha' o 'Usuarios'"
 
     name = fields.Char("Comisión", compute=_name_)
     company_id = fields.Many2one(
@@ -107,8 +107,8 @@ class Comisiones(models.Model):
         "account.comisiones.line", "comision_id", string="Lineas de comision")
     facturas_ids = fields.One2many(
         "account.move", "comision_id", string="Facturas")
-    date = fields.Date("Hasta la Fecha", default=lambda self: dt.now(
-        pytz.timezone(self.env.context.get('tz') or self.env.user.tz)).date())
+    date_init = fields.Date("Desde la Fecha")
+    date_end = fields.Date("Hasta la Fecha")
     type = fields.Selection([
         ("Soporte", "Soporte"),
         ("Vantas", "Vantas"),
@@ -144,12 +144,13 @@ class Comisiones(models.Model):
         })
 
     def init_comisiones(self):
-        invoices_ids = self.env['account.move'].search(['&', '&', '&', '&',
-            ('invoice_date', '<=', self.date),
+        invoices_ids = self.env['account.move'].search(['&', '&', '&', '&', '&',
+            ('invoice_date', '>=', self.date_init),
+            ('invoice_date', '<=', self.date_end),
             ('user_id', 'in', self.users_ids.ids),
             ('move_type', '=', 'out_invoice'),
             ('x_comision', '=', '2'),
-            ('payment_state', '=', 'partial'),
+            ('payment_state', 'in', ('in_payment','paid')),
         ])
         for item in invoices_ids:
             for line in item.invoice_line_ids:
