@@ -6,5 +6,5 @@ from odoo.exceptions import Warning
 class StockHistory(models.TransientModel):
     _name = 'stock.history'
     
-    #movimiento_ids = fields.Many2many('stock.quant', string='movimiento')
+    movimiento_ids = fields.Many2one('stock.quant', string='movimiento')
     name = fields.Char('name')

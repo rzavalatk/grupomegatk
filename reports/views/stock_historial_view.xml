@@ -11,6 +11,11 @@
                         <group>
                             <field name="name" />
                         </group>
+                        <notebook>
+                            <page name="inventario" string="Inventario">
+                                <field name="movimiento_ids" />
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
