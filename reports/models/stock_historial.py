@@ -39,7 +39,7 @@ class StockHistory(models.TransientModel):
         })
 
 
-class StockQuant(models.Model):
+"""class StockQuant(models.Model):
     _inherit = 'stock.quant'
 
     @api.model_update_fields()
@@ -50,4 +50,4 @@ class StockQuant(models.Model):
             for quant in self:
                 self.env['stock.history'].create_history(quant, quant.quantity)
 
-        return res
+        return res"""
