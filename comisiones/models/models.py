@@ -89,7 +89,7 @@ class Comisiones(models.Model):
     def _name_(self):
         #try:
         if len(self.users_ids) > 1:
-                self.name = self.company_id.name + " - " + self.type + " // " + str(self.date_init) + "-" + str(self.date_end)
+                self.name = str(self.company_id.name + " - " + self.type + " // " + str(self.date_init) + "-" + str(self.date_end))
         else:
             user_id = {}
             for item in self.users_ids:
