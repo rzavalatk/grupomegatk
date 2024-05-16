@@ -167,7 +167,7 @@ class Comisiones(models.Model):
 
     def rangeDate(self, dateInit, dateEnd):
         dates = [
-            dateInit + datetime.timedelta(n) for n in range(int((dateEnd - dateInit).days))
+            dateInit + datetime.timedelta(n) for n in range(int((int(dateEnd) - int(dateInit)).days))
         ]
         if dateEnd > dateInit:
             return len(dates)
