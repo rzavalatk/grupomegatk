@@ -204,10 +204,10 @@ class Comisiones(models.Model):
             # promedio = promedio/denominador if denominador > 0 else 0
             # print("////////////",promedio,"/////////////")
             date_payment = ''
-            for item in line.invoice_line_id.invoice_id.payment_ids:
-                date_payment = item.payment_date
+            for item in line.invoice_line_id.move_id.invoice_payments_widget:
+                date_payment = item.date
             if date_payment:
-                length = self.rangeDate(line.invoice_line_id.invoice_id.date_due,date_payment)
+                length = self.rangeDate(line.invoice_line_id.move_id.invoice_date_due,date_payment)
             else: 
                 length = -1
             line.write({
