@@ -49,8 +49,9 @@ class ComisionesLine(models.Model):
     def _pocentaje_pago(self):
         #for linea in self:
         for item in self.vencimiento:
-            if self.antiguedad_pago >= item['from'] and self.antiguedad_pago <= item['to']:
-                self.pocentaje_pago = item['pay']
+            for pay in self.antiguedad_pago:
+                if pay >= item['from'] and pay <= item['to']:
+                    pay = item['pay']
 
 
     def _comision_pagar(self):
