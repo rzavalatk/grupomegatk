@@ -97,7 +97,7 @@ class Comisiones(models.Model):
 
                 self.name = user_id.name + " // " + str(self.date)
         except :
-            self.name = str(self.date_init) + "::" + str(self.date_end)
+            self.name = str(self.company_id.name + " - " + self.type )
 
     name = fields.Char("Comisión", compute=_name_)
     company_id = fields.Many2one(
