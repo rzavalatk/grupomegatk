@@ -206,17 +206,17 @@ class Comisiones(models.Model):
             date_payment = ''
             for item in line.invoice_line_id.move_id.invoice_payments_widget:
                 _logger.warning('line : ' + item)
-                #date_payment = str(item.date)
+                date_payment = item
             if date_payment:
                 length = self.rangeDate(line.invoice_line_id.move_id.invoice_date_due,date_payment)
             else: 
                 length = -1
-            """line.write({
+            line.write({
                 'pocentaje_comision': porcentaje,
                 'posible_comision': posible_comision,
                 'forma_comision': posible_comision,
                 'antiguedad_pago': length
-            })"""
+            })
         self.write({
             'state': 'proccess'
         })
