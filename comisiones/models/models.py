@@ -181,9 +181,10 @@ class Comisiones(models.Model):
             if not line.invoice_line_id.precio_id:
                 precio = ""
             else:
-                precio = "A" if line.invoice_line_id.precio_id.name.tipo_precio == "a" else "M"
+                precio = "A" if line.invoice_line_id.precio_id.name.tipo_precio == "A" else "M"
             
             if precio == 'A':
+                _logger.warning('line.invoice_line_id.x_user_id.tipo_vendedor == 1 : ' + str(line.invoice_line_id.x_user_id.tipo_vendedor == '1'))
                 porcentaje = line.invoice_line_id.product_id.x_comisiones_a if line.invoice_line_id.x_user_id.tipo_vendedor == '1' else line.invoice_line_id.product_id.x_comisiones_a/2
             elif precio == 'M':
                 porcentaje = line.invoice_line_id.product_id.x_comisiones_m if line.invoice_line_id.x_user_id.tipo_vendedor == '1' else line.invoice_line_id.product_id.x_comisiones_m/2
