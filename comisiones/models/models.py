@@ -205,7 +205,7 @@ class Comisiones(models.Model):
             # print("////////////",promedio,"/////////////")
             date_payment = ''
             for item in line.invoice_line_id.move_id.invoice_payments_widget:
-                _logger.warning('line : ' + item.date)
+                _logger.warning('line : ' + str(item.date))
                 date_payment = str(item.date)
             if date_payment:
                 length = self.rangeDate(line.invoice_line_id.move_id.invoice_date_due,date_payment)
