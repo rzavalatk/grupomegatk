@@ -19,8 +19,8 @@ class StockReportHistory(models.Model):
 
     def _generate_report_lines(self, date, field_name):
         self.ensure_one()
-        StockQuant = self.env['stock.quantity.history']
-        quants = StockQuant.search([('inventory_datetime', '<=', date)])
+        StockQuant = self.env['stock.quant']
+        quants = StockQuant.search([('inventory_date', '=', date)])
         lines = []
         for quant in quants:
             lines.append((0, 0, {
