@@ -6,8 +6,8 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
 
     name = fields.Char(string="Report Name", required=True)
-    date_from = fields.Datetime(string="Start Date", required=True)
-    date_to = fields.Datetime(string="End Date", required=True)
+    date_from = fields.Date(string="Start Date", required=True)
+    date_to = fields.Date(string="End Date", required=True)
     report_lines_from = fields.One2many('stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
     report_lines_to = fields.One2many('stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
     report_differences = fields.One2many('stock.report.difference', 'report_id', string="Report Differences", readonly=True)
@@ -19,14 +19,14 @@ class StockReportHistory(models.Model):
 
     def _generate_report_lines(self, date, field_name):
         self.ensure_one()
-        StockQuant = self.env['stock.quant']
-        quants = StockQuant.search([('inventory_date', '=', date)])
+        StockQuant = self.env['report.stock.quantity']
+        quants = StockQuant.search([('date', '=', date)])
         lines = []
         for quant in quants:
             lines.append((0, 0, {
                 'product_id': quant.product_id.id,
-                'quantity': quant.quantity,
-                'location_id': quant.location_id.id,
+                'quantity': quant.product_qty,
+                'location_id': quant.warehouse_id.id,
             }))
         self.write({field_name: lines})
 
