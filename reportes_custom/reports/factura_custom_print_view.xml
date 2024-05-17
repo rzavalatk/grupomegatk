@@ -48,10 +48,10 @@
           <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
-                <p><strong>CAI: <span t-field="o.sequence_ids.cai"/></strong></p>
-                <p><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
-                <p><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
-                <p><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
+                <p style="margin-top: -10px"><strong>CAI: <span t-field="o.sequence_ids.cai"/></strong></p>
+                <p style="margin-top: -10px"><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
+                <p style="margin-top: -10px"><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
+                <p style="margin-top: -10px"><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
               </div> 
             </t>
           </div>
