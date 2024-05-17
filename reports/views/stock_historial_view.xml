@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        
-        <record id="stock_historial_view_form" model="ir.ui.view">
-            <field name="name">stock_historial.view.form</field>
-            <field name="model">stock.history</field>
-            <field name="arch" type="xml">
-                <form string="">
-                    <sheet>
-                        <group>
-                            <field name="name" />
-                           
-                            <field name="product_id" />
-                            <field name="location_id" />
-                            <field name="quantity" />
-                            <field name="date" />
-                            <field name="user_id" />
-                        </group>
-                        
-                    </sheet>
-                </form>
-            </field>
-        </record>
+    <record id="view_stock_report_history_form" model="ir.ui.view">
+        <field name="name">stock.report.history.form</field>
+        <field name="model">stock.report.history</field>
+        <field name="arch" type="xml">
+            <form string="Stock Report History">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <button name="generate_reports" type="object" string="Generate Reports" class="btn-primary"/>
+                    </group>
+                    <notebook>
+                        <page string="Report From">
+                            <field name="report_lines_from">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="location_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Report To">
+                            <field name="report_lines_to">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="location_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Differences">
+                            <field name="report_differences">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity_from"/>
+                                    <field name="quantity_to"/>
+                                    <field name="quantity_difference"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <record id="stock_historal_view_tree" model="ir.ui.view">
-            <field name="name">stock_historal.view.tree</field>
-            <field name="model">stock.history</field>
-            <field name="arch" type="xml">
-                <tree string="">
-                    <field name="name" />
-                </tree>
-            </field>
-        </record>
-
-        <record id="stock_historial_action" model="ir.actions.act_window">
-            <field name="name">Reportes inventario</field>
-            <field name="res_model">stock.history</field>
-            <field name="view_mode">tree,form</field>
-            
-        </record>
-
-        <menuitem
-            id="stock_history_menu"
-            name="Inventario"
-            action="stock_historial_action"
-            parent="menu_reports_inventario"
-            sequence="10"/>
-
-    </data>
+    <menuitem id="menu_stock_report_history" name="Stock Report History" parent="stock.menu_stock_inventory_control" action="stock_report_history_action"/>
+    
+    <record id="stock_report_history_action" model="ir.actions.act_window">
+        <field name="name">Stock Report History</field>
+        <field name="res_model">stock.report.history</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 </odoo>
