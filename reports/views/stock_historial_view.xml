@@ -49,11 +49,13 @@
         </field>
     </record>
 
-    <menuitem id="menu_stock_report_history" name="Stock Report History" parent="stock.menu_stock_inventory_control" action="stock_report_history_action"/>
-    
     <record id="stock_report_history_action" model="ir.actions.act_window">
         <field name="name">Stock Report History</field>
         <field name="res_model">stock.report.history</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <menuitem id="menu_stock_report_history" name="Stock Report History" parent="menu_reports_inventario" action="stock_report_history_action"/>
+    
+    
 </odoo>
