@@ -48,7 +48,7 @@
           <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
-                <p><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
+                <p><strong>CAI: <span t-field="o.sequence_ids.cai"/></strong></p>
                 <p><strong>Número Inicial:<span t-field="o.sequence_ids.vitt_min_value"/></strong></p>
                 <p><strong>Número Final: <span t-field="o.sequence_ids.vitt_max_value"/></strong></p>
                 <p><strong>Fecha Limite de Emisión: <span t-field="o.sequence_ids.expiration_date"/></strong></p>
