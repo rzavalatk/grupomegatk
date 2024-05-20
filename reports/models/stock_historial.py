@@ -1,6 +1,11 @@
 from odoo import models, fields, api
 from datetime import datetime
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
@@ -21,6 +26,7 @@ class StockReportHistory(models.Model):
         self.ensure_one()
         StockQuant = self.env['stock.quant']
         quants = StockQuant.search([('inventory_date', '<=', date)])
+        _logger.warning('Prueba comisiones : forma_comision='+ str(quants))
         lines = []
         for quant in quants:
             lines.append((0, 0, {
