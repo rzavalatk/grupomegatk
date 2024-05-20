@@ -206,7 +206,7 @@ class Comisiones(models.Model):
             date_payment = datetime
             for item in line.invoice_line_id.move_id.invoice_payments_widget:
                 _logger.warning('line : ' + item)
-                date_payment = datetime.strftime(item,"%Y/%m/%d") 
+                date_payment = item
             if date_payment:
                 length = self.rangeDate(line.invoice_line_id.move_id.invoice_date_due,date_payment)
             else: 
