@@ -27,8 +27,8 @@ class StockReportHistory(models.Model):
         #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
         StockQuant = self.env['stock.quant']
         fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
-        quants = StockQuant.search([('inventory_date', '=', fecha_objeto)])
-        _logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
+        quants = StockQuant.search([('inventory_date', '<=', date)])
+        #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         for quant in quants:
             _logger.warning('line : '+ str(quant.inventory_date))
