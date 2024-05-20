@@ -29,6 +29,7 @@ class StockReportHistory(models.Model):
         _logger.warning('Prueba comisiones : forma_comision='+ str(quants))
         lines = []
         for quant in quants:
+            _logger.warning('line : '+ str(quant.inventory_date))
             lines.append((0, 0, {
                 'product_id': quant.product_id.id,
                 'quantity': quant.quantity,
