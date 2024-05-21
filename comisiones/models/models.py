@@ -206,7 +206,7 @@ class Comisiones(models.Model):
             date_payment = ''
             n = 1
             for item in line.invoice_line_id.move_id.invoice_payments_widget:
-                _logger.warning(n + str(item))
+                _logger.warning(str(n) + str(item))
                 n = n+1
                 #date_payment = item
             if date_payment:
