@@ -207,8 +207,7 @@ class Comisiones(models.Model):
             n = 1
             for item in line.invoice_line_id.move_id.invoice_payments_widget['content']:
                 _logger.warning(str(n) + str(item['date']))
-                n = n+1
-                #date_payment = item
+                date_payment = item['date']
             if date_payment:
                 length = self.rangeDate(line.invoice_line_id.move_id.invoice_date_due,date_payment)
             else: 
