@@ -248,21 +248,21 @@ class Comisiones(models.Model):
             payment_ref_name = ""
             payment_ref_date = ""
             payment_ref_tipo = ""
-            for payment in line.invoice_line_id.invoice_id.payment_ids:
-                payment_ref_name = payment.name
-                payment_ref_date = payment.payment_date
-                payment_ref_tipo = payment.journal_id.name
+            for payment in line.invoice_line_id.move_id.invoice_payments_widget['content']:
+                payment_ref_name = payment['name']
+                payment_ref_date = payment['date']
+                payment_ref_tipo = payment['journal_name']
             
             if not line.invoice_line_id.precio_id:
                 precio = ""
             else:
-                precio = "A" if line.invoice_line_id.precio_id.name.tipo_precio == "a" else "M"
+                precio = "A" if line.invoice_line_id.precio_id.name.tipo_precio == "A" else "M"
             
             vals.append({
-                'Fecha creada': line.invoice_line_id.invoice_id.date_invoice,
-                'Fecha vencimiento': line.invoice_line_id.invoice_id.date_due,
-                'Número': line.invoice_line_id.invoice_id.name,
-                'Cliente': line.invoice_line_id.invoice_id.partner_id.name,
+                'Fecha creada': line.invoice_line_id.move_id.invoice_date,
+                'Fecha vencimiento': line.invoice_line_id.move_id.invoice_date_due,
+                'Número': line.invoice_line_id.move_id.name,
+                'Cliente': line.invoice_line_id.move_id.partner_id.name,
                 'Item': line.invoice_line_id.name,
                 'Cantidad': line.invoice_line_id.quantity,
                 'Precio unitario': line.invoice_line_id.price_unit,
