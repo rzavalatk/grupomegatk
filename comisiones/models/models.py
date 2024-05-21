@@ -89,7 +89,7 @@ class Comisiones(models.Model):
     def _name_(self):
         try:
             if len(self.users_ids) > 1:
-                    self.name = self.company_id.name + " // " + self.date_init + "::" + self.date_end
+                    self.name = self.company_id.name + " - " + self.type + " // " + self.date_init + "::" + self.date_end
             else:
                 user_id = {}
                 for item in self.users_ids:
@@ -97,7 +97,7 @@ class Comisiones(models.Model):
 
                 self.name = user_id.name + " // " + str(self.date_init) + "::" + str(self.date_end)
         except :
-            self.name = self.company_id.name + " // " + self.date_init + "::" + self.date_end
+            self.name = self.company_id.name + " - " + self.type
             #self.name = "Error: verifique 'Compañia', 'Tipo', 'Fecha' o 'Usuarios'"
 
     name = fields.Char("Comisión", compute=_name_)
