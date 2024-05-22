@@ -11,7 +11,7 @@
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_taxes']//span" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
-        <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//td[@class='text-xl-right']//strong" position="attributes">
+        <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//td[@class='text-xl-end']//strong" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
@@ -24,30 +24,6 @@
       <field name="inherit_id" ref="website_sale.cart_lines" />
       <field name="arch" type="xml">
         <xpath expr="//table[@id='cart_products']//td[@name='price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-
-
-     <!--View Cart Event (ESTO SE COMENTO POR EL ERROR DEL UPGRADE)-->
-    <record id="custom_cart_list" model="ir.ui.view">
-      <field name="name">list.cart.custom</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.ks_cart_popover_inherit_website_event_sale" />
-      <field name="arch" type="xml">
-        <xpath expr="//table[@id='cart_products']//td[@name='price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-
-
-     <!--View Products item (ESTO SE COMENTO POR EL ERROR QUE HABIA)-->
-    <record id="custom_products_grid_shop" model="ir.ui.view">
-      <field name="name">custom.products.grid.shop</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.ks_change_b_tag" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks-price']" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
@@ -76,19 +52,7 @@
       </field>
     </record>
 
-    <!--View Price Range (ESTO SE COMENTO POR EL ERROR DEL UPGRADE)-->
-    <record id="custom_price_range" model="ir.ui.view">
-      <field name="name">custom.price.range</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.products_attributes" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks_price_container ']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-        <xpath expr="//li[@class='nav-item border-top']" position="attributes">
-          <attribute name="style">display: none;</attribute>
-        </xpath>
-      </field>
-    </record>-
+    
     <!-- View Product Summary Cart 2- -->
     <record id="custom_product_summary_cart_2" model="ir.ui.view">
       <field name="name">custom.product.summary.cart.2</field>
