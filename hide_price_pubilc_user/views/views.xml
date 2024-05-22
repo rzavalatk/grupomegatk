@@ -11,9 +11,7 @@
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_taxes']//span" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
-        <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//td[@class='text-xl-end']//strong" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
+       
       </field>
     </record>
 
