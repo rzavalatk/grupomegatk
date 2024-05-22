@@ -11,7 +11,7 @@
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_taxes']//span" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
-       
+        
       </field>
     </record>
 
@@ -61,16 +61,7 @@
         </xpath>
       </field>
     </record>
-    <!-- - View poppop compare product -->
-    <record id="custom_product_compare_popover" model="ir.ui.view">
-      <field name="name">custom.product.compare.popover</field>
-      <field name="inherit_id" ref="website_sale_comparison.product_product" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks-price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
+    
     <!-- - View wishlist -->
     <record id="custom_product_wishlist" model="ir.ui.view">
       <field name="name">custom.product.wishlist</field>
