@@ -3,7 +3,7 @@
      <!--View Total--> 
     <record id="custom_cart" model="ir.ui.view">
       <field name="name">cart.custom</field>
-      <field name="inherit_id" ref="website_sale.total_view" />
+      <field name="inherit_id" ref="website_sale.total" />
       <field name="arch" type="xml">
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_untaxed']//span" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
