@@ -46,7 +46,7 @@
       <field name="name">custom.products.details.item</field>
       <field name="inherit_id" ref="website_sale.products_item" />
       <field name="arch" type="xml">
-        <xpath expr="//div[@class='o_wsale_product_sub']" position="attributes">
+        <xpath expr="//div[@itemprop='offers']" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
