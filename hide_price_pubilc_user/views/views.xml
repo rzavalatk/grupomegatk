@@ -1,6 +1,6 @@
-<!--<odoo>
+<odoo>
   <data>
-     View Total 
+     <!--View Total--> 
     <record id="custom_cart" model="ir.ui.view">
       <field name="name">cart.custom</field>
       <field name="inherit_id" ref="website_sale.total" />
@@ -11,14 +11,14 @@
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_taxes']//span" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
-        <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//td[@class='text-xl-right']//strong" position="attributes">
+       <!-- <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//td[@class='text-xl-end']//strong" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
+        </xpath> -->
       </field>
     </record>
 
 
-     View Cart Line 
+     <!--View Cart Line -->
     <record id="custom_cart_page" model="ir.ui.view">
       <field name="name">page.cart.custom</field>
       <field name="inherit_id" ref="website_sale.cart_lines" />
@@ -30,31 +30,7 @@
     </record>
 
 
-     View Cart Event (ESTO SE COMENTO POR EL ERROR DEL UPGRADE)
-    <record id="custom_cart_list" model="ir.ui.view">
-      <field name="name">list.cart.custom</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.ks_cart_popover_inherit_website_event_sale" />
-      <field name="arch" type="xml">
-        <xpath expr="//table[@id='cart_products']//td[@name='price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-
-
-     View Products item (ESTO SE COMENTO POR EL ERROR QUE HABIA)
-    <record id="custom_products_grid_shop" model="ir.ui.view">
-      <field name="name">custom.products.grid.shop</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.ks_change_b_tag" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks-price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-
-
-     View Product
+     <!--View Product-->
     <record id="custom_product_details" model="ir.ui.view">
       <field name="name">custom.products.details</field>
       <field name="inherit_id" ref="website_sale.product_price" />
@@ -64,7 +40,19 @@
         </xpath>
       </field>
     </record>
-    - View Product Summary Cart 
+
+    <!--View Product item-->
+    <record id="custom_product_details_item" model="ir.ui.view">
+      <field name="name">custom.products.details.item</field>
+      <field name="inherit_id" ref="website_sale.products_item" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@itemprop='offers']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
+    
+    <!--View Product Summary Cart--> 
     <record id="custom_product_summary_cart" model="ir.ui.view">
       <field name="name">custom.product.summary.cart</field>
       <field name="inherit_id" ref="website_sale.cart_summary" />
@@ -75,20 +63,8 @@
       </field>
     </record>
 
-    - View Price Range (ESTO SE COMENTO POR EL ERROR DEL UPGRADE)
-    <record id="custom_price_range" model="ir.ui.view">
-      <field name="name">custom.price.range</field>
-      <field name="inherit_id" ref="ks_theme_kinetik.products_attributes" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks_price_container ']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-        <xpath expr="//li[@class='nav-item border-top']" position="attributes">
-          <attribute name="style">display: none;</attribute>
-        </xpath>
-      </field>
-    </record>-
-    - View Product Summary Cart 2-
+    
+    <!-- View Product Summary Cart 2- -->
     <record id="custom_product_summary_cart_2" model="ir.ui.view">
       <field name="name">custom.product.summary.cart.2</field>
       <field name="inherit_id" ref="website_sale_comparison.product_compare" />
@@ -98,17 +74,8 @@
         </xpath>
       </field>
     </record>
-    - View poppop compare product -
-    <record id="custom_product_compare_popover" model="ir.ui.view">
-      <field name="name">custom.product.compare.popover</field>
-      <field name="inherit_id" ref="website_sale_comparison.product_product" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@class='ks-price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-    - View wishlist -
+    
+    <!-- - View wishlist -->
     <record id="custom_product_wishlist" model="ir.ui.view">
       <field name="name">custom.product.wishlist</field>
       <field name="inherit_id" ref="website_sale_wishlist.product_wishlist" />
@@ -119,4 +86,4 @@
       </field>
     </record>
   </data>
-</odoo>-->
+</odoo>

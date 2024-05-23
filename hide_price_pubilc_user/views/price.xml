@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!--<template id="custom_price_website" name="custom price" inherit_id="website_sale.product_price">
-            <xpath expr="//div[@class='product_price mt16']" position="replace">
+        <template id="custom_price_website" name="custom price" inherit_id="website_sale.products_item">
+            <xpath expr="//div[@class='product_price']" position="replace">
                 <div>
                     <h4 class="oe_price_h4 css_editable_mode_hidden">
                         <span t-if="len(product.x_comisiones) > 0" t-field="product.x_comisiones[2].precio_descuento" t-options="{&quot;widget&quot;: &quot;monetary&quot;,&quot;display_currency&quot;: product.currency_id, }"/>
@@ -10,6 +10,6 @@
                     </h4>
                 </div>
             </xpath>
-        </template> -->
+        </template>
     </data>
 </odoo>

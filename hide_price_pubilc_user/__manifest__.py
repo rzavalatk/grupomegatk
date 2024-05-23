@@ -20,7 +20,7 @@
     'depends': ['base', 'website'],
 
     'data': [
-        # 'views/price.xml',
-        #'views/views.xml',
+        #'views/price.xml',
+        'views/views.xml',
     ],
 }
