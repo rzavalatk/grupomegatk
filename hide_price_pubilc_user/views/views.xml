@@ -40,6 +40,17 @@
         </xpath>
       </field>
     </record>
+
+    <!--View Product item-->
+    <record id="custom_product_details_item" model="ir.ui.view">
+      <field name="name">custom.products.details.item</field>
+      <field name="inherit_id" ref="website_sale.products_item" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@class='o_wsale_product_sub']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
     
     <!--View Product Summary Cart--> 
     <record id="custom_product_summary_cart" model="ir.ui.view">
