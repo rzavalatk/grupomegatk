@@ -13,6 +13,9 @@ class StockReportHistory(models.Model):
     name = fields.Char(string="Report Name", required=True)
     date_from = fields.Date(string="Start Date", required=True)
     date_to = fields.Date(string="End Date", required=True)
+    company_id = fields.Many2one('res.company', string='Compañia')
+    
+    
     report_lines_from = fields.One2many('stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
     report_lines_to = fields.One2many('stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
     report_differences = fields.One2many('stock.report.difference', 'report_id', string="Report Differences", readonly=True)
@@ -25,17 +28,19 @@ class StockReportHistory(models.Model):
     def _generate_report_lines(self, date, field_name):
         #self.ensure_one()
         #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
-        StockQuant = self.env['stock.quant']
+        StockQuant = self.env['report.stock.quantity']
         #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
-        quants = StockQuant.search([('inventory_date', '<=', date)])
+        quants = StockQuant.search(['&',
+            ('inventory_date', '=', date),
+            ('company_id', '=', self.company_id.id)])
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         for quant in quants:
             _logger.warning(quant)
             lines.append((0, 0, {
                 'product_id': quant.product_id.id,
-                'quantity': quant.quantity,
-                'location_id': quant.location_id.id,
+                'quantity': quant.product_qty,
+                'location_id': quant.company_id.id,
             }))
         self.write({field_name: lines})
 
