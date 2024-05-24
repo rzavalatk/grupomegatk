@@ -10,6 +10,7 @@
                         <field name="name"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
+                        <field name="company_id" />
                     </group>
                     <group>
                         <button name="generate_reports" type="object" string="Generate Reports" class="btn-primary"/>
