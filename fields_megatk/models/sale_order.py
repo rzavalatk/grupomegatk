@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, request, _
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 #CAMPOS EN VENTAS/PRESUPUESTOS
 class Saleorder(models.Model):
     _inherit = "sale.order"
 
-    def current_user_active(self):
-        try:
-            ctx = self._context
-            obj_prestamo = self.env[ctx["active_model"]].browse(
-                ctx['active_id'])
-            return obj_prestamo.id
-        except Exception as e:
-            return 0
+    
     
     # tipo_lead = fields.Selection([('arrendamiento', 'Arrendamiento'), ('venta', 'Venta Directa'), 
     #     ('ventaarenta', 'Venta/Arrendamiento')], string='Tipo de Venta', required=True, default='arrendamiento')
@@ -45,8 +38,7 @@ class Saleorder(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
-    #current_user = fields.Char(string='Current user',
-    #                             default=current_user_active, track_visibility='onchange')
+   
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
