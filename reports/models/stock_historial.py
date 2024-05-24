@@ -31,7 +31,7 @@ class StockReportHistory(models.Model):
         StockQuant = self.env['report.stock.quantity']
         #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
         quants = StockQuant.search(['&',
-            ('inventory_date', '=', date),
+            ('date', '=', date),
             ('company_id', '=', self.company_id.id)])
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
