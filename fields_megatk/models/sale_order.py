@@ -45,8 +45,8 @@ class Saleorder(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
-    current_user = fields.Char(string='Current user',
-                                 default=current_user_active, track_visibility='onchange')
+    #current_user = fields.Char(string='Current user',
+    #                             default=current_user_active, track_visibility='onchange')
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
