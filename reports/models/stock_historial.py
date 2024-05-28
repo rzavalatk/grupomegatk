@@ -44,7 +44,7 @@ class StockReportHistory(models.Model):
         lines = []
         for quant in quants:
             #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
-            _logger.warning( str(quant.product_id) + " // " + str(quant.quantity))
+            _logger.warning( quant)
             """lines.append((0, 0, {
                 'product_id': quant.product_id.id,
                 'quantity': quant.product_qty,
