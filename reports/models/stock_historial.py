@@ -76,7 +76,7 @@ class StockReportLine(models.Model):
     report_id_to = fields.Many2one('stock.report.history', string="Report To", ondelete='cascade')
     product_id = fields.Many2one('product.product', string="Product", required=True)
     quantity = fields.Float(string="Quantity", required=True)
-    location_id = fields.Many2one('stock.location', string="Location", required=True)
+    #location_id = fields.Many2one('stock.location', string="Location", required=True)
     date_create = fields.Datetime(string="Create Date", required=True)
 
 class StockReportDifference(models.Model):

@@ -22,7 +22,7 @@
                                     <field name="product_id"/>
                                     <field name="quantity"/>
                                     <field name="date_create" />
-                                    <field name="location_id"/>
+                                    <!--<field name="location_id"/>-->
                                 </tree>
                             </field>
                         </page>
@@ -32,7 +32,7 @@
                                     <field name="product_id"/>
                                     <field name="quantity"/>
                                     <field name="date_create" />
-                                    <field name="location_id"/>
+                                    <!--<field name="location_id"/>-->
                                 </tree>
                             </field>
                         </page>
