@@ -11,8 +11,8 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
 
     name = fields.Char(string="Report Name", required=True)
-    date_from = fields.Date(string="Start Date", required=True)
-    date_to = fields.Date(string="End Date", required=True)
+    date_from = fields.Datetime(string="Start Date", required=True)
+    date_to = fields.Datetime(string="End Date", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
     
     
@@ -26,23 +26,24 @@ class StockReportHistory(models.Model):
         #self._calculate_differences()
 
     def _generate_report_lines(self, date, field_name):
-        #self.ensure_one()
+        self.ensure_one()
         #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
-        StockQuant = self.env['report.stock.quantity']
+        StockQuant = self.env['stock.valuation.layer']
         #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
         quants = StockQuant.search(['&',
-            ('date', '=', date),
+            ('create_date', '<=', date),
             ('company_id', '=', self.company_id.id)])
+        
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         for quant in quants:
-            _logger.warning(quant.date)
-            lines.append((0, 0, {
+            _logger.warning( quant)
+            """lines.append((0, 0, {
                 'product_id': quant.product_id.id,
                 'quantity': quant.product_qty,
                 'location_id': quant.company_id.id,
-            }))
-        self.write({field_name: lines})
+            }))"""
+        #self.write({field_name: lines})
 
     def _calculate_differences(self):
         self.ensure_one()
