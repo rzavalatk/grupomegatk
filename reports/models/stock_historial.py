@@ -45,12 +45,12 @@ class StockReportHistory(models.Model):
         for quant in quants:
             _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             #_logger.warning( quant)
-            """lines.append((0, 0, {
+            lines.append((0, 0, {
                 'product_id': quant.product_id.id,
-                'quantity': quant.product_qty,
-                'location_id': quant.company_id.id,
-            }))"""
-        #self.write({field_name: lines})
+                'quantity': quant.quantity,
+                'date_create': quant.create_date,
+            }))
+        self.write({field_name: lines})
 
     def _calculate_differences(self):
         self.ensure_one()
@@ -77,6 +77,7 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one('product.product', string="Product", required=True)
     quantity = fields.Float(string="Quantity", required=True)
     location_id = fields.Many2one('stock.location', string="Location", required=True)
+    date_create = fields.Datetime(string="Create Date", required=True)
 
 class StockReportDifference(models.Model):
     _name = 'stock.report.difference'
