@@ -46,9 +46,10 @@
 					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
 				 		<field name="x_series"/>
 					</xpath>
-					<xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='price_total']" position="after">
-						<field name="tax_editable" optional="show" force_save="1" />
+					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='price_total']" position="after">
+				 		<field name="tax_editable" optional="show" force_save="1"/>
 					</xpath>
+					
 		  	</field>
 		</record>
 	</data>	
