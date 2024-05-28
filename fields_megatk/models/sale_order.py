@@ -44,6 +44,7 @@ class SaleorderLine(models.Model):
     x_user_id = fields.Many2one('res.users', default=lambda self: self.env.user, string='Responsable')
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
+    tax_editable = fields.Boolean('tax e.')
 
     def _prepare_invoice_line(self, **optional_values):
         invoice_item_sequence = 0
