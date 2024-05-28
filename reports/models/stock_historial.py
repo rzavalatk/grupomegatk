@@ -30,14 +30,21 @@ class StockReportHistory(models.Model):
         #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
         StockQuant = self.env['stock.valuation.layer']
         #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
-        quants = StockQuant.search(['&',
+        """quants = StockQuant.search(['&',
             ('create_date', '<=', date),
-            ('company_id', '=', self.company_id.id)])
+            ('company_id', '=', self.company_id.id)])"""
+            
+        quants = StockQuant.read_group(
+            domain=['&', ('create_date', '<=', date), ('company_id', '=', self.company_id.id)],
+            fields=['product_id', 'quantity'],  # Aquí puedes añadir otros campos que necesites
+            groupby=['product_id']
+        )
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         for quant in quants:
-            _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
+            #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
+            _logger.warning( str(quant.product_id) + " // " + str(quant.quantity))
             """lines.append((0, 0, {
                 'product_id': quant.product_id.id,
                 'quantity': quant.product_qty,
