@@ -37,7 +37,7 @@ class StockReportHistory(models.Model):
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         for quant in quants:
-            _logger.warning( quant.create_date, quant.product_id, quant.quantity)
+            _logger.warning( quant.create_date)
             """lines.append((0, 0, {
                 'product_id': quant.product_id.id,
                 'quantity': quant.product_qty,
