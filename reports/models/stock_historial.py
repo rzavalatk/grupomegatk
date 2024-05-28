@@ -46,7 +46,7 @@ class StockReportHistory(models.Model):
             _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             #_logger.warning( quant)
             lines.append((0, 0, {
-                'product_id': quant.product_id.id,
+                'product_id': quant.product_id,
                 'quantity': quant.quantity,
                 'date_create': quant.create_date,
             }))
