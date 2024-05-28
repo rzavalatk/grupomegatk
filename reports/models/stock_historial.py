@@ -37,7 +37,7 @@ class StockReportHistory(models.Model):
         quants = StockQuant.read_group(
             domain=['&', ('create_date', '<=', date), ('company_id', '=', self.company_id.id)],
             fields=['product_id', 'quantity'],  # Aquí puedes añadir otros campos que necesites
-            groupby=['product_id']
+            groupby=['product_id.id']
         )
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
