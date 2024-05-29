@@ -40,7 +40,7 @@ class StockReportHistory(models.Model):
         for quant in quants:
             
             #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
-            _logger.warning( products_groups )
+            #_logger.warning( products_groups )
             
             if products_groups:
                 for product_product in products_groups:
@@ -65,7 +65,7 @@ class StockReportHistory(models.Model):
             lines.append((0, 0, {
                 'product_id': line_product["product_id"],
                 'quantity': line_product["quantity"],
-                'date_create': line_product["create_date"],
+                'date_create': line_product["date_create"],
             }))
             
         self.write({field_name: lines})
