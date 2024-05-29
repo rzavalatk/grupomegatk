@@ -33,23 +33,39 @@ class StockReportHistory(models.Model):
         quants = StockQuant.search(['&',
             ('create_date', '<=', date),
             ('company_id', '=', self.company_id.id)])
-            
-        """quants = StockQuant.read_group(
-            domain=['&', ('create_date', '<=', date), ('company_id', '=', self.company_id.id)],
-            fields=['product_id', 'create_date', 'quantity'],  # Aquí puedes añadir otros campos que necesites
-            groupby=['product_id']
-        )"""
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
+        products_groups = []
         for quant in quants:
+            
             _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             #_logger.warning( quant)
+            
+            if products_groups:
+                for product_product in products_groups:
+                    if product_product["product_id"] == quant.product_id.id:
+                        product_product["quantity"] = product_product["quantity"] + quant.quantity
+                    else:
+                        products_groups.append((0,0, {
+                            'product_id': quant.product_id.id,
+                            'quantity': quant.quantity,
+                            'date_create': quant.create_date, 
+                        }))
+            else:
+                products_groups.append((0,0, {
+                    'product_id': quant.product_id.id,
+                    'quantity': quant.quantity,
+                    'date_create': quant.create_date, 
+                }))
+        
+        for line_product in products_groups:   
             lines.append((0, 0, {
-                'product_id': quant.product_id.id,
-                'quantity': quant.quantity,
-                'date_create': quant.create_date,
+                'product_id': line_product["product_id"],
+                'quantity': line_product["quantity"],
+                'date_create': line_product["create_date"],
             }))
+            
         self.write({field_name: lines})
 
     def _calculate_differences(self):
