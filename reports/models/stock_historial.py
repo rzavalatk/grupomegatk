@@ -44,7 +44,7 @@ class StockReportHistory(models.Model):
             
             if products_groups:
                 for line_product in products_groups:
-                    product_id, quantity, date_create = line_product.items()
+                    product_id, quantity, date_create = dict(line_product).items()
                     if product_id == quant.product_id.id:
                         line_product["quantity"], = line_product["quantity"], + quant.quantity
                     else:
