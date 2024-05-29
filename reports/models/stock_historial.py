@@ -42,7 +42,7 @@ class StockReportHistory(models.Model):
             #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             _logger.warning( products_groups )
             
-            if products_groups:
+            """if products_groups:
                 for product_product in products_groups:
                     if product_product["product_id"] == quant.product_id.id:
                         product_product["quantity"] = product_product["quantity"] + quant.quantity
@@ -52,12 +52,12 @@ class StockReportHistory(models.Model):
                             'quantity': quant.quantity,
                             'date_create': quant.create_date, 
                         }))
-            else:
-                products_groups.append((0,0, {
-                    'product_id': quant.product_id.id,
-                    'quantity': quant.quantity,
-                    'date_create': quant.create_date, 
-                }))
+            else:"""
+            products_groups.append((0,0, {
+                'product_id': quant.product_id.id,
+                'quantity': quant.quantity,
+                'date_create': quant.create_date, 
+            }))
         
         for line_product in products_groups:   
             lines.append((0, 0, {
