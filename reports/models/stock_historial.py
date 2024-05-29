@@ -26,7 +26,7 @@ class StockReportHistory(models.Model):
         #self._calculate_differences()
 
     def _generate_report_lines(self, date, field_name):
-        self.ensure_one()
+        #self.ensure_one()
         #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
         StockQuant = self.env['stock.valuation.layer']
         #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
