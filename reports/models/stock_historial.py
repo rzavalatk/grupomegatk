@@ -46,14 +46,14 @@ class StockReportHistory(models.Model):
                 for line_product in products_groups:
                     #product_id, quantity, date_create = dict(line_product).items()
                     _logger.warning( line_product['product_id']==quant.product_id.id )
-                    """if line_product['product_id'] == quant.product_id.id:
-                        line_product[1], = line_product[1], + quant.quantity
+                    if line_product['product_id']==quant.product_id.id:
+                        line_product['quantity'], = line_product['quantity'], + quant.quantity
                     else:
                         products_groups.append((0,0, {
                             'product_id': quant.product_id.id,
                             'quantity': quant.quantity,
                             'date_create': quant.create_date, 
-                        }))"""
+                        }))
             else:
                 products_groups.append({
                     'product_id': quant.product_id.id,
