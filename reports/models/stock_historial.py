@@ -39,8 +39,8 @@ class StockReportHistory(models.Model):
         products_groups = []
         for quant in quants:
             
-            _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
-            #_logger.warning( quant)
+            #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
+            _logger.warning( products_groups )
             
             if products_groups:
                 for product_product in products_groups:
