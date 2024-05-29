@@ -22,7 +22,7 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        #self._generate_report_lines(self.date_to, 'report_lines_to')
+        self._generate_report_lines(self.date_to, 'report_lines_to')
         #self._calculate_differences()
 
     def _generate_report_lines(self, date, field_name):
@@ -46,7 +46,7 @@ class StockReportHistory(models.Model):
             _logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             #_logger.warning( quant)
             lines.append((0, 0, {
-                'product_id': quant.product_id,
+                'product_id': quant.product_id.id,
                 'quantity': quant.quantity,
                 'date_create': quant.create_date,
             }))
