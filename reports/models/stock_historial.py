@@ -44,8 +44,7 @@ class StockReportHistory(models.Model):
             
             if products_groups:
                 for line_product in products_groups:
-                    #product_id, quantity, date_create = dict(line_product).items()
-                    
+          
                     
                     try:
                         _logger.warning( "try" )
