@@ -45,7 +45,7 @@ class StockReportHistory(models.Model):
             if self.products_groups:
                 for line_product in self.products_groups:
           
-                    _logger.warning( "try" )
+                    
                     if (line_product["product_id"]==quant.product_id.id) is True:
                         line_product['quantity'] = line_product['quantity'], + quant.quantity
                     else:
@@ -62,7 +62,9 @@ class StockReportHistory(models.Model):
                     'date_create': quant.create_date, 
                 })
         
-        for line_product in self.products_groups:   
+        
+        for line_product in self.products_groups:
+            _logger.warning( line_product )   
             lines.append((0, 0, {
                 'product_id': line_product["product_id"],
                 'quantity': line_product["quantity"],
