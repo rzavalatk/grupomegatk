@@ -15,6 +15,7 @@ class StockReportHistory(models.Model):
     date_to = fields.Datetime(string="End Date", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
     
+    products_groups = []
     
     report_lines_from = fields.One2many('stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
     report_lines_to = fields.One2many('stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
@@ -36,14 +37,13 @@ class StockReportHistory(models.Model):
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
-        products_groups = []
         for quant in quants:
             
             #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
             
             
-            if products_groups:
-                for line_product in products_groups:
+            if self.products_groups:
+                for line_product in self.products_groups:
           
                     
                     try:
@@ -51,7 +51,7 @@ class StockReportHistory(models.Model):
                         if (line_product["product_id"]==quant.product_id.id) is True:
                             line_product['quantity'], = line_product['quantity'], + quant.quantity
                         else:
-                            products_groups.append({
+                            self.products_groups.append({
                                 'product_id': quant.product_id.id,
                                 'quantity': quant.quantity,
                                 'date_create': quant.create_date, 
@@ -61,20 +61,20 @@ class StockReportHistory(models.Model):
                         if line_product[0]==quant.product_id.id:
                             line_product[1], = line_product[1], + quant.quantity
                         else:
-                            products_groups.append({
+                            self.products_groups.append({
                                 'product_id': quant.product_id.id,
                                 'quantity': quant.quantity,
                                 'date_create': quant.create_date, 
                             })
                         
             else:
-                products_groups.append({
+                self.products_groups.append({
                     'product_id': quant.product_id.id,
                     'quantity': quant.quantity,
                     'date_create': quant.create_date, 
                 })
         
-        for line_product in products_groups:   
+        for line_product in self.products_groups:   
             lines.append((0, 0, {
                 'product_id': line_product["product_id"],
                 'quantity': line_product["quantity"],
