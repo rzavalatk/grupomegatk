@@ -46,9 +46,11 @@ class StockReportHistory(models.Model):
                 for line_product in self.products_groups:
           
                     
-                    if (line_product["product_id"]==quant.product_id.id) is True:
+                    if line_product["product_id"]==quant.product_id.id:
+                        _logger.warning( "Entre al IF" )
                         line_product['quantity'] = line_product['quantity'], + quant.quantity
                     else:
+                        _logger.warning( "eNTRE AL ELSE" )
                         self.products_groups.append({
                             'product_id': quant.product_id.id,
                             'quantity': quant.quantity,
@@ -56,6 +58,7 @@ class StockReportHistory(models.Model):
                         })
                     
             else:
+                _logger.warning( "Primero" )
                 self.products_groups.append({
                     'product_id': quant.product_id.id,
                     'quantity': quant.quantity,
