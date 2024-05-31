@@ -62,7 +62,7 @@ class StockReportHistory(models.Model):
                     'date_create': quant.create_date, 
                 })
         
-        
+        _logger.warning( "Hola" )
         for line_product in self.products_groups:
             _logger.warning( line_product )   
             lines.append((0, 0, {
