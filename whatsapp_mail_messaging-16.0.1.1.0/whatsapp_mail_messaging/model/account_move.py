@@ -1,24 +1,5 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
+
 from itertools import groupby
 
 from odoo import models, _
@@ -33,9 +14,9 @@ class Account(models.Model):
             'whatsapp_mail_messaging.whatsapp_message_wizard_form').id
         ctx = dict(self.env.context)
         message_template = self.company_id.whatsapp_message
-        default_message = "Hi" + " " + self.partner_id.name + ',' + '\n' + "Here is your invoice" + ' ' + self.name + ' ' + "amounting" + ' ' + str(
-            self.amount_total) + self.currency_id.symbol + ' ' + "from " + self.company_id.name + ". Please remit payment at your earliest convenience. " + '\n' + \
-                  "Please use the following communication for your payment" + ' ' + self.name
+        default_message = "Hola" + " " + self.partner_id.name + ',' + '\n' + "Esta es su factura con numero" + ' ' + self.internal_number + ' ' + "con monto" + ' ' + str(
+            self.amount_total) + self.currency_id.symbol + ' ' + "de " + self.company_id.name + ". Le rogamos remita el pago lo antes posible. " + '\n' + \
+                  "Por favor, utilice la siguiente comunicación para su pago" + ' ' + self.name
         message = message_template if message_template else default_message
         ctx.update({
             'default_message': message,
