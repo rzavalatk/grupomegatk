@@ -45,28 +45,16 @@ class StockReportHistory(models.Model):
             if self.products_groups:
                 for line_product in self.products_groups:
           
-                    
-                    
                     _logger.warning( "try" )
                     if (line_product["product_id"]==quant.product_id.id) is True:
-                        line_product['quantity'], = line_product['quantity'], + quant.quantity
+                        line_product['quantity'] = line_product['quantity'], + quant.quantity
                     else:
                         self.products_groups.append({
                             'product_id': quant.product_id.id,
                             'quantity': quant.quantity,
                             'date_create': quant.create_date, 
                         })
-                    """except:
-                        _logger.warning( "except" )
-                        if line_product[0]==quant.product_id.id:
-                            line_product[1], = line_product[1], + quant.quantity
-                        else:
-                            self.products_groups.append({
-                                'product_id': quant.product_id.id,
-                                'quantity': quant.quantity,
-                                'date_create': quant.create_date, 
-                            })
-                        """
+                    
             else:
                 self.products_groups.append({
                     'product_id': quant.product_id.id,
