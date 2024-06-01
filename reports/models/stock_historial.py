@@ -23,7 +23,7 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        self._generate_report_lines(self.date_to, 'report_lines_to')
+        #self._generate_report_lines(self.date_to, 'report_lines_to')
         #self._calculate_differences()
 
     def _generate_report_lines(self, date, field_name):
