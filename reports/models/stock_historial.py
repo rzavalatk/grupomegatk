@@ -49,7 +49,9 @@ class StockReportHistory(models.Model):
             
         products_checkgroup = self.groupby_product(products_idsg)
         
+        _logger.warning("No entre")
         if products_checkgroup:
+            _logger.warning("Entra")
             _logger.warning(products_checkgroup)            
         
         
