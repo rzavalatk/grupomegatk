@@ -51,14 +51,19 @@ class StockReportHistory(models.Model):
         
         _logger.warning(list_product)
         
+        for key, group in groupby(list_product, lambda x: x[0]):
+            quant_product = 0
+            for quantity in group:
+                quant_product = quant_product + quantity[1]
+            
+            products_idsg.append([key, quant_product])
+                
         
-         
-        products_checkgroup = self.groupby_product(products_idsg)
         
         _logger.warning("No entre")
-        if products_checkgroup:
+        if products_idsg:
             _logger.warning("Entra")
-            _logger.warning(products_checkgroup)            
+            _logger.warning(products_idsg)            
         
         
         """for line_product in self.products_groups:
