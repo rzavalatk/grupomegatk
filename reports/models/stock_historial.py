@@ -100,7 +100,7 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one('product.product', string="Product", required=True)
     quantity = fields.Float(string="Quantity", required=True)
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
-    date_create = fields.Datetime(string="Create Date", required=True)
+    #date_create = fields.Datetime(string="Create Date", required=True)
 
 class StockReportDifference(models.Model):
     _name = 'stock.report.difference'
