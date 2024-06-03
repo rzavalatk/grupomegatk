@@ -51,8 +51,8 @@ class Account(models.Model):
             compose_form_id = self.env.ref(
                 'whatsapp_mail_messaging.whatsapp_message_wizard_form').id
             ctx = dict(self.env.context)
-            message = "Hi" + " " + self.partner_id.name + ',' + '\n' + "Your Orders are" + '\n' + account_move_numbers + \
-                      ' ' + "is ready for review.Do not hesitate to contact us if you have any questions."
+            message = "Hola" + " " + self.partner_id.name + ',' + '\n' + "Sus pedidos son" + '\n' + account_move_numbers + \
+                      ' ' + "No dude en ponerse en contacto con nosotros si tiene alguna pregunta."
             ctx.update({
                 'default_message': message,
                 'default_partner_id': account_move_ids[0].partner_id.id,
@@ -70,5 +70,5 @@ class Account(models.Model):
             }
         else:
             raise UserError(_(
-                'It seems that you have selected Invoices of more than one customer.'
-                'Try select Invoices of an unique customer'))
+                'Parece que ha seleccionado Facturas de más de un cliente.'
+                'Intente seleccionar las facturas de un único cliente'))

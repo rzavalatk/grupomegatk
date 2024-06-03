@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='preview_invoice']" position="after">
                 <button type="object" class="oe_stat_button" style="background-color: #25D366;color: white;"
-                        name="action_send_whatsapp" icon="fa-whatsapp" string="Send by Whatsapp"/>
+                        name="action_send_whatsapp" icon="fa-whatsapp" string="Enviar por whatsapp"/>
             </xpath>
         </field>
     </record>
@@ -18,7 +18,7 @@
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button type="object" class="btn-primary"
-                        name="action_whatsapp_multi" icon="fa-whatsapp" string="Send by Whatsapp"/>
+                        name="action_whatsapp_multi" icon="fa-whatsapp" string="Enviar por whatsapp"/>
             </xpath>
         </field>
     </record>

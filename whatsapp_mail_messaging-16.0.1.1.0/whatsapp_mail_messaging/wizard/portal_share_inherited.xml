@@ -10,12 +10,12 @@
                 <field name="share_type" widget="radio"/>
             </xpath>
             <xpath expr="//button[@name='action_send_mail']" position="replace">
-                <button string="Send" name="action_send_mail"
+                <button string="Enviar" name="action_send_mail"
                         attrs="{'invisible': ['|',('access_warning', '!=', ''),('share_type', '=', 'whatsapp')]}"
                         type="object" class="btn-primary"/>
             </xpath>
             <xpath expr="//button[@name='action_send_mail']" position="after">
-                <button string="Send" name="action_send_whatsapp"
+                <button string="Enviar" name="action_send_whatsapp"
                         attrs="{'invisible': ['|',('access_warning', '!=', ''),('share_type', '=', 'mail')]}"
                         type="object" class="oe_highlight" icon="fa-whatsapp"/>
             </xpath>

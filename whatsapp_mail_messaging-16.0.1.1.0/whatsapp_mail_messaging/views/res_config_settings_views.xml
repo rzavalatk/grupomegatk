@@ -13,9 +13,9 @@
                         <div class="row mt16 o_settings_container" name="whatsapp_message">
                             <div class="col-12 col-lg-6 o_setting_box" id="whatsapp_message_tempalte">
                             <label for="whatsapp_message"/>
-                            <field name="whatsapp_message" placeholder="Message..." widget="text_emojis"/>
+                            <field name="whatsapp_message" placeholder="Mensaje..." widget="text_emojis"/>
                             <div class="text-muted">
-                                This WhatsApp message template is for sales orders and invoices.
+                                Esta plantilla de mensaje de WhatsApp es para pedidos de venta y facturas.
                             </div>
                             </div>
                         </div>

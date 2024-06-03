@@ -1,36 +1,17 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
+
 {
-    'name': 'Odoo Whatsapp Connector',
+    'name': 'Conector Odoo Whatsapp',
     'version': '16.0.1.1.0',
     'category': 'Extra Tools',
-    'summary': """Odoo Whatsapp Connector For Sales, Invoice, and Floating button in Website""",
-    'description': """Added options for sending Whatsapp messages and Mails in systray bar,sale order, invoices, 
-    website portal view and share the access url of documents using share option available in each records through 
+    'summary': """Odoo Whatsapp Conector Para Ventas, Factura, y el botón flotante en el sitio web""",
+    'description': """Añadido opciones para el envío de mensajes de Whatsapp y Mails en barra de sistema, orden de venta, facturas, 
+    portal web ver y compartir la url de acceso de los documentos utilizando compartir opción disponible en cada registro a través de 
     Whatsapp web..""",
-    'author': 'Cybrosys Techno Solutions',
-    'website': "https://www.cybrosys.com",
-    'company': 'Cybrosys Techno Solutions',
-    'maintainer': 'Cybrosys Techno Solutions',
+    'author': 'Ing. David Zuniga',
+    'website': "",
+    'company': 'Kreativa por MegaTK',
+    'maintainer': 'Departamento de TI Kreativa media',
     'depends': ['sale', 'account', 'website','sale_management'],
     'data': [
         'security/ir.model.access.csv',

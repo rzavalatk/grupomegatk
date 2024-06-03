@@ -1,24 +1,5 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
+
 
 import urllib.parse as urllib
 
@@ -40,17 +21,17 @@ class PortalShare(models.TransientModel):
 
     def action_send_whatsapp(self):
         """"""
-        """In this function we are redirecting to the whatsapp web
-                with required parameters"""
+        """En esta función estamos redirigiendo a la web de whatsapp
+                con los parámetros requeridos"""
         if self.note and self.mobile_number:
             if self.res_model == 'sale.order':
-                common_message = 'You have been invited to access the following Sale Order.'
+                common_message = 'Ha sido invitado a acceder a la siguiente Orden de venta.'
             elif self.res_model == 'account.move':
-                common_message = 'You have been invited to access the following Invoice.'
+                common_message = 'Se le ha invitado a acceder a la siguiente factura.'
             elif self.res_model == 'purchase.order':
-                common_message = 'You have been invited to access the following Purchase.'
+                common_message = 'Se le ha invitado a acceder a la siguiente Compra.'
             else:
-                common_message = 'You have been invited to access the following Document.'
+                common_message = 'Se le ha invitado a acceder al siguiente documento.'
             message_string = self.note + '%0a' + common_message + '%0a' + urllib.quote(self.share_link)
             related_record = self.env[self.res_model].search([('id', '=', int(self.res_id))])
             related_record.message_post(body=message_string)

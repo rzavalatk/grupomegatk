@@ -1,24 +1,4 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
 
 from itertools import groupby
 
@@ -33,8 +13,8 @@ class Sale(models.Model):
         compose_form_id = self.env.ref('whatsapp_mail_messaging.whatsapp_message_wizard_form').id
         ctx = dict(self.env.context)
         message_template = self.company_id.whatsapp_message
-        default_message = "Hi" + " " + self.partner_id.name + ',' + '\n' + "Your quotation" + ' ' + self.name + ' ' + "amounting" + ' ' + str(
-            self.amount_total) + self.currency_id.symbol + ' ' + "is ready for review.Do not hesitate to contact us if you have any questions."
+        default_message = "Hola" + " " + self.partner_id.name + ',' + '\n' + "Su cotización" + ' ' + self.name + ' ' + "con monto" + ' ' + str(
+            self.amount_total) + self.currency_id.symbol + ' ' + "No dude en ponerse en contacto con nosotros si tiene alguna pregunta."
         message = message_template if message_template else default_message
         ctx.update({
             'default_message': message,
@@ -67,8 +47,8 @@ class Sale(models.Model):
             sale_numbers = "\n".join(sale_numbers)
             compose_form_id = self.env.ref('whatsapp_mail_messaging.whatsapp_message_wizard_form').id
             ctx = dict(self.env.context)
-            message = "Hi" + " " + self.partner_id.name + ',' + '\n' + "Your Orders are" + '\n' + sale_numbers + \
-                      ' ' + '\n' + "is ready for review.Do not hesitate to contact us if you have any questions."
+            message = "Hola" + " " + self.partner_id.name + ',' + '\n' + "Sus ordenes son" + '\n' + sale_numbers + \
+                      ' ' + '\n' + "No dude en ponerse en contacto con nosotros si tiene alguna pregunta."
             ctx.update({
                 'default_message': message,
                 'default_partner_id': sale_order_ids[0].partner_id.id,
@@ -86,5 +66,5 @@ class Sale(models.Model):
             }
         else:
             raise UserError(_(
-                'It seems that you have selected orders of more than one customer.'
-                'Try select orders of an unique customer'))
+                'Parece que ha seleccionado pedidos de más de un cliente.'
+                'Pruebe a seleccionar pedidos de un único cliente'))

@@ -6,7 +6,7 @@
             <field name="model">whatsapp.message.wizard</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Whatsapp Message">
+                <form string="Mensaje de whatsapp">
                     <script>
                         $(document).ready(function(){
                         $('.modal-dialog').css({'width': '70%', 'height': '60%'});
@@ -25,9 +25,9 @@
                     </group>
 
                     <footer>
-                        <button name="send_message" string="Send" type="object" class="oe_highlight"
+                        <button name="send_message" string="Enviar" type="object" class="oe_highlight"
                                 icon="fa-whatsapp"/>
-                        <button name="cancel" string="Cancel" special="cancel"/>
+                        <button name="cancel" string="Cancelar" special="cancel"/>
                     </footer>
                     </sheet>
                 </form>
