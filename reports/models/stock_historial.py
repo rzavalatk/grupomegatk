@@ -17,7 +17,7 @@ class StockReportHistory(models.Model):
     date_to = fields.Datetime(string="End Date", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
     
-    products_groups = []
+    products_idsg = []
     
     report_lines_from = fields.One2many('stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
     report_lines_to = fields.One2many('stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
@@ -44,7 +44,7 @@ class StockReportHistory(models.Model):
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
         list_product = []
-        products_idsg = []
+        
         
         for quant in quants:
             list_product.append([quant.product_id.id, quant.quantity, quant.create_date])
@@ -56,25 +56,24 @@ class StockReportHistory(models.Model):
             for quantity in group:
                 quant_product = quant_product + quantity[1]
             
-            products_idsg.append([key, quant_product])
+            self.products_idsg.append([key, quant_product])
                 
         
         
         _logger.warning("No entre")
-        if products_idsg:
+        if self.products_idsg:
             _logger.warning("Entra")
-            _logger.warning(products_idsg)            
+            _logger.warning(self.products_idsg)            
         
         
-        """for line_product in self.products_groups:
-            _logger.warning( line_product )   
-            lines.append((0, 0, {
-                'product_id': line_product["product_id"],
-                'quantity': line_product["quantity"],
-                'date_create': line_product["date_create"],
-            }))
-            
-        self.write({field_name: lines})"""
+            for line_product in self.products_idsg: 
+                lines.append((0, 0, {
+                    'product_id': line_product[0],
+                    'quantity': line_product[1],
+                    
+                }))
+                
+            self.write({field_name: lines})
 
     def _calculate_differences(self):
         self.ensure_one()
