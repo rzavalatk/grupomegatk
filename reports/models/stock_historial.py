@@ -47,7 +47,7 @@ class StockReportHistory(models.Model):
         products_idsg = []
         
         for quant in quants:
-            list_product.append([quant.product_id.id, quant.quantity, quant.date_create])
+            list_product.append([quant.product_id.id, quant.quantity, quant.create_date])
         
         _logger.warning(list_product)
         
