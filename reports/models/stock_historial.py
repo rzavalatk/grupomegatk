@@ -49,7 +49,7 @@ class StockReportHistory(models.Model):
         for quant in quants:
             list_product.append([quant.product_id.id, quant.quantity, quant.create_date])
         
-        _logger.warning(list_product)
+        _logger.warning( "tamaño de list_product" + str(len(list_product)))
         
         for key, group in groupby(list_product, lambda x: x[0]):
             quant_product = 0
@@ -57,7 +57,8 @@ class StockReportHistory(models.Model):
                 quant_product = quant_product + quantity[1]
             
             self.products_idsg.append([key, quant_product])
-                
+        
+        _logger.warning( "tamaño de products idsg" + str(len(self.products_idsg)))        
         
         
         _logger.warning("No entre")
