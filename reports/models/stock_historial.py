@@ -29,7 +29,7 @@ class StockReportHistory(models.Model):
         #self._calculate_differences()
 
     def groupby_product(self, products_ids):
-        group_products = groupby(products_ids)
+        group_products = groupby(products_ids, lambda x: x[0])
         _logger.warning(group_products)
         return next(group_products, True) and not next(group_products, False)
     
@@ -43,11 +43,16 @@ class StockReportHistory(models.Model):
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
+        list_product = []
         products_idsg = []
         
         for quant in quants:
-            products_idsg.append(quant.product_id.id)
-            
+            list_product.append([quant.product_id.id, quant.quantity, quant.date_create])
+        
+        _logger.warning(list_product)
+        
+        
+         
         products_checkgroup = self.groupby_product(products_idsg)
         
         _logger.warning("No entre")
