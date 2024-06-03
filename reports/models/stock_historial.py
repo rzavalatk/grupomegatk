@@ -1,3 +1,5 @@
+from itertools import groupby
+
 from odoo import models, fields, api
 from datetime import datetime
 
@@ -26,47 +28,32 @@ class StockReportHistory(models.Model):
         #self._generate_report_lines(self.date_to, 'report_lines_to')
         #self._calculate_differences()
 
+    def groupby_product(self, products_ids):
+        group_products = groupby(products_ids)
+        return next(group_products, True) and not next(group_products, False)
+    
     def _generate_report_lines(self, date, field_name):
-        #self.ensure_one()
-        #_logger.warning('Prueba comisiones : forma_comision='+ str(date.strftime("%Y/%m/%d")))
+        
         StockQuant = self.env['stock.valuation.layer']
-        #fecha_objeto = datetime.strptime(date, "%Y/%m/%d")
+        
         quants = StockQuant.search(['&',
             ('create_date', '<=', date),
             ('company_id', '=', self.company_id.id)])
         
         #_logger.warning('Prueba reports : fecha='+ str(fecha_objeto))
         lines = []
-        for quant in quants:
-            
-            #_logger.warning( str(quant.create_date) + " // " + str(quant.product_id) + " // " + str(quant.quantity))
-            
-            
-            if self.products_groups:
-                for line_product in self.products_groups:
-          
-                    
-                    if line_product["product_id"]==quant.product_id.id:
-                        _logger.warning( "Entre al IF" )
-                        line_product['quantity'] = line_product['quantity'], + quant.quantity
-                    else:
-                        _logger.warning( "eNTRE AL ELSE" )
-                        self.products_groups.append({
-                            'product_id': quant.product_id.id,
-                            'quantity': quant.quantity,
-                            'date_create': quant.create_date, 
-                        })
-                    
-            else:
-                _logger.warning( "Primero" )
-                self.products_groups.append({
-                    'product_id': quant.product_id.id,
-                    'quantity': quant.quantity,
-                    'date_create': quant.create_date, 
-                })
+        products_idsg = []
         
-        _logger.warning( "Hola" )
-        for line_product in self.products_groups:
+        for quant in quants:
+            products_idsg.append(quant.product_id.id)
+            
+        products_checkgroup = self.groupby_product(products_idsg)
+        
+        if products_checkgroup:
+            _logger.warning(products_checkgroup)            
+        
+        
+        """for line_product in self.products_groups:
             _logger.warning( line_product )   
             lines.append((0, 0, {
                 'product_id': line_product["product_id"],
@@ -74,7 +61,7 @@ class StockReportHistory(models.Model):
                 'date_create': line_product["date_create"],
             }))
             
-        self.write({field_name: lines})
+        self.write({field_name: lines})"""
 
     def _calculate_differences(self):
         self.ensure_one()
@@ -112,3 +99,27 @@ class StockReportDifference(models.Model):
     quantity_from = fields.Float(string="Quantity From", required=True)
     quantity_to = fields.Float(string="Quantity To", required=True)
     quantity_difference = fields.Float(string="Quantity Difference", required=True)
+
+
+"""if self.products_groups:
+                for line_product in self.products_groups:
+          
+                    
+                    if line_product["product_id"]==quant.product_id.id:
+                        _logger.warning( "Entre al IF" )
+                        line_product['quantity'] = line_product['quantity'], + quant.quantity
+                    else:
+                        _logger.warning( "eNTRE AL ELSE" )
+                        self.products_groups.append({
+                            'product_id': quant.product_id.id,
+                            'quantity': quant.quantity,
+                            'date_create': quant.create_date, 
+                        })
+                    
+            else:
+                _logger.warning( "Primero" )
+                self.products_groups.append({
+                    'product_id': quant.product_id.id,
+                    'quantity': quant.quantity,
+                    'date_create': quant.create_date, 
+                })"""

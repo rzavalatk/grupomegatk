@@ -8,7 +8,7 @@ class WhatsappSendMessage(models.TransientModel):
 
     partner_id = fields.Many2one('res.partner', string="Cliente")
     mobile = fields.Char(required=True, string="Numero de contacto")
-    message = fields.Text(string="Mensake", required=True)
+    message = fields.Text(string="Mensaje", required=True)
     image_1920 = fields.Binary(readonly=1)
 
     @api.onchange('partner_id')
