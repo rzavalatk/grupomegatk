@@ -30,6 +30,7 @@ class StockReportHistory(models.Model):
 
     def groupby_product(self, products_ids):
         group_products = groupby(products_ids)
+        _logger.warning(group_products)
         return next(group_products, True) and not next(group_products, False)
     
     def _generate_report_lines(self, date, field_name):
