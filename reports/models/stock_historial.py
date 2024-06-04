@@ -44,43 +44,32 @@ class StockReportHistory(models.Model):
                                     ('create_date', '<=', date),
                                     ('company_id', '=', self.company_id.id)])
 
-        # lines para las lineas que se guardaran en el notebook y list_product para agregar listas con product, cantidad y fecha
-        lines = []
-        list_product = []
-        # Se recorren todos los movimientos y se agregan en listas solo los productos y las cantidades con la fecha teniendo algo asi [ [a,b,c], [a,b,c], [a,b,c] ]
+        # Diccionario para acumular las cantidades por producto
+        product_quantities = {}
+
+        # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
-            list_product.append([quant.product_id.id, quant.quantity, quant.create_date])
-        
-        _logger.warning( "List_product" + str(len(list_product)))
+            product_id = quant.product_id.id
+            quantity = quant.quantity
 
-        for product in list_product:
-            
-            if len(self.products_idsg) >= 1:
-                for line_product in self.products_idsg:
-          
-                    
-                    if line_product[0] == product[0]:
-                        _logger.warning( "Entre al IF" )
-                        line_product[1] = line_product[1], + product[1]
-                    else:
-                        
-                        _logger.warning( "eNTRE AL ELSE" )
-                        self.products_idsg.append([product[0], product[1], product[2]])        
+            if product_id in product_quantities:
+                product_quantities[product_id] += quantity
             else:
-                _logger.warning( "Primero" )
-                self.products_idsg.append([product[0], product[1], product[2]])
-        
-        _logger.warning("tamaño de products idsg" + str(len(self.products_idsg)))
+                product_quantities[product_id] = quantity
 
-        #_logger.warning("No entre")
+        # Transforma el diccionario en la lista self.products_idsg
+        self.products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
+
+        _logger.warning("tamaño de products idsg: " + str(len(self.products_idsg)))
+
         if len(self.products_idsg) >= 1:
             _logger.warning("Entra")
 
+            lines = []
             for line_product in self.products_idsg:
                 lines.append((0, 0, {
                     'product_id': line_product[0],
                     'quantity': line_product[1],
-
                 }))
 
             self.write({field_name: lines})
