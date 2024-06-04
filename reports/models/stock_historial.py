@@ -17,7 +17,7 @@ class StockReportHistory(models.Model):
     date_to = fields.Datetime(string="End Date", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
 
-    products_idsg = []
+    
 
     report_lines_from = fields.One2many(
         'stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
@@ -46,7 +46,7 @@ class StockReportHistory(models.Model):
 
         # Diccionario para acumular las cantidades por producto
         product_quantities = {}
-
+        products_idsg = []
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
             product_id = quant.product_id.id
@@ -58,15 +58,15 @@ class StockReportHistory(models.Model):
                 product_quantities[product_id] = quantity
 
         # Transforma el diccionario en la lista self.products_idsg
-        self.products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
+        products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
 
-        _logger.warning("tamaño de products idsg: " + str(len(self.products_idsg)))
+        _logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
 
-        if len(self.products_idsg) >= 1:
+        if len(products_idsg) >= 1:
             _logger.warning("Entra")
 
             lines = []
-            for line_product in self.products_idsg:
+            for line_product in products_idsg:
                 lines.append((0, 0, {
                     'product_id': line_product[0],
                     'quantity': line_product[1],
