@@ -76,13 +76,18 @@ class StockReportHistory(models.Model):
 
     def _calculate_differences(self):
         self.ensure_one()
-        lines_from = {
-            line.product_id.id: line for line in self.report_lines_from}
+        lines_from = {line.product_id.id: line for line in self.report_lines_from}
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
-            qty_from = lines_from.get(product_id, {}).get('quantity', 0)
-            qty_to = lines_to.get(product_id, {}).get('quantity', 0)
+            if product_id in lines_from:
+                qty_from = lines_from[product_id].quantity  # Access quantity directly
+            else:
+                qty_from = 0
+            if product_id in lines_to:
+                qty_to = lines_to[product_id].quantity  # Access quantity directly
+            else:
+                qty_to = 0
             differences.append((0, 0, {
                 'product_id': product_id,
                 'quantity_from': qty_from,
@@ -90,6 +95,7 @@ class StockReportHistory(models.Model):
                 'quantity_difference': qty_to - qty_from,
             }))
         self.report_differences = differences
+
 
 
 class StockReportLine(models.Model):
