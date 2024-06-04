@@ -60,10 +60,11 @@ class StockReportHistory(models.Model):
           
                     
                     if line_product[0] == product[0]:
-                        #_logger.warning( "Entre al IF" )
+                        _logger.warning( "Entre al IF" )
                         line_product[1] = line_product[1], + product[1]
                     else:
-                        #_logger.warning( "eNTRE AL ELSE" )
+                        
+                        _logger.warning( "eNTRE AL ELSE" )
                         self.products_idsg.append([product[0], product[1], product[2]])        
             else:
                 _logger.warning( "Primero" )
