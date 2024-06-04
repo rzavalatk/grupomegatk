@@ -28,8 +28,8 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        #self._generate_report_lines(self.date_to, 'report_lines_to')
-        # self._calculate_differences()
+        self._generate_report_lines(self.date_to, 'report_lines_to')
+        self._calculate_differences()
 
     def groupby_product(self, products_ids):
         group_products = groupby(products_ids, lambda x: x[0])
