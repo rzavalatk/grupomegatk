@@ -13,10 +13,10 @@
                         <field name="company_id" />
                     </group>
                     <group>
-                        <button name="generate_reports" type="object" string="Generate Reports" class="btn-primary"/>
+                        <button name="generate_reports" type="object" string="Generar reportes" class="btn-primary"/>
                     </group>
                     <notebook>
-                        <page string="Report From">
+                        <page string="Reporte Inicial">
                             <field name="report_lines_from">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
@@ -26,7 +26,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Report To">
+                        <page string="Reporte Final">
                             <field name="report_lines_to">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
@@ -36,7 +36,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Differences">
+                        <page string="Reporte de diferencias">
                             <field name="report_differences">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
