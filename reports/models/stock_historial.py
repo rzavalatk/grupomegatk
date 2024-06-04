@@ -49,16 +49,17 @@ class StockReportHistory(models.Model):
         list_product = []
         # Se recorren todos los movimientos y se agregan en listas solo los productos y las cantidades con la fecha teniendo algo asi [ [a,b,c], [a,b,c], [a,b,c] ]
         for quant in quants:
-            list_product.append(
-                [quant.product_id.id, quant.quantity, quant.create_date])
+            list_product.append([quant.product_id.id, quant.quantity, quant.create_date])
+        
+        _logger.warning( "List_product" + str(len(list_product)))
 
         for product in list_product:
             
-            if self.products_idsg:
+            if len(self.products_idsg) >= 1:
                 for line_product in self.products_idsg:
           
                     
-                    if line_product[0]==product[0]:
+                    if line_product[0] == product[0]:
                         #_logger.warning( "Entre al IF" )
                         line_product[1] = line_product[1], + product[1]
                     else:
@@ -71,9 +72,8 @@ class StockReportHistory(models.Model):
         _logger.warning("tamaño de products idsg" + str(len(self.products_idsg)))
 
         #_logger.warning("No entre")
-        if self.products_idsg:
+        if len(self.products_idsg) >= 1:
             _logger.warning("Entra")
-            _logger.warning(self.products_idsg)
 
             for line_product in self.products_idsg:
                 lines.append((0, 0, {
