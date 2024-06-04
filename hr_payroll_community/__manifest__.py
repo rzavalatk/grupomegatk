@@ -13,7 +13,6 @@
     'description': "Odoo 16 Payroll, Payroll, Odoo 15,Odoo Payroll, Odoo Community Payroll",
     'depends': ['base',
         'hr_contract',
-        'hr_holidays',
         'hr_contract_types',
     ],
     'data': [
