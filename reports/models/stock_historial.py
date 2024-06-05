@@ -13,7 +13,7 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
     
     def _name_(self):
-        self.name = self.company_id.name + " // " + self.date_from.strftime("%d/%m/%Y") + "::" + self.date_to.strftime("%d/%m/%Y")
+        self.name = str(self.company_id.name) + " // " + str(self.date_from) + "::" + str(self.date_to)
 
 
     name = fields.Char(string="Nombre de reporte", required=True, readonly=True, compute=_name_)
@@ -79,7 +79,7 @@ class StockReportHistory(models.Model):
             self.write({field_name: lines})
 
     def _calculate_differences(self):
-        self.ensure_one()
+        #self.ensure_one()
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
