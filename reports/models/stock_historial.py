@@ -105,6 +105,25 @@ class StockReportHistory(models.Model):
                             'quantity_difference': qty_to - qty_from,
                         }))
         self.report_differences = differences
+    
+    def generate_excel(self):
+        vals = []
+        for line in self.report_differences:
+            
+            vals.append({
+                'Producto': line.product_id,
+                'Cantidad Inicial': line.quantity_from,
+                'Cantidad Actual': line.quantity_to,
+                'Cantidad movida': line.quantity_difference,
+                'Compañia': self.company_id,
+                'Fecha hace 6 meses': self.date_from,
+                'Fecha actual': self.date_to,
+            })
+        return {
+            'data': vals,
+            'name': self.name
+            }
+
 
 
 
