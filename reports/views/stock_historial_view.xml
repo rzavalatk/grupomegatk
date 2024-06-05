@@ -75,7 +75,7 @@
     </record>
 
     <record id="stock_report_history_action" model="ir.actions.act_window">
-        <field name="name">Stock Report History</field>
+        <field name="name">Movimientos de inventario</field>
         <field name="res_model">stock.report.history</field>
         <field name="view_mode">tree,form</field>
     </record>
