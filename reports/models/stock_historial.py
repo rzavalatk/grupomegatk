@@ -13,7 +13,7 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
     
     def _name_(self):
-        self.name = str(self.company_id.name) + " // " + str(self.date_from) + "::" + str(self.date_to)
+        self.name = str(self.company_id.name)
 
 
     name = fields.Char(string="Nombre de reporte", required=True)
