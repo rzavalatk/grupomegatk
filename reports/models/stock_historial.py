@@ -35,10 +35,6 @@ class StockReportHistory(models.Model):
         self._generate_report_lines(self.date_to, 'report_lines_to')
         self._calculate_differences()
 
-    def groupby_product(self, products_ids):
-        group_products = groupby(products_ids, lambda x: x[0])
-        _logger.warning(group_products)
-        return next(group_products, True) and not next(group_products, False)
 
     def _generate_report_lines(self, date, field_name):
 
@@ -64,10 +60,10 @@ class StockReportHistory(models.Model):
         # Transforma el diccionario en la lista self.products_idsg
         products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
 
-        _logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
+        #_logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
 
         if len(products_idsg) >= 1:
-            _logger.warning("Entra")
+            
 
             lines = []
             for line_product in products_idsg:
@@ -94,6 +90,7 @@ class StockReportHistory(models.Model):
                 qty_to = 0
             
             if not ((qty_from == 0) and (qty_to == 0) and (qty_to - qty_from != 0)):
+                _logger.warning("Entra")
                 differences.append((0, 0, {
                     'product_id': product_id,
                     'quantity_from': qty_from,
