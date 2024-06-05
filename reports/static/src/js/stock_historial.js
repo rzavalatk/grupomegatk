@@ -31,3 +31,4 @@ odoo.define("stock_historial.assets_js", (require) => {
 
   return formController;
 });
+

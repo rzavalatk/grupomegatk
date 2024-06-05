@@ -15,8 +15,8 @@
         'views/main_menu_view.xml',
         'views/stock_historial_view.xml',
     ],
-    'qweb_template_dict': {
-        'backend': [
+    'assets': {
+        'web.assets_backend': [
             'static/src/js/stock_historial.js',
         ],
     },
