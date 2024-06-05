@@ -79,7 +79,7 @@ class StockReportHistory(models.Model):
             self.write({field_name: lines})
 
     def _calculate_differences(self):
-        #self.ensure_one()
+        self.ensure_one()
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
