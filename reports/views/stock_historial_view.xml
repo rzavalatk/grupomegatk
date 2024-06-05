@@ -61,6 +61,19 @@
         </field>
     </record>
 
+    <record id="stock_report_history_view_tree" model="ir.ui.view">
+        <field name="name">stock_report_history.view.tree</field>
+        <field name="model">stock.report.history</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="company_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
     <record id="stock_report_history_action" model="ir.actions.act_window">
         <field name="name">Stock Report History</field>
         <field name="res_model">stock.report.history</field>
