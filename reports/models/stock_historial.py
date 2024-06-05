@@ -15,6 +15,11 @@ class StockReportHistory(models.Model):
     def _name_(self):
         self.name = str(self.company_id.name)
 
+    @api.onchange('date_from','date_to')
+    def _onchange_date_from(self):
+        self.name = str(self.company_id.name) + "//" +str(self.date_from)
+    
+   
 
     name = fields.Char(string="Nombre de reporte", required=True, compute=_name_)
     date_from = fields.Datetime(string="Fecha inicio", required=True)
