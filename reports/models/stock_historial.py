@@ -12,16 +12,16 @@ class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
     
-    def _name_(self):
-        self.name = "Reporte de movimiento de inventario :: " + str(self.company_id.name)
+    """def _name_(self):
+        self.name = "Reporte de movimiento de inventario :: " + str(self.company_id.name)"""
 
-    """@api.onchange('date_from','date_to')
+    @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
-        self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)"""
+        self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)
     
    
 
-    name = fields.Char(string="Nombre de reporte", required=True, compute=_name_)
+    name = fields.Char(string="Nombre de reporte", required=True)
     date_from = fields.Datetime(string="Fecha inicio", required=True)
     date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id)
