@@ -13,11 +13,11 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
     
     def _name_(self):
-        self.name = "Reporte de " + str(self.company_id.name)
+        self.name = "Reporte de movimiento de inventario :: " + str(self.company_id.name)
 
-    @api.onchange('date_from','date_to')
+    """@api.onchange('date_from','date_to')
     def _onchange_date_from(self):
-        self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)
+        self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)"""
     
    
 

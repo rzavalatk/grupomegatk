@@ -80,7 +80,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_stock_report_history" name="Stock Report History" parent="menu_reports_inventario" action="stock_report_history_action"/>
+    <menuitem id="menu_stock_report_history" name="Movimientos de inventario" parent="menu_reports_inventario" action="stock_report_history_action"/>
     
     
 </odoo>
