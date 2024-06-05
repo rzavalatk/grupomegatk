@@ -89,14 +89,16 @@ class StockReportHistory(models.Model):
             else:
                 qty_to = 0
             
-            if not ((qty_from == 0) and (qty_to == 0) and (qty_to - qty_from != 0)):
-                _logger.warning("Entra")
-                differences.append((0, 0, {
-                    'product_id': product_id,
-                    'quantity_from': qty_from,
-                    'quantity_to': qty_to,
-                    'quantity_difference': qty_to - qty_from,
-                }))
+            if qty_from != 0:
+                if qty_to != 0:
+                    if (qty_from - qty_to) == 0:
+                        _logger.warning("Entra")
+                        differences.append((0, 0, {
+                            'product_id': product_id,
+                            'quantity_from': qty_from,
+                            'quantity_to': qty_to,
+                            'quantity_difference': qty_to - qty_from,
+                        }))
         self.report_differences = differences
 
 
