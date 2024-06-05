@@ -11,8 +11,12 @@ _logger = logging.getLogger(__name__)
 class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
+    
+    def _name_(self):
+        self.name = self.company_id.name + " // " + self.date_from.strftime("%d/%m/%Y") + "::" + self.date_to.strftime("%d/%m/%Y")
 
-    name = fields.Char(string="Nombre de reporte", required=True)
+
+    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, compute=_name_)
     date_from = fields.Datetime(string="Fecha inicio", required=True)
     date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
@@ -88,12 +92,14 @@ class StockReportHistory(models.Model):
                 qty_to = lines_to[product_id].quantity  # Access quantity directly
             else:
                 qty_to = 0
-            differences.append((0, 0, {
-                'product_id': product_id,
-                'quantity_from': qty_from,
-                'quantity_to': qty_to,
-                'quantity_difference': qty_to - qty_from,
-            }))
+            
+            if not ((qty_from == 0) and (qty_to == 0) and (qty_to - qty_from != 0)):
+                differences.append((0, 0, {
+                    'product_id': product_id,
+                    'quantity_from': qty_from,
+                    'quantity_to': qty_to,
+                    'quantity_difference': qty_to - qty_from,
+                }))
         self.report_differences = differences
 
 
@@ -103,12 +109,12 @@ class StockReportLine(models.Model):
     _description = 'Stock Report Line'
 
     report_id_from = fields.Many2one(
-        'stock.report.history', string="Report From", ondelete='cascade')
+        'stock.report.history', string="Reporte Inicial", ondelete='cascade')
     report_id_to = fields.Many2one(
-        'stock.report.history', string="Report To", ondelete='cascade')
+        'stock.report.history', string="Reporte Final", ondelete='cascade')
     product_id = fields.Many2one(
-        'product.product', string="Product", required=True)
-    quantity = fields.Float(string="Quantity", required=True)
+        'product.product', string="Producto", required=True)
+    quantity = fields.Float(string="Cantidad al dia", required=True)
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
 
@@ -118,34 +124,11 @@ class StockReportDifference(models.Model):
     _description = 'Stock Report Difference'
 
     report_id = fields.Many2one(
-        'stock.report.history', string="Report", ondelete='cascade')
+        'stock.report.history', string="Reporte", ondelete='cascade')
     product_id = fields.Many2one(
-        'product.product', string="Product", required=True)
-    quantity_from = fields.Float(string="Quantity From", required=True)
-    quantity_to = fields.Float(string="Quantity To", required=True)
+        'product.product', string="Producto", required=True)
+    quantity_from = fields.Float(string="Cantidad Inicial", required=True)
+    quantity_to = fields.Float(string="Cantidad Final", required=True)
     quantity_difference = fields.Float(
-        string="Quantity Difference", required=True)
+        string="Movimiento", required=True)
 
-
-"""if self.products_groups:
-                for line_product in self.products_groups:
-          
-                    
-                    if line_product["product_id"]==quant.product_id.id:
-                        _logger.warning( "Entre al IF" )
-                        line_product['quantity'] = line_product['quantity'], + quant.quantity
-                    else:
-                        _logger.warning( "eNTRE AL ELSE" )
-                        self.products_groups.append({
-                            'product_id': quant.product_id.id,
-                            'quantity': quant.quantity,
-                            'date_create': quant.create_date, 
-                        })
-                    
-            else:
-                _logger.warning( "Primero" )
-                self.products_groups.append({
-                    'product_id': quant.product_id.id,
-                    'quantity': quant.quantity,
-                    'date_create': quant.create_date, 
-                })"""
