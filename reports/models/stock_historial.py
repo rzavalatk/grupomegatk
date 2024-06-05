@@ -16,7 +16,7 @@ class StockReportHistory(models.Model):
         self.name = str(self.company_id.name) + " // " + str(self.date_from) + "::" + str(self.date_to)
 
 
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=True)
+    name = fields.Char(string="Nombre de reporte", required=True)
     date_from = fields.Datetime(string="Fecha inicio", required=True)
     date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia')
