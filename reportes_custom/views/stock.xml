@@ -16,6 +16,7 @@
                         context="{'active_id': id, 'active_ids': [id,]}" 
                         attrs="{'invisible': ['|', ('passed','=','Si'), ('state', 'not in', ('waiting','confirmed','assigned','done'))]}" 
                         class="oe_highlight" />
+                        
                         <button 
                         name="%(reportes_custom.stock_picking_custom)d" 
                         string="Orden de entrega"
@@ -23,6 +24,7 @@
                         type="action"
                         attrs="{'invisible': [('passed','=','No')]}" 
                         class="oe_highlight" />
+                        
                         <button 
                         name="%(reportes_custom.stock_picking_custom_pos)d" 
                         string="Orden de entrega POS"
@@ -38,6 +40,7 @@
                         type="action"
                         attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}" 
                         class="oe_highlight" />
+                        
                         <button 
                         name="%(reportes_custom.stock_picking_custom_pos)d" 
                         string="Orden de entrega POS"

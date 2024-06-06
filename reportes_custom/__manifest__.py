@@ -29,6 +29,7 @@
         'reports/cotizacion_custom_print_view_printex.xml',
         'reports/purchase_order_custom_print_view.xml',
         'reports/stock_picking_custom_print_view.xml',
+        'reports/stock_package_order_custom_print_view.xml',
         'reports/stock_picking_custom_print_view_pos.xml',
         #'reports/cotizacion_custom_proforma_view.xml',
         'wizard/wizard_sign.xml',
