@@ -25,7 +25,7 @@
                         attrs="{'invisible': [('passed','=','No')]}" 
                         class="oe_highlight" />
                         <button 
-                        name="%(reportes_custom.package_order_custom)d" 
+                        name="%(reportes_custom.stock_package_order_custom)d" 
                         string="Lista de empaque"
                         icon="fa-download"
                         type="action"
@@ -47,7 +47,7 @@
                         attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}" 
                         class="oe_highlight" />
                         <button 
-                        name="%(reportes_custom.package_order_custom)d" 
+                        name="%(reportes_custom.stock_package_order_custom)d" 
                         string="Lista de empaque"
                         icon="fa-download"
                         type="action"
