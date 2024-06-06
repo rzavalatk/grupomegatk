@@ -10,7 +10,7 @@
       </t>
     </template>
 
-    <template id="external_layout_stock_picking_custom">
+    <template id="external_layout_package_order_custom">
       <div class="header">
         <div class="row" style="margin-top: -160px;">
           <div class="col-xs-3 mb4">
@@ -134,7 +134,7 @@
   <!-- B01/IN/00162 para test -->
 
   <template id="stock_picking_odoo_custom">
-    <t t-call="reportes_custom.external_layout_stock_picking_custom">
+    <t t-call="reportes_custom.external_layout_package_order_custom">
       <div class="page">
         <div class="oe_structure"/>
         <table class="table table-sm o_main_table mt48">          <!--t-if="not o.move_line_ids"-->
