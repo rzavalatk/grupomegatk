@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="stock_report_history_export_action" model="ir.actions.server">
+        <field name="name">Exportar a Excel</field>
+        <field name="model_id" ref="stock.report.history"/>
+        <field name="binding_model_id" ref="stock.report.history"/>
+        <field name="state">code</field>
+        <field name="code">action = model.exportar_excel()</field>
+    </record>
+
     <record id="view_stock_report_history_form" model="ir.ui.view">
         <field name="name">stock.report.history.form</field>
         <field name="model">stock.report.history</field>
@@ -7,7 +16,7 @@
             <form string="Stock Report History">
                 <header>
                         <button name="generate_reports" type="object" string="Generar reportes" class="btn-primary"/>
-                        <button string="Generar Excel" name="exportar_excel" type="action" class="oe_highlight" context="{'active_id': id}"/>
+                        <button string="Generar Excel" name="stock_report_history_export_action" type="action" class="oe_highlight" context="{'active_id': id}"/>
                         <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
                 </header>
@@ -74,13 +83,7 @@
         </field>
     </record>
 
-    <record id="stock_report_history_export_action" model="ir.actions.server">
-        <field name="name">Exportar a Excel</field>
-        <field name="model_id" ref="stock.report.history"/>
-        <field name="binding_model_id" ref="stock.report.history"/>
-        <field name="state">code</field>
-        <field name="code">action = model.exportar_excel()</field>
-    </record>
+    
 
 
     <record id="stock_report_history_action" model="ir.actions.act_window">
