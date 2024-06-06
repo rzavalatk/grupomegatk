@@ -3,6 +3,10 @@ from itertools import groupby
 from odoo import models, fields, api
 from datetime import datetime
 
+import base64
+import io
+from odoo.tools.misc import xlsxwriter
+
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -105,6 +109,45 @@ class StockReportHistory(models.Model):
                             'quantity_difference': qty_to - qty_from,
                         }))
         self.report_differences = differences
+    
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet = workbook.add_worksheet()
+
+        # Escribir los encabezados
+        worksheet.write(0, 0, 'Producto')
+        worksheet.write(0, 1, 'Inventario Inicial')
+        worksheet.write(0, 2, 'Inventario Final')
+        worksheet.write(0, 3, 'Movimiento de producto')
+
+        # Escribir los datos
+        row = 1
+        for record in self.report_differences:
+            worksheet.write(row, 0, record.product_id)
+            worksheet.write(row, 1, record.quantity_from)
+            worksheet.write(row, 2, record.quantity_to)
+            worksheet.write(row, 2, record.quantity_difference)
+            row += 1
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'stock_report_history_export.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'stock_report_history_export.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
     
     def generate_excel(self):
         vals = []
