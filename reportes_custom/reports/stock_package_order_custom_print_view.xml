@@ -18,11 +18,11 @@
           </div>
 
         </div>
-        <div style="float: right; margin-top: -150px; ">
+        <div style="float: right; margin-top: -130px; ">
           <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">Packing list</p>
         </div>
 
-        <div style="float: right;margin-top: -30px;">
+        <div style="float: right;margin-top: -10px;">
           <div style="float: right;">
             <table style="text-align: center; width:330px">
               <tr>
@@ -40,6 +40,19 @@
             </table>
           </div>
         </div>
+
+        <div style="float: right;margin-top: -10px;">
+          <div style="float: right;">
+            <table style="table-layout: fixed; width:30%">
+            <tr>
+              <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid;border-top: 1px solid; border-right: 1px solid; vertical-aliword-wrap: break-word; gn:middle; font-family:'Arial'; font-size:14pt; height:25px;">
+                &amp;nbsp; <b>Entregar a:</b>
+              </td>
+            </tr>
+          </table>
+          </div>
+        </div>
+        
 
         <div>
           <div style="position: absolute; top: 8px; margin-top: 30px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
