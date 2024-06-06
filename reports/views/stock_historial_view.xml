@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="stock_report_history_export_action" model="ir.actions.server">
-        <field name="name">Exportar a Excel</field>
-        <field name="model_id" ref="stock.report.history"/>
-        <field name="binding_model_id" ref="stock.report.history"/>
-        <field name="state">code</field>
-        <field name="code">action = model.exportar_excel()</field>
-    </record>
+    
 
     <record id="view_stock_report_history_form" model="ir.ui.view">
         <field name="name">stock.report.history.form</field>
