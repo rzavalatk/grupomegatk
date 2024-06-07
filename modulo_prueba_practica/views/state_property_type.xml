@@ -5,7 +5,7 @@
         <field name="model">type.property</field>
         <field name="arch" type="xml">
             <tree string="Channel">
-            <field name="nombre"/>
+            <field name="name"/>
             </tree>
         </field>
     </record>
