@@ -4,7 +4,7 @@ class Cuota(models.Model):
     _name = 'cuota'
     _description = 'Modelo de Cuota'
 
-    prestamo_id = fields.Many2one('prestamo', string='Préstamo', required=True)
+    prestamo_id = fields.One2many('prestamo', string='Préstamo', required=True)
     monto = fields.Float(string='Monto de la Cuota', required=True)
     fecha_vencimiento = fields.Date(string='Fecha de Vencimiento', required=True)
     pagado = fields.Boolean(string='Pagado', default=False)
