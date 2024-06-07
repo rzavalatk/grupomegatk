@@ -16,7 +16,7 @@
                         <field name="tipo_prestamo"/>
                         <field name="estado"/>
                     </group>
-                    <group string="Cuotas">
+                    <!--<group string="Cuotas">
                         <field name="cuota_ids">
                             <tree string="Cuotas">
                                 <field name="monto"/>
@@ -32,7 +32,7 @@
                                 <field name="valor"/>
                             </tree>
                         </field>
-                    </group>
+                    </group>-->
                     <footer>
                         <button name="exportar_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
                     </footer>
