@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_prestamos" name="Préstamos" sequence="10" web_icon="reports,static/description/money.png"/>
+        <menuitem id="menu_prestamos" name="Préstamos" sequence="10" web_icon="gestión_de_prestamos_y_finanzas,static/description/money.png"/>
         <menuitem id="menu_prestamos_prestamos" name="Prestamos y Finanzas" parent="menu_prestamos" sequence="20"/>
         
     </data>
