@@ -57,12 +57,14 @@
             </tree>
         </field>
     </record>
-
-    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
-
+    
     <record id="action_prestamos" model="ir.actions.act_window">
         <field name="name">Préstamos</field>
         <field name="res_model">prestamo</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
+
+    
 </odoo>
