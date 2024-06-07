@@ -64,7 +64,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
+    <menuitem id="menu_prestamos_prestamos_action" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
 
     
 </odoo>
