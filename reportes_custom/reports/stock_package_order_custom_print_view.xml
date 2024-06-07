@@ -136,7 +136,7 @@
   </template>
   <!-- B01/IN/00162 para test -->
 
-  <template id="stock_picking_odoo_custom">
+  <template id="stock_package_order_custom">
     <t t-call="reportes_custom.external_layout_package_order_custom">
       <div class="page">
         <div class="oe_structure"/>

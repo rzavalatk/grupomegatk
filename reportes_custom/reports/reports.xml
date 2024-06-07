@@ -41,7 +41,7 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
-		<!--<report
+		<report
 			id="sale_order_cotizacion_custom_proforma"
 			model="sale.order"
 			string="Facturas PROFORMA"
@@ -49,7 +49,7 @@
 			file="reportes_custom.cotizacion_custom_proforma_view"
 			report_type="qweb-pdf"
 			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>-->
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 		
 		<report
 			id="sale_order_cotizacion_custom_printex"
@@ -88,16 +88,6 @@
 			string="Orden de entrega"
 			name="reportes_custom.stock_picking_custom_print_view"
 			file="reportes_custom.stock_picking_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
-
-		<report
-			id="package_order_custom"
-			model="stock.picking"
-			string="Lista de empaque"
-			name="reportes_custom.stock_package_order_custom_print_view"
-			file="reportes_custom.stock_package_order_custom_print_view"
 			report_type="qweb-pdf"
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>

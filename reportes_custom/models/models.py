@@ -18,9 +18,6 @@ class StockPicking(models.Model):
                 'reportes_custom.stock_picking_custom_pos').render_qweb_pdf(ids)
             pdf = self.env.ref(
                 'reportes_custom.stock_picking_custom').render_qweb_pdf(ids)
-            pdf_package = self.env.ref(
-                'reportes_custom.package_order_custom').render_qweb_pdf(ids)
-            
             self.env['ir.attachment'].create({
                 'name': f"Orden de entraga pos - {self.name}",
                 'type': 'binary',
@@ -35,15 +32,6 @@ class StockPicking(models.Model):
                 'type': 'binary',
                 'datas': base64.encodestring(pdf[0]),
                 'datas_fname': f'Orden de entrega -  {self.name}.pdf',
-                'res_model': 'stock.picking',
-                'res_id': id,
-                'mimetype': 'application/x-pdf'
-            })
-            self.env['ir.attachment'].create({
-                'name': f"List package -  {self.name}",
-                'type': 'binary',
-                'datas': base64.encodestring(pdf_package[0]),
-                'datas_fname': f'List package -  {self.name}.pdf',
                 'res_model': 'stock.picking',
                 'res_id': id,
                 'mimetype': 'application/x-pdf'
