@@ -1,0 +1,69 @@
+<odoo>
+    <record id="view_prestamo_form" model="ir.ui.view">
+        <field name="name">prestamo.form</field>
+        <field name="model">prestamo</field>
+        <field name="arch" type="xml">
+            <form string="Préstamo">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="cliente_id"/>
+                        <field name="monto"/>
+                        <field name="tasa_interes"/>
+                        <field name="duracion"/>
+                        <field name="fecha_inicio"/>
+                        <field name="frecuencia_pago"/>
+                        <field name="tipo_prestamo"/>
+                        <field name="estado"/>
+                    </group>
+                    <group string="Cuotas">
+                        <field name="cuota_ids">
+                            <tree string="Cuotas">
+                                <field name="monto"/>
+                                <field name="fecha_vencimiento"/>
+                                <field name="pagado"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Garantías">
+                        <field name="garantia_ids">
+                            <tree string="Garantías">
+                                <field name="descripcion"/>
+                                <field name="valor"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="exportar_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_prestamo_tree" model="ir.ui.view">
+        <field name="name">prestamo.tree</field>
+        <field name="model">prestamo</field>
+        <field name="arch" type="xml">
+            <tree string="Préstamos">
+                <field name="name"/>
+                <field name="cliente_id"/>
+                <field name="monto"/>
+                <field name="tasa_interes"/>
+                <field name="duracion"/>
+                <field name="fecha_inicio"/>
+                <field name="frecuencia_pago"/>
+                <field name="estado"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_prestamos" name="Préstamos" sequence="10"/>
+    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos" action="action_prestamos"/>
+
+    <record id="action_prestamos" model="ir.actions.act_window">
+        <field name="name">Préstamos</field>
+        <field name="res_model">prestamo</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
