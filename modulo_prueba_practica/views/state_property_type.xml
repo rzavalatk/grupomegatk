@@ -11,15 +11,10 @@
     </record>
     
     <menuitem
-        id="model_propiedades_menu"
-        name="Tipo de propiedades"
-        sequence="2"> <menuitem />
-
-    <menuitem
         id="model_name_menu"
         name="Settigs"
         action="action_type_property"
-        parent="model_propiedades_menu"
+        parent="test_menu_root"
         sequence="1"/>
            
 </odoo>
