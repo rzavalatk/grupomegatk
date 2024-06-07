@@ -58,7 +58,7 @@ class StockReportHistory(models.Model):
         products_idsg = []
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
-            product_id = quant.product_id.id
+            product_id = quant.product_id
             quantity = quant.quantity
 
             if product_id in product_quantities:
@@ -85,8 +85,8 @@ class StockReportHistory(models.Model):
 
     def _calculate_differences(self):
         self.ensure_one()
-        lines_from = self.report_lines_from
-        lines_to = self.report_lines_to
+        lines_from = {line.product_id.id: line for line in self.report_lines_from}
+        lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
             if product_id in lines_from:
