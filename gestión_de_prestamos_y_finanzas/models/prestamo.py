@@ -33,7 +33,7 @@ class Prestamo(models.Model):
         ('pagado', 'Pagado')
     ], string='Estado', default='borrador', required=True)
     cuota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas')
-    contrato_id = fields.Many2one('contrato', string='Contrato')
+    #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
     @api.model
