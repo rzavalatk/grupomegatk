@@ -14,7 +14,7 @@
         id="model_name_menu"
         name="Settigs"
         action="action_type_property"
-        parent="test_menu_root"
+        parent="modulo_prueba_practica.view_delivery_carrier_search"
         sequence="1"/>
            
 </odoo>
