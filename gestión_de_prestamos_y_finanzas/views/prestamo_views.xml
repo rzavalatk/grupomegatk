@@ -58,8 +58,7 @@
         </field>
     </record>
 
-    <menuitem id="menu_prestamos" name="Préstamos" sequence="10"/>
-    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos" action="action_prestamos"/>
+    <menuitem id="menu_prestamos_prestamos" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
 
     <record id="action_prestamos" model="ir.actions.act_window">
         <field name="name">Préstamos</field>
