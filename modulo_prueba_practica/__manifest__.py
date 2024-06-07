@@ -10,6 +10,7 @@
         'security/ir.model.access.csv',
         'views/state_property_views.xml',
         'views/state_menus.xml',
+        'views/state_property_type.xml'
     ],
     'css': ['static/src/css/crm.css'],
     'installable': True,

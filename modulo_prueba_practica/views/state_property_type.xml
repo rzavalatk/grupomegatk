@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_type_property" model="ir.ui.view">
+        <field name="name">Tipo de propiedad</field>
+        <field name="model">type.property</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+            <field name="nombre"/>
+            </tree>
+        </field>
+    </record>
+    
+    <menuitem
+        id="model_propiedades_menu"
+        name="Tipo de propiedades"
+        sequence="2"> <menuitem />
+
+    <menuitem
+        id="model_name_menu"
+        name="Settigs"
+        action="action_type_property"
+        parent="model_propiedades_menu"
+        sequence="1"/>
+           
+</odoo>
