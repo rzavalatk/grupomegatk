@@ -124,10 +124,10 @@ class StockReportHistory(models.Model):
         # Escribir los datos
         row = 1
         for record in self.report_differences:
-            worksheet.write(row, 0, record.product_id.id)
+            worksheet.write(row, 0, record.product_id.product_tmpl_id.name)
             worksheet.write(row, 1, record.quantity_from)
             worksheet.write(row, 2, record.quantity_to)
-            worksheet.write(row, 2, record.quantity_difference)
+            worksheet.write(row, 3, record.quantity_difference)
             row += 1
 
         workbook.close()
