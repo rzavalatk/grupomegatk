@@ -1,10 +1,10 @@
-from odoo import models, fields, api
+from odoo import models, fields
 
 class Cuota(models.Model):
     _name = 'cuota'
     _description = 'Modelo de Cuota'
 
-    prestamo_id = fields.One2many('prestamo', string='Préstamo', required=True)
+    prestamo_id = fields.Many2one('prestamo', string='Préstamo', required=True, ondelete='cascade')
     monto = fields.Float(string='Monto de la Cuota', required=True)
     fecha_vencimiento = fields.Date(string='Fecha de Vencimiento', required=True)
     pagado = fields.Boolean(string='Pagado', default=False)
@@ -22,4 +22,3 @@ class Cuota(models.Model):
                 })]
             })
             cuota.write({'pagado': True})
-
