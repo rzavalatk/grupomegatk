@@ -58,7 +58,7 @@ class StockReportHistory(models.Model):
         products_idsg = []
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
-            product_id = quant.product_id
+            product_id = quant.product_id.id
             quantity = quant.quantity
 
             if product_id in product_quantities:
