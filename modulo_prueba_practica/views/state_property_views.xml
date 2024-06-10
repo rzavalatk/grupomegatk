@@ -112,4 +112,15 @@
                 action="estado_propiedad_action"
                 parent="anuncio_propiedades"
                 sequence="10"/>
+            <menuitem
+                id="menu_configuraciones"
+                name="Configuraciones"
+                parent="estado_propiedad"
+                sequence="20"/>
+            <menuitem
+                id="submenu_1_configuraciones"
+                name="Tipo de propiedades"
+                action="tipo_estado_action"
+                parent="menu_configuraciones"
+                sequence="30"/>
 </odoo>
