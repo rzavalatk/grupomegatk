@@ -184,7 +184,7 @@
 		<menuitem 
 			id="menu_principal_gastos" 
 			name="Gastos" 
-			web_icon="gastos_megatk,static/description/icon.png"/>
+			web_icon="gastos_megatk,static/description/GASTO.png"/>
 
 		<menuitem  
 			id="submenu_gastos" 
