@@ -9,12 +9,6 @@
             </tree>
         </field>
     </record>
-    
-    <menuitem
-        id="model_name_menu"
-        name="Settigs"
-        action="action_type_property"
-        parent="view_delivery_carrier_search"
-        sequence="1"/>
+
            
 </odoo>

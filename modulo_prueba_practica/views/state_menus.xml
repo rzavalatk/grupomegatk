@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--
     <menuitem id="test_menu_root" name="Propiedades">
         <menuitem id="test_first_level_menu" name="Anuncios">
             <menuitem id="test_model_menu_action" action="test_model_action"/>
         </menuitem>
-    </menuitem>  
+    </menuitem>  -->
+   
+  <menuitem id="menu_principal" name="Propiedades">
+    <menuitem id="submenu_1" name="Anuncios" action="action_test_model_arbol" model="test.model"/>
+    <menuitem id="submenu_2" name="Submenú 2" action="action_type_property" model = "type.property"/>
+  </menuitem>
+
+
 </odoo>
 
