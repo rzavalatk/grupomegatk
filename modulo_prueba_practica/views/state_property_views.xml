@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="estado_propiedad" model="ir.actions.act_window">
+    <record id="estado_propiedad_action" model="ir.actions.act_window">
         <field name="name">Propiedades</field>
         <field name="res_model">test.model</field>
         <field name="view_mode">tree,form</field>
@@ -109,7 +109,7 @@
             <menuitem
                 id="submenu_1_propiedades"
                 name="Propiedades"
-                action="action_test_model_arbol"
+                action="estado_propiedad_action"
                 parent="anuncio_propiedades"
                 sequence="10"/>
 </odoo>
