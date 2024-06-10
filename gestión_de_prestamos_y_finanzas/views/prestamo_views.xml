@@ -5,20 +5,8 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
-						<!--<button name="back_draft" type="object" string="Volver a borrador" states="cancelado" class="oe_highlight"/>
-						<button name="validar" type="object" string="Validar" states="draft" class="oe_highlight" confirm='¿Desea validar el prestamo?'/>
-						<button name="crear_factura" type="object" string="Crear factura" confirm='¿Desea crear la factura?' states="desembolso" class="oe_highlight"/>
-						<button name="%(action_wizard_prestamos_wizard_cheque)d" type="action" string="Desembolso" attrs="{'invisible': ['|',('state','!=','validado'),('tipo_prestamo','=','financiamiento')]}" class="oe_highlight" />
-						<button name="%(action_wizard_prestamos_interes_wizard_personal)d" type="action" string="Facturar interes" attrs="{'invisible': ['|',('state','!=','proceso'),('tipo_prestamo','!=','personal')]}" class="oe_highlight" />
-						<button name="cancelar" type="object" string="Cancelar" states="validado,desembolso,proceso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
-						<button name="fechainicio" type="object" string="Fecha" class="oe_highlight"/>
-						<button name="ending" type="object" string="Finalizar" states="proceso" class="oe_highlight"/>
-						<button name="re_validate" type="object" string="Re-validar" states="validado,desembolso,proceso"/>
-						<button name="%(aporte_capital_action_wizard)d" type="action" string="Aportar capital" states="proceso" context="{'active_id': id}" />
-						<button string="Revisar prestamo 1" name="review_prestamo" groups="planilla_y_metas.admin_functions" type="object"/>
-						<button string="Revisar prestamo 2" name="review_prestamo_2" groups="planilla_y_metas.admin_functions" type="object"/>-->
-						<field name="state" widget="statusbar" nolabel="1"/>
-					</header>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+				</header>
                 <sheet>
                 
                     <group>
