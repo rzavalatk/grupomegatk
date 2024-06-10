@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_reports" name="Reportes" sequence="10" web_icon="reports,static/description/reporte.png"/>
+        <menuitem id="menu_reports" name="Reportes" sequence="10" web_icon="reports,static/description/REPORTES.png"/>
         <menuitem id="menu_reports_inventario" name="Inventario" parent="menu_reports" sequence="20"/>
         <menuitem id="menu_reports_contabilidad" name="Contabilidad" parent="menu_reports" sequence="30"/>
         <menuitem id="menu_reports_website" name="Sitios web" parent="menu_reports" sequence="40"/>
