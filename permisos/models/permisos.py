@@ -178,14 +178,14 @@ class HrPermisos(models.Model):
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
      
-			user_parent_id = self.env['res.users'].browse(self.sudo().employe_id.parent_id.user_id)
+			
 
 			activity = self.env['mail.activity'].sudo().create({
 				'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
 				'note': _('Solicitación de permiso'),
 				'res_id': self.id,
 				'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
-				'user_id': user_parent_id.id,
+				'user_id': self.employe_id.parent_id.user_id.id,
 			})
 			activity._onchange_activity_type_id()
 			self.write({'state': 'pendiente'})
