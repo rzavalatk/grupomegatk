@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- 
-    <record id="test_model_action" model="ir.actions.act_window">
+    <record id="estado_propiedad" model="ir.actions.act_window">
         <field name="name">Propiedades</field>
         <field name="res_model">test.model</field>
         <field name="view_mode">tree,form</field>
-    </record> -->
+    </record>
     <record id="action_test_model_arbol" model="ir.ui.view">
         <field name="name">Propiedades</field>
         <field name="model">test.model</field>
@@ -98,4 +97,19 @@
                 </search>
             </field>
         </record>
+            <menuitem
+                id="estado_propiedad"
+                name="Crear Propiedades"
+                />
+            <menuitem
+                id="anuncio_propiedades"
+                name="Anuncios"
+                parent="estado_propiedad"
+                sequence="1"/>
+            <menuitem
+                id="submenu_1_propiedades"
+                name="Propiedades"
+                action="action_test_model_arbol"
+                parent="anuncio_propiedades"
+                sequence="10"/>
 </odoo>
