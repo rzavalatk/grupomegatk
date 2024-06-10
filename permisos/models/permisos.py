@@ -185,7 +185,7 @@ class HrPermisos(models.Model):
 				'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
 				'user_id': self.employe_id.parent_id.user_id.id,
 			})
-			activity._onchange_activity_type_id()
+			#activity._onchange_activity_type_id()
 			self.write({'state': 'pendiente'})
 			template = self.env.ref('permisos.email_template_permiso_solicitud')
 			email_values = {'email_to': self.employe_id.work_email}
