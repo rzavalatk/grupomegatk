@@ -57,7 +57,7 @@
 							</tr>
 							<tr>
 								<td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
-									<span t-field="o.create_date" t-field-options="{&quot;format&quot;: &quot;yyyy-MM-dd&quot;}" />
+									<span t-field="o.date_order" t-field-options="{&quot;format&quot;: &quot;yyyy-MM-dd&quot;}" />
 								</td>
 						<!--
 									<td t-if="o.number &lt; '00030000'" style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
