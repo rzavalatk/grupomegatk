@@ -3,10 +3,10 @@
         <t t-call="web.external_layout">
             <div class="page">
                 <h2>Contrato de Préstamo</h2>
-                <p>Cliente: <t t-esc="doc.cliente_id.name"/></p>
+                <p>Cliente: <t t-esc="doc.partner_id.name"/></p>
                 <p>Monto: <t t-esc="doc.monto"/></p>
-                <p>Tasa de Interés: <t t-esc="doc.tasa_interes"/>%</p>
-                <p>Duración: <t t-esc="doc.duracion"/> meses</p>
+                <p>Tasa de Interés: <t t-esc="doc.interest_rate"/>%</p>
+                <p>Duración: <t t-esc="doc.duration"/> meses</p>
                 <p>Fecha de Inicio: <t t-esc="doc.fecha_inicio"/></p>
                 <p>Frecuencia de Pago: <t t-esc="dict(doc._fields['frecuencia_pago'].selection).get(doc.frecuencia_pago)"/></p>
             </div>

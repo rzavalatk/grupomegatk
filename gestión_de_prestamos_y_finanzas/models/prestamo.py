@@ -1,17 +1,27 @@
 from odoo import models, fields, api
 import math
 
+import base64
+import io
+from odoo.tools.misc import xlsxwriter
+
 class Prestamo(models.Model):
     _name = 'prestamo'
     _description = 'Modelo de Préstamo'
 
+    #Datos del prestamo
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
-    cliente_id = fields.Many2one('res.partner', string='Cliente', required=True)
-    monto = fields.Float(string='Monto del Préstamo', required=True)
-    tasa_interes = fields.Float(string='Tasa de Interés', required=True)
-    duracion = fields.Integer(string='Duración (meses)', required=True)
-    fecha_inicio = fields.Date(string='Fecha de Inicio', required=True)
-    frecuencia_pago = fields.Selection([
+    partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
+    amount_borrowed = fields.Float(string='Monto del Préstamo', required=True)
+    remaining_capital = fields.Float('Capital restante')
+    interest_rate = fields.Float(string='Tasa de Interés', required=True)
+    
+    #Datos de fechas
+    duration = fields.Integer(string='Duración (meses)', required=True)
+    date_init = fields.Date(string='Fecha de Inicio', required=True)
+    date_end = fields.Date(string='Fecha final', required=True)
+    
+    payment_frequency = fields.Selection([
         ('diario', 'Diario'),
         ('semanal', 'Semanal'),
         ('quincenal', 'Quincenal'),
@@ -20,19 +30,20 @@ class Prestamo(models.Model):
         ('trimestral', 'Trimestral'),
         ('anual', 'Anual')
     ], string='Frecuencia de Pago', default='mensual', required=True)
-    tipo_prestamo = fields.Selection([
-        ('nuevo', 'Nuevo'),
-        ('comprado', 'Comprado'),
+    loan_type = fields.Selection([
+        ('personal', 'Personal'),
         ('refinanciado', 'Refinanciado'),
-        ('adquirido', 'Adquirido')
+        ('financiamiento', 'Financiamiento')
     ], string='Tipo de Préstamo', required=True)
-    estado = fields.Selection([
+    state = fields.Selection([
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
         ('pagado', 'Pagado')
     ], string='Estado', default='borrador', required=True)
-    cuota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas')
+    
+    
+    quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas')
     #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
@@ -41,45 +52,45 @@ class Prestamo(models.Model):
         if vals.get('name', 'Nuevo') == 'Nuevo':
             vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
         result = super(Prestamo, self).create(vals)
-        result.calcular_cuotas()
+        result.calculate_quotas()
         return result
 
-    def calcular_cuotas(self):
+    def calculate_quotas(self):
         for prestamo in self:
-            cantidad_cuotas = prestamo.duracion
-            monto_cuota = self.calcular_monto_cuota(prestamo.monto, prestamo.tasa_interes, prestamo.duracion)
-            fecha_cuota = prestamo.fecha_inicio
+            cantidad_cuotas = prestamo.duration #Cantidad de meses = cantidad de cuotas para pagos mensuales
+            monto_cuota = self.calculate_amount_quotas(prestamo.amount_borrowed, prestamo.interest_rate, prestamo.duration)
+            fecha_cuota = prestamo.date_init
             for i in range(1, cantidad_cuotas + 1):
                 self.env['cuota'].create({
                     'prestamo_id': prestamo.id,
-                    'monto': monto_cuota,
-                    'fecha_vencimiento': fecha_cuota,
+                    'amount': monto_cuota,
+                    'date_due': fecha_cuota,
                 })
-                fecha_cuota = self.sumar_periodo(fecha_cuota, prestamo.frecuencia_pago)
+                fecha_cuota = self.add_period(fecha_cuota, prestamo.payment_frequency)
 
-    def calcular_monto_cuota(self, monto, tasa, duracion):
+    def calculate_amount_quotas(self, amount, tasa, duration):
         tasa_mensual = (tasa / 100) / 12
-        return monto * tasa_mensual / (1 - (1 + tasa_mensual) ** -duracion)
+        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -duration)
 
-    def sumar_periodo(self, fecha, frecuencia):
-        if frecuencia == 'diario':
-            return fields.Date.add(fecha, days=1)
-        elif frecuencia == 'semanal':
-            return fields.Date.add(fecha, weeks=1)
-        elif frecuencia == 'quincenal':
-            return fields.Date.add(fecha, days=15)
-        elif frecuencia == 'mensual':
-            return fields.Date.add(fecha, months=1)
-        elif frecuencia == 'bimestral':
-            return fields.Date.add(fecha, months=2)
-        elif frecuencia == 'trimestral':
-            return fields.Date.add(fecha, months=3)
-        elif frecuencia == 'anual':
-            return fields.Date.add(fecha, years=1)
+    def add_period(self, date, frequency):
+        if frequency == 'diario':
+            return fields.Date.add(date, days=1)
+        elif frequency == 'semanal':
+            return fields.Date.add(date, weeks=1)
+        elif frequency == 'quincenal':
+            return fields.Date.add(date, days=15)
+        elif frequency == 'mensual':
+            return fields.Date.add(date, months=1)
+        elif frequency == 'bimestral':
+            return fields.Date.add(date, months=2)
+        elif frequency == 'trimestral':
+            return fields.Date.add(date, months=3)
+        elif frequency == 'anual':
+            return fields.Date.add(date, years=1)
 
-    def exportar_excel(self):
+    def export_excel(self):
         # Crear un archivo en memoria
-        output = BytesIO()
+        output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         worksheet = workbook.add_worksheet()
 
@@ -96,13 +107,13 @@ class Prestamo(models.Model):
         row = 1
         for prestamo in self:
             worksheet.write(row, 0, prestamo.name)
-            worksheet.write(row, 1, prestamo.cliente_id.name)
-            worksheet.write(row, 2, prestamo.monto)
-            worksheet.write(row, 3, prestamo.tasa_interes)
-            worksheet.write(row, 4, prestamo.duracion)
-            worksheet.write(row, 5, str(prestamo.fecha_inicio))
-            worksheet.write(row, 6, dict(prestamo._fields['frecuencia_pago'].selection).get(prestamo.frecuencia_pago))
-            worksheet.write(row, 7, dict(prestamo._fields['tipo_prestamo'].selection).get(prestamo.tipo_prestamo))
+            worksheet.write(row, 1, prestamo.partner_id.name)
+            worksheet.write(row, 2, prestamo.amount_borrowed)
+            worksheet.write(row, 3, prestamo.interest_rate)
+            worksheet.write(row, 4, prestamo.duration)
+            worksheet.write(row, 5, str(prestamo.date_init))
+            worksheet.write(row, 6, dict(prestamo._fields['payment_frequency'].selection).get(prestamo.payment_frequency))
+            worksheet.write(row, 7, dict(prestamo._fields['loan_type'].selection).get(prestamo.loan_type))
             row += 1
 
         workbook.close()
