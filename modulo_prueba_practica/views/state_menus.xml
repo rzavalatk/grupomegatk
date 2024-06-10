@@ -8,8 +8,8 @@
     </menuitem>  -->
    
   <menuitem id="menu_principal" name="Propiedades">
-    <menuitem id="submenu_1" name="Anuncios" action="action_test_model_arbol" model="test.model"/>
-    <menuitem id="submenu_2" name="Submenú 2" action="action_type_property" model = "type.property"/>
+    <menuitem id="submenu_1" name="Anuncios" action="action_test_model_arbol" model="test.model" view_mode = "tree"/>
+    <menuitem id="submenu_2" name="Submenú 2" action="action_type_property" model = "type.property" view_mode = "tree"/>
   </menuitem>
 
 
