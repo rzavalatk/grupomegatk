@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_report_history,access_stock_report_history,model_stock_report_history,,1,1,1,1
+access_stock_report_line,access_stock_report_line,model_stock_report_line,,1,1,1,1
+access_stock_report_difference,access_stock_report_difference,model_stock_report_difference,,1,1,1,1

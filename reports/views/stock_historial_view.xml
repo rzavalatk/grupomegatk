@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+
+    <record id="view_stock_report_history_form" model="ir.ui.view">
+        <field name="name">stock.report.history.form</field>
+        <field name="model">stock.report.history</field>
+        <field name="arch" type="xml">
+            <form string="Stock Report History">
+                <header>
+                        <button name="generate_reports" type="object" string="Generar reportes" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
+                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                </header>
+                <sheet>
+                    <group>
+                        
+                        <field name="name"/>
+                        
+                             
+                        <field name="company_id" />
+                    
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        
+                    </group>
+                    
+                    <notebook>
+                        <page string="Reporte Inicial">
+                            <field name="report_lines_from">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <!--<field name="date_create" />-->
+                                    <!--<field name="location_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte Final">
+                            <field name="report_lines_to">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <!--<field name="date_create" />-->
+                                    <!--<field name="location_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte de diferencias">
+                            <field name="report_differences">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity_from"/>
+                                    <field name="quantity_to"/>
+                                    <field name="quantity_difference"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_report_history_view_tree" model="ir.ui.view">
+        <field name="name">stock_report_history.view.tree</field>
+        <field name="model">stock.report.history</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="company_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    
+
+
+    <record id="stock_report_history_action" model="ir.actions.act_window">
+        <field name="name">Movimientos de inventario</field>
+        <field name="res_model">stock.report.history</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_stock_report_history" name="Movimientos de inventario" parent="menu_reports_inventario" action="stock_report_history_action"/>
+    
+    
+</odoo>
