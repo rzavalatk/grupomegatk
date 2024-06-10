@@ -14,8 +14,8 @@
                             <field name="name" attrs="{'readonly': True}"/>
                         </h1>
 					</group>
-                    <group name='prestamo' string='Datos del prestamo'>
-                        <group name="cliente">
+                    <group name='prestamo' >
+                        <group name="cliente" string='Datos del prestamo'>
                             <field name="partner_id"/>
                             <field name="loan_type"/>
                             <field name="amount_borrowed"/>
