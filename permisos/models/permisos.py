@@ -183,7 +183,7 @@ class HrPermisos(models.Model):
 			activity = self.env['mail.activity'].sudo().create({
 				'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
 				'note': _('Solicitación de permiso'),
-				'res_id': self.id,
+				'res_id': self.employe_id.parent_id.user_id.id,
 				'res_model_id': self.env.ref('permisos.model_hr_employee_permisos').id,
 				'user_id': self.employe_id.parent_id.user_id.id,
 			})
