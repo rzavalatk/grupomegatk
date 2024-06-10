@@ -18,7 +18,7 @@ class Cuota(models.Model):
                 'invoice_line_ids': [(0, 0, {
                     'name': 'Cuota de Préstamo',
                     'quantity': 1,
-                    'price_unit': cuota.monto,
+                    'price_unit': cuota.amount,
                 })]
             })
             cuota.write({'pagado': True})
