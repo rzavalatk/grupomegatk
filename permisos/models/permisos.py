@@ -5,6 +5,10 @@ from odoo.exceptions import Warning
 import datetime
 import pytz
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class HrPermisos(models.Model):
 	_name = 'hr.employee.permisos'
 	_order = "id desc"
@@ -178,7 +182,7 @@ class HrPermisos(models.Model):
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
      
-			
+			_logger.warning(self.employe_id.parent_id.user_id.id)
 
 			activity = self.env['mail.activity'].sudo().create({
 				'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
