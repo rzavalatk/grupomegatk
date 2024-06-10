@@ -295,7 +295,7 @@ class AuditlogRule(models.Model):
                     )
             if self.env.user in users_to_exclude:
                 return new_records
-            rule_model.sudo().create_logs(
+            rule_model.sudo().create(
                 self.env.uid,
                 self._name,
                 new_records.ids,
