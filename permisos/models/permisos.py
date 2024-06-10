@@ -178,7 +178,7 @@ class HrPermisos(models.Model):
 					new_name = self.sequence_id.with_context().next_by_id()
 					self.write({'name': new_name})
      
-			user_parent_id = self.env['res.user'].search(['login', '=', self.sudo().employe_id.parent_id.user_id.login])
+			user_parent_id = self.env['res.users'].search(['login', '=', self.sudo().employe_id.parent_id.user_id.login])
 
 			activity = self.env['mail.activity'].sudo().create({
 				'activity_type_id': self.env.ref('permisos.mail_activity_permiso').id,
