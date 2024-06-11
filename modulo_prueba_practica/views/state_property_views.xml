@@ -100,12 +100,13 @@
             <menuitem
                 id="estado_propiedad"
                 name="Crear Propiedades"
+                sequence = "10"
                 />
             <menuitem
                 id="anuncio_propiedades"
                 name="Anuncios"
                 parent="estado_propiedad"
-                sequence="10"/>
+                sequence="20"/>
             <menuitem
                 id="submenu_1_propiedades"
                 name="Propiedades"

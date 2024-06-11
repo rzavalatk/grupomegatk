@@ -19,7 +19,7 @@
                 id="menu_configuraciones"
                 name="Configuraciones"
                 parent="estado_propiedad"
-                sequence="20"/>
+                sequence="30"/>
             <menuitem
                 id="submenu_1_configuraciones"
                 name="Tipo de propiedades"
