@@ -14,13 +14,22 @@ class Prestamo(models.Model):
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
     amount_borrowed = fields.Float(string='Monto del Préstamo', required=True)
     remaining_capital = fields.Float('Capital restante')
-    interest_rate = fields.Float(string='Tasa de Interés', required=True)
+    
     
     #Datos de fechas
     duration = fields.Integer(string='Duración (meses)', required=True)
     date_init = fields.Date(string='Fecha de Inicio', required=True)
     date_end = fields.Date(string='Fecha final', required=True)
     
+    #Datos de contabilidad
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',
+                                      required=True, readonly=True, states={'draft': [('readonly', False)]},)
+    meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={
+                                'draft': [('readonly', False)]})
+    interest_rate = fields.Float(string='Tasa de Interés', required=True)
+    currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,
+                                  readonly=True, states={'draft': [('readonly', False)]},)
+       
     payment_frequency = fields.Selection([
         ('diario', 'Diario'),
         ('semanal', 'Semanal'),

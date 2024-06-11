@@ -20,7 +20,6 @@
                             <field name="loan_type"/>
                             <field name="amount_borrowed"/>
                             <field name="remaining_capital" />
-                            <field name="interest_rate"/>
                         </group>
 
                         <group name="fechas" string="Tiempo de prestamo">
@@ -30,6 +29,12 @@
                             <field name="payment_frequency"/>
                         </group>
                         
+                    </group>
+                    <group name="contabilidad" string="Datos contables">
+                        <field name="payment_term_id" />
+                        <field name="meses_cred" />
+                        <field name="interest_rate"/>
+                        <field name="currency_id" />
                     </group>
                     <!--<group string="Cuotas">
                         <field name="cuota_ids">
