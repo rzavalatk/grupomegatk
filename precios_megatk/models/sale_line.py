@@ -37,7 +37,7 @@ class Saleline(models.Model):
     #codigo original, quitar comentarios al arreglar el problema con el dominio en precio_id
     @api.onchange("product_id")
     def validatepreciocosto(self):
-        if self.env.user.email not in ('leon.89.25@gmail.com','lvilleda@printexhn.net','lmoran@megatk.com','kromero@megatk.com','eduron@megatk.com','jmoran@meditekhn.com','msauceda@megatk.com','nfuentes@meditekhn.com'):
+        if self.env.user.email not in ('dzuniga@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com', 'yalvarado@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'):
             for line in self:
                 if line.product_id:
                     preciolista = self.env['lista.precios.producto']
@@ -82,7 +82,7 @@ class Saleline(models.Model):
         
         #_logger.warning('Pase Precios : ' + str("1"))
         allowed_emails = [
-            'rzavala@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com',
+            'dzuniga@megatk.com', 'lmoran@megatk.com', 'dvasquez@megatk.com',
             'yalvarado@megatk.com', 'jmoran@meditekhn.com', 'msauceda@megatk.com', 'nfuentes@meditekhn.com'
         ]
         
