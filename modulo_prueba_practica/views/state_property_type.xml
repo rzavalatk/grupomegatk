@@ -18,7 +18,7 @@
             <menuitem
                 id="menu_configuraciones"
                 name="Configuraciones"
-                parent="estado_propiedad"
+                parent="anuncio_propiedades"
                 sequence="20"/>
             <menuitem
                 id="submenu_1_configuraciones"
