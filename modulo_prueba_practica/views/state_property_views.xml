@@ -105,7 +105,7 @@
                 id="anuncio_propiedades"
                 name="Anuncios"
                 parent="estado_propiedad"
-                sequence="1"/>
+                sequence="10"/>
             <menuitem
                 id="submenu_1_propiedades"
                 name="Propiedades"
