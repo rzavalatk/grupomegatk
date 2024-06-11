@@ -23,7 +23,7 @@
             <menuitem
                 id="submenu_1_configuraciones"
                 name="Tipo de propiedades"
-                action="tipo_estado_action"
+                action="action_type_property"
                 parent="menu_configuraciones"
                 sequence="10"/>
            
