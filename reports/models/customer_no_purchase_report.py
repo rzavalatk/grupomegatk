@@ -8,6 +8,13 @@ class CustomerNoPurchaseReport(models.TransientModel):
     _name = 'customer.no.purchase.report'
     _description = 'Customer No Purchase Report'
 
+    @api.onchange('date_from','date_to','company_id')
+    def _onchange_date_from(self):
+        self.name = "Reporte de Clientes inactivos de " + str(self.company_id.name) + " del " +str(self.date_from) + " al " + str(self.date_to)
+    
+   
+
+    name = fields.Char(string="Nombre de reporte", required=True)
     partner_id = fields.Many2one('res.partner', string='Customer')
     company_id = fields.Many2one('res.company', string='Company')
     date_from = fields.Date(string='Start Date')
