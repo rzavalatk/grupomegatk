@@ -42,8 +42,11 @@
                             <group>
                                 <field name="selling_price"/>
                             </group>
+                            <group>
+                                <field name="type_property_id"/>
+                            </group>
                             <notebook>
-                                <page string="Description">
+                                <page string="Descripcion">
                                     <group>
                                     <field name="description"/>
                                     </group>
@@ -74,6 +77,14 @@
                                     <group>
                                     <field name="state"/>
                                     </group>
+                                </page>
+                                <page string="Otra informacion">
+                                <group>
+                                    <field name="saleman"/>
+                                </group>
+                                <group>
+                                    <field name="buyer"/>
+                                </group>        
                                 </page>
                             </notebook>
                         </group>
