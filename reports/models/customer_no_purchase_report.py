@@ -21,11 +21,11 @@ class CustomerNoPurchaseReport(models.TransientModel):
     date_to = fields.Date(string='End Date')
 
     @api.model
-    def get_customers_no_purchase(self, company_id, date_from, date_to):
+    def get_customers_no_purchase(self):
         domain = [
-            ('company_id', '=', company_id),
-            ('invoice_date', '>=', date_from),
-            ('invoice_date', '<=', date_to),
+            ('company_id', '=', self.company_id),
+            ('invoice_date', '>=', self.date_from),
+            ('invoice_date', '<=', self.date_to),
             ('state', 'in', ['posted']),
             ('move_type', 'in', ['out_refund']),
         ]
@@ -35,7 +35,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         _logger.warning(customer_ids)
 
         domain_customers = [
-            ('company_id', '=', company_id),
+            ('company_id', '=', self.company_id),
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
@@ -43,7 +43,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         report_lines = []
         for customer in customers:
             customer_domain = [
-            ('company_id', '=', company_id),
+            ('company_id', '=', self.company_id),
             ('partner_id', '=', customer.id),
             ('payment_state', 'in', ['paid']),
             ('state', 'in', ['posted']),
@@ -52,7 +52,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
             
             customer_orders = self.env['account.move'].search(customer_domain)
             
-            _logger.warning(customer_ids)
+            _logger.warning(customer_orders)
         
             report_lines.append((0, 0, {
                 'partner_id': customer.id,
