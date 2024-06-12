@@ -80,7 +80,7 @@
                                 </page>
                                 <page string="Otra informacion">
                                 <group>
-                                    <field name="saleman"/>
+                                    <field name="salesman"/>
                                 </group>
                                 <group>
                                     <field name="buyer"/>
