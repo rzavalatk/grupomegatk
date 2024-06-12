@@ -42,9 +42,7 @@
                             <group>
                                 <field name="selling_price"/>
                             </group>
-                            <group>
-                                <field name="type_property"/>
-                            </group>
+                            
                             <notebook>
                                 <page string="Descripcion">
                                     <group>
