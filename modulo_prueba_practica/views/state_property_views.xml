@@ -43,7 +43,7 @@
                                 <field name="selling_price"/>
                             </group>
                             <group>
-                                <field name="type_property_id"/>
+                                <field name="type_property"/>
                             </group>
                             <notebook>
                                 <page string="Descripcion">
@@ -79,12 +79,12 @@
                                     </group>
                                 </page>
                                 <page string="Otra informacion">
-                                <group>
-                                    <field name="salesman"/>
-                                </group>
-                                <group>
-                                    <field name="buyer"/>
-                                </group>        
+                                    <group>
+                                        <field name="salesman"/>
+                                    </group>
+                                    <group>
+                                        <field name="buyer"/>
+                                    </group>        
                                 </page>
                             </notebook>
                         </group>
