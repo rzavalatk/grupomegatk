@@ -23,7 +23,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
     
     def get_customers_no_purchase(self):
         domain = [
-            ('company_id', '=', self.company_id),
+            ('company_id', '=', self.company_id.id),
             ('invoice_date', '>=', self.date_from),
             ('invoice_date', '<=', self.date_to),
             ('state', 'in', ['posted']),
@@ -35,7 +35,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         _logger.warning(customer_ids)
 
         domain_customers = [
-            ('company_id', '=', self.company_id),
+            ('company_id', '=', self.company_id.id),
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
@@ -43,7 +43,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         report_lines = []
         for customer in customers:
             customer_domain = [
-            ('company_id', '=', self.company_id),
+            ('company_id', '=', self.company_id.id),
             ('partner_id', '=', customer.id),
             ('payment_state', 'in', ['paid']),
             ('state', 'in', ['posted']),
