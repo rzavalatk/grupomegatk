@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+
+    <record id="view_customer_no_purchase_report_form" model="ir.ui.view">
+        <field name="name">customer.no.purchase.report.form</field>
+        <field name="model">customer.no.purchase.report</field>
+        <field name="arch" type="xml">
+            <form string="Reporte de clientes sin compras en determinado tiempo">
+                <header>
+                        <button name="get_customers_no_purchase" type="object" string="Generar reporte" class="btn-primary"/>
+                        <!--<button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>-->
+                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />     
+                        <field name="company_id" />
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        
+                    </group>
+                    
+                    <!--<notebook>
+                        <page string="Reporte Inicial">
+                            <field name="report_lines_from">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                   
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte Final">
+                            <field name="report_lines_to">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte de diferencias">
+                            <field name="report_differences">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity_from"/>
+                                    <field name="quantity_to"/>
+                                    <field name="quantity_difference"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>-->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_customer_no_purchase_report_tree" model="ir.ui.view">
+        <field name="name">view.customer.no.purchase.report.tree</field>
+        <field name="model">customer.no.purchase.report</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="company_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    
+
+
+    <record id="customer_no_purchase_report_action" model="ir.actions.act_window">
+        <field name="name">Reporte clientes sin actividad</field>
+        <field name="res_model">customer.no.purchase.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_customer_no_purchase_report" name="Clientes sin actividad en compras" parent="menu_reports_contabilidad" action="customer_no_purchase_report_action"/>
+    
+    
+</odoo>

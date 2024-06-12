@@ -9,26 +9,55 @@ class Prestamo(models.Model):
     _name = 'prestamo'
     _description = 'Modelo de Préstamo'
 
-    #Datos del prestamo
+    #Datos generales
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
-    amount_borrowed = fields.Float(string='Monto del Préstamo', required=True)
-    remaining_capital = fields.Float('Capital restante')
+    remaining_capital = fields.Float('Capital restante',  copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'draft': [('readonly', False)]}, copy=False)
+    sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
+    #Datos del prestamo
+    amount_borrowed = fields.Float(string='Monto del Préstamo', store=True, readonly=True, states={'draft': [('readonly', False)]},)
+    
+    #Datos del financiamiento
+    amount_cxc = fields.Float(string='Monto a financiar', compute='_onchange_precio', store=True, readonly=True, states={'draft': [('readonly', False)]},)
+    
+    #Datos de financiamiento / producto
+    supplier_id = fields.Many2one('res.partner', string='Proveedor', required=True)
+    equipment = fields.Many2one('product.product', string='Equipo financiado', readonly=True, states={'draft': [('readonly', False)]},)
+    price_a = fields.Float(string='Precio A', readonly=True, states={'draft': [('readonly', False)]},)
+    price_m = fields.Float(string='Precio M', readonly=True, states={'draft': [('readonly', False)]},)
+    prima = fields.Float(string='Prima', readonly=True, states={'draft': [('readonly', False)]},)
+    utility = fields.Float(string='Utilidad', compute='_onchange_precioa_preciom', readonly=True, states={'draft': [('readonly', False)]},)
+    amount_cxp = fields.Float(string='Monto a pagar', compute='_onchange_preciom_prima', readonly=True, states={'draft': [('readonly', False)]},)
     
     #Datos de fechas
     duration = fields.Integer(string='Duración (meses)', required=True)
     date_init = fields.Date(string='Fecha de Inicio', required=True)
     date_end = fields.Date(string='Fecha final', required=True)
     
+    #Datos de cuentas bancarias
+    company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'draft': [('readonly', False)]},)
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
+    producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)], default=product_gasto,)
+    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True, domain=[('sale_ok', '=', True)], default=product_interes,)
+    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True, default=desembolso_cuenta,)
+    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'draft': [('readonly', False)]}, default=redescuento_cuenta)
+    user_id = fields.Many2one('res.users', string='Responsable', index=True,default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
+    
     #Datos de contabilidad
-    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',
-                                      required=True, readonly=True, states={'draft': [('readonly', False)]},)
-    meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={
-                                'draft': [('readonly', False)]})
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'draft': [('readonly', False)]},)
+    meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'draft': [('readonly', False)]})
     interest_rate = fields.Float(string='Tasa de Interés', required=True)
-    currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,
-                                  readonly=True, states={'draft': [('readonly', False)]},)
+    currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,readonly=True, states={'draft': [('readonly', False)]},)
+    
+    #Variables de conteo
+    invoice_count_cxc = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
+    invoice_count_cxp = fields.Integer(string='Factura Count', compute='_get_invoiced', readonly=True)
+    payment_count = fields.Integer(string='Payment Count', compute='_get_invoiced', readonly=True)
+    cuotas_count = fields.Integer(string='cuotas Count', compute='_get_invoiced', readonly=True)
+    invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
+    payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
        
     payment_frequency = fields.Selection([
         ('diario', 'Diario'),
