@@ -20,7 +20,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
     date_from = fields.Date(string='Start Date')
     date_to = fields.Date(string='End Date')
 
-    @api.model
+    
     def get_customers_no_purchase(self):
         domain = [
             ('company_id', '=', self.company_id),
