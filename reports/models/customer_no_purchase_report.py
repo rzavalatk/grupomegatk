@@ -32,7 +32,9 @@ class CustomerNoPurchaseReport(models.TransientModel):
         account_orders = self.env['account.move'].search(domain)
         customer_ids = account_orders.mapped('partner_id.id')
         
-        _logger.warning(customer_ids)
+        for partner in customer_ids:
+            _logger.warning(partner.name)
+        
 
         domain_customers = [
             ('company_id', '=', self.company_id.id),
@@ -52,7 +54,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
             
             customer_orders = self.env['account.move'].search(customer_domain)
             
-            _logger.warning(customer_orders)
+            #_logger.warning(customer_orders)
         
             report_lines.append((0, 0, {
                 'partner_id': customer.id,
