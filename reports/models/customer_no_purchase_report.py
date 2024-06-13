@@ -29,11 +29,10 @@ class CustomerNoPurchaseReport(models.TransientModel):
             ('state', '=', 'posted'),
             ('move_type', '=', 'out_refund'),
         ]
-        account_orders = self.env['account.move'].search(['&', '&', '&',
+        account_orders = self.env['account.move'].search(['&', '&',
             ('company_id', '=', self.company_id.id),
             ('invoice_date', '>=', self.date_from),
-            ('invoice_date', '<=', self.date_to),
-            ('move_type', '=', 'out_refund'),
+            ('invoice_date', '<=', self.date_to)
         ])
         customer_ids = account_orders.mapped('partner_id.id')
         
