@@ -4,7 +4,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class CustomerNoPurchaseReport(models.TransientModel):
+class CustomerNoPurchaseReport(models.Model):
     _name = 'customer.no.purchase.report'
     _description = 'Customer No Purchase Report'
 
