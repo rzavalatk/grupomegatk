@@ -64,8 +64,8 @@ class CustomerNoPurchaseReport(models.Model):
                                     }))         
                     else:
                         n = True
-        
-        self.write({self.report_lines_from_customer_purchase: lines})
+        if lines:
+            self.report_lines_from_customer_purchase: lines
                         
         #Proceso para ver los clientes que no han comprado en ese tiempo y cuando fue su ultima compra
         """for customer_item in customer_list:
