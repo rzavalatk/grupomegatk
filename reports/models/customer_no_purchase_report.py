@@ -28,16 +28,16 @@ class CustomerNoPurchaseReport(models.Model):
     date_to = fields.Date(string='End Date')
 
     def generate_reports(self):
-        self._get_customers_purchase(self.date_from, self.date_to, 'report_lines_from_customer_purchase')
+        self._get_customers_purchase('report_lines_from_customer_purchase')
         #self._generate_report_lines(self.date_to, self.date_to, 'report_lines_to')
         #self._calculate_differences()
     
-    def _get_customers_purchase(self, date_from, date_to, field_name):
+    def _get_customers_purchase(self, field_name):
         #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
         domain = ['&', '&', '&', '&',
             ('company_id', '=', self.company_id.id),
-            ('invoice_date', '>=', date_from),
-            ('invoice_date', '<=', date_to),
+            ('invoice_date', '>=', self.date_from),
+            ('invoice_date', '<=', self.date_to),
             ('state', '=', 'posted'),
             ('move_type', '=', 'out_invoice'),
         ]
