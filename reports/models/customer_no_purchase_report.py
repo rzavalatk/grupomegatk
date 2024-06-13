@@ -32,7 +32,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         customer_ids = account_orders.mapped('partner_id.id')
         
         for customer_item in customer_list:
-            _logger.warning(customer_ids.name)
+            _logger.warning(customer_item.name)
             _logger.warning(len(customer_item.invoice_ids))
             _logger.warning(customer_item.invoice_ids[-1])
         
