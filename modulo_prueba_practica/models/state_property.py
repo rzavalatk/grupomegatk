@@ -36,7 +36,7 @@ class TestModel(models.Model):
         ('sold','Vendido'),
         ('canceled', 'Cancelado')
     ], string='Estado', default = 'draft')
-    type_property = fields.Many2one('comodel_name', string='Tipo de propiedad')
+    property_type_id = fields.Many2one('comodel_name', string='Tipo de propiedad')
     salesman = fields.Many2one('res.partner', string='Comprador')
     buyer = fields.Many2one('res.users', string='Vendedor')
 
