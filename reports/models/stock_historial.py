@@ -116,18 +116,20 @@ class StockReportHistory(models.Model):
         worksheet = workbook.add_worksheet()
 
         # Escribir los encabezados
-        worksheet.write(0, 0, 'Producto')
-        worksheet.write(0, 1, 'Inventario Inicial')
-        worksheet.write(0, 2, 'Inventario Final')
-        worksheet.write(0, 3, 'Movimiento de producto')
+        worksheet.write(0, 0, 'Codigo de barras')
+        worksheet.write(0, 1, 'Producto')
+        worksheet.write(0, 2, 'Inventario Inicial')
+        worksheet.write(0, 3, 'Inventario Final')
+        worksheet.write(0, 4, 'Movimiento de producto')
 
         # Escribir los datos
         row = 1
         for record in self.report_differences:
-            worksheet.write(row, 0, record.product_id.product_tmpl_id.name)
-            worksheet.write(row, 1, record.quantity_from)
-            worksheet.write(row, 2, record.quantity_to)
-            worksheet.write(row, 3, record.quantity_difference)
+            worksheet.write(row, 0, record.product_id.barcode)
+            worksheet.write(row, 1, record.product_id.product_tmpl_id.name)
+            worksheet.write(row, 2, record.quantity_from)
+            worksheet.write(row, 3, record.quantity_to)
+            worksheet.write(row, 4, record.quantity_difference)
             row += 1
 
         workbook.close()
