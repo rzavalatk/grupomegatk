@@ -12,10 +12,8 @@ class CustomerNoPurchaseReport(models.TransientModel):
     def _onchange_date_from(self):
         self.name = "Reporte de Clientes inactivos de " + str(self.company_id.name) + " del " +str(self.date_from) + " al " + str(self.date_to)
     
-   
 
     name = fields.Char(string="Nombre de reporte", required=True)
-    partner_id = fields.Many2one('res.partner', string='Customer')
     company_id = fields.Many2one('res.company', string='Company')
     date_from = fields.Date(string='Start Date')
     date_to = fields.Date(string='End Date')
@@ -30,10 +28,16 @@ class CustomerNoPurchaseReport(models.TransientModel):
             ('move_type', '=', 'out_invoice'),
         ]
         account_orders = self.env['account.move'].search(domain)
+        customer_list = account_orders.mapped('partner_id')
         customer_ids = account_orders.mapped('partner_id.id')
         
-        _logger.warning(len(account_orders))
-        _logger.warning(len(customer_ids))
+        for customer_item in customer_list:
+            _logger.warning(customer_ids.name)
+            _logger.warning(len(customer_item.invoice_ids))
+            _logger.warning(customer_item.invoice_ids[-1])
+        
+        """_logger.warning(len(account_orders))
+        _logger.warning(len(customer_ids))"""
         
         domain_customers = ['&',
             ('company_id', '=', self.company_id.id),
@@ -41,7 +45,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         ]
         customers = self.env['res.partner'].search(domain_customers)
         
-        _logger.warning(len(customers))
+        #_logger.warning(len(customers))
         
         report_lines = []
         for customer in customers:
@@ -50,7 +54,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
             ('partner_id', '=', customer.id),
             ('payment_state', 'in', ['paid']),
             ('state', 'in', ['posted']),
-            ('move_type', 'in', ['out_refund']),
+            ('move_type', 'in', ['out_invoice']),
             ]
             
             customer_orders = self.env['account.move'].search(customer_domain)
@@ -67,8 +71,9 @@ class CustomerNoPurchaseReport(models.TransientModel):
         
 
 class CustomerReportLine(models.Model):
-    _name = 'customer.no.purchase.report.line'
-    _description = 'Customer Report Line'
-
+    _name = 'customer.purchase.report.line'
+    _description = 'Customer purchase Report Line'
+    
+    partner_id = fields.Many2one('res.partner', string='Customer')
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
