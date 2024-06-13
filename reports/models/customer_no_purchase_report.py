@@ -38,7 +38,8 @@ class CustomerNoPurchaseReport(models.TransientModel):
                 _logger.warning(customer_item.name)
                 _logger.warning(len(customer_item.invoice_ids))
                 for invoice_item in customer_item.invoice_ids:
-                    _logger.warning(invoice_item.internal_number)
+                    if invoice_item.move_type == 'out_invoice':
+                        _logger.warning(invoice_item.internal_number)
         
         """_logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))"""
