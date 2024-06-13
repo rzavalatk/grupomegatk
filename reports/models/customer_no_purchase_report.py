@@ -35,8 +35,8 @@ class CustomerNoPurchaseReport(models.TransientModel):
         _logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))
         
-        for partner in account_orders:
-            _logger.warning(partner)
+        for partner in customer_ids:
+            _logger.warning(partner.name)
         
 
         domain_customers = [
