@@ -35,15 +35,13 @@ class CustomerNoPurchaseReport(models.TransientModel):
         _logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))
         
-        for partner in customer_ids:
-            _logger.warning(partner.name)
-        
-
-        domain_customers = [
+        domain_customers = ['&',
             ('company_id', '=', self.company_id.id),
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
+        
+        _logger.warning(len(customers))
         
         report_lines = []
         for customer in customers:
