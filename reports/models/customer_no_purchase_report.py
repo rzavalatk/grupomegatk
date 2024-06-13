@@ -12,6 +12,12 @@ class CustomerNoPurchaseReport(models.TransientModel):
     def _onchange_date_from(self):
         self.name = "Reporte de Clientes inactivos de " + str(self.company_id.name) + " del " +str(self.date_from) + " al " + str(self.date_to)
     
+    
+    report_lines_from_customer_purchase = fields.One2many(
+        'customer.purchase.report.line', 'report_purchase_customer', string="Clientes que compraron en el intervalo de tiempo", readonly=True)
+    
+    report_lines_from_no_customer_purchase = fields.One2many(
+        'customer.purchase.report.line', 'report_no_purchase_customer', string="Clientes que no compraron en el intervalo de tiempo", readonly=True)
 
     name = fields.Char(string="Nombre de reporte", required=True)
     company_id = fields.Many2one('res.company', string='Company')
@@ -35,8 +41,29 @@ class CustomerNoPurchaseReport(models.TransientModel):
         customer_ids = account_orders.mapped('partner_id.id')
         
         #Proceso para escribir los clientes que si han comprado en ese periodo de tiempo 1
-        
+        lines = []
         for customer_item in customer_list:
+            n = True
+            for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
+                if n:
+                    if invoice_item.move_type == 'out_invoice':
+                        if (invoice_item.invoice_date <= self.date_to) and (invoice_item.invoice_date >= self.date_from):
+                            n = False 
+                            lines.append((0, 0, {
+                                'partner_id': customer_item.id,
+                                'last_purchase': invoice_item.id,
+                                'purchase_date': invoice_item.invoice_date,
+                                'purchase_amount_paid': invoice_item.amount_paid,
+                                'purchase_amount': invoice_item.amount_total,
+                                'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
+                            }))         
+                    else:
+                        n = True
+        
+        self.write({self.report_lines_from_customer_purchase: lines})
+                        
+        #Proceso para ver los clientes que no han comprado en ese tiempo y cuando fue su ultima compra
+        """for customer_item in customer_list:
             n = True
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
@@ -46,10 +73,8 @@ class CustomerNoPurchaseReport(models.TransientModel):
                         _logger.warning(invoice_item.invoice_date)
                         _logger.warning(invoice_item.internal_number)
                     else:
-                        n = True
+                        n = True"""
         
-        """_logger.warning(len(account_orders))
-        _logger.warning(len(customer_ids))"""
         
         domain_customers = ['&',
             ('company_id', '=', self.company_id.id),
@@ -86,9 +111,17 @@ class CustomerReportLine(models.Model):
     _name = 'customer.purchase.report.line'
     _description = 'Customer purchase Report Line'
     
+    
+    report_purchase_customer = fields.Many2one(
+        'customer.no.purchase.report', string="Clientes que compraron en el intervalo de tiempo", ondelete='cascade')
+    
+    report_no_purchase_customer = fields.Many2one(
+        'customer.no.purchase.report', string="Clientes que no compraron en el intervalo de tiempo", ondelete='cascade')
+    
     partner_id = fields.Many2one('res.partner', string='Customer')
     last_purchase = fields.Many2one('account.move', string='Ultima compra')
     purchase_date = fields.Date('Fecha')
+    purchase_amount_paid = fields.Float('Pagado')
     purchase_amount = fields.Float('Valor')
     purchase_term_id = fields.Char('Termino de pago')
     #location_id = fields.Many2one('stock.location', string="Location", required=True)

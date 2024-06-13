@@ -23,17 +23,21 @@
                         
                     </group>
                     
-                    <!--<notebook>
-                        <page string="Reporte Inicial">
-                            <field name="report_lines_from">
+                    <notebook>
+                        <page string="Reporte clientes que si compraron">
+                            <field name="report_lines_from_customer_purchase">
                                 <tree editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="quantity"/>
+                                    <field name="partner_id"/>
+                                    <field name="last_purchase"/>
+                                    <field name="purchase_date" />
+                                    <field name="purchase_amount_paid" />
+                                    <field name="purchase_amount" />
+                                    <field name="purchase_term_id" />
                                    
                                 </tree>
                             </field>
                         </page>
-                        <page string="Reporte Final">
+                        <!--<page string="Reporte Final">
                             <field name="report_lines_to">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
@@ -51,8 +55,8 @@
                                     <field name="quantity_difference"/>
                                 </tree>
                             </field>
-                        </page>
-                    </notebook>-->
+                        </page>-->
+                    </notebook>
                 </sheet>
             </form>
         </field>
