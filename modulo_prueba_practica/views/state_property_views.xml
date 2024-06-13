@@ -43,7 +43,7 @@
                                 <field name="selling_price"/>
                             </group>
                             <group>
-                                <field name="type_property"/>
+                                <field name="property_type_id"/>
                             </group>
                             <notebook>
                                 <page string="Descripcion">
