@@ -32,6 +32,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
         account_orders = self.env['account.move'].search(domain)
         customer_ids = account_orders.mapped('partner_id.id')
         
+        _logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))
         
         for partner in customer_ids:
