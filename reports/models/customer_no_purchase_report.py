@@ -22,7 +22,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
 
     
     def get_customers_no_purchase(self):
-        domain = [
+        domain = ['&', '&', '&', '&',
             ('company_id', '=', self.company_id.id),
             ('invoice_date', '>=', self.date_from),
             ('invoice_date', '<=', self.date_to),
