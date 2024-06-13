@@ -20,6 +20,7 @@ class CustomerNoPurchaseReport(models.TransientModel):
 
     
     def get_customers_no_purchase(self):
+        #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
         domain = ['&', '&', '&', '&',
             ('company_id', '=', self.company_id.id),
             ('invoice_date', '>=', self.date_from),
@@ -28,18 +29,24 @@ class CustomerNoPurchaseReport(models.TransientModel):
             ('move_type', '=', 'out_invoice'),
         ]
         account_orders = self.env['account.move'].search(domain)
+        
+        #Lista de todos los clientes y luego lista con todos los ids de los clientes
         customer_list = account_orders.mapped('partner_id')
         customer_ids = account_orders.mapped('partner_id.id')
         
-        n = 4 
+        #Proceso para escribir los clientes que si han comprado en ese periodo de tiempo 1
         
         for customer_item in customer_list:
-            if n < 5:
-                _logger.warning(customer_item.name)
-                _logger.warning(len(customer_item.invoice_ids))
-                for invoice_item in customer_item.invoice_ids:
+            n = True
+            for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
+                if n:
                     if invoice_item.move_type == 'out_invoice':
+                        n = False
+                        _logger.warning(customer_item.name)
+                        _logger.warning(invoice_item.invoice_date)
                         _logger.warning(invoice_item.internal_number)
+                    else:
+                        n = True
         
         """_logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))"""
@@ -80,5 +87,9 @@ class CustomerReportLine(models.Model):
     _description = 'Customer purchase Report Line'
     
     partner_id = fields.Many2one('res.partner', string='Customer')
+    last_purchase = fields.Many2one('account.move', string='Ultima compra')
+    purchase_date = fields.Date('Fecha')
+    purchase_amount = fields.Float('Valor')
+    purchase_term_id = fields.Char('Termino de pago')
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
