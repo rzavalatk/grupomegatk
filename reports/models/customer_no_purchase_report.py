@@ -31,11 +31,14 @@ class CustomerNoPurchaseReport(models.TransientModel):
         customer_list = account_orders.mapped('partner_id')
         customer_ids = account_orders.mapped('partner_id.id')
         
+        n = 4 
+        
         for customer_item in customer_list:
-            _logger.warning(customer_item.name)
-            _logger.warning(len(customer_item.invoice_ids))
-            for invoice_item in customer_item.invoice_ids:
-                _logger.warning(invoice_item)
+            if n < 5:
+                _logger.warning(customer_item.name)
+                _logger.warning(len(customer_item.invoice_ids))
+                for invoice_item in customer_item.invoice_ids:
+                    _logger.warning(invoice_item.internal_number)
         
         """_logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))"""
