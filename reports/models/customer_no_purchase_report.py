@@ -2,6 +2,8 @@ from odoo import models, fields, api
 
 import logging
 from datetime import datetime
+from datetime import date
+
 
 _logger = logging.getLogger(__name__)
 
@@ -48,7 +50,7 @@ class CustomerNoPurchaseReport(models.Model):
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
                     if invoice_item.move_type == 'out_invoice':
-                        if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, datetime.date):
+                        if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
                             if invoice_item.invoice_date <= self.date_to: 
                                 if invoice_item.invoice_date >= self.date_from:
                                     n = False 
