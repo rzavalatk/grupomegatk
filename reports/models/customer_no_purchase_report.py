@@ -27,13 +27,17 @@ class CustomerNoPurchaseReport(models.Model):
     date_from = fields.Date(string='Start Date')
     date_to = fields.Date(string='End Date')
 
+    def generate_reports(self):
+        self._get_customers_purchase(self.date_from, self.date_to, 'report_lines_from_customer_purchase')
+        #self._generate_report_lines(self.date_to, self.date_to, 'report_lines_to')
+        #self._calculate_differences()
     
-    def get_customers_no_purchase(self):
+    def _get_customers_purchase(self, date_from, date_to, field_name):
         #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
         domain = ['&', '&', '&', '&',
             ('company_id', '=', self.company_id.id),
-            ('invoice_date', '>=', self.date_from),
-            ('invoice_date', '<=', self.date_to),
+            ('invoice_date', '>=', date_from),
+            ('invoice_date', '<=', date_to),
             ('state', '=', 'posted'),
             ('move_type', '=', 'out_invoice'),
         ]
@@ -65,10 +69,10 @@ class CustomerNoPurchaseReport(models.Model):
                     else:
                         n = True
         if lines:
-            self.report_lines_from_customer_purchase: lines
+            self.write({field_name: lines})
                         
-        #Proceso para ver los clientes que no han comprado en ese tiempo y cuando fue su ultima compra
-        """for customer_item in customer_list:
+        """#Proceso para ver los clientes que no han comprado en ese tiempo y cuando fue su ultima compra
+        for customer_item in customer_list:
             n = True
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
@@ -78,7 +82,7 @@ class CustomerNoPurchaseReport(models.Model):
                         _logger.warning(invoice_item.invoice_date)
                         _logger.warning(invoice_item.internal_number)
                     else:
-                        n = True"""
+                        n = True
         
         
         domain_customers = ['&',
@@ -108,7 +112,7 @@ class CustomerNoPurchaseReport(models.Model):
                 'company_id': self.company_id.id,
                 'date_from': self.date_from,
                 'date_to': self.date_to
-            }))
+            }))"""
             
         
 
