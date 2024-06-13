@@ -27,13 +27,9 @@ class CustomerNoPurchaseReport(models.TransientModel):
             ('invoice_date', '>=', self.date_from),
             ('invoice_date', '<=', self.date_to),
             ('state', '=', 'posted'),
-            ('move_type', '=', 'out_refund'),
+            ('move_type', '=', 'out_invoice'),
         ]
-        account_orders = self.env['account.move'].search(['&', '&',
-            ('company_id', '=', self.company_id.id),
-            ('invoice_date', '>=', self.date_from),
-            ('invoice_date', '<=', self.date_to)
-        ])
+        account_orders = self.env['account.move'].search(domain)
         customer_ids = account_orders.mapped('partner_id.id')
         
         _logger.warning(len(account_orders))
