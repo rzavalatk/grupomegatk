@@ -33,8 +33,9 @@ class CustomerNoPurchaseReport(models.TransientModel):
         
         for customer_item in customer_list:
             _logger.warning(customer_item.name)
-            _logger.warning(len(customer_item.total_invoiced))
-            _logger.warning(customer_item.total_invoiced[0].invoice_date)
+            _logger.warning(len(customer_item.invoice_ids))
+            for invoice_item in customer_item.invoice_ids:
+                _logger.warning(invoice_item)
         
         """_logger.warning(len(account_orders))
         _logger.warning(len(customer_ids))"""
