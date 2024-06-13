@@ -47,16 +47,17 @@ class CustomerNoPurchaseReport(models.Model):
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
                     if invoice_item.move_type == 'out_invoice':
-                        if (invoice_item.invoice_date <= self.date_to) and (invoice_item.invoice_date >= self.date_from):
-                            n = False 
-                            lines.append((0, 0, {
-                                'partner_id': customer_item.id,
-                                'last_purchase': invoice_item.id,
-                                'purchase_date': invoice_item.invoice_date,
-                                'purchase_amount_paid': invoice_item.amount_paid,
-                                'purchase_amount': invoice_item.amount_total,
-                                'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
-                            }))         
+                        if invoice_item.invoice_date <= self.date_to: 
+                            if invoice_item.invoice_date >= self.date_from:
+                                n = False 
+                                lines.append((0, 0, {
+                                    'partner_id': customer_item.id,
+                                    'last_purchase': invoice_item.id,
+                                    'purchase_date': invoice_item.invoice_date,
+                                    'purchase_amount_paid': invoice_item.amount_paid,
+                                    'purchase_amount': invoice_item.amount_total,
+                                    'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
+                                }))         
                     else:
                         n = True
         
