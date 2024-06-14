@@ -1,3 +1,3 @@
 
 from . import stock_historial
-from . import customer_no_purchase_report
+from . import customer_purchase_report
