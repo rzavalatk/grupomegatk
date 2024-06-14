@@ -112,7 +112,7 @@ class CustomerNoPurchaseReport(models.Model):
                                     n = False 
                                     _logger.warning(customer_item.id)
                                     _logger.warning(invoice_item.id)
-                                    _logger.warning(invoice_item.invoice_date)
+                                    _logger.warning(invoice_item.invoice_date.year)
                                     _logger.warning(invoice_item.invoice_user_id.id)
                                     _logger.warning(invoice_item.amount_total)
                                     _logger.warning(invoice_item.invoice_payment_term_id.display_name)         
