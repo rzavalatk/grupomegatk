@@ -92,29 +92,42 @@ class CustomerNoPurchaseReport(models.Model):
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
-
+        
+        m = 1
+        
+        for partner_client in customers:
+            if m < 6:
+                m = m + 1
+                for invoice_item in partner_client.invoice_ids:
+                    _logger.warning(partner_client.id)
+                    _logger.warning(invoice_item.id)
+                    _logger.warning(invoice_item.invoice_date)
+                    _logger.warning(invoice_item.invoice_user_id.id)
+                    _logger.warning(invoice_item.amount_total)
+                    _logger.warning(invoice_item.invoice_payment_term_id.display_name)
+               
+        
+        
+        
         #Proceso para agregar los clientes que no compraron
         
         lines = []
         for customer_item in customers:
             n = True
-            _logger.warning("pase 1")
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
-                    _logger.warning("pase 2")
                     if invoice_item.move_type == 'out_invoice':
                         if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
-                            _logger.warning(invoice_item.invoice_date)
                             if invoice_item.invoice_date >= self.date_to or invoice_item.invoice_date <= self.date_from: 
-    
-                                _logger.warning("pase 4")
                                 n = False 
-                                _logger.warning(customer_item.id)
-                                _logger.warning(invoice_item.id)
-                                _logger.warning(invoice_item.invoice_date.year)
-                                _logger.warning(invoice_item.invoice_user_id.id)
-                                _logger.warning(invoice_item.amount_total)
-                                _logger.warning(invoice_item.invoice_payment_term_id.display_name)         
+                                lines.append((0, 0, {
+                                    'partner_id': customer_item.id,
+                                    'last_purchase': invoice_item.id,
+                                    'purchase_date': invoice_item.invoice_date,
+                                    'purchase_comercial': invoice_item.invoice_user_id.id,
+                                    'purchase_amount': invoice_item.amount_total,
+                                    'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
+                                }))         
                     else:
                         n = True
         if lines:
