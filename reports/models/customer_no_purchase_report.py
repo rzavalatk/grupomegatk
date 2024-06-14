@@ -92,12 +92,7 @@ class CustomerNoPurchaseReport(models.Model):
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
-        
-        
-               
-        
-        
-        
+
         #Proceso para agregar los clientes que no compraron
         
         lines = []
@@ -109,7 +104,7 @@ class CustomerNoPurchaseReport(models.Model):
                     _logger.warning("pase 2")
                     if invoice_item.move_type == 'out_invoice':
                         if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
-                            
+                            _logger.warning(invoice_item.invoice_date)
                             if invoice_item.invoice_date >= self.date_to: 
                                 _logger.warning("pase 3")
                                 if invoice_item.invoice_date <= self.date_from:
