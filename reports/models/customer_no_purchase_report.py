@@ -103,10 +103,13 @@ class CustomerNoPurchaseReport(models.Model):
         lines = []
         for customer_item in customers:
             n = True
+            _logger.warning("pase 1")
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
+                    _logger.warning("pase 2")
                     if invoice_item.move_type == 'out_invoice':
                         if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
+                            _logger.warning("pase 3")
                             if invoice_item.invoice_date >= self.date_to: 
                                 if invoice_item.invoice_date <= self.date_from:
                                     n = False 
