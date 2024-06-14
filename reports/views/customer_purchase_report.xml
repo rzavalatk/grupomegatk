@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+
+    <record id="view_customer_no_purchase_report_form" model="ir.ui.view">
+        <field name="name">customer.purchase.report.form</field>
+        <field name="model">customer.purchase.report</field>
+        <field name="arch" type="xml">
+            <form string="Reporte de clientes sin compras en determinado tiempo">
+                <header>
+                        <button name="generate_reports" type="object" string="Generar reporte" class="btn-primary"/>
+                        <!--<button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>-->
+                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />     
+                        <field name="company_id" />
+                        
+                        
+                    </group>
+
+                    <group name="fechas">
+                        <group name="first_time" string="Primer intervalo de tiempo">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group name="second_time" string="Segundo intervalo de tiempo">
+                            <field name="date_from_i2"/>
+                            <field name="date_to_i2"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Reporte clientes que si compraron">
+                            <field name="report_lines_from_customer_purchase">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="last_purchase"/>
+                                    <field name="purchase_date" />
+                                    <field name="purchase_comercial" />
+                                    <field name="purchase_amount" />
+                                    <field name="purchase_term_id" />
+                                   
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte clientes que no compraron">
+                            <field name="report_lines_to_customer_purchase">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="last_purchase"/>
+                                    <field name="purchase_date" />
+                                    <field name="purchase_comercial" />
+                                    <field name="purchase_amount" />
+                                    <field name="purchase_term_id" />
+                                   
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reporte de clientes en ambos intervalos">
+                            <field name="report_differences">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="company_id"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_customer_no_purchase_report_tree" model="ir.ui.view">
+        <field name="name">view.customer.purchase.report.tree</field>
+        <field name="model">customer.purchase.report</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="company_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    
+
+
+    <record id="customer_no_purchase_report_action" model="ir.actions.act_window">
+        <field name="name">Reporte clientes sin actividad</field>
+        <field name="res_model">customer.purchase.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_customer_no_purchase_report" name="Clientes sin actividad en compras" parent="menu_reports_contabilidad" action="customer_no_purchase_report_action"/>
+    
+    
+</odoo>
