@@ -93,18 +93,7 @@ class CustomerNoPurchaseReport(models.Model):
         ]
         customers = self.env['res.partner'].search(domain_customers)
         
-        m = 1
         
-        for partner_client in customers:
-            if m < 6:
-                m = m + 1
-                for invoice_item in partner_client.invoice_ids:
-                    _logger.warning(partner_client.id)
-                    _logger.warning(invoice_item.id)
-                    _logger.warning(invoice_item.invoice_date)
-                    _logger.warning(invoice_item.invoice_user_id.id)
-                    _logger.warning(invoice_item.amount_total)
-                    _logger.warning(invoice_item.invoice_payment_term_id.display_name)
                
         
         
