@@ -98,7 +98,14 @@ class CustomerNoPurchaseReport(models.Model):
         for partner_client in customers:
             if m < 6:
                 m = m + 1
-                _logger.warning(partner_client)
+                for invoice_item in partner_client.invoice_ids:
+                    _logger.warning(partner_client.id)
+                    _logger.warning(invoice_item.id)
+                    _logger.warning(invoice_item.invoice_date)
+                    _logger.warning(invoice_item.invoice_user_id.id)
+                    _logger.warning(invoice_item.amount_total)
+                    _logger.warning(invoice_item.invoice_payment_term_id.display_name)
+               
         
         
         
