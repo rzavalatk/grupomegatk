@@ -93,10 +93,12 @@ class CustomerNoPurchaseReport(models.Model):
         ]
         customers = self.env['res.partner'].search(domain_customers)
         
+        _logger.warning(len(customers))
+        
         #Proceso para agregar los clientes que no compraron
         
         lines = []
-        for customer_item in customers:
+        """for customer_item in customers:
             n = True
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 if n:
@@ -116,7 +118,7 @@ class CustomerNoPurchaseReport(models.Model):
                     else:
                         n = True
         if lines:
-            self.write({field_name: lines})
+            self.write({field_name: lines})"""
             
         
 
