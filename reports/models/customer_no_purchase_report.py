@@ -62,7 +62,7 @@ class CustomerNoPurchaseReport(models.Model):
                                         'partner_id': customer_item.id,
                                         'last_purchase': invoice_item.id,
                                         'purchase_date': invoice_item.invoice_date,
-                                        'purchase_amount_paid': invoice_item.amount_paid,
+                                        'purchase_comercial': invoice_item.invoice_user_id,
                                         'purchase_amount': invoice_item.amount_total,
                                         'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
                                     }))         
@@ -130,7 +130,7 @@ class CustomerReportLine(models.Model):
     partner_id = fields.Many2one('res.partner', string='Customer')
     last_purchase = fields.Many2one('account.move', string='Ultima compra')
     purchase_date = fields.Date('Fecha')
-    purchase_amount_paid = fields.Float('Pagado')
+    purchase_comercial = fields.Many2one('res.users', string='Comercial')
     purchase_amount = fields.Float('Valor')
     purchase_term_id = fields.Char('Termino de pago')
     #location_id = fields.Many2one('stock.location', string="Location", required=True)

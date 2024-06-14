@@ -30,7 +30,7 @@
                                     <field name="partner_id"/>
                                     <field name="last_purchase"/>
                                     <field name="purchase_date" />
-                                    <field name="purchase_amount_paid" />
+                                    <field name="purchase_comercial" />
                                     <field name="purchase_amount" />
                                     <field name="purchase_term_id" />
                                    
