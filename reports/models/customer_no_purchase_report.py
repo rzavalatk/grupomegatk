@@ -105,17 +105,16 @@ class CustomerNoPurchaseReport(models.Model):
                     if invoice_item.move_type == 'out_invoice':
                         if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
                             _logger.warning(invoice_item.invoice_date)
-                            if invoice_item.invoice_date >= self.date_to: 
-                                _logger.warning("pase 3")
-                                if invoice_item.invoice_date <= self.date_from:
-                                    _logger.warning("pase 4")
-                                    n = False 
-                                    _logger.warning(customer_item.id)
-                                    _logger.warning(invoice_item.id)
-                                    _logger.warning(invoice_item.invoice_date.year)
-                                    _logger.warning(invoice_item.invoice_user_id.id)
-                                    _logger.warning(invoice_item.amount_total)
-                                    _logger.warning(invoice_item.invoice_payment_term_id.display_name)         
+                            if invoice_item.invoice_date >= self.date_to or invoice_item.invoice_date <= self.date_from: 
+    
+                                _logger.warning("pase 4")
+                                n = False 
+                                _logger.warning(customer_item.id)
+                                _logger.warning(invoice_item.id)
+                                _logger.warning(invoice_item.invoice_date.year)
+                                _logger.warning(invoice_item.invoice_user_id.id)
+                                _logger.warning(invoice_item.amount_total)
+                                _logger.warning(invoice_item.invoice_payment_term_id.display_name)         
                     else:
                         n = True
         if lines:
