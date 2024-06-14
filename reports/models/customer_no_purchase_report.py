@@ -23,13 +23,13 @@ class CustomerNoPurchaseReport(models.Model):
         'customer.purchase.report.line', 'report_no_purchase_customer', string="Clientes que no compraron en el intervalo de tiempo", readonly=True)
 
     name = fields.Char(string="Nombre de reporte", required=True)
-    company_id = fields.Many2one('res.company', string='Company')
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id)
     date_from = fields.Date(string='Start Date')
     date_to = fields.Date(string='End Date')
 
     def generate_reports(self):
         self._get_customers_purchase('report_lines_from_customer_purchase')
-        #self._generate_report_lines(self.date_to, self.date_to, 'report_lines_to')
+        self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
         #self._calculate_differences()
     
     def _get_customers_purchase(self, field_name):
@@ -70,49 +70,53 @@ class CustomerNoPurchaseReport(models.Model):
                         n = True
         if lines:
             self.write({field_name: lines})
-                        
-        """#Proceso para ver los clientes que no han comprado en ese tiempo y cuando fue su ultima compra
-        for customer_item in customer_list:
-            n = True
-            for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
-                if n:
-                    if invoice_item.move_type == 'out_invoice':
-                        n = False
-                        _logger.warning(customer_item.name)
-                        _logger.warning(invoice_item.invoice_date)
-                        _logger.warning(invoice_item.internal_number)
-                    else:
-                        n = True
+    
+    def _get_customers_no_purchase(self, field_name):
         
+        #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
+        domain = ['&', '&', '&', '&',
+            ('company_id', '=', self.company_id.id),
+            ('invoice_date', '>=', self.date_from),
+            ('invoice_date', '<=', self.date_to),
+            ('state', '=', 'posted'),
+            ('move_type', '=', 'out_invoice'),
+        ]
+        account_orders = self.env['account.move'].search(domain)
         
+        #lista con todos los ids de los clientes
+        customer_ids = account_orders.mapped('partner_id.id')      
+        
+        #Busqueda de los clientes que no han comprado
         domain_customers = ['&',
             ('company_id', '=', self.company_id.id),
             ('id', 'not in', customer_ids)
         ]
         customers = self.env['res.partner'].search(domain_customers)
         
-        #_logger.warning(len(customers))
+        #Proceso para agregar los clientes que no compraron
         
-        report_lines = []
-        for customer in customers:
-            customer_domain = [
-            ('company_id', '=', self.company_id.id),
-            ('partner_id', '=', customer.id),
-            ('payment_state', 'in', ['paid']),
-            ('state', 'in', ['posted']),
-            ('move_type', 'in', ['out_invoice']),
-            ]
-            
-            customer_orders = self.env['account.move'].search(customer_domain)
-            
-            #_logger.warning(customer_orders)
-        
-            report_lines.append((0, 0, {
-                'partner_id': customer.id,
-                'company_id': self.company_id.id,
-                'date_from': self.date_from,
-                'date_to': self.date_to
-            }))"""
+        lines = []
+        for customer_item in customers:
+            n = True
+            for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
+                if n:
+                    if invoice_item.move_type == 'out_invoice':
+                        if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
+                            if invoice_item.invoice_date >= self.date_to: 
+                                if invoice_item.invoice_date <= self.date_from:
+                                    n = False 
+                                    lines.append((0, 0, {
+                                        'partner_id': customer_item.id,
+                                        'last_purchase': invoice_item.id,
+                                        'purchase_date': invoice_item.invoice_date,
+                                        'purchase_comercial': invoice_item.invoice_user_id.id,
+                                        'purchase_amount': invoice_item.amount_total,
+                                        'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
+                                    }))         
+                    else:
+                        n = True
+        if lines:
+            self.write({field_name: lines})
             
         
 

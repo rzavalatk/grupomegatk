@@ -37,16 +37,20 @@
                                 </tree>
                             </field>
                         </page>
-                        <!--<page string="Reporte Final">
-                            <field name="report_lines_to">
+                        <page string="Reporte clientes que no compraron">
+                            <field name="report_lines_from_no_customer_purchase">
                                 <tree editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="quantity"/>
-                                    
+                                    <field name="partner_id"/>
+                                    <field name="last_purchase"/>
+                                    <field name="purchase_date" />
+                                    <field name="purchase_comercial" />
+                                    <field name="purchase_amount" />
+                                    <field name="purchase_term_id" />
+                                   
                                 </tree>
                             </field>
                         </page>
-                        <page string="Reporte de diferencias">
+                        <!--<page string="Reporte de diferencias">
                             <field name="report_differences">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
