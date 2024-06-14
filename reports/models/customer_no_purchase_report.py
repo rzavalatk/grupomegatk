@@ -29,7 +29,7 @@ class CustomerNoPurchaseReport(models.Model):
 
     def generate_reports(self):
         self._get_customers_purchase('report_lines_from_customer_purchase')
-        self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
+        #self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
         #self._calculate_differences()
     
     def _get_customers_purchase(self, field_name):
