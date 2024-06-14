@@ -86,7 +86,7 @@ class CustomerPurchaseReport(models.Model):
         differences = []
         
         for item_from in list_from:
-            partner = self.env['res.partner'].search(['id', '=', item_from])
+            partner = self.env['res.partner'].search(['id', '=', str(item_from)])
             #_logger.warning(item_from)
             if item_from in list_to:
                
