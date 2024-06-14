@@ -17,7 +17,7 @@ class CustomerPurchaseReport(models.Model):
     
     
     report_lines_from_customer_purchase = fields.One2many(
-        'customer.purchase.report.line', 'report_purchase_customer', string="Clientes que compraron en el intervalo de tiempo 1", readonly=True)
+        'customer.purchase.report.line', 'report_purchase_customers', string="Clientes que compraron en el intervalo de tiempo 1", readonly=True)
     
     report_lines_to_customer_purchase = fields.One2many(
         'customer.purchase.report.line', 'report_to_purchase_customer', string="Clientes que compraron en el intervalo de tiempo 2", readonly=True)
@@ -104,7 +104,7 @@ class CustomerReportLine(models.Model):
     _description = 'Customer purchase Report Line'
     
     
-    report_purchase_customer = fields.Many2one(
+    report_purchase_customers = fields.Many2one(
         'customer.purchase.report', string="Clientes que compraron en el intervalo de tiempo 1", ondelete='cascade')
     
     report_to_purchase_customer = fields.Many2one(
