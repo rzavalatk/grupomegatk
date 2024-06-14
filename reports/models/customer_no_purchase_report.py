@@ -93,7 +93,14 @@ class CustomerNoPurchaseReport(models.Model):
         ]
         customers = self.env['res.partner'].search(domain_customers)
         
-        _logger.warning(len(customers))
+        m = 1
+        
+        for partner_client in customers:
+            if m < 6:
+                m = m + 1
+                _logger.warning(partner_client)
+        
+        
         
         #Proceso para agregar los clientes que no compraron
         
