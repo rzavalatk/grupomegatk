@@ -62,7 +62,7 @@ class CustomerNoPurchaseReport(models.Model):
                                         'partner_id': customer_item.id,
                                         'last_purchase': invoice_item.id,
                                         'purchase_date': invoice_item.invoice_date,
-                                        'purchase_comercial': invoice_item.invoice_user_id,
+                                        'purchase_comercial': invoice_item.invoice_user_id.id,
                                         'purchase_amount': invoice_item.amount_total,
                                         'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
                                     }))         
