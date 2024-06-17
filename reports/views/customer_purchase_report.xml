@@ -103,12 +103,12 @@
 
 
     <record id="customer_no_purchase_report_action" model="ir.actions.act_window">
-        <field name="name">Reporte clientes sin actividad</field>
+        <field name="name">Reporte actividad de clientes</field>
         <field name="res_model">customer.purchase.report</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_customer_no_purchase_report" name="Clientes sin actividad en compras" parent="menu_reports_contabilidad" action="customer_no_purchase_report_action"/>
+    <menuitem id="menu_customer_no_purchase_report" name="Reporte actividad de clientes" parent="menu_reports_contabilidad" action="customer_no_purchase_report_action"/>
     
     
 </odoo>
