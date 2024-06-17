@@ -34,7 +34,7 @@
                     </group>
                     
                     <notebook>
-                        <page string="Reporte clientes que si compraron">
+                        <page string="Cliente primer intervalo de tiempo">
                             <field name="report_lines_from_customer_purchase">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
@@ -47,7 +47,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Reporte clientes que no compraron">
+                        <page string="Cliente segundo intervalo de tiempo">
                             <field name="report_lines_to_customer_purchase">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
@@ -60,8 +60,18 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Reporte de clientes en ambos intervalos">
+                        <page string="Clientes que compraron en ambos intervalos">
                             <field name="report_differences">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="company_id"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Clientes que compraron en un solo intervalo">
+                            <field name="report_differences_OI">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
                                     <field name="company_id"/>

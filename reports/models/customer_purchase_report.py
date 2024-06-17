@@ -25,6 +25,9 @@ class CustomerPurchaseReport(models.Model):
     report_differences = fields.One2many(
         'customer.purchase.report.line.difference', 'report_id', string="Report Differences", readonly=True)
     
+    report_differences_OI = fields.One2many(
+        'customer.purchase.report.line.difference', 'report_id_OI', string="Report Differences", readonly=True)
+    
     name = fields.Char(string="Nombre de reporte", required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id)
     date_from = fields.Date(string='Start Date')
@@ -84,6 +87,7 @@ class CustomerPurchaseReport(models.Model):
     def _get_customers_difference(self, list_from, list_to):
         self.ensure_one()
         differences = []
+        differences_OI = []
         
         for item_from in list_from:
             #partner = self.env['res.partner'].search(['id', '=', str(item_from)])
@@ -95,7 +99,14 @@ class CustomerPurchaseReport(models.Model):
                     'company_id': self.company_id.id,
                     
                 }))
+            else:
+                differences_OI.append((0, 0, {
+                    'partner_id': item_from,
+                    'company_id': self.company_id.id,
+                    
+                }))
         self.report_differences = differences
+        self.report_differences_OI = differences
         
         
 
@@ -124,6 +135,9 @@ class CustomerReportLineDifference(models.Model):
     _description = 'Customer purchase Report Line difference'
 
     report_id = fields.Many2one(
+        'customer.purchase.report', string="Reporte", ondelete='cascade')
+    
+    report_id_OI = fields.Many2one(
         'customer.purchase.report', string="Reporte", ondelete='cascade')
     
     partner_id = fields.Many2one('res.partner', string='Customer')
