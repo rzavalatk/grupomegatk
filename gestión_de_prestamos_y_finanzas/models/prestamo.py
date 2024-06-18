@@ -34,13 +34,7 @@ class Prestamo(models.Model):
     amount_cxp = fields.Float(string='Monto a pagar', ccompute='_compute_amount_cxp', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de fechas
-    duration = fields.Selection([
-        ('12', '12 Meses'),
-        ('24', '24 Meses'),
-        ('36', '36 Meses'),
-        ('48', '48 Meses'),
-        ('60', '60 Meses'),
-    ], string='Duración de prestamo', default='12', required=True)
+    duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     date_init = fields.Date(string='Fecha de Inicio', required=True)
     date_end = fields.Date(string='Fecha final', required=True)
     
