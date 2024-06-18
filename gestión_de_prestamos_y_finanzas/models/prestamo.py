@@ -35,11 +35,11 @@ class Prestamo(models.Model):
     
     #Datos de fechas
     duration = fields.Selection([
-        (12, '12 Meses'),
-        (24, '24 Meses'),
-        (36, '36 Meses'),
-        (48, '48 Meses'),
-        (60, '60 Meses'),
+        ('12', '12 Meses'),
+        ('24', '24 Meses'),
+        ('36', '36 Meses'),
+        ('48', '48 Meses'),
+        ('60', '60 Meses'),
     ], string='Duración de prestamo', default='12', required=True)
     date_init = fields.Date(string='Fecha de Inicio', required=True)
     date_end = fields.Date(string='Fecha final', required=True)
