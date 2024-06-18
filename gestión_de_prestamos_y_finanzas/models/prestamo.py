@@ -25,7 +25,7 @@ class Prestamo(models.Model):
     amount_cxc = fields.Float(string='Monto a financiar', compute='_compute_amount_cxc', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de financiamiento / producto
-    supplier_id = fields.Many2one('res.partner', string='Proveedor', required=True)
+    #supplier_id = fields.Many2one('res.partner', string='Proveedor', required=True)
     equipment = fields.Many2one('product.product', string='Equipo financiado', readonly=True, states={'borrador': [('readonly', False)]},)
     price_a = fields.Float(string='Precio A', readonly=True, states={'borrador': [('readonly', False)]},)
     price_m = fields.Float(string='Precio M', readonly=True, states={'borrador': [('readonly', False)]},)
@@ -114,9 +114,8 @@ class Prestamo(models.Model):
     def create(self, vals):
         if vals.get('name', 'Nuevo') == 'Nuevo':
             vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
-        result = super(Prestamo, self).create(vals)
-        result.generate_quota()
-        return result
+        return super(Prestamo, self).create(vals)
+         
 
     def generate_quota(self):
         for prestamo in self:
