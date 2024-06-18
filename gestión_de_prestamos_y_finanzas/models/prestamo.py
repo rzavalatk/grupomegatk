@@ -17,7 +17,7 @@ class Prestamo(models.Model):
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
     #Datos del prestamo
-    amount_borrowed = fields.Float(string='Monto del Préstamo', store=True, readonly=True, states={'draft': [('readonly', False)]},)
+    amount_borrowed = fields.Float(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos del financiamiento
     amount_cxc = fields.Float(string='Monto a financiar', compute='_onchange_precio', store=True, readonly=True, states={'draft': [('readonly', False)]},)
