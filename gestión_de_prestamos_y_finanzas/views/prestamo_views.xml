@@ -5,6 +5,9 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
+                    <button string="Aprobar" type="object" name="action_approve" states="borrador"/>
+                    <button string="Rechazar" type="object" name="action_reject" states="borrador"/>
+                    <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
                     <field name="state" widget="statusbar" nolabel="1"/>
 				</header>
                 <sheet>
@@ -36,6 +39,21 @@
                         <field name="interest_rate"/>
                         <field name="currency_id" />
                     </group>
+                    <notebook>
+                        <page name="cuotas" string="Cuotas">
+                            <field name="quota_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="date_due"/>
+                                    <field name="payment_date" />
+                                    <field name="amount" />
+                                    <field name="amount_capital" />
+                                    <field name="state" />
+                                   
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                     <!--<group string="Cuotas">
                         <field name="cuota_ids">
                             <tree string="Cuotas">

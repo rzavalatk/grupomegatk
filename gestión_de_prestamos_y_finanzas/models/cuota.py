@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
 
 class Cuota(models.Model):
@@ -36,7 +36,23 @@ class Cuota(models.Model):
     
     state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'),('hecho', 'Hecho')], string="Estado", default='draft')
     
+    @api.depends('amount', 'amount_pay')
+    def _compute_balance(self):
+        for cuota in self:
+            cuota.balance = cuota.amount - cuota.amount_pay
 
+    def action_validate(self):
+        for cuota in self:
+            cuota.state = 'validado'
+
+    def action_cancel(self):
+        for cuota in self:
+            cuota.state = 'cancelado'
+
+    def action_pay(self):
+        for cuota in self:
+            cuota.is_pagado = True
+            cuota.state = 'hecho'
 
     def generar_factura(self):
         for cuota in self:
