@@ -83,7 +83,7 @@ class Prestamo(models.Model):
     ], string='Estado', default='borrador', required=True)
     
     
-    quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas')
+    quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas', readonly=True)
     #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
