@@ -34,7 +34,13 @@ class Prestamo(models.Model):
     amount_cxp = fields.Float(string='Monto a pagar', ccompute='_compute_amount_cxp', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de fechas
-    duration = fields.Integer(string='Duración (meses)', required=True)
+    duration = fields.Selection([
+        ('12', '12 Meses'),
+        ('24', '24 Meses'),
+        ('36', '36 Meses'),
+        ('48', '48 Meses'),
+        ('60', '60 Meses'),
+    ], string='Duración de prestamo', default='12', required=True)
     date_init = fields.Date(string='Fecha de Inicio', required=True)
     date_end = fields.Date(string='Fecha final', required=True)
     
@@ -62,13 +68,13 @@ class Prestamo(models.Model):
     payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
        
     payment_frequency = fields.Selection([
-        ('diario', 'Diario'),
-        ('semanal', 'Semanal'),
-        ('quincenal', 'Quincenal'),
-        ('mensual', 'Mensual'),
-        ('bimestral', 'Bimestral'),
-        ('trimestral', 'Trimestral'),
-        ('anual', 'Anual')
+        ('365', 'Diario'),
+        ('52', 'Semanal'),
+        ('24', 'Quincenal'),
+        ('12', 'Mensual'),
+        ('6', 'Bimestral'),
+        ('4', 'Trimestral'),
+        ('1', 'Anual')
     ], string='Frecuencia de Pago', default='mensual', required=True)
     loan_type = fields.Selection([
         ('personal', 'Personal'),
@@ -115,23 +121,52 @@ class Prestamo(models.Model):
         if vals.get('name', 'Nuevo') == 'Nuevo':
             vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
         return super(Prestamo, self).create(vals)
-         
+    
+    def date_due_cuota(self, date_init, quta):
+        
+        if self.payment_frequency == 365:
+            return date_init + timedelta(days=1 * quta)
+        elif self.payment_frequency == 52:
+            return date_init + timedelta(days=7 * quta)
+        elif self.payment_frequency == 24:
+            return date_init + timedelta(days=15 * quta)
+        elif self.payment_frequency == 12:
+            return date_init + timedelta(days=30 * quta)
+        elif self.payment_frequency == 6:
+            return date_init + timedelta(days=60 * quta)
+        elif self.payment_frequency == 4:
+            return date_init + timedelta(days=90 * quta)
+        elif self.payment_frequency == 1:
+            return date_init + timedelta(days=365 * quta)
+        
 
     def generate_quota(self):
         for prestamo in self:
             cuota_obj = self.env['cuota']
-            tasa_mensual = (prestamo.interest_rate / 100) / 12
-            amount_per_quota = prestamo.amount_borrowed * tasa_mensual / (1 - (1 + tasa_mensual) ** -prestamo.duration)
-            interest_per_quota = prestamo.amount_borrowed * (prestamo.interest_rate / 100) / 12
-            for month in range(1, prestamo.duration + 1):
+            #tasa_mensual = (prestamo.interest_rate / 100) / 12
+            #amount_per_quota = prestamo.amount_borrowed * tasa_mensual / (1 - (1 + tasa_mensual) ** -prestamo.duration)
+            #interest_per_quota = prestamo.amount_borrowed * (prestamo.interest_rate / 100) / 12
+            
+            años = self.duration/12
+            cant_cuotas = self.payment_frequency * años
+            At = self.amount_borrowed / cant_cuotas
+            n = 0
+            for quta in range(1, cant_cuotas + 1):
+                
+                St = self.amount_borrowed - (n * At)
+                
+                It = St * pow( (1 + ( self.interest_rate / 12 )), 12) - St
+                
+                Ct = At - It
+                
                 cuota_obj.create({
-                    'name': f'Cuota {month}/{prestamo.duration}',
+                    'name': f'Cuota {quta}/{cant_cuotas} de {self.name}',
                     'prestamo_id': prestamo.id,
-                    'amount': amount_per_quota,
-                    'amount_capital': amount_per_quota - interest_per_quota,
+                    'amount': Ct,
+                    'amount_capital': St,
                     'interest_rate': prestamo.interest_rate,
-                    'interest_generated': interest_per_quota,
-                    'date_due': prestamo.date_init + timedelta(days=30 * month),
+                    'interest_generated': It,
+                    'date_due': self.date_due_cuota(prestamo.date_init, quta),
                 })
 
     def action_approve(self):
