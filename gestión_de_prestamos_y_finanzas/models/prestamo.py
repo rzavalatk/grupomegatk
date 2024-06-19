@@ -194,7 +194,7 @@ class Prestamo(models.Model):
 
     def calculate_amount_quotas(self, amount, tasa, duration):
         tasa_mensual = (tasa / 100) / 12
-        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -duration)"""
+        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -duration)
 
     def add_period(self, date, frequency):
         if frequency == 'diario':
@@ -210,7 +210,7 @@ class Prestamo(models.Model):
         elif frequency == 'trimestral':
             return fields.Date.add(date, months=3)
         elif frequency == 'anual':
-            return fields.Date.add(date, years=1)
+            return fields.Date.add(date, years=1)"""
 
     def export_excel(self):
         # Crear un archivo en memoria
