@@ -141,7 +141,7 @@ class Prestamo(models.Model):
             #amount_per_quota = prestamo.amount_borrowed * tasa_mensual / (1 - (1 + tasa_mensual) ** -prestamo.duration)
             #interest_per_quota = prestamo.amount_borrowed * (prestamo.interest_rate / 100) / 12
             
-            años = self.duration/12
+            años = float(self.duration/12)
             cant_cuotas = self.payment_frequency * años
             At = self.amount_borrowed / cant_cuotas
             n = 0
