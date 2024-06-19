@@ -172,7 +172,7 @@ class Prestamo(models.Model):
                     'amount_capital': saldo_pendiente,
                     'interest_rate': prestamo.interest_rate,
                     'interest_generated': interes,
-                    'date_due': self.date_due_cuota(prestamo.date_init, quta),
+                    'date_due': self.date_due_cuota(prestamo.date_init, total_payments),
                 })
                 
              
