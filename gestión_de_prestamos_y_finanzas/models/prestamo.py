@@ -137,16 +137,27 @@ class Prestamo(models.Model):
     def generate_quota(self):
         for prestamo in self:
             cuota_obj = self.env['cuota']
-            #tasa_mensual = (prestamo.interest_rate / 100) / 12
-            #amount_per_quota = prestamo.amount_borrowed * tasa_mensual / (1 - (1 + tasa_mensual) ** -prestamo.duration)
-            #interest_per_quota = prestamo.amount_borrowed * (prestamo.interest_rate / 100) / 12
+            # Determinar la frecuencia de pago en número de pagos por año
+            frequency_map = {
+                'diario': 365,
+                'semanal': 52,
+                'quincenal': 26,
+                'mensual': 12,
+                'bimestral': 6,
+                'trimestral': 4,
+                'anual': 1
+            }
             
-            años = int(prestamo.duration/12)
-            cant_cuotas = int(prestamo.payment_frequency) * años
-            At = prestamo.amount_borrowed / cant_cuotas
+            if prestamo.payment_frequency not in frequency_map:
+                raise ValueError("Frecuencia de pago no válida")
+            
+            payments_per_year = frequency_map[prestamo.payment_frequency]
+            total_payments = payments_per_year * int(prestamo.duration / 12)
+            At = prestamo.amount_borrowed / total_payments
             tasa_interes = prestamo.interest_rate / 100
             n = 0
-            for quta in range(1, cant_cuotas + 1):
+            
+            for quta in range(1, total_payments + 1):
                 
                 St = prestamo.amount_borrowed - (n * At)
                 
@@ -160,7 +171,7 @@ class Prestamo(models.Model):
                 Ct = At - It
                 
                 cuota_obj.create({
-                    'name': f'Cuota {quta}/{cant_cuotas} de {prestamo.name}',
+                    'name': f'Cuota {quta}/{total_payments} de {prestamo.name}',
                     'prestamo_id': prestamo.id,
                     'amount': Ct,
                     'amount_capital': St,
