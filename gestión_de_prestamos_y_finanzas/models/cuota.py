@@ -19,6 +19,7 @@ class Cuota(models.Model):
     date_due = fields.Date(string='Fecha limite',copy=False,)
     payment_date = fields.Date(string='Fecha de pago',copy=False,)
     amount = fields.Float(string='Cuota',copy=False)
+    amount_capital_quota = fields.Float(string='Capital de cuota',copy=False)
     amount_capital = fields.Float(string='Capital',copy=False)
     interest_rate = fields.Float(string='Interes',copy=False, digits=dp.get_precision('Product Unit of Measure'))
     interest_generated = fields.Float(string='Interes generado',copy=False, default=0,)

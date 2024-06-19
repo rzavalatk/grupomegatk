@@ -174,6 +174,7 @@ class Prestamo(models.Model):
                     'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
                     'prestamo_id': prestamo.id,
                     'amount': cuota_mensual,
+                    'amount_capital_quota': capital_amortizado,
                     'amount_capital': saldo_pendiente,
                     'interest_rate': prestamo.interest_rate,
                     'interest_generated': interes,
