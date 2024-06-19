@@ -69,7 +69,7 @@ class Prestamo(models.Model):
         ('6', 'Bimestral'),
         ('4', 'Trimestral'),
         ('1', 'Anual')
-    ], string='Frecuencia de Pago', default='mensual', required=True)
+    ], string='Frecuencia de Pago', default='12', required=True)
     loan_type = fields.Selection([
         ('personal', 'Personal'),
         ('refinanciado', 'Refinanciado'),
