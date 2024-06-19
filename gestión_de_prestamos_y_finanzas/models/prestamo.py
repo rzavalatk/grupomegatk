@@ -162,6 +162,8 @@ class Prestamo(models.Model):
                     'interest_generated': It,
                     'date_due': self.date_due_cuota(prestamo.date_init, quta),
                 })
+                
+                n = n + 1
 
     def action_approve(self):
         for prestamo in self:
