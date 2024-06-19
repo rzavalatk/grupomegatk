@@ -144,12 +144,18 @@ class Prestamo(models.Model):
             años = int(self.duration/12)
             cant_cuotas = int(self.payment_frequency) * años
             At = self.amount_borrowed / cant_cuotas
+            tasa_interes = self.interest_rate / 100
             n = 0
             for quta in range(1, cant_cuotas + 1):
                 
                 St = self.amount_borrowed - (n * At)
                 
-                It = St * pow( (1 + ( self.interest_rate / 12 )), 12) - St
+                Tim = tasa_interes / 12
+                Tim1 = 1 + Tim
+                
+                exp = pow(Tim1, 12)
+                
+                It = (St * exp) - St
                 
                 Ct = At - It
                 
