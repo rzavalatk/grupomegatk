@@ -137,7 +137,49 @@ class Prestamo(models.Model):
     def generate_quota(self):
         for prestamo in self:
             cuota_obj = self.env['cuota']
+            
             # Determinar la frecuencia de pago en número de pagos por año
+            frequency_map = {
+                '365': 365,
+                '52': 52,
+                '24': 24,
+                '12': 12,
+                '6': 6,
+                '1': 4,
+                '1': 1
+            }
+            
+            if prestamo.payment_frequency not in frequency_map:
+                raise ValueError("Frecuencia de pago no válida")
+            
+            payments_per_year = frequency_map[prestamo.payment_frequency]
+            total_payments = payments_per_year * int(prestamo.duration / 12)
+            
+            saldo_pendiente = prestamo.amount_borrowed
+            tasa_interes_mensual = prestamo.interest_rate / 100 / 12
+            amortizacion_constante = prestamo.amount_borrowed / total_payments
+            
+            for cuota_number in range(1, total_payments + 1):
+                
+                interes = saldo_pendiente * tasa_interes_mensual
+                cuota_total = amortizacion_constante + interes
+                saldo_pendiente -= amortizacion_constante
+
+                cuota_obj.create({
+                    'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
+                    'prestamo_id': prestamo.id,
+                    'amount': cuota_total,
+                    'amount_capital': saldo_pendiente,
+                    'interest_rate': prestamo.interest_rate,
+                    'interest_generated': interes,
+                    'date_due': self.date_due_cuota(prestamo.date_init, quta),
+                })
+                
+             
+
+        
+            
+            """# Determinar la frecuencia de pago en número de pagos por año
             frequency_map = {
                 '365': 365,
                 '52': 52,
@@ -180,7 +222,7 @@ class Prestamo(models.Model):
                     'date_due': self.date_due_cuota(prestamo.date_init, quta),
                 })
                 
-                n = n + 1
+                n = n + 1"""
 
     def action_approve(self):
         for prestamo in self:
