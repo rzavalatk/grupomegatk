@@ -159,16 +159,21 @@ class Prestamo(models.Model):
             tasa_interes_mensual = prestamo.interest_rate / 100 / 12
             amortizacion_constante = prestamo.amount_borrowed / total_payments
             
+            # Calcular la cuota fija mensual
+            cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
+
+            
             for cuota_number in range(1, total_payments + 1):
                 
                 interes = saldo_pendiente * tasa_interes_mensual
-                cuota_total = amortizacion_constante + interes
-                saldo_pendiente -= amortizacion_constante
+                
+                capital_amortizado = cuota_mensual - interes
+                saldo_pendiente -= capital_amortizado
 
                 cuota_obj.create({
                     'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
                     'prestamo_id': prestamo.id,
-                    'amount': cuota_total,
+                    'amount': cuota_mensual,
                     'amount_capital': saldo_pendiente,
                     'interest_rate': prestamo.interest_rate,
                     'interest_generated': interes,
