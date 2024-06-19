@@ -139,13 +139,13 @@ class Prestamo(models.Model):
             cuota_obj = self.env['cuota']
             # Determinar la frecuencia de pago en número de pagos por año
             frequency_map = {
-                'diario': 365,
-                'semanal': 52,
-                'quincenal': 26,
-                'mensual': 12,
-                'bimestral': 6,
-                'trimestral': 4,
-                'anual': 1
+                '365': 365,
+                '52': 52,
+                '24': 24,
+                '12': 12,
+                '6': 6,
+                '1': 4,
+                '1': 1
             }
             
             if prestamo.payment_frequency not in frequency_map:
