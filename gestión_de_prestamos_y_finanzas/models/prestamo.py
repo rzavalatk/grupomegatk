@@ -166,7 +166,7 @@ class Prestamo(models.Model):
                 
                 exp = pow(Tim1, 12)
                 
-                It = (St * exp) - St
+                It = (St * tasa_interes) - St
                 
                 Ct = At + It
                 
