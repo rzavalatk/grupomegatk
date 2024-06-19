@@ -141,14 +141,14 @@ class Prestamo(models.Model):
             #amount_per_quota = prestamo.amount_borrowed * tasa_mensual / (1 - (1 + tasa_mensual) ** -prestamo.duration)
             #interest_per_quota = prestamo.amount_borrowed * (prestamo.interest_rate / 100) / 12
             
-            años = int(self.duration/12)
-            cant_cuotas = int(self.payment_frequency) * años
-            At = self.amount_borrowed / cant_cuotas
-            tasa_interes = self.interest_rate / 100
+            años = int(prestamo.duration/12)
+            cant_cuotas = int(prestamo.payment_frequency) * años
+            At = prestamo.amount_borrowed / cant_cuotas
+            tasa_interes = prestamo.interest_rate / 100
             n = 0
             for quta in range(1, cant_cuotas + 1):
                 
-                St = self.amount_borrowed - (n * At)
+                St = prestamo.amount_borrowed - (n * At)
                 
                 Tim = tasa_interes / 12
                 Tim1 = 1 + Tim
@@ -160,7 +160,7 @@ class Prestamo(models.Model):
                 Ct = At - It
                 
                 cuota_obj.create({
-                    'name': f'Cuota {quta}/{cant_cuotas} de {self.name}',
+                    'name': f'Cuota {quta}/{cant_cuotas} de {prestamo.name}',
                     'prestamo_id': prestamo.id,
                     'amount': Ct,
                     'amount_capital': St,
