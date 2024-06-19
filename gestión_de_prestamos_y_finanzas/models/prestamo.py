@@ -168,7 +168,7 @@ class Prestamo(models.Model):
                 
                 It = (St * exp) - St
                 
-                Ct = At - It
+                Ct = At + It
                 
                 cuota_obj.create({
                     'name': f'Cuota {quta}/{total_payments} de {prestamo.name}',
