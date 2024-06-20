@@ -15,6 +15,20 @@
             </tree>
         </field>
     </record>
+    <record id="propiedad_etiqueta_action" model="ir.actions.act_window">
+        <field name="name">Etiquetas</field>
+        <field name="res_model">tag.property</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_tag_property" model="ir.ui.view">
+        <field name="name">Etiqueta de propiedad</field>
+        <field name="model">tag.property</field>
+        <field name="arch" type="xml">
+            <tree string="Casa">
+            <field name="name"/>
+            </tree>
+        </field>
+    </record>
             <menuitem
                 id="menu_configuraciones"
                 name="Configuraciones"
@@ -26,5 +40,10 @@
                 action="tipo_estado_action"
                 parent="menu_configuraciones"
                 sequence="10"/>
-           
+            <menuitem
+                id="submenu_2_etiquetas"
+                name="Tipo de etiquetas"
+                action="propiedad_etiqueta_action"
+                parent="menu_configuraciones"
+                sequence="20"/>
 </odoo>
