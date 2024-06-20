@@ -59,7 +59,7 @@ class Cuota(models.Model):
         for cuota in self:
             factura = self.env['account.move'].create({
                 'move_type': 'out_invoice',
-                'partner_id': cuota.prestamo_id.partner_id.id,
+                #'partner_id': cuota.prestamo_id.partner_id.id,
                 'invoice_date': fields.Date.today(),
                 'invoice_line_ids': [(0, 0, {
                     'name': 'Cuota de Préstamo',
