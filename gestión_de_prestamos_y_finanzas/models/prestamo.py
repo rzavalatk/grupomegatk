@@ -108,7 +108,7 @@ class Prestamo(models.Model):
                  if quta.state == 'pagado':
                      pagado = pagado + quta.amount_capital_quota
             self.pay_capital = pagado
-            self.remaining_capital = self.amount_borrowed - self.pay_capital"""
+            self.remaining_capital = self.amount_borrowed - self.pay_capital
             
     @api.onchange('date_init', 'duration')
     def _onchange_dates(self):
@@ -127,7 +127,7 @@ class Prestamo(models.Model):
                 months = int(record.duration)
                 record.date_end = start_date + relativedelta(months=months)
             else:
-                record.date_end = False    
+                record.date_end = False"""    
     
     def _compute_invoiced(self):
         for prestamo in self:
