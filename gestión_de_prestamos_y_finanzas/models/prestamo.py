@@ -171,7 +171,7 @@ class Prestamo(models.Model):
 
                 cuota_obj.create({
                     'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
-                    'prestamo_id': prestamo.id,
+                    #'prestamo_id': prestamo.id,
                     'amount': cuota_mensual,
                     'amount_capital_quota': capital_amortizado,
                     'amount_capital': saldo_pendiente,
