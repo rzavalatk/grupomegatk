@@ -44,7 +44,7 @@ class Prestamo(models.Model):
     payment_term_id = fields.Many2one('account.payment.term|', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Float(string='Tasa de Interés', required=True)
-    currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,readonly=True, states={'borrador': [('readonly', False)]},)
+    currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Variables de conteo
     invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
@@ -100,7 +100,34 @@ class Prestamo(models.Model):
         for prestamo in self:
             prestamo.amount_cxp = prestamo.price_m - prestamo.prima
 
-       
+    """@api.onchange('quota_ids')
+    def _onchange_quota_ids_(self):
+        if self.quota_ids:
+            pagado = 0
+            for quta in self.quota_ids:
+                 if quta.state == 'pagado':
+                     pagado = pagado + quta.amount_capital_quota
+            self.pay_capital = pagado
+            self.remaining_capital = self.amount_borrowed - self.pay_capital
+            
+    @api.onchange('date_init', 'duration')
+    def _onchange_dates(self):
+        if self.date_init and self.duration:
+            start_date = fields.Date.from_string(self.date_init)
+            months = int(self.duration)
+            self.date_end = start_date + relativedelta(months=months)
+        else:
+            self.date_end = False
+
+    @api.depends('date_init', 'duration')
+    def _compute_end_date(self):
+        for record in self:
+            if record.date_init and record.duration:
+                start_date = fields.Date.from_string(record.date_init)
+                months = int(record.duration)
+                record.date_end = start_date + relativedelta(months=months)
+            else:
+                record.date_end = False"""    
     
     def _compute_invoiced(self):
         for prestamo in self:
@@ -171,7 +198,7 @@ class Prestamo(models.Model):
 
                 cuota_obj.create({
                     'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
-                    #'prestamo_id': prestamo.id,
+                    'prestamo_id': prestamo.id,
                     'amount': cuota_mensual,
                     'amount_capital_quota': capital_amortizado,
                     'amount_capital': saldo_pendiente,
