@@ -24,7 +24,7 @@
         <field name="name">Etiquetas de propiedad</field>
         <field name="model">tag.property</field>
         <field name="arch" type="xml">
-            <tree string="Casa">
+            <tree string="Etiqueta">
             <field name="name"/>
             </tree>
         </field>
@@ -39,11 +39,11 @@
                 action="tipo_estado_action"
                 parent="menu_configuraciones"
                 sequence="10"/>
-                <menuitem
+            <menuitem
                 id="submenu_2_etiquetas"
                 name="Etiquetas de propiedades"
                 action="etiqueta_action"
                 parent="menu_configuraciones"
-                sequence="11"/>
+                sequence="20"/>
            
 </odoo>
