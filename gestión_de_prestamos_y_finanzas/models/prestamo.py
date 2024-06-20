@@ -100,34 +100,7 @@ class Prestamo(models.Model):
         for prestamo in self:
             prestamo.amount_cxp = prestamo.price_m - prestamo.prima
 
-    """@api.onchange('quota_ids')
-    def _onchange_quota_ids_(self):
-        if self.quota_ids:
-            pagado = 0
-            for quta in self.quota_ids:
-                 if quta.state == 'pagado':
-                     pagado = pagado + quta.amount_capital_quota
-            self.pay_capital = pagado
-            self.remaining_capital = self.amount_borrowed - self.pay_capital
-            
-    @api.onchange('date_init', 'duration')
-    def _onchange_dates(self):
-        if self.date_init and self.duration:
-            start_date = fields.Date.from_string(self.date_init)
-            months = int(self.duration)
-            self.date_end = start_date + relativedelta(months=months)
-        else:
-            self.date_end = False
-
-    @api.depends('date_init', 'duration')
-    def _compute_end_date(self):
-        for record in self:
-            if record.date_init and record.duration:
-                start_date = fields.Date.from_string(record.date_init)
-                months = int(record.duration)
-                record.date_end = start_date + relativedelta(months=months)
-            else:
-                record.date_end = False"""    
+       
     
     def _compute_invoiced(self):
         for prestamo in self:
