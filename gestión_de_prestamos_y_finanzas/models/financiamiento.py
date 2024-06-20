@@ -6,7 +6,6 @@ import io
 from odoo.tools.misc import xlsxwriter
 
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 
 class Prestamo(models.Model):
     _name = 'prestamo'
@@ -14,24 +13,32 @@ class Prestamo(models.Model):
 
     #Datos generales
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
-    partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
-    remaining_capital = fields.Float('Capital restante', readonly=True, states={'borrador': [('readonly', False)]},  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
-    pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
-    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
+    partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
+    remaining_capital = fields.Float('Capital restante',  copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
     #Datos del prestamo
     amount_borrowed = fields.Float(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
+    #Datos del financiamiento
+    amount_cxc = fields.Float(string='Monto a financiar', compute='_compute_amount_cxc', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    #Datos de financiamiento / producto
+    #supplier_id = fields.Many2one('res.partner', string='Proveedor', required=True)
+    equipment = fields.Many2one('product.product', string='Equipo financiado', readonly=True, states={'borrador': [('readonly', False)]},)
+    price_a = fields.Float(string='Precio A', readonly=True, states={'borrador': [('readonly', False)]},)
+    price_m = fields.Float(string='Precio M', readonly=True, states={'borrador': [('readonly', False)]},)
+    prima = fields.Float(string='Prima', readonly=True, states={'borrador': [('readonly', False)]},)
+    utility = fields.Float(string='Utilidad', compute='_compute_utility', readonly=True, states={'borrador': [('readonly', False)]},)
+    amount_cxp = fields.Float(string='Monto a pagar', ccompute='_compute_amount_cxp', readonly=True, states={'borrador': [('readonly', False)]},)
+    
     #Datos de fechas
-    duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
-    date_init = fields.Date(string='Fecha de Inicio', required=True) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
-    date_end = fields.Date(string='Fecha final', required=True) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]})
+    date_init = fields.Date(string='Fecha de Inicio', required=True)
+    date_end = fields.Date(string='Fecha final', required=True)
     
     #Datos de cuentas bancarias
-    
-    #ESTO ESTA POR DEFINIRSE
-    
     company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
     #recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
     """producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)], default=product_gasto,)
@@ -41,7 +48,7 @@ class Prestamo(models.Model):
     user_id = fields.Many2one('res.users', string='Responsable', index=True,default=lambda self: self.env.user, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de contabilidad
-    payment_term_id = fields.Many2one('account.payment.term|', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Float(string='Tasa de Interés', required=True)
     currency_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id,readonly=True, states={'borrador': [('readonly', False)]},)
@@ -94,41 +101,8 @@ class Prestamo(models.Model):
     def _compute_amount_cxp(self):
         for prestamo in self:
             prestamo.amount_cxp = prestamo.price_m - prestamo.prima
-            
-    @api.depends('price_m', 'prima')
-    def _compute_amount_cxp(self):
-        for prestamo in self:
-            prestamo.amount_cxp = prestamo.price_m - prestamo.prima
 
-    @api.onchange('quota_ids')
-    def _onchange_quota_ids_(self):
-        if self.quota_ids:
-            pagado = 0
-            for quta in self.quota_ids:
-                 if quta.state == 'pagado':
-                     pagado = pagado + quta.amount_capital_quota
-            self.pay_capital = pagado
-            self.remaining_capital = self.amount_borrowed - self.pay_capital
-            
-    @api.onchange('date_init', 'duration')
-    def _onchange_dates(self):
-        if self.date_init and self.duration:
-            start_date = fields.Date.from_string(self.date_init)
-            months = int(self.duration)
-            self.date_end = start_date + relativedelta(months=months)
-        else:
-            self.date_end = False
-
-    @api.depends('date_init', 'duration')
-    def _compute_end_date(self):
-        for record in self:
-            if record.date_init and record.duration:
-                start_date = fields.Date.from_string(record.date_init)
-                months = int(record.duration)
-                record.date_end = start_date + relativedelta(months=months)
-            else:
-                record.date_end = False    
-    
+    @api.depends('quota_ids')
     def _compute_invoiced(self):
         for prestamo in self:
             prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)

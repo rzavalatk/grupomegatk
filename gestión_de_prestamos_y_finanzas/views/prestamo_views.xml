@@ -47,10 +47,11 @@
                                     <field name="name"/>
                                     <field name="date_due"/>
                                     <field name="payment_date" />
+                                    <field name="amount_capital" />
                                     <field name="amount_capital_quota" />
                                     <field name="interest_generated" />
                                     <field name="amount" />
-                                    <field name="amount_capital" />
+                                    <field name="balance" />
                                     <field name="state" />
                                    
                                 </tree>
