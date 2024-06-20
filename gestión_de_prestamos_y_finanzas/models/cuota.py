@@ -35,7 +35,7 @@ class Cuota(models.Model):
     prestamo_id = fields.Many2one('prestamo', string='Préstamo', required=True, ondelete='cascade')
     type_prestamo = fields.Char(string='Tipo', default=__type_prestamo)
     
-    state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('proceso', 'Proceso de pago'),('pagado', 'Pagado')], string="Estado", default='draft')
+    state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'),('hecho', 'Hecho')], string="Estado", default='draft')
     
     @api.depends('amount', 'amount_pay')
     def _compute_balance(self):
