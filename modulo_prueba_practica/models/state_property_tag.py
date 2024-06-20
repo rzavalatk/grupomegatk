@@ -1,6 +1,6 @@
-from odoo import models, fields
+from odoo import models,fields
 
-class etiquetas(models, fields):
+class etiquetas(models.fields):
     _name = "tag.property"
     _description = "Etiquetas"
 
