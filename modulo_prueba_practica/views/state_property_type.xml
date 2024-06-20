@@ -28,6 +28,7 @@
             <field name="name"/>
             </tree>
         </field>
+        </record>
             <menuitem
                 id="menu_configuraciones"
                 name="Configuraciones"
