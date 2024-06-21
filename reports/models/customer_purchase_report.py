@@ -103,12 +103,12 @@ class CustomerPurchaseReport(models.Model):
         
         for _, _, item in list_from:
             
-            no_encontrado = True
+            no_encontrado = False
             
             for _, _, item_to in list_to:
                 
                 if item['partner_id'] == item_to['partner_id']:
-                    
+                    no_encontrado = True
                     differences.append((0, 0, {
                         'partner_id': item['partner_id'],
                         'comercial': item['purchase_comercial'],
@@ -117,9 +117,9 @@ class CustomerPurchaseReport(models.Model):
                         'amount_total': item['purchase_amount'] + item_to['purchase_amount'],
                         
                     }))
-                    no_encontrado = False
                     
-            if no_encontrado:
+                    
+            if not no_encontrado:
                 differences_OI.append((0, 0, {
                     'partner_id': item['partner_id'],
                     'comercial': item['purchase_comercial'],
@@ -131,7 +131,7 @@ class CustomerPurchaseReport(models.Model):
         
         _logger.info(f"Writing differences: {differences}, OI: {differences_OI}")
         self.report_differences = differences
-        self.report_differences_OI = differences
+        self.report_differences_OI = differences_OI
         
         
 

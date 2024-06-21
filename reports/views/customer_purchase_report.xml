@@ -78,9 +78,10 @@
                             <field name="report_differences_OI">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
-                                    <field name="company_id"/>
-                                    <field name="email"/>
-                                    <field name="phone"/>
+                                    <field name="comercial" />
+                                    <field name="amount_first"/>
+                                    <field name="amount_second"/>
+                                    <field name="amount_total"/>
                                 </tree>
                             </field>
                         </page>
