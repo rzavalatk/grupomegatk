@@ -101,7 +101,6 @@ class CustomerPurchaseReport(models.Model):
         differences = []
         differences_OI = []
         
-        customer_ids = list_from.mapped('partner_id.id')
         
         for _, _, item in list_from:
             
