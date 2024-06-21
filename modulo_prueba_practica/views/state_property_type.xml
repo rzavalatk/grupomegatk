@@ -45,6 +45,6 @@
                 name="Etiquetas de propiedades"
                 action="etiqueta_action"
                 parent="menu_configuraciones"
-                sequence="20"/>
+                sequence="11"/>
            
 </odoo>
