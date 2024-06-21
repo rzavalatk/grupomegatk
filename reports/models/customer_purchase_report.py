@@ -89,6 +89,7 @@ class CustomerPurchaseReport(models.Model):
                 }))
         
         if lines:
+            _logger.info(f"Writing lines to field {field_name}: {lines}")
             self.write({field_name: lines})
         
         return customer_ids    
@@ -115,6 +116,8 @@ class CustomerPurchaseReport(models.Model):
                     'company_id': self.company_id.id,
                     
                 }))
+        
+        _logger.info(f"Writing differences: {differences}, OI: {differences_OI}")
         self.report_differences = differences
         self.report_differences_OI = differences
         
