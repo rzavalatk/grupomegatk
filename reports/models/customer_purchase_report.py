@@ -102,9 +102,9 @@ class CustomerPurchaseReport(models.Model):
         differences_OI = []
         
         
-        for _, _, item in list_from:
+        for item in list_from:
             
-            for _, _, item_to in list_to:
+            for item_to in list_to:
                 
                 if item['partner_id'] == item_to['partner_id']:
                     
