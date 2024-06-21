@@ -10,6 +10,7 @@ class TestModel(models.Model):
         fecha_futura = fecha_actual + timedelta(days=30 * 3)
         return fecha_futura.strftime("%Y-%m-%d")  
     
+    
     name = fields.Char('Nombre', required=True)
     description = fields.Text('Descripcion')
     postcode = fields.Char('Codigo postal')
