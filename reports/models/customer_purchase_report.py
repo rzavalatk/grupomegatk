@@ -93,7 +93,7 @@ class CustomerPurchaseReport(models.Model):
             _logger.info(f"Writing lines to field {field_name}: {lines}")
             self.write({field_name: lines})
         
-        return customer_list    
+        return lines   
         
     
     def _get_customers_difference(self, list_from, list_to):
@@ -102,9 +102,9 @@ class CustomerPurchaseReport(models.Model):
         differences_OI = []
         
         
-        for item in list_from:
+        for _, _, item in list_from:
             
-            for item_to in list_to:
+            for _, _, item_to in list_to:
                 
                 if item['partner_id'] == item_to['partner_id']:
                     
