@@ -117,7 +117,7 @@ class CustomerPurchaseReport(models.Model):
                         
                     }))
                 else:
-                    differences.append((0, 0, {
+                    differences_OI.append((0, 0, {
                         'partner_id': item['partner_id'],
                         'comercial': item['purchase_comercial'],
                         'amount_first': item['purchase_amount'],
@@ -125,25 +125,6 @@ class CustomerPurchaseReport(models.Model):
                         'amount_total': item['purchase_amount'],
                         
                     }))
-
-        
-        for item_from in list_from:
-            #partner = self.env['res.partner'].search(['id', '=', str(item_from)])
-            #_logger.warning(item_from)
-            if item_from in list_to:
-               
-                differences.append((0, 0, {
-                    'partner_id': item_from.id,
-                    'company_id': self.company_id.id,
-                    'comercial': item_from.user_id.id,
-                    
-                }))
-            else:
-                differences_OI.append((0, 0, {
-                    'partner_id': item_from,
-                    'company_id': self.company_id.id,
-                    
-                }))
         
         _logger.info(f"Writing differences: {differences}, OI: {differences_OI}")
         self.report_differences = differences
