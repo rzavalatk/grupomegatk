@@ -3,7 +3,7 @@ from odoo import models, fields, api
 import logging
 from datetime import datetime
 from datetime import date
-
+import time
 
 _logger = logging.getLogger(__name__)
 
@@ -38,8 +38,10 @@ class CustomerPurchaseReport(models.Model):
 
     def generate_reports(self):
         line_from = self._get_customers_purchase( self.date_from, self.date_to, 'report_lines_from_customer_purchase')
+        time.sleep(2)
         line_to = self._get_customers_purchase( self.date_from_i2, self.date_to_i2, 'report_lines_to_customer_purchase')
         #self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
+        time.sleep(2)
         if line_from and line_to:
             self._get_customers_difference(line_from, line_to)
         
@@ -53,6 +55,8 @@ class CustomerPurchaseReport(models.Model):
             ('move_type', '=', 'out_invoice'),
         ]
         account_orders = self.env['account.move'].search(domain)
+        
+        time.sleep(2)
         
         #Lista de todos los clientes y luego lista con todos los ids de los clientes
         customer_list = account_orders.mapped('partner_id')
