@@ -83,7 +83,7 @@ class CustomerPurchaseReport(models.Model):
                     'partner_id': customer_item.id,
                     'last_purchase': invoice_info[0],
                     'purchase_date': invoice_info[1],
-                    'purchase_comercial': customer_item.user_id,
+                    'purchase_comercial': customer_item.user_id.id,
                     'purchase_amount': valor_total,
                     'purchase_term_id': invoice_info[2],
                 }))
