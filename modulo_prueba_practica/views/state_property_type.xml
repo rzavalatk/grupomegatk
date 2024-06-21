@@ -25,7 +25,7 @@
         <field name="model">tag.property</field>
         <field name="arch" type="xml">
             <tree string="Etiqueta">
-            <field name="Nombre"/>
+            <field name="name"/>
             </tree>
         </field>
         </record>
