@@ -61,23 +61,33 @@ class CustomerPurchaseReport(models.Model):
         lines = []
         for customer_item in customer_list:
             n = True
+            invoice_info = []
+            valor_total = 0
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
-                if n:
-                    if invoice_item.move_type == 'out_invoice':
-                        if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
-                            if invoice_item.invoice_date <= date2: 
-                                if invoice_item.invoice_date >= date1:
-                                    n = False 
-                                    lines.append((0, 0, {
-                                        'partner_id': customer_item.id,
-                                        'last_purchase': invoice_item.id,
-                                        'purchase_date': invoice_item.invoice_date,
-                                        'purchase_comercial': invoice_item.invoice_user_id.id,
-                                        'purchase_amount': invoice_item.amount_total,
-                                        'purchase_term_id': invoice_item.invoice_payment_term_id.display_name,
-                                    }))         
-                    else:
-                        n = True
+                
+                if invoice_item.move_type == 'out_invoice':
+                    if invoice_item.invoice_date and isinstance(invoice_item.invoice_date, date):
+                        if invoice_item.invoice_date <= date2: 
+                            if invoice_item.invoice_date >= date1:
+                                if n:
+                                    invoice_info.append(invoice_item.id)
+                                    invoice_info.append(invoice_item.invoice_date)
+                                    invoice_info.append(invoice_item.invoice_payment_term_id.display_name)
+                                    n = False
+                                
+                                valor_total = valor_total + invoice_item.amount_total     
+                                
+                                         
+            if invoice_info:
+                lines.append((0, 0, {
+                    'partner_id': customer_item.id,
+                    'last_purchase': invoice_info[0],
+                    'purchase_date': invoice_info[1],
+                    'purchase_comercial': customer_item.user_id,
+                    'purchase_amount': valor_total,
+                    'purchase_term_id': invoice_info[2],
+                }))
+        
         if lines:
             self.write({field_name: lines})
         
@@ -123,10 +133,10 @@ class CustomerReportLine(models.Model):
     
     partner_id = fields.Many2one('res.partner', string='Customer')
     last_purchase = fields.Many2one('account.move', string='Ultima compra')
-    purchase_date = fields.Date('Fecha')
-    purchase_comercial = fields.Many2one('res.users', string='Comercial')
-    purchase_amount = fields.Float('Valor')
-    purchase_term_id = fields.Char('Termino de pago')
+    purchase_date = fields.Date('Fecha ultima compra')
+    purchase_comercial = fields.Many2one('res.users', string='Comercial del cliente')
+    purchase_amount = fields.Float('Total comprado')
+    purchase_term_id = fields.Char('Termino de pago ultima compra')
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
     
