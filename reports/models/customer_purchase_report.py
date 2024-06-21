@@ -40,7 +40,8 @@ class CustomerPurchaseReport(models.Model):
         line_from = self._get_customers_purchase( self.date_from, self.date_to, 'report_lines_from_customer_purchase')
         line_to = self._get_customers_purchase( self.date_from_i2, self.date_to_i2, 'report_lines_to_customer_purchase')
         #self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
-        self._get_customers_difference(line_from, line_to)
+        if line_from and line_to:
+            self._get_customers_difference(line_from, line_to)
         
     def _get_customers_purchase(self,date1, date2, field_name):
         #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
@@ -55,7 +56,7 @@ class CustomerPurchaseReport(models.Model):
         
         #Lista de todos los clientes y luego lista con todos los ids de los clientes
         customer_list = account_orders.mapped('partner_id')
-        customer_ids = account_orders.mapped('partner_id.id')
+        
         
         #Proceso para escribir los clientes que si han comprado en ese periodo de tiempo 1
         lines = []
@@ -92,7 +93,7 @@ class CustomerPurchaseReport(models.Model):
             _logger.info(f"Writing lines to field {field_name}: {lines}")
             self.write({field_name: lines})
         
-        return customer_ids    
+        return customer_list    
         
     
     def _get_customers_difference(self, list_from, list_to):
@@ -100,14 +101,42 @@ class CustomerPurchaseReport(models.Model):
         differences = []
         differences_OI = []
         
+        customer_ids = list_from.mapped('partner_id.id')
+        
+        for _, _, item in list_from:
+            
+            for _, _, item_to in list_to:
+                
+                if item['partner_id'] == item_to['partner_id']:
+                    
+                    differences.append((0, 0, {
+                        'partner_id': item['partner_id'],
+                        'comercial': item['purchase_comercial'],
+                        'amount_first': item['purchase_amount'],
+                        'amount_second': item_to['purchase_amount'], 
+                        'amount_total': item['purchase_amount'] + item_to['purchase_amount'],
+                        
+                    }))
+                else:
+                    differences.append((0, 0, {
+                        'partner_id': item['partner_id'],
+                        'comercial': item['purchase_comercial'],
+                        'amount_first': item['purchase_amount'],
+                        'amount_second': '0', 
+                        'amount_total': item['purchase_amount'],
+                        
+                    }))
+
+        
         for item_from in list_from:
             #partner = self.env['res.partner'].search(['id', '=', str(item_from)])
             #_logger.warning(item_from)
             if item_from in list_to:
                
                 differences.append((0, 0, {
-                    'partner_id': item_from,
+                    'partner_id': item_from.id,
                     'company_id': self.company_id.id,
+                    'comercial': item_from.user_id.id,
                     
                 }))
             else:
@@ -157,3 +186,8 @@ class CustomerReportLineDifference(models.Model):
     company_id = fields.Many2one('res.company', string='Compañia')
     email = fields.Text('email')
     phone = fields.Text('telefono')
+    comercial = fields.Many2one('res.users', string='Comercial del cliente')
+    amount_first = fields.Float('Total comprado primer intervalo')
+    amount_second = fields.Float('Total comprado segundo intervalo')
+    amount_total = fields.Float('Total comprado')
+    
