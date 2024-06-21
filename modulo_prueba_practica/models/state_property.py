@@ -11,6 +11,7 @@ class TestModel(models.Model):
         return fecha_futura.strftime("%Y-%m-%d")  
     
     tag_ids = fields.Many2many('tag.property', string='Etiquetas')
+    property_type_id = fields.Many2one('type.property', string='Tipo de propiedad')
     name = fields.Char('Nombre', required=True)
     description = fields.Text('Descripcion')
     postcode = fields.Char('Codigo postal')
@@ -37,7 +38,6 @@ class TestModel(models.Model):
         ('sold','Vendido'),
         ('canceled', 'Cancelado')
     ], string='Estado', default = 'draft')
-    #property_type_id = fields.Many2one('comodel_name', string='Tipo de propiedad')
     salesman = fields.Many2one('res.partner', string='Comprador')
     buyer = fields.Many2one('res.users', string='Vendedor')
 
