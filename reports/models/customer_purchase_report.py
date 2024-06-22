@@ -32,13 +32,22 @@ class CustomerPurchaseReport(models.Model):
     report_differences_OI = fields.One2many(
         'customer.purchase.report.line.difference', 'report_id_OI', string="Report Differences", readonly=True)
     
-    name = fields.Char(string="Nombre de reporte", required=True)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id)
-    date_from = fields.Date(string='Start Date')
-    date_to = fields.Date(string='End Date')
+    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_from = fields.Date(string='Start Date', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_to = fields.Date(string='End Date', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
-    date_from_i2 = fields.Date(string='Fencha inicio')
-    date_to_i2 = fields.Date(string='Fecha final')
+    date_from_i2 = fields.Date(string='Fencha inicio', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_to_i2 = fields.Date(string='Fecha final', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('aprobado', 'Aprobado'),
+        ('rechazado', 'Rechazado'),
+        ])
+    
+    def volver_borrador(self):
+         self.write({'state': 'borrador'})   
 
     def generate_reports(self):
         time.sleep(4)

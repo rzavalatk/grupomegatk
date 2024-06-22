@@ -9,10 +9,10 @@
         <field name="arch" type="xml">
             <form string="Reporte de clientes sin compras en determinado tiempo">
                 <header>
-                        <button name="generate_reports" type="object" string="Generar reporte" class="btn-primary"/>
-                        <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
-                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                        <button name="generate_reports" states='borrador' type="object" string="Generar reporte" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
+                        <button string="Volver a borrador" states="aprobado" name="volver_borrador" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado" />
                 </header>
                 <sheet>
                     <group>

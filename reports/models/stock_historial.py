@@ -30,6 +30,11 @@ class StockReportHistory(models.Model):
     date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id)
 
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('aprobado', 'Aprobado'),
+        ('rechazado', 'Rechazado'),
+        ])
     
 
     report_lines_from = fields.One2many(
