@@ -59,6 +59,8 @@ class CustomerPurchaseReport(models.Model):
         if line_from and line_to:
             self._get_customers_difference(line_from, line_to)
         
+        self.write({'state': 'aprobado'})
+        
     def _get_customers_purchase(self,date1, date2, field_name):
         #Busqueda para todas las facturas en el periodo de tiempo 1 (Periodo de clientres que si han comprado)
         domain = ['&', '&', '&', '&',
