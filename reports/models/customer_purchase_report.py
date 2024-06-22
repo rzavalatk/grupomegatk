@@ -44,7 +44,7 @@ class CustomerPurchaseReport(models.Model):
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
-        ])
+        ], default='borrador')
     
     def volver_borrador(self):
          self.write({'state': 'borrador'})   
