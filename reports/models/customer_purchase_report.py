@@ -220,7 +220,7 @@ class CustomerPurchaseReport(models.Model):
                 record.amount_second,
                 record.amount_total
             )
-            for record in self.report_differences_OIz9c
+            for record in self.report_differences_OI
         ]
 
         # Escribir datos en las hojas correspondientes
