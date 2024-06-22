@@ -174,7 +174,7 @@ class CustomerPurchaseReport(models.Model):
         encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
         col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
         
-        encabezados_differences = ['Customer', 'Compañia', 'email', 'telefono', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
+        encabezados_differences = ['Customer', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
         col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
 
         # Preparar los datos
