@@ -182,7 +182,7 @@ class CustomerPurchaseReport(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
+        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
         col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
         
         encabezados_differences = ['Customer', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
@@ -193,7 +193,6 @@ class CustomerPurchaseReport(models.Model):
             (
                 record.partner_id.name,
                 record.last_purchase.name,
-                record.purchase_date,
                 record.purchase_comercial.name,
                 record.purchase_amount,
                 record.purchase_term_id
@@ -205,7 +204,6 @@ class CustomerPurchaseReport(models.Model):
             (
                 record.partner_id.name,
                 record.last_purchase.name,
-                record.purchase_date,
                 record.purchase_comercial.name,
                 record.purchase_amount,
                 record.purchase_term_id
