@@ -5,6 +5,10 @@ from datetime import datetime
 from datetime import date
 import time
 
+import io
+import base64
+import xlsxwriter
+
 _logger = logging.getLogger(__name__)
 
 class CustomerPurchaseReport(models.Model):
@@ -136,6 +140,113 @@ class CustomerPurchaseReport(models.Model):
         _logger.info(f"Writing differences: {differences}, OI: {differences_OI}")
         self.report_differences = differences
         self.report_differences_OI = differences_OI
+    
+
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # Crear hojas de Excel
+        worksheet_lines_from_customer = workbook.add_worksheet('Clientes Intervalo 1')
+        worksheet_lines_to_customer = workbook.add_worksheet('Clientes Intervalo 2')
+        worksheet_differences = workbook.add_worksheet('Diferencias')
+        worksheet_differences_OIz9c = workbook.add_worksheet('Diferencias OI')
+
+        # Función para escribir encabezados y datos en una hoja
+        def escribir_hoja(worksheet, encabezados, datos):
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value)
+                row += 1
+
+        # Encabezados
+        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
+        encabezados_differences = ['Customer', 'Compañia', 'email', 'telefono', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
+
+        # Preparar los datos
+        datos_lines_from_customer = [
+            (
+                record.partner_id.name,
+                record.last_purchase.name,
+                record.purchase_date,
+                record.purchase_comercial.name,
+                record.purchase_amount,
+                record.purchase_term_id
+            )
+            for record in self.report_lines_from_customer_purchase
+        ]
+
+        datos_lines_to_customer = [
+            (
+                record.partner_id.name,
+                record.last_purchase.name,
+                record.purchase_date,
+                record.purchase_comercial.name,
+                record.purchase_amount,
+                record.purchase_term_id
+            )
+            for record in self.report_lines_to_customer_purchase
+        ]
+
+        datos_differences = [
+            (
+                record.partner_id.name,
+                record.company_id.name,
+                record.email,
+                record.phone,
+                record.comercial.name,
+                record.amount_first,
+                record.amount_second,
+                record.amount_total
+            )
+            for record in self.report_differences
+        ]
+
+        datos_differences_OIz9c = [
+            (
+                record.partner_id.name,
+                record.company_id.name,
+                record.email,
+                record.phone,
+                record.comercial.name,
+                record.amount_first,
+                record.amount_second,
+                record.amount_total
+            )
+            for record in self.report_differences_OIz9c
+        ]
+
+        # Escribir datos en las hojas correspondientes
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer)
+        escribir_hoja(worksheet_lines_to_customer, encabezados_lines_customer, datos_lines_to_customer)
+        escribir_hoja(worksheet_differences, encabezados_differences, datos_differences)
+        escribir_hoja(worksheet_differences_OIz9c, encabezados_differences, datos_differences_OIz9c)
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'stock_report_history_export.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'stock_report_history_export.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+
         
         
 
