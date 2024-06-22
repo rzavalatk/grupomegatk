@@ -151,10 +151,14 @@ class CustomerPurchaseReport(models.Model):
         worksheet_lines_from_customer = workbook.add_worksheet('Clientes Intervalo 1')
         worksheet_lines_to_customer = workbook.add_worksheet('Clientes Intervalo 2')
         worksheet_differences = workbook.add_worksheet('Diferencias')
-        worksheet_differences_OIz9c = workbook.add_worksheet('Diferencias OI')
+        worksheet_differences_OIz9c = workbook.add_worksheet('Diferencias OIz9c')
 
-        # Función para escribir encabezados y datos en una hoja
-        def escribir_hoja(worksheet, encabezados, datos):
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
             # Escribir los encabezados
             for col, encabezado in enumerate(encabezados):
                 worksheet.write(0, col, encabezado)
@@ -166,9 +170,12 @@ class CustomerPurchaseReport(models.Model):
                     worksheet.write(row, col, value)
                 row += 1
 
-        # Encabezados
+        # Encabezados y anchos de columnas
         encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
+        col_widths_lines_customer = [30, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
+        
         encabezados_differences = ['Customer', 'Compañia', 'email', 'telefono', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
+        col_widths_differences = [30, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
 
         # Preparar los datos
         datos_lines_from_customer = [
@@ -198,9 +205,6 @@ class CustomerPurchaseReport(models.Model):
         datos_differences = [
             (
                 record.partner_id.name,
-                record.company_id.name,
-                record.email,
-                record.phone,
                 record.comercial.name,
                 record.amount_first,
                 record.amount_second,
@@ -212,9 +216,6 @@ class CustomerPurchaseReport(models.Model):
         datos_differences_OIz9c = [
             (
                 record.partner_id.name,
-                record.company_id.name,
-                record.email,
-                record.phone,
                 record.comercial.name,
                 record.amount_first,
                 record.amount_second,
@@ -223,11 +224,11 @@ class CustomerPurchaseReport(models.Model):
             for record in self.report_differences_OI
         ]
 
-        # Escribir datos en las hojas correspondientes
-        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer)
-        escribir_hoja(worksheet_lines_to_customer, encabezados_lines_customer, datos_lines_to_customer)
-        escribir_hoja(worksheet_differences, encabezados_differences, datos_differences)
-        escribir_hoja(worksheet_differences_OIz9c, encabezados_differences, datos_differences_OIz9c)
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+        escribir_hoja(worksheet_lines_to_customer, encabezados_lines_customer, datos_lines_to_customer, col_widths_lines_customer)
+        escribir_hoja(worksheet_differences, encabezados_differences, datos_differences, col_widths_differences)
+        escribir_hoja(worksheet_differences_OIz9c, encabezados_differences, datos_differences_OIz9c, col_widths_differences)
 
         workbook.close()
         output.seek(0)
