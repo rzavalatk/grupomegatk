@@ -150,8 +150,8 @@ class CustomerPurchaseReport(models.Model):
         # Crear hojas de Excel
         worksheet_lines_from_customer = workbook.add_worksheet('Clientes Intervalo 1')
         worksheet_lines_to_customer = workbook.add_worksheet('Clientes Intervalo 2')
-        worksheet_differences = workbook.add_worksheet('Diferencias')
-        worksheet_differences_OIz9c = workbook.add_worksheet('Diferencias OIz9c')
+        worksheet_differences = workbook.add_worksheet('Clientes que compraron en ambos')
+        worksheet_differences_OIz9c = workbook.add_worksheet('Clientes que compraron en el primero pero no en el segundo')
 
         # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
         def escribir_hoja(worksheet, encabezados, datos, col_widths):
@@ -172,10 +172,10 @@ class CustomerPurchaseReport(models.Model):
 
         # Encabezados y anchos de columnas
         encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
-        col_widths_lines_customer = [30, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
+        col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
         
         encabezados_differences = ['Customer', 'Compañia', 'email', 'telefono', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
-        col_widths_differences = [30, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
+        col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
 
         # Preparar los datos
         datos_lines_from_customer = [
