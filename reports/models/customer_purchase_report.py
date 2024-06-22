@@ -41,11 +41,12 @@ class CustomerPurchaseReport(models.Model):
     date_to_i2 = fields.Date(string='Fecha final')
 
     def generate_reports(self):
+        time.sleep(4)
         line_from = self._get_customers_purchase( self.date_from, self.date_to, 'report_lines_from_customer_purchase')
-        time.sleep(2)
+        time.sleep(4)
         line_to = self._get_customers_purchase( self.date_from_i2, self.date_to_i2, 'report_lines_to_customer_purchase')
         #self._get_customers_no_purchase('report_lines_from_no_customer_purchase')
-        time.sleep(2)
+        time.sleep(4)
         if line_from and line_to:
             self._get_customers_difference(line_from, line_to)
         
