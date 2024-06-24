@@ -127,6 +127,8 @@ class StockReportHistory(models.Model):
                                     ids.append(product_id)
         self.report_differences = differences
     
+    
+
     def exportar_excel(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
@@ -136,31 +138,37 @@ class StockReportHistory(models.Model):
         worksheet_product_to = workbook.add_worksheet(f'Reporte a la fecha {self.date_to}')
         worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
         
+        # Definir formatos
+        currency_format = workbook.add_format({'num_format': 'L#,##0.00', 'align': 'center'})
+        number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
+        header_format = workbook.add_format({'bold': True, 'align': 'center'})
+        
         # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
-        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+        def escribir_hoja(worksheet, encabezados, datos, col_widths, formatos):
             # Ajustar el tamaño de las columnas
             for col, width in enumerate(col_widths):
                 worksheet.set_column(col, col, width)
             
             # Escribir los encabezados
             for col, encabezado in enumerate(encabezados):
-                worksheet.write(0, col, encabezado)
+                worksheet.write(0, col, encabezado, header_format)
             
             # Escribir los datos
             row = 1
             for record in datos:
                 for col, value in enumerate(record):
-                    worksheet.write(row, col, value)
+                    worksheet.write(row, col, value, formatos[col])
                 row += 1
 
         # Encabezados y anchos de columnas
         encabezados_lines_reports = ['Producto', 'Cantidad al dia']
         col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
+        formatos_lines_reports = [None, number_format]  # Formatos para cada columna
         
-        encabezados_reports_differences = ['Producto', 'Precio de coste', 'Precio de venta', 'Cantidad inicial', 'Cantidad final', 'Movimiento']
+        encabezados_reports_differences = ['Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta']
         col_widths_reports_differences = [45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        formatos_reports_differences = [None, number_format, number_format, number_format, currency_format, currency_format]  # Formatos para cada columna
         
-
         # Preparar los datos
         datos_lines_from_report = [
             (
@@ -170,7 +178,6 @@ class StockReportHistory(models.Model):
             for record in self.report_lines_from
         ]
         
-
         datos_lines_to_report = [
             (
                 record.product_id.name,
@@ -182,20 +189,20 @@ class StockReportHistory(models.Model):
         datos_differences = [
             (
                 record.product_id.name,
-                record.standard_price,
-                record.lst_price,
                 record.quantity_from,
                 record.quantity_to,
-                record.quantity_difference
+                record.quantity_difference,
+                record.standard_price,
+                record.lst_price,
             )
             for record in self.report_differences
         ]
         
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
-        escribir_hoja(worksheet_product_from, encabezados_lines_reports, datos_lines_from_report, col_widths_lines_reports)
-        escribir_hoja(worksheet_product_to, encabezados_lines_reports, datos_lines_to_report, col_widths_lines_reports)
-        escribir_hoja(worksheet_sin_movimiento, encabezados_reports_differences, datos_differences, col_widths_reports_differences)
-
+        escribir_hoja(worksheet_sin_movimiento, encabezados_reports_differences, datos_differences, col_widths_reports_differences, formatos_reports_differences)
+        escribir_hoja(worksheet_product_from, encabezados_lines_reports, datos_lines_from_report, col_widths_lines_reports, formatos_lines_reports)
+        escribir_hoja(worksheet_product_to, encabezados_lines_reports, datos_lines_to_report, col_widths_lines_reports, formatos_lines_reports)
+        
         workbook.close()
         output.seek(0)
 
@@ -214,6 +221,7 @@ class StockReportHistory(models.Model):
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
         }
+
     
     def generate_excel(self):
         vals = []

@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.addons.base.models.res_currency import amount_to_text_es
 import logging
 import math
 
 _logger = logging.getLogger(__name__)
+
+
+def custom_amount_to_text(number):
+    # Aquí puedes ajustar la lógica para cambiar 'lempira' por 'lempiras' y 'y' por 'con'
+    words = amount_to_text_es(number)
+    words = words.replace(' Lempira y ', ' Lempiras con ')
+    words = words.replace(' Lempira', ' Lempiras')  # Si hay otros casos donde no hay 'y'
+    return words
 
 
 #Campo de comisión pagada en las facturas
@@ -16,6 +25,9 @@ class Account_Move(models.Model):
         self.x_contacto = cotizacion.x_contacto
         self.sorteo_id = cotizacion.sorteo_id.id
         self.x_student = cotizacion.x_student
+    
+    def amount_to_text(self, amount):
+        return custom_amount_to_text(amount)
         
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
