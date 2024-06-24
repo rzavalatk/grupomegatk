@@ -94,7 +94,7 @@ class StockReportHistory(models.Model):
             self.write({field_name: lines})
 
     def _calculate_differences(self):
-        
+        self.ensure_one()
         product = fields.Many2one('product.product', string="Producto", required=True)
         
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
