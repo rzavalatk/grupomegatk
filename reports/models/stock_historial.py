@@ -95,10 +95,8 @@ class StockReportHistory(models.Model):
 
     def _calculate_differences(self):
         self.ensure_one()
-        product = fields.Many2one('product.product', string="Producto", required=True)
-        
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
-        time.sleep(4)
+        #time.sleep(4)
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
