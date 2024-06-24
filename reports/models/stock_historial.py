@@ -2,6 +2,7 @@ from itertools import groupby
 
 from odoo import models, fields, api
 from datetime import datetime
+import time
 
 import base64
 import io
@@ -16,19 +17,16 @@ class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
     
-    """def _name_(self):
-        self.name = "Reporte de movimiento de inventario :: " + str(self.company_id.name)"""
-
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
-        self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)
+        self.name = "No vendido del " + str(self.company_id.name) +str(self.date_from) + " al " + str(self.date_to)
     
    
 
-    name = fields.Char(string="Nombre de reporte", required=True)
-    date_from = fields.Datetime(string="Fecha inicio", required=True)
-    date_to = fields.Datetime(string="Fecha final", required=True)
-    company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id)
+    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id, required=True, readonly=True, states={'borrador': [('readonly', False)]},)
 
     state = fields.Selection([
         ('borrador', 'Borrador'),
@@ -45,8 +43,11 @@ class StockReportHistory(models.Model):
         'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
 
     def generate_reports(self):
+        time.sleep(4)
         self._generate_report_lines(self.date_from, 'report_lines_from')
+        time.sleep(4)
         self._generate_report_lines(self.date_to, 'report_lines_to')
+        time.sleep(4)
         self._calculate_differences()
 
 
@@ -112,40 +113,89 @@ class StockReportHistory(models.Model):
                             'quantity_from': qty_from,
                             'quantity_to': qty_to,
                             'quantity_difference': qty_to - qty_from,
+                            'lst_price': lines_to[product_id].lst_price,
+                            'standard_price': lines_to[product_id].standard_price
                         }))
         self.report_differences = differences
     
     def exportar_excel(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        worksheet = workbook.add_worksheet()
 
-        # Escribir los encabezados
-        worksheet.write(0, 0, 'Codigo de barras')
-        worksheet.write(0, 1, 'Producto')
-        worksheet.write(0, 2, 'Inventario Inicial')
-        worksheet.write(0, 3, 'Inventario Final')
-        worksheet.write(0, 4, 'Movimiento de producto')
+        # Crear hojas de Excel
+        worksheet_product_from = workbook.add_worksheet(f'Reporte a la fecha {self.date_from}')
+        worksheet_product_to = workbook.add_worksheet(f'Reporte a la fecha {self.date_to}')
+        worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
+        
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value)
+                row += 1
 
-        # Escribir los datos
-        row = 1
-        for record in self.report_differences:
-            worksheet.write(row, 0, record.product_id.barcode)
-            worksheet.write(row, 1, record.product_id.product_tmpl_id.name)
-            worksheet.write(row, 2, record.quantity_from)
-            worksheet.write(row, 3, record.quantity_to)
-            worksheet.write(row, 4, record.quantity_difference)
-            row += 1
+        # Encabezados y anchos de columnas
+        encabezados_lines_reports = ['Producto', 'Cantidad al dia']
+        col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
+        
+        encabezados_reports_differences = ['Producto', 'Precio de coste', 'Precio de venta', 'Cantidad inicial', 'Cantidad final', 'Movimiento']
+        col_widths_reports_differences = [45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        
+
+        # Preparar los datos
+        datos_lines_from_report = [
+            (
+                record.product_id,
+                record.quantity,
+            )
+            for record in self.report_lines_from
+        ]
+        
+
+        datos_lines_to_report = [
+            (
+                record.product_id,
+                record.quantity,
+            )
+            for record in self.report_lines_to
+        ]
+
+        datos_differences = [
+            (
+                record.product_id,
+                record.standard_price,
+                record.lst_price,
+                record.quantity_from,
+                record.quantity_to,
+                record.quantity_difference
+            )
+            for record in self.report_differences
+        ]
+        
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_product_from, encabezados_lines_reports, datos_lines_from_report, col_widths_lines_reports)
+        escribir_hoja(worksheet_product_to, encabezados_lines_reports, datos_lines_to_report, col_widths_lines_reports)
+        escribir_hoja(worksheet_sin_movimiento, encabezados_reports_differences, datos_differences, col_widths_reports_differences)
 
         workbook.close()
         output.seek(0)
 
         # Crear el adjunto
         attachment = self.env['ir.attachment'].create({
-            'name': 'stock_report_history_export.xlsx',
+            'name': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
             'type': 'binary',
             'datas': base64.b64encode(output.getvalue()),
-            'store_fname': 'stock_report_history_export.xlsx',
+            'store_fname': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
 
@@ -204,4 +254,6 @@ class StockReportDifference(models.Model):
     quantity_to = fields.Float(string="Cantidad Final", required=True)
     quantity_difference = fields.Float(
         string="Movimiento", required=True)
+    lst_price = fields.Float(string="Precio de venta", required=True)
+    standard_price = fields.Float(string="Precio de coste", required=True)
 
