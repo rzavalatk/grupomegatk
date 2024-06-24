@@ -164,7 +164,7 @@ class StockReportHistory(models.Model):
         # Preparar los datos
         datos_lines_from_report = [
             (
-                record.product_id,
+                record.product_id.name,
                 record.quantity,
             )
             for record in self.report_lines_from
@@ -173,7 +173,7 @@ class StockReportHistory(models.Model):
 
         datos_lines_to_report = [
             (
-                record.product_id,
+                record.product_id.name,
                 record.quantity,
             )
             for record in self.report_lines_to
@@ -181,7 +181,7 @@ class StockReportHistory(models.Model):
 
         datos_differences = [
             (
-                record.product_id,
+                record.product_id.name,
                 record.standard_price,
                 record.lst_price,
                 record.quantity_from,
