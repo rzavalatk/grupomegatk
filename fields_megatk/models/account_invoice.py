@@ -7,12 +7,12 @@ import math
 
 _logger = logging.getLogger(__name__)
 
-"""def custom_amount_to_text(number):
+def custom_amount_to_text(self):
         # Aquí puedes ajustar la lógica para cambiar 'lempira' por 'lempiras' y 'y' por 'con'
-        words = amount_to_text_es(number)
+        words = self.num_word
         words = words.replace(' Lempira y ', ' Lempiras con ')
         words = words.replace(' Lempira', ' Lempiras')  # Si hay otros casos donde no hay 'y'
-        return words"""
+        return words
 
 #Campo de comisión pagada en las facturas
 class Account_Move(models.Model):
@@ -26,8 +26,8 @@ class Account_Move(models.Model):
     
     
     
-    """def amount_to_text(self, amount):
-        return custom_amount_to_text(amount)"""
+    def amount_to_text(self):
+        return custom_amount_to_text()
         
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',

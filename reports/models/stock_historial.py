@@ -134,9 +134,10 @@ class StockReportHistory(models.Model):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
         # Crear hojas de Excel
+        worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
         worksheet_product_from = workbook.add_worksheet(f'Reporte a la fecha {self.date_from}')
         worksheet_product_to = workbook.add_worksheet(f'Reporte a la fecha {self.date_to}')
-        worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
+        
         
         # Definir formatos
         currency_format = workbook.add_format({'num_format': 'L#,##0.00', 'align': 'center'})
