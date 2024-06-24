@@ -109,7 +109,7 @@ class StockReportHistory(models.Model):
             if qty_from != 0:
                 if qty_to != 0:
                     if (qty_from - qty_to) == 0:
-                        producto = self.env['product.product'].search(['product_id', '=', product_id])
+                        producto = self.env['product.product'].search(['product_id', '=', product_id.id])
                         differences.append((0, 0, {
                             'product_id': product_id,
                             'quantity_from': qty_from,
