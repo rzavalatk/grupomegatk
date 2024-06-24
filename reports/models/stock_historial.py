@@ -129,98 +129,98 @@ class StockReportHistory(models.Model):
     
     
 
-def exportar_excel(self):
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
-    # Crear hojas de Excel
-    worksheet_product_from = workbook.add_worksheet(f'Reporte a la fecha {self.date_from}')
-    worksheet_product_to = workbook.add_worksheet(f'Reporte a la fecha {self.date_to}')
-    worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
-    
-    # Definir formatos
-    currency_format = workbook.add_format({'num_format': '$#,##0.00', 'align': 'center'})
-    number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
-    header_format = workbook.add_format({'bold': True, 'align': 'center'})
-    
-    # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
-    def escribir_hoja(worksheet, encabezados, datos, col_widths, formatos):
-        # Ajustar el tamaño de las columnas
-        for col, width in enumerate(col_widths):
-            worksheet.set_column(col, col, width)
+        # Crear hojas de Excel
+        worksheet_product_from = workbook.add_worksheet(f'Reporte a la fecha {self.date_from}')
+        worksheet_product_to = workbook.add_worksheet(f'Reporte a la fecha {self.date_to}')
+        worksheet_sin_movimiento = workbook.add_worksheet('Productos sin movimientos')
         
-        # Escribir los encabezados
-        for col, encabezado in enumerate(encabezados):
-            worksheet.write(0, col, encabezado, header_format)
+        # Definir formatos
+        currency_format = workbook.add_format({'num_format': 'L#,##0.00', 'align': 'center'})
+        number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
+        header_format = workbook.add_format({'bold': True, 'align': 'center'})
         
-        # Escribir los datos
-        row = 1
-        for record in datos:
-            for col, value in enumerate(record):
-                worksheet.write(row, col, value, formatos[col])
-            row += 1
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths, formatos):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado, header_format)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value, formatos[col])
+                row += 1
 
-    # Encabezados y anchos de columnas
-    encabezados_lines_reports = ['Producto', 'Cantidad al dia']
-    col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
-    formatos_lines_reports = [None, number_format]  # Formatos para cada columna
-    
-    encabezados_reports_differences = ['Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta']
-    col_widths_reports_differences = [45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
-    formatos_reports_differences = [None, number_format, number_format, number_format, currency_format, currency_format]  # Formatos para cada columna
-    
-    # Preparar los datos
-    datos_lines_from_report = [
-        (
-            record.product_id.name,
-            record.quantity,
-        )
-        for record in self.report_lines_from
-    ]
-    
-    datos_lines_to_report = [
-        (
-            record.product_id.name,
-            record.quantity,
-        )
-        for record in self.report_lines_to
-    ]
+        # Encabezados y anchos de columnas
+        encabezados_lines_reports = ['Producto', 'Cantidad al dia']
+        col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
+        formatos_lines_reports = [None, number_format]  # Formatos para cada columna
+        
+        encabezados_reports_differences = ['Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta']
+        col_widths_reports_differences = [45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        formatos_reports_differences = [None, number_format, number_format, number_format, currency_format, currency_format]  # Formatos para cada columna
+        
+        # Preparar los datos
+        datos_lines_from_report = [
+            (
+                record.product_id.name,
+                record.quantity,
+            )
+            for record in self.report_lines_from
+        ]
+        
+        datos_lines_to_report = [
+            (
+                record.product_id.name,
+                record.quantity,
+            )
+            for record in self.report_lines_to
+        ]
 
-    datos_differences = [
-        (
-            record.product_id.name,
-            record.quantity_from,
-            record.quantity_to,
-            record.quantity_difference,
-            record.standard_price,
-            record.lst_price,
-        )
-        for record in self.report_differences
-    ]
-    
-    # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
-    escribir_hoja(worksheet_sin_movimiento, encabezados_reports_differences, datos_differences, col_widths_reports_differences, formatos_reports_differences)
-    escribir_hoja(worksheet_product_from, encabezados_lines_reports, datos_lines_from_report, col_widths_lines_reports, formatos_lines_reports)
-    escribir_hoja(worksheet_product_to, encabezados_lines_reports, datos_lines_to_report, col_widths_lines_reports, formatos_lines_reports)
-    
-    workbook.close()
-    output.seek(0)
+        datos_differences = [
+            (
+                record.product_id.name,
+                record.quantity_from,
+                record.quantity_to,
+                record.quantity_difference,
+                record.standard_price,
+                record.lst_price,
+            )
+            for record in self.report_differences
+        ]
+        
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_sin_movimiento, encabezados_reports_differences, datos_differences, col_widths_reports_differences, formatos_reports_differences)
+        escribir_hoja(worksheet_product_from, encabezados_lines_reports, datos_lines_from_report, col_widths_lines_reports, formatos_lines_reports)
+        escribir_hoja(worksheet_product_to, encabezados_lines_reports, datos_lines_to_report, col_widths_lines_reports, formatos_lines_reports)
+        
+        workbook.close()
+        output.seek(0)
 
-    # Crear el adjunto
-    attachment = self.env['ir.attachment'].create({
-        'name': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
-        'type': 'binary',
-        'datas': base64.b64encode(output.getvalue()),
-        'store_fname': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
-        'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    })
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
 
-    # Devolver la acción para descargar el archivo
-    return {
-        'type': 'ir.actions.act_url',
-        'url': f'/web/content/{attachment.id}?download=true',
-        'target': 'self',
-    }
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
 
     
     def generate_excel(self):
