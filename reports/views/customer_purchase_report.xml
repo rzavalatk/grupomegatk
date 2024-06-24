@@ -9,10 +9,10 @@
         <field name="arch" type="xml">
             <form string="Reporte de clientes sin compras en determinado tiempo">
                 <header>
-                        <button name="generate_reports" type="object" string="Generar reporte" class="btn-primary"/>
-                        <!--<button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>-->
-                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                        <button name="generate_reports" states='borrador' type="object" string="Generar reporte" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
+                        <button string="Volver a borrador" states="aprobado" name="volver_borrador" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado" />
                 </header>
                 <sheet>
                     <group>
@@ -40,9 +40,10 @@
                                     <field name="partner_id"/>
                                     <field name="last_purchase"/>
                                     <field name="purchase_date" />
+                                    <field name="purchase_term_id" />
                                     <field name="purchase_comercial" />
                                     <field name="purchase_amount" />
-                                    <field name="purchase_term_id" />
+                                    
                                    
                                 </tree>
                             </field>
@@ -53,9 +54,10 @@
                                     <field name="partner_id"/>
                                     <field name="last_purchase"/>
                                     <field name="purchase_date" />
+                                    <field name="purchase_term_id" />
                                     <field name="purchase_comercial" />
                                     <field name="purchase_amount" />
-                                    <field name="purchase_term_id" />
+                                    
                                    
                                 </tree>
                             </field>
@@ -64,9 +66,11 @@
                             <field name="report_differences">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
-                                    <field name="company_id"/>
-                                    <field name="email"/>
-                                    <field name="phone"/>
+                                    <field name="comercial" />
+                                    <field name="amount_first"/>
+                                    <field name="amount_second"/>
+                                    <field name="amount_total"/>
+                                    
                                 </tree>
                             </field>
                         </page>
@@ -74,9 +78,10 @@
                             <field name="report_differences_OI">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
-                                    <field name="company_id"/>
-                                    <field name="email"/>
-                                    <field name="phone"/>
+                                    <field name="comercial" />
+                                    <field name="amount_first"/>
+                                    <field name="amount_second"/>
+                                    <field name="amount_total"/>
                                 </tree>
                             </field>
                         </page>
