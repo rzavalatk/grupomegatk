@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from odoo.addons.base.models.res_currency import amount_to_text_es
+#from odoo.addons.base.models.res_currency import amount_to_text_es
 import logging
 import math
 
