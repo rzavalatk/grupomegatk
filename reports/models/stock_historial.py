@@ -19,7 +19,7 @@ class StockReportHistory(models.Model):
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
-        self.name = "No vendido del " + str(self.company_id.name) +str(self.date_from) + " al " + str(self.date_to)
+        self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
    
 
@@ -43,7 +43,6 @@ class StockReportHistory(models.Model):
         'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
 
     def generate_reports(self):
-        time.sleep(4)
         self._generate_report_lines(self.date_from, 'report_lines_from')
         time.sleep(4)
         self._generate_report_lines(self.date_to, 'report_lines_to')
@@ -92,8 +91,9 @@ class StockReportHistory(models.Model):
             self.write({field_name: lines})
 
     def _calculate_differences(self):
-        self.ensure_one()
+        
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
+        time.sleep(4)
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
