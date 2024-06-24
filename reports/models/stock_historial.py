@@ -115,16 +115,14 @@ class StockReportHistory(models.Model):
                     if (qty_from - qty_to) == 0:
                         for product in self.product_list:
                             if product_id == product.id:
-                                if product_id in ids:
-                                    pass
-                                else: 
+                                if product_id not in ids:
                                     differences.append((0, 0, {
                                         'product_id': product_id,
                                         'quantity_from': qty_from,
                                         'quantity_to': qty_to,
                                         'quantity_difference': qty_to - qty_from,
-                                        'lst_price': product.lst_price,
-                                        'standard_price': product.standard_price
+                                        'lst_price': product.lst_price * qty_to,
+                                        'standard_price': product.standard_price * qty_to
                                     }))
                                     ids.append(product_id)
         self.report_differences = differences
