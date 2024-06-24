@@ -99,6 +99,7 @@ class StockReportHistory(models.Model):
         #time.sleep(4)
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
         differences = []
+        ids = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
             if product_id in lines_from:
                 qty_from = lines_from[product_id].quantity  # Access quantity directly
@@ -114,14 +115,18 @@ class StockReportHistory(models.Model):
                     if (qty_from - qty_to) == 0:
                         for product in self.product_list:
                             if product_id == product.id:
-                                differences.append((0, 0, {
-                                    'product_id': product_id,
-                                    'quantity_from': qty_from,
-                                    'quantity_to': qty_to,
-                                    'quantity_difference': qty_to - qty_from,
-                                    'lst_price': product.lst_price,
-                                    'standard_price': product.standard_price
-                                }))
+                                if product_id in ids:
+                                    pass
+                                else: 
+                                    differences.append((0, 0, {
+                                        'product_id': product_id,
+                                        'quantity_from': qty_from,
+                                        'quantity_to': qty_to,
+                                        'quantity_difference': qty_to - qty_from,
+                                        'lst_price': product.lst_price,
+                                        'standard_price': product.standard_price
+                                    }))
+                                    ids.append(product_id)
         self.report_differences = differences
     
     def exportar_excel(self):
