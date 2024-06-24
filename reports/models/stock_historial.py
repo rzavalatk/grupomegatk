@@ -62,30 +62,19 @@ class StockReportHistory(models.Model):
 
         # Diccionario para acumular las cantidades por producto
         product_quantities = {}
-        product_lst_price = {}
-        product_standard_price = {}
         products_idsg = []
-        products_lst_price = []
-        products_standard_price = []
-        
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
             product_id = quant.product_id.id
             quantity = quant.quantity
-            lst_price = quant.lst_price
-            standard_price = quant.standard_price
-            
+
             if product_id in product_quantities:
                 product_quantities[product_id] += quantity
             else:
                 product_quantities[product_id] = quantity
-                product_lst_price[product_id] = lst_price
-                product_standard_price[product_id] = standard_price
 
         # Transforma el diccionario en la lista self.products_idsg
         products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
-        products_lst_price = [[product_id, lst_price] for product_id, lst_price in product_lst_price.items()]
-        products_standard_price = [[product_id, standard_price] for product_id, standard_price in product_standard_price.items()]
 
         #_logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
 
@@ -94,17 +83,10 @@ class StockReportHistory(models.Model):
 
             lines = []
             for line_product in products_idsg:
-                for line_lst_price in products_lst_price:
-                    if line_product[0] == line_lst_price[0]:
-                        for line_star_price in products_standard_price:
-                            if line_product[0] == line_star_price[0]:
-                                
-                                lines.append((0, 0, {
-                                    'product_id': line_product[0],
-                                    'quantity': line_product[1],
-                                    'lst_price': line_lst_price[1],
-                                    'standard_price': line_star_price[1],
-                                }))
+                lines.append((0, 0, {
+                    'product_id': line_product[0],
+                    'quantity': line_product[1],
+                }))
 
             self.write({field_name: lines})
 
@@ -127,14 +109,14 @@ class StockReportHistory(models.Model):
             if qty_from != 0:
                 if qty_to != 0:
                     if (qty_from - qty_to) == 0:
-                        _logger.warning("Entra")
+                        producto = self.env['product.product'].search(['product_id', '=', product_id])
                         differences.append((0, 0, {
                             'product_id': product_id,
                             'quantity_from': qty_from,
                             'quantity_to': qty_to,
                             'quantity_difference': qty_to - qty_from,
-                            'lst_price': lines_to[product_id].lst_price,
-                            'standard_price': lines_to[product_id].standard_price
+                            'lst_price': producto.lst_price,
+                            'standard_price': producto.standard_price
                         }))
         self.report_differences = differences
     
