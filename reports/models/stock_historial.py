@@ -92,6 +92,8 @@ class StockReportHistory(models.Model):
 
     def _calculate_differences(self):
         
+        product = fields.Many2one('product.product', string="Producto", required=True)
+        
         lines_from = {line.product_id.id: line for line in self.report_lines_from}
         time.sleep(4)
         lines_to = {line.product_id.id: line for line in self.report_lines_to}
@@ -109,14 +111,14 @@ class StockReportHistory(models.Model):
             if qty_from != 0:
                 if qty_to != 0:
                     if (qty_from - qty_to) == 0:
-                        producto = self.env['product.product'].search(['id', '=', product_id])
+                        product = product_id
                         differences.append((0, 0, {
                             'product_id': product_id,
                             'quantity_from': qty_from,
                             'quantity_to': qty_to,
                             'quantity_difference': qty_to - qty_from,
-                            'lst_price': producto.lst_price,
-                            'standard_price': producto.standard_price
+                            'lst_price': product.lst_price,
+                            'standard_price': product.standard_price
                         }))
         self.report_differences = differences
     
