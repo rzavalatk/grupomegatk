@@ -32,7 +32,7 @@ class StockReportHistory(models.Model):
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
-        ])
+        ], default='borrador')
     
 
     report_lines_from = fields.One2many(
@@ -49,6 +49,8 @@ class StockReportHistory(models.Model):
         self._generate_report_lines(self.date_to, 'report_lines_to')
         time.sleep(4)
         self._calculate_differences()
+        
+        self.write({'state': 'aprobado'})
 
 
     def _generate_report_lines(self, date, field_name):

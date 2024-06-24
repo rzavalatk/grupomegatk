@@ -12,7 +12,7 @@
                         <button name="generate_reports" type="object" states='borrador' string="Generar reportes" class="btn-primary"/>
                         <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
                         <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>-->
-                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, cancelado" />
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado" />
                 </header>
                 <sheet>
                     <group>
