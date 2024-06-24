@@ -244,10 +244,10 @@ class CustomerPurchaseReport(models.Model):
 
         # Crear el adjunto
         attachment = self.env['ir.attachment'].create({
-            'name': 'stock_report_history_export.xlsx',
+            'name': 'reporte_de_actividad_clientes.xlsx',
             'type': 'binary',
             'datas': base64.b64encode(output.getvalue()),
-            'store_fname': 'stock_report_history_export.xlsx',
+            'store_fname': 'reporte_de_actividad_clientes.xlsx',
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
 

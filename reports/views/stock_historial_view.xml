@@ -9,10 +9,10 @@
         <field name="arch" type="xml">
             <form string="Stock Report History">
                 <header>
-                        <button name="generate_reports" type="object" string="Generar reportes" class="btn-primary"/>
-                        <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
-                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />-->
+                        <button name="generate_reports" type="object" states='borrador' string="Generar reportes" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
+                        <!--<button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado" />
                 </header>
                 <sheet>
                     <group>
@@ -52,6 +52,8 @@
                             <field name="report_differences">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
+                                    <field name="standard_price" />
+                                    <field name="lst_price" />
                                     <field name="quantity_from"/>
                                     <field name="quantity_to"/>
                                     <field name="quantity_difference"/>
