@@ -247,8 +247,7 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
-    lst_price = fields.Float(string="Precio de venta", required=True)
-    standard_price = fields.Float(string="Precio de coste", required=True)
+    
     
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
