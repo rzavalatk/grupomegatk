@@ -62,19 +62,30 @@ class StockReportHistory(models.Model):
 
         # Diccionario para acumular las cantidades por producto
         product_quantities = {}
+        product_lst_price = {}
+        product_standard_price = {}
         products_idsg = []
+        products_lst_price = []
+        products_standard_price = []
+        
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
             product_id = quant.product_id.id
             quantity = quant.quantity
-
+            lst_price = quant.lst_price
+            standard_price = quant.standard_price
+            
             if product_id in product_quantities:
                 product_quantities[product_id] += quantity
             else:
                 product_quantities[product_id] = quantity
+                product_lst_price[product_id] = lst_price
+                product_standard_price[product_id] = standard_price
 
         # Transforma el diccionario en la lista self.products_idsg
         products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
+        products_lst_price = [[product_id, lst_price] for product_id, lst_price in product_lst_price.items()]
+        products_standard_price = [[product_id, standard_price] for product_id, standard_price in product_standard_price.items()]
 
         #_logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
 
@@ -83,10 +94,17 @@ class StockReportHistory(models.Model):
 
             lines = []
             for line_product in products_idsg:
-                lines.append((0, 0, {
-                    'product_id': line_product[0],
-                    'quantity': line_product[1],
-                }))
+                for line_lst_price in products_lst_price:
+                    if line_product[0] == line_lst_price[0]:
+                        for line_star_price in products_standard_price:
+                            if line_product[0] == line_star_price[0]:
+                                
+                                lines.append((0, 0, {
+                                    'product_id': line_product[0],
+                                    'quantity': line_product[1],
+                                    'lst_price': line_lst_price[1],
+                                    'standard_price': line_star_price[1],
+                                }))
 
             self.write({field_name: lines})
 
@@ -240,6 +258,9 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
+    lst_price = fields.Float(string="Precio de venta", required=True)
+    standard_price = fields.Float(string="Precio de coste", required=True)
+    
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
 
