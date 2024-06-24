@@ -41,6 +41,8 @@ class StockReportHistory(models.Model):
         'stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
     report_differences = fields.One2many(
         'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
+    
+    product_list = []
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
@@ -72,6 +74,7 @@ class StockReportHistory(models.Model):
                 product_quantities[product_id] += quantity
             else:
                 product_quantities[product_id] = quantity
+                self.product_list.append(quant.product_id)
 
         # Transforma el diccionario en la lista self.products_idsg
         products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
@@ -111,15 +114,16 @@ class StockReportHistory(models.Model):
             if qty_from != 0:
                 if qty_to != 0:
                     if (qty_from - qty_to) == 0:
-                        product = product_id
-                        differences.append((0, 0, {
-                            'product_id': product_id,
-                            'quantity_from': qty_from,
-                            'quantity_to': qty_to,
-                            'quantity_difference': qty_to - qty_from,
-                            'lst_price': product.lst_price,
-                            'standard_price': product.standard_price
-                        }))
+                        for product in self.product_list:
+                            if product_id == product.id:
+                                differences.append((0, 0, {
+                                    'product_id': product_id,
+                                    'quantity_from': qty_from,
+                                    'quantity_to': qty_to,
+                                    'quantity_difference': qty_to - qty_from,
+                                    'lst_price': product.lst_price,
+                                    'standard_price': product.standard_price
+                                }))
         self.report_differences = differences
     
     def exportar_excel(self):
