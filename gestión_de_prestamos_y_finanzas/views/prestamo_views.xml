@@ -5,11 +5,11 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
-                    <button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
+                    <!--<button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
                     <button string="Aprobar" type="object" name="action_approve" states="borrador"/>
                     <button string="Rechazar" type="object" name="action_reject" states="borrador"/>
                     <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
-                    <field name="state" widget="statusbar" nolabel="1"/>
+                    <field name="state" widget="statusbar" nolabel="1"/>-->
 				</header>
                 <sheet>
                 
