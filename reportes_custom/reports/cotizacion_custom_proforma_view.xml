@@ -11,7 +11,7 @@
 
 		<template id="external_layout_cotizacion_custom_proforma">
 			<div class="header">
-				<div class="row" style="margin-top: -155px;">
+				<div class="row" style="margin-top: -105px;">
 					<div class="col-xs-3 mb4">
 						
 						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; margin-top: -100px; margin-button: 0px;" alt="Logo"/>
@@ -30,8 +30,16 @@
 
 				<div style="float: right; margin-top: 10px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
-							
-						<span>FACTURA PROFORMA</span>
+
+						<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+								<t t-if="o.x_consignacion == 'no'">
+										<span>FACTURA PROFORMA</span>
+								</t>
+								<t t-if="o.x_consignacion == 'si'">
+									<span>CONSIGNACIÓN</span>
+								</t>
+						</t>	
+						
 							
 					</p>
 				</div>
