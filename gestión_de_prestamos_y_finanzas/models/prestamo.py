@@ -81,7 +81,7 @@ class Prestamo(models.Model):
     #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
-    @api.depends('amount_borrowed', 'interest_rate', 'duration')
+    """@api.depends('amount_borrowed', 'interest_rate', 'duration')
     def _compute_amount_cxc(self):
         for prestamo in self:
             prestamo.amount_cxc = prestamo.amount_borrowed * (1 + (prestamo.interest_rate / 100) * (prestamo.duration / 12))
@@ -101,7 +101,7 @@ class Prestamo(models.Model):
         for prestamo in self:
             prestamo.amount_cxp = prestamo.price_m - prestamo.prima
 
-    """@api.onchange('quota_ids')
+    @api.onchange('quota_ids')
     def _onchange_quota_ids_(self):
         if self.quota_ids:
             pagado = 0
@@ -128,14 +128,14 @@ class Prestamo(models.Model):
                 months = int(record.duration)
                 record.date_end = start_date + relativedelta(months=months)
             else:
-                record.date_end = False"""    
+                record.date_end = False    
     
     def _compute_invoiced(self):
         for prestamo in self:
             prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)
             prestamo.invoice_count_cxp = len(prestamo.quota_ids.filtered(lambda q: q.is_pagado))
             prestamo.payment_count = len(prestamo.payment_ids)
-            prestamo.cuotas_count = len(prestamo.quota_ids)
+            prestamo.cuotas_count = len(prestamo.quota_ids)"""
 
     @api.model
     def create(self, vals):
