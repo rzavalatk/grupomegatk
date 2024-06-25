@@ -31,11 +31,11 @@
                             <field name="duration"/>
                             <field name="date_init"/>
                             <field name="date_end" />
-                            <field name="payment_frequency"/>
+                            <!--<field name="payment_frequency"/>-->
                         </group>
                         
                     </group>
-                    <group name="contabilidad" string="Datos contables">
+                    <!--<group name="contabilidad" string="Datos contables">
                         <field name="payment_term_id" />
                         <field name="meses_cred" />
                         <field name="interest_rate"/>
@@ -59,7 +59,7 @@
                             </field>
                         </page>
                     </notebook>
-                    <!--<group string="Cuotas">
+                    <group string="Cuotas">
                         <field name="cuota_ids">
                             <tree string="Cuotas">
                                 <field name="monto"/>
@@ -76,9 +76,9 @@
                             </tree>
                         </field>
                     </group>-->
-                    <footer>
-                        <!--<button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>-->
-                    </footer>
+                   <!-- <footer>
+                        <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
+                    </footer>-->
                 </sheet>
             </form>
         </field>
