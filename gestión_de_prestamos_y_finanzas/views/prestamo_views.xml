@@ -58,23 +58,7 @@
                             </field>
                         </page>
                     </notebook>
-                    <!--<group string="Cuotas">
-                        <field name="cuota_ids">
-                            <tree string="Cuotas">
-                                <field name="monto"/>
-                                <field name="fecha_vencimiento"/>
-                                <field name="pagado"/>
-                            </tree>
-                        </field>
-                    </group>
-                    <group string="Garantías">
-                        <field name="garantia_ids">
-                            <tree string="Garantías">
-                                <field name="descripcion"/>
-                                <field name="valor"/>
-                            </tree>
-                        </field>
-                    </group>-->
+                    
                     <footer>
                         <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
                     </footer>
