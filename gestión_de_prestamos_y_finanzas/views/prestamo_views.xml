@@ -92,11 +92,11 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="amount_borrowed"/>
-                <field name="interest_rate"/>
+                <!--<field name="interest_rate"/>-->
                 <field name="duration"/>
                 <field name="date_init"/>
-                <field name="payment_frequency"/>
-                <field name="state"/>
+                <!--<field name="payment_frequency"/>
+                <field name="state"/>-->
             </tree>
         </field>
     </record>
