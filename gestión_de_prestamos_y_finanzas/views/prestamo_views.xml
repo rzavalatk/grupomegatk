@@ -34,13 +34,13 @@
                         </group>
                         
                     </group>
-                    <!--<group name="contabilidad" string="Datos contables">
+                    <group name="contabilidad" string="Datos contables">
                         <field name="payment_term_id" />
                         <field name="meses_cred" />
                         <field name="interest_rate"/>
                         <field name="currency_id" />
                     </group>
-                    <notebook>
+                    <!--<notebook>
                         <page name="cuotas" string="Cuotas">
                             <field name="quota_ids">
                                 <tree editable="bottom">
