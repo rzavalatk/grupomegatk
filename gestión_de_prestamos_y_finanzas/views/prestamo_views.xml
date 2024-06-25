@@ -5,11 +5,11 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
-                    <!--<button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
+                    <button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
                     <button string="Aprobar" type="object" name="action_approve" states="borrador"/>
                     <button string="Rechazar" type="object" name="action_reject" states="borrador"/>
                     <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
-                    <field name="state" widget="statusbar" nolabel="1"/>-->
+                    <!--<field name="state" widget="statusbar" nolabel="1"/>-->
 				</header>
                 <sheet>
                 
@@ -24,18 +24,18 @@
                             <field name="loan_type"/>
                             <field name="amount_borrowed"/>
                             
-                            <!--<field name="remaining_capital" />-->
+                            <field name="remaining_capital" />
                         </group>
 
                         <group name="fechas" string="Tiempo de prestamo">
                             <field name="duration"/>
                             <field name="date_init"/>
                             <field name="date_end" />
-                            <!--<field name="payment_frequency"/>-->
+                            <field name="payment_frequency"/>
                         </group>
                         
                     </group>
-                    <!--<group name="contabilidad" string="Datos contables">
+                    <group name="contabilidad" string="Datos contables">
                         <field name="payment_term_id" />
                         <field name="meses_cred" />
                         <field name="interest_rate"/>
@@ -59,7 +59,7 @@
                             </field>
                         </page>
                     </notebook>
-                    <group string="Cuotas">
+                    <!--<group string="Cuotas">
                         <field name="cuota_ids">
                             <tree string="Cuotas">
                                 <field name="monto"/>
@@ -76,9 +76,9 @@
                             </tree>
                         </field>
                     </group>-->
-                   <!-- <footer>
+                    <footer>
                         <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
-                    </footer>-->
+                    </footer>
                 </sheet>
             </form>
         </field>
@@ -92,11 +92,11 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="amount_borrowed"/>
-                <!--<field name="interest_rate"/>-->
+                <field name="interest_rate"/>
                 <field name="duration"/>
                 <field name="date_init"/>
-                <!--<field name="payment_frequency"/>
-                <field name="state"/>-->
+                <field name="payment_frequency"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
