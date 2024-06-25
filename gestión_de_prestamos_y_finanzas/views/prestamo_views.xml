@@ -5,11 +5,11 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
-                    <button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
+                    <!--<button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
                     <button string="Aprobar" type="object" name="action_approve" states="borrador"/>
                     <button string="Rechazar" type="object" name="action_reject" states="borrador"/>
                     <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
-                    <!--<field name="state" widget="statusbar" nolabel="1"/>-->
+                    <field name="state" widget="statusbar" nolabel="1"/>-->
 				</header>
                 <sheet>
                 
@@ -23,7 +23,6 @@
                             <field name="partner_id"/>
                             <field name="loan_type"/>
                             <field name="amount_borrowed"/>
-                            
                             <field name="remaining_capital" />
                         </group>
 
@@ -35,7 +34,7 @@
                         </group>
                         
                     </group>
-                    <group name="contabilidad" string="Datos contables">
+                    <!--<group name="contabilidad" string="Datos contables">
                         <field name="payment_term_id" />
                         <field name="meses_cred" />
                         <field name="interest_rate"/>
@@ -59,7 +58,7 @@
                             </field>
                         </page>
                     </notebook>
-                    <!--<group string="Cuotas">
+                    <group string="Cuotas">
                         <field name="cuota_ids">
                             <tree string="Cuotas">
                                 <field name="monto"/>
@@ -77,7 +76,7 @@
                         </field>
                     </group>-->
                     <footer>
-                        <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
+                        <!--<button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>-->
                     </footer>
                 </sheet>
             </form>
