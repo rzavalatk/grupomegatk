@@ -123,7 +123,7 @@
 			</div>
 		</template>
 
-		<template id="cotizacion_odoo_custom">
+		<template id="cotizacion_odoo_custom_proforma">
 			<t t-call="reportes_custom.external_layout_cotizacion_custom"> 
 				<div class="page">
 					<div class="oe_structure"/>

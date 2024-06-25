@@ -88,7 +88,7 @@ class ResCurrencyInherit(models.Model):
                         amt_word=self.currency_unit_label,
                         )
         if not self.is_zero(amount - integer_value):
-            amount_words += ' ' + _('with') + tools.ustr(' {amt_value} {amt_word}').format(
+            amount_words += ' ' + _('con') + tools.ustr(' {amt_value} {amt_word}').format(
                         amt_value=_num2words(fractional_value, lang=lang.iso_code),
                         amt_word=self.currency_subunit_label,
                         )
