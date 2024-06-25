@@ -4,16 +4,16 @@
 		<template id="cotizacion_custom_proforma_view">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
-					<t t-call="reportes_custom.cotizacion_odoo_custom" t-lang="o.partner_id.lang"/>
+					<t t-call="reportes_custom.cotizacion_odoo_custom_proforma" t-lang="o.partner_id.lang"/>
 				</t>
 			</t>
 		</template>
 
-		<template id="external_layout_cotizacion_custom">
+		<template id="external_layout_cotizacion_custom_proforma">
 			<div class="header">
-				<div class="row" >
+				<div class="row" style="margin-top: 5px;">
 					<div class="col-xs-3 mb4">
-						<!--<img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 100px;"/>-->
+						
 						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; margin-top: -100px; margin-button: 0px;" alt="Logo"/>
              		
 						<div style="position: absolute; margin-top: 130px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
@@ -28,23 +28,21 @@
 					</div>
 				</div>
 
-				<div style="float: right; margin-top: 10px;">
+				<div style="float: right; margin-top: 25px;">
 					<p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">
-							
 
-							<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+						<t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
 								<t t-if="o.x_consignacion == 'no'">
-										<span t-if="o.state not in ['draft','sent']">FACTURA PROFORMA</span>
-										<span t-if="o.state in ['draft','sent']">FACTURA PROFORMA </span>
+										<span>FACTURA PROFORMA</span>
 								</t>
 								
-							</t>
-							
+						</t>	
 						
-						</p>
+							
+					</p>
 				</div>
 
-				<div style="position: absolute; margin-left:500px; margin-top: 100px;">
+				<div style="position: absolute; margin-left:500px; margin-top: 110px;">
 					<div style="float: right;">
 						<table style="text-align: center; width:330px">
 							<tr>
@@ -64,15 +62,8 @@
 							</tr>
 						</table>
 					</div>  
-					<div style="margin-top:80px;">
-					  <div style ='font-size:11pt;'>
-					    <div t-if="o.company_id.name =='MEDITEK'">
-					      CAI: 3DDDB5-427155-30478D-338A56-CAA88F-C5
-					    </div>
-					    <div t-if="o.company_id.name =='MEGATK'">
-					      CAI: 0164A4-3337C2-554799-E18564-042AAF-16
-					    </div>
-					  </div> 
+					<div style="margin-top:110px;">
+
 						<table style="text-align: center; margin-top:10px;">
 							<tr>
 								<td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMINOS</td>
@@ -132,8 +123,8 @@
 			</div>
 		</template>
 
-		<template id="cotizacion_odoo_custom">
-			<t t-call="reportes_custom.external_layout_cotizacion_custom"> 
+		<template id="cotizacion_odoo_custom_proforma">
+			<t t-call="reportes_custom.external_layout_cotizacion_custom_proforma"> 
 				<div class="page">
 					<div class="oe_structure"/>
 						
