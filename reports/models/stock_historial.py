@@ -2,6 +2,7 @@ from itertools import groupby
 
 from odoo import models, fields, api
 from datetime import datetime
+import time
 
 import base64
 import io
@@ -23,7 +24,7 @@ class StockReportHistory(models.Model):
     def _onchange_date_from(self):
         self.name = "Reporte de " + str(self.company_id.name) + " // " +str(self.date_from) + "::" + str(self.date_to)
     
-   
+    time.sleep(4)
 
     name = fields.Char(string="Nombre de reporte", required=True)
     date_from = fields.Datetime(string="Fecha inicio", required=True)

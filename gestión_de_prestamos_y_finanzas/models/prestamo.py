@@ -6,6 +6,7 @@ import io
 from odoo.tools.misc import xlsxwriter
 
 from datetime import timedelta
+import time
 from dateutil.relativedelta import relativedelta
 
 class Prestamo(models.Model):
@@ -162,6 +163,7 @@ class Prestamo(models.Model):
 
     def generate_quota(self):
         for prestamo in self:
+            time.sleep(2)
             cuota_obj = self.env['cuota']
             
             # Determinar la frecuencia de pago en número de pagos por año
@@ -188,7 +190,7 @@ class Prestamo(models.Model):
             # Calcular la cuota fija mensual
             cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
 
-            
+            time.sleep(2)
             for cuota_number in range(1, total_payments + 1):
                 
                 interes = saldo_pendiente * tasa_interes_mensual
@@ -207,56 +209,8 @@ class Prestamo(models.Model):
                     'date_due': self.date_due_cuota(prestamo.date_init, total_payments),
                 })
                 
-             
 
-        
-            
-            """# Determinar la frecuencia de pago en número de pagos por año
-            frequency_map = {
-                '365': 365,
-                '52': 52,
-                '24': 24,
-                '12': 12,
-                '6': 6,
-                '1': 4,
-                '1': 1
-            }
-            
-            if prestamo.payment_frequency not in frequency_map:
-                raise ValueError("Frecuencia de pago no válida")
-            
-            payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = payments_per_year * int(prestamo.duration / 12)
-            At = prestamo.amount_borrowed / total_payments
-            tasa_interes = prestamo.interest_rate / 100
-            n = 0
-            
-            for quta in range(1, total_payments + 1):
-                
-                St = prestamo.amount_borrowed - (n * At)
-                
-                Tim = tasa_interes / 12
-                Tim1 = 1 + Tim
-                
-                exp = pow(Tim1, 12)
-                
-                It = (St * tasa_interes) - St
-                
-                Ct = At + It
-                
-                cuota_obj.create({
-                    'name': f'Cuota {quta}/{total_payments} de {prestamo.name}',
-                    'prestamo_id': prestamo.id,
-                    'amount': Ct,
-                    'amount_capital': St,
-                    'interest_rate': prestamo.interest_rate,
-                    'interest_generated': It,
-                    'date_due': self.date_due_cuota(prestamo.date_init, quta),
-                })
-                
-                n = n + 1"""
-
-    def action_approve(self):
+    """def action_approve(self):
         for prestamo in self:
             prestamo.state = 'aprobado'
             prestamo.generate_quota()
@@ -267,7 +221,7 @@ class Prestamo(models.Model):
 
     def action_pay(self):
         for prestamo in self:
-            prestamo.state = 'pagado'
+            prestamo.state = 'pagado'"""
             
             
     
@@ -305,7 +259,7 @@ class Prestamo(models.Model):
         elif frequency == 'anual':
             return fields.Date.add(date, years=1)"""
 
-    def export_excel(self):
+    """def export_excel(self):
         # Crear un archivo en memoria
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
@@ -353,4 +307,4 @@ class Prestamo(models.Model):
             'type': 'ir.actions.act_url',
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
-        }
+        }"""
