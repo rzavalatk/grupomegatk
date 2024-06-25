@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_prestamo_user,access.prestamo.user,model_prestamo,,1,1,1,1
+access_cuota_user,access.cuota.user,model_cuota,,1,1,1,1
