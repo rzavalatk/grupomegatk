@@ -77,7 +77,7 @@
                         </field>
                     </group>-->
                     <footer>
-                        <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
+                        <!--<button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>-->
                     </footer>
                 </sheet>
             </form>
