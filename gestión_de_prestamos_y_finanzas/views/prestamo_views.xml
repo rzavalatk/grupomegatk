@@ -31,7 +31,7 @@
                             <field name="duration"/>
                             <field name="date_init"/>
                             <field name="date_end" />
-                            <!--<field name="payment_frequency"/>
+                            <!--<field name="payment_frequency"/>-->
                         </group>
                         
                     </group>
