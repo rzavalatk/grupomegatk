@@ -16,13 +16,13 @@ class Prestamo(models.Model):
     #Datos generales
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
-    remaining_capital = fields.Float('Capital restante', readonly=True, states={'borrador': [('readonly', False)]},  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
+    remaining_capital = fields.Monetary('Capital restante', readonly=True, states={'borrador': [('readonly', False)]},  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
     pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
     #Datos del prestamo
-    amount_borrowed = fields.Float(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de fechas
     duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
@@ -42,7 +42,7 @@ class Prestamo(models.Model):
     user_id = fields.Many2one('res.users', string='Responsable', index=True,default=lambda self: self.env.user, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de contabilidad
-    payment_term_id = fields.Many2one('account.payment.term|', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Float(string='Tasa de Interés', required=True)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
@@ -66,9 +66,8 @@ class Prestamo(models.Model):
     ], string='Frecuencia de Pago', default='12', required=True)
     loan_type = fields.Selection([
         ('personal', 'Personal'),
-        ('refinanciado', 'Refinanciado'),
         ('financiamiento', 'Financiamiento')
-    ], string='Tipo de Préstamo', required=True)
+    ], string='Tipo de Préstamo', default="personal", required=True)
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
