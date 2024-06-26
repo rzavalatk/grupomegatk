@@ -35,10 +35,10 @@
                         
                     </group>
                     <group name="contabilidad" string="Datos contables">
-                        <field name="payment_term_id" />
+                        <!--<field name="payment_term_id" />-->
                         <field name="meses_cred" />
                         <field name="interest_rate"/>
-                        <!--<field name="currency_id" />-->
+                        <field name="currency_id" />
                     </group>
                     <notebook>
                         <page name="cuotas" string="Cuotas">
