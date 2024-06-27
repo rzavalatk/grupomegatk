@@ -8,6 +8,6 @@ class ofertas(models.Model):
     status = fields.Selection([
         ('accepted', 'Aceptado'),
         ('refused','Rechazado')
-    ], string='Estatus')
+    ], copy = False, string='Estatus')
     partner_identification = fields.Many2one('res.partner', string='Identificacion de socio', required=True)
     property_id = fields.Many2one('test.model', string='ID de propiedad', required=True)
