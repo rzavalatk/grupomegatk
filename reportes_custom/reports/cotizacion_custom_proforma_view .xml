@@ -104,17 +104,17 @@
 			<div class="footer" style='font-size:10pt !important;'>
 				<div style="border-top: 1px solid rgb(13, 143, 210);">
 					<ul style="text-align: center;" class="list-inline mb4">
-						<li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+						<li t-if="o.company_id.street"><span t-field="o.company_id.street"/></li>
 					</ul>
 					<ul style="text-align: center;" class="list-inline mb4">
-						<li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+						<li t-if="o.company_id.street2"><span t-field="o.company_id.street2"/></li>
 					</ul>
 					<ul style="text-align: center;" class="list-inline mb4">
 						<li>
-							<t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
-							<t t-if="user.company_id.email">Correo: <span t-field="user.company_id.email"/></t>
-							<t t-if="user.company_id.website">Web: <span t-field="user.company_id.website"/></t>
-							<t t-if="user.company_id.vat"><t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+							<t t-if="o.company_id.phone">Telefono: <span t-field="o.company_id.phone"/></t>
+							<t t-if="o.company_id.email">Correo: <span t-field="o.company_id.email"/></t>
+							<t t-if="o.company_id.website">Web: <span t-field="o.company_id.website"/></t>
+							<t t-if="o.company_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.company_id.vat"/></t>
 						</li>
 					</ul>
 					<div style='float:left'>
