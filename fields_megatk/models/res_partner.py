@@ -2,6 +2,11 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 #CAMPOS EN FORMULARIO CONTACTO/VENTAS Y COMPRAS/VARIOS
 class Campos_clientes(models.Model):
     _inherit = "res.partner"
@@ -20,6 +25,8 @@ class Campos_clientes(models.Model):
         """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
         
         partner = self.env['res.partner'].search([('vat', '=', self.vat)])
+        
+        _logger.warning("Nombre del contacto encontrado: " + partner.name)
         
         if partner:
             raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
