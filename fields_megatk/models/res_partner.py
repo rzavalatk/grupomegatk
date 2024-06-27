@@ -24,7 +24,7 @@ class Campos_clientes(models.Model):
     def create(self, vals_list):
         """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
 
-        self.company_id = self.env.user.company_id.id
+        company_id = self.env.user.company_id.id
         for vals in vals_list:
             vat = vals.get('vat')
             if vat:
@@ -33,5 +33,6 @@ class Campos_clientes(models.Model):
                 if partner:
                     _logger.warning("Nombre del contacto encontrado: " + partner.name)
                     raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
+            vals['company_id'] = company_id
 
         return super().create(vals_list)
