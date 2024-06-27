@@ -14,7 +14,7 @@ class Campos_clientes(models.Model):
     x_zonac = fields.Selection([('centro','Centro (Teg, Comayagua, Sigua)'),('norte','Norte (SPS, Pto Cortez, Ceiba)')
     	,('oriente','Oriente (Danli y El Paraiso)'),('sur','Sur (Choluteca, San Lor, Amap)')],string = 'Zona cliente')
     
-    #clientes_varios = fields.Boolean(string='Clientes varios', default=False)
+    is_vat_readonly = fields.Boolean(string='VAT Readonly', default=False)
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
