@@ -9,5 +9,5 @@ class ofertas(models.Model):
         ('accepted', 'Aceptado'),
         ('refused','Rechazado')
     ], string='Estatus')
-    partner_identification = fields.Many2one('res.partner', string='Identificacion de socio', required=True)
-    property_id = fields.Many2one('test.model', string='ID de propiedad', required=True)
+   # partner_identification = fields.Many2one('res.partner', string='Identificacion de socio', required=True)
+    #property_id = fields.Many2one('test.model', string='ID de propiedad', required=True)
