@@ -14,13 +14,17 @@ class Campos_clientes(models.Model):
     
     #x_clientes_varios = fields.Boolean(string='Clientes varios', default=False)
     
-    """@api.model_create_multi
+    @api.model_create_multi
     def create(self, vals_list):
-        #Condicion que busca el vat de todos los clientes y luego verifica si ya existe.
-        
-        partner = self.env['res.partner'].search([('vat', '=', self.vat)])
-        
-        if partner:
-            raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
-        
-        return super().create(vals_list)"""
+        """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
+
+        company_id = self.env.user.company_id.id
+        for vals in vals_list:
+            vat = vals.get('vat')
+            if vat:
+                partner = self.env['res.partner'].search(['&',('vat', '=', vat),('company_id', '=', self.env.user.company_id.id)], limit=1)
+                if partner:
+                    raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
+            vals['company_id'] = company_id
+
+        return super().create(vals_list)
