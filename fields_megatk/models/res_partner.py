@@ -14,7 +14,7 @@ class Campos_clientes(models.Model):
     x_zonac = fields.Selection([('centro','Centro (Teg, Comayagua, Sigua)'),('norte','Norte (SPS, Pto Cortez, Ceiba)')
     	,('oriente','Oriente (Danli y El Paraiso)'),('sur','Sur (Choluteca, San Lor, Amap)')],string = 'Zona cliente')
     
-    x_is_vat_readonly = fields.Boolean(string='VAT Readonly', default=False)
+    "#"
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
@@ -28,7 +28,7 @@ class Campos_clientes(models.Model):
             vat = vals.get('vat')
             if vat:
                 partner = self.env['res.partner'].search([('vat', '=', vat)], limit=1)
-                if partner:
+                if partner.company_id != self.env.user.company_id:
                     _logger.warning("Nombre del contacto encontrado: " + partner.name)
                     raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
 
