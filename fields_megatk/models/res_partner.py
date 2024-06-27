@@ -24,7 +24,7 @@ class Campos_clientes(models.Model):
     def create(self, vals_list):
         """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
 
-        self.company_id = self.env.user.company_id.id
+        vals_list['company_id'] = self.env.user.company_id.id
         for vals in vals_list:
             vat = vals.get('vat')
             if vat:
