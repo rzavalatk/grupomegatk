@@ -83,11 +83,14 @@
                                 </page>
                                 <page string="Ofertas">
                                     <group>
-                                        <field name="salesman"/>
+                                        <field name="price"/>
                                     </group>
                                     <group>
-                                        <field name="buyer"/>
+                                        <field name="partner_identification"/>
                                     </group>        
+                                    <group>
+                                        <field name="status"/>
+                                    </group>  
                                 </page>
                                 <page string="Otra informacion">
                                     <group>
