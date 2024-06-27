@@ -28,7 +28,7 @@ class Campos_clientes(models.Model):
             vat = vals.get('vat')
             if vat:
                 _logger.warning("Nombre del contacto encontrado: " + self.env.user.company_id.name)
-                partner = self.env['res.partner'].search(['&',('vat', '=', vat),('company_id', '=', self.env.user.company_id)], limit=1)
+                partner = self.env['res.partner'].search(['&',('vat', '=', vat),('company_id', '=', self.env.user.company_id.id)], limit=1)
                 if partner:
                     _logger.warning("Nombre del contacto encontrado: " + partner.name)
                     raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
