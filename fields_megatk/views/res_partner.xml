@@ -11,15 +11,15 @@
     				<field name="x_zonac"/>
   				</xpath>
 
-				<xpath expr="//field[@name='vat']" position="attributes">
+				<!--<xpath expr="//field[@name='vat']" position="attributes">
 					<attribute name="attrs">{"readonly": [["x_clientes_varios","=",True]], "required": [["x_clientes_varios","=",False]]}</attribute>
 					<attribute name="force_save">True</attribute>
 					<attribute name="string">RTN</attribute>
 				</xpath>
-				
+
 				<xpath expr="//field[@name='vat']" position="after">
 					<field name="x_clientes_varios" string="Clientes varios"/>
-				</xpath>
+				</xpath>-->
 
 				
 			</data>

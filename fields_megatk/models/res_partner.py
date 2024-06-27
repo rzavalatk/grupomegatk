@@ -12,7 +12,7 @@ class Campos_clientes(models.Model):
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
     
-    x_clientes_varios = fields.Boolean(string='Clientes varios', default=False)
+    #x_clientes_varios = fields.Boolean(string='Clientes varios', default=False)
     
     @api.model_create_multi
     def create(self, vals_list):
