@@ -26,7 +26,7 @@ class Campos_clientes(models.Model):
         partner = self.env['res.partner'].search([('vat', '=', self.vat)])
         
         if partner:
-            self.encontrado = True
+            self.write({'encontrado': True})
     
     
     @api.model_create_multi
