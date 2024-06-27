@@ -81,7 +81,14 @@
                                     <field name="state"/>
                                     </group>
                                 </page>
-                                
+                                <page string="Ofertas">
+                                    <group>
+                                        <field name="salesman"/>
+                                    </group>
+                                    <group>
+                                        <field name="buyer"/>
+                                    </group>        
+                                </page>
                                 <page string="Otra informacion">
                                     <group>
                                         <field name="salesman"/>

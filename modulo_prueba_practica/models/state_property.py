@@ -40,4 +40,4 @@ class TestModel(models.Model):
     ], string='Estado', default = 'draft')
     salesman = fields.Many2one('res.partner', string='Comprador')
     buyer = fields.Many2one('res.users', string='Vendedor')
-    
+    offer_ids = fields.Many2many('offers.property', string='offer')
