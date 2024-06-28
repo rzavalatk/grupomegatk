@@ -52,6 +52,7 @@
                             <field name="report_differences">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
+                                    <field name="barcode" />
                                     <field name="standard_price" />
                                     <field name="lst_price" />
                                     <field name="quantity_from"/>

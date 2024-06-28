@@ -124,6 +124,7 @@ class StockReportHistory(models.Model):
                                         'quantity_from': qty_from,
                                         'quantity_to': qty_to,
                                         'quantity_difference': qty_to - qty_from,
+                                        'barcode': product.barcode,
                                         'lst_price': product.lst_price * qty_to,
                                         'standard_price': product.standard_price * qty_to
                                     }))
@@ -280,3 +281,4 @@ class StockReportDifference(models.Model):
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
 
+    barcode = fields.Char(string="Barcode")
