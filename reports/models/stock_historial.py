@@ -98,9 +98,9 @@ class StockReportHistory(models.Model):
 
     def _calculate_differences(self):
         self.ensure_one()
-        lines_from = {line.product_id.id: line for line in self.report_lines_from}
+        lines_from = {line.product_id: line for line in self.report_lines_from}
         #time.sleep(4)
-        lines_to = {line.product_id.id: line for line in self.report_lines_to}
+        lines_to = {line.product_id: line for line in self.report_lines_to}
         differences = []
         ids = []
         for product_id in set(lines_from.keys()).union(lines_to.keys()):
