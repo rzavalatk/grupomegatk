@@ -217,6 +217,12 @@
                 <p style="font-weight: normal;font-size: 15.5px;">
                   <span>LA FACTURA ES BENEFICIO DE TODOS, EXIJALA</span>
                 </p>
+                <p style="font-weight: normal; font-size: 16.5px; color: red; text-align: center; margin-top:5px;">
+                  <span>SE COBRARA UN 5% MENSUAL DE RECARGO POR
+                        RETRASO EN LA FECHA DE PAGO Y UN CARGO POR
+                        CHEQUE DEVUELTO DE LPS. 1,000.00 ** NO SE ACEPTAN
+                        CAMBIOS NI DEVOLUCIONES **</span>
+                </p>
                 <p t-if="o.ref" style="text-align: center;color:red">
                   <br></br><span t-field="o.ref"/>
                 </p>
