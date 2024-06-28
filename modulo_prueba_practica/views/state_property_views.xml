@@ -54,11 +54,15 @@
                                     <field name="description"/>
                                     </group>
                                     <group>
-                                    <field name="bedrooms"/>
-                                    </group>                                    
+                          <group>
+                                        <field name="price"/>
+                                    </group>
                                     <group>
-                                    <field name="living_area"/>
-                                    </group>                                    
+                                        <field name="partner_identification"/>
+                                    </group>        
+                                    <group>
+                                        <field name="status"/>
+                                    </group>                </group>                                    
                                     <group>
                                     <field name="facades"/>
                                     </group>                                    
@@ -122,6 +126,38 @@
                 </search>
             </field>
         </record>
+            </record>
+            <record id="arbol_ofertas" model="ir.ui.view">
+            <field name="name">Ofertas</field>
+            <field name="model">offers.property</field>
+            <field name="arch" type="xml">
+            <tree string="Channel">
+            <field name="price"/>
+            <field name="partner_id"/>
+            <field name="status"/>
+            </tree>
+            </field>
+        </record>
+         <record id="form_ofertas" model="ir.ui.view">
+        <field name="name">Ofertas</field>
+        <field name="model">offers.property</field>
+        <field name="arch" type="xml">
+            <form string="Mi nueva casa">
+                   <sheet>
+                        <group>
+                            <group>
+                                <field name = "price"/>
+                            </group>
+                            <group>
+                                <field name = "partner_id"/>
+                            </group>
+                            <group>
+                                <field name = "status"/>
+                            </group>
+                    </sheet> 
+            </form>
+        </field>
+    </record>
             <menuitem
                 id="estado_propiedad"
                 name="Crear Propiedades"
