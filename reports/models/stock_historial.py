@@ -67,14 +67,17 @@ class StockReportHistory(models.Model):
         products_idsg = []
         # Recorre todos los movimientos y acumula las cantidades en el diccionario
         for quant in quants:
-            product_id = quant.product_id.id
-            quantity = quant.quantity
+            if quant.product_id.active:
+                if quant.product_id.detailed_type not in ['consu','service']:
+                    if quant.product_id.list_price > 0:
+                        product_id = quant.product_id.id
+                        quantity = quant.quantity
 
-            if product_id in product_quantities:
-                product_quantities[product_id] += quantity
-            else:
-                product_quantities[product_id] = quantity
-                self.product_list.append(quant.product_id)
+                        if product_id in product_quantities:
+                            product_quantities[product_id] += quantity
+                        else:
+                            product_quantities[product_id] = quantity
+                            self.product_list.append(quant.product_id)
 
         # Transforma el diccionario en la lista self.products_idsg
         products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
