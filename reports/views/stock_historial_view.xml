@@ -51,13 +51,15 @@
                         <page string="Reporte de diferencias">
                             <field name="report_differences">
                                 <tree editable="bottom">
-                                    <field name="product_id"/>
                                     <field name="barcode" />
-                                    <field name="standard_price" />
-                                    <field name="lst_price" />
+                                    <field name="product_id"/>
                                     <field name="quantity_from"/>
                                     <field name="quantity_to"/>
                                     <field name="quantity_difference"/>
+                                    <field name="standard_price" />
+                                    <field name="lst_price" />
+                                    <field name="linea" />
+                                    <field name="marca" />
                                 </tree>
                             </field>
                         </page>
