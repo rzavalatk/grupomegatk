@@ -233,7 +233,6 @@ class StockReportHistory(models.Model):
             'target': 'self',
         }
 
-    
     def generate_excel(self):
         vals = []
         for line in self.report_differences:
