@@ -116,7 +116,7 @@
                 </search>
             </field>
         </record>
-            </record>
+            
             <record id="arbol_ofertas" model="ir.ui.view">
             <field name="name">Ofertas</field>
             <field name="model">offers.property</field>
