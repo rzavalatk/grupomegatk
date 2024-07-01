@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class Vendors(models.Model):
     _inherit = "sale.order"
     
@@ -10,6 +14,7 @@ class Vendors(models.Model):
         
 
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
+        _logger.warning(ids)
         if ids is not None and self.env.user.id in ids:
                 partner_id = self.env['res.partner'].browse(self.partner_id.id)
                 if partner_id.user_id:
