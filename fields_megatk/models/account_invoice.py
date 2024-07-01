@@ -55,7 +55,8 @@ class Account_Move(models.Model):
             term_id = vals.get('invoice_payment_term_id')
             if term_id:
                 term = self.env['account.payment.term'].browse(term_id)
-                _logger.warning(term)
+                _logger.warning(term.line_ids)
+                _logger.warning(term.line_ids.days)
                 if term.line_ids and any(line.days > 0 for line in term.line_ids):
                     partner = self.env['res.partner'].browse(vals.get('partner_id'))
                     if partner:
