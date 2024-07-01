@@ -25,28 +25,24 @@ class Vendors(models.Model):
                                 i[2]['x_user_id'] = partner_id.user_id.id
         res = super(Vendors,self).create(vals_list)
         return res
-    
-    
-    
-    
-"""    
+        
 class VendorsInvoices(models.Model):
     _inherit = "account.move"
     
     #@api.model
-    def create(self,vals):
+    def create(self, vals_list):
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
         if ids is not None and self.env.user.id in ids:
-            partner_id = self.env['res.partner'].browse(vals['partner_id'])
+            partner_id = self.env['res.partner'].browse(vals_list['partner_id'])
             if partner_id.user_id:
-                vals['user_id'] = partner_id.user_id.id
-                for item in vals:
+                vals_list['user_id'] = partner_id.user_id.id
+                for item in vals_list:
                     if item == 'invoice_line_ids':
-                        for i in vals[item]:
+                        for i in vals_list[item]:
                             i[2]['x_user_id'] = partner_id.user_id.id
-        res = super(VendorsInvoices,self).create(vals)
-        return res """
-
+        res = super(VendorsInvoices,self).create(vals_list)
+        return res 
+    
 class DefaultVendor(models.Model):
     _inherit = "res.partner"
     
