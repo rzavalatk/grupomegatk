@@ -32,6 +32,29 @@ class Account_Move(models.Model):
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Condicion que busca si la factura es al credito, si es asi busca el cliente si tiene numero y dirección, en caso de que no lo tenga no crea nada."""
+
+        company_id = self.env.user.company_id.id
+        for vals in vals_list:
+            term_id = vals.get('invoice_payment_term_id')
+            if term_id:
+                term = self.env['account.payment.term'].browse(term_id)
+                _logger.warning(term.line_ids)
+                _logger.warning(term.line_ids.days)
+                if term.line_ids and any(line.days > 0 for line in term.line_ids):
+                    partner = self.env['res.partner'].browse(vals.get('partner_id'))
+                    if partner:
+                        if partner.mobile or partner.phone:
+                            if partner.street and partner.city:
+                                return super().create(vals_list)
+                            else:
+                                raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
+                        else:
+                            raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
+        return super().create(vals_list)
         
     #mostrar boton en factura de borrados
     def go_draft(self):
