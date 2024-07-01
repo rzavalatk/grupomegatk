@@ -53,16 +53,7 @@
                                     <group>
                                     <field name="description"/>
                                     </group>
-                                    <group>
-                          <group>
-                                        <field name="price"/>
-                                    </group>
-                                    <group>
-                                        <field name="partner_identification"/>
-                                    </group>        
-                                    <group>
-                                        <field name="status"/>
-                                    </group>                </group>                                    
+                                    <group>                                 
                                     <group>
                                     <field name="facades"/>
                                     </group>                                    
@@ -126,7 +117,7 @@
                 </search>
             </field>
         </record>
-            
+            </record>
             <record id="arbol_ofertas" model="ir.ui.view">
             <field name="name">Ofertas</field>
             <field name="model">offers.property</field>
