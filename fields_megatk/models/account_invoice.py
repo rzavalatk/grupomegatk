@@ -52,24 +52,21 @@ class Account_Move(models.Model):
 
         company_id = self.env.user.company_id.id
         for vals in vals_list:
-            term = self.env['account.payment.term'].search(['id', 'in', vals.get('invoice_payment_term_id')], limit=1)
-            _logger.warning(term)
-            _logger.warning(term.line_ids.days)
-            if term.line_ids.days > 0:
-                _logger.warning("No es al contado ")
-                partner = self.env['res.partner'].search(['id', 'in', vals.get('partner_id')], limit=1)
-                if partner:
-                    if partner.mobile and partner.phone:
-                        if partner.street:
-                            if partner.city:
+            term_id = vals.get('invoice_payment_term_id')
+            if term_id:
+                term = self.env['account.payment.term'].browse(term_id)
+                _logger.warning(term)
+                if term.line_ids and any(line.days > 0 for line in term.line_ids):
+                    partner = self.env['res.partner'].browse(vals.get('partner_id'))
+                    if partner:
+                        if partner.mobile or partner.phone:
+                            if partner.street and partner.city:
                                 return super().create(vals_list)
                             else:
-                                raise UserError(_("ERROR: Contacto no tiene el campo ciudad de la dirección, agregar antes de crear facturas al credito."))    
+                                raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
                         else:
-                            raise UserError(_("ERROR: Contacto no tiene el campo calle de la dirección, agregar antes de crear facturas al credito."))    
-                    else:    
-                        raise UserError(_("ERROR: Contacto no tiene numero de telefono o numero fijo al que se pueda comunicar, agregar alguno de los dos antes de crear facturas al credito."))
-
+                            raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
+        return super().create(vals_list)
         
     
     
