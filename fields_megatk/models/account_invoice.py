@@ -53,6 +53,8 @@ class Account_Move(models.Model):
         company_id = self.env.user.company_id.id
         for vals in vals_list:
             term = vals.get('invoice_payment_term_id')
+            _logger.warning(term.line_ids)
+            _logger.warning(term.line_ids.days)
             if term.line_ids.days > 0:
                 _logger.warning("No es al contado ")
                 partner = vals.get('partner_id')
