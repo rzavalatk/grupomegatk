@@ -4,20 +4,27 @@ from odoo import models, fields, api
 class Vendors(models.Model):
     _inherit = "sale.order"
     
-    #@api.model
-"""    def create(self,vals):
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        
+
         ids = self.env['res.config.settings'].sudo().get_usuarios_vendedores()
         if ids is not None and self.env.user.id in ids:
                 partner_id = self.env['res.partner'].browse(self.partner_id.id)
                 if partner_id.user_id:
-                    vals['user_id'] = partner_id.user_id
-                    for item in vals:
+                    vals_list['user_id'] = partner_id.user_id
+                    for item in vals_list:
                         if item == 'order_line':
-                            for i in vals[item]:
+                            for i in vals_list[item]:
                                 i[2]['x_user_id'] = partner_id.user_id.id
-        res = super(Vendors,self).create(vals)
+        res = super(Vendors,self).create(vals_list)
         return res
     
+    
+    
+    
+"""    
 class VendorsInvoices(models.Model):
     _inherit = "account.move"
     

@@ -8,6 +8,7 @@ class Users(models.Model):
     _inherit = "res.users"
     
     vendor=fields.Boolean("Vendedor")
+    #rest_contact=fields.Boolean("Restringir vendedor", help="Restringir cambiar comercial en facturas, contactos y cotizaciones")
     
 
 class Leads(models.Model):
@@ -19,4 +20,6 @@ class Leads(models.Model):
             raise Warning("No tiene permisos para realizar esta acción. Consulte con su Administrador.")
         else:
             return super(Leads, self).unlink()
+        
+
     
