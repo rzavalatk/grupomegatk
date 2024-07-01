@@ -52,12 +52,12 @@ class Account_Move(models.Model):
 
         company_id = self.env.user.company_id.id
         for vals in vals_list:
-            term = self.env['account.payment.term'].search(['id', '=', int(vals.get('invoice_payment_term_id'))], limit=1)
+            term = self.env['account.payment.term'].search(['id', 'in', vals.get('invoice_payment_term_id')], limit=1)
             _logger.warning(term)
             _logger.warning(term.line_ids.days)
             if term.line_ids.days > 0:
                 _logger.warning("No es al contado ")
-                partner = self.env['res.partner'].search(['id', '=', vals.get('partner_id')], limit=1)
+                partner = self.env['res.partner'].search(['id', 'in', vals.get('partner_id')], limit=1)
                 if partner:
                     if partner.mobile and partner.phone:
                         if partner.street:
