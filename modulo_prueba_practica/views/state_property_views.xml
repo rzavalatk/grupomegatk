@@ -142,7 +142,7 @@
         <field name="name">Ofertas</field>
         <field name="model">offers.property</field>
         <field name="arch" type="xml">
-            <form string="Mi nueva casa">
+            <form string="Mi nueva oferta">
                    <sheet>
                         <group>
                             <group>
@@ -154,6 +154,7 @@
                             <group>
                                 <field name = "status"/>
                             </group>
+                        </group>    
                     </sheet> 
             </form>
         </field>
