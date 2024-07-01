@@ -40,7 +40,7 @@ class TestModel(models.Model):
     ], string='Estado', default = 'draft')
     salesman = fields.Many2one('res.partner', string='Comprador')
     buyer = fields.Many2one('res.users', string='Vendedor')
-    offer_ids = fields.Many2many('offers.property', string='offer')
+    offer_ids = fields.One2many('offers.property', 'property_id', string='Ofertas')
     #price = fields.Many2one('offers.property', string='Precio')
     #status = fields.Many2one('offers.property', string='estatus')
     #partner_identification = fields.Many2one('offers.property', string='identificacion de socio')
