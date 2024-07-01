@@ -52,8 +52,7 @@
                                 <page string="Descripcion">
                                     <group>
                                     <field name="description"/>
-                                    </group>
-                                    <group>                                 
+                                    </group>                                
                                     <group>
                                     <field name="facades"/>
                                     </group>                                    
