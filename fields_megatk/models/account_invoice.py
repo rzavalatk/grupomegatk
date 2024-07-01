@@ -52,7 +52,7 @@ class Account_Move(models.Model):
 
         company_id = self.env.user.company_id.id
         for vals in vals_list:
-            term = self.env['res.partner'].search(['id', '=', vals.get('invoice_payment_term_id')], limit=1)
+            term = self.env['account.payment.term'].search(['id', '=', vals.get('invoice_payment_term_id')], limit=1)
             _logger.warning(term)
             _logger.warning(term.line_ids.days)
             if term.line_ids.days > 0:
