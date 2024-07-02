@@ -84,16 +84,12 @@ class Prestamo(models.Model):
     ], string='Tipo de Préstamo', default="personal", required=True)
     state = fields.Selection([
         ('borrador', 'Borrador'),
+        ('generado', 'Generado'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
         ('pagado', 'Pagado')
     ], string='Estado', default='borrador', required=True)
-    
-    state_quotas = fields.Selection([
-        ('borradorquota', 'Borrador'),
-        ('generado', 'Generado'),
-    ], string='Estado Cuotas', default='borradorquota', required=True)
-    
+       
     
     quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas', readonly=True)
     #contrato_id = fields.Many2one('contrato', string='Contrato')
@@ -222,7 +218,7 @@ class Prestamo(models.Model):
                 if n <= total_payments:
                     n = n + 1
             
-            prestamo.state_quotas = 'generado'
+            prestamo.state = 'generado'
 
     def action_approve(self):
         for prestamo in self:
@@ -240,7 +236,7 @@ class Prestamo(models.Model):
     def unclick_quotas(self):
         for prestamo in self:
             prestamo.quota_ids = []
-            prestamo.state_quotas = 'borradorquota'
+            prestamo.state = 'borrador'
 
     def action_pay(self):
         for prestamo in self:
