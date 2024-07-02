@@ -74,7 +74,7 @@
                 <field name="partner_id"/>
                 <field name="amount_borrowed"/>
                 <field name="interest_rate"/>
-                <field name="duration"/>
+                <field name="meses_seleccion"/>
                 <field name="date_init"/>
                 <field name="payment_frequency"/>
                 <field name="state"/>
