@@ -41,7 +41,7 @@ class Prestamo(models.Model):
     )
     #duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
     date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today()) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
-    date_end = fields.Date(string='Fecha final', compute='_compute_fecha_calculada', store=True)
+    date_end = fields.Date(string='Fecha final', compute='_compute_date_end', store=True)
     
     #Datos de cuentas bancarias
     
