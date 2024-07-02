@@ -176,22 +176,22 @@ class Prestamo(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
         return super(Prestamo, self).create(vals)
     
-    def date_due_cuota(self, date_init, quta):
+    def date_due_cuota(self, date_init, payments, frequency, n):
         
-        if self.payment_frequency == 365:
-            return date_init + timedelta(days=1 * quta)
-        elif self.payment_frequency == 52:
-            return date_init + timedelta(days=7 * quta)
-        elif self.payment_frequency == 24:
-            return date_init + timedelta(days=15 * quta)
-        elif self.payment_frequency == 12:
-            return date_init + timedelta(days=30 * quta)
-        elif self.payment_frequency == 6:
-            return date_init + timedelta(days=60 * quta)
-        elif self.payment_frequency == 4:
-            return date_init + timedelta(days=90 * quta)
-        elif self.payment_frequency == 1:
-            return date_init + timedelta(days=365 * quta)
+        if frequency == 365 and n <= payments:
+            return date_init + relativedelta(days=1*n)
+        elif frequency == 52 and n <= payments:
+            return date_init + relativedelta(days=7 * n)
+        elif frequency == 24 and n <= payments:
+            return date_init + relativedelta(days=15 * n)
+        elif frequency == 12 and n <= payments:
+            return date_init + relativedelta(months=1 * n)
+        elif frequency == 6 and n <= payments:
+            return date_init + relativedelta(months=2 * n)
+        elif frequency == 4 and n <= payments:
+            return date_init + relativedelta(months=3 * n)
+        elif frequency == 1 and n <= payments:
+            return date_init + relativedelta(months=12 * n)
         
 
     def generate_quota(self):
@@ -206,7 +206,7 @@ class Prestamo(models.Model):
                 '24': 24,
                 '12': 12,
                 '6': 6,
-                '1': 4,
+                '4': 4,
                 '1': 1
             }
             
@@ -222,7 +222,9 @@ class Prestamo(models.Model):
             
             # Calcular la cuota fija mensual
             cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
-
+            
+            n = 1
+            
             time.sleep(2)
             for cuota_number in range(1, int(total_payments) + 1):
                 
@@ -239,8 +241,11 @@ class Prestamo(models.Model):
                     'amount_capital': saldo_pendiente,
                     'interest_rate': prestamo.interest_rate,
                     'interest_generated': interes,
-                    'date_due': self.date_due_cuota(prestamo.date_init, total_payments),
+                    'date_due': self.date_due_cuota(prestamo.date_init, total_payments, payments_per_year, n),
                 })
+                
+                if n <= total_payments:
+                    n = n + 1
                 
              
 
