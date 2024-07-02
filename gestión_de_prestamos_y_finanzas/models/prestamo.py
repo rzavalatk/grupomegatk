@@ -214,7 +214,7 @@ class Prestamo(models.Model):
                 raise ValueError("Frecuencia de pago no válida")
             
             payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = int(payments_per_year) * (prestamo.meses_seleccion / 12)
+            total_payments = int(payments_per_year) * (int(prestamo.meses_seleccion) / 12)
             
             saldo_pendiente = prestamo.amount_borrowed
             tasa_interes_mensual = prestamo.interest_rate / 100 / 12
