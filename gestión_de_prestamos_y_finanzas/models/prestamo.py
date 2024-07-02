@@ -41,7 +41,7 @@ class Prestamo(models.Model):
     )
     #duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
     date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today()) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
-    date_end = fields.Date(string='Fecha final', compute='_compute_date_end', store=True)
+    date_endss = fields.Date(string='Fecha final', compute='_compute_date_endss', store=True)
     
     #Datos de cuentas bancarias
     
@@ -105,13 +105,13 @@ class Prestamo(models.Model):
             prestamo.amount_borrowed = prestamo.amount_borrowed - pagado
             
     @api.depends('date_init', 'meses_seleccion')
-    def _compute_date_end(self):
+    def _compute_date_ends(self):
         for record in self:
             if record.date_init and record.meses_seleccion:
                 meses = int(record.meses_seleccion)
-                record.date_end = record.date_init + relativedelta(months=meses)
+                record.date_ends = record.date_init + relativedelta(months=meses)
             else:
-                record.date_end = False
+                record.date_ends = False
 
     
     @api.depends('amount_borrowed', 'interest_rate', 'duration')
@@ -149,9 +149,9 @@ class Prestamo(models.Model):
         if self.date_init and self.duration:
             start_date = fields.Date.from_string(self.date_init)
             months = int(self.duration)
-            self.date_end = start_date + relativedelta(months=months)
+            self.date_ends = start_date + relativedelta(months=months)
         else:
-            self.date_end = False
+            self.date_ends = False
 
     @api.depends('date_init', 'duration')
     def _compute_end_date(self):
@@ -159,9 +159,9 @@ class Prestamo(models.Model):
             if record.date_init and record.duration:
                 start_date = fields.Date.from_string(record.date_init)
                 months = int(record.duration)
-                record.date_end = start_date + relativedelta(months=months)
+                record.date_ends = start_date + relativedelta(months=months)
             else:
-                record.date_end = False"""    
+                record.date_ends = False"""    
     
     def _compute_invoiced(self):
         for prestamo in self:

@@ -29,7 +29,7 @@
                         <group name="fechas" string="Tiempo de prestamo">
                             <field name="meses_seleccion"/>
                             <field name="date_init"/>
-                            <field name="date_end" />
+                            <field name="date_ends" />
                             <field name="payment_frequency"/>
                         </group>
                         
