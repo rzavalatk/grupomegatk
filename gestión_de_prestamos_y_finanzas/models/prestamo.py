@@ -92,7 +92,7 @@ class Prestamo(models.Model):
     state_quotas = fields.Selection([
         ('borradorquota', 'Borrador'),
         ('generado', 'Generado'),
-    ], string='Estado Cuotas', default='borrador', required=True)
+    ], string='Estado Cuotas', default='borradorquota', required=True)
     
     
     quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas', readonly=True)
