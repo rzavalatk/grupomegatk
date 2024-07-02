@@ -5,9 +5,9 @@
             <field name="name">res.partner.limits.vandedor</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>
+            <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/notebook/page/group/group/field[@name='user_id']" position="attributes">
+                <xpath expr="//form/sheet/notebook/page/group/group/field[@name='user_id']" position="attributes" groups="grupos_accesos.limits_vandedor">
                     <attribute name="readonly">1</attribute>
                 </xpath>
                 
