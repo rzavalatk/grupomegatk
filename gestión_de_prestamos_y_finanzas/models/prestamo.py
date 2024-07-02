@@ -89,6 +89,11 @@ class Prestamo(models.Model):
         ('pagado', 'Pagado')
     ], string='Estado', default='borrador', required=True)
     
+    state_quotas = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('generado', 'Generado'),
+    ], string='Estado Cuotas', default='borrador', required=True)
+    
     
     quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas', readonly=True)
     #contrato_id = fields.Many2one('contrato', string='Contrato')
@@ -132,36 +137,7 @@ class Prestamo(models.Model):
     @api.depends('price_m', 'prima')
     def _compute_amount_cxp(self):
         for prestamo in self:
-            prestamo.amount_cxp = prestamo.price_m - prestamo.prima
-
-    """@api.onchange('quota_ids')
-    def _onchange_quota_ids_(self):
-        if self.quota_ids:
-            pagado = 0
-            for quta in self.quota_ids:
-                 if quta.state == 'pagado':
-                     pagado = pagado + quta.amount_capital_quota
-            self.pay_capital = pagado
-            self.remaining_capital = self.amount_borrowed - self.pay_capital
-            
-    @api.onchange('date_init', 'meses_seleccion')
-    def _onchange_dates(self):
-        if self.date_init and self.meses_seleccion:
-            start_date = fields.Date.from_string(self.date_init)
-            months = int(self.meses_seleccion)
-            self.date_ends = start_date + relativedelta(months=months)
-        else:
-            self.date_ends = False
-
-    @api.depends('date_init', 'meses_seleccion')
-    def _compute_end_date(self):
-        for record in self:
-            if record.date_init and record.meses_seleccion:
-                start_date = fields.Date.from_string(record.date_init)
-                months = int(record.meses_seleccion)
-                record.date_ends = start_date + relativedelta(months=months)
-            else:
-                record.date_ends = False"""    
+            prestamo.amount_cxp = prestamo.price_m - prestamo.prima   
     
     def _compute_invoiced(self):
         for prestamo in self:
@@ -191,8 +167,7 @@ class Prestamo(models.Model):
         elif frequency == 4 and n <= payments:
             return date_init + relativedelta(months=3 * n)
         elif frequency == 1 and n <= payments:
-            return date_init + relativedelta(months=12 * n)
-        
+            return date_init + relativedelta(months=12 * n)      
 
     def generate_quota(self):
         for prestamo in self:
@@ -246,60 +221,11 @@ class Prestamo(models.Model):
                 
                 if n <= total_payments:
                     n = n + 1
-                
-             
-
-        
-            
-            """# Determinar la frecuencia de pago en número de pagos por año
-            frequency_map = {
-                '365': 365,
-                '52': 52,
-                '24': 24,
-                '12': 12,
-                '6': 6,
-                '1': 4,
-                '1': 1
-            }
-            
-            if prestamo.payment_frequency not in frequency_map:
-                raise ValueError("Frecuencia de pago no válida")
-            
-            payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = payments_per_year * int(prestamo.meses_seleccion / 12)
-            At = prestamo.amount_borrowed / total_payments
-            tasa_interes = prestamo.interest_rate / 100
-            n = 0
-            
-            for quta in range(1, total_payments + 1):
-                
-                St = prestamo.amount_borrowed - (n * At)
-                
-                Tim = tasa_interes / 12
-                Tim1 = 1 + Tim
-                
-                exp = pow(Tim1, 12)
-                
-                It = (St * tasa_interes) - St
-                
-                Ct = At + It
-                
-                cuota_obj.create({
-                    'name': f'Cuota {quta}/{total_payments} de {prestamo.name}',
-                    'prestamo_id': prestamo.id,
-                    'amount': Ct,
-                    'amount_capital': St,
-                    'interest_rate': prestamo.interest_rate,
-                    'interest_generated': It,
-                    'date_due': self.date_due_cuota(prestamo.date_init, quta),
-                })
-                
-                n = n + 1"""
 
     def action_approve(self):
         for prestamo in self:
             prestamo.state = 'aprobado'
-            prestamo.generate_quota()
+            #prestamo.generate_quota()
 
     def action_reject(self):
         for prestamo in self:
@@ -308,42 +234,6 @@ class Prestamo(models.Model):
     def action_pay(self):
         for prestamo in self:
             prestamo.state = 'pagado'
-            
-            
-    
-
-    """def calculate_quotas(self):
-        for prestamo in self:
-            cantidad_cuotas = prestamo.meses_seleccion #Cantidad de meses = cantidad de cuotas para pagos mensuales
-            monto_cuota = self.calculate_amount_quotas(prestamo.amount_borrowed, prestamo.interest_rate, prestamo.meses_seleccion)
-            fecha_cuota = prestamo.date_init
-            for i in range(1, cantidad_cuotas + 1):
-                self.env['cuota'].create({
-                    'prestamo_id': prestamo.id,
-                    'amount': monto_cuota,
-                    'date_due': fecha_cuota,
-                })
-                fecha_cuota = self.add_period(fecha_cuota, prestamo.payment_frequency)
-
-    def calculate_amount_quotas(self, amount, tasa, meses_seleccion):
-        tasa_mensual = (tasa / 100) / 12
-        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -meses_seleccion)
-
-    def add_period(self, date, frequency):
-        if frequency == 'diario':
-            return fields.Date.add(date, days=1)
-        elif frequency == 'semanal':
-            return fields.Date.add(date, weeks=1)
-        elif frequency == 'quincenal':
-            return fields.Date.add(date, days=15)
-        elif frequency == 'mensual':
-            return fields.Date.add(date, months=1)
-        elif frequency == 'bimestral':
-            return fields.Date.add(date, months=2)
-        elif frequency == 'trimestral':
-            return fields.Date.add(date, months=3)
-        elif frequency == 'anual':
-            return fields.Date.add(date, years=1)"""
 
     def export_excel(self):
         # Crear un archivo en memoria
