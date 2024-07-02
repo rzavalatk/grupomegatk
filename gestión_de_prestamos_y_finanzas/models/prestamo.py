@@ -224,7 +224,7 @@ class Prestamo(models.Model):
             cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
 
             time.sleep(2)
-            for cuota_number in range(1, total_payments + 1):
+            for cuota_number in range(1, float(total_payments) + 1):
                 
                 interes = saldo_pendiente * tasa_interes_mensual
                 
