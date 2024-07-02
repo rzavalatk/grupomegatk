@@ -90,7 +90,7 @@ class Prestamo(models.Model):
     ], string='Estado', default='borrador', required=True)
     
     state_quotas = fields.Selection([
-        ('borrador', 'Borrador'),
+        ('borradorquota', 'Borrador'),
         ('generado', 'Generado'),
     ], string='Estado Cuotas', default='borrador', required=True)
     
@@ -221,6 +221,8 @@ class Prestamo(models.Model):
                 
                 if n <= total_payments:
                     n = n + 1
+            
+            prestamo.state_quotas = 'generado'
 
     def action_approve(self):
         for prestamo in self:
@@ -230,6 +232,15 @@ class Prestamo(models.Model):
     def action_reject(self):
         for prestamo in self:
             prestamo.state = 'rechazado'
+            
+    def go_to_draft(self):
+        for prestamo in self:
+            prestamo.state = 'borrador'
+    
+    def unclick_quotas(self):
+        for prestamo in self:
+            prestamo.quota_ids = []
+            prestamo.state_quotas = 'borradorquota'
 
     def action_pay(self):
         for prestamo in self:

@@ -5,9 +5,11 @@
         <field name="arch" type="xml">
             <form string="Préstamo">
                 <header>
-                    <button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borrador"/>
+                    <button name="generate_quota" type="object" string="Generar Cuotas" class="btn-primary" states="borradorquota"/>
+                    <button name="unclick_quotas" type="object" string="Borrar Cuotas" class="btn-primary" states="generado"/>
                     <button string="Aprobar" type="object" name="action_approve" states="borrador"/>
                     <button string="Rechazar" type="object" name="action_reject" states="borrador"/>
+                    <button string="Volver a borrador" type="object" name="unclick_quotas" states="rechazado"/>
                     <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
                     <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado, pagado"/>
 				</header>
