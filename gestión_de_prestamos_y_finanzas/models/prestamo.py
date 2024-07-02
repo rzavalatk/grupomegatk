@@ -8,6 +8,7 @@ from odoo.tools.misc import xlsxwriter
 from datetime import timedelta
 import time
 from dateutil.relativedelta import relativedelta
+from datetime import date
 
 class Prestamo(models.Model):
     _name = 'prestamo'
@@ -16,7 +17,7 @@ class Prestamo(models.Model):
     #Datos generales
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
-    remaining_capital = fields.Monetary('Capital restante', readonly=True, states={'borrador': [('readonly', False)]},  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
+    remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
     pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
@@ -25,9 +26,22 @@ class Prestamo(models.Model):
     amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de fechas
-    duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
-    date_init = fields.Date(string='Fecha de Inicio', required=True) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
-    date_end = fields.Date(string='Fecha final', required=True) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    meses_seleccion = fields.Selection(
+        [
+            ('12', '12 meses'),
+            ('24', '24 meses'),
+            ('36', '36 meses'),
+            ('48', '48 meses'),
+            ('60', '60 meses'),
+        ],
+        string='Duracion (meses)',
+        required=True,
+        default='12',
+        readonly=True, states={'borrador': [('readonly', False)]}
+    )
+    #duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
+    date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today()) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    date_end = fields.Date(string='Fecha final', required=True, compute='_compute_fecha_calculada', store=True)
     
     #Datos de cuentas bancarias
     
@@ -80,6 +94,26 @@ class Prestamo(models.Model):
     #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
+    @api.depends('amount_borrowed', 'quota_ids')
+    def _compute_amount_borrowed(self):
+        for prestamo in self:
+            pagado = 0
+            
+            for quota in prestamo.quota_ids:
+                pagado = pagado + quota.amount_pay
+            
+            prestamo.amount_borrowed = prestamo.amount_borrowed - pagado
+            
+    @api.depends('date_init', 'meses_seleccion')
+    def _compute_date_end(self):
+        for record in self:
+            if record.date_init and record.meses_seleccion:
+                meses = int(record.meses_seleccion)
+                record.date_end = record.date_init + relativedelta(months=meses)
+            else:
+                record.date_end = False
+
+    
     @api.depends('amount_borrowed', 'interest_rate', 'duration')
     def _compute_amount_cxc(self):
         for prestamo in self:

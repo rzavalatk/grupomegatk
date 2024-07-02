@@ -27,7 +27,7 @@
                         </group>
 
                         <group name="fechas" string="Tiempo de prestamo">
-                            <field name="duration"/>
+                            <field name="meses_seleccion"/>
                             <field name="date_init"/>
                             <field name="date_end" />
                             <field name="payment_frequency"/>
@@ -35,8 +35,6 @@
                         
                     </group>
                     <group name="contabilidad" string="Datos contables">
-                        <field name="payment_term_id" />
-                        <field name="meses_cred" />
                         <field name="interest_rate"/>
                         <field name="currency_id" />
                     </group>
