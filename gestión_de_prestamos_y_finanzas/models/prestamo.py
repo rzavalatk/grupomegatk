@@ -203,7 +203,7 @@ class Prestamo(models.Model):
                 
                 capital_amortizado = cuota_mensual - interes
                 saldo_pendiente -= capital_amortizado
-
+                
                 cuota_obj.create({
                     'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
                     'prestamo_id': prestamo.id,
@@ -235,7 +235,9 @@ class Prestamo(models.Model):
     
     def unclick_quotas(self):
         for prestamo in self:
-            prestamo.quota_ids = []
+            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
+            for cuota in cuotas:
+                cuota.unlink()
             prestamo.state = 'borrador'
 
     def action_pay(self):
