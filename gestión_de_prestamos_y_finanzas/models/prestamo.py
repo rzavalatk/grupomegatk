@@ -39,7 +39,7 @@ class Prestamo(models.Model):
         default='12',
         readonly=True, states={'borrador': [('readonly', False)]}
     )
-    #duration = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
+    #meses_seleccion = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
     date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today()) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
     date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
     
@@ -114,10 +114,10 @@ class Prestamo(models.Model):
                 record.date_ends = False
 
     
-    @api.depends('amount_borrowed', 'interest_rate', 'duration')
+    @api.depends('amount_borrowed', 'interest_rate', 'meses_seleccion')
     def _compute_amount_cxc(self):
         for prestamo in self:
-            prestamo.amount_cxc = prestamo.amount_borrowed * (1 + (prestamo.interest_rate / 100) * (prestamo.duration / 12))
+            prestamo.amount_cxc = prestamo.amount_borrowed * (1 + (prestamo.interest_rate / 100) * (prestamo.meses_seleccion / 12))
 
     @api.depends('price_a', 'price_m')
     def _compute_utility(self):
@@ -144,21 +144,21 @@ class Prestamo(models.Model):
             self.pay_capital = pagado
             self.remaining_capital = self.amount_borrowed - self.pay_capital
             
-    @api.onchange('date_init', 'duration')
+    @api.onchange('date_init', 'meses_seleccion')
     def _onchange_dates(self):
-        if self.date_init and self.duration:
+        if self.date_init and self.meses_seleccion:
             start_date = fields.Date.from_string(self.date_init)
-            months = int(self.duration)
+            months = int(self.meses_seleccion)
             self.date_ends = start_date + relativedelta(months=months)
         else:
             self.date_ends = False
 
-    @api.depends('date_init', 'duration')
+    @api.depends('date_init', 'meses_seleccion')
     def _compute_end_date(self):
         for record in self:
-            if record.date_init and record.duration:
+            if record.date_init and record.meses_seleccion:
                 start_date = fields.Date.from_string(record.date_init)
-                months = int(record.duration)
+                months = int(record.meses_seleccion)
                 record.date_ends = start_date + relativedelta(months=months)
             else:
                 record.date_ends = False"""    
@@ -214,7 +214,7 @@ class Prestamo(models.Model):
                 raise ValueError("Frecuencia de pago no válida")
             
             payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = payments_per_year * int(prestamo.duration / 12)
+            total_payments = payments_per_year * int(prestamo.meses_seleccion / 12)
             
             saldo_pendiente = prestamo.amount_borrowed
             tasa_interes_mensual = prestamo.interest_rate / 100 / 12
@@ -261,7 +261,7 @@ class Prestamo(models.Model):
                 raise ValueError("Frecuencia de pago no válida")
             
             payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = payments_per_year * int(prestamo.duration / 12)
+            total_payments = payments_per_year * int(prestamo.meses_seleccion / 12)
             At = prestamo.amount_borrowed / total_payments
             tasa_interes = prestamo.interest_rate / 100
             n = 0
@@ -309,8 +309,8 @@ class Prestamo(models.Model):
 
     """def calculate_quotas(self):
         for prestamo in self:
-            cantidad_cuotas = prestamo.duration #Cantidad de meses = cantidad de cuotas para pagos mensuales
-            monto_cuota = self.calculate_amount_quotas(prestamo.amount_borrowed, prestamo.interest_rate, prestamo.duration)
+            cantidad_cuotas = prestamo.meses_seleccion #Cantidad de meses = cantidad de cuotas para pagos mensuales
+            monto_cuota = self.calculate_amount_quotas(prestamo.amount_borrowed, prestamo.interest_rate, prestamo.meses_seleccion)
             fecha_cuota = prestamo.date_init
             for i in range(1, cantidad_cuotas + 1):
                 self.env['cuota'].create({
@@ -320,9 +320,9 @@ class Prestamo(models.Model):
                 })
                 fecha_cuota = self.add_period(fecha_cuota, prestamo.payment_frequency)
 
-    def calculate_amount_quotas(self, amount, tasa, duration):
+    def calculate_amount_quotas(self, amount, tasa, meses_seleccion):
         tasa_mensual = (tasa / 100) / 12
-        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -duration)
+        return amount * tasa_mensual / (1 - (1 + tasa_mensual) ** -meses_seleccion)
 
     def add_period(self, date, frequency):
         if frequency == 'diario':
@@ -362,7 +362,7 @@ class Prestamo(models.Model):
             worksheet.write(row, 1, prestamo.partner_id.name)
             worksheet.write(row, 2, prestamo.amount_borrowed)
             worksheet.write(row, 3, prestamo.interest_rate)
-            worksheet.write(row, 4, prestamo.duration)
+            worksheet.write(row, 4, prestamo.meses_seleccion)
             worksheet.write(row, 5, str(prestamo.date_init))
             worksheet.write(row, 6, dict(prestamo._fields['payment_frequency'].selection).get(prestamo.payment_frequency))
             worksheet.write(row, 7, dict(prestamo._fields['loan_type'].selection).get(prestamo.loan_type))
