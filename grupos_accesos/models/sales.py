@@ -35,7 +35,7 @@ class VendorsInvoices(models.Model):
         if ids is not None and self.env.user.id in ids:
             partner_id = self.env['res.partner'].browse(vals_list['partner_id'])
             if partner_id.user_id:
-                vals_list['user_id'] = partner_id.user_id.id
+                vals_list['invoice_user_id'] = partner_id.user_id.id
                 for item in vals_list:
                     if item == 'invoice_line_ids':
                         for i in vals_list[item]:
