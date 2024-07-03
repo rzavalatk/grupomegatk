@@ -331,8 +331,8 @@
                         </t>
                       </td>
                     </tr>
-                    <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
-                    <t t-foreach="payments_vals" t-as="payment_vals">
+                    <!--<t t-set="payments_vals" t-value="o._get_payments_vals()"/>-->
+                    <t t-foreach="o.payments_widget_vals['content']" t-as="payment_vals">
                         <tr>
                             <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
                                 <i class="oe_form_field text-right oe_payment_label">Pagado en <t t-esc="payment_vals['date']"/></i>
