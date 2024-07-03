@@ -188,7 +188,7 @@
                 <td class="text-right" id="subtotal" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
                   <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                 </td>
-                <t t-foreach="o.payment_move_line_ids" t-as="payment">
+                <t t-foreach="o.invoice_payments_widget" t-as="payment">
                     <tr>
                         <td><t t-esc="payment.date"/></td>
                         <td><t t-esc="payment.name"/></td>
