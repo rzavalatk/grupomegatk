@@ -190,9 +190,8 @@
                 </td>
                 <t t-foreach="o.invoice_payments_widget" t-as="payment">
                     <tr>
-                        <td><t t-esc="payment.date"/></td>
-                        <td><t t-esc="payment.name"/></td>
-                        <td><t t-esc="payment.amount_currency"/></td>
+                        <td><t t-esc="payment"/></td>
+                        
                     </tr>
                 </t>
               </tr>
