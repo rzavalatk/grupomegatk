@@ -188,12 +188,7 @@
                 <td class="text-right" id="subtotal" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
                   <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                 </td>
-                <t t-foreach="o.invoice_payments_widget" t-as="payment">
-                    <tr>
-                        <td><t t-esc="payment"/></td>
-                        
-                    </tr>
-                </t>
+                
               </tr>
               <tr t-foreach="range(max(4-len(o.invoice_line_ids),0))" t-as="l">
                 <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
@@ -336,7 +331,7 @@
                         </t>
                       </td>
                     </tr>
-                    <!--<t t-set="payments_vals" t-value="o._get_payments_vals()"/>-->
+                    <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
                     <t t-foreach="payments_vals" t-as="payment_vals">
                         <tr>
                             <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
