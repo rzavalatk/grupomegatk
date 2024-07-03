@@ -95,6 +95,7 @@ class Prestamo(models.Model):
     #contrato_id = fields.Many2one('contrato', string='Contrato')
     #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
+    #           METODOS COMPUTADOS PARA ASIGNACION DE VALORES
     @api.depends('amount_borrowed', 'quota_ids')
     def _compute_amount_borrowed(self):
         for prestamo in self:
@@ -141,6 +142,17 @@ class Prestamo(models.Model):
             prestamo.invoice_count_cxp = len(prestamo.quota_ids.filtered(lambda q: q.is_pagado))
             prestamo.payment_count = len(prestamo.payment_ids)
             prestamo.cuotas_count = len(prestamo.quota_ids)
+            
+    #           METODOS ONCHANGE
+    @api.onchange('amount_borrowed')
+    def _onchange_amount_borrowed(self):
+        for prestamo in self:
+            prestamo.amount_borrowed = self.amount_borrowed
+        
+    @api.onchange('meses_seleccion')
+    def _onchange_meses_seleccion(self):
+        for prestamo in self:
+            prestamo.meses_seleccion = self.meses_seleccion
 
     @api.model
     def create(self, vals):
@@ -219,7 +231,8 @@ class Prestamo(models.Model):
                     n = n + 1
             
             prestamo.state = 'generado'
-
+    
+    
     def action_approve(self):
         for prestamo in self:
             prestamo.state = 'aprobado'
