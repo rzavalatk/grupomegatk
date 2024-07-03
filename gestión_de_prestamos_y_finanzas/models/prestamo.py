@@ -40,7 +40,7 @@ class Prestamo(models.Model):
         readonly=True, states={'borrador': [('readonly', False)]}
     )
     #meses_seleccion = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
-    date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today()) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today(), readonly=True, states={'borrador': [('readonly', False)]},) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
     date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
     
     #Datos de cuentas bancarias
@@ -58,7 +58,7 @@ class Prestamo(models.Model):
     #Datos de contabilidad
     #payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     #meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
-    interest_rate = fields.Float(string='Tasa de Interés', required=True)
+    interest_rate = fields.Float(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Variables de conteo
@@ -77,11 +77,11 @@ class Prestamo(models.Model):
         ('6', 'Bimestral'),
         ('4', 'Trimestral'),
         ('1', 'Anual')
-    ], string='Frecuencia de Pago', default='12', required=True)
+    ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     loan_type = fields.Selection([
         ('personal', 'Personal'),
         ('financiamiento', 'Financiamiento')
-    ], string='Tipo de Préstamo', default="personal", required=True)
+    ], string='Tipo de Préstamo', default="personal", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('generado', 'Generado'),
