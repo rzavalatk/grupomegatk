@@ -70,6 +70,8 @@ class CierreDiario(models.Model):
     facturas_ids = fields.One2many("account.move", "cierre_id", "Facturas")
     total_cobrado = fields.Monetary("Total Cobrado", compute=_total_cobrado)
     total = fields.Monetary("Total Cobrado", compute=_total)
+    promedio_mensual = fields.Monetary("Promedio mensual",)
+    promedio_anual = fields.Monetary("Promedio anual")
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
@@ -171,7 +173,7 @@ class CierreDiario(models.Model):
         ])
         self.register_ids(pagos, 'pagos')
 
-        _logger.warning('Arreglo de Pagos : ' + str(pagos))
+        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
         # 1
 
         facturas = self.env['account.move'].sudo().search([
@@ -298,6 +300,256 @@ class CierreDiario(models.Model):
         self.write({
             'state': 'proccess'
         })
+        
+    def procesar_promedio_mensual(self):
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
+
+        dia = self.date.day
+        mes = self.date.month
+        año = self.date.year
+        
+        #fecha para promedio mensual
+        fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
+        
+        #fecha para el promedio anual
+        fecha_init_anual = fields.Date(f'{año}-01-01')     
+
+        pagos = self.env['account.payment'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            ('date', '>=', fecha_init_mensual),
+            ('date', '<=', self.date),
+            ('company_id', '=', self.company_id.id),
+            ('region', '=', self.region),
+            ('partner_type', '=', 'customer'),
+            ('state', '=', 'posted'),
+        ])
+        self.register_ids(pagos, 'pagos')
+
+        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
+        # 1
+
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            ('invoice_date', '>=', fecha_init_mensual),
+            ('invoice_date', '<=', self.date),
+            ('company_id', '=', self.company_id.sudo().id),
+            # ('user_id','in',users_ids),
+            ('team_id', 'in', canales_ids),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '!=', 'cancel'),
+            ('state', '!=', 'draft'),
+            # ('de_consignacion', '=', False),
+        ])
+        self.register_ids(facturas, 'facturas')
+        
+
+        mas_de_un_pago_factura = {}
+        ids_facturas = []
+
+        # Recorrer los pagos
+        for pago in pagos:
+            # Recorrer los diarios del cierre asignados
+            for item in self.cierre_line_ids:
+                # Compartar que pagos entran en los diarios de cierre
+                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                    
+                    acumulado_factura = 0  # lo acumulado de facturas
+                    # recorrer facturas de los pagos
+                    for factura in pago.move_id.sudo().ids:
+                        
+                        
+                        #Obtenemos el dato del pago
+                        factura_move= self.env['account.move'].sudo().browse(factura)
+                        
+                        #OBtenemos la factura relacionada al pago
+                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
+                        self.register_ids(factura_id, 'facturas de pagos')
+
+                        if factura_id not in ids_facturas:
+                          
+                            if factura_id.invoice_date <= self.date and factura_id.invoice_date >= fecha_init_mensual:
+                                
+                                try:
+                                    if factura_id.state != 'cancel':
+                                        
+                                        payments_widget = factura_id.invoice_payments_widget
+                                        payments_list = payments_widget["content"]
+                                        
+                                    else:
+                                        payments_widget = []
+                                except:
+                                    #_logger.warning('Error . factura : '+ str(factura))
+                                    raise Warning(
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+
+                                for pay in payments_list:
+                                    
+                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
+                                        
+                                        acumulado_factura += pay['amount']
+                                        
+                                        if len(payments_widget) > 1:
+                                            try:
+                                                mas_de_un_pago_factura[factura_id.internal_number]
+                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
+                                                if temp <= 0:
+                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                        ids_facturas = ids_facturas + \
+                                                            [factura_id.id]
+                                                else:
+                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                            except:
+                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
+                                                    payments_widget) - 1
+                                        else:
+                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                ids_facturas = ids_facturas + \
+                                                    [factura_id.id]
+
+                    acumulado = acumulado + acumulado_factura
+                    promedio = acumulado / dia
+                    self.write({
+                        'promedio_mensual': promedio
+                    })
+            
+    def procesar_promedio_anual(self):
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
+
+        dia = self.date.day
+        mes = self.date.month
+        año = self.date.year
+        
+        #fecha para promedio mensual
+        fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
+        
+        #fecha para el promedio anual
+        fecha_init_anual = fields.Date(f'{año}-01-01')     
+
+        pagos = self.env['account.payment'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            ('date', '>=', fecha_init_anual),
+            ('date', '<=', self.date),
+            ('company_id', '=', self.company_id.id),
+            ('region', '=', self.region),
+            ('partner_type', '=', 'customer'),
+            ('state', '=', 'posted'),
+        ])
+        self.register_ids(pagos, 'pagos')
+
+        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
+        # 1
+
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            ('invoice_date', '>=', fecha_init_anual),
+            ('invoice_date', '<=', self.date),
+            ('company_id', '=', self.company_id.sudo().id),
+            # ('user_id','in',users_ids),
+            ('team_id', 'in', canales_ids),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '!=', 'cancel'),
+            ('state', '!=', 'draft'),
+            # ('de_consignacion', '=', False),
+        ])
+        self.register_ids(facturas, 'facturas')
+        
+
+        mas_de_un_pago_factura = {}
+        ids_facturas = []
+
+        # Recorrer los pagos
+        for pago in pagos:
+            # Recorrer los diarios del cierre asignados
+            for item in self.cierre_line_ids:
+                # Compartar que pagos entran en los diarios de cierre
+                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                    
+                    acumulado_factura = 0  # lo acumulado de facturas
+                    # recorrer facturas de los pagos
+                    for factura in pago.move_id.sudo().ids:
+                        
+                        
+                        #Obtenemos el dato del pago
+                        factura_move= self.env['account.move'].sudo().browse(factura)
+                        
+                        #OBtenemos la factura relacionada al pago
+                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
+                        self.register_ids(factura_id, 'facturas de pagos')
+
+                        if factura_id not in ids_facturas:
+                          
+                            if factura_id.invoice_date <= self.date and factura_id.invoice_date >= fecha_init_mensual:
+                                
+                                try:
+                                    if factura_id.state != 'cancel':
+                                        
+                                        payments_widget = factura_id.invoice_payments_widget
+                                        payments_list = payments_widget["content"]
+                                        
+                                    else:
+                                        payments_widget = []
+                                except:
+                                    #_logger.warning('Error . factura : '+ str(factura))
+                                    raise Warning(
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+
+                                for pay in payments_list:
+                                    
+                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
+                                        
+                                        acumulado_factura += pay['amount']
+                                        
+                                        if len(payments_widget) > 1:
+                                            try:
+                                                mas_de_un_pago_factura[factura_id.internal_number]
+                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
+                                                if temp <= 0:
+                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                        ids_facturas = ids_facturas + \
+                                                            [factura_id.id]
+                                                else:
+                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                            except:
+                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
+                                                    payments_widget) - 1
+                                        else:
+                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                ids_facturas = ids_facturas + \
+                                                    [factura_id.id]
+
+                    acumulado = acumulado + acumulado_factura
+                    promedio = acumulado / mes
+                    self.write({
+                        'promedio_anual': promedio
+                    })
+                   
+    
 
     def send_email(self, email, cc=""):
         template = self.env.ref(
@@ -346,6 +598,8 @@ class CierreDiario(models.Model):
                 cierre.iniciar_cierre()
                 time.sleep(1)
                 cierre.procesar_cierre()
+                cierre.procesar_promedio_mensual()
+                cierre.procesar_promedio_anual()
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
                     # if cierre.company_id.sudo().id == 12:

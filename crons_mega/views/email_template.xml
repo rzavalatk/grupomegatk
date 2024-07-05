@@ -136,6 +136,30 @@
                             </t>
                         </tbody>
                     </table>
+
+
+                
+                </div>
+                <div class="tabla_centrada">
+                    <table>
+                        <thead>
+                            <th>Promedio mensual</th>
+                            <th>Promedio anual</th>
+                            
+                        </thead>
+                        <tbody>
+                            
+                                <tr>
+                                    <th><t t-out="object.promedio_mensual"/></th>
+                                    <th><t t-out="object.promedio_mensual"/></th>
+                                
+                                </tr>
+    
+                        </tbody>
+                    </table>
+
+                    
+                
                 </div>
                 <br/>
                 <br/>
