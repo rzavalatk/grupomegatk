@@ -147,15 +147,15 @@
                 <div class="tabla_centrada">
                     <table>
                         <thead>
-                            <th>Promedio mensual</th>
-                            <th>Promedio anual</th>
+                            <th>Promedio mensual / ventas diarias</th>
+                            <th>Promedio anual / ventas mensuales</th>
                             
                         </thead>
                         <tbody>
                             
                                 <tr>
                                     <th><t t-out="object.promedio_mensual"/></th>
-                                    <th><t t-out="object.promedio_mensual"/></th>
+                                    <th><t t-out="object.promedio_anual"/></th>
                                 
                                 </tr>
     
