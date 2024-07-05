@@ -362,6 +362,7 @@ class CierreDiario(models.Model):
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
+        acumulado = 0
 
         # Recorrer los pagos
         for pago in pagos:
@@ -487,6 +488,7 @@ class CierreDiario(models.Model):
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
+        acumulado = 0
 
         # Recorrer los pagos
         for pago in pagos:
