@@ -621,9 +621,7 @@ class CierreDiario(models.Model):
                 time.sleep(1)
                 cierre.procesar_cierre()
                 time.sleep(1)
-                cierre.procesar_promedio_mensual()
-                time.sleep(1)
-                cierre.procesar_promedio_anual()
+                
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
                     # if cierre.company_id.sudo().id == 12:
