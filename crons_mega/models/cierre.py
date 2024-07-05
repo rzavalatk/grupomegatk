@@ -315,6 +315,7 @@ class CierreDiario(models.Model):
         
         #fecha para promedio mensual
         fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
+        _logger.warning("fecha mensual: " + fecha_init_mensual)
         
         #fecha para el promedio anual
         fecha_init_anual = fields.Date(f'{año}-01-01')     
@@ -333,7 +334,7 @@ class CierreDiario(models.Model):
         ])
         self.register_ids(pagos, 'pagos')
 
-        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
+        _logger.warning('Arreglo de Pagos : ' + str(pagos))
         # 1
 
         facturas = self.env['account.move'].sudo().search([
@@ -355,6 +356,7 @@ class CierreDiario(models.Model):
         ])
         self.register_ids(facturas, 'facturas')
         
+        _logger.warning("facturas: " + str(facturas))
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
@@ -400,6 +402,7 @@ class CierreDiario(models.Model):
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
                                         
                                         acumulado_factura += pay['amount']
+                                        _logger.warning("acumulado: " + acumulado_factura)
                                         
                                         if len(payments_widget) > 1:
                                             try:
