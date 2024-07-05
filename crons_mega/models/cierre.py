@@ -445,7 +445,7 @@ class CierreDiario(models.Model):
         año = self.date.year
         
         
-        #fecha para el promedio anual    
+        #fecha para el promedio anual
         fecha_init_anual = date(año, 1, 1)
         
         pagos = self.env['account.payment'].sudo().search([
