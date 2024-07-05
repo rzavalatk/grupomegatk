@@ -385,51 +385,53 @@ class CierreDiario(models.Model):
 
                         if factura_id not in ids_facturas:
                             
-                            _logger.warning("HOla"+ str(factura_id.invoice_date))
-                            _logger.warning(self.date)
-                            _logger.warning(factura_id.invoice_date <= self.date)
-                            if factura_id.invoice_date <= self.date:
+                            if isinstance(factura_id.invoice_date, date):
+                                _logger.warning("HOla"+ str(factura_id.invoice_date))
+                                _logger.warning(self.date)
+                                _logger.warning(factura_id.invoice_date <= self.date)
                                 
-                                
-                                if factura_id.invoice_date >= fecha_init_mensual:
-                                
-                                    try:
-                                        if factura_id.state != 'cancel':
-                                            
-                                            payments_widget = factura_id.invoice_payments_widget
-                                            payments_list = payments_widget["content"]
-                                            
-                                        else:
-                                            payments_widget = []
-                                    except:
-                                        #_logger.warning('Error . factura : '+ str(factura))
-                                        raise Warning(
-                                            f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-
-                                    for pay in payments_list:
-                                        
-                                        if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
-                                            
-                                            acumulado_factura += pay['amount']
-                                            _logger.warning("acumulado: " + str(acumulado_factura))
-                                            
-                                            if len(payments_widget) > 1:
-                                                try:
-                                                    mas_de_un_pago_factura[factura_id.internal_number]
-                                                    temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
-                                                    if temp <= 0:
-                                                        if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                            ids_facturas = ids_facturas + \
-                                                                [factura_id.id]
-                                                    else:
-                                                        mas_de_un_pago_factura[factura_id.internal_number] = temp
-                                                except:
-                                                    mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                        payments_widget) - 1
+                                if factura_id.invoice_date <= self.date:
+                                    
+                                    
+                                    if factura_id.invoice_date >= fecha_init_mensual:
+                                    
+                                        try:
+                                            if factura_id.state != 'cancel':
+                                                
+                                                payments_widget = factura_id.invoice_payments_widget
+                                                payments_list = payments_widget["content"]
+                                                
                                             else:
-                                                if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                    ids_facturas = ids_facturas + \
-                                                        [factura_id.id]
+                                                payments_widget = []
+                                        except:
+                                            #_logger.warning('Error . factura : '+ str(factura))
+                                            raise Warning(
+                                                f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+
+                                        for pay in payments_list:
+                                            
+                                            if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
+                                                
+                                                acumulado_factura += pay['amount']
+                                                _logger.warning("acumulado: " + str(acumulado_factura))
+                                                
+                                                if len(payments_widget) > 1:
+                                                    try:
+                                                        mas_de_un_pago_factura[factura_id.internal_number]
+                                                        temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
+                                                        if temp <= 0:
+                                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                                ids_facturas = ids_facturas + \
+                                                                    [factura_id.id]
+                                                        else:
+                                                            mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                                    except:
+                                                        mas_de_un_pago_factura[factura_id.internal_number] = len(
+                                                            payments_widget) - 1
+                                                else:
+                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                        ids_facturas = ids_facturas + \
+                                                            [factura_id.id]
 
                     acumulado = acumulado + acumulado_factura
                     _logger.warning("acumulado promedio: " + str(acumulado))
