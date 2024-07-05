@@ -385,7 +385,7 @@ class CierreDiario(models.Model):
 
                         if factura_id not in ids_facturas:
                             
-                            _logger.warning("HOla"+factura_id.invoice_date)
+                            _logger.warning("HOla"+ str(factura_id.invoice_date))
                             _logger.warning(self.date)
                             _logger.warning(factura_id.invoice_date <= self.date)
                             if factura_id.invoice_date <= self.date:
