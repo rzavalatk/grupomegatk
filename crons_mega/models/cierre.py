@@ -402,7 +402,7 @@ class CierreDiario(models.Model):
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
                                         
                                         acumulado_factura += pay['amount']
-                                        _logger.warning("acumulado: " + acumulado_factura)
+                                        _logger.warning("acumulado: " + str(acumulado_factura))
                                         
                                         if len(payments_widget) > 1:
                                             try:
@@ -423,7 +423,9 @@ class CierreDiario(models.Model):
                                                     [factura_id.id]
 
                     acumulado = acumulado + acumulado_factura
+                    _logger.warning("acumulado promedio: " + str(acumulado))
                     promedio = acumulado / dia
+                    _logger.warning("PROMEDIO: " + str(promedio))
                     self.write({
                         'promedio_mensual': promedio
                     })
