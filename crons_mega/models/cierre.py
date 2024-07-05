@@ -297,6 +297,10 @@ class CierreDiario(models.Model):
                 #                     'facturado': factura.amount_total_signed + item.facturado
                 #                 })]
                 #             })
+        
+        self.procesar_promedio_mensual()
+        time.sleep(1)
+        self.procesar_promedio_anual()
         self.write({
             'state': 'proccess'
         })
@@ -602,11 +606,10 @@ class CierreDiario(models.Model):
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
                 time.sleep(1)
-                cierre.procesar_promedio_mensual()
-                time.sleep(1)
                 cierre.procesar_cierre()
                 time.sleep(1)
-                
+                cierre.procesar_promedio_mensual()
+                time.sleep(1)
                 cierre.procesar_promedio_anual()
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
