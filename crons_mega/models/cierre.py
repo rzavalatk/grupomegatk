@@ -193,7 +193,7 @@ class CierreDiario(models.Model):
             # ('de_consignacion', '=', False),
         ])
         self.register_ids(facturas, 'facturas')
-        _logger.warning('Arreglo de facturas : ' + str(facturas))
+        #_logger.warning('Arreglo de facturas : ' + str(facturas))
         # 1
 
         mas_de_un_pago_factura = {}
@@ -205,7 +205,7 @@ class CierreDiario(models.Model):
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    _logger.warning('id pago diario:' + str(pago.journal_id.sudo().id) + 'id item diario:'+ str(item.journal_id.sudo().id))
+                    #_logger.warning('id pago diario:' + str(pago.journal_id.sudo().id) + 'id item diario:'+ str(item.journal_id.sudo().id))
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
@@ -231,7 +231,7 @@ class CierreDiario(models.Model):
                                         #_logger.warning("Pase 3: ")
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
-                                        _logger.warning("Payments: " + str(payments_list))
+                                        #_logger.warning("Payments: " + str(payments_list))
 
                                     else:
                                         payments_widget = []
@@ -245,8 +245,8 @@ class CierreDiario(models.Model):
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
                                         #_logger.warning("Pase 5: ")
                                         acumulado_factura += pay['amount']
-                                        _logger.warning("Amount: " + str(pay['amount']))
-                                        _logger.warning("Acumulado factura: " + str(acumulado_factura))
+                                        #_logger.warning("Amount: " + str(pay['amount']))
+                                        #_logger.warning("Acumulado factura: " + str(acumulado_factura))
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
@@ -315,7 +315,7 @@ class CierreDiario(models.Model):
         
         #fecha para promedio mensual
         fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
-        _logger.warning("fecha mensual: " + fecha_init_mensual)
+        _logger.warning("fecha mensual: " + str(fecha_init_mensual))
         
         #fecha para el promedio anual
         fecha_init_anual = fields.Date(f'{año}-01-01')     
