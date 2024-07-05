@@ -5,6 +5,7 @@ from odoo.exceptions import Warning
 import pytz
 import time
 import json
+from datetime import date
 
 import logging
 import math
@@ -318,12 +319,10 @@ class CierreDiario(models.Model):
         año = self.date.year
         
         #fecha para promedio mensual
-        fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
+        fecha_init_mensual = date(año, mes, 1)
         _logger.warning("fecha mensual: " + str(fecha_init_mensual))
         
-        #fecha para el promedio anual
-        fecha_init_anual = fields.Date(f'{año}-01-01')     
-
+       
         pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
@@ -446,12 +445,10 @@ class CierreDiario(models.Model):
         mes = self.date.month
         año = self.date.year
         
-        #fecha para promedio mensual
-        fecha_init_mensual = fields.Date(f'{año}-{mes}-01')
         
-        #fecha para el promedio anual
-        fecha_init_anual = fields.Date(f'{año}-01-01')     
-
+        #fecha para el promedio anual    
+        fecha_init_anual = date(año, 1, 1)
+        
         pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
