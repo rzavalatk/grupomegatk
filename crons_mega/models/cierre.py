@@ -322,7 +322,6 @@ class CierreDiario(models.Model):
         fecha_init_mensual = date(año, mes, 1)
         _logger.warning("fecha mensual: " + str(fecha_init_mensual))
         
-       
         pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
