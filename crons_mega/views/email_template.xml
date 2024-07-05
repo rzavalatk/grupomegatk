@@ -154,8 +154,8 @@
                         <tbody>
                             
                                 <tr>
-                                    <th><t t-out="object.promedio_mensual"/></th>
-                                    <th><t t-out="object.promedio_anual"/></th>
+                                    <th><t t-out="object.promedio_mensual"/> Lps.</th>
+                                    <th><t t-out="object.promedio_anual"/> Lps.</th>
                                 
                                 </tr>
     
