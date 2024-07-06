@@ -20,6 +20,8 @@
         'wizard/wizard.xml',
         'security/security.xml',
         'security/rules.xml',
+        'data/due_invoice_action.xml',
+        'data/email_template_invoice_due.xml',
         #'views/account_invoice.xml',
         'views/cierre_diario_cron.xml',
         #'views/invoice_expire_cron.xml',
