@@ -13,7 +13,7 @@
                 <p>Por favor, asegúrese de realizar el pago antes de la fecha de vencimiento.</p>
                 <p>Saludos,</p>
                 <p><t t-out="object.company_id.name"/></p>
-            
+        
             </field>
         </record>
     </data>
