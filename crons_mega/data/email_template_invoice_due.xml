@@ -7,13 +7,13 @@
             <field name="email_from">${object.company_id.email}</field>
             <field name="email_to">${object.partner_id.email}</field>
             <field name="body_html" type="html">
-                <![CDATA[
+                
                 <p>Estimado ${object.partner_id.name},</p>
                 <p>Le recordamos que la factura ${object.name} con fecha de vencimiento ${object.invoice_date_due} está próxima a vencer.</p>
                 <p>Por favor, asegúrese de realizar el pago antes de la fecha de vencimiento.</p>
                 <p>Saludos,</p>
                 <p>${object.company_id.name}</p>
-                ]]>
+            
             </field>
         </record>
     </data>
