@@ -25,7 +25,7 @@ class AccountMove(models.Model):
 
         
         for invoice in invoices:
-            _logger.warning('Numero de factura : ' + str(invoice.number))
+            
             if invoice.invoice_user_id:
                 _logger.warning('Fecha de vencimiento : ' + str(invoice.invoice_user_id.login))
                 mail_template.sudo().send_mail(invoice.id, email_values={'email_to': invoice.invoice_user_id.login}, force_send=True)
