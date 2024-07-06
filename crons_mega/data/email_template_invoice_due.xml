@@ -3,7 +3,7 @@
         <record id="mail_template_notification_invoice_due" model="mail.template">
             <field name="name">Notificación de Vencimiento de Factura</field>
             <field name="model_id" ref="account.model_account_move"/>
-            <field name="subject">[ALERTA] Factura próxima a vencer: ${object.name}</field>
+            <field name="subject">[ALERTA] Factura próxima a vencer</field>
             <field name="email_from">${user.email_formatted | safe}</field>
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="body_html" type="html">
