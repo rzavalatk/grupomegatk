@@ -153,10 +153,6 @@ class CierreDiario(models.Model):
     #         str(cierre.date) + "\nCompañia: " + cierre.company_id.name + "\nZona: "+ cierre.region +
     #         "\n ----------------------------------------------------------------------\n"
     #     })
-    
-    def _get_current_date_parts(self):
-        today = self.date
-        return today.day, today.month, today.year
 
     def procesar_cierre(self):
         if self.region == self.regions_list[1][0]:
@@ -311,49 +307,86 @@ class CierreDiario(models.Model):
         })
         
     def procesar_promedio_mensual(self):
-        day, month, year = self._get_current_date_parts()
-        start_of_month = date(year, month, 1)
-        today = self.date
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
-        self.env.cr.execute("""
-            SELECT AVG(amount_total) 
-            FROM account_move 
-            WHERE invoice_date >= %s 
-            AND invoice_date <= %s 
-            AND state = 'posted' 
-            AND payment_state = 'paid'
-        """, (start_of_month, today))
-        result = self.env.cr.fetchone()
-        average_monthly_sales = result[0] if result else 0
-        _logger.warning("Saldo mensual" + str(average_monthly_sales))
+        dia = self.date.day
+        mes = self.date.month
+        año = self.date.year
         
+        #fecha para promedio mensual
+        fecha_init_mensual = date(año, mes, 1)
+
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            ('invoice_date', '>=', fecha_init_mensual),
+            ('invoice_date', '<=', self.date),
+            ('company_id', '=', self.company_id.sudo().id),
+            # ('user_id','in',users_ids),
+            ('team_id', 'in', canales_ids),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '!=', 'cancel'),
+            ('state', '!=', 'draft'),
+            # ('de_consignacion', '=', False),
+        ])
+
+        # Recorrer las facturas y sumar los totales
+        total_ventas = sum(factura.amount_total for factura in facturas)
         
-        promedio = average_monthly_sales / day
-        _logger.warning("PROMEDIO MENSUAL: " + str(promedio))
+        promedio = total_ventas / dia
         self.write({
             'promedio_mensual': promedio
         })
             
     def procesar_promedio_anual(self):
-        
-        day, month, year = self._get_current_date_parts()
-        start_of_year = date(year, 1, 1)
-        today = self.date
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
-        self.env.cr.execute("""
-            SELECT AVG(amount_total) 
-            FROM account_move 
-            WHERE invoice_date >= %s 
-            AND invoice_date <= %s 
-            AND state = 'posted' 
-            AND payment_state = 'paid'
-        """, (start_of_year, today))
-        result = self.env.cr.fetchone()
-        average_annual_sales = result[0] if result else 0
-        _logger.warning("Saldo anual" + str(average_annual_sales))
-
+        dia = self.date.day
+        mes = self.date.month
+        año = self.date.year
         
-        promedio = average_annual_sales / month
+        
+        #fecha para el promedio anual
+        fecha_init_anual = date(año, 1, 1)
+
+
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            ('invoice_date', '>=', fecha_init_anual),
+            ('invoice_date', '<=', self.date),
+            ('company_id', '=', self.company_id.sudo().id),
+            # ('user_id','in',users_ids),
+            ('team_id', 'in', canales_ids),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '!=', 'cancel'),
+            ('state', '!=', 'draft'),
+            # ('de_consignacion', '=', False),
+        ])
+        
+        # Recorrer las facturas y sumar los totales
+        total_ventas = sum(factura.amount_total for factura in facturas)
+        
+
+        promedio = total_ventas / mes
         self.write({
             'promedio_anual': promedio
         })
