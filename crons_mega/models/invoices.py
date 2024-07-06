@@ -27,8 +27,11 @@ class AccountMove(models.Model):
         for invoice in invoices:
             
             if invoice.invoice_user_id:
-                _logger.warning('Fecha de vencimiento : ' + str(invoice.invoice_user_id.login))
-                mail_template.sudo().send_mail(invoice.id, email_values={'email_to': invoice.invoice_user_id.login}, force_send=True)
                 if invoice.partner_id.email:
-                    _logger.warning('Fecha de vencimiento : ' + str(invoice.partner_id.email))
-                    mail_template.sudo().send_mail(invoice.id, email_values={'email_to': invoice.partner_id.email}, force_send=True)
+                    email_values = {
+                        'email_from': 'megatk.no_reply@megatk.com',
+                        'email_to': invoice.partner_id.email,
+                        'email_cc': invoice.invoice_user_id.login
+                    }
+                    
+                    mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)

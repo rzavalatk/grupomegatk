@@ -4,8 +4,8 @@
             <field name="name">Notificación de Vencimiento de Factura</field>
             <field name="model_id" ref="account.model_account_move"/>
             <field name="subject">[ALERTA] Factura próxima a vencer: ${object.name}</field>
-            <field name="email_from">${object.company_id.email}</field>
-            <field name="email_to">${object.partner_id.email}</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
             <field name="body_html" type="html">
                 
                 <p>Estimado <t t-out="object.partner_id.name"/>,</p>
