@@ -19,7 +19,7 @@ class AccountMove(models.Model):
         today = datetime.now(user_tz)
         due_date = today + timedelta(days=5)
         invoices = self.search([('invoice_date_due', '=', due_date), ('state', '=', 'posted')])
-        mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_due')
+        mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_dues')
         
         _logger.warning('Fecha de vencimiento : ' + str(due_date))
 
