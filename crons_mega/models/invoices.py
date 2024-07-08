@@ -52,8 +52,9 @@ class AccountMove(models.Model):
                 if invoice.partner_id.email:
                     email_values = {
                         'email_from': 'megatk.no_reply@megatk.com',
-                        'email_to': invoice.partner_id.email,
-                        'email_cc': invoice.invoice_user_id.login
+                        'email_to': 'dzuniga@megatk.com',
+                        #'email_to': invoice.partner_id.email,
+                        #'email_cc': invoice.invoice_user_id.login
                     }
                     
                     mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
