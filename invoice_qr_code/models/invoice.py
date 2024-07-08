@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Ingenuity Info
-#
-#    Copyright (C) 2023-TODAY Ingenuity Info(<https://ingenuityinfo.in>)
-#    Author: Ingenuity Info(<https://ingenuityinfo.in>)
-#
-#
-#############################################################################
+
 from odoo import models, fields, api
 from odoo.http import request
 import qrcode
@@ -38,7 +29,13 @@ class AccountMove(models.Model):
 
     def _generate_qr_code(self):
         for order in self:
-            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            if self.env.company.id == 8:
+                base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            elif self.env.company.id == 9:
+                base_url = 'megatk.net'
+            else:
+                base_url = 'meditekhn.net'
+                
             # Construye el enlace que quieres que aparezca en el código QR
             invoice_url = "{}/web/login?redirect=/my/invoices/{}".format(base_url, order.id)
             # Genera el código QR con el enlace
