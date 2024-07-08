@@ -58,7 +58,7 @@ class AccountMove(models.Model):
                             #'email_cc': invoice.invoice_user_id.login
                         }"""
                     
-                    if invoice.company_id == 8: 
+                    if invoice.company_id.id == 8: 
                         email_values = {
                             'email_from': 'megatk.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',
@@ -66,7 +66,7 @@ class AccountMove(models.Model):
                             #'email_cc': invoice.invoice_user_id.login
                         }
                         mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                    elif invoice.company_id == 9: 
+                    elif invoice.company_id.id == 9: 
                         email_values = {
                             'email_from': 'meditek.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',
