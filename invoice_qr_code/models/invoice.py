@@ -9,7 +9,7 @@ def generate_qr_code(value):
     qr = qrcode.QRCode(
              version=1,
              error_correction=qrcode.constants.ERROR_CORRECT_L,
-             box_size=20,
+             box_size=30,
              border=4)
     qr.add_data(value)
     qr.make(fit=True)
@@ -25,7 +25,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     qr_image = fields.Binary("QR Code", compute='_generate_qr_code')
-    qr_in_report = fields.Boolean('Display QRCode in Report?')
+    qr_in_report = fields.Boolean('¿Añadir QR a la factura?')
 
     def _generate_qr_code(self):
         for order in self:
