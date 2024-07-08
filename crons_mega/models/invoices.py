@@ -50,11 +50,21 @@ class AccountMove(models.Model):
             
             if invoice.invoice_user_id:
                 if invoice.partner_id.email:
-                    email_values = {
-                        'email_from': 'megatk.no_reply@megatk.com',
-                        'email_to': 'dzuniga@megatk.com',
-                        #'email_to': invoice.partner_id.email,
-                        #'email_cc': invoice.invoice_user_id.login
-                    }
+                    
+                    if invoice.company_id == 8: 
+                        email_values = {
+                            'email_from': 'megatk.no_reply@megatk.com',
+                            'email_to': 'dzuniga@megatk.com',
+                            #'email_to': invoice.partner_id.email,
+                            #'email_cc': invoice.invoice_user_id.login
+                        }
+                    elif invoice.company_id == 9: 
+                        email_values = {
+                            'email_from': 'meditek.no_reply@megatk.com',
+                            'email_to': 'dzuniga@megatk.com',
+                            #'email_to': invoice.partner_id.email,
+                            #'email_cc': invoice.invoice_user_id.login
+                        }
+                    
                     
                     mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
