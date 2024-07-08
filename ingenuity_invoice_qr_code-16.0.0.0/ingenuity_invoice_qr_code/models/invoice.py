@@ -37,20 +37,15 @@ class AccountMove(models.Model):
     qr_in_report = fields.Boolean('Display QRCode in Report?')
 
     def _generate_qr_code(self):
-        self.qr_image = None
         for order in self:
-            supplier_name = self.company_id.name
-            vat = str(self.company_id.vat)
-            vat_total = str(self.amount_tax)
-            date = str(self.invoice_date)
-
-            total = ''.join([self.currency_id.name, str(self.amount_total)])
-            lf = '\t'
-            invoice = lf.join(
-                ['Seller name:', supplier_name, 'Vat Registration Number:', vat, 'Date:', date, 'Total with VAT:',
-                 total, 'VAT total:', vat_total])
-            qr_img = generate_qr_code(invoice)
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            # Construye el enlace que quieres que aparezca en el código QR
+            invoice_url = "{}/my/invoices/{}".format(base_url, order.id)
+            
+            # Genera el código QR con el enlace
+            qr_img = generate_qr_code(invoice_url)
+            
             order.write({
                 'qr_image' : qr_img
             })
-            print (self.qr_image,"qr_imageqr_image--------------------")
+            print(self.qr_image, "qr_imageqr_image--------------------")
