@@ -13,7 +13,7 @@
                 ha vencido el <t t-out="object.invoice_date_due"/> por un monto de <t t-out="object.amount_total"/> Lps.</p>
                 <p>Hasta la fecha, no hemos recibido el pago correspondiente, por lo que le agradeceríamos mucho que pudiera gestionar el pago a la brevedad posible.</p>
                 <p>Agradecemos de antemano su colaboración y quedamos a su disposición para cualquier consulta adicional, le agradecemos mucho por ser cliente nuestro. </p>
-                <br>
+                <br></br>
                 <p>Saludos,</p>
                 <p><t t-out="object.company_id.name"/></p>
 
