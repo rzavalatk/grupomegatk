@@ -1,10 +1,10 @@
 <odoo>
     <data>
-        <record id="ir_cron_notify_due_invoices" model="ir.cron">
-            <field name="name">Notificar 5 dias antes de vencer una factura</field>
+        <record id="ir_cron_notify_date_due_invoices" model="ir.cron">
+            <field name="name">Notificar vencimiento de factura</field>
             <field name="model_id" ref="account.model_account_move"/>
             <field name="state">code</field>
-            <field name="code">model.notify_due_invoices()</field>
+            <field name="code">model.notify_date_due_invoices()</field>
             <field name="active" eval="True"/>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>

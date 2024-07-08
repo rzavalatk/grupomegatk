@@ -8,12 +8,17 @@
             <field name="email_to">${user.email_formatted | safe}</field>
             <field name="body_html" type="html">
                 
-                <p>Estimado <t t-out="object.partner_id.name"/>,</p>
-                <p>Le recordamos que la factura <t t-out="object.internal_number"/> con fecha de vencimiento <t t-out="object.invoice_date_due"/></p>
-                <p>Por favor, asegúrese de realizar el pago antes de la fecha de vencimiento.</p>
+                <p>Estimado/a <t t-out="object.partner_id.name"/>,</p>
+                <p>Le informamos que la factura <t t-out="object.internal_number"/> con fecha de vencimiento <t t-out="object.invoice_date_due"/> por un monto de <t t-out="object.amount_total"/> Lps. está por vencerse.</p>
+                <p>Este correo es solo un recordatorio por del vencimiento del mismo.  Si usted ya cancelo este saldo por favor hacer caso omiso de este correo.</p>
+                <p>Le agradecemos mucho por ser cliente nuestro. </p>
+                <br>
                 <p>Saludos,</p>
                 <p><t t-out="object.company_id.name"/></p>
-        
+
+                <div class="footer">
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
+                </div>
             </field>
         </record>
     </data>
