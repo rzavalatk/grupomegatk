@@ -40,8 +40,7 @@ class AccountMove(models.Model):
         for order in self:
             base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
             # Construye el enlace que quieres que aparezca en el código QR
-            invoice_url = "{}/my/invoices/{}".format(base_url, order.id)
-            
+            invoice_url = "{}/web/login?redirect=/my/invoices/{}".format(base_url, order.id)
             # Genera el código QR con el enlace
             qr_img = generate_qr_code(invoice_url)
             
