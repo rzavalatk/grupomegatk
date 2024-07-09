@@ -78,8 +78,10 @@ class Account_Move(models.Model):
     def enviar_email_qr(self):
         mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
         
-        for invoice in self:
         
+        
+        for invoice in self:
+            
             if invoice.partner_id.email:
                         
                         if invoice.company_id.id == 8:
@@ -132,13 +134,15 @@ class Account_Move(models.Model):
                         if not flag:
                             for marca in self.sorteo_id.marcas:
                                 if not flag:
-                                    if move_line.product_id.marca_id.name == marca.marcas.name:
-                                        
-                                        if marca.fecha_inicial <= self.invoice_date <= marca.fecha_final:
-                                            #({'ticket': "ticket x2"})
-                                            tickets = tickets* 2
-                                            flag = True
-                                            break
+                                    if move_line.product_id.marca_id.name:
+                                        if marca.marcas.name:
+                                            if move_line.product_id.marca_id.name == marca.marcas.name:
+                                                
+                                                if marca.fecha_inicial <= self.invoice_date <= marca.fecha_final:
+                                                    #({'ticket': "ticket x2"})
+                                                    tickets = tickets* 2
+                                                    flag = True
+                                                    break
                                 
                             for producto in self.sorteo_id.productos:
                                 if not flag:
