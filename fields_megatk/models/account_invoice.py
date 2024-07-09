@@ -81,28 +81,30 @@ class Account_Move(models.Model):
         
         
         for invoice in self:
-            
             if invoice.partner_id.email:
-                        
-                        if invoice.company_id.id == 8:
-                            
-                            email_values = {
-                                'email_from': 'megatk.no_reply@megatk.com',
-                                'email_to': 'dzuniga@megatk.com',
-                                #'email_to': invoice.partner_id.email,
-                                #'email_cc': invoice.invoice_user_id.login
-                            }
-                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                            
-                        elif invoice.company_id.id == 9:
-                            
-                            email_values = {
-                                'email_from': 'meditek.no_reply@megatk.com',
-                                'email_to': 'dzuniga@megatk.com',
-                                #'email_to': invoice.partner_id.email,
-                                #'email_cc': invoice.invoice_user_id.login
-                            }
-                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                qr_img_base64 = invoice.qr_image.decode('utf-8') if invoice.qr_image else ""
+                email_values = {}
+
+                if invoice.company_id.id == 8:
+                    email_values = {
+                        'email_from': 'megatk.no_reply@megatk.com',
+                        'email_to': 'dzuniga@megatk.com',
+                        #'email_to': invoice.partner_id.email,
+                        #'email_cc': invoice.invoice_user_id.login
+                    }
+                elif invoice.company_id.id == 9:
+                    email_values = {
+                        'email_from': 'meditek.no_reply@megatk.com',
+                        'email_to': 'dzuniga@megatk.com',
+                        #'email_to': invoice.partner_id.email,
+                        #'email_cc': invoice.invoice_user_id.login
+                    }
+                    
+                email_context = {
+                    'qr_image_base64': qr_img_base64
+                }
+
+                mail_template.sudo().with_context(email_context).send_mail(invoice.id, email_values=email_values, force_send=True)
 
     def generate_tickets(self):
         tickets = 0

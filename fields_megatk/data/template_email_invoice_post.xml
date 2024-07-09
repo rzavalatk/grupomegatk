@@ -15,7 +15,9 @@
                 <p>Si tiene alguna pregunta o necesita asistencia adicional, no dude en contactarnos. </p>
                 <br></br>
                 <br></br>
-                <t t-out="object.qr_image"/>
+                <t t-if="ctx.get('qr_image_base64')">
+                    <img src="data:image/png;base64,<t t-esc="ctx.get('qr_image_base64')"/>" alt="QR Code"/>
+                </t>
                 <br></br>
                 <br></br>
                 <p>Gracias por su preferencia.</p>
