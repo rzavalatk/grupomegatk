@@ -49,7 +49,7 @@ class AccountMove(models.Model):
             if invoice.invoice_user_id:
                 if invoice.partner_id.email:
                     
-                    _logger.warning("oase 1")
+                    _logger.warning("oase 1" + str(len(invoices)))
                     """email_values = {
                             'email_from': 'megatk.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',
