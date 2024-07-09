@@ -15,6 +15,7 @@
         "formatos_papel_mega",
 	  ],
     "data": [
+        'data/template_email_invoice_post.xml',
         'reports/visita_tecnica.xml',
         'reports/visita_print_view.xml',
         'reports/entrega_equipo_print_view.xml',

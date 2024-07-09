@@ -1,0 +1,31 @@
+<odoo>
+    <data>
+        <record id="mail_template_invoice_post" model="mail.template">
+            <field name="name">Correo factura codigo QR</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="subject">¡Su factura ya está disponible!</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="email_to">${user.email_formatted | safe}</field>
+            <field name="body_html" type="html">
+                
+                <p>Estimado/a <t t-out="object.partner_id.name"/>,</p>
+                <p>Nos complace informarle que su factura con el número <t t-out="object.internal_number"/>, emitida el <t t-out="object.invoice_date"/> 
+                ha sido generada y está disponible para su revisión.</p>
+                <p>Adjunto a este correo encontrará un código QR que puede escanear para acceder a su factura de manera rápida y sencilla.</p>
+                <p>Si tiene alguna pregunta o necesita asistencia adicional, no dude en contactarnos. </p>
+                <br></br>
+                <br></br>
+                <t t-out="object.qr_image"/>
+                <br></br>
+                <br></br>
+                <p>Gracias por su preferencia.</p>
+                <p>Saludos,</p>
+                <p><t t-out="object.company_id.name"/></p>
+
+                <div class="footer">
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

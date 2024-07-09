@@ -44,15 +44,6 @@ class AccountMove(models.Model):
         invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]), ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', '=', 'not_paid')])
         mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_date_dues')
         
-        """_logger.warning("cantidad de facturas:" + str(len(invoices)))
-        _logger.warning("FECHA: " + str(today))
-        
-        for invoice in invoices:
-            _logger.warning("FACTURA")
-            _logger.warning("Move_type: " + str(invoice.move_type))
-            _logger.warning("state" + str(invoice.state))
-            _logger.warning("payment_state" + str(invoice.payment_state))
-            _logger.warning("date_due" + str(invoice.invoice_date_due))"""
         
         for invoice in invoices:
             

@@ -29,6 +29,7 @@ class Account_Move(models.Model):
     
     n_tickets_acum = fields.Integer('Tickets')
     
+    
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
@@ -70,6 +71,32 @@ class Account_Move(models.Model):
                 
     def action_post(self):
         res = super(Account_Move, self).action_post()
+        mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
+        
+        for invoice in self:
+        
+            if invoice.partner_id.email:
+                        
+                        if invoice.company_id.id == 8:
+                            
+                            email_values = {
+                                'email_from': 'megatk.no_reply@megatk.com',
+                                'email_to': 'dzuniga@megatk.com',
+                                #'email_to': invoice.partner_id.email,
+                                #'email_cc': invoice.invoice_user_id.login
+                            }
+                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            
+                        elif invoice.company_id.id == 9:
+                            
+                            email_values = {
+                                'email_from': 'meditek.no_reply@megatk.com',
+                                'email_to': 'dzuniga@megatk.com',
+                                #'email_to': invoice.partner_id.email,
+                                #'email_cc': invoice.invoice_user_id.login
+                            }
+                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+        
         self.generate_tickets()
         return res
 
