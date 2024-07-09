@@ -41,13 +41,14 @@ class AccountMove(models.Model):
         admin = self.env['res.users'].sudo().browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
-        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]) ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', '=', 'not_paid')])
+        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', ['8','9']) ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', '=', 'not_paid')])
         mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_date_dues')
         
         _logger.warning("cantidad de facturas:" + str(len(invoices)))
         _logger.warning("FECHA: " + str(today))
         
         for invoice in invoices:
+            _logger.warning("FACTURA")
             _logger.warning("Move_type: " + str(invoice.move_type))
             _logger.warning("state" + str(invoice.state))
             _logger.warning("payment_state" + str(invoice.payment_state))
