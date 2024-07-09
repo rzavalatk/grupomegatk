@@ -22,8 +22,6 @@ class AccountMove(models.Model):
         invoices = self.search([('invoice_date_due', '=', due_date), ('state', '=', 'posted')])
         mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_dues')
         
-        _logger.warning('Fecha de vencimiento : ' + str(due_date))
-
         
         for invoice in invoices:
             
@@ -51,6 +49,7 @@ class AccountMove(models.Model):
             if invoice.invoice_user_id:
                 if invoice.partner_id.email:
                     
+                    _logger.warning("oase 1")
                     """email_values = {
                             'email_from': 'megatk.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',
@@ -58,7 +57,8 @@ class AccountMove(models.Model):
                             #'email_cc': invoice.invoice_user_id.login
                         }"""
                     
-                    if invoice.company_id.id == 8: 
+                    if invoice.company_id.id == 8:
+                        _logger.warning("oase 2") 
                         email_values = {
                             'email_from': 'megatk.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',
@@ -66,7 +66,8 @@ class AccountMove(models.Model):
                             #'email_cc': invoice.invoice_user_id.login
                         }
                         mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                    elif invoice.company_id.id == 9: 
+                    elif invoice.company_id.id == 9:
+                        _logger.warning("oase 3") 
                         email_values = {
                             'email_from': 'meditek.no_reply@megatk.com',
                             'email_to': 'dzuniga@megatk.com',

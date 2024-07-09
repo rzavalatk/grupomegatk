@@ -9,7 +9,7 @@
             <field name="body_html" type="html">
                 
                 <p>Estimado/a <t t-out="object.partner_id.name"/>,</p>
-                <p>Nos dirigimos a usted de parte de MEGATK para recordarle amablemente que la factura número <t t-out="object.internal_number"/>, emitida el <t t-out="object.invoice_date"/> 
+                <p>Nos dirigimos a usted de parte de <t t-out="object.company_id.name"/> para recordarle amablemente que la factura número <t t-out="object.internal_number"/>, emitida el <t t-out="object.invoice_date"/> 
                 ha vencido el <t t-out="object.invoice_date_due"/> por un monto de <t t-out="object.amount_total"/> Lps.</p>
                 <p>Hasta la fecha, no hemos recibido el pago correspondiente, por lo que le agradeceríamos mucho que pudiera gestionar el pago a la brevedad posible.</p>
                 <p>Agradecemos de antemano su colaboración y quedamos a su disposición para cualquier consulta adicional, le agradecemos mucho por ser cliente nuestro. </p>
