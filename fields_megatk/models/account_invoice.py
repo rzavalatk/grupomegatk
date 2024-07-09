@@ -71,6 +71,11 @@ class Account_Move(models.Model):
                 
     def action_post(self):
         res = super(Account_Move, self).action_post()
+        
+        self.generate_tickets()
+        return res
+    
+    def s(self):
         mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
         
         for invoice in self:
@@ -96,9 +101,6 @@ class Account_Move(models.Model):
                                 #'email_cc': invoice.invoice_user_id.login
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-        
-        self.generate_tickets()
-        return res
 
     def generate_tickets(self):
         tickets = 0

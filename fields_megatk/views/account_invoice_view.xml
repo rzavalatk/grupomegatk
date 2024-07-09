@@ -21,6 +21,7 @@
          
                 <xpath expr="//button[@name='action_post']" position="after">
                     <button string="Borrador" groups="sign_orders.group_admins" name="go_draft" type="object"/>
+                    <button string="Enviar factura electronica" name="enviar_email_qr" type="object"/>
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='sale_info_group']/field[@name='partner_bank_id']" position="before">
                     <field name="x_comision"/>
