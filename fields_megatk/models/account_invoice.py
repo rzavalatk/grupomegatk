@@ -75,7 +75,7 @@ class Account_Move(models.Model):
         self.generate_tickets()
         return res
     
-    def s(self):
+    def enviar_email_qr(self):
         mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
         
         for invoice in self:
