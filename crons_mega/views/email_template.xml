@@ -78,10 +78,10 @@
                                 <tr>
                                     <th>Facturado</th>
                                     <t t-foreach="object.cierre_line_ids" t-as="row">
-                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.facturado"/></th>
+                                        <th><t t-esc="row.facturado" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
                                     </t>
 
-                                    <th><t t-out="object.currency_id.symbol"/> <t t-out="object.total_facturado"/> </th>
+                                    <th><t t-esc="object.total_facturado" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
                                 </tr>
                                 <tr>
                                     <th>Cobrado Cxc</th>
@@ -91,16 +91,17 @@
                                             <th>No Aplica</th>
                                         </t>
                                         <t t-else="">
-                                            <th> <t t-out="row.currency_id.symbol"/> <t t-out="row.cobrado"/> </th>
+                                            <th><t t-esc="row.cobrado" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
                                         </t>
                                     </t>
 
-                                    <th> <t t-out="object.currency_id.symbol"/> <t t-out="object.total_cobrado"/> </th>
+                                    <th><t t-esc="object.total_cobrado" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
                                     <t t-foreach="object.cierre_line_ids" t-as="row">
-                                        <th><t t-out="row.currency_id.symbol"/> <t t-out="row.total"/> </th>
+                                        
+                                        <th><t t-esc="row.total" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
                                     </t>
                                 </tr>
                             </tbody>
@@ -123,15 +124,14 @@
                             <th>Saldo</th>
                         </thead>
                         <tbody>
-                            <t t-foreach="object.facturas_ids" t-as="row">
-                            
-                                
+                            <t t-foreach="object.facturas_ids" t-as="row">      
                                 <tr>
                                     <th><t t-out="row.partner_id.name"/></th>
                                     <th><t t-out="row.name"/></th>
                                     <th><t t-out="row.user_id.name"/></th>
-                                    <th><t t-out="row.amount_total_signed"/></th>
-                                    <th><t t-out="row.amount_residual"/></th>
+                                    <th><t t-esc="row.amount_total_signed" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
+                                    <th><t t-esc="row.amount_residual" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> </th>
+                                    
                                 </tr>
                             </t>
                         </tbody>
@@ -143,7 +143,7 @@
                 <br/>
                 <br/>
                 <br/>
-            
+                <h3 class="texto_centro">Promedio de ventas</h3>
                 <div class="tabla_centrada">
                     <table>
                         <thead>
