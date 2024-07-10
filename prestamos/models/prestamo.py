@@ -89,7 +89,7 @@ class Prestamos(models.Model):
     prima = fields.Float(string='Prima', readonly=True, states={
                          'draft': [('readonly', False)]},)
 
-    utilidad = fields.Float(string='Utilidad', compute='_onchange_precioa_preciom',
+    utilidad = fields.Float(string='Utilidad',
                             readonly=True, states={'draft': [('readonly', False)]},)
     monto_cxp = fields.Float(string='Monto a pagar', compute='_onchange_preciom_prima',
                              readonly=True, states={'draft': [('readonly', False)]},)
@@ -208,10 +208,10 @@ class Prestamos(models.Model):
         if self.precio_m != 0 and self.prima != 0:
             self.monto_cxp = self.precio_m - self.prima
 
-    @api.depends('precio_m', 'precio_a')
+    """@api.depends('precio_m', 'precio_a')
     def _onchange_precioa_preciom(self):
         if self.precio_m != 0 and self.precio_a != 0:
-            self.utilidad = self.precio_a - self.precio_m
+            self.utilidad = self.precio_a - self.precio_m"""
 
     @api.onchange('payment_term_id', 'fecha_inicio')
     def _onchange_payment_term_fecha_inicio(self):

@@ -58,7 +58,7 @@ class Prestamo(models.Model):
     #Datos de contabilidad
     #payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     #meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
-    interest_rate = fields.Float(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Variables de conteo

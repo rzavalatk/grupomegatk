@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Ingenuity Info
-#
-#    Copyright (C) 2023-TODAY Ingenuity Info(<https://ingenuityinfo.in>)
-#    Author: Ingenuity Info(<https://ingenuityinfo.in>)
-#
-#
-#############################################################################
 {
     'name': "QR Code on Invoice",
     'author': "Ingenuity Info",
@@ -44,3 +34,4 @@
     'application': True,
     'auto_install': False,
 }
+
