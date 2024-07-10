@@ -153,11 +153,13 @@
                         </thead>
                         <tbody>
                             
-                                <tr>
-                                    <th><t t-out="object.promedio_mensual"/> Lps.</th>
-                                    <th><t t-out="object.promedio_anual"/> Lps.</th>
                                 
-                                </tr>
+                            <tr>
+                                <th><t t-esc="object.promedio_mensual" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> Lps.</th>
+                                <th><t t-esc="object.promedio_anual" t-options="{'widget': 'monetary', 'display_currency': object.currency_id}"/> Lps.</th>
+                            </tr>
+                                
+                                
     
                         </tbody>
                     </table>
