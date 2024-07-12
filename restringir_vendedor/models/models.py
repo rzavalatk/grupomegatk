@@ -30,12 +30,12 @@ class ProductNoCreate(models.Model):
         else:
             return super(ProductNoCreate, self).create(vals_list)
         
-    @api.model_create_multi
+    """@api.model_create_multi
     def write(self, vals):
         if self.env.user.vendor:
             raise Warning("No tiene permisos para realizar esta acción. Consulte con su Administrador.")
         else:
-            return super(ProductNoCreate, self).write(vals)
+            return super(ProductNoCreate, self).write(vals)"""
         
 class ProductTemplateNoCreate(models.Model):
     _inherit = "product.template"
