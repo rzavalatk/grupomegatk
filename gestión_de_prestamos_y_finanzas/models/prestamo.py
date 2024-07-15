@@ -180,8 +180,8 @@ class Prestamo(models.Model):
         for prestamo in self:
             
             if prestamo.interest_rate > 0:
-                if prestamo.amount_borrowed > 0:
-                    raise UserError(_("No se puede procesar el prestamo, monto menor que cero."))
+                if prestamo.amount_borrowed >= 0:
+                    raise UserError(_("No se puede procesar el prestamo, monto menor que cero o es cero."))
                 if not prestamo.name:
                     prestamo.name = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
                 else:
