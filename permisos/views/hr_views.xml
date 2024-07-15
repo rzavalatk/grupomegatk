@@ -35,6 +35,27 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="hr_public_permiso_view_inh">
+      <field name="name">hr.public.employee.permisos.view</field>
+      <field name="model">hr.employee.public</field>
+      <field name="inherit_id" ref="hr.hr_employee_public_view_form" />
+        <field name="arch" type="xml">
+          
+
+        
+
+        <xpath expr="//div[@name='button_box']" position="inside">
+          <button class="oe_stat_button"
+            icon="fa-list"
+            type="action" 
+            name="%(action_emplyee_permiso_personal)d"
+            string="Permisos">
+          </button>
+        </xpath>
+
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="action_emplyee_permiso_personal">
       <field name="name">Permisos</field>
       <field name="type">ir.actions.act_window</field>
