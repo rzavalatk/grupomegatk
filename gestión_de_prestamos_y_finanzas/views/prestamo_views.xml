@@ -59,15 +59,18 @@
                             </field>
                         </page>
                         <page name="cuentas" string="Cuentas">
-                            <group name="info_encargado" string="Información">
-                                <field name="company_id" />
-                                <field name="user_id" />
+                            <group >
+                               <group name="info_encargado" string="Información">
+                                    <field name="company_id" />
+                                    <field name="user_id" />
+                                </group>
+                                <group name="info_cuentas" string="Cuentas">
+                                    <field name="recibir_pagos" />
+                                    <field name="account_id" />
+                                    <field name="account_redes_id" />
+                                </group> 
                             </group>
-                            <group name="info_cuentas" string="Cuentas">
-                                <field name="recibir_pagos" />
-                                <field name="account_id" />
-                                <field name="account_redes_id" />
-                            </group>
+                            
                             
                             
                         </page>

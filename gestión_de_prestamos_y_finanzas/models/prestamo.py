@@ -1,9 +1,10 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 import math
 
 import base64
 import io
 from odoo.tools.misc import xlsxwriter
+from odoo.exceptions import UserError
 
 from datetime import timedelta
 import time
@@ -177,58 +178,68 @@ class Prestamo(models.Model):
 
     def generate_quota(self):
         for prestamo in self:
-            time.sleep(2)
-            cuota_obj = self.env['cuota']
             
-            # Determinar la frecuencia de pago en número de pagos por año
-            frequency_map = {
-                '365': 365,
-                '52': 52,
-                '24': 24,
-                '12': 12,
-                '6': 6,
-                '4': 4,
-                '1': 1
-            }
+            if prestamo.interest_rate < 0:
+                if prestamo.amount_borrowed < 0:
+                    raise UserError(_("No se puede procesar el prestamo, monto menor que cero."))
+                if not prestamo.name:
+                    prestamo.name = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
+                else:
+                    time.sleep(2)
+                    cuota_obj = self.env['cuota']
+                    
+                    # Determinar la frecuencia de pago en número de pagos por año
+                    frequency_map = {
+                        '365': 365,
+                        '52': 52,
+                        '24': 24,
+                        '12': 12,
+                        '6': 6,
+                        '4': 4,
+                        '1': 1
+                    }
+                    
+                    if prestamo.payment_frequency not in frequency_map:
+                        raise ValueError("Frecuencia de pago no válida")
+                    
+                    payments_per_year = frequency_map[prestamo.payment_frequency]
+                    total_payments = int(payments_per_year) * (int(prestamo.meses_seleccion) / 12)
+                    
+                    saldo_pendiente = prestamo.amount_borrowed
+                    tasa_interes_mensual = prestamo.interest_rate / 100 / 12
+                    amortizacion_constante = prestamo.amount_borrowed / total_payments
+                    
+                    # Calcular la cuota fija mensual
+                    cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
+                    
+                    n = 1
+                    
+                    time.sleep(2)
+                    for cuota_number in range(1, int(total_payments) + 1):
+                        
+                        interes = saldo_pendiente * tasa_interes_mensual
+                        
+                        capital_amortizado = cuota_mensual - interes
+                        saldo_pendiente -= capital_amortizado
+                        
+                        cuota_obj.create({
+                            'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
+                            'prestamo_id': prestamo.id,
+                            'amount': cuota_mensual,
+                            'amount_capital_quota': capital_amortizado,
+                            'amount_capital': saldo_pendiente,
+                            'interest_rate': prestamo.interest_rate,
+                            'interest_generated': interes,
+                            'date_due': self.date_due_cuota(prestamo.date_init, total_payments, payments_per_year, n),
+                        })
+                        
+                        if n <= total_payments:
+                            n = n + 1
+                    
+                    prestamo.state = 'generado'
+            else:
+                 raise UserError(_("La tasa no puede ser menor que cero"))
             
-            if prestamo.payment_frequency not in frequency_map:
-                raise ValueError("Frecuencia de pago no válida")
-            
-            payments_per_year = frequency_map[prestamo.payment_frequency]
-            total_payments = int(payments_per_year) * (int(prestamo.meses_seleccion) / 12)
-            
-            saldo_pendiente = prestamo.amount_borrowed
-            tasa_interes_mensual = prestamo.interest_rate / 100 / 12
-            amortizacion_constante = prestamo.amount_borrowed / total_payments
-            
-            # Calcular la cuota fija mensual
-            cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
-            
-            n = 1
-            
-            time.sleep(2)
-            for cuota_number in range(1, int(total_payments) + 1):
-                
-                interes = saldo_pendiente * tasa_interes_mensual
-                
-                capital_amortizado = cuota_mensual - interes
-                saldo_pendiente -= capital_amortizado
-                
-                cuota_obj.create({
-                    'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
-                    'prestamo_id': prestamo.id,
-                    'amount': cuota_mensual,
-                    'amount_capital_quota': capital_amortizado,
-                    'amount_capital': saldo_pendiente,
-                    'interest_rate': prestamo.interest_rate,
-                    'interest_generated': interes,
-                    'date_due': self.date_due_cuota(prestamo.date_init, total_payments, payments_per_year, n),
-                })
-                
-                if n <= total_payments:
-                    n = n + 1
-            
-            prestamo.state = 'generado'
     
     
     def action_approve(self):
