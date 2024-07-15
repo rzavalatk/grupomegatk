@@ -143,10 +143,10 @@ class Prestamo(models.Model):
             prestamo.cuotas_count = len(prestamo.quota_ids)
             
     #           METODOS ONCHANGE
-    @api.onchange('amount_borrowed')
+    """@api.onchange('amount_borrowed')
     def _onchange_amount_borrowed(self):
         for prestamo in self:
-            prestamo.amount_borrowed = self.amount_borrowed
+            prestamo.amount_borrowed = self.amount_borrowed"""
         
     @api.onchange('meses_seleccion')
     def _onchange_meses_seleccion(self):
