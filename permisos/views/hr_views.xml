@@ -47,11 +47,6 @@
       <field name="inherit_id" ref="hr.hr_employee_public_view_form" />
         <field name="arch" type="xml">
           
-          <xpath expr="//form/header/button[@name='1113']" position="after">
-        
-            <button name="%(action_permisos_wizard)d" type="action" icon="fa-calendar" string="Permiso General" class="oe_highlight" />  
-         
-          </xpath>
 
         
 
