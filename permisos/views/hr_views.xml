@@ -19,8 +19,14 @@
 
           <xpath expr="//form/header/button[@name='1113']" position="after">
         
-            <button name="%(action_permisos_wizard)d" type="action" string="Permiso General" class="oe_highlight" />  
+            <button name="%(action_permisos_wizard)d" type="action" icon="fa-calendar" string="Permiso General" class="oe_highlight" />  
          
+          </xpath>
+
+        <xpath expr="//field[@name='user_id']" position="before">
+          <div name="button_box" class="oe_button_box">
+            <button name="%(action_permisos_wizard)d" type="action" icon="fa-calendar" string="Permiso General" class="oe_highlight" />
+          </div>
         </xpath>
 
         <xpath expr="//div[@name='button_box']" position="inside">

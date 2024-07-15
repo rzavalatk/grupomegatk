@@ -18,8 +18,8 @@ class Prestamo(models.Model):
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
-    #pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
-    #note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
+    pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
     #sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
     #Datos del prestamo
@@ -39,7 +39,6 @@ class Prestamo(models.Model):
         default='12',
         readonly=True, states={'borrador': [('readonly', False)]}
     )
-    #meses_seleccion = fields.Integer(string='Duracion (meses)', required=True, readonly=True, states={'borrador': [('readonly', False)]}) #ESTO TIENE QUE SER UN SELECTION
     date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today(), readonly=True, states={'borrador': [('readonly', False)]},) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
     date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
     
@@ -47,13 +46,12 @@ class Prestamo(models.Model):
     
     #ESTO ESTA POR DEFINIRSE
     
-    #company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
-    #recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
-    """producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)], default=product_gasto,)
-    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True, domain=[('sale_ok', '=', True)], default=product_interes,)
-    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True, default=desembolso_cuenta,)
-    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'borrador': [('readonly', False)]}, default=redescuento_cuenta)"""
-    #user_id = fields.Many2one('res.users', string='Responsable', index=True,default=lambda self: self.env.user, readonly=True, states={'borrador': [('readonly', False)]},)
+    company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
+    producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', required=True, domain=[('sale_ok', '=', True)], )
+    producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes', required=True, domain=[('sale_ok', '=', True)],)
+    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True)
+    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Datos de contabilidad
     #payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)

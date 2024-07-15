@@ -17,7 +17,7 @@ class Cuota(models.Model):
     
     #Datos de los pagos
     date_due = fields.Date(string='Fecha limite',copy=False,)
-    payment_date = fields.Date(string='Fecha de pago',copy=False,)
+    payment_date = fields.Date(string='Fecha pagado',copy=False,)
     amount = fields.Float(string='Cuota',copy=False)
     amount_capital_quota = fields.Float(string='Capital de cuota',copy=False)
     amount_capital = fields.Float(string='Capital',copy=False)
