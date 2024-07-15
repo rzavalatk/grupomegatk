@@ -108,13 +108,13 @@
 									<field name="tipo_soporte"/>
 									<field name="estado_taller" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
 									<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
+									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo,"llamada"]]]}'/>
 								</group>
 								<group name="data2">
 									<field name="reporto" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
 									<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
 									<field name="repor_email" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="repor_direction" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="repor_direction" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
 									<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 									<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 								</group>
