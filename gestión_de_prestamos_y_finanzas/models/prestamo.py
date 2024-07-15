@@ -179,8 +179,8 @@ class Prestamo(models.Model):
     def generate_quota(self):
         for prestamo in self:
             
-            if self.interest_rate < 0:
-                if prestamo.amount_borrowed < 0:
+            if prestamo.interest_rate > 0:
+                if prestamo.amount_borrowed > 0:
                     raise UserError(_("No se puede procesar el prestamo, monto menor que cero."))
                 if not prestamo.name:
                     prestamo.name = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
