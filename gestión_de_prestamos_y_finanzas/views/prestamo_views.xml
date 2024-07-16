@@ -24,9 +24,9 @@
 							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('payment_count', '=', 0)]}">
 								<field name="payment_count" widget="statinfo" string="Pagos cliente"/>
 							</button>
-							<button class="oe_stat_button" icon="fa-bank" type="action" name="%(action_prestamos_cuotas)d" attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
+							<!--<button class="oe_stat_button" icon="fa-bank" type="action" name="%(action_prestamos_cuotas)d" attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
 								<field name="cuotas_count" widget="statinfo" string="Cuotas"/>
-							</button>
+							</button>-->
 						</div>
 
                     <group>
