@@ -61,12 +61,12 @@ class Prestamo(models.Model):
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
     
     #Variables de conteo
-    #invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
+    invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
     #invoice_count_cxp = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
-    #payment_count = fields.Integer(string='Payment Count', compute='_compute_invoiced', readonly=True)
-    #cuotas_count = fields.Integer(string='cuotas Count', compute='_compute_invoiced', readonly=True)
-    #invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
-    #payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
+    payment_count = fields.Integer(string='Payment Count', compute='_compute_invoiced', readonly=True)
+    cuotas_count = fields.Integer(string='cuotas Count', compute='_compute_invoiced', readonly=True)
+    invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
+    payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
        
     payment_frequency = fields.Selection([
         ('365', 'Diario'),
@@ -86,6 +86,7 @@ class Prestamo(models.Model):
         ('generado', 'Generado'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
+        ('cancelado', 'Cancelado'),
         ('pagado', 'Pagado')
     ], string='Estado', default='borrador', required=True)
        
@@ -138,7 +139,6 @@ class Prestamo(models.Model):
     def _compute_invoiced(self):
         for prestamo in self:
             prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)
-            prestamo.invoice_count_cxp = len(prestamo.quota_ids.filtered(lambda q: q.is_pagado))
             prestamo.payment_count = len(prestamo.payment_ids)
             prestamo.cuotas_count = len(prestamo.quota_ids)
             
@@ -239,8 +239,27 @@ class Prestamo(models.Model):
                     prestamo.state = 'generado'
             else:
                  raise UserError(_("La tasa no puede ser menor que cero"))
+             
+    def action_view_invoice(self):
+        invoices = self.mapped('invoice_cxc_ids')
+        action = self.env.ref('account.action_move_out_invoice_type').read()[0]
+        
+        if len(invoices) > 1:
+            action['domain'] = [('id', 'in', invoices.ids)]
+        elif len(invoices) == 1:
+            form_view_id = self.env.ref('account.view_move_form').id
+            action['views'] = [(form_view_id, 'form')]
+            action['res_id'] = invoices.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        
+        return action
             
-    
+    def unlink(self):
+        for prestamo in self:
+            if prestamo.state != 'draft':
+                raise UserError(_('No se puede eliminar o cancelar una prestamo en estado ' + prestamo.state))
+        return super(Prestamo, self).unlink()
     
     def action_approve(self):
         for prestamo in self:
@@ -250,6 +269,20 @@ class Prestamo(models.Model):
     def action_reject(self):
         for prestamo in self:
             prestamo.state = 'rechazado'
+        
+    def action_cancel(self):
+        cuotas = self.env["cuota"].search(
+            [('prestamo_id', '=', self.id)])
+        if cuotas:
+            for cuota in cuotas:
+                if cuota.state != 'draft':
+                    raise UserError(_('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
+                cuota.sudo().unlink()         
+
+        self.write({'state': 'cancelado',
+                    'cuota_prestamo': 0,
+                    'cuota_inicial': 0
+                    })
             
     def go_to_draft(self):
         for prestamo in self:
@@ -265,6 +298,33 @@ class Prestamo(models.Model):
     def action_pay(self):
         for prestamo in self:
             prestamo.state = 'pagado'
+        
+    def ending(self):
+        pase = True
+        for prestamo in self:
+            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
+            for cuota in cuotas:
+                if cuota.state != 'pay':
+                    pase = False
+        if self.amount_borrowed < 1 and pase:
+            self.write({
+                'state': 'pagado',
+            })
+        else:
+           raise UserError(_('No se puede finalizar el prestamo'))
+       
+    def action_view_payment(self):
+        patment = self.mapped('payment_ids')
+        action = self.env.ref('account.action_account_payments').read()[0]
+        if len(patment) > 1:
+            action['domain'] = [('id', 'in', patment.ids)]
+        elif len(patment) == 1:
+            action['views'] = [
+                (self.env.ref('account.view_account_payment_form').id, 'form')]
+            action['res_id'] = patment.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     def export_excel(self):
         # Crear un archivo en memoria
@@ -315,3 +375,56 @@ class Prestamo(models.Model):
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
         }
+        
+    def crear_factura(self):
+        if not self.invoice_cxc_ids:
+            self.crear_factura_cxc()
+            self.write({
+                'remaining_capital': self.amount_borrowed
+            })
+
+    def crear_factura_cxc(self):
+        obj_factura = self.env["account.move"]
+        lineas = []
+        val_lineas = {
+            'name': 'Capital prestado',
+            'account_id': self.account_id.id,
+            'price_unit': self.amount_borrowed,
+            'quantity': 1,
+            'product_id': False,
+            'x_user_id': self.env.user.id
+        }
+        lineas.append((0, 0, val_lineas))
+        if self.gasto_prestamo > 0:
+            val_lineas1 = {
+                'name': 'Cargos administrativos',
+                'account_id': self.producto_gasto_id.property_account_income_id.id or self.producto_gasto_id.categ_id.property_account_income_categ_id.id,
+                'price_unit': self.gasto_prestamo,
+                'quantity': 1,
+                'product_id': self.producto_gasto_id.id or False,
+                'x_user_id': self.env.user.id
+            }
+            lineas.append((0, 0, val_lineas1))
+        company_id = self.company_id.id
+        journal_id = (self.env['account.move'].with_context(company_id=company_id or self.env.user.company_id.id)
+                    .default_get(['journal_id'])['journal_id'])
+        if not journal_id:
+            raise UserError(
+                _('Please define an accounting sales journal for this company.'))
+        val_encabezado = {
+            'move_type': 'out_invoice',
+            'partner_id': self.res_partner_id.id,
+            'journal_id': journal_id,
+            'currency_id': self.currency_id.id,
+            'invoice_payment_term_id': self.payment_term_id.id,
+            'company_id': company_id,
+            'invoice_user_id': self.user_id and self.user_id.id,
+            'invoice_line_ids': lineas,
+        }
+
+        account_move_id = obj_factura.create(val_encabezado)
+        # account_move_id.action_post()
+        self.write({
+            'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
+            'state': 'proceso'
+        })

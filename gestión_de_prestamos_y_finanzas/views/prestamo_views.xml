@@ -9,12 +9,26 @@
                     <button name="unclick_quotas" type="object" string="Borrar Cuotas" class="btn-primary" states="generado"/>
                     <button string="Aprobar" type="object" name="action_approve" states="generado"/>
                     <button string="Rechazar" type="object" name="action_reject" states="aprobado"/>
-                    <button string="Volver a borrador" type="object" name="go_to_draft" states="rechazado"/>
+                    <button string="Volver a borrador" type="object" name="go_to_draft" states="rechazado, cancelado"/>
+                    <button string="Cancelar" type="object" name="action_cancel" states="aprobado"/>
                     <button string="Pagar" type="object" name="action_pay" states="aprobado"/>
-                    <field name="state" widget="statusbar" statusbar_visible="borrador, generado, aprobado, rechazado, pagado"/>
+                    <button string="Finalizar" type="object" name="ending" states="aprobado"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador, generado, aprobado, rechazado, cancelado, pagado"/>
 				</header>
                 <sheet>
-                
+
+                    <div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count_cxc', '=', 0)]}">
+								<field name="invoice_count_cxc" widget="statinfo" string="Facturas"/>
+							</button>
+							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('payment_count', '=', 0)]}">
+								<field name="payment_count" widget="statinfo" string="Pagos cliente"/>
+							</button>
+							<button class="oe_stat_button" icon="fa-bank" type="action" name="%(action_prestamo_cuotas)d" attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
+								<field name="cuotas_count" widget="statinfo" string="Cuotas"/>
+							</button>
+						</div>
+
                     <group>
                         <h1>
                             <field name="name" attrs="{'readonly': True}"/>
