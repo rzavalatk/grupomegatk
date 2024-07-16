@@ -262,6 +262,7 @@ class Prestamo(models.Model):
         return super(Prestamo, self).unlink()
     
     def action_approve(self):
+        self.crear_factura()
         for prestamo in self:
             prestamo.state = 'aprobado'
             #prestamo.generate_quota()
