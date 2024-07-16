@@ -59,6 +59,8 @@ class Prestamo(models.Model):
     #meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
+    gasto_prestamo = fields.Float(string='Gasto', default=0, readonly=True, states={
+                                  'draft': [('readonly', False)]}, copy=False,)
     
     #Variables de conteo
     invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
