@@ -115,12 +115,12 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_prestamos_cuotas">
+    <!--<record model="ir.actions.act_window" id="action_prestamos_cuotas">
 			<field name="name">Cuota</field>
 			<field name="res_model">cuota</field>
 			<field name="view_mode">tree,form</field>
 			<field name="domain">[('prestamo_id','=',active_id)]</field>
-		</record>
+		</record>-->
     
     <record id="action_prestamos" model="ir.actions.act_window">
         <field name="name">Préstamos</field>
