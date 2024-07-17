@@ -55,7 +55,7 @@ class Prestamo(models.Model):
                               default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
     
     #Datos de contabilidad
-    #payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     #meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
@@ -409,8 +409,7 @@ class Prestamo(models.Model):
             }
             lineas.append((0, 0, val_lineas1))
         company_id = self.company_id.id
-        journal_id = (self.env['account.move'].with_context(company_id=company_id or self.env.user.company_id.id)
-                    .default_get(['journal_id'])['journal_id'])
+        journal_id = self.recibir_pagos
         if not journal_id:
             raise UserError(
                 _('Please define an accounting sales journal for this company.'))
