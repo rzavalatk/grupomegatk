@@ -428,5 +428,5 @@ class Prestamo(models.Model):
         # account_move_id.action_post()
         self.write({
             'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
-            'state': 'proceso'
+            'state': 'aprobado'
         })
