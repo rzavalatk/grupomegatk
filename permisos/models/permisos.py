@@ -39,9 +39,9 @@ class HrPermisos(models.Model):
 	por_empresa = fields.Boolean('Por Empresa:', default=False)
 
 	
-	@api.onchange('employe_id')
+	"""@api.onchange('employe_id')
 	def _onchange_employe(self):
-		self.department_id = self.employe_id.department_id.id
+		self.department_id = self.employe_id.department_id.id"""
 
 	@api.onchange('fecha_fin','fecha_inicio')
 	def _onchange_fechafin(self):
