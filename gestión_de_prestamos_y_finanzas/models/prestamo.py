@@ -416,7 +416,7 @@ class Prestamo(models.Model):
         val_encabezado = {
             'move_type': 'out_invoice',
             'partner_id': self.partner_id.id,
-            'journal_id': journal_id.id,
+            #'journal_id': journal_id.id,
             'currency_id': self.currency_id.id,
             'invoice_payment_term_id': self.payment_term_id.id,
             'company_id': company_id,
