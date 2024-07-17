@@ -415,8 +415,8 @@ class Prestamo(models.Model):
                 _('Please define an accounting sales journal for this company.'))
         val_encabezado = {
             'move_type': 'out_invoice',
-            'partner_id': self.res_partner_id.id,
-            'journal_id': journal_id,
+            'partner_id': self.partner_id.id,
+            'journal_id': journal_id.id,
             'currency_id': self.currency_id.id,
             'invoice_payment_term_id': self.payment_term_id.id,
             'company_id': company_id,
