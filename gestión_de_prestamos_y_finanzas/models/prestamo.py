@@ -25,6 +25,7 @@ class Prestamo(models.Model):
     
     #Datos del prestamo
     amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    cuota = fields.Monetary('Cuota', readonly=True,  copy=False,)
     
     #Datos de fechas
     meses_seleccion = fields.Selection(
@@ -45,12 +46,10 @@ class Prestamo(models.Model):
     
     #Datos de cuentas bancarias
     
-    #ESTO ESTA POR DEFINIRSE
-    
     company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
-    account_id = fields.Many2one('account.account', 'Cuenta de desembolso', required=True)
-    account_redes_id = fields.Many2one('account.account', 'Cuenta de redescuento', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    account_id = fields.Many2one('account.account', 'Cuenta de intereses', required=True)
+    account_redes_id = fields.Many2one('account.account', 'Cuenta de gastos', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     user_id = fields.Many2one('res.users', string='Responsable', index=True,
                               default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
     
@@ -77,10 +76,12 @@ class Prestamo(models.Model):
         ('4', 'Trimestral'),
         ('1', 'Anual')
     ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
     loan_type = fields.Selection([
         ('personal', 'Personal'),
         ('financiamiento', 'Financiamiento')
     ], string='Tipo de Préstamo', default="personal", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('generado', 'Generado'),
@@ -142,6 +143,7 @@ class Prestamo(models.Model):
             prestamo.payment_count = len(prestamo.payment_ids)
             prestamo.cuotas_count = len(prestamo.quota_ids)
             
+    
     #           METODOS ONCHANGE
     """@api.onchange('amount_borrowed')
     def _onchange_amount_borrowed(self):
@@ -153,11 +155,75 @@ class Prestamo(models.Model):
         for prestamo in self:
             prestamo.meses_seleccion = self.meses_seleccion
 
+    #            METODOS CRUD
+    
     @api.model
     def create(self, vals):
         if vals.get('name', 'Nuevo') == 'Nuevo':
             vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
         return super(Prestamo, self).create(vals)
+    
+    def unlink(self):
+        for prestamo in self:
+            if prestamo.state != 'draft':
+                raise UserError(_('No se puede eliminar o cancelar una prestamo en estado ' + prestamo.state))
+        return super(Prestamo, self).unlink()
+    
+    #            METODOS DE ACCIONES DE ESTADOS
+    
+    def action_approve(self):
+        self.crear_factura()
+        for prestamo in self:
+            prestamo.state = 'aprobado'
+            #prestamo.generate_quota()
+
+    def action_reject(self):
+        for prestamo in self:
+            prestamo.state = 'rechazado'
+        
+    def action_cancel(self):
+        cuotas = self.env["cuota"].search(
+            [('prestamo_id', '=', self.id)])
+        if cuotas:
+            for cuota in cuotas:
+                if cuota.state != 'draft':
+                    raise UserError(_('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
+                cuota.sudo().unlink()         
+
+        self.write({'state': 'cancelado',
+                    'cuota_prestamo': 0,
+                    'cuota_inicial': 0
+                    })
+            
+    def go_to_draft(self):
+        for prestamo in self:
+            prestamo.state = 'borrador'
+    
+
+    def action_pay(self):
+        for prestamo in self:
+            prestamo.state = 'pagado'
+        
+    def ending(self):
+        pase = True
+        for prestamo in self:
+            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
+            for cuota in cuotas:
+                if cuota.state != 'pay':
+                    pase = False
+        if self.amount_borrowed < 1 and pase:
+            self.write({
+                'state': 'pagado',
+            })
+        else:
+           raise UserError(_('No se puede finalizar el prestamo'))
+    
+    def unclick_quotas(self):
+        for prestamo in self:
+            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
+            for cuota in cuotas:
+                cuota.unlink()
+            prestamo.state = 'borrador'
     
     def date_due_cuota(self, date_init, payments, frequency, n):
         
@@ -239,6 +305,58 @@ class Prestamo(models.Model):
                     prestamo.state = 'generado'
             else:
                  raise UserError(_("La tasa no puede ser menor que cero"))
+    
+    def crear_factura(self):
+        if not self.invoice_cxc_ids:
+            self.crear_factura_cxc()
+            self.write({
+                'remaining_capital': self.amount_borrowed
+            })
+
+    def crear_factura_cxc(self):
+        obj_factura = self.env["account.move"]
+        lineas = []
+        val_lineas = {
+            'name': 'Capital prestado',
+            'account_id': self.recibir_pagos.id,
+            'price_unit': self.amount_borrowed,
+            'quantity': 1,
+            'product_id': False,
+            'x_user_id': self.env.user.id
+        }
+        lineas.append((0, 0, val_lineas))
+        if self.gasto_prestamo > 0:
+            val_lineas1 = {
+                'name': 'Cargos administrativos',
+                'account_id': self.account_redes_id.id,
+                'price_unit': self.gasto_prestamo,
+                'quantity': 1,
+                'product_id': False,
+                'x_user_id': self.env.user.id
+            }
+            lineas.append((0, 0, val_lineas1))
+        company_id = self.company_id.id
+        journal_id = self.recibir_pagos
+        if not journal_id:
+            raise UserError(
+                _('Please define an accounting sales journal for this company.'))
+        val_encabezado = {
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_id.id,
+            #'journal_id': journal_id.id,
+            'currency_id': self.currency_id.id,
+            'invoice_payment_term_id': self.payment_term_id.id,
+            'company_id': company_id,
+            'invoice_user_id': self.user_id and self.user_id.id,
+            'invoice_line_ids': lineas,
+        }
+
+        account_move_id = obj_factura.create(val_encabezado)
+        # account_move_id.action_post()
+        self.write({
+            'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
+            'state': 'aprobado'
+        })
              
     def action_view_invoice(self):
         invoices = self.mapped('invoice_cxc_ids')
@@ -255,64 +373,6 @@ class Prestamo(models.Model):
         
         return action
             
-    def unlink(self):
-        for prestamo in self:
-            if prestamo.state != 'draft':
-                raise UserError(_('No se puede eliminar o cancelar una prestamo en estado ' + prestamo.state))
-        return super(Prestamo, self).unlink()
-    
-    def action_approve(self):
-        self.crear_factura()
-        for prestamo in self:
-            prestamo.state = 'aprobado'
-            #prestamo.generate_quota()
-
-    def action_reject(self):
-        for prestamo in self:
-            prestamo.state = 'rechazado'
-        
-    def action_cancel(self):
-        cuotas = self.env["cuota"].search(
-            [('prestamo_id', '=', self.id)])
-        if cuotas:
-            for cuota in cuotas:
-                if cuota.state != 'draft':
-                    raise UserError(_('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
-                cuota.sudo().unlink()         
-
-        self.write({'state': 'cancelado',
-                    'cuota_prestamo': 0,
-                    'cuota_inicial': 0
-                    })
-            
-    def go_to_draft(self):
-        for prestamo in self:
-            prestamo.state = 'borrador'
-    
-    def unclick_quotas(self):
-        for prestamo in self:
-            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
-            for cuota in cuotas:
-                cuota.unlink()
-            prestamo.state = 'borrador'
-
-    def action_pay(self):
-        for prestamo in self:
-            prestamo.state = 'pagado'
-        
-    def ending(self):
-        pase = True
-        for prestamo in self:
-            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
-            for cuota in cuotas:
-                if cuota.state != 'pay':
-                    pase = False
-        if self.amount_borrowed < 1 and pase:
-            self.write({
-                'state': 'pagado',
-            })
-        else:
-           raise UserError(_('No se puede finalizar el prestamo'))
        
     def action_view_payment(self):
         patment = self.mapped('payment_ids')
@@ -377,54 +437,4 @@ class Prestamo(models.Model):
             'target': 'self',
         }
         
-    def crear_factura(self):
-        if not self.invoice_cxc_ids:
-            self.crear_factura_cxc()
-            self.write({
-                'remaining_capital': self.amount_borrowed
-            })
-
-    def crear_factura_cxc(self):
-        obj_factura = self.env["account.move"]
-        lineas = []
-        val_lineas = {
-            'name': 'Capital prestado',
-            'account_id': self.account_id.id,
-            'price_unit': self.amount_borrowed,
-            'quantity': 1,
-            'product_id': False,
-            'x_user_id': self.env.user.id
-        }
-        lineas.append((0, 0, val_lineas))
-        if self.gasto_prestamo > 0:
-            val_lineas1 = {
-                'name': 'Cargos administrativos',
-                'account_id': self.producto_gasto_id.property_account_income_id.id or self.producto_gasto_id.categ_id.property_account_income_categ_id.id,
-                'price_unit': self.gasto_prestamo,
-                'quantity': 1,
-                'product_id': self.producto_gasto_id.id or False,
-                'x_user_id': self.env.user.id
-            }
-            lineas.append((0, 0, val_lineas1))
-        company_id = self.company_id.id
-        journal_id = self.recibir_pagos
-        if not journal_id:
-            raise UserError(
-                _('Please define an accounting sales journal for this company.'))
-        val_encabezado = {
-            'move_type': 'out_invoice',
-            'partner_id': self.partner_id.id,
-            #'journal_id': journal_id.id,
-            'currency_id': self.currency_id.id,
-            'invoice_payment_term_id': self.payment_term_id.id,
-            'company_id': company_id,
-            'invoice_user_id': self.user_id and self.user_id.id,
-            'invoice_line_ids': lineas,
-        }
-
-        account_move_id = obj_factura.create(val_encabezado)
-        # account_move_id.action_post()
-        self.write({
-            'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
-            'state': 'aprobado'
-        })
+    

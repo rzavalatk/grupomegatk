@@ -58,6 +58,7 @@
                         <group >
                             <field name="payment_term_id" />
                             <field name="gasto_prestamo" />
+                            <field name="cuota" />
                         </group>
                     </group>
 
