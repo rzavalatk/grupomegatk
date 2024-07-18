@@ -56,7 +56,6 @@ class Prestamo(models.Model):
     
     #Datos de contabilidad
     payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    #meses_cred = fields.Integer(string='Mes', required=True, readonly=True, states={'borrador': [('readonly', False)]})
     interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
     gasto_prestamo = fields.Float(string='Gasto', default=0, readonly=True, states={
@@ -64,7 +63,6 @@ class Prestamo(models.Model):
     
     #Variables de conteo
     invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
-    #invoice_count_cxp = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
     payment_count = fields.Integer(string='Payment Count', compute='_compute_invoiced', readonly=True)
     cuotas_count = fields.Integer(string='cuotas Count', compute='_compute_invoiced', readonly=True)
     invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)

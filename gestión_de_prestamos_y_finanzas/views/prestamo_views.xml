@@ -49,11 +49,19 @@
                         </group>
                         
                     </group>
-                    <group name="contabilidad" string="Datos contables">
-                        <field name="interest_rate"/>
-                        <field name="currency_id" />
-                        <field name="payment_term_id" />
+                    <group >
+                        <group name="contabilidad" string="Datos contables">
+                            <field name="interest_rate"/>
+                            <field name="currency_id" />
+                            
+                        </group>
+                        <group >
+                            <field name="payment_term_id" />
+                            <field name="gasto_prestamo" />
+                        </group>
                     </group>
+
+                    
                     <notebook>
                         <page name="cuotas" string="Cuotas">
                             <field name="quota_ids">
