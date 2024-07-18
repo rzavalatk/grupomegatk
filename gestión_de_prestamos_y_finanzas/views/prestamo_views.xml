@@ -49,8 +49,8 @@
                         </group>
                         
                     </group>
-                    <group >
-                        <group name="contabilidad" string="Datos contables">
+                    <group name="contabilidad" string="Datos contables">
+                        <group >
                             <field name="interest_rate"/>
                             <field name="currency_id" />
                             
