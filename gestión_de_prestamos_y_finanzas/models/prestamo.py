@@ -19,7 +19,7 @@ class Prestamo(models.Model):
     name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
-    pay_capital = fields.Float('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
     #sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
     
@@ -57,8 +57,8 @@ class Prestamo(models.Model):
     payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]},)
-    gasto_prestamo = fields.Float(string='Gasto', default=0, readonly=True, states={
-                                  'draft': [('readonly', False)]}, copy=False,)
+    gasto_prestamo = fields.Monetary(string='Gastos administrativos', default=0, readonly=True, states={
+                                  'borrador': [('readonly', False)]}, copy=False,)
     
     #Variables de conteo
     invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
@@ -175,7 +175,6 @@ class Prestamo(models.Model):
         self.crear_factura()
         for prestamo in self:
             prestamo.state = 'aprobado'
-            #prestamo.generate_quota()
 
     def action_reject(self):
         for prestamo in self:
@@ -277,7 +276,7 @@ class Prestamo(models.Model):
                     
                     # Calcular la cuota fija mensual
                     cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
-                    
+                    prestamo.cuota = cuota_mensual
                     n = 1
                     
                     time.sleep(2)
