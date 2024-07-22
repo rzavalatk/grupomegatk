@@ -12,11 +12,13 @@
                 <p>Nos complace informarle que su factura con el número <t t-out="object.internal_number"/>, emitida el <t t-out="object.invoice_date"/> 
                 ha sido generada y está disponible para su revisión.</p>
                 <p>Adjunto a este correo encontrará un código QR que puede escanear para acceder a su factura de manera rápida y sencilla.</p>
+                <br></br>
+                <p>Lo invitamos a registrarse en nuestra pagina web para poder llevar el control de sus facturas y cotizaciones.</p>
                 <p>Si tiene alguna pregunta o necesita asistencia adicional, no dude en contactarnos. </p>
                 <br></br>
                 <br></br>
                 
-                <img style="width: 150px; height: 150px:" t-if="object.qr_image" t-att-src="image_data_uri(object.qr_image)" />
+                <img style="width: 200px; height: 200px:" t-if="object.qr_image" t-att-src="image_data_uri(object.qr_image)" />
                 
                 <br></br>
                 <br></br>
