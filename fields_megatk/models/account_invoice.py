@@ -88,15 +88,15 @@ class Account_Move(models.Model):
                 if invoice.company_id.id == 8:
                     email_values = {
                         'email_from': 'megatk.no_reply@megatk.com',
-                        'email_to': 'dzuniga@megatk.com',
-                        #'email_to': invoice.partner_id.email,
+                        #'email_to': 'dzuniga@megatk.com',
+                        'email_to': invoice.partner_id.email,
                         #'email_cc': invoice.invoice_user_id.login
                     }
                 elif invoice.company_id.id == 9:
                     email_values = {
                         'email_from': 'meditek.no_reply@megatk.com',
-                        'email_to': 'dzuniga@megatk.com',
-                        #'email_to': invoice.partner_id.email,
+                        #'email_to': 'dzuniga@megatk.com',
+                        'email_to': invoice.partner_id.email,
                         #'email_cc': invoice.invoice_user_id.login
                     }
                     
