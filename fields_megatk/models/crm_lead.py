@@ -29,6 +29,101 @@ class CrmLead(models.Model):
     producto2 = fields.Char(string='Media',)
     producto3 = fields.Char(string='Origen',)
     fecha_movimiento = fields.Datetime(string='Fecha primer movimiento',)
+    
+    #Campos para sistema de puntos de desempeño
+    marca = fields.Selection([
+        ('evolis', 'Evolis'),
+        ('zebra', 'Zebra'),
+        ('pos', 'POS'),
+        ('etiquetas', 'Etiquetas'),
+        ('ploter', 'Ploter'),
+        ('traslados', 'Traslados')
+    ], string='Marca')
+    
+    servicio = fields.Selection([
+        ('evl_1', 'Revision para diagnostico impresora Evolis'),
+        ('evl_2', 'Mantenimiento de impresora Evolis'),
+        ('evl_3', 'Capacitacion de impresora Evolis'),
+        ('evl_4', 'Instalacion de BIOMETRICOS DE ASISTENCIA'),
+        ('evl_5', 'Capacitacion de software de crosschex Standard /CLOUD'),
+        ('evl_6', 'instalacion de control de acceso'),
+        ('zeb_1', 'Capacitacion de Zebr ZXP  ZXP 7,8 y 9'),
+        ('zeb_2', 'Mantenimiento de Zebra  ZXP 7,8 y 9'),
+        ('pos_1', 'reparacion de impresoras POS'),
+        ('etq_1', 'Mantenimiento y reparacion impresoras de etiquetas'),
+        ('plt_1', 'Mantenimiento'),
+        ('plt_2', 'Reparación'),
+        ('plt_3', 'Asistencia telefonica'),
+        ('tls_1', 'traslados para instalacion'),
+    ], string='Servicio')
+    
+    tipo_servicio = fields.Selection([
+        ('taller', 'Taller'),
+        ('visita', 'Visita'),
+        ('llamada', 'Llamada'),
+    ], string='Tipo de servicio')
+    
+    tecnico_asistente_1 = fields.Many2one('res.users', string='1er Asistente')
+    tecnico_asistente_2 = fields.Many2one('res.users', string='2do Asistente')
+    
+    porcentaje1 = fields.Selection([
+        ('10', '10'),
+        ('20', '20'),
+        ('30', '30'),
+        ('40', '40'),
+        ('50', '50')
+    ], string='Porcentaje')
+    porcentaje2 = fields.Selection([
+        ('10', '10'),
+        ('20', '20'),
+        ('30', '30'),
+        ('40', '40'),
+        ('50', '50')
+    ], string='Porcentaje')
+    
+    puntuado = fields.Boolean('Puntuado', default=False)
+
+    @api.onchange('porcentaje1')
+    def _onchange_porcentaje(self):
+        if self.porcentaje1 == '10':
+            self.porcentaje2 = False
+            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30', '40'])]}}
+        elif self.porcentaje1 == '20':
+            self.porcentaje2 = False
+            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30'])]}}
+        elif self.porcentaje1 == '30':
+            self.porcentaje2 = False
+            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20'])]}}
+        elif self.porcentaje1 == '40':
+            self.porcentaje2 = False
+            return {'domain': {'porcentaje2': [('code', 'in', ['10'])]}}
+        else:
+            self.porcentaje2 = False
+            return {'domain': {'porcentaje2': []}}
+    
+    @api.onchange('marca')
+    def _onchange_marca(self):
+        if self.marca == 'evolis':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['evl_1', 'evl_2', 'evl_3', 'evl_4', 'evl_5', 'evl_6'])]}}
+        elif self.marca == 'zebra':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['zeb_1', 'zeb_2'])]}}
+        elif self.marca == 'pos':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['pos_1'])]}}
+        elif self.marca == 'etiquetas':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['etq_1'])]}}
+        elif self.marca == 'ploter':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['plt_1', 'plt_2', 'plt_3'])]}}
+        elif self.marca == 'traslados':
+            self.servicio = False
+            return {'domain': {'servicio': [('code', 'in', ['tls_1'])]}}
+        else:
+            self.servicio = False
+            return {'domain': {'servicio': []}}
 
 
     @api.onchange('marca_id')
