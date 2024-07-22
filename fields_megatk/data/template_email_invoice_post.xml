@@ -16,7 +16,7 @@
                 <br></br>
                 <br></br>
                 
-                <img t-if="object.qr_image" t-att-src="image_data_uri(object.qr_image)" />
+                <img style="width: 50px; height: 50px:" t-if="object.qr_image" t-att-src="image_data_uri(object.qr_image)" />
                 
                 <br></br>
                 <br></br>
