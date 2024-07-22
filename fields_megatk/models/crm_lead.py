@@ -86,19 +86,19 @@ class CrmLead(models.Model):
     @api.onchange('porcentaje1')
     def _onchange_porcentaje(self):
         if self.porcentaje1 == '10':
-            self.porcentaje2 = False
+            
             return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30', '40'])]}}
         elif self.porcentaje1 == '20':
-            self.porcentaje2 = False
+            
             return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30'])]}}
         elif self.porcentaje1 == '30':
-            self.porcentaje2 = False
+            
             return {'domain': {'porcentaje2': [('code', 'in', ['10', '20'])]}}
         elif self.porcentaje1 == '40':
-            self.porcentaje2 = False
+            
             return {'domain': {'porcentaje2': [('code', 'in', ['10'])]}}
         else:
-            self.porcentaje2 = False
+            
             return {'domain': {'porcentaje2': []}}
     
     @api.onchange('marca')
