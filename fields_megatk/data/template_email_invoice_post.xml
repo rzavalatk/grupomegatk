@@ -16,7 +16,7 @@
                 <br></br>
                 <br></br>
                 
-                <t t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" />
+                <t t-out="o.qr_image" />
                 
                 <br></br>
                 <br></br>
