@@ -138,9 +138,9 @@
 							<group name="servicio">
 								<group name="data_servicio">
 									<field name="marca"/>
-									<field name="servicio" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
-									<field name="tipo_servicio" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="puntuado" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
+									<field name="servicio"/>
+									<field name="tipo_servicio" />
+									<field name="puntuado" />
 								</group>
 								<group name="servicio_data2">
 									<group>
