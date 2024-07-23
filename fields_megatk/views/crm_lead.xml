@@ -138,7 +138,12 @@
 							<group name="servicio">
 								<group name="data_servicio">
 									<field name="marca"/>
-									<field name="servicio"/>
+									<field name="servicio_evolis" attrs='{"invisible": [["marca","not in",["evolis"]]]}'/>
+									<field name="servicio_zebra" attrs='{"invisible": [["marca","not in",["zebra"]]]}'/>
+									<field name="servicio_pos" attrs='{"invisible": [["marca","not in",["pos"]]]}'/>
+									<field name="servicio_etiquetas" attrs='{"invisible": [["marca","not in",["etiquetas"]]]}'/>
+									<field name="servicio_ploter" attrs='{"invisible": [["marca","not in",["ploter"]]]}'/>
+									<field name="servicio_traslado" attrs='{"invisible": [["marca","not in",["traslados"]]]}'/>
 									<field name="tipo_servicio" />
 									<field name="puntuado" />
 								</group>

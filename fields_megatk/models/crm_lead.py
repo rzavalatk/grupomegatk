@@ -40,20 +40,36 @@ class CrmLead(models.Model):
         ('traslados', 'Traslados')
     ], string='Marca')
     
-    servicio = fields.Selection([
+    #Servicios individuales segun lo que se elija en marca
+    servicio_evolis = fields.Selection([
         ('evl_1', 'Revision para diagnostico impresora Evolis'),
         ('evl_2', 'Mantenimiento de impresora Evolis'),
         ('evl_3', 'Capacitacion de impresora Evolis'),
         ('evl_4', 'Instalacion de BIOMETRICOS DE ASISTENCIA'),
         ('evl_5', 'Capacitacion de software de crosschex Standard /CLOUD'),
         ('evl_6', 'instalacion de control de acceso'),
+    ], string='Servicio')
+    
+    servicio_zebra = fields.Selection([
         ('zeb_1', 'Capacitacion de Zebr ZXP  ZXP 7,8 y 9'),
         ('zeb_2', 'Mantenimiento de Zebra  ZXP 7,8 y 9'),
+    ], string='Servicio')
+    
+    servicio_pos = fields.Selection([
         ('pos_1', 'reparacion de impresoras POS'),
+    ], string='Servicio')
+    
+    servicio_etiquetas = fields.Selection([
         ('etq_1', 'Mantenimiento y reparacion impresoras de etiquetas'),
+    ], string='Servicio')
+    
+    servicio_ploter = fields.Selection([
         ('plt_1', 'Mantenimiento'),
         ('plt_2', 'Reparación'),
         ('plt_3', 'Asistencia telefonica'),
+    ], string='Servicio')
+    
+    servicio_traslado = fields.Selection([
         ('tls_1', 'traslados para instalacion'),
     ], string='Servicio')
     
@@ -81,49 +97,7 @@ class CrmLead(models.Model):
         ('50', '50')
     ], string='Porcentaje')
     
-    puntuado = fields.Boolean('Puntuado', default=False)
-
-    @api.onchange('porcentaje1')
-    def _onchange_porcentaje(self):
-        if self.porcentaje1 == '10':
-            
-            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30', '40'])]}}
-        elif self.porcentaje1 == '20':
-            
-            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20', '30'])]}}
-        elif self.porcentaje1 == '30':
-            
-            return {'domain': {'porcentaje2': [('code', 'in', ['10', '20'])]}}
-        elif self.porcentaje1 == '40':
-            
-            return {'domain': {'porcentaje2': [('code', 'in', ['10'])]}}
-        else:
-            
-            return {'domain': {'porcentaje2': []}}
-    
-    @api.onchange('marca')
-    def _onchange_marca(self):
-        if self.marca == 'evolis':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['evl_1', 'evl_2', 'evl_3', 'evl_4', 'evl_5', 'evl_6'])]}}
-        elif self.marca == 'zebra':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['zeb_1', 'zeb_2'])]}}
-        elif self.marca == 'pos':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['pos_1'])]}}
-        elif self.marca == 'etiquetas':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['etq_1'])]}}
-        elif self.marca == 'ploter':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['plt_1', 'plt_2', 'plt_3'])]}}
-        elif self.marca == 'traslados':
-            self.servicio = False
-            return {'domain': {'servicio': [('code', 'in', ['tls_1'])]}}
-        else:
-            self.servicio = False
-            return {'domain': {'servicio': []}}
+    puntuado = fields.Boolean('Puntuado', default=False, readonly=True)
 
 
     @api.onchange('marca_id')
