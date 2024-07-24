@@ -263,8 +263,8 @@ class LoanRequest(models.Model):
                     'amount': amount,
                     'interest_amount': interest_amount,
                     'total_amount': total_amount,
-                    'interest_account_id': loan.journal_id,
-                    'repayment_account_id': loan.journal_id,
+                    'interest_account_id': loan.journal_id.id,
+                    'repayment_account_id': loan.journal_id.id,
                     'loan_id': loan.id})
                 date_start += relativedelta(months=1)
         return True
