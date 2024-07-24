@@ -75,8 +75,7 @@ class LoanRequest(models.Model):
     journal_id = fields.Many2one('account.journal',
                                  string="Journal",
                                  help="Journal types",
-                                 domain="[('type', '=', 'purchase'),"
-                                        "('company_id', '=', company_id)]",
+                                 domain="[('company_id', '=', company_id)]",
                                  )
     debit_account_id = fields.Many2one('account.account',
                                        string="Debit account",
