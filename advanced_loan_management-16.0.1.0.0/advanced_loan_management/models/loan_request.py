@@ -72,7 +72,7 @@ class LoanRequest(models.Model):
                                           column1="documents_ids",
                                           string="Images",
                                           help="Image proofs")
-    journal_id = fields.Many2one('account.journal',
+    journal_id = fields.Many2one('account.account',
                                  string="Journal",
                                  help="Journal types",
                                  domain="[('company_id', '=', company_id)]",
@@ -262,12 +262,8 @@ class LoanRequest(models.Model):
                     'amount': amount,
                     'interest_amount': interest_amount,
                     'total_amount': total_amount,
-                    'interest_account_id': self.env.ref('advanced_loan_management.'
-                                                        'loan_management_'
-                                                        'inrst_accounts').id,
-                    'repayment_account_id': self.env.ref('advanced_loan_management.'
-                                                         'demo_'
-                                                         'loan_accounts').id,
+                    'interest_account_id': self.journal_id,
+                    'repayment_account_id': self.journal_id,
                     'loan_id': loan.id})
                 date_start += relativedelta(months=1)
         return True
