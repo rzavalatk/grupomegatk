@@ -35,7 +35,6 @@
     'depends': ['mail', 'account', 'base', 'l10n_generic_coa'],
     #'demo': ['data/loan_journal_data.xml'],
     'data': [
-        'data/loan_journal_data.xml',
         'security/loan_management_groups.xml',
         'security/loan_management_security.xml',
         'security/ir.model.access.csv',
