@@ -89,6 +89,7 @@
                                 <group name="info_cuentas" string="Cuentas">
                                     <field name="recibir_pagos" />
                                     <field name="account_id" />
+                                    <field name="account_int_moratorio" />
                                     <field name="account_redes_id" />
                                 </group> 
                             </group>

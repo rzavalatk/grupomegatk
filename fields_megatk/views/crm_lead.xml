@@ -147,7 +147,7 @@
 									<field name="tipo_servicio" />
 									<field name="puntuado" />
 								</group>
-								<group name="servicio_data2">
+								<group name="servicio_data2" string="Asistentes">
 									<group>
 										<field name="tecnico_asistente_1"/>
 										<field name="porcentaje1"/>

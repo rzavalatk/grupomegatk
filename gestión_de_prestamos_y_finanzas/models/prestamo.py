@@ -49,6 +49,7 @@ class Prestamo(models.Model):
     company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
     account_id = fields.Many2one('account.account', 'Cuenta de intereses', required=True)
+    account_int_moratorio = fields.Many2one('account.account', 'Cuenta de intereses moratorios', required=True)
     account_redes_id = fields.Many2one('account.account', 'Cuenta de gastos', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     user_id = fields.Many2one('res.users', string='Responsable', index=True,
                               default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)

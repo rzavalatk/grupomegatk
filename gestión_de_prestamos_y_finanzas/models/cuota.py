@@ -55,7 +55,7 @@ class Cuota(models.Model):
             cuota.is_pagado = True
             cuota.state = 'hecho'
 
-    """def pagar(self):
+    def pagar(self):
         obj_factura = self.env["account.move"]
         lineas = []
         if self.interest_generated > 0:
@@ -72,7 +72,7 @@ class Cuota(models.Model):
         if self.interest_on_arrears > 0:
             val_lineas1 = {
                 'name': 'Interes moratorios por incumplimiento de pago',
-                'account_id': self.interest_generated,
+                'account_id': self.prestamo_id.account_int_moratorio,
                 'price_unit': self.interest_on_arrears,
                 'quantity': 1,
                 'product_id': False,
@@ -80,7 +80,6 @@ class Cuota(models.Model):
             }
             lineas.append((0, 0, val_lineas1))
         
-        company_id = self.company_id.id
         
         val_encabezado = {
             'move_type': 'out_invoice',
@@ -88,7 +87,7 @@ class Cuota(models.Model):
             'partner_id': self.prestamo_id.partner_id.id,
             #'journal_id': journal_id,
             'currency_id': self.prestamo_id.currency_id.id,
-            'company_id': company_id,
+            'company_id': self.company_id.id,
             'user_id': self.env.user.id,
             'invoice_line_ids': lineas,
         }
@@ -102,7 +101,7 @@ class Cuota(models.Model):
             obj_paymet_id = self.env["account.payment"]
             val_payment = {
                 'payment_type': 'inbound',
-                'company_id': company_id,
+                'company_id': self.company_id.id,
                 'partner_type': 'customer',
                 'partner_id': self.prestamo_id.partner_id.id,
                 'amount': self.amount,
@@ -123,7 +122,7 @@ class Cuota(models.Model):
                     'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
                 }   
         self.prestamo_id.write(vals) 
-        # capital_real = self.cuota_capital + self.cuota_interes
+        # capital_real = self.cuota_capital + self.cuota_interes                  AQUIIIIIIIIIIIIIIIIIIII-------------
         if capital != 0:
             # if self.pago < self.cuota_prestamo:
             #     saldo = self.cuota_capital + self.cuota_interes + self.interes_moratorio  - self.pago
@@ -182,4 +181,3 @@ class Cuota(models.Model):
             if cuota.state != 'draft':
                 raise Warning(_('No se puede eliminar o cancelar una cuota en estado '+ cuota.state))
         return super(PrestamosCuotas, self).unlink()
-"""
