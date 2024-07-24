@@ -266,9 +266,9 @@ class LoanRequest(models.Model):
                     """'interest_account_id': self.env.ref('advanced_loan_management.'
                                                         'loan_management_'
                                                         'inrst_accounts').id,"""
-                    'repayment_account_id': self.env.ref('advanced_loan_management.'
+                    """'repayment_account_id': self.env.ref('advanced_loan_management.'
                                                          'demo_'
-                                                         'loan_accounts').id,
+                                                         'loan_accounts').id,"""
                     'loan_id': loan.id})
                 date_start += relativedelta(months=1)
         return True
