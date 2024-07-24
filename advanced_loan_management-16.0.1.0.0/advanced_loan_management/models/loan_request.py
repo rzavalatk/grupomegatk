@@ -263,9 +263,9 @@ class LoanRequest(models.Model):
                     'amount': amount,
                     'interest_amount': interest_amount,
                     'total_amount': total_amount,
-                    'interest_account_id': self.env.ref('advanced_loan_management.'
+                    """'interest_account_id': self.env.ref('advanced_loan_management.'
                                                         'loan_management_'
-                                                        'inrst_accounts').id,
+                                                        'inrst_accounts').id,"""
                     'repayment_account_id': self.env.ref('advanced_loan_management.'
                                                          'demo_'
                                                          'loan_accounts').id,
