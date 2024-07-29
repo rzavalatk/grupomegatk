@@ -1,34 +1,16 @@
-# -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Sabeel B (odoo@cybrosys.com)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
+#MODELO PARA CAMBIAR LOS ESTADOS DE LAS CUOTAS CUANDO SE CANCELA LA FACTURA O SE MANDA A ESTADO BORRADOR
+#CAMBIO DE ESTADO DE LA CUOTA DESDE LA FACTURA RELACIONADA A LA MISMA
+
 from odoo import models
 
 
 class AccountMove(models.Model):
-    """Alter loan repayment line state on draft and cancel button click"""
+    """Alterar el estado de la línea de reembolso del préstamo al pulsar el botón de borrador y cancelación"""
     _inherit = 'account.move'
 
     def button_draft(self):
-        """Change repayment record state to 'invoiced'
-        while reset to draft the invoice"""
+        """Cambiar el estado del registro de reembolso a «facturado»
+        mientras se restablece para redactar la factura"""
         res = super().button_draft()
         loan_line_ids = self.env['repayment.line'].search([
             ('name', 'ilike', self.payment_reference)])
@@ -40,8 +22,8 @@ class AccountMove(models.Model):
         return res
 
     def button_cancel(self):
-        """Change repayment record state to 'unpaid'
-        while cancelling the invoice"""
+        """Cambiar el estado del registro de reembolso a «impagado».
+        al anular la factura"""
         res = super().button_cancel()
         for record in self:
             loan_line_ids = self.env['repayment.line'].search([

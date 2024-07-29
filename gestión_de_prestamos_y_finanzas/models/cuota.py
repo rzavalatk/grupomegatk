@@ -30,12 +30,13 @@ class Cuota(models.Model):
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
     invoice_id = fields.Many2one("account.move", "Factura", track_visibility='onchange',copy=False,)
     is_pagado = fields.Boolean(string='Pagado', default=False)
+    invoice = fields.Boolean(string="invoice", default=False,)
     
     #Datos del prestamo
     prestamo_id = fields.Many2one('prestamo', string='Préstamo', required=True, ondelete='cascade')
     type_prestamo = fields.Char(string='Tipo', default=__type_prestamo)
     
-    state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'),('pay', 'Pagado')], string="Estado", default='draft')
+    state = fields.Selection( [('borrador', 'Borrador'), ('cancelado', 'Cancelado'),('invoiced','Factura'), ('unpaid', 'Sin pagar'),('pagado', 'Pagado')], string="Estado", default='draft')
     
     @api.depends('amount', 'amount_pay')
     def _compute_balance(self):
@@ -55,16 +56,38 @@ class Cuota(models.Model):
             cuota.is_pagado = True
             cuota.state = 'hecho'
 
-    def pagar(self):
-        obj_factura = self.env["account.move"]
+    def action_pay_emi(self):
+        
+        time_now = self.date_due
+
+        for rec in self:
+            loan_lines_ids = self.env['cuota'].search(
+                [('prestamo_id', '=', rec.prestamo_id.id)], order='date asc')
+            for line in loan_lines_ids:
+                if line.date_due < rec.date_due and line.state in \
+                        ('unpaid', 'invoiced'):
+                    message_id = self.env['message.popup'].create(
+                        {'message': (
+                            "Hay cuotas pendientes para pagar")})
+                    return {
+                        'name': 'Repayment',
+                        'type': 'ir.actions.act_window',
+                        'view_mode': 'form',
+                        'res_model': 'message.popup',
+                        'res_id': message_id.id,
+                        'target': 'new'
+                    }
+
+        invoice = self.env['account.move']
+        
         lineas = []
         if self.interest_generated > 0:
             val_lineas = {
-            'name': 'Cobro de interes mensual de ' + str(self.interest_rate) + '%',
-            'account_id': self.prestamo_id.account_id,
+            'name': 'Cobro de interes mensual de ' + str(self.prestamo_id.interest_rate) + '%',
+            'account_id': self.prestamo_id.account_id.id,
             'price_unit': self.interest_generated,
             'quantity': 1,
-            'product_id': False,
+            'product_id':False,
             'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas))
@@ -72,87 +95,55 @@ class Cuota(models.Model):
         if self.interest_on_arrears > 0:
             val_lineas1 = {
                 'name': 'Interes moratorios por incumplimiento de pago',
-                'account_id': self.prestamo_id.account_int_moratorio,
+                'account_id': self.prestamo_id.account_int_moratorio.id,
                 'price_unit': self.interest_on_arrears,
                 'quantity': 1,
-                'product_id': False,
+                'product_id':False,
                 'x_user_id': self.env.user.id
             }
             lineas.append((0, 0, val_lineas1))
-        
-        
+            
         val_encabezado = {
             'move_type': 'out_invoice',
-            #'invoice_line_ids': self.prestamo_id.partner_id.property_account_receivable_id.id,
-            'partner_id': self.prestamo_id.partner_id.id,
-            #'journal_id': journal_id,
-            'currency_id': self.prestamo_id.currency_id.id,
-            'company_id': self.company_id.id,
-            'user_id': self.env.user.id,
-            'invoice_line_ids': lineas,
+            'invoice_date': time_now,
+            'partner_id': self.partner_id.id,
+            'currency_id': self.company_id.currency_id.id,
+            'payment_reference': self.name,
+            'invoice_line_ids': lineas
         }
         
-        account_invoice_id = obj_factura.create(val_encabezado)
+        account_invoice_id = invoice.create(val_encabezado)
         
-        
-        capital = self.amount_pay - (self.interest_generated)
-        
-        if self.amount > 0:
-            obj_paymet_id = self.env["account.payment"]
-            val_payment = {
-                'payment_type': 'inbound',
-                'company_id': self.company_id.id,
-                'partner_type': 'customer',
-                'partner_id': self.prestamo_id.partner_id.id,
-                'amount': self.amount,
-                'currency_id': self.prestamo_id.currency_id.id,
-                'journal_id': self.prestamo_id.recibir_pagos.id,
-                'payment_date': self.payment_date,
-                'communication': self.prestamo_id.name + ' ' + self.name,
-                'payment_method_id': 1
-            }
-            paymet_id = obj_paymet_id.create(val_payment)
-            paymet_id.post()
-            vals= {
-                'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
-                'payment_ids': [(4, paymet_id.id, 0)]
-            }
-        else:
-            vals= {
-                    'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
-                }   
-        self.prestamo_id.write(vals) 
-        # capital_real = self.cuota_capital + self.cuota_interes                  AQUIIIIIIIIIIIIIIIIIIII-------------
-        if capital != 0:
-            # if self.pago < self.cuota_prestamo:
-            #     saldo = self.cuota_capital + self.cuota_interes + self.interes_moratorio  - self.pago
-            # elif self.pago == capital_real:
-            #     saldo = self.cuota_capital + self.cuota_interes - self.pago
-            # elif self.pago > self.cuota_prestamo:
-            #     saldo = self.cuota_capital - self.pago
-            # else:
-            #     saldo = self.saldo
-            saldo = self.amount_capital_quota + self.interest_generated + self.interest_on_arrears - self.amount_pay
-            if 0 >= saldo: 
-                vals_c= {
-                    'monto_restante': saldo,
-                    'state': 'finalizado'
-                }
-            else:
-                vals_c= {
-                    'monto_restante': saldo
-                }
+        # Crear el pago
+        payment = self.env['account.payment'].create({
+            'payment_type': 'outbound',
+            'partner_type': 'customer',
+            'partner_id': self.partner_id.id,
+            'amount': self.amount,  # Monto del capital
+            'currency_id': self.company_id.currency_id.id,
+            'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
+            'journal_id': self.journal_id.id,  # Diario desde donde se hará el pago
+            'payment_date': time_now,
+        })
 
-            self.prestamo_id.write(vals_c)
+        # Confirmar el pago
+        payment.action_post()
 
-            if self.saldo > 0 and abs(self.pago - self.cuota_prestamo) > 0.01:
-                tasa = self.cuotas_prestamo_id.tasa / 100
-                cuota = self.pago - self.gastos
-                self.cuotas_prestamo_id._cuotas(saldo,tasa,cuota,0,self.interes_generado)
-        self.write({
-            'invoice_id' : account_invoice_id.id,
-            'state': 'hecho',
-            })
+        # Reconciliar el pago con la factura
+        #(invoice + payment).line_ids.filtered(lambda line: line.account_id == self.repayment_account_id).reconcile()
+
+        
+        if invoice:
+            self.invoice = True
+            self.write({'state': 'invoiced'})
+
+        return {
+            'name': 'Invoice',
+            'res_model': 'account.move',
+            'res_id': account_invoice_id.id,
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+        }
 
     def action_view_invoice(self):
         invoices = self.mapped('invoice_id')
@@ -180,4 +171,4 @@ class Cuota(models.Model):
         for cuota in self:
             if cuota.state != 'draft':
                 raise Warning(_('No se puede eliminar o cancelar una cuota en estado '+ cuota.state))
-        return super(PrestamosCuotas, self).unlink()
+        return super(Cuota, self).unlink()

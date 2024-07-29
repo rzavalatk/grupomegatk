@@ -1,60 +1,38 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Sabeel (odoo@cybrosys.com)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
+
 from odoo import api, fields, models
 
 
 class LoanTypes(models.Model):
-    """Create different types of Loans, And can wisely choose while requesting
-     for loan"""
+    """Cree varios tipos de prestamos y luego se puedan elegir en la creacion del prestamo"""
     _name = 'loan.type'
     _inherit = ['mail.thread']
     _description = 'Loan Type'
 
-    name = fields.Char(string='Name', help="LoanType Name")
-    loan_amount = fields.Integer(string='Loan Amount', help="Loan Amount")
-    tenure = fields.Integer(string='Tenure', default='1',
-                            help="Amortization period")
-    tenure_plan = fields.Char(string="Tenure Plan", default='monthly',
-                              readonly='True', help="EMI payment plan")
-    interest_rate = fields.Float(string='Interest Rate',
-                                 help="Loan Interest Rate")
-    disbursal_amount = fields.Float(string='Disbursal Amount',
+    name = fields.Char(string='Nombre', help="Nombre del prestamo")
+    loan_amount = fields.Integer(string='Monto del Préstamo', help="Cantidad a prestar")
+    tenure = fields.Integer(string='Duración (meses)', default='1',
+                            help="Periodo de amortización")
+    tenure_plan = fields.Char(string="Frecuencia de pago", default='monthly',
+                              readonly='True')
+    interest_rate = fields.Float(string='Tasa de interes',
+                                 help="Tasa de interes del prestamo")
+    disbursal_amount = fields.Float(string='Importe de caítal',
                                     compute='_compute_disbursal_amount',
-                                    help="Total Amount To Be Disbursed")
+                                    help="Valor total a pagar")
     documents_ids = fields.Many2many('loan.documents',
-                                     string="Documents",
-                                     help="Personal Proofs")
-    processing_fee = fields.Integer(string="Processing Fee",
-                                    help="Amount For Initializing The Loan")
-    note = fields.Text(string="Criteria", help="Criteria for approving "
-                                               "loan requests")
-    company_id = fields.Many2one('res.company', string='Company',
+                                     string="Documentos requeridos",)
+    processing_fee = fields.Integer(string="Tasa de tramitación",
+                                    help="Importe para inicializar el préstamo")
+    note = fields.Text(string="Notas")
+    company_id = fields.Many2one('res.company', string='Compañia',
                                  readonly=True,
-                                 help="Company Name",
+                                 help="Nombre de la compañia",
                                  default=lambda self:
                                  self.env.company, )
 
     @api.depends('processing_fee')
     def _compute_disbursal_amount(self):
-        """Calculating amount for disbursing"""
+        """Calcular monto a pagar"""
         self.disbursal_amount = self.loan_amount - self.processing_fee
 

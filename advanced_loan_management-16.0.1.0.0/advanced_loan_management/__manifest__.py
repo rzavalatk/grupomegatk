@@ -1,24 +1,4 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Sabeel B (odoo@cybrosys.com)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
 {
     'name': 'Loan Management',
     'version': '16.0.1.0.0',
@@ -33,11 +13,11 @@
     'maintainer': 'Cybrosys Techno Solutions',
     'website': 'https://www.cybrosys.com',
     'depends': ['mail', 'account', 'base', 'l10n_generic_coa'],
-    #'demo': ['data/loan_journal_data.xml'],
     'data': [
         'security/loan_management_groups.xml',
         'security/loan_management_security.xml',
         'security/ir.model.access.csv',
+        'data/secuencia.xml',
         'views/loan_type_views.xml',
         'views/loan_request_views.xml',
         'views/repayment_lines_views.xml',

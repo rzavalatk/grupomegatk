@@ -1,142 +1,204 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Sabeel (odoo@cybrosys.com)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from odoo import api, fields, models, _
+from odoo import models, fields, api, _
+import math
+
+import base64
+import io
+from odoo.tools.misc import xlsxwriter
 from odoo.exceptions import UserError
 
+from datetime import timedelta
+import time
+from dateutil.relativedelta import relativedelta
+from datetime import date
 
-class LoanRequest(models.Model):
-    """Can create new loan requests and manage records"""
-    _name = 'loan.request'
+class Prestamo(models.Model):
+    """Aqui se crearan los prestamos y se manejaran las cuotas"""
+    _name = 'prestamo'
     _inherit = ['mail.thread']
-    _description = 'Loan Request'
+    _description = 'Modelo de Préstamo'
 
-    name = fields.Char(string='Loan Reference', readonly=True,
-                       copy=False, help="Sequence number for loan requests",
-                       default=lambda self: 'New')
-    company_id = fields.Many2one('res.company', string='Company',
-                                 readonly=True,
-                                 help="Company Name",
-                                 default=lambda self:
-                                 self.env.company)
-    currency_id = fields.Many2one('res.currency', string='Currency',
-                                  required=True, help="Currency",
-                                  default=lambda self: self.env.user.company_id.
-                                  currency_id)
-    loan_type_id = fields.Many2one('loan.type', string='Loan Type',
-                                   required=True, help="Can choose different "
-                                                       "loan types suitable")
-    loan_amount = fields.Float(string="Loan Amount", store=True,
-                               help="Total loan amount", )
+    #Datos generales
+    name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
+    partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
+    remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
+    pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
     disbursal_amount = fields.Float(string="Disbursal_amount",
                                     help="Total loan amount "
                                          "available to disburse")
-    tenure = fields.Integer(string="Tenure",
-                            help="Installment period")
-    interest_rate = fields.Float(string="Interest rate", help="Interest "
-                                                              "percentage")
-    date = fields.Date(string="Date", default=fields.Date.today(),
-                       readonly=True, help="Date")
-    partner_id = fields.Many2one('res.partner', string="Partner",
-                                 required=True,
-                                 help="Partner")
-    repayment_lines_ids = fields.One2many('repayment.line',
-                                          'loan_id',
-                                          string="Loan Line", index=True,
-                                          help="Repayment lines")
-    documents_ids = fields.Many2many('loan.documents',
-                                     string="Proofs",
-                                     help="Documents as proof")
-    img_attachment_ids = fields.Many2many('ir.attachment',
-                                          relation="m2m_ir_identity_card_rel",
-                                          column1="documents_ids",
-                                          string="Images",
-                                          help="Image proofs")
-    journal_id = fields.Many2one('account.account',
-                                 string="Journal",
-                                 help="Journal types",
-                                 domain="[('company_id', '=', company_id)]",
-                                 )
-    debit_account_id = fields.Many2one('account.account',
-                                       string="Debit account",
-                                       help="Choose account for "
-                                            "disbursement debit")
-    credit_account_id = fields.Many2one('account.account',
-                                        string="Credit account",
-                                        help="Choose account for "
-                                             "disbursement credit")
-    reject_reason = fields.Text(string="Reason", help="Displays "
-                                                      "rejected reason")
-    request = fields.Boolean(string="Request", default=False,
-                             help="For monitoring the record")
-    state = fields.Selection(
-        string='State',
-        selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'),
-                   ('waiting for approval', 'Waiting For Approval'),
-                   ('approved', 'Approved'), ('disbursed', 'Disbursed'),
-                   ('rejected', 'Rejected'), ('closed', 'Closed')],
-        required=True, readonly=True, copy=False,
-        tracking=True, default='draft', help="Loan request states")
+    
+    #Datos del prestamo
+    amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    cuota = fields.Monetary('Cuota', readonly=True,  copy=False,)
+    loan_type_id = fields.Many2one('loan.type', string='Tipo de prestamo', required=True)
+    documents_ids = fields.Many2many('loan.documents', string="Documentos",)
+    img_attachment_ids = fields.Many2many('ir.attachment', relation="m2m_ir_identity_card_rel",column1="documents_ids",string="Imagenes",)
+    reject_reason = fields.Text(string="Razon de rechazo")
+    request = fields.Boolean(string="Request", default=False,help="Para monitorear el prestamo")
+    
+    #Datos de fechas
+    meses_seleccion = fields.Selection(
+        [
+            ('12', '12 meses'),
+            ('24', '24 meses'),
+            ('36', '36 meses'),
+            ('48', '48 meses'),
+            ('60', '60 meses'),
+        ],
+        string='Duracion (meses)', required=True, default='12', readonly=True, states={'borrador': [('readonly', False)]})
+    date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today(), readonly=True, states={'borrador': [('readonly', False)]},) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
+    
+    #Datos de cuentas bancarias
+    company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
+    account_id = fields.Many2one('account.account', 'Cuenta de intereses', required=True)
+    account_int_moratorio = fields.Many2one('account.account', 'Cuenta de intereses moratorios', required=True)
+    account_gasto_id = fields.Many2one('account.account', 'Cuenta de gastos', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    user_id = fields.Many2one('res.users', string='Responsable', index=True, default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
+    debit_account_id = fields.Many2one('account.account', string="Cuenta de debito", help="Elija cuenta para débito por desembolso")
+    credit_account_id = fields.Many2one('account.account', string="Cuenta de credito", help="Elija cuenta para credito por desembolso")
+    
+    
+    #Datos de contabilidad
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]}, default=lambda self: self.env.user.company_id.currency_id)
+    gasto_prestamo = fields.Monetary(string='Gastos administrativos', default=0, readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    
+    #Variables de conteo
+    invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
+    payment_count = fields.Integer(string='Payment Count', compute='_compute_invoiced', readonly=True)
+    cuotas_count = fields.Integer(string='cuotas Count', compute='_compute_invoiced', readonly=True)
+    invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
+    payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
+       
+    payment_frequency = fields.Selection([
+        ('365', 'Diario'),
+        ('52', 'Semanal'),
+        ('24', 'Quincenal'),
+        ('12', 'Mensual'),
+        ('6', 'Bimestral'),
+        ('4', 'Trimestral'),
+        ('1', 'Anual')
+    ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    loan_type = fields.Selection([
+        ('personal', 'Personal'),
+        ('financiamiento', 'Financiamiento')
+    ], string='Tipo de Préstamo', default="personal", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('generado', 'Generado'),
+        ('confirmado', 'Confirmado'),
+        ('aprobado', 'Aprobado'),
+        ('pro_pago', 'Proceso de pago')
+        ('rechazado', 'Rechazado'),
+        ('cancelado', 'Cancelado'),
+        ('pagado', 'Pagado')
+    ], string='Estado', default='borrador', required=True)
+       
+    
+    quota_ids = fields.One2many('cuota', 'prestamo_id', string='Cuotas', readonly=True)
+    #contrato_id = fields.Many2one('contrato', string='Contrato')
+    #garantia_ids = fields.One2many('garantia', 'prestamo_id', string='Garantías')
 
-    @api.model
-    def create(self, vals):
-        """create  auto sequence for the loan request records"""
-        loan_count = self.env['loan.request'].search(
-            [('partner_id', '=', vals['partner_id']),
-             ('state', 'not in', ('draft', 'rejected', 'closed'))])
-        if loan_count:
-            for rec in loan_count:
-                if rec.state != 'closed':
-                    raise UserError(
-                        _('The partner has already an ongoing loan.'))
-        else:
-            if vals.get('name', 'New') == 'New':
-                vals['name'] = self.env['ir.sequence'].next_by_code(
-                    'increment_loan_ref')
-            res = super().create(vals)
-            return res
+    
+    """
+    |||||||| METODOS COMPUTADOS PARA ASIGNACION DE VALORES ||||||||||
+        
+                                                        """
+                                                        
+    @api.depends('amount_borrowed', 'quota_ids')
+    def _compute_amount_borrowed(self):
+        for prestamo in self:
+            pagado = 0
+            
+            for quota in prestamo.quota_ids:
+                pagado = pagado + quota.amount_pay
+            
+            prestamo.amount_borrowed = prestamo.amount_borrowed - pagado
+            
+    @api.depends('date_init', 'meses_seleccion')
+    def _compute_date_ends(self):
+        for record in self:
+            if record.date_init and record.meses_seleccion:
+                meses = int(record.meses_seleccion)
+                record.date_ends = record.date_init + relativedelta(months=meses)
+            else:
+                record.date_ends = False
 
+    @api.depends('amount_borrowed', 'interest_rate', 'meses_seleccion')
+    def _compute_amount_cxc(self):
+        for prestamo in self:
+            prestamo.amount_cxc = prestamo.amount_borrowed * (1 + (prestamo.interest_rate / 100) * (prestamo.meses_seleccion / 12))
+    
+    def _compute_invoiced(self):
+        for prestamo in self:
+            prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)
+            prestamo.payment_count = len(prestamo.payment_ids)
+            prestamo.cuotas_count = len(prestamo.quota_ids)
+            
+    
+    """ ||||||||||| METODOS ONCHANGE |||||||||||||||"""
+   
+    @api.onchange('meses_seleccion')
+    def _onchange_meses_seleccion(self):
+        for prestamo in self:
+            prestamo.meses_seleccion = self.meses_seleccion
+            
     @api.onchange('loan_type_id')
     def _onchange_loan_type_id(self):
-        """Changing field values based on the chosen loan type"""
+        """Cambia los valores de los campos en base a el tipo de prestamo"""
         type_id = self.loan_type_id
-        self.loan_amount = type_id.loan_amount
+        self.amount_borrowed = type_id.loan_amount
         self.disbursal_amount = type_id.disbursal_amount
-        self.tenure = type_id.tenure
+        self.meses_seleccion = type_id.tenure
         self.interest_rate = type_id.interest_rate
         self.documents_ids = type_id.documents_ids
 
+    """ |||||||| METODOS CRUD |||||||| """
+    
+    @api.model
+    def create(self, vals):
+        """verifica si el cliente tiene un prestamo en procesop de pago sino crear una secuencia automática para los registros de solicitudes de préstamo"""
+        loan_count = self.env['prestamo'].search(
+            [('partner_id', '=', vals['partner_id']),
+             ('state', 'not in', ('borrador', 'rechazado', 'cancelado'))])
+        if loan_count:
+            for rec in loan_count:
+                if rec.state != 'pagadp':
+                    raise UserError(
+                        _('El socio ya tiene un préstamo en curso.'))
+        else:
+            if vals.get('name', 'Nuevo') == 'Nuevo':
+                vals['name'] = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
+            return super(Prestamo, self).create(vals)
+    
+    def unlink(self):
+        for prestamo in self:
+            if prestamo.state != 'draft':
+                raise UserError(_('No se puede eliminar o cancelar una prestamo en estado ' + prestamo.state))
+        return super(Prestamo, self).unlink()
+    
+    """ |||||||||| METODOS DE ACCIONES DE ESTADOS ||||||||||||||| """
+    
+    def go_to_draft(self):
+        for prestamo in self:
+            prestamo.state = 'borrador'
+    
     def action_loan_request(self):
-        """Changes the state to confirmed and send confirmation mail"""
-        self.write({'state': "confirmed"})
+        """Cambia el estado a confirmado y manda el correo de notificacion al cliente"""
+        self.write({'state': "confirmado"})
         partner = self.partner_id
         loan_no = self.name
-        subject = 'Loan Confirmation'
+        subject = 'Prestamo confirmado'
 
-        message = (f"Dear {partner.name},<br/> This is a confirmation mail "
-                   f"for your loan{loan_no}. We have submitted your loan "
-                   f"for approval.")
-
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f"la confirmación de su prestamo con numero {loan_no}." 
+                   f"Hemos enviado su préstamo para aprobación, se le estara notificando")
         outgoing_mail = self.company_id.email
         mail_values = {
             'subject': subject,
@@ -148,77 +210,72 @@ class LoanRequest(models.Model):
         mail = self.env['mail.mail'].sudo().create(mail_values)
         mail.send()
 
-    def action_request_for_loan(self):
-        """Change the state to waiting for approval"""
-        if self.request:
-            self.write({'state': "waiting for approval"})
-        else:
-            message_id = self.env['message.popup'].create(
-                {'message': _("Compute the repayments before requesting")})
-            return {
-                'name': _('Repayment'),
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'message.popup',
-                'res_id': message_id.id,
-                'target': 'new'
-            }
+    
+    def action_approve(self):
+        self.crear_factura()
+        self.write({'state': "aprobado"})
+        partner = self.partner_id
+        loan_no = self.name
+        subject = 'Prestamo Aprobado'
 
-    def action_loan_approved(self):
-        """Change to Approved state"""
-        self.write({'state': "approved"})
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f"la aprobación de su prestamo con numero {loan_no}.<br/>" 
+                   f"Se le genero una cuota mensual con un saldo de {self.cuota}.<br/>"
+                   f"Para mas información contactar con servicio al cliente.")
+        outgoing_mail = self.company_id.email
+        mail_values = {
+            'subject': subject,
+            'email_from': outgoing_mail,
+            'author_id': self.env.user.partner_id.id,
+            'email_to': partner.email,
+            'body_html': message,
+        }
+        mail = self.env['mail.mail'].sudo().create(mail_values)
+        mail.send()
 
-    def action_disburse_loan(self):
-        """Disbursing the loan to customer and creating journal
-         entry for the disbursement"""
-        self.write({'state': "disbursed"})
+    def action_reject(self):
+        self.write({'state': "rechazado"})
+        partner = self.partner_id
+        loan_no = self.name
+        subject = 'Prestamo Rechazado'
 
-        for loan in self:
-            amount = loan.disbursal_amount
-            loan_name = loan.partner_id.name
-            reference = loan.name
-            journal_id = loan.journal_id.id
-            debit_account_id = loan.debit_account_id.id
-            credit_account_id = loan.credit_account_id.id
-            date_now = loan.date
-            debit_vals = {
-                'name': loan_name,
-                'account_id': debit_account_id,
-                'journal_id': journal_id,
-                'date': date_now,
-                'debit': amount > 0.0 and amount or 0.0,
-                'credit': amount < 0.0 and -amount or 0.0,
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f" que su prestamo con numero {loan_no} fue rechazado.<br/>"
+                   f"Para mas información contactar con servicio al cliente.")
+        outgoing_mail = self.company_id.email
+        mail_values = {
+            'subject': subject,
+            'email_from': outgoing_mail,
+            'author_id': self.env.user.partner_id.id,
+            'email_to': partner.email,
+            'body_html': message,
+        }
+        mail = self.env['mail.mail'].sudo().create(mail_values)
+        mail.send()
+        
+    def action_cancel(self):
+        cuotas = self.env["cuota"].search(
+            [('prestamo_id', '=', self.id)])
+        if cuotas:
+            for cuota in cuotas:
+                if cuota.state != 'draft':
+                    raise UserError(_('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
+                cuota.sudo().unlink()         
 
-            }
-            credit_vals = {
-                'name': loan_name,
-                'account_id': credit_account_id,
-                'journal_id': journal_id,
-                'date': date_now,
-                'debit': amount < 0.0 and -amount or 0.0,
-                'credit': amount > 0.0 and amount or 0.0,
-            }
-            vals = {
-                'name': f'DIS / {reference}',
-                'narration': reference,
-                'ref': reference,
-                'journal_id': journal_id,
-                'date': date_now,
-                'line_ids': [(0, 0, debit_vals), (0, 0, credit_vals)]
-            }
-            move = self.env['account.move'].create(vals)
-            move.action_post()
-        return True
-
-    def action_close_loan(self):
-        """Closing the loan"""
+        self.write({'state': 'cancelado',
+                    'cuota_prestamo': 0,
+                    'cuota_inicial': 0
+                    })
+        
+    def ending(self):
+        """Cerrar prestamo"""
         demo = []
-        for check in self.repayment_lines_ids:
+        for check in self.quota_ids:
             if check.state == 'unpaid':
                 demo.append(check)
         if len(demo) >= 1:
             message_id = self.env['message.popup'].create(
-                {'message': _("Pending Repayments")})
+                {'message': _("Pagos pendientes")})
             return {
                 'name': _('Repayment'),
                 'type': 'ir.actions.act_window',
@@ -227,43 +284,174 @@ class LoanRequest(models.Model):
                 'res_id': message_id.id,
                 'target': 'new'
             }
-        self.write({'state': "closed"})
+        self.write({'state': "pagado"})
+    
+    def unclick_quotas(self):
+        for prestamo in self:
+            cuotas = self.env['cuota'].search([('prestamo_id', '=', prestamo.id)])
+            for cuota in cuotas:
+                cuota.unlink()
+            
+    """ |||||||||||| METODOS DE FUNCIONAMIENTO """
+    
+    def date_due_cuota(self, date_init, payments, frequency, n):
+        
+        if frequency == 365 and n <= payments:
+            return date_init + relativedelta(days=1*n)
+        elif frequency == 52 and n <= payments:
+            return date_init + relativedelta(days=7 * n)
+        elif frequency == 24 and n <= payments:
+            return date_init + relativedelta(days=15 * n)
+        elif frequency == 12 and n <= payments:
+            return date_init + relativedelta(months=1 * n)
+        elif frequency == 6 and n <= payments:
+            return date_init + relativedelta(months=2 * n)
+        elif frequency == 4 and n <= payments:
+            return date_init + relativedelta(months=3 * n)
+        elif frequency == 1 and n <= payments:
+            return date_init + relativedelta(months=12 * n)      
 
-    def action_loan_rejected(self):
-        """You can add reject reasons here"""
-        return {'type': 'ir.actions.act_window',
-                'name': 'Loan Rejection',
-                'res_model': 'reject.reason',
-                'target': 'new',
-                'view_mode': 'form',
-                'context': {'default_loan': self.name}
-                }
+    def generate_quota(self):
+        for prestamo in self:
+            prestamo.unclick_quotas()
+            if prestamo.interest_rate > 0:
+                if prestamo.amount_borrowed <= 0:
+                    raise UserError(_("No se puede procesar el prestamo, monto menor que cero o es cero."))
+                if not prestamo.name:
+                    prestamo.name = self.env['ir.sequence'].next_by_code('prestamo') or 'Nuevo'
+                else:
+                    time.sleep(2)
+                    cuota_obj = self.env['cuota']
+                    
+                    # Determinar la frecuencia de pago en número de pagos por año
+                    frequency_map = {
+                        '365': 365,
+                        '52': 52,
+                        '24': 24,
+                        '12': 12,
+                        '6': 6,
+                        '4': 4,
+                        '1': 1
+                    }
+                    
+                    if prestamo.payment_frequency not in frequency_map:
+                        raise ValueError("Frecuencia de pago no válida")
+                    
+                    payments_per_year = frequency_map[prestamo.payment_frequency]
+                    total_payments = int(payments_per_year) * (int(prestamo.meses_seleccion) / 12)
+                    
+                    saldo_pendiente = prestamo.amount_borrowed
+                    tasa_interes_mensual = prestamo.interest_rate / 100 / 12
+                    amortizacion_constante = prestamo.amount_borrowed / total_payments
+                    
+                    # Calcular la cuota fija mensual
+                    cuota_mensual = prestamo.amount_borrowed * (tasa_interes_mensual * (1 + tasa_interes_mensual) ** total_payments) / ((1 + tasa_interes_mensual) ** total_payments - 1)
+                    prestamo.cuota = cuota_mensual
+                    n = 1
+                    
+                    time.sleep(2)
+                    for cuota_number in range(1, int(total_payments) + 1):
+                        
+                        interes = saldo_pendiente * tasa_interes_mensual
+                        
+                        capital_amortizado = cuota_mensual - interes
+                        saldo_pendiente -= capital_amortizado
+                        
+                        cuota_obj.create({
+                            'name': f'Cuota {cuota_number}/{total_payments} de {prestamo.name}',
+                            'prestamo_id': prestamo.id,
+                            'amount': cuota_mensual,
+                            'amount_capital_quota': capital_amortizado,
+                            'amount_capital': saldo_pendiente,
+                            'interest_rate': prestamo.interest_rate,
+                            'interest_generated': interes,
+                            'date_due': self.date_due_cuota(prestamo.date_init, total_payments, payments_per_year, n),
+                        })
+                        
+                        if n <= total_payments:
+                            n = n + 1
+                    
+                    prestamo.state = 'generado'
+            else:
+                 raise UserError(_("La tasa no puede ser menor que cero"))
+    
+    def crear_factura(self):
+        if not self.invoice_cxc_ids:
+            self.crear_factura_cxc()
+            self.write({
+                'remaining_capital': self.amount_borrowed
+            })
 
-    def action_compute_repayment(self):
-        """This automatically create the installment the employee need to pay to
-        company based on payment start date and the no of installments.
-            """
-        self.request = True
-        for loan in self:
-            loan.repayment_lines_ids.unlink()
-            date_start = (datetime.strptime(str(loan.date),
-                                            '%Y-%m-%d') +
-                          relativedelta(months=1))
-            amount = loan.loan_amount / loan.tenure
-            interest = loan.loan_amount * loan.interest_rate
-            interest_amount = interest / loan.tenure
-            total_amount = amount + interest_amount
-            partner = self.partner_id
-            for rand_num in range(1, loan.tenure + 1):
-                self.env['repayment.line'].create({
-                    'name': f"{loan.name}/{rand_num}",
-                    'partner_id': partner.id,
-                    'date': date_start,
-                    'amount': amount,
-                    'interest_amount': interest_amount,
-                    'total_amount': total_amount,
-                    'interest_account_id': self.journal_id.id,
-                    'repayment_account_id': self.journal_id.id,
-                    'loan_id': loan.id})
-                date_start += relativedelta(months=1)
-        return True
+    def crear_factura_cxc(self):
+        obj_factura = self.env["account.move"]
+        lineas = []
+        val_lineas = {
+            'name': 'Capital prestado',
+            'account_id': self.recibir_pagos.id,
+            'price_unit': self.amount_borrowed,
+            'quantity': 1,
+            'product_id': False,
+            'x_user_id': self.env.user.id
+        }
+        lineas.append((0, 0, val_lineas))
+        if self.gasto_prestamo > 0:
+            val_lineas1 = {
+                'name': 'Cargos administrativos',
+                'account_id': self.account_gasto_id.id,
+                'price_unit': self.gasto_prestamo,
+                'quantity': 1,
+                'product_id': False,
+                'x_user_id': self.env.user.id
+            }
+            lineas.append((0, 0, val_lineas1))
+        company_id = self.company_id.id
+        journal_id = self.recibir_pagos
+        if not journal_id:
+            raise UserError(
+                _('Please define an accounting sales journal for this company.'))
+        val_encabezado = {
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_id.id,
+            #'journal_id': journal_id.id,
+            'currency_id': self.currency_id.id,
+            'invoice_payment_term_id': self.payment_term_id.id,
+            'company_id': company_id,
+            'invoice_user_id': self.user_id and self.user_id.id,
+            'invoice_line_ids': lineas,
+        }
+
+        account_move_id = obj_factura.create(val_encabezado)
+        # account_move_id.action_post()
+        self.write({
+            'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
+            'state': 'aprobado'
+        })
+             
+    def action_view_invoice(self):
+        invoices = self.mapped('invoice_cxc_ids')
+        action = self.env.ref('account.action_move_out_invoice_type').read()[0]
+        
+        if len(invoices) > 1:
+            action['domain'] = [('id', 'in', invoices.ids)]
+        elif len(invoices) == 1:
+            form_view_id = self.env.ref('account.view_move_form').id
+            action['views'] = [(form_view_id, 'form')]
+            action['res_id'] = invoices.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        
+        return action
+            
+       
+    def action_view_payment(self):
+        patment = self.mapped('payment_ids')
+        action = self.env.ref('account.action_account_payments').read()[0]
+        if len(patment) > 1:
+            action['domain'] = [('id', 'in', patment.ids)]
+        elif len(patment) == 1:
+            action['views'] = [
+                (self.env.ref('account.view_account_payment_form').id, 'form')]
+            action['res_id'] = patment.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
