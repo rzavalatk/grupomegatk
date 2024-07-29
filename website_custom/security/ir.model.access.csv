@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_breadcum_custom_breadcum_custom,breadcum_custom.breadcum_custom,model_breadcum_custom_breadcum_custom,,1,0,0,0
+access_blog_blog,blog_blog.blog_blog,model_blog_blog,,1,0,0,0
