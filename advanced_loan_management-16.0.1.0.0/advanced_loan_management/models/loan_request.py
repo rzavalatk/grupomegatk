@@ -18,7 +18,14 @@ class Prestamo(models.Model):
     _inherit = ['mail.thread']
     _description = 'Modelo de Préstamo'
 
-    
+    #Datos generales
+    name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
+    partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
+    remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False,) #Se tiene que crear metodo computado para la asignación constante de cuanto capital queda
+    pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
+    disbursal_amount = fields.Float(string="Disbursal_amount",
+                                    help="Total loan amount available to disburse")
     
     #Datos del prestamo
     amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
@@ -42,15 +49,6 @@ class Prestamo(models.Model):
     date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today(), readonly=True, states={'borrador': [('readonly', False)]},) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
     date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
     
-    #Datos de cuentas bancarias
-    company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
-    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
-    account_id = fields.Many2one('account.account', 'Cuenta de intereses', required=True)
-    account_int_moratorio = fields.Many2one('account.account', 'Cuenta de intereses moratorios', required=True)
-    account_gasto_id = fields.Many2one('account.account', 'Cuenta de gastos', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    user_id = fields.Many2one('res.users', string='Responsable', index=True, default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
-    debit_account_id = fields.Many2one('account.account', string="Cuenta de debito", help="Elija cuenta para débito por desembolso")
-    credit_account_id = fields.Many2one('account.account', string="Cuenta de credito", help="Elija cuenta para credito por desembolso")
     
     
     #Datos de contabilidad
