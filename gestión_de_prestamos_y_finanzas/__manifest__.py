@@ -5,7 +5,7 @@
     'author': 'David Zuniga',
     'depends': ['base', 'account'],
     'data': [
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/main_menu_view.xml',
         'views/prestamo_views.xml',
         #'views/cuota_views.xml',
@@ -18,7 +18,7 @@
         #'data/prestamo_data.xml',
         'data/secuencia.xml',
         #'report/prestamo_report.xml',
-        'report/contrato_template.xml'
+        #'report/contrato_template.xml'
     ],
     'installable': True,
     'application': True,
