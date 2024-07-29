@@ -7,7 +7,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/main_menu_view.xml',
-        'views/prestamo_views.xml',
+        #'views/prestamo_views.xml',
         #'views/cuota_views.xml',
         #'views/cliente_views.xml',
         #'views/contrato_views.xml',
