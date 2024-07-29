@@ -81,7 +81,7 @@ class Cuota(models.Model):
 
         invoice = self.env['account.move']
         
-        """lineas = []
+        lineas = []
         if self.interest_generated > 0:
             val_lineas = {
             'name': 'Cobro de interes mensual de ' + str(self.prestamo_id.interest_rate) + '%',
@@ -145,7 +145,7 @@ class Cuota(models.Model):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
         }
-"""
+
     def action_view_invoice(self):
         invoices = self.mapped('invoice_id')
         action = self.env.ref('account.action_invoice_tree1').read()[0]
