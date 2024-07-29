@@ -5,12 +5,7 @@
         <field name="arch" type="xml">
             <form string="Préstamo"> 
                 <header>
-                    <div class="alert alert-info" role="alert"
-                            style="height: 40px; margin-bottom:0px;"
-                            attrs="{'invisible':[('state', 'not in', 'waiting for approval')]}"
-                            groups="advanced_loan_management.loan_management_group_user">
-                        Esperando la aprobación de un administrador
-                    </div>
+                    
                     <button name="generate_quota" type="object" string="Calcular Cuotas" class="btn-primary" states="borrador, generado"/>
                     <button string="Confirmar" type="object" name="action_loan_request" states="generado"/>
                     <button string="Aprobar" type="object" name="action_approve" states="confirmado"/>
