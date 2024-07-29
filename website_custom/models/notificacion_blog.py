@@ -4,10 +4,10 @@ class notificion_blog(models.Model):
     _inherit = ['blog.blog']
 
     def get_blog_url(self):
-        if self.website_id.name == 'megatk':
-            return 'https://www.megatk.net/blog/' + '#{slug(object)}/#{slug(post)}'
+        if self.object.name == 'blog megatk':
+            return 'https://www.megatk.net/blog/#{slug(object)}/#{slug(post)}'
         else:
-            return 'https://www.meditekhn.net/blog/' + '#{slug(object)}/#{slug(post)}'
+            return 'https://www.meditekhn.net/blog/#{slug(object)}/#{slug(post)}'
 
     def _check_for_publication(self, vals):
         if vals.get('is_published'):
