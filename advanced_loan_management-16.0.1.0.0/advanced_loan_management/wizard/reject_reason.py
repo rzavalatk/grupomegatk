@@ -13,7 +13,7 @@ class RejectReasonWizard(models.TransientModel):
 
     def action_reject_reason_txt(self):
         """Attach Reject Reason"""
-        loan_request = self.env['loan.request'].search(
+        loan_request = self.env['prestamo'].search(
             [('name', '=', self.loan)])
         loan_request.write({
             'state': 'rejected',

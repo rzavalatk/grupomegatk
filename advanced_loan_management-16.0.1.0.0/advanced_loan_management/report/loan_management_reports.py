@@ -9,7 +9,7 @@ class LoanDetails(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, doc_ids, data=None):
-        loan_id = self.env['loan.request'].browse(doc_ids)
+        loan_id = self.env['prestamo'].browse(doc_ids)
         data = {
             'Loan_id': loan_id.id,
             'Customer': loan_id.partner_id.name,
@@ -22,21 +22,21 @@ class LoanDetails(models.AbstractModel):
             else '',
             'CustomerContact': loan_id.partner_id.phone,
             'Loan_Type': loan_id.loan_type_id.name,
-            'Tenure': loan_id.tenure,
+            'Tenure': loan_id.meses_seleccion,
             'Tenure_type': loan_id.loan_type_id.tenure_plan,
             'Interest_Rate': str(loan_id.interest_rate),
-            'Loan_Amount': str(loan_id.loan_amount),
+            'Loan_Amount': str(loan_id.amount_borrowed),
         }
         """Fetching values for the report using query and returns the value"""
-        query = """SELECT name as Name, date as Date, amount as Amount,
-         interest_amount as Interest_amount,state as State, 
-         total_amount as Total_amount FROM repayment_line"""
+        query = """SELECT name as Name, date_due as Date, amount_capital_quota as Amount,
+         interest_generated as Interest_amount,state as State, 
+         amount as Total_amount FROM cuota"""
         check = """WHERE"""
-        condition = """loan_id='{cust}'""".format(cust=loan_id.id)
+        condition = """prestamo_id='{cust}'""".format(cust=loan_id.id)
         query = """{} {} {}""".format(query, check, condition)
         self.env.cr.execute(query)
         record = self.env.cr.dictfetchall()
-        record_sort = sorted(record, key=lambda x: x['date'])
+        record_sort = sorted(record, key=lambda x: x['date_due'])
         return {
             'docs': record_sort,
             'doc_ids': doc_ids,

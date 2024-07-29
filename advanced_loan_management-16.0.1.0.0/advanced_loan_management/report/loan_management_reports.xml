@@ -3,7 +3,7 @@
     <!--    PDF report action-->
      <record id="loan_management_report_action" model="ir.actions.report">
         <field name="name">Loan Request</field>
-        <field name="model">loan.request</field>
+        <field name="model">prestamo</field>
         <field name="report_type">qweb-pdf</field>
          <field name="report_name">advanced_loan_management.loan_report_template</field>
         <field name="report_file">advanced_loan_management.loan_report_template</field>
