@@ -4,7 +4,7 @@ class notificion_blog(models.Model):
     _inherit = ['blog.blog']
 
     def get_blog_url(self):
-        if self.object.website_id == 'Megatk store':
+        if self.website_id == 'Megatk store':
             return 'https://www.megatk.net/blog/#{slug(object)}/#{slug(post)}'
         else:
             return 'https://www.meditekhn.net/blog/#{slug(object)}/#{slug(post)}'
