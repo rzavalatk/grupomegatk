@@ -4,7 +4,7 @@ class notificion_blog(models.Model):
     _inherit = ['blog.blog']
 
     def get_blog_url(self):
-        if self.website_id == 'Megatk store':
+        if self.object.website_id == 'Megatk store':
             return 'https://www.megatk.net/blog/#{slug(object)}/#{slug(post)}'
         else:
             return 'https://www.meditekhn.net/blog/#{slug(object)}/#{slug(post)}'
@@ -18,4 +18,4 @@ class notificion_blog(models.Model):
                     values={'post': post},
                     subtype_id=self.env['ir.model.data']._xmlid_to_res_id('website_blog.mt_blog_blog_published'))
             return True
-        return False
+        return False 
