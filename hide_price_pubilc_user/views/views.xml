@@ -99,7 +99,7 @@
     <field name="name">website.sale.product.price.hide.cart</field>
     <field name="inherit_id" ref="website_sale.cart" />
     <field name="arch" type="xml">
-        <xpath expr="//div[@class='o_wsale_product_btn']//a[@aria-label='Carrito de compras']" position="replace"/>
+        <xpath expr="//div[@class='o_wsale_product_btn']" position="replace"/>
     </field>
 </record>
   </data>
