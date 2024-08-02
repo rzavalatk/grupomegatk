@@ -90,7 +90,7 @@
       <field name="name">custom.product.add.cart</field>
       <field name="inherit_id" ref="website_sale.o_wsale_product_btn" />
       <field name="arch" type="xml">
-        <xpath expr="//div[@tittle='carrito de compras']" position="attributes">
+        <xpath expr="//a[@aria-label='Carrito de compras']" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
