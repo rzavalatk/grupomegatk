@@ -97,7 +97,7 @@
     </record>--> 
     <record id="hide_shopping_cart_for_non_users" model="ir.ui.view">
     <field name="name">website.sale.product.price.hide.cart</field>
-    <field name="inherit_id" ref="website_sale.product_price" />
+    <field name="inherit_id" ref="website_sale.products_item" />
     <field name="arch" type="xml">
         <xpath expr="//div[@class='o_wsale_product_btn']//a[@aria-label='Carrito de compras']" position="replace"/>
     </field>
