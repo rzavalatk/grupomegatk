@@ -97,9 +97,9 @@
     </record>--> 
     <record id="hide_shopping_cart_for_non_users" model="ir.ui.view">
     <field name="name">website.sale.product.price.hide.cart</field>
-    <field name="inherit_id" ref="website_sale.cart" />
+    <field name="inherit_id" ref="website_sale.btn btn-primary a-submit" />
     <field name="arch" type="xml">
-        <xpath expr="//div[@class='o_wsale_product_btn']" position="replace"/>
+        <xpath expr="//a[@aria-label='Carrito de compras']" position="attributes">
     </field>
 </record>
   </data>
