@@ -85,5 +85,15 @@
         </xpath>
       </field>
     </record>
+    <!--View add to Cart--> 
+    <record id="custom_product_add_to_cart" model="ir.ui.view">
+      <field name="name">custom.product.add.cart</field>
+      <field name="inherit_id" ref="website_sale.o_wsale_product_btn" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@tittle='carrito de compras']" position="attributes">
+          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        </xpath>
+      </field>
+    </record>
   </data>
 </odoo>
