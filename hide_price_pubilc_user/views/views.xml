@@ -85,7 +85,7 @@
         </xpath>
       </field>
     </record>
-    <!--View add to Cart--> 
+    <!--View add to Cart
     <record id="custom_product_add_to_cart" model="ir.ui.view">
       <field name="name">custom.product.add.cart</field>
       <field name="inherit_id" ref="website_sale.o_wsale_product_btn" />
@@ -94,6 +94,15 @@
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
-    </record>
+    </record>--> 
+    <record id="custom_product_add_to_cart" model="ir.ui.view">
+    <field name="name">custom.product.add.cart</field>
+    <field name="inherit_id" ref="website_sale.template.product"/>
+    <field name="arch" type="xml">
+        <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="replace">
+            <p>El carrito de compras ha sido deshabilitado para ti.</p>
+        </xpath>
+    </field>
+</record>
   </data>
 </odoo>
