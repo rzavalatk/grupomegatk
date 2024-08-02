@@ -96,11 +96,16 @@
       </field>
     </record>--> 
     <record id="hide_shopping_cart_for_non_users" model="ir.ui.view">
-    <field name="name">website.sale.product.price.hide.cart</field>
-    <field name="inherit_id" ref="website_sale.btn btn-primary a-submit" />
-    <field name="arch" type="xml">
-        <xpath expr="//a[@aria-label='Carrito de compras']" position="attributes">
-    </field>
+    <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="replace">
+            <div class="o_wsale_product_btn">
+                <t t-if="user.has_group('base.group_portal') or user.has_group('base.group_user')">
+                    <input name="product_id" type="hidden" data-oe-id="1570" data-oe-xpath="/data/xpath/input" data-oe-model="ir.ui.view" data-oe-field="arch" value="4174">
+                    <a href="#" role="button" class="btn btn-primary a-submit" aria-label="Carrito de compras" title="Carrito de compras" data-oe-model="ir.ui.view" data-oe-id="1570" data-oe-field="arch" data-oe-xpath="/data/xpath/t[2]/a[1]">
+                        <span class="fa fa-shopping-cart"></span>
+                    </a>
+                </t>
+                </div>
+        </xpath>
 </record>
   </data>
 </odoo>
