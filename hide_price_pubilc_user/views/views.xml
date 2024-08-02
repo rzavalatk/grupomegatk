@@ -95,13 +95,11 @@
         </xpath>
       </field>
     </record>--> 
-    <record id="custom_product_add_to_cart" model="ir.ui.view">
-    <field name="name">custom.product.add.cart</field>
-    <field name="inherit_id" ref="website_sale.template.product"/>
+    <record id="hide_shopping_cart_for_non_users" model="ir.ui.view">
+    <field name="name">website.sale.product.price.hide.cart</field>
+    <field name="inherit_id" ref="website_sale.product_price" />
     <field name="arch" type="xml">
-        <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="replace">
-            <p>El carrito de compras ha sido deshabilitado para ti.</p>
-        </xpath>
+        <xpath expr="//div[@class='o_wsale_product_btn']//a[@aria-label='Carrito de compras']" position="replace"/>
     </field>
 </record>
   </data>
