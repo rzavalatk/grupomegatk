@@ -99,7 +99,7 @@
       <field name="name">custom.product.add.cart.one</field>
       <field name="inherit_id" ref="website_sale.add_to_cart_wrap" />
       <field name="arch" type="xml">
-        <xpath expr="//div[@id='add_to_cart_wrap']" position="replace">
+        <xpath expr="//div[@id='add_to_cart']" position="replace">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
