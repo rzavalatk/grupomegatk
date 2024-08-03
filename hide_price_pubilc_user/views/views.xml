@@ -94,7 +94,7 @@
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
       </field>
-    </record>--> 
+   
     <record id="custom_product_add_to_cart" model="ir.ui.view">
       <field name="name">custom.product.add.cart.one</field>
       <field name="inherit_id" ref="website_sale.add_to_cart_wrap" />
@@ -104,5 +104,6 @@
         </xpath>
       </field>
     </record>
+     </record>--> 
   </data>
 </odoo>
