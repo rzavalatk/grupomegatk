@@ -97,7 +97,7 @@
     </record>--> 
     <record id="custom_product_add_to_cart" model="ir.ui.view">
       <field name="name">custom.product.add.cart.one</field>
-      <field name="inherit_id" ref="website_sale.products_item" />
+      <field name="inherit_id" ref="website_sale.add_to_cart_wrap" />
       <field name="arch" type="xml">
         <xpath expr="//div[@id='add_to_cart_wrap']" position="replace">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
