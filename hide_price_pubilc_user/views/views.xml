@@ -49,6 +49,9 @@
         <xpath expr="//div[@itemprop='offers']" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
+        <xpath expr="//div[@class='o_wsale_product_btn']" position="attributes">
+          <attribute name="groups">base.group_user</attribute>
+        </xpath>
       </field>
     </record>
     
@@ -85,25 +88,6 @@
         </xpath>
       </field>
     </record>
-    <!--View add to Cart
-    <record id="custom_product_add_to_cart" model="ir.ui.view">
-      <field name="name">custom.product.add.cart</field>
-      <field name="inherit_id" ref="website_sale.o_wsale_product_btn" />
-      <field name="arch" type="xml">
-        <xpath expr="//a[@aria-label='Carrito de compras']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-   
-    <record id="custom_product_add_to_cart" model="ir.ui.view">
-      <field name="name">custom.product.add.cart.one</field>
-      <field name="inherit_id" ref="website_sale.add_to_cart_wrap" />
-      <field name="arch" type="xml">
-        <xpath expr="//div[@id='add_to_cart']" position="replace">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
-      </field>
-    </record>
-     </record>--> 
+
   </data>
 </odoo>
