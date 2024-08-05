@@ -7,14 +7,40 @@ class LoanTypes(models.Model):
     """Cree varios tipos de prestamos y luego se puedan elegir en la creacion del prestamo"""
     _name = 'loan.type'
     _inherit = ['mail.thread']
-    _description = 'Loan Type'
+    _description = 'Tipo de prestamo'
 
     name = fields.Char(string='Nombre', help="Nombre del prestamo")
     loan_amount = fields.Integer(string='Monto del Préstamo', help="Cantidad a prestar")
-    tenure = fields.Integer(string='Duración (meses)', default='1',
-                            help="Periodo de amortización")
-    tenure_plan = fields.Char(string="Frecuencia de pago", default='monthly',
-                              readonly='True')
+    meses_seleccion = fields.Selection(
+        [
+            ('12', '12 meses'),
+            ('24', '24 meses'),
+            ('36', '36 meses'),
+            ('48', '48 meses'),
+            ('60', '60 meses'),
+        ],
+        string='Duracion (meses)', required=True, default='12', readonly=True, states={'borrador': [('readonly', False)]})
+    
+    payment_frequency = fields.Selection([
+        ('365', 'Diario'),
+        ('52', 'Semanal'),
+        ('24', 'Quincenal'),
+        ('12', 'Mensual'),
+        ('6', 'Bimestral'),
+        ('4', 'Trimestral'),
+        ('1', 'Anual')
+    ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    loan_type = fields.Selection([
+        ('personal', 'Personal'),
+        ('financiamiento', 'Financiamiento')
+    ], string='Tipo de Préstamo', default="personal", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('aprobado', 'Aprobado')
+    ], string='Estado', default='borrador', required=True)
+    
     interest_rate = fields.Float(string='Tasa de interes',
                                  help="Tasa de interes del prestamo")
     disbursal_amount = fields.Float(string='Importe de caítal',

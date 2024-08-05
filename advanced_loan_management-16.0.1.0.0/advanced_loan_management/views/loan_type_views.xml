@@ -2,7 +2,7 @@
 <odoo>
 <!--        Loan Type Action-->
         <record id="loan_type_action" model="ir.actions.act_window">
-            <field name="name">Loan Type</field>
+            <field name="name">Tipo de prestamo</field>
             <field name="res_model">loan.type</field>
             <field name="view_mode">kanban,tree,form</field>
         </record>
@@ -20,14 +20,14 @@
                                 <div class="oe_kanban_details">
                                     <strong>
                                         <ul>
-                                            <li>Name :
+                                            <li>Nombre :
                                                 <field name="name"/>
                                             </li>
-                                            <li>Amount :
+                                            <li>Monto :
                                                 <field name="loan_amount"/>
                                             </li>
-                                            <li>Tenure :
-                                                <field name="tenure"/>
+                                            <li>Duración :
+                                                <field name="meses_seleccion"/>
                                             </li>
                                             <li>
                                                 <field name="interest_rate" widget="percentage"/>
@@ -52,7 +52,7 @@
                     <field name="name"/>
                     <field name="loan_amount"/>
                     <field name="interest_rate"/>
-                    <field name="processing_fee"/>
+                    <field name="payment_frequency"/>
                 </tree>
             </field>
         </record>
@@ -68,14 +68,15 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="name" style="width: 50%%;" placeholder="Loan Type"/>
+                                <field name="name" style="width: 50%%;" placeholder="Tipo de prestamo"/>
                             </h1>
                         </div>
                         <group>
                             <group>
                                 <field name="loan_amount"/>
-                                <field name="tenure"/>
-                                <field name="tenure_plan"/>
+                                <field name="meses_seleccion"/>
+                                <field name="loan_type" />
+                                <field name="payment_frequency"/>
                                 <field name="documents_ids" widget="many2many_tags"/>
                             </group>
 
@@ -89,7 +90,7 @@
                         </group>
                         <br/>
                         <notebook>
-                            <page string="Reminder">
+                            <page string="Recordatorios">
                                 <group>
                                     <field name="note"/>
                                 </group>
