@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 <!--        Default GroupBy-->
-        <record id="cuota_default_group" model="ir.ui.view">
-            <field name="name">cuota.default.group</field>
-            <field name="model">cuota</field>
+        <record id="repayment_line_default_group" model="ir.ui.view">
+            <field name="name">repayment.line.default.group</field>
+            <field name="model">repayment.line</field>
             <field name="arch" type="xml">
-                <search string="Prestamo">
-                    <filter name="prestamo_id" string="Prestamo ID" context="{'group_by': 'prestamo_id'}"/>
+                <search string="Loan">
+                    <filter name="loan" string="Loan ID" context="{'group_by': 'loan_id'}"/>
                 </search>
             </field>
         </record>
 
-        <!--        Cuota Action-->
-        <record id="cuota_action" model="ir.actions.act_window">
-            <field name="name">Cuota acción</field>
-            <field name="res_model">cuota</field>
+        <!--        Repayment Line Action-->
+        <record id="repayment_line_action" model="ir.actions.act_window">
+            <field name="name">Repayment Line</field>
+            <field name="res_model">repayment.line</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{'search_default_loan': 1}</field>
-            <field name="search_view_id" ref="cuota_default_group"/>
+            <field name="search_view_id" ref="repayment_line_default_group"/>
         </record>
 
-        <!--        Cuota Tree View-->
-        <record id="cuota_view_tree" model="ir.ui.view">
-            <field name="name">cuota.view.tree</field>
-            <field name="model">cuota</field>
+        <!--        Repayment Line Tree View-->
+        <record id="repayment_line_view_tree" model="ir.ui.view">
+            <field name="name">repayment.line.view.tree</field>
+            <field name="model">repayment.line</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Prestamos" create="false">
+                <tree string="Loan Request" create="false">
                     <field name="name"/>
-                    <field name="res_partner_id"/>
-                    <field name="prestamo_id"/>
-                    <field name="date_due"/>
-                    <field name="amount"/>
+                    <field name="partner_id"/>
+                    <field name="loan_id"/>
+                    <field name="date"/>
+                    <field name="total_amount"/>
                     <field name="company_id"/>
                     <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <!--        Cuota Form View -->
-        <record id="cuota_view_form" model="ir.ui.view">
-            <field name="name">cuota.view.form</field>
-            <field name="model">cuota</field>
+        <!--        Repayment Line Form View -->
+        <record id="repayment_line_view_form" model="ir.ui.view">
+            <field name="name">repayment.line.view.form</field>
+            <field name="model">repayment.line</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Cuota form" create="false">
+                <form string="Repayment Line" create="false">
                     <header>
                         <field name="state" widget="statusbar"
-                               statusbar_visible="unpaid,pagado"/>
+                               statusbar_visible="unpaid,paid"/>
                         <button attrs="{'invisible': ['|', ('invoice', '=', True), ('state', '!=', 'unpaid')]}"
                                 name="action_pay_emi"
                                 class="oe_highlight"
-                                string="Pagar"
+                                string="Pay"
                                 type="object"/>
                     </header>
                     <sheet>
@@ -62,21 +62,33 @@
                         </div>
                         <group>
                             <group>
-                                <field name="res_partner_id"/>
-                                <field name="prestamo_id"/>
+                                <field name="partner_id"/>
+                                <field name="loan_id"/>
                             </group>
                             <group>
-                                <field name="date_due"/>
-                                <field name="amount_capital_quota"/>
-                                <field name="interest_generated"/>
+                                <field name="date"/>
                                 <field name="amount"/>
+                                <field name="interest_amount"/>
+                                <field name="total_amount"/>
                                 <field name="invoice" invisible="1"/>
                             </group>
                             <group>
                                 <field name="company_id"/>
                             </group>
                         </group>
-                        
+                        <notebook>
+                            <page string="Accounting">
+                                <group>
+                                    <group>
+                                        <field name="journal_loan_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="interest_account_id"/>
+                                        <field name="repayment_account_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
