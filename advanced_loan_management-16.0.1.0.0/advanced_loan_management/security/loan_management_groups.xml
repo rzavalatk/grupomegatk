@@ -4,9 +4,7 @@
         <!--        New user groups for the module Loan Management-->
         <record model="ir.module.category" id="loan_management_groups">
             <field name="name">loan_management</field>
-            <field name="description">User access level for loan_management
-                model
-            </field>
+            <field name="description">Nivel de acceso de usuario para el modulo de loan_management</field>
             <field name="sequence">8</field>
         </record>
 

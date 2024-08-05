@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
         <!--        Loan Management Menu Items-->
-        <menuitem id="loan_management_menu_root" name="Loan Management"
+        <menuitem id="loan_management_menu_root" name="Gestión de prestamos"
         web_icon="advanced_loan_management,static/description/icon.png"/>
-        <menuitem id="loan_management_loan" name="Loan" sequence="10"
+        <menuitem id="loan_management_loan" name="Prestamos" sequence="10"
                   parent="loan_management_menu_root"/>
-        <menuitem id="loan_management_request" name="Loan requests"
+        <menuitem id="loan_management_request" name="Prestamos"
                   parent="loan_management_loan" action="loan_request_action"/>
-        <menuitem id="loan_management_type" name="Loan types"
+        <menuitem id="loan_management_type" name="Tipos de prestamos"
                   parent="loan_management_loan" action="loan_type_action"/>
-        <menuitem id="loan_management_lines" name="Repayments"
+        <menuitem id="loan_management_lines" name="Cuotas"
                   parent="loan_management_loan" action="repayment_line_action"/>
-        <menuitem id="loan_management_certificates" name="Documents" sequence="15"
+        <menuitem id="loan_management_certificates" name="Documentos" sequence="15"
                   parent="loan_management_menu_root"/>
-        <menuitem id="loan_management_proofs" name="Loan Proofs"
+        <menuitem id="loan_management_proofs" name="Documentos de prestamos"
                   parent="loan_management_certificates" action="loan_documents_action"/>
-        <menuitem id="loan_management_conf" name="Configuration" sequence="20"
+        <menuitem id="loan_management_conf" name="Configuración" sequence="20"
                   parent="loan_management_menu_root"/>
-        <menuitem id="loan_management_settings" name="Settings"
+        <menuitem id="loan_management_settings" name="Ajustes"
                   parent="loan_management_conf" action="res_config_settings_action"/>
-        <menuitem id="loan_management_report" name="Loan Report" sequence="20"
+        <menuitem id="loan_management_report" name="Reportes de prestamos" sequence="20"
                   parent="loan_management_menu_root"/>
 </odoo>

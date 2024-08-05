@@ -2,7 +2,7 @@
 <odoo>
     <!--        Loan Documents Action-->
     <record id="loan_documents_action" model="ir.actions.act_window">
-        <field name="name">Loan Documents</field>
+        <field name="name">Documentos</field>
         <field name="res_model">loan.documents</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -12,7 +12,7 @@
         <field name="model">loan.documents</field>
         <field name="priority" eval="8"/>
         <field name="arch" type="xml">
-            <tree string="Loan Documents" editable="bottom">
+            <tree string="Documentos de prestamos" editable="bottom">
                 <field name="loan_proofs"/>
                 <field name="company_id"/>
             </tree>

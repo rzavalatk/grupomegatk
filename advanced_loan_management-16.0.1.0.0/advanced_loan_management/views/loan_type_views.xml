@@ -65,7 +65,7 @@
             <field name="arch" type="xml">
                 <form string="Loan Type">
                     <header>
-                        <button string="Confirmar" type="object" name="action_confirm" states="generado"/>
+                        <button string="Confirmar" type="object" name="action_confirm" states="borrador"/>
                         <button string="Cancelar" type="object" name="action_cancel" states="aprobado"/>
                         <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado"/>
                     </header>
