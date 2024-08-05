@@ -29,7 +29,7 @@ class Campos_clientes(models.Model):
 
         return super().create(vals_list)
     
-    @api.model_create_multi
+    """@api.model_create_multi
     def write(self, vals_list):
         """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
 
@@ -42,4 +42,4 @@ class Campos_clientes(models.Model):
                     raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
             vals['company_id'] = company_id
 
-        return super().create(vals_list)
+        return super().create(vals_list)"""
