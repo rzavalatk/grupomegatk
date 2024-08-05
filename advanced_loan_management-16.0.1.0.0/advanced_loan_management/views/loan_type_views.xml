@@ -64,7 +64,11 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Loan Type">
-                    <header/>
+                    <header>
+                        <button string="Confirmar" type="object" name="action_confirm" states="generado"/>
+                        <button string="Cancelar" type="object" name="action_cancel" states="aprobado"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado"/>
+                    </header>
                     <sheet>
                         <div class="oe_title">
                             <h1>

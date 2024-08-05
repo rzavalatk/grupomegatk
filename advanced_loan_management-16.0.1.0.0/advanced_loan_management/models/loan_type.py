@@ -61,4 +61,12 @@ class LoanTypes(models.Model):
     def _compute_disbursal_amount(self):
         """Calcular monto a pagar"""
         self.disbursal_amount = self.loan_amount - self.processing_fee
+        
+    def action_confirm(self):
+        for prestamo in self:
+            prestamo.state = 'aprobado'
+            
+    def action_cancel(self):
+        for prestamo in self:
+            prestamo.state = 'borrador'
 
