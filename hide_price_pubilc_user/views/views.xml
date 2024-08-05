@@ -49,6 +49,9 @@
         <xpath expr="//div[@itemprop='offers']" position="attributes">
           <attribute name="groups">base.group_portal, base.group_user</attribute>
         </xpath>
+        <xpath expr="//div[@class='o_wsale_product_btn']" position="attributes">
+          <attribute name="groups">base.group_user</attribute>
+        </xpath>
       </field>
     </record>
     
