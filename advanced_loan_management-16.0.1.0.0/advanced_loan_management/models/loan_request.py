@@ -140,7 +140,7 @@ class LoanRequest(models.Model):
         for prestamo in self:
             prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)
             prestamo.payment_count = len(prestamo.payment_ids)
-            prestamo.cuotas_count = len(prestamo.quota_ids)
+            prestamo.cuotas_count = len(prestamo.repayment_lines_ids)
         
     def go_to_draft(self):
         for prestamo in self:
@@ -286,7 +286,7 @@ class LoanRequest(models.Model):
     def ending(self):
         """Cerrar prestamo"""
         demo = []
-        for check in self.quota_ids:
+        for check in self.repayment_lines_ids:
             if check.state == 'unpaid':
                 demo.append(check)
         if len(demo) >= 1:
