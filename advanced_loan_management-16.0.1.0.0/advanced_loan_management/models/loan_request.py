@@ -296,6 +296,35 @@ class LoanRequest(models.Model):
                 'target': 'new'
             }
         self.write({'state': "pagado"})
+        
+    def action_view_invoice(self):
+        invoices = self.mapped('invoice_cxc_ids')
+        action = self.env.ref('account.action_move_out_invoice_type').read()[0]
+        
+        if len(invoices) > 1:
+            action['domain'] = [('id', 'in', invoices.ids)]
+        elif len(invoices) == 1:
+            form_view_id = self.env.ref('account.view_move_form').id
+            action['views'] = [(form_view_id, 'form')]
+            action['res_id'] = invoices.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        
+        return action
+            
+       
+    def action_view_payment(self):
+        patment = self.mapped('payment_ids')
+        action = self.env.ref('account.action_account_payments').read()[0]
+        if len(patment) > 1:
+            action['domain'] = [('id', 'in', patment.ids)]
+        elif len(patment) == 1:
+            action['views'] = [
+                (self.env.ref('account.view_account_payment_form').id, 'form')]
+            action['res_id'] = patment.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     def action_compute_repayment(self):
         """This automatically create the installment the employee need to pay to
