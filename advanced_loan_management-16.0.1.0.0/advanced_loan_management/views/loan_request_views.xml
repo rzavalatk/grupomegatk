@@ -155,8 +155,7 @@
                             <page string="Loan rejection" states="rejected">
                                 <field name="reject_reason" readonly="1"/>
                             </page>
-                            <page string="Accounting"
-                                  attrs="{'invisible': [('state', '=', 'borrador')]}">
+                            <page string="Accounting">
                                 <group>
                                     <group>
                                         <field name="recibir_pagos"/>
