@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from datetime import date
+import time
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
@@ -12,7 +14,7 @@ class LoanRequest(models.Model):
     _description = 'Loan Request'
 
     #DATOS GENERALES
-    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False, copy=False, help="Sequence number for loan requests", default=lambda self: 'Nuevo')
+    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False, copy=False, default=lambda self: 'Nuevo')
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     amount_borrowed = fields.Float('Capital restante', readonly=True,  copy=False, )
     pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
@@ -26,7 +28,7 @@ class LoanRequest(models.Model):
     documents_ids = fields.Many2many('loan.documents', string="Documentos",)
     img_attachment_ids = fields.Many2many('ir.attachment', relation="m2m_ir_identity_card_rel",column1="documents_ids",string="Imagenes",)
     reject_reason = fields.Text(string="Razon de rechazo")
-    request = fields.Boolean(string="Request", default=False,help="Para monitorear el prestamo")
+    request = fields.Boolean(string="Request", default=False)
     
     #Datos de fechas
     meses_seleccion = fields.Selection(
@@ -71,7 +73,7 @@ class LoanRequest(models.Model):
         ('12', 'Mensual'),
         ('6', 'Bimestral'),
         ('4', 'Trimestral'),
-        ('1', 'Anual')
+        ('1', 'Anual'),
     ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     
     loan_type = fields.Selection([
@@ -86,15 +88,14 @@ class LoanRequest(models.Model):
         ('pro_pago', 'Proceso de pago'),
         ('rechazado', 'Rechazado'),
         ('cancelado', 'Cancelado'),
-        ('pagado', 'Pagado')
+        ('pagado', 'Pagado'),
     ], string='Estado', default='borrador',  required=True, readonly=True, copy=False,
         tracking=True,)
        
     
     repayment_lines_ids = fields.One2many('repayment.line',
                                           'loan_id',
-                                          string="Loan Line", index=True,
-                                          help="Repayment lines")
+                                          string="Cuotas", index=True,)
 
    
     @api.model
