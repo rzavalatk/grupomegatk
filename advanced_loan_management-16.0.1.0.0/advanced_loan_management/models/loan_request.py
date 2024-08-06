@@ -15,6 +15,7 @@ class LoanRequest(models.Model):
 
     #DATOS GENERALES
     
+    partner_id = fields.Many2one('res.partner', string="Cliente", required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False, )
     pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
