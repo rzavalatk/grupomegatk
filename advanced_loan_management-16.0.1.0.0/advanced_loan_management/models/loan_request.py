@@ -11,74 +11,95 @@ class LoanRequest(models.Model):
     _inherit = ['mail.thread']
     _description = 'Loan Request'
 
-    name = fields.Char(string='Loan Reference', readonly=True,
+    #DATOS GENERALES
+    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False,
                        copy=False, help="Sequence number for loan requests",
-                       default=lambda self: 'New')
-    company_id = fields.Many2one('res.company', string='Company',
-                                 readonly=True,
-                                 help="Company Name",
-                                 default=lambda self:
-                                 self.env.company)
-    currency_id = fields.Many2one('res.currency', string='Currency',
-                                  required=True, help="Currency",
-                                  default=lambda self: self.env.user.company_id.
-                                  currency_id)
-    loan_type_id = fields.Many2one('loan.type', string='Loan Type',
-                                   required=True, help="Can choose different "
-                                                       "loan types suitable")
-    loan_amount = fields.Float(string="Loan Amount", store=True,
-                               help="Total loan amount", )
-    disbursal_amount = fields.Float(string="Disbursal_amount",
-                                    help="Total loan amount "
-                                         "available to disburse")
-    tenure = fields.Integer(string="Tenure",
-                            help="Installment period")
-    interest_rate = fields.Float(string="Interest rate", help="Interest "
-                                                              "percentage")
-    date = fields.Date(string="Date", default=fields.Date.today(),
-                       readonly=True, help="Date")
-    partner_id = fields.Many2one('res.partner', string="Partner",
-                                 required=True,
-                                 help="Partner")
+                       default=lambda self: 'Nuevo')
+    partner_id = fields.Many2one('res.partner', string="Cliente",
+                                 required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
+    amount_borrowed = fields.Float('Capital restante', readonly=True,  copy=False, )
+    pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
+    disbursal_amount = fields.Float(string="Disbursal_amount", help="Total loan amount available to disburse")
+    
+    #Datos del prestamo 
+    amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    cuota = fields.Monetary('Cuota', readonly=True,  copy=False,)
+    loan_type_id = fields.Many2one('loan.type', string='Tipo de prestamo', required=True)
+    documents_ids = fields.Many2many('loan.documents', string="Documentos",)
+    img_attachment_ids = fields.Many2many('ir.attachment', relation="m2m_ir_identity_card_rel",column1="documents_ids",string="Imagenes",)
+    reject_reason = fields.Text(string="Razon de rechazo")
+    request = fields.Boolean(string="Request", default=False,help="Para monitorear el prestamo")
+    
+    #Datos de fechas
+    meses_seleccion = fields.Selection(
+        [
+            ('12', '12 meses'),
+            ('24', '24 meses'),
+            ('36', '36 meses'),
+            ('48', '48 meses'),
+            ('60', '60 meses'),
+        ],
+        string='Duracion (meses)', required=True, default='12', readonly=True, states={'borrador': [('readonly', False)]})
+    date_init = fields.Date(string='Fecha de Inicio', required=True, default=lambda self: date.today(), readonly=True, states={'borrador': [('readonly', False)]},) #SE TIENE QUE CALCULAR AUTOMATICO CUANDO SE ELIJE DURACION
+    date_ends = fields.Date(string='Fecha final', compute='_compute_date_ends', store=True)
+    
+    #Datos de cuentas bancarias
+    company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id, readonly=True, states={'borrador': [('readonly', False)]},)
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type', '=', 'bank')], required=True,)
+    account_id = fields.Many2one('account.account', 'Cuenta de intereses', required=True)
+    account_int_moratorio = fields.Many2one('account.account', 'Cuenta de intereses moratorios', required=True)
+    account_gasto_id = fields.Many2one('account.account', 'Cuenta de gastos', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    user_id = fields.Many2one('res.users', string='Responsable', index=True, default=lambda self: self.env.user, readonly=True, states={'draft': [('readonly', False)]},)
+    debit_account_id = fields.Many2one('account.account', string="Cuenta de debito", help="Elija cuenta para débito por desembolso")
+    credit_account_id = fields.Many2one('account.account', string="Cuenta de credito", help="Elija cuenta para credito por desembolso")
+    
+    #Datos de contabilidad
+    payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    interest_rate = fields.Integer(string='Tasa de Interés', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True, states={'borrador': [('readonly', False)]}, default=lambda self: self.env.user.company_id.currency_id)
+    gasto_prestamo = fields.Monetary(string='Gastos administrativos', default=0, readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
+    
+    #Variables de conteo
+    invoice_count_cxc = fields.Integer(string='Factura Count', compute='_compute_invoiced', readonly=True)
+    payment_count = fields.Integer(string='Payment Count', compute='_compute_invoiced', readonly=True)
+    cuotas_count = fields.Integer(string='cuotas Count', compute='_compute_invoiced', readonly=True)
+    invoice_cxc_ids = fields.Many2many("account.move", string='Facturas cxc', readonly=True, copy=False)
+    payment_ids = fields.Many2many("account.payment", string="Pagos", copy=False,)
+    
+    payment_frequency = fields.Selection([
+        ('365', 'Diario'),
+        ('52', 'Semanal'),
+        ('24', 'Quincenal'),
+        ('12', 'Mensual'),
+        ('6', 'Bimestral'),
+        ('4', 'Trimestral'),
+        ('1', 'Anual')
+    ], string='Frecuencia de Pago', default='12', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    loan_type = fields.Selection([
+        ('personal', 'Personal'),
+        ('financiamiento', 'Financiamiento')
+    ], string='Tipo de Préstamo', default="personal", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('confirmado', 'Confirmado'),
+        ('aprobado', 'Aprobado'),
+        ('pro_pago', 'Proceso de pago')
+        ('rechazado', 'Rechazado'),
+        ('cancelado', 'Cancelado'),
+        ('pagado', 'Pagado')
+    ], string='Estado', default='borrador',  required=True, readonly=True, copy=False,
+        tracking=True,)
+       
+    
     repayment_lines_ids = fields.One2many('repayment.line',
                                           'loan_id',
                                           string="Loan Line", index=True,
                                           help="Repayment lines")
-    documents_ids = fields.Many2many('loan.documents',
-                                     string="Proofs",
-                                     help="Documents as proof")
-    img_attachment_ids = fields.Many2many('ir.attachment',
-                                          relation="m2m_ir_identity_card_rel",
-                                          column1="documents_ids",
-                                          string="Images",
-                                          help="Image proofs")
-    journal_id = fields.Many2one('account.journal',
-                                 string="Journal",
-                                 help="Journal types",
-                                 domain="[('type', '=', 'purchase'),"
-                                        "('company_id', '=', company_id)]",
-                                 )
-    debit_account_id = fields.Many2one('account.account',
-                                       string="Debit account",
-                                       help="Choose account for "
-                                            "disbursement debit")
-    credit_account_id = fields.Many2one('account.account',
-                                        string="Credit account",
-                                        help="Choose account for "
-                                             "disbursement credit")
-    reject_reason = fields.Text(string="Reason", help="Displays "
-                                                      "rejected reason")
-    request = fields.Boolean(string="Request", default=False,
-                             help="For monitoring the record")
-    state = fields.Selection(
-        string='State',
-        selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'),
-                   ('waiting for approval', 'Waiting For Approval'),
-                   ('approved', 'Approved'), ('disbursed', 'Disbursed'),
-                   ('rejected', 'Rejected'), ('closed', 'Closed')],
-        required=True, readonly=True, copy=False,
-        tracking=True, default='draft', help="Loan request states")
 
+   
     @api.model
     def create(self, vals):
         """create  auto sequence for the loan request records"""
@@ -101,7 +122,7 @@ class LoanRequest(models.Model):
     def _onchange_loan_type_id(self):
         """Changing field values based on the chosen loan type"""
         type_id = self.loan_type_id
-        self.loan_amount = type_id.loan_amount
+        self.amount_borrowed = type_id.loan_amount
         self.disbursal_amount = type_id.disbursal_amount
         self.tenure = type_id.meses_seleccion
         self.interest_rate = type_id.interest_rate
@@ -230,8 +251,8 @@ class LoanRequest(models.Model):
             date_start = (datetime.strptime(str(loan.date),
                                             '%Y-%m-%d') +
                           relativedelta(months=1))
-            amount = loan.loan_amount / loan.tenure
-            interest = loan.loan_amount * loan.interest_rate
+            amount = loan.amount_borrowed / loan.tenure
+            interest = loan.amount_borrowed * loan.interest_rate
             interest_amount = interest / loan.tenure
             total_amount = amount + interest_amount
             partner = self.partner_id
