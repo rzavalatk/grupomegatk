@@ -88,14 +88,14 @@
                                 <field name="partner_id"/>
                                 <field name="loan_type"/>
                                 <field name="loan_type_id"
-                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                       attrs="{'readonly': [('state', '!=', 'borrador')]}"/>
                                 <field name="amount_borrowed"/>
                                 <field name="remaining_capital" />
                                 <field name="pay_capital" />
                             </group>
                             <group name="fechas" string="Tiempo de prestamo">
                                 <field name="meses_seleccion"
-                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                       attrs="{'readonly': [('state', '!=', 'borrador')]}"/>
                                 <field name="disbursal_amount"/>
                                 <field name="date_init"/>
                                 <field name="date_ends" />
@@ -119,7 +119,7 @@
                         
                         <notebook>
                             <page string="Repayment schedules"
-                                  attrs="{'invisible': [('state', '=', 'draft')]}">
+                                  attrs="{'invisible': [('state', '=', 'borrador')]}">
                                 <field name="repayment_lines_ids" readonly="1">
                                     <tree string="tree" create="false">
                                         <field name="name"/>
@@ -156,7 +156,7 @@
                                 <field name="reject_reason" readonly="1"/>
                             </page>
                             <page string="Accounting"
-                                  attrs="{'invisible': [('state', '=', 'draft')]}">
+                                  attrs="{'invisible': [('state', '=', 'borrador')]}">
                                 <group>
                                     <group>
                                         <field name="recibir_pagos"/>
