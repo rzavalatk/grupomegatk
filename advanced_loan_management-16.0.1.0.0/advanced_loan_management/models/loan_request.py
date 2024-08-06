@@ -12,11 +12,8 @@ class LoanRequest(models.Model):
     _description = 'Loan Request'
 
     #DATOS GENERALES
-    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False,
-                       copy=False, help="Sequence number for loan requests",
-                       default=lambda self: 'Nuevo')
-    partner_id = fields.Many2one('res.partner', string="Cliente",
-                                 required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
+    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False, copy=False, help="Sequence number for loan requests", default=lambda self: 'Nuevo')
+    partner_id = fields.Many2one('res.partner', string="Cliente", required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     amount_borrowed = fields.Float('Capital restante', readonly=True,  copy=False, )
     pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
@@ -86,7 +83,7 @@ class LoanRequest(models.Model):
         ('borrador', 'Borrador'),
         ('confirmado', 'Confirmado'),
         ('aprobado', 'Aprobado'),
-        ('pro_pago', 'Proceso de pago')
+        ('pro_pago', 'Proceso de pago'),
         ('rechazado', 'Rechazado'),
         ('cancelado', 'Cancelado'),
         ('pagado', 'Pagado')
