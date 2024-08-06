@@ -159,14 +159,11 @@
                                   attrs="{'invisible': [('state', '=', 'draft')]}">
                                 <group>
                                     <group>
-                                        <field name="journal_id"
-                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
+                                        <field name="recibir_pagos"/>
                                     </group>
                                     <group>
-                                        <field name="debit_account_id"
-                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
-                                        <field name="credit_account_id"
-                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
+                                        <field name="debit_account_id"/>
+                                        <field name="credit_account_id"/>
                                     </group>
                                 </group>
                             </page>
