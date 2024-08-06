@@ -127,6 +127,15 @@ class LoanRequest(models.Model):
         self.documents_ids = type_id.documents_ids
 
     
+    @api.depends('date_init', 'meses_seleccion')
+    def _compute_date_ends(self):
+        for record in self:
+            if record.date_init and record.meses_seleccion:
+                meses = int(record.meses_seleccion)
+                record.date_ends = record.date_init + relativedelta(months=meses)
+            else:
+                record.date_ends = False
+        
     def go_to_draft(self):
         for prestamo in self:
             prestamo.state = 'borrador'
