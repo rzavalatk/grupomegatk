@@ -14,6 +14,7 @@ class LoanRequest(models.Model):
     _description = 'Loan Request'
 
     #DATOS GENERALES
+    name = fields.Char(string='Número de Préstamo', readonly=True, required=True, copy=False, copy=False, )
     
     pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
     note = fields.Text('Notas', readonly=True, states={'borrador': [('readonly', False)]}, copy=False) #Agregar a un campo en una page del notebook
