@@ -16,10 +16,11 @@
                 <tree string="Loan Request">
                     <field name="name"/>
                     <field name="partner_id"/>
-                    <field name="loan_amount"/>
+                    <field name="amount_borrowed"/>
                     <field name="interest_rate"/>
-                    <field name="date"/>
-                    <field name="tenure"/>
+                    <field name="date_init"/>
+                    <field name="date_ends" />
+                    <field name="meses_seleccion"/>
                     <field name="company_id"/>
                     <field name="state"/>
                 </tree>
@@ -50,60 +51,72 @@
                         </div>
 
                         <field name="state" widget="statusbar"
-                               statusbar_visible="draft,confirmed,approved"/>
-                        <button name="action_loan_request" class="oe_highlight"
-                                states="draft" string="Confirm"
-                                type="object"/>
+                               statusbar_visible="borrador,confirmado,aprobado,pro_pago,rechazado,cancelado,pagado"/>
+                        <button string="Confirmar" type="object" name="action_loan_request" states="borrador"/>
+                    
                         <button name="action_compute_repayment" class="oe_highlight"
                                 states="confirmed"
-                                string="Compute Repayments"
+                                string="Generar cuotas"
                                 type="object"/>
-                        <button name="action_request_for_loan" class="oe_highlight"
-                                states="confirmed" string="Request"
-                                type="object"/>
-                        <button name="action_loan_approved" class="oe_highlight"
-                                states="waiting for approval" string="Approve"
-                                type="object"
-                                groups="advanced_loan_management.loan_management_group_manager"/>
-                        <button name="action_loan_rejected" class="oe_highlight"
-                                states="waiting for approval" string="Reject"
-                                type="object"
-                                groups="advanced_loan_management.loan_management_group_manager"/>
-                        <button name="action_disburse_loan" class="oe_highlight"
-                                string="Disburse"
-                                type="object" states="approved"/>
-                        <button name="action_close_loan" class="oe_highlight"
-                                string="Close"
-                                type="object"
-                                states="disbursed"/>
+                        <button string="Aprobar" type="object" name="action_approve" states="confirmado"/>
+                        <button string="Rechazar" type="object" name="action_reject" states="confirmado"/>
+                        <button string="Volver a borrador" type="object" name="go_to_draft" states="rechazado, cancelado"/>
+                        <button string="Cancelar" type="object" name="action_cancel" states="aprobado"/>
+                        <button string="Finalizar" type="object" name="ending" states="aprobado"/>
+                    
                     </header>
                     <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count_cxc', '=', 0)]}">
+								<field name="invoice_count_cxc" widget="statinfo" string="Facturas"/>
+							</button>
+							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('payment_count', '=', 0)]}">
+								<field name="payment_count" widget="statinfo" string="Pagos cliente"/>
+							</button>
+							
+						</div>
+
                         <div class="oe_title">
                             <h1>
                                 <field name="name" style="width: 50%%;"
-                                       placeholder="Loan Type"/>
+                                       placeholder="Prestamo"/>
                             </h1>
                         </div>
-                        <group>
-                            <group>
+                        <group name='prestamo'>
+                            <group name="cliente" string='Datos del prestamo'>
                                 <field name="partner_id"/>
+                                <field name="loan_type"/>
                                 <field name="loan_type_id"
                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="amount_borrowed"/>
+                                <field name="remaining_capital" />
+                                <field name="pay_capital" />
                             </group>
-                            <group>
-                                <field name="tenure"
+                            <group name="fechas" string="Tiempo de prestamo">
+                                <field name="meses_seleccion"
                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                 <field name="disbursal_amount"/>
-                                <field name="currency_id"/>
-                                <field name="date"/>
+                                <field name="date_init"/>
+                                <field name="date_ends" />
                                 <field name="request" invisible="1"/>
                             </group>
+                        </group>
+                        <group name="contabilidad" string="Datos contables">
                             <group>
-                                <field name="loan_amount"/>
+                                <field name="amount_borrowed"/>
                                 <field name="interest_rate"/>
+                                <field name="currency_id"/>
                                 <field name="company_id"/>
                             </group>
+                            <group >
+                                <field name="payment_term_id" />
+                                <field name="gasto_prestamo" />
+                                <field name="cuota" />
+                            </group>
                         </group>
+                            
+                        
                         <notebook>
                             <page string="Repayment schedules"
                                   attrs="{'invisible': [('state', '=', 'draft')]}">

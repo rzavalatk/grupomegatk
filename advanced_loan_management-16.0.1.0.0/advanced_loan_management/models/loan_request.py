@@ -116,19 +116,31 @@ class LoanRequest(models.Model):
             res = super().create(vals)
             return res
 
-    
+    @api.onchange('loan_type_id')
+    def _onchange_loan_type_id(self):
+        """Changing field values based on the chosen loan type"""
+        type_id = self.loan_type_id
+        self.amount_borrowed = type_id.loan_amount
+        self.disbursal_amount = type_id.disbursal_amount
+        self.tenure = type_id.meses_seleccion
+        self.interest_rate = type_id.interest_rate
+        self.documents_ids = type_id.documents_ids
 
+    
+    def go_to_draft(self):
+        for prestamo in self:
+            prestamo.state = 'borrador'
+    
     def action_loan_request(self):
-        """Changes the state to confirmed and send confirmation mail"""
-        self.write({'state': "confirmed"})
+        """Cambia el estado a confirmado y manda el correo de notificacion al cliente"""
+        self.write({'state': "confirmado"})
         partner = self.partner_id
         loan_no = self.name
-        subject = 'Loan Confirmation'
+        subject = 'Prestamo confirmado'
 
-        message = (f"Dear {partner.name},<br/> This is a confirmation mail "
-                   f"for your loan{loan_no}. We have submitted your loan "
-                   f"for approval.")
-
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f"la confirmación de su prestamo con numero {loan_no}." 
+                   f"Hemos enviado su préstamo para aprobación, se le estara notificando")
         outgoing_mail = self.company_id.email
         mail_values = {
             'subject': subject,
@@ -140,25 +152,27 @@ class LoanRequest(models.Model):
         mail = self.env['mail.mail'].sudo().create(mail_values)
         mail.send()
 
-    def action_request_for_loan(self):
-        """Change the state to waiting for approval"""
-        if self.request:
-            self.write({'state': "waiting for approval"})
-        else:
-            message_id = self.env['message.popup'].create(
-                {'message': _("Compute the repayments before requesting")})
-            return {
-                'name': _('Repayment'),
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'message.popup',
-                'res_id': message_id.id,
-                'target': 'new'
-            }
+    def action_approve(self):
+        self.crear_factura()
+        self.write({'state': "aprobado"})
+        partner = self.partner_id
+        loan_no = self.name
+        subject = 'Prestamo Aprobado'
 
-    def action_loan_approved(self):
-        """Change to Approved state"""
-        self.write({'state': "approved"})
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f"la aprobación de su prestamo con numero {loan_no}.<br/>" 
+                   f"Se le genero una cuota mensual con un saldo de {self.cuota}.<br/>"
+                   f"Para mas información contactar con servicio al cliente.")
+        outgoing_mail = self.company_id.email
+        mail_values = {
+            'subject': subject,
+            'email_from': outgoing_mail,
+            'author_id': self.env.user.partner_id.id,
+            'email_to': partner.email,
+            'body_html': message,
+        }
+        mail = self.env['mail.mail'].sudo().create(mail_values)
+        mail.send()
 
     def action_disburse_loan(self):
         """Disbursing the loan to customer and creating journal
@@ -221,15 +235,58 @@ class LoanRequest(models.Model):
             }
         self.write({'state': "closed"})
 
-    def action_loan_rejected(self):
-        """You can add reject reasons here"""
-        return {'type': 'ir.actions.act_window',
-                'name': 'Loan Rejection',
-                'res_model': 'reject.reason',
-                'target': 'new',
+    def action_reject(self):
+        self.write({'state': "rechazado"})
+        partner = self.partner_id
+        loan_no = self.name
+        subject = 'Prestamo Rechazado'
+
+        message = (f"Estimado/a {partner.name},<br/> este es un correo notificando" 
+                   f" que su prestamo con numero {loan_no} fue rechazado.<br/>"
+                   f"Para mas información contactar con servicio al cliente.")
+        outgoing_mail = self.company_id.email
+        mail_values = {
+            'subject': subject,
+            'email_from': outgoing_mail,
+            'author_id': self.env.user.partner_id.id,
+            'email_to': partner.email,
+            'body_html': message,
+        }
+        mail = self.env['mail.mail'].sudo().create(mail_values)
+        mail.send()
+        
+    def action_cancel(self):
+        cuotas = self.env["cuota"].search(
+            [('prestamo_id', '=', self.id)])
+        if cuotas:
+            for cuota in cuotas:
+                if cuota.state != 'draft':
+                    raise UserError(_('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
+                cuota.sudo().unlink()         
+
+        self.write({'state': 'cancelado',
+                    'cuota_prestamo': 0,
+                    'cuota_inicial': 0
+                    })
+        
+    def ending(self):
+        """Cerrar prestamo"""
+        demo = []
+        for check in self.quota_ids:
+            if check.state == 'unpaid':
+                demo.append(check)
+        if len(demo) >= 1:
+            message_id = self.env['message.popup'].create(
+                {'message': _("Pagos pendientes")})
+            return {
+                'name': _('Repayment'),
+                'type': 'ir.actions.act_window',
                 'view_mode': 'form',
-                'context': {'default_loan': self.name}
-                }
+                'res_model': 'message.popup',
+                'res_id': message_id.id,
+                'target': 'new'
+            }
+        self.write({'state': "pagado"})
 
     def action_compute_repayment(self):
         """This automatically create the installment the employee need to pay to
