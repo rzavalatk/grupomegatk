@@ -14,7 +14,7 @@ class LoanRequest(models.Model):
     _description = 'Loan Request'
 
     #DATOS GENERALES
-    
+    name = fields.Char(string='Número de Préstamo', required=True, copy=False, readonly=True, default='Nuevo')
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, readonly=True, states={'borrador': [('readonly', False)]}, copy=False)
     remaining_capital = fields.Monetary('Capital restante', readonly=True,  copy=False, )
     pay_capital = fields.Monetary('Capital pagado',  readonly=True, states={'borrador': [('readonly', False)]}, copy=False,)
