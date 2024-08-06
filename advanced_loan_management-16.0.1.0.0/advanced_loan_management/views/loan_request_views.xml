@@ -118,7 +118,7 @@
                             
                         
                         <notebook>
-                            <page string="Repayment schedules"
+                            <page string="Tabla de cuotas"
                                   attrs="{'invisible': [('state', '=', 'borrador')]}">
                                 <field name="repayment_lines_ids" readonly="1">
                                     <tree string="tree" create="false">
@@ -144,7 +144,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Documents">
+                            <page string="Documentos">
                                 <group>
                                     <field name="documents_ids"
                                            widget="many2many_tags"/>
@@ -155,7 +155,7 @@
                             <page string="Loan rejection" states="rejected">
                                 <field name="reject_reason" readonly="1"/>
                             </page>
-                            <page string="Accounting">
+                            <page string="Contabilidad">
                                 <group>
                                     <group>
                                         <field name="recibir_pagos"/>
