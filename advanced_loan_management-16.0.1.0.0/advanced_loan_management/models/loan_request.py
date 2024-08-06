@@ -135,6 +135,12 @@ class LoanRequest(models.Model):
                 record.date_ends = record.date_init + relativedelta(months=meses)
             else:
                 record.date_ends = False
+    
+    def _compute_invoiced(self):
+        for prestamo in self:
+            prestamo.invoice_count_cxc = len(prestamo.invoice_cxc_ids)
+            prestamo.payment_count = len(prestamo.payment_ids)
+            prestamo.cuotas_count = len(prestamo.quota_ids)
         
     def go_to_draft(self):
         for prestamo in self:
