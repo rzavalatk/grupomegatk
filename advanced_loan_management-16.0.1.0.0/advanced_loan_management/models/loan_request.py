@@ -116,15 +116,7 @@ class LoanRequest(models.Model):
             res = super().create(vals)
             return res
 
-    @api.onchange('loan_type_id')
-    def _onchange_loan_type_id(self):
-        """Changing field values based on the chosen loan type"""
-        type_id = self.loan_type_id
-        self.amount_borrowed = type_id.loan_amount
-        self.disbursal_amount = type_id.disbursal_amount
-        self.tenure = type_id.meses_seleccion
-        self.interest_rate = type_id.interest_rate
-        self.documents_ids = type_id.documents_ids
+    
 
     def action_loan_request(self):
         """Changes the state to confirmed and send confirmation mail"""
