@@ -103,7 +103,7 @@ class LoanRequest(models.Model):
         type_id = self.loan_type_id
         self.loan_amount = type_id.loan_amount
         self.disbursal_amount = type_id.disbursal_amount
-        self.tenure = type_id.tenure
+        self.tenure = type_id.meses_seleccion
         self.interest_rate = type_id.interest_rate
         self.documents_ids = type_id.documents_ids
 
