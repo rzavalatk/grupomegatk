@@ -183,9 +183,8 @@ class LoanRequest(models.Model):
         mail = self.env['mail.mail'].sudo().create(mail_values)
         mail.send()
 
-    def action_disburse_loan(self):
-        """Disbursing the loan to customer and creating journal
-         entry for the disbursement"""
+    """def action_disburse_loan(self):
+       
         self.write({'state': "disbursed"})
 
         for loan in self:
@@ -223,7 +222,7 @@ class LoanRequest(models.Model):
             }
             move = self.env['account.move'].create(vals)
             move.action_post()
-        return True
+        return True"""
 
     def action_close_loan(self):
         """Closing the loan"""
