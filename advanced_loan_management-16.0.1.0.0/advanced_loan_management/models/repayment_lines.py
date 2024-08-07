@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import models, fields, api
+from odoo.addons import decimal_precision as dp
 
 
 class RepaymentLine(models.Model):
@@ -20,7 +21,7 @@ class RepaymentLine(models.Model):
                                  default=lambda self: self.env.company)
     
     #Datos de los pagos
-    date_due = fields.Date(string="Fecha de pago", required=True,default=fields.Date.today(),readonly=True,)
+    date_due = fields.Date(string="Fecha de pago", required=True, default=fields.Date.today(),readonly=True,)
     payment_date = fields.Date(string='Fecha pagado',copy=False,)
     amount = fields.Float(string="Cuota", required=True, digits=(16, 2))
     amount_capital_quota = fields.Float(string='Capital de cuota',copy=False)
