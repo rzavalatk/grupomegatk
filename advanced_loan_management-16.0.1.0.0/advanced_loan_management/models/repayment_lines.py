@@ -4,56 +4,64 @@ from odoo import fields, models
 
 
 class RepaymentLine(models.Model):
-    """Loan repayments """
+    """ Cuotas"""
     _name = "repayment.line"
     _description = "Repayment Line"
 
-    name = fields.Char(string="Loan ", default="/", readonly=True,
-                       help="Repayment no: of loan")
-    partner_id = fields.Many2one('res.partner', string="Partner",
-                                 required=True,
-                                 help="Partner")
-    company_id = fields.Many2one('res.company', string='Company',
-                                 readonly=True,
-                                 help="Company",
+    def __type_prestamo(self):
+        if self.loan_id:
+            return self.loan_id.loan_type_id
+        
+    #Datos de la cuota
+    name = fields.Char(string="Cuota ", default="/", readonly=True,)
+    description = fields.Text(copy=False)
+    partner_id = fields.Many2one('res.partner', string="Partner",required=True,)
+    company_id = fields.Many2one('res.company', string='Company',readonly=True,
                                  default=lambda self: self.env.company)
-    date = fields.Date(string="Payment Date", required=True,
-                       default=fields.Date.today(),
-                       readonly=True,
-                       help="Date of the payment")
-    amount = fields.Float(string="Amount", required=True, help="Amount",
-                          digits=(16, 2))
-    interest_amount = fields.Float(string="Interest_Amount", required=True,
-                                   help="Interest Amount", digits=(16, 2))
-    total_amount = fields.Float(string="Total_Amount", required=True,
-                                help="Total Amount", digits=(16, 2))
+    
+    #Datos de los pagos
+    date_due = fields.Date(string="Fecha de pago", required=True,default=fields.Date.today(),readonly=True,)
+    payment_date = fields.Date(string='Fecha pagado',copy=False,)
+    amount = fields.Float(string="Cuota", required=True, digits=(16, 2))
+    amount_capital_quota = fields.Float(string='Capital de cuota',copy=False)
+    amount_capital = fields.Float(string='Capital',copy=False)
+    interest_rate = fields.Float(string='Interes',copy=False, digits=dp.get_precision('Product Unit of Measure'))
+    interest_generated = fields.Float(string='Interes generado',copy=False, default=0, digits=(16, 2))
+    interest_on_arrears = fields.Float(string='Interes moratorio',copy=False, default=0,)
+    balance = fields.Float(string='Saldo',readonly=True,copy=False)
+    bills = fields.Float(string='Gastos',copy=False)
+    
+    amount_pay = fields.Float(string='Se pago ', track_visibility='onchange', copy=False,readonly=True, digits=(16, 2))
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos", store=True, default=lambda self: self.
+                                      env['account.journal'].search([('code', 'like', 'CSH1')]),  domain=[('type','=','bank')],)
+    invoice_id = fields.Many2one("account.move", "Factura", track_visibility='onchange',copy=False,)
+    is_pagado = fields.Boolean(string='Pagado', default=False)
+    invoice = fields.Boolean(string="invoice", default=False,)
+    interest_account_id = fields.Many2one('account.account',
+                                          string="Cuenta de Interes",
+                                          store=True,)
+    
+    #Datos del prestamo
     loan_id = fields.Many2one('loan.request', string="Loan Ref.",
                               help="Loan",
                               readonly=True)
+    type_prestamo = fields.Char(string='Tipo', default=__type_prestamo)
+       
+    
     state = fields.Selection(string="State",
-                             selection=[('unpaid', 'Unpaid'),
-                                        ('invoiced', 'Invoiced'),
-                                        ('paid', 'Paid')],
+                             selection=[('unpaid', 'Sin pagar'),
+                                        ('invoiced', 'Facturado sin pagar'),
+                                        ('paid', 'Pagado')],
                              required=True, readonly=True, copy=False,
-                             tracking=True, default='unpaid',
-                             help="Includes paid and unpaid states for each "
-                                  "repayments", )
-    journal_loan_id = fields.Many2one('account.journal',
-                                      string="Journal",
-                                      store=True, default=lambda self: self.
-                                      env['account.journal'].
-                                      search([('code', 'like', 'CSH1')]),
-                                      help="Journal Record")
-    interest_account_id = fields.Many2one('account.account',
-                                          string="Interest",
-                                          store=True,
-                                          help="Account For Interest")
+                             tracking=True, default='unpaid',)
+
+    
+    
     repayment_account_id = fields.Many2one('account.account',
                                            string="Repayment",
                                            store=True,
                                            help="Account For Repayment")
-    invoice = fields.Boolean(string="invoice", default=False,
-                             help="For monitoring the record")
+    invoice = fields.Boolean(string="Factura Intereses", default=False,)
 
     def action_pay_emi(self):
         """Creates invoice for each EMI"""

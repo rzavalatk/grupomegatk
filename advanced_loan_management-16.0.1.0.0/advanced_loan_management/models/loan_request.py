@@ -24,7 +24,7 @@ class LoanRequest(models.Model):
     #Datos del prestamo 
     amount_borrowed = fields.Monetary(string='Monto del Préstamo', store=True, readonly=True, states={'borrador': [('readonly', False)]},)
     cuota = fields.Monetary('Cuota', readonly=True,  copy=False,)
-    loan_type_id = fields.Many2one('loan.type', string='Tipo de prestamo', required=True)
+    loan_type_id = fields.Many2one('loan.type', string='Prestamo', required=True)
     documents_ids = fields.Many2many('loan.documents', string="Documentos",)
     img_attachment_ids = fields.Many2many('ir.attachment', relation="m2m_ir_identity_card_rel",column1="documents_ids",string="Imagenes",)
     reject_reason = fields.Text(string="Razon de rechazo")
