@@ -55,7 +55,7 @@
                         <button string="Confirmar" type="object" name="action_loan_request" states="borrador"/>
                     
                         <button name="action_compute_repayment" class="oe_highlight"
-                                states="confirmed"
+                                states="confirmado"
                                 string="Generar cuotas"
                                 type="object"/>
                         <button string="Aprobar" type="object" name="action_approve" states="confirmado"/>
@@ -123,12 +123,12 @@
                                 <field name="repayment_lines_ids" readonly="1">
                                     <tree string="tree" create="false">
                                         <field name="name"/>
-                                        <field name="date"/>
+                                        <field name="date_due"/>
+                                        <field name="amount_capital_quota"/>
+                                        <field name="interest_generated"/>
                                         <field name="amount"/>
-                                        <field name="interest_amount"/>
-                                        <field name="total_amount"/>
                                         <field name="state"
-                                               attrs="{'column_invisible': [('parent.state', '!=', 'disbursed')]}"
+                                               attrs="{'column_invisible': [('parent.state', '!=', 'pagado')]}"
                                                widget="badge"
                                                optional="show"
                                                decoration-danger="state == 'unpaid'"
@@ -136,10 +136,10 @@
                                                decoration-success="state == 'paid'"/>
                                         <field name="invoice" invisible="1"/>
                                         <button attrs="{'invisible': ['|', '|', ('invoice', '=', True),
-                                           ('state', '!=', 'unpaid'), ('parent.state', '!=', 'disbursed')]}"
+                                           ('state', '!=', 'unpaid'), ('parent.state', '!=', 'pagado')]}"
                                                 name="action_pay_emi"
                                                 class="oe_highlight"
-                                                string="Pay"
+                                                string="Pagar"
                                                 type="object"/>
                                     </tree>
                                 </field>

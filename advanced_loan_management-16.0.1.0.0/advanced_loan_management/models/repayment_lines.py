@@ -25,7 +25,7 @@ class RepaymentLine(models.Model):
     payment_date = fields.Date(string='Fecha pagado',copy=False,)
     amount = fields.Float(string="Cuota", required=True, digits=(16, 2))
     amount_capital_quota = fields.Float(string='Capital de cuota',copy=False)
-    amount_capital = fields.Float(string='Capital',copy=False)
+    amount_capital_loan = fields.Float(string='Capital',copy=False)
     interest_rate = fields.Float(string='Interes',copy=False, digits=dp.get_precision('Product Unit of Measure'))
     interest_generated = fields.Float(string='Interes generado',copy=False, default=0, digits=(16, 2))
     interest_on_arrears = fields.Float(string='Interes moratorio',copy=False, default=0,)
@@ -58,29 +58,22 @@ class RepaymentLine(models.Model):
 
     
     
-    repayment_account_id = fields.Many2one('account.account',
-                                           string="Repayment",
-                                           store=True,
-                                           help="Account For Repayment")
+    
     invoice = fields.Boolean(string="Factura Intereses", default=False,)
 
     def action_pay_emi(self):
-        """Creates invoice for each EMI"""
-        time_now = self.date
-        interest_product_id = self.env['ir.config_parameter'].sudo().get_param(
-            'advanced_loan_management.interest_product_id')
-        repayment_product_id = self.env['ir.config_parameter'].sudo().get_param(
-            'advanced_loan_management.repayment_product_id')
+        """Crear factura para los intereses"""
+        time_now = self.date_due
 
         for rec in self:
             loan_lines_ids = self.env['repayment.line'].search(
-                [('loan_id', '=', rec.loan_id.id)], order='date asc')
+                [('loan_id', '=', rec.loan_id.id)], order='date_due asc')
             for line in loan_lines_ids:
-                if line.date < rec.date and line.state in \
+                if line.date_due < rec.date_due and line.state in \
                         ('unpaid', 'invoiced'):
                     message_id = self.env['message.popup'].create(
                         {'message': (
-                            "You have pending amounts")})
+                            "Tiene cuotas pendientes que pagar")})
                     return {
                         'name': 'Repayment',
                         'type': 'ir.actions.act_window',
@@ -90,29 +83,67 @@ class RepaymentLine(models.Model):
                         'target': 'new'
                     }
 
-        invoice = self.env['account.move'].create({
+        invoice = self.env['account.move']
+        
+        lineas = []
+        if self.interest_generated > 0:
+            val_lineas = { 
+            'name': 'Cobro de interes mensual de ' + str(self.loan_id.interest_rate) + '%',
+            'account_id': self.loan_id.account_id.id,
+            'price_unit': self.interest_generated,
+            'quantity': 1,
+            'product_id':False,
+            'x_user_id': self.env.user.id
+            }
+            lineas.append((0, 0, val_lineas))
+
+        if self.interest_on_arrears > 0:
+            val_lineas1 = {
+                'name': 'Interes moratorios por incumplimiento de pago',
+                'account_id': self.loan_id.account_int_moratorio.id,
+                'price_unit': self.interest_on_arrears,
+                'quantity': 1,
+                'product_id':False,
+                'x_user_id': self.env.user.id
+            }
+            lineas.append((0, 0, val_lineas1))
+            
+        val_encabezado = {
             'move_type': 'out_invoice',
             'invoice_date': time_now,
             'partner_id': self.partner_id.id,
             'currency_id': self.company_id.currency_id.id,
             'payment_reference': self.name,
-            'invoice_line_ids': [
-                (0, 0, {
-                    'price_unit': self.amount,
-                    'product_id': repayment_product_id,
-                    'name': 'Repayment',
-                    'account_id': self.repayment_account_id.id,
-                    'quantity': 1,
-                }),
-                (0, 0, {
-                    'price_unit': self.interest_amount,
-                    'product_id': interest_product_id,
-                    'name': 'Interest amount',
-                    'account_id': self.interest_account_id.id,
-                    'quantity': 1,
-                }),
-            ],
+            'invoice_line_ids': lineas
+        }
+        
+        account_invoice_id = invoice.create(val_encabezado)
+        
+        # Aplicar el pago a la factura existente
+
+        capital_invoice = self.env['account.move'].browse(self.loan_id.invoice_cxc_ids[0].id)
+        if not capital_invoice:
+            raise UserError("No se encontró la factura del capital.")
+        
+        # Crear el pago
+        payment = self.env['account.payment'].create({
+            'payment_type': 'outbound',
+            'partner_type': 'customer',
+            'partner_id': self.partner_id.id,
+            'amount': self.amount_capital_quota,  # Monto del capital
+            'currency_id': self.company_id.currency_id.id,
+            'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
+            'journal_id': self.journal_id.id,  # Diario desde donde se hará el pago
+            'payment_date': time_now,
         })
+
+        # Confirmar el pago
+        payment.action_post()
+        
+        # Reconciliar el pago con la factura
+        (capital_invoice + payment).line_ids.filtered(lambda line: line.account_id == self.recibir_pagos).reconcile()
+
+        
         if invoice:
             self.invoice = True
             self.write({'state': 'invoiced'})
@@ -120,7 +151,7 @@ class RepaymentLine(models.Model):
         return {
             'name': 'Invoice',
             'res_model': 'account.move',
-            'res_id': invoice.id,
+            'res_id': account_invoice_id.id,
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
         }
