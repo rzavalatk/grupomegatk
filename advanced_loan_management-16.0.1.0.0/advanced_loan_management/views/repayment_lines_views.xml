@@ -81,7 +81,7 @@
                             <page string="Accounting">
                                 <group>
                                     <group>
-                                        <field name="journal_loan_id"/>
+                                        <field name="recibir_pagos"/>
                                     </group>
                                     <group>
                                         <field name="interest_account_id"/>
