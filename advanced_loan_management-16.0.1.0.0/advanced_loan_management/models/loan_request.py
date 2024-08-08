@@ -359,8 +359,8 @@ class LoanRequest(models.Model):
                             'amount_capital_loan': saldo_pendiente,
                             'interest_rate': prestamo.interest_rate,
                             'interest_generated': interes,
-                            'recibir_pagos': prestamo.recibir_pagos,
-                            'interest_account_id': prestamo.account_id,
+                            'recibir_pagos': prestamo.recibir_pagos.id,
+                            'interest_account_id': prestamo.account_id.id,
                             'date_due': self.date_due_cuota(prestamo.date_init, total_payments, payments_per_year, n),
                         })
                         
