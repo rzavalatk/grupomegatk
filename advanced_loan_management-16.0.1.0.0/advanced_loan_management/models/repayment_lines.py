@@ -34,8 +34,7 @@ class RepaymentLine(models.Model):
     bills = fields.Float(string='Gastos',copy=False)
     
     amount_pay = fields.Float(string='Se pago ', track_visibility='onchange', copy=False,readonly=True, digits=(16, 2))
-    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos", store=True, default=lambda self: self.
-                                      env['account.journal'].search([('code', 'like', 'CSH1')]),  domain=[('type','=','bank')],)
+    recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",)
     invoice_id = fields.Many2one("account.move", "Factura", track_visibility='onchange',copy=False,)
     is_pagado = fields.Boolean(string='Pagado', default=False)
     invoice = fields.Boolean(string="invoice", default=False,)
