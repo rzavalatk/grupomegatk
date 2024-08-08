@@ -382,7 +382,7 @@ class LoanRequest(models.Model):
         lineas = []
         val_lineas = {
             'name': 'Capital prestado',
-            'account_id': self.recibir_pagos.id,
+            #'account_id': self.recibir_pagos.id,
             'price_unit': self.amount_borrowed,
             'quantity': 1,
             'product_id': False,
