@@ -9,7 +9,7 @@ class ResPartner(models.Model):
 
     def _compute_partner_loans(self):
         """Calcula el importe del préstamo y el número total de préstamos de un socio.."""
-        self.loan_count = self.env['prestamo'].search_count(
+        self.loan_count = self.env['loan.request'].search_count(
             [('partner_id', '=', self.id),
              ('state', 'in', ('pro_pago', 'pagado'))])
 
@@ -24,7 +24,7 @@ class ResPartner(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Loans',
             'view_mode': 'tree',
-            'res_model': 'prestamo',
+            'res_model': 'loan.request',
             'domain': [('partner_id', '=', self.id)],
             'context': "{'create': False}"
         }
