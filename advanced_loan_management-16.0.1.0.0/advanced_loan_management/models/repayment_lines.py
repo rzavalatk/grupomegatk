@@ -133,7 +133,7 @@ class RepaymentLine(models.Model):
             'amount': self.amount_capital_quota,  # Monto del capital
             'currency_id': self.company_id.currency_id.id,
             'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
-            'journal_id': self.journal_id.id,  # Diario desde donde se hará el pago
+            'journal_id': self.recibir_pagos.id,  # Diario desde donde se hará el pago
             'payment_date': time_now,
         })
 
