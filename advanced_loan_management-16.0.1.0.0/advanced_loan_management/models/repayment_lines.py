@@ -140,9 +140,11 @@ class RepaymentLine(models.Model):
         # Confirmar el pago
         payment.action_post()
         
-        # Reconciliar el pago con la factura
-        (capital_invoice + payment).line_ids.filtered(lambda line: line.account_id == self.recibir_pagos).reconcile()
-
+        # Reconciliar el pago con la factura existente del capital
+        lines_to_reconcile = (capital_invoice.line_ids | payment.move_id.line_ids).filtered(
+            lambda line: line.account_id == self.repayment_account_id
+        )
+        lines_to_reconcile.reconcile()
         
         if invoice:
             self.invoice = True
