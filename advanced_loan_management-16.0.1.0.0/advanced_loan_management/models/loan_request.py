@@ -389,7 +389,7 @@ class LoanRequest(models.Model):
             'x_user_id': self.env.user.id
         }
         lineas.append((0, 0, val_lineas))
-        if self.gasto_prestamo > 0:
+        """if self.gasto_prestamo > 0:
             val_lineas1 = {
                 'name': 'Cargos administrativos',
                 'account_id': self.account_gasto_id.id,
@@ -398,7 +398,7 @@ class LoanRequest(models.Model):
                 'product_id': False,
                 'x_user_id': self.env.user.id
             }
-            lineas.append((0, 0, val_lineas1))
+            lineas.append((0, 0, val_lineas1))"""
         company_id = self.company_id.id
         journal_id = self.recibir_pagos
         if not journal_id:
