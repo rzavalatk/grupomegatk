@@ -128,7 +128,7 @@
                                         <field name="interest_generated"/>
                                         <field name="amount"/>
                                         <field name="state"
-                                               attrs="{'column_invisible': [('parent.state', '!=', 'pagado')]}"
+                                               
                                                widget="badge"
                                                optional="show"
                                                decoration-danger="state == 'unpaid'"
