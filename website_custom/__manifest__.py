@@ -17,7 +17,7 @@
     "license": "LGPL-3",
     'depends': ['base', 'website', 'banks'],
     'data': [
-        #'data/mail_templates_blog.xml',
+        'data/mail_templates_blog.xml',
         #'views/assets/assets.xml',
         #'views/website/breadcrum_shop.xml',
         #'views/website/chat_facebook.xml',
