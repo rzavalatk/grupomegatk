@@ -195,6 +195,7 @@ class StockReportHistory(models.Model):
 
         datos_differences = [
             (
+                record.barcode,
                 record.product_id.name,
                 record.quantity_from,
                 record.quantity_to,
