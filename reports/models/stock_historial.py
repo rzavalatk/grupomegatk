@@ -213,7 +213,7 @@ class StockReportHistory(models.Model):
         workbook.close()
         output.seek(0)
 
-        # Crear el adjunto
+        # Crear el adjunto 
         attachment = self.env['ir.attachment'].create({
             'name': f'reporte_movimiento_inventario_{self.date_from}_{self.date_to}.xlsx',
             'type': 'binary',
