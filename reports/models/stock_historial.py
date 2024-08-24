@@ -124,7 +124,7 @@ class StockReportHistory(models.Model):
                                         'quantity_from': qty_from,
                                         'quantity_to': qty_to,
                                         'quantity_difference': qty_to - qty_from,
-                                        #'barcode': product.barcode if product.barcode else '',
+                                        'barcode': product.barcode if product.barcode else '',
                                         'lst_price': product.lst_price * qty_to,
                                         'standard_price': product.standard_price * qty_to,
                                         'linea': product.x_ingresotk,
