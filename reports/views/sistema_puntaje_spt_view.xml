@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sistema_puntaje_soporte_view_form" model="ir.ui.view">
+        <field name="name">sistema.puntaje.soporte.view.form</field>
+        <field name="model">sistema.puntaje.soporte</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                        <button name="generate_report" type="object" states='borrador' string="Generar reporte" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" states='hecho' type="object" class="btn-primary"/>
+                        <button string="Confirmar" states="borrador" name="action_confirm" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, hecho, cancelado" />
+                </header>
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" style="width: 50%%;"/>
+                        </h1>
+                    </div>
+                    <group >
+                        <group>
+                            <field name="company_id" />
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final"/>
+                        </group>
+                        <group >
+                            
+                            <field name="users_ids"/> 
+                        </group>
+                    </group>
+                    
+                    
+                    <notebook>
+                        <page string="Tabla de puntos">
+                            <field name="tabla_puntaje">
+                                <tree editable="bottom">
+                                    <field name="tecnico_id"/>
+                                    <field name="marcas_id"/>
+                                    <field name="servicio_id" />
+                                    <field name="taller_id" />
+                                    <field name="visita_id" />
+                                    <field name="llamada_id" />
+                                    <field name="total" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Detalles">
+                            <field name="tabla_detalle">
+                                <tree editable="bottom">
+                                    <field name="tecnico_id"/>
+                                    <field name="rol" />
+                                    <field name="marcas_id"/>
+                                    <field name="servicio_id" />
+                                    <field name="taller_id" />
+                                    <field name="visita_id" />
+                                    <field name="llamada_id" />
+                                    <field name="ticket_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sistema_puntaje_soporte_view_tree" model="ir.ui.view">
+        <field name="name">sistema.puntaje.soporte.view.tree</field>
+        <field name="model">sistema.puntaje.soporte</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="company_id" />
+                <field name="users_ids"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_final"/> 
+            </tree>
+        </field>
+    </record>
+
+    <record id="sistema_puntaje_soporte_action" model="ir.actions.act_window">
+        <field name="name">sistema puntaje SP action</field>
+        <field name="res_model">sistema.puntaje.soporte</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="puntaje_spt_menu"
+        name="Sistema de Puntaje Soporte Tecnico"
+        action="sistema_puntaje_soporte_action"
+        parent="menu_reports_CRM"
+        sequence="10"/>
+
+</odoo>

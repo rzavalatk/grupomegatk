@@ -23,12 +23,81 @@ class CrmLead(models.Model):
     repor_tel = fields.Char(string='Telefono',)
     repor_email = fields.Char(string='Correo electrónico',)
     repor_direction = fields.Char(string='Direccion de la visita')
-    proposito = fields.Char(string='Propósito de la llamada/visita',)
+    proposito = fields.Char(string='Propósito de la visita',)
     observacion_visita = fields.Html(string='Observaciones')
     producto1 = fields.Char(string='Campaña',)
     producto2 = fields.Char(string='Media',)
     producto3 = fields.Char(string='Origen',)
     fecha_movimiento = fields.Datetime(string='Fecha primer movimiento',)
+    
+    #Campos para sistema de puntos de desempeño
+    marca = fields.Selection([
+        ('evolis', 'Evolis'),
+        ('zebra', 'Zebra'),
+        ('pos', 'POS'),
+        ('etiquetas', 'Etiquetas'),
+        ('ploter', 'Ploter'),
+        ('traslados', 'Traslados')
+    ], string='Marca')
+    
+    #Servicios individuales segun lo que se elija en marca
+    servicio_evolis = fields.Selection([
+        ('evl_1', 'Revision para diagnostico impresora Evolis'),
+        ('evl_2', 'Mantenimiento de impresora Evolis'),
+        ('evl_3', 'Capacitacion de impresora Evolis'),
+        ('evl_4', 'Instalacion de BIOMETRICOS DE ASISTENCIA'),
+        ('evl_5', 'Capacitacion de software de crosschex Standard /CLOUD'),
+        ('evl_6', 'instalacion de control de acceso'),
+    ], string='Servicio')
+    
+    servicio_zebra = fields.Selection([
+        ('zeb_1', 'Capacitacion de Zebr ZXP  ZXP 7,8 y 9'),
+        ('zeb_2', 'Mantenimiento de Zebra  ZXP 7,8 y 9'),
+    ], string='Servicio')
+    
+    servicio_pos = fields.Selection([
+        ('pos_1', 'reparacion de impresoras POS'),
+    ], string='Servicio')
+    
+    servicio_etiquetas = fields.Selection([
+        ('etq_1', 'Mantenimiento y reparacion impresoras de etiquetas'),
+    ], string='Servicio')
+    
+    servicio_ploter = fields.Selection([
+        ('plt_1', 'Mantenimiento'),
+        ('plt_2', 'Reparación'),
+        ('plt_3', 'Asistencia telefonica'),
+    ], string='Servicio')
+    
+    servicio_traslado = fields.Selection([
+        ('tls_1', 'traslados para instalacion'),
+    ], string='Servicio')
+    
+    tipo_servicio = fields.Selection([
+        ('taller', 'Taller'),
+        ('visita', 'Visita'),
+        ('llamada', 'Llamada'),
+    ], string='Tipo de servicio')
+    
+    tecnico_asistente_1 = fields.Many2one('res.users', string='1er Asistente')
+    tecnico_asistente_2 = fields.Many2one('res.users', string='2do Asistente')
+    
+    porcentaje1 = fields.Selection([
+        ('0.1', '10'),
+        ('0.2', '20'),
+        ('0.3', '30'),
+        ('0.4', '40'),
+        ('0.5', '50')
+    ], string='Porcentaje')
+    porcentaje2 = fields.Selection([
+        ('0.1', '10'),
+        ('0.2', '20'),
+        ('0.3', '30'),
+        ('0.4', '40'),
+        ('0.5', '50')
+    ], string='Porcentaje')
+    
+    puntuado = fields.Boolean('Puntuado', default=False, readonly=True)
 
 
     @api.onchange('marca_id')

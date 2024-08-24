@@ -113,8 +113,8 @@ class StockReportHistory(models.Model):
             else:
                 qty_to = 0
             
-            if qty_from > 0:
-                if qty_to > 0:
+            if qty_from != 0:
+                if qty_to != 0:
                     if (qty_from - qty_to) == 0:
                         for product in self.product_list:
                             if product_id == product.id:
@@ -172,9 +172,9 @@ class StockReportHistory(models.Model):
         col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
         formatos_lines_reports = [None, number_format]  # Formatos para cada columna
         
-        encabezados_reports_differences = ['Codigo de barras','Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
-        col_widths_reports_differences = [30, 45, 25, 25, 25, 25, 25, 35, 35]  # Ajusta estos valores según sea necesario
-        formatos_reports_differences = [None, None, number_format, number_format, number_format, None, None, None, None]  # Formatos para cada columna
+        encabezados_reports_differences = ['Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta']
+        col_widths_reports_differences = [45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        formatos_reports_differences = [None, number_format, number_format, number_format, currency_format, currency_format]  # Formatos para cada columna
         
         # Preparar los datos
         datos_lines_from_report = [
@@ -195,16 +195,12 @@ class StockReportHistory(models.Model):
 
         datos_differences = [
             (
-                record.barcode,
                 record.product_id.name,
                 record.quantity_from,
                 record.quantity_to,
                 record.quantity_difference,
                 record.standard_price,
                 record.lst_price,
-                record.linea,
-                record.marca,
-                
             )
             for record in self.report_differences
         ]
@@ -233,6 +229,7 @@ class StockReportHistory(models.Model):
             'target': 'self',
         }
 
+    
     def generate_excel(self):
         vals = []
         for line in self.report_differences:
@@ -285,7 +282,8 @@ class StockReportDifference(models.Model):
         string="Movimiento", required=True)
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
-
+    
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")
     marca = fields.Char(string="Marca")
+

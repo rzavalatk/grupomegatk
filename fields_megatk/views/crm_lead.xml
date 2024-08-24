@@ -108,13 +108,13 @@
 									<field name="tipo_soporte"/>
 									<field name="estado_taller" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
 									<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
 								</group>
 								<group name="data2">
 									<field name="reporto" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
 									<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
 									<field name="repor_email" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="repor_direction" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
+									<field name="repor_direction" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
 									<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 									<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 								</group>
@@ -131,6 +131,34 @@
 									<field name="observacion_visita" invisible="1"/>
 								</group>
 							</group>
+						</page>
+					</xpath>
+					<xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+						<page name="soportepuntos" string="Puntos SPT">
+							<group name="servicio">
+								<group name="data_servicio">
+									<field name="marca"/>
+									<field name="servicio_evolis" attrs='{"invisible": [["marca","not in",["evolis"]]]}'/>
+									<field name="servicio_zebra" attrs='{"invisible": [["marca","not in",["zebra"]]]}'/>
+									<field name="servicio_pos" attrs='{"invisible": [["marca","not in",["pos"]]]}'/>
+									<field name="servicio_etiquetas" attrs='{"invisible": [["marca","not in",["etiquetas"]]]}'/>
+									<field name="servicio_ploter" attrs='{"invisible": [["marca","not in",["ploter"]]]}'/>
+									<field name="servicio_traslado" attrs='{"invisible": [["marca","not in",["traslados"]]]}'/>
+									<field name="tipo_servicio" />
+									<field name="puntuado" />
+								</group>
+								<group name="servicio_data2" string="Asistentes">
+									<group>
+										<field name="tecnico_asistente_1"/>
+										<field name="porcentaje1"/>
+									</group>
+									<group >
+										<field name="tecnico_asistente_2"/>
+										<field name="porcentaje2"/>
+									</group>
+									</group>
+							</group>
+							
 						</page>
 					</xpath>
 					<xpath expr="//field[@name='campaign_id']" position="attributes">

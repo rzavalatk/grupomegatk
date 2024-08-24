@@ -14,7 +14,8 @@
         'security/ir.model.access.csv',
         'views/main_menu_view.xml',
         'views/stock_historial_view.xml',
-        'views/customer_purchase_report.xml'
+        'views/customer_purchase_report.xml',
+        'views/sistema_puntaje_spt_view.xml',
     ],
     'assets': {
         'web.assets_backend': [
