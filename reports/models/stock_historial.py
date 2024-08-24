@@ -176,7 +176,7 @@ class StockReportHistory(models.Model):
         col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
         formatos_reports_differences = [None,None, number_format, number_format, number_format, currency_format, currency_format]  # Formatos para cada columna
         
-        # Preparar los datos
+        # Preparar los datos 
         datos_lines_from_report = [
             (
                 record.product_id.name,
