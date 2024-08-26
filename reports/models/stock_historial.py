@@ -46,9 +46,9 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        time.sleep(4)
+        #time.sleep(4)
         self._generate_report_lines(self.date_to, 'report_lines_to')
-        time.sleep(4)
+        #time.sleep(4)
         self._calculate_differences()
         
         self.write({'state': 'aprobado'})
@@ -124,7 +124,7 @@ class StockReportHistory(models.Model):
                                         'quantity_from': qty_from,
                                         'quantity_to': qty_to,
                                         'quantity_difference': qty_to - qty_from,
-                                        'barcode': product.barcode,
+                                        'barcode': product.barcode if product.barcode else '',
                                         'lst_price': product.lst_price * qty_to,
                                         'standard_price': product.standard_price * qty_to,
                                         'linea': product.x_ingresotk,
@@ -172,11 +172,11 @@ class StockReportHistory(models.Model):
         col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
         formatos_lines_reports = [None, number_format]  # Formatos para cada columna
         
-        encabezados_reports_differences = ['Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
-        col_widths_reports_differences = [45, 25, 25, 25, 25, 25, 30, 30]  # Ajusta estos valores según sea necesario
-        formatos_reports_differences = [None, number_format, number_format, number_format, currency_format, currency_format, None, None]  # Formatos para cada columna
+        encabezados_reports_differences = ['Codigo de barras', 'Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
+        col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        formatos_reports_differences = [None,None, number_format, number_format, number_format, currency_format, currency_format, None, None]  # Formatos para cada columna
         
-        # Preparar los datos
+        # Preparar los datos 
         datos_lines_from_report = [
             (
                 record.product_id.name,
@@ -195,6 +195,7 @@ class StockReportHistory(models.Model):
 
         datos_differences = [
             (
+                record.barcode,
                 record.product_id.name,
                 record.quantity_from,
                 record.quantity_to,
