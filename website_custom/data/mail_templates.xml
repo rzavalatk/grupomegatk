@@ -1,10 +1,8 @@
-<!-- Tu módulo: views/blog_post_template.xml -->
+
 <odoo>
     <data>
-        <!-- Asegúrate de usar el ID correcto del template original -->
-        <template id="blog_post_template_new_post_inherit" inherit_id="blog_post_template_new_post">
+        <template id="blog_post_template_new_post">
             <xpath expr="//a[@t-attf-href]" position="attributes">
-                <!-- Usa el dominio del website asociado con la publicación para la URL -->
                 <attribute name="t-attf-href">
                     #{post.website_id.domain}/blog/#{slug(object)}/#{slug(post)}
                 </attribute>
