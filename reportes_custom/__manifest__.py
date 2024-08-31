@@ -21,7 +21,7 @@
     # always loaded
     'data': [
         'reports/baecode_products_stickers.xml',
-        'reports/reports.xml',
+        'reports/stock_package_order_custom_print_view.xml',
         'reports/factura_custom_print_view.xml',
         'reports/factura_custom_printe_view.xml',
         'reports/factura_pos_custom_print_view.xml',
@@ -32,6 +32,7 @@
         'reports/stock_picking_custom_print_view_pos.xml',
         'reports/cotizacion_custom_proforma_view.xml',
         'wizard/wizard_sign.xml',
+        'reports/reports.xml',
         'views/stock.xml',
         'security/groups.xml',
         'security/ir.model.access.csv'

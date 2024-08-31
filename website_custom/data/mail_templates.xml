@@ -1,0 +1,12 @@
+
+<odoo>
+    <data>
+        <template id="blog_post_template_new_post">
+            <xpath expr="//a[@t-attf-href]" position="attributes">
+                <attribute name="t-attf-href">
+                    #{post.website_id.domain}/blog/#{slug(object)}/#{slug(post)}
+                </attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>
