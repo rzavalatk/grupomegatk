@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="journal_settings_view_form" model="ir.ui.view">
+        <field name="name">fiscal_sequences_form_view</field>
+        <field name="model">sar.journal.settings</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Fiscal Sequences">
+                
+                <sheet>
+                    <separator string="Configuración de diario y usuarios"/>
+                    <group colspan="4">
+                        <group cols="2">
+                            <field name="company_id"/>
+                            <field name="journal_id" placeholder="Seleccione un diario..." domain="[('company_id', '=', company_id), ('type', 'in', ['sale','purchase','general'])]"/>
+                        </group>
+                        <group cols="2">
+                            <field name="user_ids" placeholder="Seleccione usuarios..." domain="[('company_id', '=', company_id)]" widget="many2many_tags"/> 
+                        </group>
+                    </group>
+                    <separator string="Fiscal Sequences"/>
+                    <group>
+                        <field name="new_sequence"/>
+                        <field name="sequence_name" attrs="{'invisible': [('new_sequence', '=', False)], 'required': [('new_sequence', '=', True)]}"/>
+                        <field name="sequence_id" placeholder="Seleccione una secuencia..." attrs="{'invisible': [('new_sequence', '=', True)]}" domain="[('is_fiscal_sequence', '=', True),('journal_id','=', journal_id)]" options="{'no_create': True}"/>
+                    </group>
+                    <group colspan="4">
+                        <group cols="2">
+                            <field name="vitt_prefix" placeholder="Por ejemplo 000-001-01-..."/>
+                            <field name="min_value"/>
+                            <field name="max_value"/>
+                            <field name="number_next"/>
+                        </group>
+                        <group cols="2">
+                            <field name="vitt_padding"/>
+                            <field name="doc_type" placeholder="Seleccione un tipo de documento..."/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button name="fct_settings_fiscal" string="Validar" type="object" class="oe_highlight"/>
+                        <button class="oe_highlight" special="cancel" string="Cancelar"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="wizard_seq_action_id">
+        <field name="name">Configuración de Secuencias</field>
+        <field name="res_model">sar.journal.settings</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</data>
+</odoo>
