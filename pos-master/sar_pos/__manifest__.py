@@ -2,7 +2,7 @@
 ##############################################################################
 
 {
-    'name': "Facturación Electrónica Honduras",
+    'name': "Facturación Electrónica Honduras-2024",
     'summary': """
         Regulación del SAR para regimene de facturación para autoimpresores
         """,
