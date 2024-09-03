@@ -65,10 +65,11 @@ class AccountInvoice(models.Model):
             self.amount_total_text =self.to_word(self.amount_total,self.user_id.company_id.currency_id.name)
         return True
 
-    def to_word(self,number, mi_moneda):
+    def to_word(self, number, mi_moneda):
         valor = number
         number = int(number)
-        centavos = int((round(valor-number,2)) * 100)
+        centavos = int((round(valor - number, 2)) * 100)
+        
         UNIDADES = (
             '',
             'UN ',
@@ -102,7 +103,8 @@ class AccountInvoice(models.Model):
             'SETENTA ',
             'OCHENTA ',
             'NOVENTA ',
-            'CIEN ')
+            'CIEN '
+        )
 
         CENTENAS = (
             'CIENTO ',
@@ -115,29 +117,32 @@ class AccountInvoice(models.Model):
             'OCHOCIENTOS ',
             'NOVECIENTOS '
         )
+        
         MONEDAS = (
-            {'country': u'Colombia', 'currency': 'COP', 'singular': u'PESO COLOMBIANO', 'plural': u'PESOS COLOMBIANOS', 'symbol': u'$'},
-            {'country': u'Honduras', 'currency': 'HNL', 'singular': u'Lempira', 'plural': u'Lempiras', 'symbol': u'L'},
-            {'country': u'Estados Unidos', 'currency': 'USD', 'singular': u'DÓLAR', 'plural': u'DÓLARES', 'symbol': u'US$'},
-            {'country': u'Europa', 'currency': 'EUR', 'singular': u'EURO', 'plural': u'EUROS', 'symbol': u'€'},
-            {'country': u'México', 'currency': 'MXN', 'singular': u'PESO MEXICANO', 'plural': u'PESOS MEXICANOS', 'symbol': u'$'},
-            {'country': u'Perú', 'currency': 'PEN', 'singular': u'NUEVO SOL', 'plural': u'NUEVOS SOLES', 'symbol': u'S/.'},
-            {'country': u'Reino Unido', 'currency': 'GBP', 'singular': u'LIBRA', 'plural': u'LIBRAS', 'symbol': u'£'}
-            )
-        if mi_moneda != None:
-        	try:
-        		moneda = list(filter(lambda x: x['currency'] == mi_moneda, MONEDAS))
-        		moneda = moneda[0]
-        		if number < 2:
-        			moneda = moneda['singular']
-        		else:
-        			moneda = moneda['plural']
-        	except:
-        		return "Tipo de moneda inválida"
+            {'country': 'Colombia', 'currency': 'COP', 'singular': 'PESO COLOMBIANO', 'plural': 'PESOS COLOMBIANOS', 'symbol': '$'},
+            {'country': 'Honduras', 'currency': 'HNL', 'singular': 'Lempira', 'plural': 'Lempiras', 'symbol': 'L'},
+            {'country': 'Estados Unidos', 'currency': 'USD', 'singular': 'DÓLAR', 'plural': 'DÓLARES', 'symbol': 'US$'},
+            {'country': 'Europa', 'currency': 'EUR', 'singular': 'EURO', 'plural': 'EUROS', 'symbol': '€'},
+            {'country': 'México', 'currency': 'MXN', 'singular': 'PESO MEXICANO', 'plural': 'PESOS MEXICANOS', 'symbol': '$'},
+            {'country': 'Perú', 'currency': 'PEN', 'singular': 'NUEVO SOL', 'plural': 'NUEVOS SOLES', 'symbol': 'S/.'},
+            {'country': 'Reino Unido', 'currency': 'GBP', 'singular': 'LIBRA', 'plural': 'LIBRAS', 'symbol': '£'}
+        )
+        
+        if mi_moneda is not None:
+            try:
+                moneda = list(filter(lambda x: x['currency'] == mi_moneda, MONEDAS))
+                moneda = moneda[0]
+                if number < 2:
+                    moneda = moneda['singular']
+                else:
+                    moneda = moneda['plural']
+            except:
+                return "Tipo de moneda inválida"
         else:
-        	moneda = ""
-		        
+            moneda = ""
+
         converted = ''
+        
         if not (0 < number < 999999999):
             return 'No es posible convertir el numero a letras'
 
@@ -146,27 +151,30 @@ class AccountInvoice(models.Model):
         miles = number_str[3:6]
         cientos = number_str[6:]
 
-        if(millones):
-            if(millones == '001'):
+        if millones:
+            if millones == '001':
                 converted += 'UN MILLON '
-            elif(int(millones) > 0):
+            elif int(millones) > 0:
                 converted += '%sMILLONES ' % self.convert_group(millones)
 
-        if(miles):
-            if(miles == '001'):
+        if miles:
+            if miles == '001':
                 converted += 'MIL '
-            elif(int(miles) > 0):
+            elif int(miles) > 0:
                 converted += '%sMIL ' % self.convert_group(miles)
 
-        if(cientos):
-            if(cientos == '001'):
+        if cientos:
+            if cientos == '001':
                 converted += 'UN '
-            elif(int(cientos) > 0):
+            elif int(cientos) > 0:
                 converted += '%s ' % self.convert_group(cientos)
-        if(centavos)>0:
-            converted+= "con %2i/100 "%centavos
+        
+        if centavos > 0:
+            converted += "con %2i/100 " % centavos
+        
         converted += moneda
         return converted.title()
+
 
 
     def convert_group(self,n):
