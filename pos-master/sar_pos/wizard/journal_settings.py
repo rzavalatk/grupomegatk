@@ -44,6 +44,7 @@ class SequenceJournal(models.TransientModel):
         if not self.number_next:
             self.number_next = self.min_value
 
+
     @api.model
     def fct_settings_fiscal(self):
         ctx = self._context
