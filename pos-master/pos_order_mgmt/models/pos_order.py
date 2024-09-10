@@ -30,13 +30,13 @@ class PosOrder(models.Model):
         string='Refund Orders Quantity',
     )
 
-    @api.multi
+    @api.model
     @api.depends('refund_order_ids')
     def _compute_refund_order_qty(self):
         for order in self:
             order.refund_order_qty = len(order.refund_order_ids)
 
-    @api.multi
+    @api.model
     def action_view_refund_orders(self):
         self.ensure_one()
 
@@ -50,11 +50,11 @@ class PosOrder(models.Model):
             action['domain'] = [('id', 'in', self.refund_order_ids.ids)]
         return action
 
-    @api.multi
+    @api.model
     def refund(self):
         return super(PosOrder, self.with_context(refund=True)).refund()
 
-    @api.multi
+    @api.model
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
         self.ensure_one()
@@ -101,7 +101,7 @@ class PosOrder(models.Model):
         return self.search_read(
             condition, field_names, limit=config.iface_load_done_order_max_qty)
 
-    @api.multi
+    @api.model
     def _prepare_done_order_for_pos(self):
         self.ensure_one()
         order_lines = []
@@ -128,7 +128,7 @@ class PosOrder(models.Model):
         }
         return res
 
-    @api.multi
+    @api.model
     def _prepare_done_order_line_for_pos(self, order_line):
         self.ensure_one()
         return {
@@ -138,7 +138,7 @@ class PosOrder(models.Model):
             'discount': order_line.discount,
         }
 
-    @api.multi
+    @api.model
     def _prepare_done_order_payment_for_pos(self, payment_line):
         self.ensure_one()
         return {
@@ -146,7 +146,7 @@ class PosOrder(models.Model):
             'amount': payment_line.amount,
         }
 
-    @api.multi
+    @api.model
     def load_done_order_for_pos(self):
         self.ensure_one()
         return self._prepare_done_order_for_pos()
