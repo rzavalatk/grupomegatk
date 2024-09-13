@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 <template id="plantilla_personalizada_nuevo_post_id" name="Custom Blog Post Email Template" inherit_id="website_blog.blog_post_template_new_post">
