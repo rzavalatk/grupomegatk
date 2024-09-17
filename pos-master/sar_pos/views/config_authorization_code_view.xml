@@ -117,7 +117,7 @@
         <field name="res_model">sar.authorization.code</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <menuitem id="tax_configuration" parent="account.menu_finance_configuration" name="Fiscal Regime"  sequence="10" />
+    <menuitem id="tax_configuration" parent="menu_pos_global_settings" name="Fiscal Regime"  sequence="10" />
     <menuitem id="fiscal_sequence" parent="tax_configuration" name="Fiscal Numbers"  sequence="11" action="vitt_fiscal_seq_action_id"/>
 </data>
 </odoo>
