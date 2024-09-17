@@ -17,7 +17,13 @@
     'category': 'Extra Tools',
     'depends': ['base'],
     'data': [
-        "views/ir_sequence_view.xml",
+        'views/account_invoice_view.xml',
+        'views/config_authorization_code_view.xml',
+        'views/config_journal_view.xml',
+        'views/ir_sequence_view.xml',
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'wizard/journal_settings_view.xml',
     ],
     'demo': [
     ],
