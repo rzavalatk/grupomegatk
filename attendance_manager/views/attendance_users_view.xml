@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        attendance users action-->
+    <record id="attendance_users_action" model="ir.actions.act_window">
+        <field name="name">Usuarios para marcaciones</field>
+        <field name="res_model">attendance.users</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!--        attendance users Tree View -->
+    <record id="attendance_users_view_tree" model="ir.ui.view">
+        <field name="name">attendance.users.view.tree</field>
+        <field name="model">attendance.users</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Usuarios" editable="bottom">
+                <field name="id_marcaciones"/>
+                <field name="employee_id"/>
+                <field name="company_id" />
+            </tree>
+        </field>
+    </record>
+</odoo>

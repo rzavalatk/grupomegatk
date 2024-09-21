@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm.lead.servicio_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.servicio.view.form</field>
+        <field name="model">crm.lead.servicio</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="marca_id" />
+                    </group>
+                    <notebook>
+                        <page name="puntaje" string="Puntaje">
+                            <field name="puntaje">
+                                <tree>
+                                    <field name="id_tipo" />
+                                    <field name="puntaje" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm.lead.servicio_view_tree" model="ir.ui.view">
+        <field name="name">crm.lead.servicio.view.tree</field>
+        <field name="model">crm.lead.servicio</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="marca_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_tipo_servicio_view_tree" model="ir.ui.view">
+        <field name="name">crm.tipo.servicio.view.tree</field>
+        <field name="model">crm.tipo.servicio</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Tipos de servicio" editable="bottom">
+                <field name="name"/>
+                <field name="active"/>
+                <field name="spt_active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_lead_puntaje_view_tree" model="ir.ui.view">
+        <field name="name">crm.lead.puntaje.view.tree</field>
+        <field name="model">crm.lead.puntaje</field>
+        <field name="arch" type="xml">
+            <tree string="Puntajes de servicios" editable="bottom">
+                <field name="lead_id" />
+                <field name="id_tipo" />
+                <field name="puntaje" />
+                <field name="active" />
+                <field name="spt_active" />
+            </tree>
+        </field>
+    </record>
+
+</odoo>

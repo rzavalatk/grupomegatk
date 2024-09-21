@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+#from odoo.addons.base.models.res_currency import amount_to_text_es
 import logging
 import math
 
 _logger = logging.getLogger(__name__)
 
+def custom_amount_to_text(self):
+        # Aquí puedes ajustar la lógica para cambiar 'lempira' por 'lempiras' y 'y' por 'con'
+        words = self.num_word
+        words = words.replace(' Lempira y ', ' Lempiras con ')
+        words = words.replace(' Lempira', ' Lempiras')  # Si hay otros casos donde no hay 'y'
+        return words
 
 #Campo de comisión pagada en las facturas
 class Account_Move(models.Model):
@@ -16,6 +23,11 @@ class Account_Move(models.Model):
         self.x_contacto = cotizacion.x_contacto
         self.sorteo_id = cotizacion.sorteo_id.id
         self.x_student = cotizacion.x_student
+    
+    
+    
+    def amount_to_text(self):
+        return custom_amount_to_text()
         
     x_comision = fields.Selection([('1','SI'),('2','NO')], string='Comisión Pagada', required=True, default='2')
     invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
@@ -31,10 +43,10 @@ class Account_Move(models.Model):
     
     mostrar_direccion = fields.Boolean(string='¿Mostrar Dirección de contacto?', default=False)
     
-    
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
+    
     
     @api.model_create_multi
     def create(self, vals_list):
@@ -45,8 +57,7 @@ class Account_Move(models.Model):
             term_id = vals.get('invoice_payment_term_id')
             if term_id:
                 term = self.env['account.payment.term'].browse(term_id)
-                _logger.warning(term.line_ids)
-                _logger.warning(term.line_ids.days)
+                
                 if term.line_ids and any(line.days > 0 for line in term.line_ids):
                     partner = self.env['res.partner'].browse(vals.get('partner_id'))
                     if partner:
@@ -58,6 +69,9 @@ class Account_Move(models.Model):
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
         return super().create(vals_list)
+        
+    
+    
         
     #mostrar boton en factura de borrados
     def go_draft(self):
@@ -73,40 +87,8 @@ class Account_Move(models.Model):
                 
     def action_post(self):
         res = super(Account_Move, self).action_post()
-        
         self.generate_tickets()
         return res
-    
-    def enviar_email_qr(self):
-        mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
-        
-        
-        
-        for invoice in self:
-            if invoice.partner_id.email:
-                qr_img_base64 = invoice.qr_image.decode('utf-8') if invoice.qr_image else ""
-                email_values = {}
-
-                if invoice.company_id.id == 8:
-                    email_values = {
-                        'email_from': 'megatk.no_reply@megatk.com',
-                        #'email_to': 'dzuniga@megatk.com',
-                        'email_to': invoice.partner_id.email,
-                        #'email_cc': invoice.invoice_user_id.login
-                    }
-                elif invoice.company_id.id == 9:
-                    email_values = {
-                        'email_from': 'meditek.no_reply@megatk.com',
-                        #'email_to': 'dzuniga@megatk.com',
-                        'email_to': invoice.partner_id.email,
-                        #'email_cc': invoice.invoice_user_id.login
-                    }
-                    
-                email_context = {
-                    'qr_image_base64': qr_img_base64
-                }
-
-                mail_template.sudo().with_context(email_context).send_mail(invoice.id, email_values=email_values, force_send=True)
 
     def generate_tickets(self):
         tickets = 0
@@ -138,15 +120,13 @@ class Account_Move(models.Model):
                         if not flag:
                             for marca in self.sorteo_id.marcas:
                                 if not flag:
-                                    if move_line.product_id.marca_id.name:
-                                        if marca.marcas.name:
-                                            if move_line.product_id.marca_id.name == marca.marcas.name:
-                                                
-                                                if marca.fecha_inicial <= self.invoice_date <= marca.fecha_final:
-                                                    #({'ticket': "ticket x2"})
-                                                    tickets = tickets* 2
-                                                    flag = True
-                                                    break
+                                    if move_line.product_id.marca_id.name == marca.marcas.name:
+                                        
+                                        if marca.fecha_inicial <= self.invoice_date <= marca.fecha_final:
+                                            #({'ticket': "ticket x2"})
+                                            tickets = tickets* 2
+                                            flag = True
+                                            break
                                 
                             for producto in self.sorteo_id.productos:
                                 if not flag:

@@ -20,8 +20,6 @@
 				<xpath expr="//field[@name='vat']" position="after">
 					<field name="x_clientes_varios" string="Clientes varios"/>
 				</xpath>-->
-
-				
 			</data>
 		              
 		</field>

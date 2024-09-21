@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--        attendance daily action-->
+    <record id="attendance_daily_action" model="ir.actions.act_window">
+        <field name="name">Marcaciones diarias</field>
+        <field name="res_model">attendance.daily</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!--        attendance daily Tree View -->
+    <record id="attendance_daily_view_tree" model="ir.ui.view">
+        <field name="name">attendance.daily.view.tree</field>
+        <field name="model">attendance.daily</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Marcaciones diarias" editable="bottom">
+                <field name="id_marcaciones"/>
+                <field name="employee_id"/>
+                <field name="company_id" />
+                <field name="fecha" />
+                <field name="check_in"/>
+                <field name="check_type" />
+            </tree>
+        </field>
+    </record>
+</odoo>

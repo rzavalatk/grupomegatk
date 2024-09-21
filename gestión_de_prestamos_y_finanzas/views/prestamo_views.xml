@@ -1,0 +1,180 @@
+<odoo>
+    <record id="view_prestamo_form" model="ir.ui.view">
+        <field name="name">prestamo.form</field>
+        <field name="model">prestamo</field>
+        <field name="arch" type="xml">
+            <form string="Préstamo"> 
+                <header>
+                    
+                    <button name="generate_quota" type="object" string="Calcular Cuotas" class="btn-primary" states="borrador, generado"/>
+                    <button string="Confirmar" type="object" name="action_loan_request" states="generado"/>
+                    <button string="Aprobar" type="object" name="action_approve" states="confirmado"/>
+                    <button string="Rechazar" type="object" name="action_reject" states="confirmado"/>
+                    <button string="Volver a borrador" type="object" name="go_to_draft" states="rechazado, cancelado"/>
+                    <button string="Cancelar" type="object" name="action_cancel" states="aprobado"/>
+                    <button string="Finalizar" type="object" name="ending" states="aprobado"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador, generado, confirmado, aprobado, rechazado, cancelado, pagado"/>
+				</header>
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count_cxc', '=', 0)]}">
+								<field name="invoice_count_cxc" widget="statinfo" string="Facturas"/>
+							</button>
+							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('payment_count', '=', 0)]}">
+								<field name="payment_count" widget="statinfo" string="Pagos cliente"/>
+							</button>
+							
+						</div>
+
+                    <group>
+                        <h1>
+                            <field name="name" style="width: 50%%;" attrs="{'readonly': True}"/>
+                        </h1>
+					</group>
+                    <group name='prestamo' >
+                        <group name="cliente" string='Datos del prestamo'>
+                            <field name="partner_id"/>
+                            <field name="loan_type"/>
+                            <field name="loan_type_id"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="amount_borrowed"/>
+                            <field name="remaining_capital" />
+                            <field name="pay_capital" />
+                        </group>
+
+                        <group name="fechas" string="Tiempo de prestamo">
+                            <field name="meses_seleccion"/>
+                            <field name="date_init"/>
+                            <field name="date_ends" />
+                            <field name="payment_frequency"/>
+                        </group>
+                        
+                    </group>
+                    <group name="contabilidad" string="Datos contables">
+                        <group >
+                            <field name="interest_rate"/>
+                            <field name="currency_id" />
+                            
+                        </group>
+                        <group >
+                            <field name="payment_term_id" />
+                            <field name="gasto_prestamo" />
+                            <field name="cuota" />
+                        </group>
+                    </group>
+
+                    
+                    <notebook>
+                        <page name="cuotas" string="Cuotas" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="quota_ids" readonly="1">
+                                <tree editable="bottom" string="tree" create="false">
+                                    <field name="name"/>
+                                    <field name="date_due"/>
+                                    <field name="payment_date" />
+                                    <field name="amount_capital" />
+                                    <field name="amount_capital_quota" />
+                                    <field name="interest_generated" />
+                                    <field name="amount" />
+                                    <field name="balance" />
+                                    <field name="state"
+                                            attrs="{'column_invisible': [('parent.state', '!=', 'borrador','generado','confirmado')]}"
+                                               widget="badge"
+                                               optional="show"
+                                               decoration-danger="state == 'unpaid'"
+                                               decoration-warning="state == 'invoiced'"
+                                               decoration-success="state == 'pagado'"/>
+                                    <field name="invoice" invisible="1"/>
+                                    <button attrs="{'invisible': ['|', '|', ('invoice', '=', True),
+                                           ('state', '!=', 'unpaid'), ('parent.state', '!=', 'borrador','generado','confirmado')]}"
+                                                name="action_pay_emi"
+                                                class="oe_highlight"
+                                                string="Pagar"
+                                                type="object"/>
+                                   
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <field name="documents_ids"
+                                        widget="many2many_tags"/>
+                                <field name="img_attachment_ids"
+                                        widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="Loan rejection" states="rejected">
+                            <field name="reject_reason" readonly="1"/>
+                        </page>
+                        <page name="cuentas" string="Cuentas">
+                            <group >
+                               <group name="info_encargado" string="Información">
+                                    <field name="company_id" />
+                                    <field name="user_id" />
+                                </group>
+                                <group name="info_cuentas" string="Cuentas">
+                                    <field name="recibir_pagos" />
+                                    <field name="account_id" />
+                                    <field name="account_int_moratorio" />
+                                    <field name="account_redes_id" />
+                                </group> 
+                            </group>
+                            <group>
+                                    <group>
+                                        <field name="journal_id"
+                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="debit_account_id"
+                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
+                                        <field name="credit_account_id"
+                                               attrs="{'required': [('state', '=', 'approved')], 'readonly': [('state', '=', 'disbursed')]}"/>
+                                    </group>
+                                </group>
+                            
+                            
+                            
+                        </page>
+                    </notebook>
+                    
+                    <footer>
+                        <button name="export_excel" type="object" string="Exportar a Excel" class="btn-primary"/>
+                    </footer>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree view-->
+    <record id="view_prestamo_tree" model="ir.ui.view">
+        <field name="name">prestamo.tree</field>
+        <field name="model">prestamo</field>
+        <field name="arch" type="xml">
+            <tree string="Préstamos">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="amount_borrowed"/>
+                <field name="interest_rate"/>
+                <field name="meses_seleccion"/>
+                <field name="date_init"/>
+                <field name="payment_frequency"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_prestamos" model="ir.actions.act_window">
+        <field name="name">Préstamos</field>
+        <field name="res_model">prestamo</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_prestamos_prestamos_action" name="Préstamos" parent="menu_prestamos_prestamos" action="action_prestamos"/>
+
+    
+</odoo>

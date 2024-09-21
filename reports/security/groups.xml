@@ -4,12 +4,27 @@
         <record model="ir.module.category" id="module_category_reports">
             <field name="name">Modulo de reportes</field>
             <field name="description">Modulo de reportes</field>
-            <field name="sequence">6</field>
+            <field name="sequence">4</field>
     	</record>
     	
         <record id="reportes_manager" model="res.groups">
     		<field name="category_id" ref="module_category_reports"/>
             <field name="name">Responsable modulo reportes</field>
+        </record>
+
+        <record id="reportes_inventario" model="res.groups">
+    		<field name="category_id" ref="module_category_reports"/>
+            <field name="name">Responsable reportes inventario</field>
+        </record>
+
+        <record id="reportes_account" model="res.groups">
+    		<field name="category_id" ref="module_category_reports"/>
+            <field name="name">Responsable reportes contabilidad</field>
+        </record>
+
+        <record id="reportes_crm" model="res.groups">
+    		<field name="category_id" ref="module_category_reports"/>
+            <field name="name">Responsable reportes CRM</field>
         </record>
 
         

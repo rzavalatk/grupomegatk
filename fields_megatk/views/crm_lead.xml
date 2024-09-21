@@ -2,16 +2,7 @@
 <odoo>
 	
 	<data>
-		<!--<record model="ir.ui.view" id="crm_campo_megatk_view_inh">
-	  		<field name="name">crm.lead.campomegatk.view</field>
-	  		<field name="model">crm.lead</field>
-	  		<field name="inherit_id" ref="crm.crm_lead_view_form" />
-				<field name="arch" type="xml">
-						<xpath expr="//form/sheet/group/group/field[@name='lost_reason']" position="after">
-							<field name="id" string="Ticket"/>
-						</xpath>
-				</field>
-	   	</record>-->
+		
 	   	<record model="ir.ui.view" id="crm_kanban_campo_megatk_view_inh">
 	  		<field name="name">crm.kanban.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
@@ -34,54 +25,7 @@
 	        </field>
 			</field>
    		</record>
-   		<!--<record model="ir.ui.view" id="crm_case_form_campo_megatk_view_inh">
-	  		<field name="name">crm.case.form.campomegatk.view</field>
-	  		<field name="model">crm.lead</field>
-	  		<field name="inherit_id" ref="crm.crm_case_form_view_leads" />
-				<field name="arch" type="xml">
-					<field name="name" position="before">
-		      	<h1>Ticket: <field name="id"/></h1>
-		      	<field name="fecha_movimiento" invisible='1'/>
-		      </field>
-		      <xpath expr="//field[@name='name']" position="attributes">
-				    <attribute name="attrs">{}</attribute>
-				    <attribute name="readonly">1</attribute>
-				    <attribute name="required">1</attribute>
-				  </xpath>
-		      <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
-				    <page name="soportetecnico" string="Soporte Tecnico">
-					     <group name="soporte">
-					        <group name="data1">
-					        	<field name="tipo_soporte"/>
-					        	<field name="estado_taller" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
-					        	<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="proposito" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        </group>	
-					        <group name="data2">
-					        	<field name="reporto" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="repor_email" attrs='{"invisible": [["tipo_soporte","!=","visita"]]}'/>
-					        	<field name="serie" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
-					        	<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'/>
-					        </group>	
-					    </group>
-					    <group name="soporte1" attrs='{"invisible": [["tipo_soporte","!=","taller"]]}'>
-					        <group name="data3">
-					        	<field name="marca_id"/>
-					        	<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
-					        	<field name="modelo_id" domain="[('categoria_id', '=', categoria_id)]"/>
-					        </group>	
-					        <group name="data4">
-					        	<field name="fallas"/>
-					      	<field name="informe_tecnico"/>
-					      	<field name="observacion_visita" invisible='1'/>
-					        </group>	
-					    </group>
-				    </page>
-				  </xpath>
-			</field>
- 		</record> -->
-
+   		
    		<record model="ir.ui.view" id="crm_form_campo_megatk_view_inh">
 	  		<field name="name">crm.form.campomegatk.view</field>
 	  		<field name="model">crm.lead</field>
@@ -108,7 +52,7 @@
 									<field name="tipo_soporte"/>
 									<field name="estado_taller" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
 									<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo", "llamada"]]]}'/>
+									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
 								</group>
 								<group name="data2">
 									<field name="reporto" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
@@ -137,24 +81,18 @@
 						<page name="soportepuntos" string="Puntos SPT">
 							<group name="servicio">
 								<group name="data_servicio">
-									<field name="marca"/>
-									<field name="servicio_evolis" attrs='{"invisible": [["marca","not in",["evolis"]]]}'/>
-									<field name="servicio_zebra" attrs='{"invisible": [["marca","not in",["zebra"]]]}'/>
-									<field name="servicio_pos" attrs='{"invisible": [["marca","not in",["pos"]]]}'/>
-									<field name="servicio_etiquetas" attrs='{"invisible": [["marca","not in",["etiquetas"]]]}'/>
-									<field name="servicio_ploter" attrs='{"invisible": [["marca","not in",["ploter"]]]}'/>
-									<field name="servicio_traslado" attrs='{"invisible": [["marca","not in",["traslados"]]]}'/>
+									<field name="marca_spt"/>
+									<field name="servicio_spt"/>
 									<field name="tipo_servicio" />
 									<field name="puntuado" />
 								</group>
 								<group name="servicio_data2" string="Asistentes">
 									<group>
 										<field name="tecnico_asistente_1"/>
-										<field name="porcentaje1"/>
+										<field name="tecnico_asistente_2"/>
 									</group>
 									<group >
-										<field name="tecnico_asistente_2"/>
-										<field name="porcentaje2"/>
+										<field name="tecnico_asistente_3"/>
 									</group>
 									</group>
 							</group>
@@ -229,13 +167,34 @@
 				</form>
 			</field>
 		</record>
-	   	
+
+		<record id="crm_servicio_view_tree" model="ir.ui.view">
+			<field name="name">crm.servicio.view.tree</field>
+			<field name="model">crm.servicio</field>
+			<field name="arch" type="xml">
+				<tree string="">
+					<field name="name" />
+					<field name="marca_id"/>
+					<field name="puntaje_taller"/>
+					<field name="puntaje_llamada"/>
+					<field name="puntaje_visita" />
+				</tree>
+			</field>
+		</record>
+
+		
+		<record id="crm_servicio_action" model="ir.actions.act_window">
+			<field name="name">Servicios</field>
+			<field name="res_model">crm.servicio</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
  		<record model="ir.actions.act_window" id="action_crm_lead_marca">
 			<field name="name">Marcas</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">crm.lead.marca</field>
 			<field name="view_mode">tree,form</field>
-	    </record>
+	    </record>     
     	<record model="ir.actions.act_window" id="action_crm_lead_categoria">
 			<field name="name">Categorias</field>
 			<field name="type">ir.actions.act_window</field>
@@ -254,6 +213,7 @@
 	    <menuitem name="Marca" id="import_product_menu_marca" sequence = "1" parent="crm_menu_soporte_taller" action = "action_crm_lead_marca"/>
 	    <menuitem name="Categoria" id="import_product_menu_category" sequence = "2" parent="crm_menu_soporte_taller" action = "action_crm_lead_categoria"/>
 	    <menuitem name="Modelo" id="import_product_menu_modelo" sequence = "3" parent="crm_menu_soporte_taller" action = "action_crm_lead_modelo"/>
+		<menuitem name="Servicio" id="crm_servicio_menu" sequence = "4" parent="crm_menu_soporte_taller" action = "crm_servicio_action"/>
 
 	</data>	
 </odoo>

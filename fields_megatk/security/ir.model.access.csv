@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 acces_fields_megatk.model_product_marca,product.marca,fields_megatk.model_product_marca,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_marca,crm.lead.marca,fields_megatk.model_crm_lead_marca,sales_team.group_sale_manager,1,1,1,1
+acces_fields_megatk.model_crm_servicio,crm.servicio,fields_megatk.model_crm_servicio,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_categoria,crm.lead.categoria,fields_megatk.model_crm_lead_categoria,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_modelo,crm.lead.modelo,fields_megatk.model_crm_lead_modelo,sales_team.group_sale_manager,1,1,1,1
 acces_fields_megatk.model_crm_lead_tipo,crm.lead.tipo,fields_megatk.model_crm_lead_tipo,sales_team.group_sale_manager,1,1,1,1

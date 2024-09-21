@@ -35,99 +35,10 @@ class SistemaPuntajeSoporte(models.Model):
     tabla_detalle = fields.One2many(
         'sistema.detalles.puntaje', 'sistema_puntaje', string="Detalles", readonly=True)
     
-    def _load_puntaje_rules(self):
-        # Definir las reglas de puntaje directamente en el código
-        rules = {
-            'evolis': {
-                'evl_1': {
-                    'taller': 8,
-                    'visita': 10,
-                    'llamada': 5,
-                },
-                'evl_2': {
-                    'taller': 6,
-                    'visita': 8,
-                    'llamada': 5,
-                },
-                'evl_3': {
-                    'taller': 5,
-                    'visita': 7,
-                    'llamada': 7,
-                },
-                'evl_4': {
-                    'taller': 5,
-                    'visita': 7,
-                    'llamada': 7,
-                },'evl_5': {
-                    'taller': 5,
-                    'visita': 7,
-                    'llamada': 7,
-                },'evl_6': {
-                    'taller': 5,
-                    'visita': 7,
-                    'llamada': 7,
-                },
-            },
-            'zebra': {
-                'zeb_1': {
-                    'taller': 9,
-                    'visita': 12,
-                    'llamada': 6,
-                },
-                'zeb_2': {
-                    'taller': 7,
-                    'visita': 9,
-                    'llamada': 6,
-                },
-                
-            },
-            'pos': {
-                'pos_1': {
-                    'taller': 7,
-                    'visita': 9,
-                    'llamada': 4,
-                },
-                
-            },
-            'etiquetas': {
-                'etq_1': {
-                    'taller': 6,
-                    'visita': 8,
-                    'llamada': 4,
-                },
-                
-            },
-            'ploter': {
-                'plt_1': {
-                    'taller': 7,
-                    'visita': 10,
-                    'llamada': 6,
-                },
-                'plt_2': {
-                    'taller': 7,
-                    'visita': 10,
-                    'llamada': 6,
-                },
-                'plt_3': {
-                    'taller': 7,
-                    'visita': 10,
-                    'llamada': 6,
-                },  
-            },
-            'traslados': {
-                'tls_1': {
-                    'taller': 5,
-                    'visita': 7,
-                    'llamada': 5,
-                },
-               
-            },
-            # Agrega más marcas aquí si es necesario
-        }
-        return rules
+    tickets_ids = []
+    
 
     def generate_report(self):
-        rules = self._load_puntaje_rules()
 
         domain = [
             ('date_deadline', '>=', self.fecha_inicio),
@@ -141,6 +52,10 @@ class SistemaPuntajeSoporte(models.Model):
 
         #_logger.warning("tamaño de products idsg: " + str(len(tickets)))
 
+        porcentaje_tecnico = 1
+        porcentaje_asis1 = 0
+        porcentaje_asis2 = 0
+        porcentaje_asis3 = 0
         user_points_taller = {}
         user_points_visita = {}
         user_points_llamada = {}
@@ -156,201 +71,114 @@ class SistemaPuntajeSoporte(models.Model):
             servicio_str = ""
             
             for ticket in tickets:
-                marca = ticket.marca
-                servicios = [ticket.servicio_evolis, ticket.servicio_zebra, ticket.servicio_pos, 
-                            ticket.servicio_etiquetas, ticket.servicio_ploter, ticket.servicio_traslado]
-                
-                servicio = ""
+                marca = ticket.marca_spt
+                servicio = ticket.servicio_spt
                 tipo = ticket.tipo_servicio  # 'taller', 'visita', 'llamada'
                 points_taller = 0
                 points_llamada = 0
                 points_visita = 0
                 
-                for item in servicios:
-                    if item:
-                        indice = servicios.index(item)
-                        if indice == 0:
-                            servicio_str = "servicio_evolis"
-                        elif indice == 1:
-                            servicio_str = "servicio_zebra"
-                        elif indice == 2:
-                            servicio_str = "servicio_pos"
-                        elif indice == 3:
-                            servicio_str = "servicio_etiquetas"
-                        elif indice == 4:
-                            servicio_str = "servicio_ploter"
-                        elif indice == 5:
-                            servicio_str = "servicio_traslado"
-                        
-                        servicio = item
+                if marca:          
+                    if tipo == 'taller':
+                        points_taller = servicio.puntaje_taller
+                        points_visita = 0
+                        points_llamada = 0
+                    elif tipo == 'visita':
+                        points_taller = 0
+                        points_visita = servicio.puntaje_visita
+                        points_llamada = 0
+                    elif tipo == 'llamada':
+                        points_taller = 0
+                        points_visita = 0
+                        points_llamada = servicio.puntaje_llamada
+                    else:
+                        raise Warning(_('Error en el sistema de puntaje: tipo de servicio no definido'))
 
-                if marca in rules and servicio in rules[marca]:
-                    puntos = rules[marca][servicio].get(tipo, 0)
+                    #Calculo de porcentajesf
+                    if ticket.tecnico_asistente_3:
+                        porcentaje_tecnico = 0.25
+                        porcentaje_asis1 = 0.25
+                        porcentaje_asis2 = 0.25
+                        porcentaje_asis3 = 0.25
+                    elif ticket.tecnico_asistente_2:
+                        porcentaje_tecnico = 0.4
+                        porcentaje_asis1 = 0.3
+                        porcentaje_asis2 = 0.3
+                    elif ticket.tecnico_asistente_1:
+                        porcentaje_tecnico = 0.5
+                        porcentaje_asis1 = 0.5
                     
-                    owner = ticket.user_id
-                    assistant_1 = ticket.tecnico_asistente_1
-                    assistant_2 = ticket.tecnico_asistente_2
                     
-                    p_dueño = 1
-                    porcentaje_1 = float(ticket.porcentaje1)
-                    porcentaje_2 = float(ticket.porcentaje2)
                     
-                    servicio_string =dict(ticket._fields[servicio_str].selection)[servicio]
-
-                    if not assistant_1 and not assistant_2:
-                        
-                        if tipo == 'taller':
-                            points_taller = puntos
-                            self._add_points(user_points_taller, owner, puntos)
-                        elif tipo == 'visita':
-                            points_visita = puntos
-                            self._add_points(user_points_visita, owner, puntos)
-                        elif tipo == 'llamada':
-                            points_llamada = puntos
-                            self._add_points(user_points_llamada, owner, puntos)
-                        
-                        self._add_points(user_points, owner, puntos)
-                        self._track_top_service(user_top_service, user_top_marca, owner, servicio, marca, puntos, servicio_string)
-                        
-                    elif assistant_1 and not assistant_2:
-                        
-                        if porcentaje_1:
-                            p_dueño = 1 - porcentaje_1
-                            if tipo == 'taller':
-                                points_taller = puntos
-                                self._add_points(user_points_taller, owner, puntos * p_dueño)
-                                self._add_points(user_points_taller, assistant_1, puntos * porcentaje_1)
-                            elif tipo == 'visita':
-                                points_visita = puntos 
-                                self._add_points(user_points_visita, owner, puntos * p_dueño)
-                                self._add_points(user_points_visita, assistant_1, puntos * porcentaje_1)
-                            elif tipo == 'llamada':
-                                points_llamada = puntos
-                                self._add_points(user_points_llamada, owner, puntos * p_dueño)
-                                self._add_points(user_points_llamada, assistant_1, puntos * porcentaje_1)
-                            
-                            self._add_points(user_points, owner, puntos * p_dueño)
-                            self._add_points(user_points, assistant_1, puntos * porcentaje_1)
-                            self._track_top_service(user_top_service, user_top_marca, owner, servicio, marca, puntos * p_dueño, servicio_string)
-                            self._track_top_service(user_top_service, user_top_marca, assistant_1, servicio, marca, puntos * porcentaje_1, servicio_string)
-                            
-                    elif assistant_1 and assistant_2:
-                        if porcentaje_1 and porcentaje_2:
-                            if porcentaje_1 + porcentaje_2 <= 0.5:
-                                p_dueño = 1 - (porcentaje_1 + porcentaje_2)
-                                if tipo == 'taller':
-                                    points_taller = puntos
-                                    self._add_points(user_points_taller, owner, puntos * p_dueño)
-                                    self._add_points(user_points_taller, assistant_1, puntos * porcentaje_1)
-                                    self._add_points(user_points_taller, assistant_2, puntos * porcentaje_2)
-                                elif tipo == 'visita':
-                                    points_visita = puntos
-                                    self._add_points(user_points_visita, owner, puntos * p_dueño)
-                                    self._add_points(user_points_visita, assistant_1, puntos * porcentaje_1)
-                                    self._add_points(user_points_visita, assistant_2, puntos * porcentaje_2)
-                                elif tipo == 'llamada':
-                                    points_llamada = puntos
-                                    self._add_points(user_points_llamada, owner, puntos * p_dueño)
-                                    self._add_points(user_points_llamada, assistant_1, puntos * porcentaje_1)
-                                    self._add_points(user_points_llamada, assistant_2, puntos * porcentaje_2)
-                                
-                                self._add_points(user_points, owner, puntos * p_dueño)
-                                self._add_points(user_points, assistant_1, puntos * porcentaje_1)
-                                self._add_points(user_points, assistant_2, puntos * porcentaje_2)
-                                self._track_top_service(user_top_service, user_top_marca, owner, servicio, marca, puntos * p_dueño, servicio_string)
-                                self._track_top_service(user_top_service, user_top_marca, assistant_1, servicio, marca, puntos * porcentaje_1, servicio_string)
-                                self._track_top_service(user_top_service, user_top_marca, assistant_2, servicio, marca, puntos * porcentaje_2, servicio_string)
-                            else:
-                                if porcentaje_1 > porcentaje_2:
-                                    porcentaje_2 = 0.5 -porcentaje_1
-                                    p_dueño = 1 - (porcentaje_1 + porcentaje_2)
-                                    if tipo == 'taller':
-                                        points_taller = puntos
-                                        self._add_points(user_points_taller, owner, puntos * p_dueño)
-                                        self._add_points(user_points_taller, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_taller, assistant_2, puntos * porcentaje_2)
-                                    elif tipo == 'visita':
-                                        points_visita = puntos
-                                        self._add_points(user_points_visita, owner, puntos * p_dueño)
-                                        self._add_points(user_points_visita, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_visita, assistant_2, puntos * porcentaje_2)
-                                    elif tipo == 'llamada':
-                                        points_llamada = puntos
-                                        self._add_points(user_points_llamada, owner, puntos * p_dueño)
-                                        self._add_points(user_points_llamada, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_llamada, assistant_2, puntos * porcentaje_2)
-                                    
-                                    self._add_points(user_points, owner, puntos * p_dueño)
-                                    self._add_points(user_points, assistant_1, puntos * porcentaje_1)
-                                    self._add_points(user_points, assistant_2, puntos * porcentaje_2)
-                                    self._track_top_service(user_top_service, user_top_marca, owner, servicio, marca, puntos * p_dueño, servicio_string)
-                                    self._track_top_service(user_top_service, user_top_marca, assistant_1, servicio, marca, puntos * porcentaje_1, servicio_string)
-                                    self._track_top_service(user_top_service, user_top_marca, assistant_2, servicio, marca, puntos * porcentaje_2, servicio_string)
-                                else:
-                                    porcentaje_1 = 0.5 - porcentaje_2
-                                    p_dueño = 1 - (porcentaje_1 + porcentaje_2)
-                                    if tipo == 'taller':
-                                        points_taller = puntos
-                                        self._add_points(user_points_taller, owner, puntos * p_dueño)
-                                        self._add_points(user_points_taller, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_taller, assistant_2, puntos * porcentaje_2)
-                                    elif tipo == 'visita':
-                                        points_visita = puntos
-                                        self._add_points(user_points_visita, owner, puntos * p_dueño)
-                                        self._add_points(user_points_visita, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_visita, assistant_2, puntos * porcentaje_2)
-                                    elif tipo == 'llamada':
-                                        points_llamada = puntos
-                                        self._add_points(user_points_llamada, owner, puntos * p_dueño)
-                                        self._add_points(user_points_llamada, assistant_1, puntos * porcentaje_1)
-                                        self._add_points(user_points_llamada, assistant_2, puntos * porcentaje_2)
-                                    
-                                    self._add_points(user_points, owner, puntos * p_dueño)
-                                    self._add_points(user_points, assistant_1, puntos * porcentaje_1)
-                                    self._add_points(user_points, assistant_2, puntos * porcentaje_2)
-                                    self._track_top_service(user_top_service, user_top_marca, owner, servicio, marca, puntos * p_dueño, servicio_string)
-                                    self._track_top_service(user_top_service, user_top_marca, assistant_1, servicio, marca, puntos * porcentaje_1, servicio_string)
-                                    self._track_top_service(user_top_service, user_top_marca, assistant_2, servicio, marca, puntos * porcentaje_2, servicio_string)
-                
                     lines_tickets.append((0, 0,{
                             'sistema_puntaje': self.id,
-                            'tecnico_id': owner.id,
+                            'tecnico_id': ticket.user_id.id,
                             'rol': 'Tecnico',
-                            'marcas_id': dict(ticket._fields['marca'].selection)[marca],
-                            'servicio_id': dict(ticket._fields[servicio_str].selection)[servicio],
-                            'taller_id': points_taller,
-                            'visita_id': points_visita,
-                            'llamada_id': points_llamada,
+                            'marcas_id': ticket.marca_spt.name,
+                            'servicio_id': ticket.servicio_spt.name,
+                            'taller_id': points_taller * porcentaje_tecnico,
+                            'visita_id': points_visita * porcentaje_tecnico,
+                            'llamada_id': points_llamada * porcentaje_tecnico,
                             'ticket_id': ticket.id,
                         }))
                     
-                    if assistant_1:
+                    self._add_points(user_points_taller, ticket.user_id, points_taller * porcentaje_tecnico)
+                    self._add_points(user_points_visita, ticket.user_id, points_visita * porcentaje_tecnico)
+                    self._add_points(user_points_llamada, ticket.user_id, points_llamada * porcentaje_tecnico)
+                    
+                    if ticket.tecnico_asistente_1:
                         lines_tickets.append((0, 0,{
                             'sistema_puntaje': self.id,
-                            'tecnico_id': assistant_1.id,
-                            'rol': 'Asistente 1',
-                            'marcas_id': dict(ticket._fields['marca'].selection)[marca],
-                            'servicio_id': dict(ticket._fields[servicio_str].selection)[servicio],
-                            'taller_id': points_taller * porcentaje_1,
-                            'visita_id': points_visita * porcentaje_1,
-                            'llamada_id': points_llamada * porcentaje_1,
+                            'tecnico_id': ticket.tecnico_asistente_1.id,
+                            'rol': 'Asistente',
+                            'marcas_id': ticket.marca_spt.name,
+                            'servicio_id': ticket.servicio_spt.name,
+                            'taller_id': points_taller * porcentaje_asis1,
+                            'visita_id': points_visita * porcentaje_asis1,
+                            'llamada_id': points_llamada * porcentaje_asis1,
                             'ticket_id': ticket.id,
                         }))
+                        
+                        self._add_points(user_points_taller, ticket.tecnico_asistente_1, points_taller * porcentaje_asis1)
+                        self._add_points(user_points_visita, ticket.tecnico_asistente_1, points_visita * porcentaje_asis1)
+                        self._add_points(user_points_llamada, ticket.tecnico_asistente_1, points_llamada * porcentaje_asis1)
                     
-                    if assistant_2:
+                    if ticket.tecnico_asistente_2:
                         lines_tickets.append((0, 0,{
                             'sistema_puntaje': self.id,
-                            'tecnico_id': assistant_2.id,
-                            'rol': 'Asistente 2',
-                            'marcas_id': dict(ticket._fields['marca'].selection)[marca],
-                            'servicio_id': dict(ticket._fields[servicio_str].selection)[servicio],
-                            'taller_id': points_taller * porcentaje_2,
-                            'visita_id': points_visita * porcentaje_2,
-                            'llamada_id': points_llamada * porcentaje_2,
+                            'tecnico_id': ticket.tecnico_asistente_2.id,
+                            'rol': 'Asistente',
+                            'marcas_id': str(ticket.marca_spt.name),
+                            'servicio_id': str(ticket.servicio_spt.name),
+                            'taller_id': points_taller * porcentaje_asis2,
+                            'visita_id': points_visita * porcentaje_asis2,
+                            'llamada_id': points_llamada * porcentaje_asis2,
                             'ticket_id': ticket.id,
                         }))
+                        
+                        self._add_points(user_points_taller, ticket.tecnico_asistente_2, points_taller * porcentaje_asis2)
+                        self._add_points(user_points_visita, ticket.tecnico_asistente_2, points_visita * porcentaje_asis2)
+                        self._add_points(user_points_llamada, ticket.tecnico_asistente_2, points_llamada * porcentaje_asis2)
+                        
+                    if ticket.tecnico_asistente_3:
+                        lines_tickets.append((0, 0,{
+                            'sistema_puntaje': self.id,
+                            'tecnico_id': ticket.tecnico_asistente_3.id,
+                            'rol': 'Asistente',
+                            'marcas_id': ticket.marca_spt.name,
+                            'servicio_id': ticket.servicio_spt.name,
+                            'taller_id': points_taller * porcentaje_asis3,
+                            'visita_id': points_visita * porcentaje_asis3,
+                            'llamada_id': points_llamada * porcentaje_asis3,
+                            'ticket_id': ticket.id,
+                        }))
+                        
+                        self._add_points(user_points_taller, ticket.tecnico_asistente_3, points_taller * porcentaje_asis3)
+                        self._add_points(user_points_visita, ticket.tecnico_asistente_3, points_visita * porcentaje_asis3)
+                        self._add_points(user_points_llamada, ticket.tecnico_asistente_3, points_llamada * porcentaje_asis3)
                     
-                    #ticket.sudo().write({'puntuado': True})                 
+                    #ticket.sudo().write({'puntuado': True})   
+                    self.tickets_ids.append(ticket.id)
 
             lines = []
             for user in self.users_ids:
@@ -364,12 +192,10 @@ class SistemaPuntajeSoporte(models.Model):
                 lines.append((0, 0,{
                     'sistema_puntaje': self.id,
                     'tecnico_id': user.id,
-                    'marcas_id': top_marca,
-                    'servicio_id':  service_str,
                     'taller_id': user_points_taller.get(user, 0),
                     'visita_id': user_points_visita.get(user, 0),
                     'llamada_id': user_points_llamada.get(user, 0),
-                    'total': total_points,
+                    'total': user_points_taller.get(user, 0) + user_points_visita.get(user, 0) + user_points_llamada.get(user, 0)
                     # Asegúrate de manejar los campos de taller, visita y llamada como sea necesario
                 }))
             
@@ -406,7 +232,7 @@ class SistemaPuntajeSoporte(models.Model):
         """
     
     def action_confirm(self):
-        rules = self._load_puntaje_rules()
+        
 
         domain = [
             ('date_deadline', '>=', self.fecha_inicio),
@@ -416,22 +242,12 @@ class SistemaPuntajeSoporte(models.Model):
             ('stage_id', '=', 4)
         ]
             
-        tickets_list = self.env['crm.lead'].search(domain)
+        tickets_list = self.env['crm.lead'].search([('id', 'in', self.tickets_ids)])
 
         if tickets_list:
             
             for ticket_item in tickets_list:
-                marca = ticket_item.marca
-                servicios = [ticket_item.servicio_evolis, ticket_item.servicio_zebra, ticket_item.servicio_pos, 
-                            ticket_item.servicio_etiquetas, ticket_item.servicio_ploter, ticket_item.servicio_traslado]
-                
-                servicio = ""       
-                
-                for item in servicios:
-                    if item:
-                        servicio = item
-
-                if marca in rules and servicio in rules[marca]:
+                if ticket_item.marca_spt:
                     ticket_item.write({'puntuado': True})
         
         self.state = 'hecho'
@@ -465,8 +281,8 @@ class SistemaPuntajeSoporte(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_puntaje = ['Tecnico', 'Marca mas atendida', 'Servicio mas solicitado', 'Puntos taller', 'Puntos visita', 'Puntos llamada', 'Total puntos']
-        col_widths_lines_puntaje = [45, 35, 35, 20, 20, 20, 20]  # Ajusta estos valores según sea necesario
+        encabezados_lines_puntaje = ['Tecnico','Puntos taller', 'Puntos visita', 'Puntos llamada', 'Total puntos']
+        col_widths_lines_puntaje = [45, 20, 20, 20, 20]  # Ajusta estos valores según sea necesario
         
         encabezados_reports_detalles = ['Tecnico', 'Rol', 'Marca', 'Servicio', 'Puntos taller', 'Puntos visita', 'Puntos llamada']
         col_widths_reports_detalles = [45, 25, 35, 35, 25, 25, 25]  # Ajusta estos valores según sea necesario
@@ -475,8 +291,6 @@ class SistemaPuntajeSoporte(models.Model):
         datos_lines_from_puntaje = [
             (
                 record.tecnico_id.name,
-                record.marcas_id,
-                record.servicio_id,
                 record.taller_id,
                 record.visita_id,
                 record.llamada_id,

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_attendance_record">
+            <field name="name">Modulo de Asistencias</field>
+            <field name="description">Modulo de asistencias</field>
+            <field name="sequence">6</field>
+    	</record>
+    	
+        <record id="attendance_rec_manager" model="res.groups">
+    		<field name="category_id" ref="module_attendance_record"/>
+            <field name="name">Administrador de asistencias</field>
+        </record>
+
+        
+    </data>
+</odoo>

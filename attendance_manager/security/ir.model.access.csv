@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_attendance_record,access_attendance_record,model_attendance_record,attendance_rec_manager,1,1,1,1
+access_attendance_daily,access_attendance_daily,model_attendance_daily,attendance_rec_manager,1,1,1,1
+access_attendance_users,access_attendance_users,model_attendance_users,attendance_rec_manager,1,1,1,1
