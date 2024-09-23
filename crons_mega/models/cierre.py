@@ -564,7 +564,7 @@ class CierreDiario(models.Model):
                                                         ids_facturas = ids_facturas + \
                                                             [factura_id.id]
 
-                        acumulado = acumulado + acumulado_factura
+                    acumulado = acumulado + acumulado_factura
                     
                     promedio = acumulado / mes
                     self.write({
