@@ -262,7 +262,6 @@ class HelpTicket(models.Model):
             'reporto': self.customer_name,
             'repor_tel': self.phone,
             'repor_email': self.email,
-            'repor_direction': self.customer_id.street,
         })
 
         # Devolver la acción para redirigir al usuario al ticket recién creado
