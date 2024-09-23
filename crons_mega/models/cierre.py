@@ -514,7 +514,7 @@ class CierreDiario(models.Model):
                         
                         #OBtenemos la factura relacionada al pago
                         factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        self.register_ids(factura_id, 'facturas de pagos')
+                        self.register_ids(factura_id, 'facturas de pagos') 
 
                         if factura_id not in ids_facturas:
                           
