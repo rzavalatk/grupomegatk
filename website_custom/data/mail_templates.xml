@@ -1,12 +1,31 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <template id="blog_post_template_new_post">
-            <xpath expr="//a[@t-attf-href]" position="attributes">
-                <attribute name="t-attf-href">
-                    #{post.website_id.domain}/blog/#{slug(object)}/#{slug(post)}
-                </attribute>
-            </xpath>
-        </template>
-    </data>
+    <template id="plantilla_personalizada_nuevo_post_id" name="Custom Blog Post Email Template" inherit_id="website_blog.blog_post_template_new_post">
+        <xpath expr="//t" position="replace">
+            <t t-name="website_blog.blog_post_template_new_post">
+                <p>¡Un nuevo post <t t-esc="post.name"/> ha sido publicado en el blog <t t-esc="object.name"/>!</p>
+                <p style="margin-left: 30px; margin-top: 10px; margin-bottom: 10px;">
+                    <!-- Condicional para verificar si el blog es "Blog megatk" -->
+                    <t t-if="object.name == 'Blog megatk'">
+                        <a t-attf-href="https://www.megatk.net/blog/#{slug(object)}/#{slug(post)}"
+                            style="padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; 
+                                   text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center;
+                                   vertical-align: middle; cursor: pointer;background-color: #875A7B; border: 1px solid #875A7B; border-radius:3px">
+                            Acceder al post
+                        </a>
+                    </t>
+                    <!-- Si el blog no es "Blog megatk", usa otro dominio -->
+                    <t t-else="">
+                        <a t-attf-href="https://www.meditekhn.net/blog/#{slug(object)}/#{slug(post)}"
+                            style="padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; 
+                                   text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center;
+                                   vertical-align: middle; cursor: pointer;background-color: #875A7B; border: 1px solid #875A7B; border-radius:3px">
+                            Acceder al post
+                        </a>
+                    </t>
+                </p>
+                <p>¡Esperamos que disfrutes del contenido!</p>
+            </t>
+        </xpath>
+    </template>
 </odoo>
