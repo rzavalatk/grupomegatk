@@ -73,6 +73,8 @@ class CierreDiario(models.Model):
     total = fields.Monetary("Total Cobrado", compute=_total)
     promedio_mensual = fields.Monetary("Promedio mensual",)
     promedio_anual = fields.Monetary("Promedio anual")
+    ganancia_diaria = fields.Monetary("Ganancia diaria")
+    
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
@@ -199,6 +201,7 @@ class CierreDiario(models.Model):
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
+        acumulado_ganancia = 0
 
         # Recorrer los pagos
         for pago in pagos:
@@ -210,29 +213,30 @@ class CierreDiario(models.Model):
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
-                        #_logger.warning('Prueba 1 . factura : '+ str(factura))
-                        #_logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
-                        
                         #Obtenemos el dato del pago
                         factura_move= self.env['account.move'].sudo().browse(factura)
                         
                         #OBtenemos la factura relacionada al pago
                         factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                         self.register_ids(factura_id, 'facturas de pagos')
-                        
-                        #_logger.warning(factura_id.invoice_date)
-                        #_logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                         if factura_id not in ids_facturas:
-                            #_logger.warning("Pase 1: ")
+                            
                             if factura_id.invoice_date == self.date:
-                                #_logger.warning("Pase 2: ")
+                               
                                 try:
                                     if factura_id.state != 'cancel':
-                                        #_logger.warning("Pase 3: ")
+                                        
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
-                                        #_logger.warning("Payments: " + str(payments_list))
+                                        
+                                        for line in factura_id.line_ids:
+                                            if line:
+                                                acumulado_ganancia += line.product_id.lst_price - line.product_id.standard_price
+                                        
+                                        self.write({
+                                            'ganancia_diaria': acumulado_ganancia
+                                        })
 
                                     else:
                                         payments_widget = []
@@ -246,8 +250,7 @@ class CierreDiario(models.Model):
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
                                         #_logger.warning("Pase 5: ")
                                         acumulado_factura += pay['amount']
-                                        #_logger.warning("Amount: " + str(pay['amount']))
-                                        #_logger.warning("Acumulado factura: " + str(acumulado_factura))
+                                       
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
@@ -386,9 +389,6 @@ class CierreDiario(models.Model):
                         if factura_id not in ids_facturas:
                             
                             if isinstance(factura_id.invoice_date, date):
-                                _logger.warning("HOla"+ str(factura_id.invoice_date))
-                                _logger.warning(self.date)
-                                _logger.warning(factura_id.invoice_date <= self.date)
                                 
                                 if factura_id.invoice_date <= self.date:
                                     

@@ -150,14 +150,15 @@
                         <thead>
                             <th>Promedio mensual</th>
                             <th>Promedio anual</th>
+                            <th>Ganancia diaria</th>
                             
                         </thead>
                         <tbody>
                             
                                 <tr>
                                     <th><t t-out="object.promedio_mensual"/></th>
-                                    <th><t t-out="object.promedio_mensual"/></th>
-                                
+                                    <th><t t-out="object.promedio_anual"/></th>
+                                    <th><t t-out="object.ganancia_diaria"/></th>
                                 </tr>
     
                         </tbody>
@@ -166,6 +167,7 @@
                     
                 
                 </div>
+
                 <br/>
                 <br/>
                 <br/>
