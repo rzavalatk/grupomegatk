@@ -122,29 +122,7 @@
                                 <p class="text-center">Volveremos a usted en breve.
                                 </p>
                             </div>
-                            <div class="col-lg-4">
-                                <ul class="list-unstyled mb-0 pl-2">
-                                    <li>Mi compañia</li>
-                                    <li>
-                                        <i class="fa fa-map-marker fa-fw mr-2"/>
-                                        <span class="o_force_ltr">3575
-                                            Demo Buena Vista Avenue
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-phone fa-fw mr-2"/>
-                                        <span class="o_force_ltr">+1
-                                            (+504) 9988-7766
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-1x fa-fw fa-envelope mr-2"/>
-                                        <span>
-                                            info@megatk.com
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+                            
                         </div>
                     </div>
                 </section>
