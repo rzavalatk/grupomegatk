@@ -93,6 +93,10 @@ class HelpTicket(models.Model):
                                      string='Adjunto')
     merge_ticket_invisible = fields.Boolean(string='Fusionar ticket',)
     merge_count = fields.Integer(string='Recuento de fusiones', )
+    
+    tipo_soporte = fields.Selection([('llamada','Llamada'),('interno','Interno'),('visita','Visita'),('visita_sin_costo','Visita sin costo'),('taller','Taller'),('sin_costo','Sin Costo')], string='Tipo de Soporte', default='sin_costo')
+    tipo_visita = fields.Selection([('cortesia','Cortesía'),('contado','Contado'),('garantia','Garantía'),('capacitacion','Capacitación'),('instalacion','Instalación')], string='Tipo de Visita')
+    
 
     @api.onchange('team_id', 'team_head')
     def team_leader_domain(self):
@@ -252,6 +256,13 @@ class HelpTicket(models.Model):
             'company_id': self.assigned_user.company_id.id,   # Empresa relacionada (opcional)
             'description': self.description,
             'priority': self.priority,                     # Prioridad del ticket (opcional)
+            'tipo_soporte': self.tipo_soporte,
+            'tipo_visita': self.tipo_visita,
+            'proposito': self.subject,
+            'reporto': self.customer_name,
+            'repor_tel': self.phone,
+            'repor_email': self.email,
+            'repor_direction': self.customer_id.street,
         })
 
         # Devolver la acción para redirigir al usuario al ticket recién creado

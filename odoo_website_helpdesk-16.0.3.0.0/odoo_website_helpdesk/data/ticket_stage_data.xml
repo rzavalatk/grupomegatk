@@ -3,7 +3,7 @@
     <!-- Estados -->
     <record id="ticket_stage_inbox" model="ticket.stage">
         <field name="sequence">10</field>
-        <field name="name">bandeja de entrada</field>
+        <field name="name">Bandeja de entrada</field>
     </record>
 <!-- Borrador-->
     <record id="ticket_stage_draft" model="ticket.stage">

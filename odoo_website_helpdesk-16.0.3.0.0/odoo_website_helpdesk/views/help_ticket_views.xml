@@ -127,6 +127,8 @@
                                     <field name="team_id"/>
                                     <field name="team_head"/>
                                     <field name="assigned_user"/>
+                                    <field name="tipo_soporte" />
+                                    <field name="tipo_visita" />
                                     <field name="category_id"
                                            groups="odoo_website_helpdesk.group_show_category"/>
                                 </group>

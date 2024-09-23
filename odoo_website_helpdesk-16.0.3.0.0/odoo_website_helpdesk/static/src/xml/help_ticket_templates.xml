@@ -120,13 +120,13 @@
                         <div class="col"
                              style="margin-top: 28px;margin-left: 88px;height: 48px;">
                             <h2 class="section-header" style="color:#4a5c9a;">
-                                Soporte tecnico dashboard
+                                Soporte Tecnico
                             </h2>
                         </div>
                         <div class="col-md-4 d-flex justify-content-end bg-light"
                              style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px">
                             <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
-                                Filter by:
+                                Filtrar por:
                             </b>
                             <select id="filter_selection"
                                     style="width: 50%;padding:10px;border-radius:10px; background:white;">
