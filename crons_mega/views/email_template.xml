@@ -157,7 +157,7 @@
                             
                                 <tr>
                                     <th><t t-out="object.promedio_mensual"/></th>
-                                    <th><t t-out="object.promedio_mensual"/></th>
+                                    <th><t t-out="object.promedio_anual"/></th>
                                     <th><t t-out="object.ganancia_diaria"/></th>
                                 </tr>
     

@@ -509,7 +509,6 @@ class CierreDiario(models.Model):
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
                         
-                        
                         #Obtenemos el dato del pago
                         factura_move= self.env['account.move'].sudo().browse(factura)
                         
@@ -565,7 +564,8 @@ class CierreDiario(models.Model):
                                                         ids_facturas = ids_facturas + \
                                                             [factura_id.id]
 
-                    acumulado = acumulado + acumulado_factura
+                        acumulado = acumulado + acumulado_factura
+                    
                     promedio = acumulado / mes
                     self.write({
                         'promedio_anual': promedio
