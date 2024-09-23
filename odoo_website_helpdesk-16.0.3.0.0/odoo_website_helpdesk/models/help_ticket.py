@@ -253,7 +253,7 @@ class HelpTicket(models.Model):
             'name': f'SPT/{self.customer_id.name}',   # Nombre del ticket
             'partner_id': self.customer_id.id,        # ID del cliente (partner)
             'user_id': self.assigned_user.id,             # Asignado a (usuario actual)
-            'company_id': self.assigned_user.company_id.id,   # Empresa relacionada (opcional)
+            'company_id': 8,   # Empresa relacionada (opcional)
             'description': self.description,
             'priority': self.priority,                     # Prioridad del ticket (opcional)
             'tipo_soporte': self.tipo_soporte,
