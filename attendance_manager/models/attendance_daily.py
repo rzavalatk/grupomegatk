@@ -16,8 +16,8 @@ class AttendanceDaily(models.Model):
         ('break', 'Hora de descanso'),
     ])
     
-    attendance_record = fields.Many2one('attendance.record', string='Asistencias entradas', required=True)
-    attendance_record_exists = fields.Many2one('attendance.record', string='Asistencias salidas', required=True)
+    attendance_record = fields.Many2one('attendance.record', string='Asistencias entradas', )
+    attendance_record_exists = fields.Many2one('attendance.record', string='Asistencias salidas',)
 
     def time_to_milliseconds(self, time_str):
         """Convierte una hora en formato HH:MM:SS:FFF a milisegundos desde las 00:00:00:000"""
@@ -55,4 +55,4 @@ class AttendanceDaily(models.Model):
                     if hora_marcacion < hora_max_entrada:
                         vals["check_type"] = "in"
 
-        return super().create(vals)
+                return super().create(vals)
