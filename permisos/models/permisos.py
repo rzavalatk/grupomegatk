@@ -38,7 +38,7 @@ class HrPermisos(models.Model):
 	sequence_id = fields.Many2one('ir.sequence', "Prestamo")
 	por_empresa = fields.Boolean('Por Empresa:', default=False)
  
-	
+	attendance_record = fields.Many2one('attendance.record', string='Asistencias', )
 
 	
 	@api.onchange('employe_id')
