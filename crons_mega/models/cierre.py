@@ -232,11 +232,8 @@ class CierreDiario(models.Model):
                                         
                                         for line in factura_id.line_ids:
                                             if line:
-                                                acumulado_ganancia += line.product_id.lst_price - line.product_id.standard_price
+                                                acumulado_ganancia = acumulado_ganancia + (line.product_id.lst_price - line.product_id.standard_price)
                                         
-                                        self.write({
-                                            'ganancia_diaria': acumulado_ganancia
-                                        })
 
                                     else:
                                         payments_widget = []
@@ -275,6 +272,8 @@ class CierreDiario(models.Model):
                             'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
+                    
+                    
                     #ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
@@ -306,6 +305,7 @@ class CierreDiario(models.Model):
         time.sleep(1)
         self.procesar_promedio_anual()
         self.write({
+            'ganancia_diaria': acumulado_ganancia,
             'state': 'proccess'
         })
         
@@ -613,7 +613,7 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)"""
             for i in ids:
-                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
+                principal_emails = "dzuniga@megatk.com,dvasquez@megatk.com"
                 cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
@@ -632,10 +632,10 @@ class CierreDiario(models.Model):
                         cc_mega += ",vmoran@megatk.com"
                         cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
-                    cierre.send_email(principal_emails, cc_mega)
+                    cierre.send_email(principal_emails )
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
-                    cierre.send_email(principal_emails, cc_meditek)
+                    cierre.send_email(principal_emails)
                 time.sleep(1)
 
     def go_to_view_tree(self):
