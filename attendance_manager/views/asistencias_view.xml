@@ -63,6 +63,18 @@
                                 </field>
                                 
                             </page>
+                            <page name="permisos" string="Permisos">
+                                <field name="permisos">
+                                    <tree >
+                                        <field name="name" />
+                                        <field name="fecha_inicio" />
+                                        <field name="fecha_fin" />
+                                        <field name="employe_idn" />
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                                
+                            </page>
                             
                             <!--<page name="administracion" string="Administración">
                                 <field name="attendance_administracion">
