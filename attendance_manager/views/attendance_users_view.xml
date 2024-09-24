@@ -19,4 +19,10 @@
             </tree>
         </field>
     </record>
+    <menuitem
+            id="attendance_users_menu"
+            name="Usuarios"
+            action="attendance_users_action"
+            parent="menu_attendance_sub"
+            sequence="20"/>
 </odoo>

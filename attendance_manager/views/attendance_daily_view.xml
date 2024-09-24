@@ -22,4 +22,10 @@
             </tree>
         </field>
     </record>
+    <menuitem
+            id="attendance_daily_menu"
+            name="Marcaciones diarias"
+            action="attendance_daily_action"
+            parent="menu_attendance_sub"
+            sequence="10"/>
 </odoo>
