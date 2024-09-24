@@ -16,10 +16,11 @@
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'views/main_menu_view.xml',
         'views/asistencias_view.xml',
         'views/attendance_users_view.xml',
         'views/attendance_daily_view.xml',
-        'views/main_menu_view.xml',
+        
     ],
     'installable': True,
     'application': True,
