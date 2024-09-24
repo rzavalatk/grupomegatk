@@ -22,7 +22,7 @@ class AttendanceRecord(models.Model):
     attendance_daily_entries = fields.One2many('attendance.daily', 'attendance_record', string='Asistencias entradas')
     attendance_daily_exits = fields.One2many('attendance.daily', 'attendance_record_exists', string='Asistencias salidas')
     
-    permisos = fields.One2many('hr.employee.permisos', 'attendance_record', string='Permisos')
+    permisos = fields.One2many('hr.employee.permisos', string='Permisos')
     #attendance_sync = fields.One2many('attendance.sync', 'attendance_record', string='Marcaciones', required=True)
     #attendance_administracion = fields.One2many('attendance.administration', 'attendance_record', string='Administración', required=True)
     
