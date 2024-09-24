@@ -108,6 +108,7 @@ class RestApi(http.Controller):
                 return ("<html><body><h2>Método no permitido"
                         "</h2></body></html>")
             else:
+                logging.warning("POST")
                 try:
                     try:
                         data = json.loads(request.httprequest.data)
