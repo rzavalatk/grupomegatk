@@ -1,5 +1,4 @@
 from odoo import models, fields, api
-import pymssql
 from sqlalchemy import create_engine
 
 from odoo.exceptions import UserError
