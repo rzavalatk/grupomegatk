@@ -76,6 +76,8 @@ class CierreDiario(models.Model):
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
+    ganancia_diaria = fields.Monetary("Ganancia Diaria", compute="_compute_ganancia_diaria")
+    
     logs = fields.Text("Registros", default="")
     state = fields.Selection([
         ("draft", "Borrador"),
@@ -105,6 +107,14 @@ class CierreDiario(models.Model):
             'logs': "",
             'state': 'cancel'
         })
+    def _compute_ganancia_diaria(self):
+        for record in self:
+            ganancia_total = 0
+            for factura in record.facturas_ids:
+                costo_total = sum(line.product_id.standard_price * line.quantity for line in factura.invoice_line_ids)
+                ganancia_factura = factura.amount_total - costo_total
+                ganancia_total += ganancia_factura
+            record.ganancia_diaria = round(ganancia_total, 2)
 
     def iniciar_cierre(self):
         journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
@@ -299,9 +309,8 @@ class CierreDiario(models.Model):
                 #                 })]
                 #             })
         
-        self.procesar_promedio_mensual()
-        time.sleep(1)
-        self.procesar_promedio_anual()
+        # Recalcular la ganancia diaria
+        self._compute_ganancia_diaria()
         self.write({
             'state': 'proccess'
         })
