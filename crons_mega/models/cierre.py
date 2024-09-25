@@ -308,7 +308,7 @@ class CierreDiario(models.Model):
             costo_total = sum(line.product_id.standard_price * line.quantity for line in factura.invoice_line_ids)
             ganancia_factura = factura.amount_total - costo_total
             ganancia_total += ganancia_factura
-        self.ganancia_diaria = round(ganancia_total, 2)
+        self.ganancia_diaria = ganancia_total
         
         self.procesar_promedio_mensual()
         time.sleep(1)
