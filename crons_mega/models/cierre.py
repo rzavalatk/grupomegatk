@@ -106,15 +106,7 @@ class CierreDiario(models.Model):
             'facturas_ids': facturas,
             'logs': "",
             'state': 'cancel'
-        })
-    def _compute_ganancia_diaria(self):
-        for record in self:
-            ganancia_total = 0
-            for factura in record.facturas_ids:
-                costo_total = sum(line.product_id.standard_price * line.quantity for line in factura.invoice_line_ids)
-                ganancia_factura = factura.amount_total - costo_total
-                ganancia_total += ganancia_factura
-            record.ganancia_diaria = round(ganancia_total, 2)
+        })        
 
     def iniciar_cierre(self):
         journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
@@ -209,6 +201,7 @@ class CierreDiario(models.Model):
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
+        facturas_ganancia = []
 
         # Recorrer los pagos
         for pago in pagos:
@@ -252,12 +245,13 @@ class CierreDiario(models.Model):
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
 
                                 for pay in payments_list:
-                                    #_logger.warning("Pase 4: ")
+                                    
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
-                                        #_logger.warning("Pase 5: ")
+                                        
                                         acumulado_factura += pay['amount']
-                                        #_logger.warning("Amount: " + str(pay['amount']))
-                                        #_logger.warning("Acumulado factura: " + str(acumulado_factura))
+                                        
+                                        facturas_ganancia.append(factura_id)
+                                        
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
@@ -309,8 +303,17 @@ class CierreDiario(models.Model):
                 #                 })]
                 #             })
         
-        # Recalcular la ganancia diaria
-        self._compute_ganancia_diaria()
+        ganancia_total = 0
+        for factura in facturas_ganancia:
+            costo_total = sum(line.product_id.standard_price * line.quantity for line in factura.invoice_line_ids)
+            ganancia_factura = factura.amount_total - costo_total
+            ganancia_total += ganancia_factura
+        self.ganancia_diaria = round(ganancia_total, 2)
+        
+        self.procesar_promedio_mensual()
+        time.sleep(1)
+        self.procesar_promedio_anual()
+        
         self.write({
             'state': 'proccess'
         })
