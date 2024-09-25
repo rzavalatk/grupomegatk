@@ -73,8 +73,6 @@ class CierreDiario(models.Model):
     total = fields.Monetary("Total Cobrado", compute=_total)
     promedio_mensual = fields.Monetary("Promedio mensual",)
     promedio_anual = fields.Monetary("Promedio anual")
-    ganancia_diaria = fields.Monetary("Ganancia diaria")
-    
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
@@ -201,7 +199,6 @@ class CierreDiario(models.Model):
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
-        acumulado_ganancia = 0
 
         # Recorrer los pagos
         for pago in pagos:
@@ -213,23 +210,29 @@ class CierreDiario(models.Model):
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
+                        #_logger.warning('Prueba 1 . factura : '+ str(factura))
+                        #_logger.warning('pagos.move=_id.sudo.ids : '+ str(pago.move_id.sudo().ids))
+                        
                         #Obtenemos el dato del pago
                         factura_move= self.env['account.move'].sudo().browse(factura)
                         
                         #OBtenemos la factura relacionada al pago
                         factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                         self.register_ids(factura_id, 'facturas de pagos')
+                        
+                        #_logger.warning(factura_id.invoice_date)
+                        #_logger.warning('total pago: ' + str(factura_id.invoice_payments_widget))
 
                         if factura_id not in ids_facturas:
-                            
+                            #_logger.warning("Pase 1: ")
                             if factura_id.invoice_date == self.date:
-                               
+                                #_logger.warning("Pase 2: ")
                                 try:
                                     if factura_id.state != 'cancel':
-                                        
+                                        #_logger.warning("Pase 3: ")
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
-                                        
+                                        #_logger.warning("Payments: " + str(payments_list))
 
                                     else:
                                         payments_widget = []
@@ -243,7 +246,8 @@ class CierreDiario(models.Model):
                                     if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
                                         #_logger.warning("Pase 5: ")
                                         acumulado_factura += pay['amount']
-                                       
+                                        #_logger.warning("Amount: " + str(pay['amount']))
+                                        #_logger.warning("Acumulado factura: " + str(acumulado_factura))
                                         if len(payments_widget) > 1:
                                             try:
                                                 mas_de_un_pago_factura[factura_id.internal_number]
@@ -268,8 +272,6 @@ class CierreDiario(models.Model):
                             'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
-                    
-                    
                     #ids_facturas = ids_facturas + pago.invoice_ids.sudo().ids
         self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
@@ -297,7 +299,9 @@ class CierreDiario(models.Model):
                 #                 })]
                 #             })
         
-       
+        self.procesar_promedio_mensual()
+        time.sleep(1)
+        self.procesar_promedio_anual()
         self.write({
             'state': 'proccess'
         })
@@ -316,20 +320,6 @@ class CierreDiario(models.Model):
         
         #fecha para promedio mensual
         fecha_init_mensual = date(año, mes, 1)
-        _logger.warning("fecha mensual: " + str(fecha_init_mensual))
-        
-        pagos = self.env['account.payment'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            ('date', '>=', fecha_init_mensual),
-            ('date', '<=', self.date),
-            ('company_id', '=', self.company_id.id),
-            ('region', '=', self.region),
-            ('partner_type', '=', 'customer'),
-            ('state', '=', 'posted'),
-        ])
 
         facturas = self.env['account.move'].sudo().search([
             '&',
@@ -341,66 +331,21 @@ class CierreDiario(models.Model):
             ('invoice_date', '>=', fecha_init_mensual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
+            # ('user_id','in',users_ids),
             ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
+            # ('de_consignacion', '=', False),
         ])
 
-        mas_de_un_pago_factura = {}
-        ids_facturas = []
-        acumulado = 0
-
-        for pago in pagos:
-            for item in self.cierre_line_ids:
-                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    acumulado_factura = 0 
-                    for factura in pago.move_id.sudo().ids:
-                        factura_move= self.env['account.move'].sudo().browse(factura)
-                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        if factura_id not in ids_facturas:
-                            if isinstance(factura_id.invoice_date, date):   
-                                if factura_id.invoice_date <= self.date:
-                                    if factura_id.invoice_date >= fecha_init_mensual:
-                                        try:
-                                            if factura_id.state != 'cancel': 
-                                                payments_widget = factura_id.invoice_payments_widget
-                                                payments_list = payments_widget["content"]
-                                                
-                                            else:
-                                                payments_widget = []
-                                        except:
-                                            raise Warning(
-                                                f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-                                        for pay in payments_list:
-                                            if pay['date'] <= self.date and pay['date'] >= fecha_init_mensual and pay['account_payment_id'] == pago.id:
-                                                acumulado_factura += pay['amount']
-                                                
-                                                if len(payments_widget) > 1:
-                                                    try:
-                                                        mas_de_un_pago_factura[factura_id.internal_number]
-                                                        temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
-                                                        if temp <= 0:
-                                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                                ids_facturas = ids_facturas + \
-                                                                    [factura_id.id]
-                                                        else:
-                                                            mas_de_un_pago_factura[factura_id.internal_number] = temp
-                                                    except:
-                                                        mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                            payments_widget) - 1
-                                                else:
-                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                        ids_facturas = ids_facturas + \
-                                                            [factura_id.id]
-
-                                                acumulado = acumulado + acumulado_factura
-                    _logger.warning("acumulado promedio mensural: " + str(acumulado))
-                    promedio = acumulado / dia
-                    _logger.warning("PROMEDIO mensual: " + str(promedio))
-                    self.write({
-                        'promedio_mensual': promedio
-                    })
+        # Recorrer las facturas y sumar los totales
+        total_ventas = sum(factura.amount_total for factura in facturas)
+        
+        promedio = total_ventas / dia
+        self.write({
+            'promedio_mensual': promedio
+        })
             
     def procesar_promedio_anual(self):
         if self.region == self.regions_list[1][0]:
@@ -417,23 +362,7 @@ class CierreDiario(models.Model):
         
         #fecha para el promedio anual
         fecha_init_anual = date(año, 1, 1)
-        
-        pagos = self.env['account.payment'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            ('date', '>=', fecha_init_anual),
-            ('date', '<=', self.date),
-            ('company_id', '=', self.company_id.id),
-            ('region', '=', self.region),
-            ('partner_type', '=', 'customer'),
-            ('state', '=', 'posted'),
-        ])
-        self.register_ids(pagos, 'pagos')
 
-        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
-        # 1
 
         facturas = self.env['account.move'].sudo().search([
             '&',
@@ -452,85 +381,15 @@ class CierreDiario(models.Model):
             ('state', '!=', 'draft'),
             # ('de_consignacion', '=', False),
         ])
-        self.register_ids(facturas, 'facturas')
+        
+        # Recorrer las facturas y sumar los totales
+        total_ventas = sum(factura.amount_total for factura in facturas)
         
 
-        mas_de_un_pago_factura = {}
-        ids_facturas = []
-        acumulado = 0
-
-        # Recorrer los pagos
-        for pago in pagos:
-            # Recorrer los diarios del cierre asignados
-            for item in self.cierre_line_ids:
-                # Compartar que pagos entran en los diarios de cierre
-                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    
-                    acumulado_factura = 0  # lo acumulado de facturas
-                    # recorrer facturas de los pagos
-                    for factura in pago.move_id.sudo().ids:
-                        
-                        #Obtenemos el dato del pago
-                        factura_move= self.env['account.move'].sudo().browse(factura)
-                        
-                        #OBtenemos la factura relacionada al pago
-                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        self.register_ids(factura_id, 'facturas de pagos') 
-
-                        if factura_id not in ids_facturas:
-                          
-                            if isinstance(factura_id.invoice_date, date):
-                                
-                                
-                                if factura_id.invoice_date <= self.date:
-                                    
-                                    
-                                    if factura_id.invoice_date >= fecha_init_anual:
-                                    
-                                        try:
-                                            if factura_id.state != 'cancel':
-                                                
-                                                payments_widget = factura_id.invoice_payments_widget
-                                                payments_list = payments_widget["content"]
-                                                
-                                            else:
-                                                payments_widget = []
-                                        except:
-                                            #_logger.warning('Error . factura : '+ str(factura))
-                                            raise Warning(
-                                                f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-
-                                        for pay in payments_list:
-                                            
-                                            if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
-                                                
-                                                acumulado_factura += pay['amount']
-                                                _logger.warning("acumulado: " + str(acumulado_factura))
-                                                
-                                                if len(payments_widget) > 1:
-                                                    try:
-                                                        mas_de_un_pago_factura[factura_id.internal_number]
-                                                        temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
-                                                        if temp <= 0:
-                                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                                ids_facturas = ids_facturas + \
-                                                                    [factura_id.id]
-                                                        else:
-                                                            mas_de_un_pago_factura[factura_id.internal_number] = temp
-                                                    except:
-                                                        mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                            payments_widget) - 1
-                                                else:
-                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                        ids_facturas = ids_facturas + \
-                                                            [factura_id.id]
-
-                    acumulado = acumulado + acumulado_factura
-                    
-                    promedio = acumulado / mes
-                    self.write({
-                        'promedio_anual': promedio
-                    })
+        promedio = total_ventas / mes
+        self.write({
+            'promedio_anual': promedio
+        })
                    
     
 
@@ -574,7 +433,7 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)"""
             for i in ids:
-                principal_emails = "dzuniga@megatk.com"
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
                 cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
@@ -582,9 +441,7 @@ class CierreDiario(models.Model):
                 time.sleep(1)
                 cierre.procesar_cierre()
                 time.sleep(1)
-                cierre.procesar_promedio_mensual()
-                time.sleep(1)
-                cierre.procesar_promedio_anual()
+                
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
                     # if cierre.company_id.sudo().id == 12:
@@ -593,10 +450,10 @@ class CierreDiario(models.Model):
                         cc_mega += ",vmoran@megatk.com"
                         cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
-                    cierre.send_email(principal_emails,)
+                    cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
-                    cierre.send_email(principal_emails,)
+                    cierre.send_email(principal_emails, cc_meditek)
                 time.sleep(1)
 
     def go_to_view_tree(self):
