@@ -232,6 +232,9 @@ class CierreDiario(models.Model):
                                         
                                         for line in factura_id.line_ids:
                                             if line:
+                                                logging.warning(line.product_id.name)
+                                                logging.warning(line.product_id.lst_price)
+                                                logging.warning(line.product_id.standard_price)
                                                 acumulado_ganancia = acumulado_ganancia + (line.product_id.lst_price - line.product_id.standard_price)
                                         
 
@@ -301,9 +304,7 @@ class CierreDiario(models.Model):
                 #                 })]
                 #             })
         
-        self.procesar_promedio_mensual()
-        time.sleep(1)
-        self.procesar_promedio_anual()
+       
         self.write({
             'ganancia_diaria': acumulado_ganancia,
             'state': 'proccess'
