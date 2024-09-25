@@ -445,7 +445,7 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)"""
             for i in ids:
-                principal_emails = "dzuniga@megatk.com"
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
                 cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
@@ -462,10 +462,10 @@ class CierreDiario(models.Model):
                         cc_mega += ",vmoran@megatk.com"
                         cc_meditek += "dgarcia@meditekhn.com"
                     # print("/////////////",principal_emails,cc_mega,"//////////////")
-                    cierre.send_email(principal_emails,)
+                    cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
-                    cierre.send_email(principal_emails, ) #Meditek
+                    cierre.send_email(principal_emails, cc_meditek) #Meditek
                 time.sleep(1)
 
     def go_to_view_tree(self):
