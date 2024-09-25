@@ -230,13 +230,6 @@ class CierreDiario(models.Model):
                                         payments_widget = factura_id.invoice_payments_widget
                                         payments_list = payments_widget["content"]
                                         
-                                        for line in factura_id.line_ids:
-                                            if line:
-                                                logging.warning(line.product_id.name)
-                                                logging.warning(line.product_id.lst_price)
-                                                logging.warning(line.product_id.standard_price)
-                                                acumulado_ganancia = acumulado_ganancia + (line.product_id.lst_price - line.product_id.standard_price)
-                                        
 
                                     else:
                                         payments_widget = []
@@ -306,7 +299,6 @@ class CierreDiario(models.Model):
         
        
         self.write({
-            'ganancia_diaria': acumulado_ganancia,
             'state': 'proccess'
         })
         
@@ -338,10 +330,6 @@ class CierreDiario(models.Model):
             ('partner_type', '=', 'customer'),
             ('state', '=', 'posted'),
         ])
-        self.register_ids(pagos, 'pagos')
-
-        #_logger.warning('Arreglo de Pagos : ' + str(pagos))
-        # 1
 
         facturas = self.env['account.move'].sudo().search([
             '&',
@@ -353,68 +341,40 @@ class CierreDiario(models.Model):
             ('invoice_date', '>=', fecha_init_mensual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            # ('user_id','in',users_ids),
             ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-            # ('de_consignacion', '=', False),
         ])
-        self.register_ids(facturas, 'facturas')
-        
-        #_logger.warning("facturas: " + str(facturas))
 
         mas_de_un_pago_factura = {}
         ids_facturas = []
         acumulado = 0
 
-        # Recorrer los pagos
         for pago in pagos:
-            # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
-                # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    
-                    acumulado_factura = 0  # lo acumulado de facturas
-                    # recorrer facturas de los pagos
+                    acumulado_factura = 0 
                     for factura in pago.move_id.sudo().ids:
-                        
-                        
-                        #Obtenemos el dato del pago
                         factura_move= self.env['account.move'].sudo().browse(factura)
-                        
-                        #OBtenemos la factura relacionada al pago
                         factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        self.register_ids(factura_id, 'facturas de pagos')
-
                         if factura_id not in ids_facturas:
-                            
-                            if isinstance(factura_id.invoice_date, date):
-                                
+                            if isinstance(factura_id.invoice_date, date):   
                                 if factura_id.invoice_date <= self.date:
-                                    
-                                    
                                     if factura_id.invoice_date >= fecha_init_mensual:
-                                    
                                         try:
-                                            if factura_id.state != 'cancel':
-                                                
+                                            if factura_id.state != 'cancel': 
                                                 payments_widget = factura_id.invoice_payments_widget
                                                 payments_list = payments_widget["content"]
                                                 
                                             else:
                                                 payments_widget = []
                                         except:
-                                            #_logger.warning('Error . factura : '+ str(factura))
                                             raise Warning(
                                                 f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-
                                         for pay in payments_list:
-                                            
-                                            if pay['date'] == self.date and pay['account_payment_id'] == pago.id:
-                                                
+                                            if pay['date'] <= self.date and pay['date'] >= fecha_init_mensual and pay['account_payment_id'] == pago.id:
                                                 acumulado_factura += pay['amount']
-                                                _logger.warning("acumulado: " + str(acumulado_factura))
                                                 
                                                 if len(payments_widget) > 1:
                                                     try:
@@ -434,10 +394,10 @@ class CierreDiario(models.Model):
                                                         ids_facturas = ids_facturas + \
                                                             [factura_id.id]
 
-                    acumulado = acumulado + acumulado_factura
-                    _logger.warning("acumulado promedio: " + str(acumulado))
+                                                acumulado = acumulado + acumulado_factura
+                    _logger.warning("acumulado promedio mensural: " + str(acumulado))
                     promedio = acumulado / dia
-                    _logger.warning("PROMEDIO: " + str(promedio))
+                    _logger.warning("PROMEDIO mensual: " + str(promedio))
                     self.write({
                         'promedio_mensual': promedio
                     })
