@@ -28,6 +28,7 @@
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='sale_info_group']/field[@name='partner_bank_id']" position="after">
+                    <field name="certificado_deposito" />
                     <field name="sorteo_id"/>
                     <field name="x_student" />
                     <field name="n_tickets_acum" readonly="True" />

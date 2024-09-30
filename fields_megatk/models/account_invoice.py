@@ -24,12 +24,10 @@ class Account_Move(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
-    
     x_contacto = fields.Char('Contacto de referencia', compute='_compute_contacto')
-    
     n_tickets_acum = fields.Integer('Tickets')
-    
     mostrar_direccion = fields.Boolean(string='¿Mostrar Dirección de contacto?', default=False)
+    certificado_deposito = fields.Boolean(string='¿Certificado de Deposito?', default=False)
     
     
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
