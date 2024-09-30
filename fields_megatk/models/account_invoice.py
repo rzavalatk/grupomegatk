@@ -43,6 +43,8 @@ class Account_Move(models.Model):
     
     mostrar_direccion = fields.Boolean(string='¿Mostrar Dirección de contacto?', default=False)
     
+    certificado_deposito = fields.Boolean(string='¿Certificado de Deposito?', default=False)
+    
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
