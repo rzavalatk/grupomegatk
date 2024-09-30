@@ -34,9 +34,9 @@
         <div style="float: right; margin-top: 25px;">
           <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_refund'">NOTA DE CREDITO</span>
           <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_refund'">Vendor Credit Note</span>
-          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'">FACTURA PROVEEDOR</span>
-          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice' and o.certificado_deposito == False">FACTURA COMERCIAL</span>
-          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice' and o.certificado_deposito == True">CERTIFICADO DE DEPOSITO</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'  and o.certificado_deposito == False">FACTURA PROVEEDOR</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice'">FACTURA COMERCIAL</span>
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'in_invoice'' and o.certificado_deposito == True">CERTIFICADO DE DEPOSITO</span>
           <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
                 <p style="margin-top: -10px"><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>

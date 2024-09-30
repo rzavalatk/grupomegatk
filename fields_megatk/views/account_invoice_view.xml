@@ -28,11 +28,14 @@
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='sale_info_group']/field[@name='partner_bank_id']" position="after">
-                    <field name="certificado_deposito" />
                     <field name="sorteo_id"/>
                     <field name="x_student" />
                     <field name="n_tickets_acum" readonly="True" />
                     
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='auto_post']" position="after">
+                    <field name="certificado_deposito" />
                 </xpath>
 
                 <!--<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='invoice_tab']/field[@name='invoice_line_ids']/tree[1]/field[@name='product_id']" position="attributes">
