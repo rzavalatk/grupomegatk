@@ -120,4 +120,5 @@
     <menuitem id="taxes_configuration" parent="menu_point_root" name="Fiscal Regime POS"  sequence="70" />
     <menuitem id="fiscal_sequence" parent="taxes_configuration" name="Fiscal Numbers POS"  sequence="14" action="vitt_fiscal_seq_action_id"/>
 </data>
+
 </odoo>
