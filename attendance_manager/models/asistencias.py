@@ -22,7 +22,7 @@ class AttendanceRecord(models.Model):
     attendance_daily_entries = fields.One2many('attendance.daily', 'attendance_record', string='Asistencias entradas')
     attendance_daily_exits = fields.One2many('attendance.daily', 'attendance_record_exists', string='Asistencias salidas')
     
-    #permisos = fields.One2many('hr.employee.permisos', string='Permisos')
+    attendance_permisos = fields.One2many('hr.employee.permisos', string='Permisos')
     #attendance_sync = fields.One2many('attendance.sync', 'attendance_record', string='Marcaciones', required=True)
     #attendance_administracion = fields.One2many('attendance.administration', 'attendance_record', string='Administración', required=True)
     
@@ -39,14 +39,14 @@ class AttendanceRecord(models.Model):
         asistencias_salidas = self.env['attendance.daily'].sudo().search([('fecha', '=', self.fecha_reporte), ('company_id', '=', self.company_id.id), 
                                                                            ('check_type', '=', 'out')])
         
-        permisos_daily = self.env['hr.employee.permisos'].sudo().search([('fecha_inicio', '<=', self.fecha_reporte), ('fecha_fin', '>=', self.fecha_reporte),])  
+        permisos_daily = self.env['hr.employee.permisos'].sudo().search([('fecha_inicio', '<=', self.fecha_reporte), ('fecha_fin', '>=', self.fecha_reporte), ('state', '=', 'aprobado')])  
 
         if not asistencias_entradas and not asistencias_salidas:
             raise UserError('No hay registros para evaluar')
         else:
             self.attendance_daily_entries = asistencias_entradas
             self.attendance_daily_exits = asistencias_salidas
-            self.permisos = permisos_daily
+            self.attendance_permisos = permisos_daily
         
 class AttendanceSync(models.Model):
     _name = 'attendance.sync'

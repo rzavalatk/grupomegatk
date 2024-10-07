@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Odoo16 Employee Contracts Types',
+    'name': 'Odoo16 Tipos de contratos para empleados',
     'version': '16.0.1.1.0',
     'category': 'Generic Modules/Human Resources',
     'summary': """
-        Contract type in contracts
+        Tipos de contratos para empleados
     """,
-    'description': """Odoo16 Employee Contracts Types,Odoo16 Employee, Employee Contracts, Odoo 16""",
-    'author': 'Odoo SA,Cybrosys Techno Solutions',
-    'company': 'Cybrosys Techno Solutions',
-    'maintainer': 'Cybrosys Techno Solutions',
-    'website': 'https://www.cybrosys.com',
+    'description': """Odoo16 Tipos de Contratos de Empleados,Odoo16 Empleado, Contratos de Empleados, Odoo 16""",
+    'author': 'Megatk, Cybrosys Techno Solutions',
+    'company': 'Megatk, Cybrosys Techno Solutions',
+    'maintainer': 'Megatk',
     'depends': ['hr', 'hr_contract'],
     'data': [
         'security/ir.model.access.csv',
@@ -19,7 +18,6 @@
         'data/hr_contract_type_data.xml',
     ],
     'installable': True,
-    'images': ['static/description/banner.png'],
     'auto_install': False,
     'application': False,
     'license': 'AGPL-3',

@@ -15,6 +15,6 @@ class ContractType(models.Model):
 class ContractInherit(models.Model):
     _inherit = 'hr.contract'
 
-    type_id = fields.Many2one('hr.contract.type', string="Employee Category",
-                              required=True, help="Employee category",
+    type_id = fields.Many2one('hr.contract.type', string="Categoria de empleado",
+                              required=True, help="Categoria de empleado",
                               default=lambda self: self.env['hr.contract.type'].search([], limit=1))

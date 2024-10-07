@@ -12,7 +12,7 @@
         </field>
     </record>
 
-<!--    CONTRACT TYPE     -->
+<!--    TIpo de contrato    -->
     <record id="hr_contract_type_view_form" model="ir.ui.view">
             <field name="name">hr.contract.type.form</field>
             <field name="model">hr.contract.type</field>
