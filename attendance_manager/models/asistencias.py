@@ -39,14 +39,14 @@ class AttendanceRecord(models.Model):
         asistencias_salidas = self.env['attendance.daily'].sudo().search([('fecha', '=', self.fecha_reporte), ('company_id', '=', self.company_id.id), 
                                                                            ('check_type', '=', 'out')])
         
-        #permisos_daily = self.env['hr.employee.permisos'].sudo().search([('fecha_inicio', '<=', self.fecha_reporte), ('fecha_fin', '>=', self.fecha_reporte), ('state', '=', 'aprobado')])  
+        permisos_daily = self.env['hr.employee.permisos'].sudo().search([('fecha_inicio', '<=', self.fecha_reporte), ('fecha_fin', '>=', self.fecha_reporte), ('state', '=', 'aprobado')])  
 
         if not asistencias_entradas and not asistencias_salidas:
             raise UserError('No hay registros para evaluar')
         else:
             self.attendance_daily_entries = asistencias_entradas
             self.attendance_daily_exits = asistencias_salidas
-            #self.attendance_permisos = permisos_daily
+            self.attendance_permisos = permisos_daily
         
 class AttendanceSync(models.Model):
     _name = 'attendance.sync'
