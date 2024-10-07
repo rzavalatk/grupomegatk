@@ -63,12 +63,12 @@
                                 </field>
                                 
                             </page>
-                            <!--<page name="permisos" string="Permisos">
+                            <page name="permisos" string="Permisos">
                                 <field name="attendance_permisos"></field>
                                 
                             </page>
                             
-                            <page name="administracion" string="Administración">
+                            <!--<page name="administracion" string="Administración">
                                 <field name="attendance_administracion">
                                     <tree editable='button'>
                                         <field name="employee_id" />
