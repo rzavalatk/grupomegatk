@@ -64,9 +64,7 @@
                                 
                             </page>
                             <page name="permisos" string="Permisos">
-                                <field name="attendance_permisos">
-                                    
-                                </field>
+                                <field name="attendance_permisos"></field>
                                 
                             </page>
                             
