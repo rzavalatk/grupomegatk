@@ -113,6 +113,6 @@
 		<field name="view_mode">tree,form</field>
 	</record>
 	<menuitem id="tax_configuration" parent="account.menu_finance_configuration" name="Fiscal Regime POS"  sequence="20" />
-	<menuitem id="fiscal_sequence" parent="tax_configuration" name="Fiscal Numbers POS"  sequence="12" action="vitt_fiscal_seq_action_id"/>
+	<menuitem id="fiscal_sequence" parent="tax_configuration" name="Fiscal Numbers POS"  sequence="20" action="vitt_fiscal_seq_action_id"/>
 </data>
 </odoo>
