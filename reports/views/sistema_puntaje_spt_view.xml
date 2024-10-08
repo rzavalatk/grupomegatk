@@ -37,8 +37,6 @@
                             <field name="tabla_puntaje">
                                 <tree editable="bottom">
                                     <field name="tecnico_id"/>
-                                    <field name="marcas_id"/>
-                                    <field name="servicio_id" />
                                     <field name="taller_id" />
                                     <field name="visita_id" />
                                     <field name="llamada_id" />
@@ -81,7 +79,7 @@
     </record>
 
     <record id="sistema_puntaje_soporte_action" model="ir.actions.act_window">
-        <field name="name">sistema puntaje SP action</field>
+        <field name="name">Sistema puntaje soporte tecnico.</field>
         <field name="res_model">sistema.puntaje.soporte</field>
         <field name="view_mode">tree,form</field>
     </record>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    Ticket types-->
+    <record id="helpdesk_types_question" model="helpdesk.types">
+        <field name="name">Pregunta</field>
+    </record>
+    <record id="helpdesk_types_repair" model="helpdesk.types">
+        <field name="name">Reparar</field>
+    </record>
+    <record id="helpdesk_types_maintenance" model="helpdesk.types">
+        <field name="name">Mantenimiento</field>
+    </record>
+    <record id="helpdesk_categories_internal" model="helpdesk.categories">
+        <field name="name">Interno</field>
+    </record>
+    <record id="helpdesk_categories_technical" model="helpdesk.categories">
+        <field name="name">Técnico</field>
+    </record>
+</odoo>
