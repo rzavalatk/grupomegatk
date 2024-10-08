@@ -2,8 +2,8 @@
 <odoo>
 <data>
 <record model="ir.ui.view" id="account_invoice_form_view_sequence_inh">
-    <field name="name">account.invoice.sequence.form.view.inh</field>
-    <field name="model">account.invoice</field>
+    <field name="name">account.move.sequence.form.view.inh</field>
+    <field name="model">account.move</field>
     <field name="inherit_id" ref="account.invoice_form" />
     <field name="arch" type="xml">
         <field name="payment_term_id" position="after">
