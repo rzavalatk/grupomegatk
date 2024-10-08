@@ -35,8 +35,26 @@
                         </group>
                     </group>
 
+                    <group>
+                        <notebook>
+                            <page string="Fiscal Regime">
+                                <field name="fiscal_sequence_regime_ids" options="{'no_create': True}">
+                                    <tree editable="top">
+                                      <field name="authorization_code_id"/>
+                                      <field name="_from"/>
+                                      <field name="_to"/>
+                                      <field name="actived"/>
+                                  </tree>
+                              </field>
+                          </page>
+                      </notebook>
+                  </group>
                 </page>
 
+                <page string="Users" attrs="{'invisible': [('is_fiscal_sequence','!=',True)]}">
+                    <separator  string="Users"/>   
+                    <field name="user_ids" options="{'no_create': True}"></field>
+                </page>
             </notebook>
 
         </field>

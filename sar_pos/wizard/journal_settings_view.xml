@@ -12,7 +12,8 @@
                     <separator string="Configuración de diario y usuarios"/>
                     <group colspan="4">
                         <group cols="2">
-                            <field name="company_id"/>
+                            <!--<field name="company_id" groups="base.group_multi_company"/>-->
+                            <field name="company_id" />
                             <field name="journal_id" placeholder="Seleccione un diario..." domain="[('company_id', '=', company_id), ('type', 'in', ['sale','purchase','general'])]"/>
                         </group>
                         <group cols="2">
@@ -51,6 +52,8 @@
         <field name="name">Configuración de Secuencias</field>
         <field name="res_model">sar.journal.settings</field>
         <field name="view_mode">form</field>
+        <field name="view_id" ref="journal_settings_view_form"/>
+        <field name="target">new</field>
     </record>
 
 </data>
