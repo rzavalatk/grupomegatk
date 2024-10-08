@@ -8,6 +8,7 @@ from odoo import models, fields, api
 class Sequence(models.Model):
     _inherit = "ir.sequence"
 
+    fiscal_sequence_regime_ids = fields.One2many("sar.fiscal.sequence.regime", "sequence_id")
     expiration_date = fields.Date('Expiration Date')
     vitt_min_value = fields.Char('Minimal number', )
     vitt_max_value = fields.Char('Max number', )
@@ -18,6 +19,7 @@ class Sequence(models.Model):
     vitt_padding = fields.Integer('Number padding', related='padding')
     vitt_number_next_actual = fields.Integer('Next Number', related='number_next_actual')
     is_fiscal_sequence = fields.Boolean("Fiscal sequence")
+    user_ids = fields.Many2many("res.users", string="Users")
 
     journal_id = fields.Many2one("account.journal", "Journal")
     min_value = fields.Integer('Minimal value')
