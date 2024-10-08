@@ -302,7 +302,7 @@
                                                         <div class="col-sm">
                                                             <input id="contact5"
                                                                    type="text"
-                                                                   placeholder="Mention your Issue here"
+                                                                   placeholder="Mencione aquí su asunto"
                                                                    class="form-control s_website_form_input"
                                                                    name="subject"
                                                                    required=""/>
@@ -327,7 +327,7 @@
                                                                     id="contact6"
                                                                     class="form-control s_website_form_input"
                                                                     name="description"
-                                                                    placeholder="Issue description in detail"
+                                                                    placeholder="Descripción detallada del problema"
                                                                     required=""/>
                                                         </div>
                                                     </div>
