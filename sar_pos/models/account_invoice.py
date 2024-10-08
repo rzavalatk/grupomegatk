@@ -14,7 +14,7 @@ TYPE2JOURNAL = {
 
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
     @api.multi
     @api.depends("company_id")
