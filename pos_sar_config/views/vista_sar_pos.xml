@@ -4,7 +4,7 @@
 	<record id="inherit_view_config_sar" model="ir.ui.view">
 		<field name="name">account.move.sequence.form.view.inh</field>
 		<field name="model">sar.fiscal.sequence.regime</field>
-		<field name="inherit_id" ref="fiscal_sequence.fiscal_sequence_regime_form_view"/>
+		<field name="inherit_id" ref="sar.fiscal_sequence_regime_form_view"/>
 		<field name="arch" type="xml">
 			<form string="Fiscal Regime">
 					<sheet>
@@ -116,3 +116,4 @@
 		<menuitem id="fiscal_sequence" parent="tax_configuration" name="Fiscal Numbers"  sequence="11" action="vitt_fiscal_seq_action_id"/>
 	</data>
 </odoo>
+
