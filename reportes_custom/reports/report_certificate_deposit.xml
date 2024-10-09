@@ -10,7 +10,7 @@
     </template>
 
     <template id="report_certificate_deposit_template">
-        <t t-call="web.external_layout">
+        
             <div class="page">
                 <!-- Encabezado -->
                 <div class="text-center">
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-        </t>
+        
     </template>
 
     
