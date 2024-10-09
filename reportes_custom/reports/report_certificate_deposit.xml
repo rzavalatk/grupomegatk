@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-12">
                         <p>Por el presente Certificamos que en esta fecha hemos recibido de: <strong t-field="doc.customer_name"/></p>
-                        <p>La cantidad de: <strong t-field="doc.amount"/> Lps</strong></p>
+                        <p>La cantidad de: <strong t-field="doc.amount"/> Lps</p>
                         <p>En calidad de depósito a la vista.</p>
                     </div>
                 </div>
