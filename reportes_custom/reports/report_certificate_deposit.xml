@@ -9,21 +9,21 @@
                     <h2>BANCO FICENSA</h2>
                     <p>Certificado de Depósito a la Vista</p>
                     <p>No Negociable</p>
-                    <p>Certificado No: <span t-field="doc.number"/></p>
+                    <p>Certificado No: <span t-field="doc.name"/></p>
                 </div>
 
                 <!-- Fecha y Lugar -->
                 <div class="row mt-3">
                     <div class="col-6">
-                        <p>Lugar y Fecha: <span t-field="doc.place"/>, <span t-field="doc.date"/></p>
+                        <p>Lugar y Fecha: <span t-field="doc.company_id.city"/>, <span t-field="doc.invoice_date"/></p>
                     </div>
                 </div>
 
                 <!-- Datos de depósito -->
                 <div class="row">
                     <div class="col-12">
-                        <p>Por el presente Certificamos que en esta fecha hemos recibido de: <strong t-field="doc.customer_name"/></p>
-                        <p>La cantidad de: <strong t-field="doc.amount"/> Lps</p>
+                        <p>Por el presente Certificamos que en esta fecha hemos recibido de: <strong t-field="doc.partner_id.name"/></p>
+                        <p>La cantidad de: <strong t-field="doc.amount_total"/> Lps</p>
                         <p>En calidad de depósito a la vista.</p>
                     </div>
                 </div>
