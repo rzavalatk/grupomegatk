@@ -126,5 +126,16 @@
 			paperformat="report_sticker_barcode_2"
         />
 
+		<!-- Registro del reporte -->
+		<report
+			id="action_report_certificate_deposit"
+			model="account.move"
+			string="Certificado de Depósito"
+			report_type="qweb-pdf"
+			name="reportes_custom.report_certificate_deposit_template"
+			file="reportes_custom.report_certificate_deposit_template"
+			print_report_name="'Certificado_de_Deposito_' + object.number"
+		/>
+
 	</data>
 </odoo>

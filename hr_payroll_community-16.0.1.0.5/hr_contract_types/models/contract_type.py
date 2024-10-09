@@ -8,8 +8,8 @@ class ContractType(models.Model):
     _description = 'Contract Type'
     _order = 'sequence, id'
 
-    name = fields.Char(string='Contract Type', required=True, help="Name")
-    sequence = fields.Integer(help="Gives the sequence when displaying a list of Contract.", default=10)
+    name = fields.Char(string='Tipo de contrato', required=True, help="Nombre")
+    sequence = fields.Integer(help="Indica la secuencia de visualización de una lista de contratos.", default=10)
 
 
 class ContractInherit(models.Model):

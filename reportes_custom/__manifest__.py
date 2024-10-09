@@ -31,6 +31,7 @@
         'reports/stock_picking_custom_print_view.xml',
         'reports/stock_picking_custom_print_view_pos.xml',
         'reports/cotizacion_custom_proforma_view.xml',
+        'reports/report_certificate_deposit.xml',
         'wizard/wizard_sign.xml',
         'views/stock.xml',
         'security/groups.xml',

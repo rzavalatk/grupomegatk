@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Plantilla del reporte -->
+    <template id="report_certificate_deposit_template">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <!-- Encabezado -->
+                <div class="text-center">
+                    <h2>BANCO FICENSA</h2>
+                    <p>Certificado de Depósito a la Vista</p>
+                    <p>No Negociable</p>
+                    <p>Certificado No: <span t-field="doc.number"/></p>
+                </div>
+
+                <!-- Fecha y Lugar -->
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <p>Lugar y Fecha: <span t-field="doc.place"/>, <span t-field="doc.date"/></p>
+                    </div>
+                </div>
+
+                <!-- Datos de depósito -->
+                <div class="row">
+                    <div class="col-12">
+                        <p>Por el presente Certificamos que en esta fecha hemos recibido de: <strong t-field="doc.customer_name"/></p>
+                        <p>La cantidad de: <strong t-field="doc.amount"/> Lps</strong></p>
+                        <p>En calidad de depósito a la vista.</p>
+                    </div>
+                </div>
+
+                <!-- Firma y sello -->
+                <div class="row mt-5">
+                    <div class="col-6 text-left">
+                        <p>Firma Autorizada: ___________________________</p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <p>Sello: ___________________________</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    
+</odoo>
