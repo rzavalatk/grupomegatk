@@ -35,7 +35,8 @@
                     <div class="col-6">
                         <!--<span  t-if="doc.currency_id.name == 'HNL'">Lps. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
                         <span  t-if="doc.currency_id.name == 'USD'">USD. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>-->
-                        <strong t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        <t t-esc="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+
                     </div>
                 </div>
 
