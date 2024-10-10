@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Plantilla del reporte -->
+    <template id="report_certificate_deposit_template_view">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+          <t t-call="reportes_custom.report_certificate_deposit_template" t-lang="doc.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+
+    <template id="report_certificate_deposit_template">
+        
+            <div class="page" style="">
+                
+                <!-- Encabezado -->
+                <div class="Encabezado" style="display: flex; flex-direction: row; flex-grow: 1fr 2fr 1fr; ">
+                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 270px; position: absolute; top: -88px; padding-top: 0px; padding: 0px;" alt="Logo"/>
+                    
+                    <h2 style="position: absolute; top: 15px; left: 310px">CERTIFICADO DE DEPOSITO A PLAZO FIJO</h2>        
+                    
+                    <p style="position: absolute; top: 20px; left: 900px">No: <span t-field="doc.internal_number"/></p>
+                </div>
+                
+
+                <!-- Fecha y Lugar -->
+                <div class="" style="position: absolute; top: 120px; width: 600px;">
+                    <div class="">
+                        <p>Lugar y Fecha: TEGUCIGALPA - <span t-field="doc.invoice_date"/></p>
+                    </div>
+                </div>
+
+                <!-- Cantidad en numeros-->
+                <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family:'Arial'">
+                    <div class="col-6">
+                       <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                    </div>
+                </div>
+
+                <!-- Datos de depósito -->
+                <div class="row" style="position: absolute; top: 190px;">
+                    <div class="col-12">
+                        <p style="font-family:'Arial'">Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name"/></p>
+                        <p style="font-family:'Arial'">La cantidad de: <strong t-field="doc.num_word"/> </p>
+                        <p style="font-family:'Arial'">En calidad de deposito a plazo fijo por doce meses.</p>
+                    </div>
+                </div>
+
+                <!-- Firma y sello -->
+                <div class="row mt-5" style="position: absolute; top: 370px; left: 600px" >
+                    <div class="col-6 text-left">
+                        <p>Firma Autorizada: ___________________________</p>
+                    </div>
+                    
+                </div>
+            </div>
+        
+    </template>
+
+    
+</odoo>
