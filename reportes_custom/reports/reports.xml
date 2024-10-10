@@ -104,18 +104,6 @@
 			paperformat="formatos_papel_mega.report_paperformat_pos"
 		/>-->
 
-		
-		<report
-			id="stock_package_custom"
-			model="stock.picking"
-			string="Lista de empaque"
-			name="reportes_custom.stock_package_order_custom_print_view"
-			file="reportes_custom.stock_package_order_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"
-		/>
-
 		<report
 			id="stock_picking_custom_pos"
 			model="stock.picking"
@@ -137,6 +125,18 @@
             print_report_name="'Products barcode - %s' % (object.name)"
 			paperformat="report_sticker_barcode_2"
         />
+
+		<!-- Registro del reporte -->
+		<report
+			id="action_report_certificate_deposit"
+			model="account.move"
+			string="Certificado de Depósito"
+			report_type="qweb-pdf"
+			name="reportes_custom.report_certificate_deposit_template_view"
+			file="reportes_custom.report_certificate_deposit_template_view"
+			print_report_name="'Certificado_de_Deposito_'"
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos_horizontal"
+		/>
 
 	</data>
 </odoo>
