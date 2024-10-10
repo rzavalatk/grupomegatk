@@ -24,7 +24,7 @@
                 
 
                 <!-- Fecha y Lugar -->
-                <div class="" style="position: absolute; top: 120px;">
+                <div class="" style="position: absolute; top: 120px; width: 200px;">
                     <div class="">
                         <p>Lugar y Fecha: TEGUCIGALPA - <span t-field="doc.invoice_date"/></p>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="col-6">
                         <!--<span  t-if="doc.currency_id.name == 'HNL'">Lps. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
                         <span  t-if="doc.currency_id.name == 'USD'">USD. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>-->
-                        <strong t-field="doc.amount_total" />
+                        <strong t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                     </div>
                 </div>
 
