@@ -24,8 +24,8 @@
                 
 
                 <!-- Fecha y Lugar -->
-                <div class="row mt-3" style="position: absolute; top: 120px;">
-                    <div class="col-6">
+                <div class="" style="position: absolute; top: 120px;">
+                    <div class="">
                         <p>Lugar y Fecha: TEGUCIGALPA - <span t-field="doc.invoice_date"/></p>
                     </div>
                 </div>
@@ -33,8 +33,9 @@
                 <!-- Cantidad en numeros-->
                 <div class="row mt-3" style="position: absolute; top: 120px; left: 700px">
                     <div class="col-6">
-                        <span  t-if="doc.currency_id.name == 'HNL'">Lps. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
-                        <span  t-if="doc.currency_id.name == 'USD'">USD. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
+                        <!--<span  t-if="doc.currency_id.name == 'HNL'">Lps. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
+                        <span  t-if="doc.currency_id.name == 'USD'">USD. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>-->
+                        <strong t-field="doc.amount_total" />
                     </div>
                 </div>
 
@@ -43,7 +44,7 @@
                     <div class="col-12">
                         <p style="font-family:'Arial'">Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name"/></p>
                         <p style="font-family:'Arial'">La cantidad de: <strong t-field="doc.num_word"/> </p>
-                        <p style="font-family:'Arial'">En calidad de depósito a plazo fijo por doce meses.</p>
+                        <p style="font-family:'Arial'">En calidad de deposito a plazo fijo por doce meses.</p>
                     </div>
                 </div>
 
