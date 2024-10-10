@@ -2,8 +2,7 @@
 <odoo>
     <template id="ChatToCompany" name="Chat With Company"
               inherit_id="website.footer_custom">
-              
-        <xpath expr="//div[hasclass('s_share')]" position="inside">
+        <xpath expr="//div[hasclass('s_social_media')]" position="inside">
             <div class="cy_whatsapp_web">
                 <i class="fa fa-whatsapp cy-icon"/>
             </div>
