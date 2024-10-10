@@ -15,11 +15,11 @@
                 
                 <!-- Encabezado -->
                 <div class="Encabezado" style="display: flex; flex-direction: row; flex-grow: 1fr 2fr 1fr; ">
-                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 270px; position: absolute; top: 10px; padding-top: 0px; padding: 0px;" alt="Logo"/>
+                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 270px; position: absolute; top: -100px; padding-top: 0px; padding: 0px;" alt="Logo"/>
                     
-                    <h2 style="position: absolute; top: 15px; left: 280px">CERTIFICADO DE DEPOSITO A PLAZO FIJO</h2>        
+                    <h2 style="position: absolute; top: 15px; left: 300px">CERTIFICADO DE DEPOSITO A PLAZO FIJO</h2>        
                     
-                    <p>No: <span t-field="doc.internal_number"/></p>
+                    <p style="position: absolute; top: 15px; left: 800px">No: <span t-field="doc.internal_number"/></p>
                 </div>
                 
 
