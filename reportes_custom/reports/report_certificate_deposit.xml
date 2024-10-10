@@ -11,7 +11,7 @@
 
     <template id="report_certificate_deposit_template">
         
-            <div class="page">
+            <div class="page" style="transform: rotate(45deg);">
                 <!-- Encabezado -->
                 <div class="text-center">
                     <h2>BANCO FICENSA</h2>
