@@ -33,7 +33,7 @@
             <field name="name">Tamaño Carta Horizontal</field>
             <field name="default" eval="True"/>
             <field name="format">Letter</field>
-            <field name="orientation">landscape</field>
+            <field name="orientation">Landscape</field>
             <field name="margin_top">40</field>
             <field name="margin_bottom">20</field>
             <field name="margin_left">7</field>
