@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Compute duration -->
+     <record id="ir_cron_add_duration" model="ir.cron">
+        <field name="name">Website Visitors: Compute Duration</field>
+        <field name="model_id" ref="model_website_visitor"/>
+        <field name="state">code</field>
+        <field name="code">model.calculate_duration()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+    </record>
+    <!--Archive website visitors -->
+    <record id="ir_cron_archive_bot_visitors" model="ir.cron">
+        <field name="name">Website Visitors: Remove visitors if they are bots</field>
+        <field name="model_id" ref="model_website_visitor"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_remove_bots()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>
