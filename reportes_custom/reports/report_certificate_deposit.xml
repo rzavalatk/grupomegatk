@@ -24,31 +24,31 @@
                 
 
                 <!-- Fecha y Lugar -->
-                <div class="row mt-3" style="position: absolute; top: 100px;">
+                <div class="row mt-3" style="position: absolute; top: 120px;">
                     <div class="col-6">
-                        <p>Lugar y Fecha: TEGUCIGALPA <span t-field="doc.invoice_date"/></p>
+                        <p>Lugar y Fecha: TEGUCIGALPA - <span t-field="doc.invoice_date"/></p>
                     </div>
                 </div>
 
                 <!-- Cantidad en numeros-->
-                <div class="row mt-3" style="position: absolute; top: 100px; left: 700px">
+                <div class="row mt-3" style="position: absolute; top: 120px; left: 700px">
                     <div class="col-6">
-                        <span style="" t-if="doc.currency_id.name == 'HNL'">Lps. <span t-field="doc.amount_total" /> </span>
-                        <span style="" t-if="doc.currency_id.name == 'USD'">USD. <span t-field="doc.amount_total" /></span>
+                        <span  t-if="doc.currency_id.name == 'HNL'">Lps. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
+                        <span  t-if="doc.currency_id.name == 'USD'">USD. <span style="font-family:'Arial'" t-field="doc.amount_total" /> </span>
                     </div>
                 </div>
 
                 <!-- Datos de depósito -->
-                <div class="row" style="position: absolute; top: 160px;">
+                <div class="row" style="position: absolute; top: 190px;">
                     <div class="col-12">
-                        <p>Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name"/></p>
-                        <p>La cantidad de: <strong t-field="doc.num_word"/> </p>
-                        <p>En calidad de depósito a plazo fijo por doce meses.</p>
+                        <p style="font-family:'Arial'">Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name"/></p>
+                        <p style="font-family:'Arial'">La cantidad de: <strong t-field="doc.num_word"/> </p>
+                        <p style="font-family:'Arial'">En calidad de depósito a plazo fijo por doce meses.</p>
                     </div>
                 </div>
 
                 <!-- Firma y sello -->
-                <div class="row mt-5" style="position: absolute; top: 300px; left: 600px" >
+                <div class="row mt-5" style="position: absolute; top: 350px; left: 600px" >
                     <div class="col-6 text-left">
                         <p>Firma Autorizada: ___________________________</p>
                     </div>
