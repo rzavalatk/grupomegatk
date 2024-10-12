@@ -136,6 +136,7 @@
 			file="reportes_custom.report_certificate_deposit_template_view"
 			print_report_name="'Certificado_de_Deposito_'"
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos_horizontal"
+			context="{'lang': 'es_MX'}"
 		/>
 
 	</data>
