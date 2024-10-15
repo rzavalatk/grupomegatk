@@ -24,6 +24,7 @@ class CrmLead(models.Model):
     repor_email = fields.Char(string='Correo electrónico',)
     repor_direction = fields.Char(string='Direccion de la visita')
     proposito = fields.Char(string='Propósito de la visita',)
+    proposito_llamada = fields.Text("Proposito de la llamada")
     observacion_visita = fields.Html(string='Observaciones')
     producto1 = fields.Char(string='Campaña',)
     producto2 = fields.Char(string='Media',)
