@@ -53,7 +53,7 @@
 									<field name="estado_taller" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
 									<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
 									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="proposito_llamada" attrs='{"invisible": [["tipo_soporte","in",["visita","visita_sin_costo"]]]}'/>
+									<field name="proposito_llamada"/>
 									
 								</group>
 								<group name="data2">
