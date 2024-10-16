@@ -11,7 +11,7 @@
     'maintainer': 'Megatk',
     'website': 'megatk.com',
     'depends': ['base', 'website', 'project', 'sale_project',
-                'hr_timesheet', 'mail', 'contacts'],
+                 'mail', 'contacts'],
     'data': [
         'security/odoo_website_helpdesk_security.xml',
         'security/ir.model.access.csv',
