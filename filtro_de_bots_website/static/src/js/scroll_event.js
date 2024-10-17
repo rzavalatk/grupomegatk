@@ -18,7 +18,7 @@ odoo.define('lt_website_enhancement.scroll_page', function (require) {
                     var currentScrollLeft = ev.target.scrollLeft;
                     var top_difference = Math.abs(currentScrollTop - lastScrollTop);
                     var left_difference = Math.abs(currentScrollLeft - lastScrollLeft);
-                    if(top_difference >= 10 || left_difference >= 10){
+                    if(top_difference >= 2 || left_difference >= 2){
                         self._rpc({
                             route: '/website/update_visitor_last_connection',
                             params: {
