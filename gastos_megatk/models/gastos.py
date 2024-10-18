@@ -59,7 +59,7 @@ class LiquidacionGastos(models.Model):
     state = fields.Selection( [('draft', 'Borrador'),  ('pendiente', 'Pendiente de aprobacíón'), ('aprobado', 'Aprobado'), ('desembolso', 'Desembolsado'),
         ('liquidado', 'Liquidado'), ('rechazado', 'Rechazado')], string="Estado", default='draft')
     tipo_gasto = fields.Selection([('viatico', 'Viatico'), ('otro', 'Otros')], string="Tipo de gasto", required=True)
-    currency_id = fields.Many2one('res.currency', string='Currency', readonly=True)
+    #currency_id = fields.Many2one('res.currency', string='Currency', readonly=True)
 
     #relacion de unos a muchos
     detalle_gastos_ids = fields.One2many("gastos.lineas.megatk", "obj_parent", "Detalle de gastos")
@@ -263,9 +263,9 @@ class LineaGastos(models.Model):
     obj_parent = fields.Many2one("gastos.megatk", "Gasto")
     gasto_id = fields.Many2one("gastos.megatk.conceptos", "Tipo de gasto")
     name = fields.Char("Descripción")
-    monto = fields.Monetary("Monto solicitado", required=True)
+    monto = fields.Float("Monto solicitado", required=True)
     comprobante = fields.Char("Factura/Comprobante")
-    monto_comprobante = fields.Monetary("Monto a liquidar")
+    monto_comprobante = fields.Float("Monto a liquidar")
     estado_parent = fields.Boolean("Flag")
 
     #@api.model_create_multi

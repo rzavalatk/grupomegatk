@@ -57,7 +57,7 @@
 				<field name="empleado_solicitud" options="{'no_create': True}" attrs="{'readonly': [('state','!=','draft')]}" />
 				<field name="tipo_gasto" attrs="{'readonly': [('state','!=','draft')]}"/>
 				<field name="total_solicitado"/>
-				<field name="currency_id" />
+				
 				
 			</group>
 			<group cols="2">
