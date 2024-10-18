@@ -40,7 +40,8 @@
                         </td>
                         <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
                             <t t-if="o.state != 'cancel'">
-                            <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                <t t-set="amount" t-value="o.amount_total"/>
+                                <t t-esc="env.context['lang'].formatLang(amount, monetary=True)"/>
                             </t>
                             <t t-else="">
                             <t t-set="i" t-value="0.00"/>
