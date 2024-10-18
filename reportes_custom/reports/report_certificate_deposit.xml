@@ -34,7 +34,7 @@
                 <!-- Cantidad en numeros-->
                 <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family: 'DejaVu Sans', 'Arial';">
                     <t t-set="amount" t-value="doc.amount_total"/>
-                    <t t-esc="lang.formatLang(amount, monetary=True)"/>
+                    <t t-esc="formatLang(amount, monetary=True)"/>
                 </div>
 
                 <!-- Datos de depósito -->
