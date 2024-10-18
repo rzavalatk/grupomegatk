@@ -40,7 +40,7 @@
                         </td>
                         <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
                             <t t-if="o.state != 'cancel'">
-                                <t t-set="amount" t-value="o.amount_total"/>
+                                <t t-set="amount" t-value="doc.amount_total"/>
                                 <t t-esc="env.context['lang'].formatLang(amount, monetary=True)"/>
                             </t>
                             <t t-else="">
