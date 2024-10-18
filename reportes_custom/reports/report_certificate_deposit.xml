@@ -33,23 +33,8 @@
 
                 <!-- Cantidad en numeros-->
                 <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family: 'DejaVu Sans', 'Arial';">
-                    <table class="table table-sm" >
-                        <tr style="border-bottom: blacl 4px solid;">  
-                        <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;  font-weight: bold;">
-                            <strong>Total</strong>
-                        </td>
-                        <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
-                            <t t-if="o.state != 'cancel'">
-                                <t t-set="amount" t-value="doc.amount_total"/>
-                                <t t-esc="env.context['lang'].formatLang(amount, monetary=True)"/>
-                            </t>
-                            <t t-else="">
-                            <t t-set="i" t-value="0.00"/>
-                            <span t-esc="i" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
-                            </t>
-                        </td>
-                        </tr>
-                  </table>
+                    <t t-set="amount" t-value="doc.amount_total"/>
+                    <t t-esc="env.context['lang'].formatLang(amount, monetary=True)"/>
                 </div>
 
                 <!-- Datos de depósito -->
