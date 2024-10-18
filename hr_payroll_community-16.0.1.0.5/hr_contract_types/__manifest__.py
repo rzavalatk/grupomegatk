@@ -8,8 +8,8 @@
         Tipos de contratos para empleados
     """,
     'description': """Odoo16 Tipos de Contratos de Empleados,Odoo16 Empleado, Contratos de Empleados, Odoo 16""",
-    'author': 'Megatk, Cybrosys Techno Solutions',
-    'company': 'Megatk, Cybrosys Techno Solutions',
+    'author': 'Megatk',
+    'company': 'Megatk',
     'maintainer': 'Megatk',
     'depends': ['hr', 'hr_contract'],
     'data': [

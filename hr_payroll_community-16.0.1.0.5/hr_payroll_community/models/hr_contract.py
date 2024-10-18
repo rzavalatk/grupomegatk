@@ -4,31 +4,21 @@ from odoo import api, fields, models
 
 
 class HrContract(models.Model):
-    """
-    Employee contract based on the visa, work permits
-    allows to configure different Salary structure
-    """
     _inherit = 'hr.contract'
     _description = 'Employee Contract'
 
-    struct_id = fields.Many2one('hr.payroll.structure', string='Salary Structure')
+    struct_id = fields.Many2one('hr.payroll.structure', string='Estrucutra de salario')
     schedule_pay = fields.Selection([
-        ('monthly', 'Monthly'),
-        ('quarterly', 'Quarterly'),
-        ('semi-annually', 'Semi-annually'),
-        ('annually', 'Annually'),
-        ('weekly', 'Weekly'),
-        ('bi-weekly', 'Bi-weekly'),
-        ('bi-monthly', 'Bi-monthly'),
-    ], string='Scheduled Pay', index=True, default='monthly',
-        help="Defines the frequency of the wage payment.")
-    resource_calendar_id = fields.Many2one(required=True, help="Employee's working schedule.")
-    hra = fields.Monetary(string='HRA', tracking=True, help="House rent allowance.")
-    travel_allowance = fields.Monetary(string="Travel Allowance", help="Travel allowance")
-    da = fields.Monetary(string="DA", help="Dearness allowance")
-    meal_allowance = fields.Monetary(string="Meal Allowance", help="Meal allowance")
-    medical_allowance = fields.Monetary(string="Medical Allowance", help="Medical allowance")
-    other_allowance = fields.Monetary(string="Other Allowance", help="Other allowances")
+        ('monthly', 'Mensual'),
+        ('quarterly', 'Trimestral'),
+        ('semi-annually', 'Semi anual'),
+        ('annually', 'Anual'),
+        ('weekly', 'Semanal'),
+    ], string='Pago programado', index=True, default='monthly',
+        help="Define la frecuencia del pago del salario.")
+    resource_calendar_id = fields.Many2one(required=True, help="Horario de trabajo del empleado.")
+    medical_allowance = fields.Monetary(string="Subsidio médico", help="Subsidio médico")
+    other_allowance = fields.Monetary(string="Otras indemnizaciones", help="Otras indemnizaciones")
 
     def get_all_structures(self):
 

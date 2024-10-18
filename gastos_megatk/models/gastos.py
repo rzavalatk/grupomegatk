@@ -59,14 +59,15 @@ class LiquidacionGastos(models.Model):
     state = fields.Selection( [('draft', 'Borrador'),  ('pendiente', 'Pendiente de aprobacíón'), ('aprobado', 'Aprobado'), ('desembolso', 'Desembolsado'),
         ('liquidado', 'Liquidado'), ('rechazado', 'Rechazado')], string="Estado", default='draft')
     tipo_gasto = fields.Selection([('viatico', 'Viatico'), ('otro', 'Otros')], string="Tipo de gasto", required=True)
+    currency_id = fields.Many2one('res.currency', string='Currency', readonly=True)
 
     #relacion de unos a muchos
     detalle_gastos_ids = fields.One2many("gastos.lineas.megatk", "obj_parent", "Detalle de gastos")
     comentarios = fields.Text("Comentarios")
-    total_solicitado = fields.Float("Monto solicitado", compute=get_totalgastos, track_visibility='onchange')
-    total_gastos = fields.Float("Total gastos", compute=get_totalgastos, track_visibility='onchange')
-    total_diferencia = fields.Float("Diferencia", compute=get_totalgastos, track_visibility='onchange')
-    monto_anticipo = fields.Float("Monto de anticipo", track_visibility='onchange')
+    total_solicitado = fields.Monetary("Monto solicitado", compute=get_totalgastos, track_visibility='onchange')
+    total_gastos = fields.Monetary("Total gastos", compute=get_totalgastos, track_visibility='onchange')
+    total_diferencia = fields.Monetary("Diferencia", compute=get_totalgastos, track_visibility='onchange')
+    monto_anticipo = fields.Monetary("Monto de anticipo", track_visibility='onchange')
     banco_id = fields.Many2one("banks.check", "Cheque/Transferencia", track_visibility='onchange', copy=False)
     banco_debit_id = fields.Many2one("banks.debit", "Debito", track_visibility='onchange', copy=False)
     journal_id = fields.Many2one("account.journal", "Diario", domain=[('type','=','general')])
@@ -262,9 +263,9 @@ class LineaGastos(models.Model):
     obj_parent = fields.Many2one("gastos.megatk", "Gasto")
     gasto_id = fields.Many2one("gastos.megatk.conceptos", "Tipo de gasto")
     name = fields.Char("Descripción")
-    monto = fields.Float("Monto solicitado", required=True)
+    monto = fields.Monetary("Monto solicitado", required=True)
     comprobante = fields.Char("Factura/Comprobante")
-    monto_comprobante = fields.Float("Monto a liquidar")
+    monto_comprobante = fields.Monetary("Monto a liquidar")
     estado_parent = fields.Boolean("Flag")
 
     #@api.model_create_multi
