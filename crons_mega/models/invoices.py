@@ -51,7 +51,7 @@ class AccountMove(models.Model):
         admin = self.env['res.users'].sudo().browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
-        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]), ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', '=', 'not_paid')])
+        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]), ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', 'in', ['not_paid', 'in_payment'])])
         mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_date_dues')
         
         
@@ -66,8 +66,8 @@ class AccountMove(models.Model):
                             
                             email_values = {
                                 'email_from': 'megatk.no_reply@megatk.com',
-                                'email_to': invoice.partner_id.email,
-                                'email_cc': invoice.invoice_user_id.login
+                                'email_to': 'dzuniga@megatk.com',
+                                'email_cc': 'dvasquez@megatk.com'
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                             
@@ -75,8 +75,8 @@ class AccountMove(models.Model):
                             
                             email_values = {
                                 'email_from': 'meditek.no_reply@megatk.com',
-                                'email_to': invoice.partner_id.email,
-                                'email_cc': invoice.invoice_user_id.login
+                                'email_to': 'dzuniga@megatk.com',
+                                'email_cc': 'dvasquez@megatk.com'
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                     
