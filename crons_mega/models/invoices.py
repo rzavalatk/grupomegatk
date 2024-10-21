@@ -58,7 +58,9 @@ class AccountMove(models.Model):
         for invoice in invoices:
             
             if invoice.invoice_payment_term_id.line_ids.months != 0:
-            
+                
+                _logger.warning("#1" + invoice.internal_number)
+                
                 if invoice.invoice_user_id:
                     if invoice.partner_id.email:
                         
@@ -70,7 +72,7 @@ class AccountMove(models.Model):
                                 'email_cc': 'dvasquez@megatk.com'
                             }
                             #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                            _logger.warning(invoice.name)
+                            _logger.warning(invoice.internal_number)
                             
                         """elif invoice.company_id.id == 9:
                             
