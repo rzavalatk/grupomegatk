@@ -57,7 +57,7 @@ class AccountMove(models.Model):
         
         for invoice in invoices:
             
-            if invoice.invoice_payment_term_id.id not in ["111","126"]:
+            if invoice.invoice_payment_term_id.line_ids.months != 0:
             
                 if invoice.invoice_user_id:
                     if invoice.partner_id.email:
@@ -71,14 +71,14 @@ class AccountMove(models.Model):
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                             
-                        elif invoice.company_id.id == 9:
+                        """elif invoice.company_id.id == 9:
                             
                             email_values = {
                                 'email_from': 'meditek.no_reply@megatk.com',
                                 'email_to': 'dzuniga@megatk.com',
                                 'email_cc': 'dvasquez@megatk.com'
                             }
-                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)"""
                     
                     
                     
