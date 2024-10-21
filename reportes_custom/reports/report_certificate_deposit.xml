@@ -51,7 +51,7 @@
                 <!-- Datos de depósito -->
                 <div class="row" style="position: absolute; top: 190px;">
                     <div class="col-12">
-                        <p style="font-family:'Arial'">Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name"/></p>
+                        <p style="font-family:'Arial'">Prúeba Por el presente Certificamos que en esta fecha hemos recibido de:  <strong t-field="doc.partner_id.name" t-options='{"widget": "text"}'/></p>
                         <p style="font-family:'Arial'">La cantidad de: <strong t-field="doc.num_word"/> </p>
                         <p style="font-family:'Arial'">En calidad de deposito a plazo fijo por doce meses.</p>
                     </div>
