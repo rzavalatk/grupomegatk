@@ -51,14 +51,16 @@ class AccountMove(models.Model):
         admin = self.env['res.users'].sudo().browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
-        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]), ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', '=', 'not_paid')])
+        invoices = self.search([('invoice_date_due', '<', today), ('company_id', 'in', [8,9]), ('state', '=', 'posted'), ('move_type', '=', 'out_invoice'), ('payment_state', 'in', ['not_paid', 'partial'])])
         mail_template = self.env.ref('crons_mega.mail_template_notification_invoice_date_dues')
         
         
         for invoice in invoices:
             
-            if invoice.invoice_payment_term_id.id not in ["111","126"]:
-            
+            if invoice.invoice_payment_term_id.line_ids.months != 0:
+                
+                _logger.warning("#1" + invoice.name)
+                
                 if invoice.invoice_user_id:
                     if invoice.partner_id.email:
                         
@@ -66,19 +68,20 @@ class AccountMove(models.Model):
                             
                             email_values = {
                                 'email_from': 'megatk.no_reply@megatk.com',
-                                'email_to': invoice.partner_id.email,
-                                'email_cc': invoice.invoice_user_id.login
+                                'email_to': 'dzuniga@megatk.com',
+                                'email_cc': 'dvasquez@megatk.com'
                             }
-                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            _logger.warning(invoice.name)
                             
                         elif invoice.company_id.id == 9:
                             
                             email_values = {
                                 'email_from': 'meditek.no_reply@megatk.com',
-                                'email_to': invoice.partner_id.email,
-                                'email_cc': invoice.invoice_user_id.login
+                                'email_to': 'dzuniga@megatk.com',
+                                'email_cc': 'dvasquez@megatk.com'
                             }
-                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                    
+                            #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            _logger.warning(invoice.name)
                     
                     
