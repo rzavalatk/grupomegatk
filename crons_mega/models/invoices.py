@@ -71,9 +71,8 @@ class AccountMove(models.Model):
                                 'email_to': 'dzuniga@megatk.com',
                                 'email_cc': 'dvasquez@megatk.com'
                             }
-                            #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                            _logger.warning(invoice.name)
-                            _logger.warning(invoice.invoice_payment_term_id)
+                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                           
                             
                         elif invoice.company_id.id == 9:
                             
@@ -82,8 +81,7 @@ class AccountMove(models.Model):
                                 'email_to': 'dzuniga@megatk.com',
                                 'email_cc': 'dvasquez@megatk.com'
                             }
-                            #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
-                            _logger.warning(invoice.name)
-                            _logger.warning(invoice.invoice_payment_term_id)
+                            mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
+                            
                     
                     
