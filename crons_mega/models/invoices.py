@@ -68,8 +68,8 @@ class AccountMove(models.Model):
                             
                             email_values = {
                                 'email_from': 'megatk.no_reply@megatk.com',
-                                'email_to': 'dzuniga@megatk.com',
-                                'email_cc': 'dvasquez@megatk.com'
+                                'email_to': invoice.partner_id.email,
+                                'email_cc': invoice.invoice_user_id.login
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                            
@@ -78,8 +78,8 @@ class AccountMove(models.Model):
                             
                             email_values = {
                                 'email_from': 'meditek.no_reply@megatk.com',
-                                'email_to': 'dzuniga@megatk.com',
-                                'email_cc': 'dvasquez@megatk.com'
+                                'email_to': invoice.partner_id.email,
+                                'email_cc': invoice.invoice_user_id.login
                             }
                             mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                     
