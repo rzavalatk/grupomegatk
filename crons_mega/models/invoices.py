@@ -59,7 +59,7 @@ class AccountMove(models.Model):
             
             if invoice.invoice_payment_term_id.id not in [111,126]:
                 
-                _logger.warning("#1 " + invoice.name )
+                #_logger.warning("#1 " + invoice.name )
                 
                 if invoice.invoice_user_id:
                     if invoice.partner_id.email:
@@ -73,6 +73,7 @@ class AccountMove(models.Model):
                             }
                             #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                             _logger.warning(invoice.name)
+                            _logger.warning(invoice.invoice_payment_term_id)
                             
                         elif invoice.company_id.id == 9:
                             
@@ -83,5 +84,6 @@ class AccountMove(models.Model):
                             }
                             #mail_template.sudo().send_mail(invoice.id, email_values=email_values, force_send=True)
                             _logger.warning(invoice.name)
+                            _logger.warning(invoice.invoice_payment_term_id)
                     
                     
