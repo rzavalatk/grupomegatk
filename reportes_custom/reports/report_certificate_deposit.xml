@@ -37,7 +37,7 @@
                     <tr>
                     <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
                         <t t-if="doc.state != 'cancel'">
-                          <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                          <span t-esc="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                         </t>
                         <t t-else="">
                           <t t-set="i" t-value="0.00"/>
