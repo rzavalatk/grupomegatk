@@ -154,6 +154,7 @@ class LiquidacionGastos(models.Model):
             'account_id': self.cuenta_anticipo_id.id,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
         }
         lineas.append((0, 0, vals_credit_anticipo))
@@ -168,6 +169,7 @@ class LiquidacionGastos(models.Model):
             'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
             }
             lineas.append((0, 0, vals_cuenta_gasto))
@@ -182,6 +184,7 @@ class LiquidacionGastos(models.Model):
             'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
             }
             lineas.append((0, 0, vals_cuenta_gasto))
@@ -195,6 +198,7 @@ class LiquidacionGastos(models.Model):
             'account_id': self.cuenta_cxc_id.id,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
             }
             lineas.append((0, 0, vals_cuenta_cxc))
@@ -209,6 +213,7 @@ class LiquidacionGastos(models.Model):
             'analytic_distribution': analytic_distribution,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
             }
             lineas.append((0, 0, vals_cuenta_gasto))
@@ -222,6 +227,7 @@ class LiquidacionGastos(models.Model):
             'account_id': self.cuenta_caja_id.id,
             'date': self.fecha_liquidacion,
             'partner_id': self.empleado_solicitud.id,
+            'currency_id': self.currency_id.id,
             #'company_id': self.company_id.id,
             }
             lineas.append((0, 0, vals_cuenta_caja))
