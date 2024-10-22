@@ -235,6 +235,7 @@ class LiquidacionGastos(models.Model):
             'journal_id': self.journal_id.id,
             'date': self.fecha_liquidacion,
             'ref': self.name,
+            'currency_id': self.currency_id.id,
             'line_ids': lineas,
             'state': 'draft',
         }
