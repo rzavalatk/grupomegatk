@@ -32,10 +32,10 @@
                 </div>
 
                 <!-- Cantidad en numeros-->
-                <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family: 'DejaVu Sans', 'Arial';">
+                <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family: 'DejaVu Sans';">
                     <table class="table table-sm" >
                     <tr>
-                    <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
+                    <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Dejavu Sans'; font-size:13pt;">
                         <t t-if="doc.state != 'cancel'">
                           <span t-esc="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                         </t>
