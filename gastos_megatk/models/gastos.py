@@ -71,6 +71,7 @@ class LiquidacionGastos(models.Model):
     banco_debit_id = fields.Many2one("banks.debit", "Debito", track_visibility='onchange', copy=False)
     journal_id = fields.Many2one("account.journal", "Diario", domain=[('type','=','general')])
     move_id = fields.Many2one('account.move', 'Apunte Contable', readonly=True)
+    currency_id = fields.Many2one('res.currency', string='Moneda')
 
     activar_cuenta_gasto = fields.Boolean("Activar", compute=get_totalgastos)
     activar_cuenta_cxc = fields.Boolean("Activar", compute=get_totalgastos)
