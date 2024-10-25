@@ -33,7 +33,7 @@
                 <!-- Cantidad en numeros-->
                 <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family:'Arial'">
                     <div class="col-6">
-                       <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                       <span t-esc="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                     </div>
                 </div>
 
