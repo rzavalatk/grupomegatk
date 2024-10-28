@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <odoo>
-<data>
     <!-- Plantilla del reporte -->
     <template id="report_certificate_deposit_template_view">
       <t t-call="web.html_container">
         <t t-foreach="docs" t-as="doc">
-          <t t-call="reportes_custom.report_certificate_deposit_template" t-lang="doc.partner_id.lang"/>
+          <t t-set="lang" t-value="doc.partner_id.lang"/>
+          <t t-call="reportes_custom.report_certificate_deposit_template" t-lang="lang"/>
         </t>
       </t>
     </template>
 
     <template id="report_certificate_deposit_template">
-        
+        <t t-call="web.external_layout">
             <div class="page" style="">
                 
                 <!-- Encabezado -->
@@ -33,20 +32,10 @@
                 </div>
 
                 <!-- Cantidad en numeros-->
-                <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family:'Arial';">
-                    <table class="table table-sm" >
-                    <tr>
-                    <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
-                        <t t-if="doc.state != 'cancel'">
-                          <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-                        </t>
-                        <t t-else="">
-                          <t t-set="i" t-value="0.00"/>
-                          <span t-esc="i" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-                        </t>
-                      </td>
-                    </tr>
-                    </table>
+                <div class="row mt-3" style="position: absolute; top: 127px; left: 700px; font-family:'Arial'">
+                    <div class="col-6">
+                       <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                    </div>
                 </div>
 
                 <!-- Datos de depósito -->
@@ -66,9 +55,11 @@
                     
                 </div>
             </div>
-        
+        </t>
     </template>
 
-   </data> 
+    
 </odoo>
+
+
 
