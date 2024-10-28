@@ -43,7 +43,7 @@ class WebsiteVisitor(models.Model):
 
     def calculate_duration(self):
         visitors = self.env['website.visitor'].search(
-            [('set_duration', '=', False)], limit=1500)
+            [('set_duration', '=', False)], limit=3000)
         for rec in visitors:
             if rec.last_connection_datetime:
                 difference = rec.last_connection_datetime - rec.create_date
