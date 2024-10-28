@@ -6,7 +6,7 @@ from odoo import api, models, fields
 
 
 class PosOrder(models.Model):
-    _inherit = 'point_of_sale.order'
+    _inherit = 'point.of.sale.order'
 
     returned_order_id = fields.Many2one(
         comodel_name='pos.order',
