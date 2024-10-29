@@ -7,4 +7,5 @@
             <link rel="stylesheet" href="/pos_master/pos_order_mgmt/static/src/css/pos.css"/>
         </xpath>
     </template>
+    
 </odoo>
