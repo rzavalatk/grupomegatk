@@ -9,7 +9,7 @@ from odoo import fields, models
 
 
 class PosConfig(models.Model):
-    _inherit = 'point.of.sale.config'
+    _inherit = 'pos.config'
 
     iface_order_mgmt = fields.Boolean(
         string='Order Management',
