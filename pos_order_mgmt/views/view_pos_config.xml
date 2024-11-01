@@ -8,7 +8,7 @@
 
     <record id="view_pos_config_form" model="ir.ui.view">
         <field name="model">pos.config</field>
-        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
         <field name="arch" type="xml">
             <div id="receipt" position="inside">
                 <div class="col-xs-12 col-md-6 o_setting_box" id="pos_order_mgmt">
