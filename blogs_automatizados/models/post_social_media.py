@@ -1,5 +1,6 @@
-import requests
 from odoo import models, fields, api
+from odoo.exceptions import UserError
+import requests
 
 class BlogPostFacebookPublisher(models.Model):
     _inherit = 'blog.post'
