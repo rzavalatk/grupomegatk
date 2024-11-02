@@ -26,4 +26,4 @@ class BlogPostFacebookPublisher(models.Model):
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
                 # Manejo de errores si la publicación falla
-                _logger.error("Error al publicar en Facebook: %s", response.json())
+                self._logger.error("Error al publicar en Facebook: %s", response.json())
