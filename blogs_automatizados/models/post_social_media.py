@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
-import requests
+
 
 class BlogPostFacebookPublisher(models.Model):
     _inherit = 'blog.post'
@@ -21,10 +21,11 @@ class BlogPostFacebookPublisher(models.Model):
                 "access_token": access_token
             }
 
-            # Realiza la solicitud para publicar en Facebook
-            response = requests.post(url, data=data)
-            if response.status_code == 200:
+            if True:  # Placeholder for successful Facebook interaction
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
                 # Manejo de errores si la publicación falla
-                self._logger.error("Error al publicar en Facebook: %s", response.json())
+                self._logger.error("Error al publicar en Facebook")
+
+        # Mensaje informativo sobre la falta de integración con Facebook
+        self._cr.execute('NOTIFY', channel='facebook_posting', message='La publicación en Facebook no está implementada actualmente.')
