@@ -76,7 +76,8 @@ class CierreDiario(models.Model):
     region = fields.Selection(
         regions_list, string="Region/Zona", required=True)
     date = fields.Date("Fecha")
-    ganancia_diaria = fields.Monetary("Ganancia Diaria", compute="_compute_ganancia_diaria")
+    #ganancia_diaria = fields.Monetary("Ganancia Diaria", compute="_compute_ganancia_diaria")
+    ganancia_diaria = fields.Monetary("Ganancia Diaria",)
     
     logs = fields.Text("Registros", default="")
     state = fields.Selection([
