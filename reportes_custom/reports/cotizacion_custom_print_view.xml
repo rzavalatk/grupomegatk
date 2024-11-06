@@ -151,7 +151,7 @@
 								<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">CANTIDAD</th>
 								<t t-if="o.x_consignacion == 'no'">
 									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">P.U.</th>
-									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Disc.(%)</th>
+									<th t-if="display_discount" class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Disc.(%)</th>
 									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">ISV</th>
 									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">MONTO</th>
 								</t>
@@ -173,7 +173,7 @@
 										<td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
 												<span t-field="l.price_unit"/>
 										</td>
-										<td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+										<td t-if="display_discount" class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);" groups="sale.group_discount_per_so_line">
 												<span t-field="l.discount"/>
 										</td>
 										<td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
