@@ -1,1 +1,1 @@
-from . import post_social_media
+from . import multi_post_social_media
