@@ -5,7 +5,7 @@ class BlogPostFacebookPublisher(models.Model):
     _inherit = 'blog.post'
 
     is_published_facebook = fields.Boolean(default=False, string="Publicado en Facebook")
-    
+
     @api.model
     def publish_to_facebook(self):
         # Obtener el nombre del blog o página de origen
