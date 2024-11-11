@@ -1,3 +1,4 @@
+import urllib3
 
 from odoo import models, fields, api
 
@@ -34,9 +35,10 @@ class BlogPostFacebookPublisher(models.Model):
             }
 
             # Realizar la solicitud para publicar en Facebook
-            response = self.post(url, data=data)
-            if response.status_code == 200:
+            http = urllib3.PoolManager()
+            response = http.request('POST', url, fields=data)
+            if response.status == 200:
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
                 # Manejo de errores si la publicación falla
-                self._logger.error("Error al publicar en Facebook: %s", response.json())
+                self._logger.error("Error al publicar en Facebook: %s", response.data.decode('utf-8'))
