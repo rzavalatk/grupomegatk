@@ -24,7 +24,7 @@ class BlogPostFacebookPublisher(models.Model):
             return
 
         # Formatear el contenido que deseas publicar en Facebook
-        for post in self.search([('is_published_facebook', '=', False)]):
+        for post in self.env['blog.post'].search([('is_published_facebook', '=', False)]):
             message = f"Nuevo blog publicado: {post.name}\n{post.website_url}"
             url = f"https://graph.facebook.com/{facebook_page_id}/feed"
             data = {
