@@ -13,17 +13,25 @@ class BlogPostFacebookPublisher(models.Model):
         blog = self.env['website_blog.blog'].browse(self.env.context.get('active_id'))
         blog_name = blog.name
 
+        facebook_data = {
+            'Blog megatk': ('ID_DE_LA_PAGINA_MEGATK', 'TOKEN_DE_ACCESO_MEGATK'),
+            'Blog meditekhn': ('ID_DE_LA_PAGINA_MEDITEKHN', 'TOKEN_DE_ACCESO_MEDITEKHN')
+        }
+
+        if blog_name not in facebook_data:
         # Establecer la página de Facebook dependiendo del blog o página de origen
-        if blog_name == 'Blog megatk':
-            facebook_page_id = 'ID_DE_LA_PAGINA_MEGATK'
-            access_token = 'TOKEN_DE_ACCESO_MEGATK'
-        elif blog_name == 'Blog meditekhn':
-            facebook_page_id = 'ID_DE_LA_PAGINA_MEDITEKHN'
-            access_token = 'TOKEN_DE_ACCESO_MEDITEKHN'
-        else:
-            # Manejo de errores si no se encuentra la página de Facebook correspondiente
-            self._logger.error("No se encontró la página de Facebook correspondiente para el blog %s", blog_name)
-            return
+            if blog_name == 'Blog megatk':
+                facebook_page_id = 'ID_DE_LA_PAGINA_MEGATK'
+                access_token = 'TOKEN_DE_ACCESO_MEGATK'
+            elif blog_name == 'Blog meditekhn':
+                facebook_page_id = 'ID_DE_LA_PAGINA_MEDITEKHN'
+                access_token = 'TOKEN_DE_ACCESO_MEDITEKHN'
+            else:
+                # Manejo de errores si no se encuentra la página de Facebook correspondiente
+                self._logger.error("No se encontró la página de Facebook correspondiente para el blog %s", blog_name)
+                return
+
+        facebook_page_id, access_token = facebook_data[blog_name]
 
         # Formatear el contenido que deseas publicar en Facebook
         for post in self.search([('is_published_facebook', '=', False)]):
@@ -38,6 +46,7 @@ class BlogPostFacebookPublisher(models.Model):
             http = urllib3.PoolManager()
             response = http.request('POST', url, body=urllib.parse.urlencode(data), headers={'Content-Type': 'application/x-www-form-urlencoded'})
             if response.status == 200:
+                post.is_published_facebook = True
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
                 # Manejo de errores si la publicación falla
