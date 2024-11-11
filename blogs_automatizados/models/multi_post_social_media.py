@@ -1,4 +1,4 @@
-import requests
+
 from odoo import models, fields, api
 
 class BlogPostFacebookPublisher(models.Model):
@@ -34,7 +34,7 @@ class BlogPostFacebookPublisher(models.Model):
             }
 
             # Realizar la solicitud para publicar en Facebook
-            response = requests.post(url, data=data)
+            response = self.post(url, data=data)
             if response.status_code == 200:
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
