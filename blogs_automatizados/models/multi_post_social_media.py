@@ -9,7 +9,8 @@ class BlogPostFacebookPublisher(models.Model):
     @api.model
     def publish_to_facebook(self):
         # Obtener el nombre del blog o página de origen
-        blog_name = self.env['website_blog.blog'].search([('id', '=', self.id)]).name
+        blog = self.env['website_blog.blog'].browse(self.env.context.get('active_id'))
+        blog_name = blog.name
 
         # Establecer la página de Facebook dependiendo del blog o página de origen
         if blog_name == 'Blog megatk':
@@ -24,7 +25,7 @@ class BlogPostFacebookPublisher(models.Model):
             return
 
         # Formatear el contenido que deseas publicar en Facebook
-        for post in self.env['blog.post'].search([('is_published_facebook', '=', False)]):
+        for post in self.search([('is_published_facebook', '=', False)]):
             message = f"Nuevo blog publicado: {post.name}\n{post.website_url}"
             url = f"https://graph.facebook.com/{facebook_page_id}/feed"
             data = {
