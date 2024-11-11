@@ -5,8 +5,8 @@
             <field name="model_id" ref="model_blog_post"/>
             <field name="state">code</field>
             <field name="code">model.publish_to_facebook()</field>
-            <field name="interval_number">10</field> <!-- Cambia el intervalo según tu preferencia -->
-            <field name="interval_type">minutes</field>
+            <field name="interval_number">2</field> <!-- Cambia el intervalo según tu preferencia -->
+            <field name="interval_type">days</field>
             <field name="active" eval="True"/>
         </record>
     </data>
