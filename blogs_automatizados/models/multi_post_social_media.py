@@ -36,7 +36,7 @@ class BlogPostFacebookPublisher(models.Model):
 
             # Realizar la solicitud para publicar en Facebook
             http = urllib3.PoolManager()
-            response = http.request('POST', url, fields=data)
+            response = http.request('POST', url, body=urllib.parse.urlencode(data), headers={'Content-Type': 'application/x-www-form-urlencoded'})
             if response.status == 200:
                 post.is_published_facebook = True  # Marcar como publicado en Facebook
             else:
