@@ -130,7 +130,7 @@ class HrPermisos(models.Model):
 			if (dateEnd.weekday() == 5 or dateEnd.weekday() == 6) and timeEnd.hour > 12:
 				sab = timeEnd.hour - 12
 			sab = timeEnd.hour - sab
-			H1 = 17 - timeInit.hour
+			H1 = 16 - timeInit.hour
 			H2 = sab - 8
 			if timeInit.hour <= 12:
 				H1 = H1 - 1
