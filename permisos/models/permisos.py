@@ -93,7 +93,7 @@ class HrPermisos(models.Model):
 				hour = hour - 1
 			if hour < 0:
 				return "Error en las Horas."
-			else:
+			else: 
 				hour = hour - 1
 				minutes = timeEnd.minute - timeInit.minute
 				if minutes < 0 and hour >= 0:
