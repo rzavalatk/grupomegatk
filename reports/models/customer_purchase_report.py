@@ -257,8 +257,73 @@ class CustomerPurchaseReport(models.Model):
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
         }
+ 
+    def exportar_excel_intervalo(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
-        
+        # Crear hojas de Excel
+        worksheet_lines_from_customer = workbook.add_worksheet('Clientes que mas compraron')
+
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value)
+                row += 1
+
+        # Encabezados y anchos de columnas
+        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
+        col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
+    
+        # Preparar los datos
+        datos_lines_from_customer = [
+            (
+                record.partner_id.name,
+                record.last_purchase.name,
+                record.purchase_comercial.name,
+                record.purchase_amount,
+                record.purchase_term_id
+            )
+            for record in sorted(self.report_lines_from_customer_purchase, key=lambda x: x.purchase_amount, reverse=True)
+        ]
+
+       
+
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'reporte_de_compras_clientes.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'reporte_de_compras_clientes.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+
+            
         
 
 class CustomerReportLine(models.Model):

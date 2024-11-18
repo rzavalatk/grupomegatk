@@ -11,6 +11,8 @@
                 <header>
                         <button name="generate_reports" states='borrador' type="object" string="Generar reporte" class="btn-primary"/>
                         <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
+                        <button string="Generar mas comprados 1er intervalo" name="exportar_excel_intervalo" states='aprobado' type="object" class="btn-primary"/>
+                        
                         <button string="Volver a borrador" states="aprobado" name="volver_borrador" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="borrador, aprobado, rechazado" />
                 </header>
@@ -18,7 +20,6 @@
                     <group>
                         <field name="name" />     
                         <field name="company_id" />
-                        
                         
                     </group>
 
