@@ -68,6 +68,7 @@ class CustomerPurchaseReport(models.Model):
             ('invoice_date', '>=', date1),
             ('invoice_date', '<=', date2),
             ('state', '=', 'posted'),
+            ('state', '!=', 'cancel'),
             ('move_type', '=', 'out_invoice'),
         ]
         account_orders = self.env['account.move'].search(domain)
