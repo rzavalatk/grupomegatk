@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!--        Loan Management Menu Items-->
+        <menuitem id="loan_management_menu_root" name="Gestión de prestamo"
+        web_icon="prestamos_financieros,static/description/icon.png"/>
+        <menuitem id="loan_management_loan" name="Prestamos" sequence="10"
+                  parent="loan_management_menu_root"/>
+        <menuitem id="loan_management_type" name="Tipos de prestamos"
+                  parent="loan_management_loan" action="loan_type_action"/>
+        <menuitem id="loan_management_request" name="Prestamo"
+                  parent="loan_management_loan" action="loan_request_action"/>
+        <menuitem id="loan_management_lines" name="Cuotas"
+                  parent="loan_management_loan" action="repayment_line_action"/>
+        <menuitem id="loan_management_certificates" name="Documentos" sequence="15"
+                  parent="loan_management_menu_root"/>
+        <menuitem id="loan_management_proofs" name="Documentos de prestamos"
+                  parent="loan_management_certificates" action="loan_documents_action"/>
+        <!--<menuitem id="loan_management_conf" name="Configuración" sequence="20"
+                  parent="loan_management_menu_root"/>
+        <menuitem id="loan_management_settings" name="Ajustes"
+                  parent="loan_management_conf" action="res_config_settings_action"/>-->
+        <menuitem id="loan_management_report" name="Reportes de prestamos" sequence="20"
+                  parent="loan_management_menu_root"/>
+</odoo>
