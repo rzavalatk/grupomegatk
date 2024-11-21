@@ -4,7 +4,7 @@ from odoo import api, models
 
 
 class LoanDetails(models.AbstractModel):
-    """fetch pdf report values"""
+    
     _name = 'report.prestamos_financieros.loan_report_template'
 
     @api.model
@@ -23,11 +23,11 @@ class LoanDetails(models.AbstractModel):
             'CustomerContact': loan_id.partner_id.phone,
             'Loan_Type': loan_id.loan_type_id.name,
             'Tenure': loan_id.meses_seleccion,
-            'Tenure_type': loan_id.loan_type_id.tenure_plan,
+            'Tenure_type': loan_id.loan_type_id.payment_frequency,
             'Interest_Rate': str(loan_id.interest_rate),
             'Loan_Amount': str(loan_id.amount_borrowed),
         }
-        """Fetching values for the report using query and returns the value"""
+       
         query = """SELECT name as Name, date_due as Date, amount_capital_quota as Amount,
          interest_generated as Interest_amount,state as State, 
          amount as Total_amount FROM cuota"""

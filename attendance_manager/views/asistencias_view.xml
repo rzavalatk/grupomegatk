@@ -21,7 +21,7 @@
                 <form string="">
                     
                     <header>
-                        <button string="Evaluar" name="evaluar" type="object" class="oe_highlight"/>
+                        <button string="Evaluar" name="conectar_sql_server" type="object" class="oe_highlight"/>
                     </header>
                     
                     <sheet>

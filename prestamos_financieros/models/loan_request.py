@@ -8,7 +8,7 @@ from odoo.exceptions import UserError
 
 
 class LoanRequest(models.Model):
-    """Can create new loan requests and manage records"""
+    """Puede crear nuevas solicitudes de préstamo y administrar registros."""
     _name = 'loan.request'
     _inherit = ['mail.thread']
     _description = 'Loan Request'
@@ -569,45 +569,3 @@ class LoanRequest(models.Model):
             'invoice_cxc_ids': [(6, 0, [account_move_id.id])],
             'state': 'aprobado'
         })
-
-
-    """def action_disburse_loan(self):
-       
-        self.write({'state': "disbursed"})
-
-        for loan in self:
-            amount = loan.disbursal_amount
-            loan_name = loan.partner_id.name
-            reference = loan.name
-            journal_id = loan.journal_id.id
-            debit_account_id = loan.debit_account_id.id
-            credit_account_id = loan.credit_account_id.id
-            date_now = loan.date
-            debit_vals = {
-                'name': loan_name,
-                'account_id': debit_account_id,
-                'journal_id': journal_id,
-                'date': date_now,
-                'debit': amount > 0.0 and amount or 0.0,
-                'credit': amount < 0.0 and -amount or 0.0,
-
-            }
-            credit_vals = {
-                'name': loan_name,
-                'account_id': credit_account_id,
-                'journal_id': journal_id,
-                'date': date_now,
-                'debit': amount < 0.0 and -amount or 0.0,
-                'credit': amount > 0.0 and amount or 0.0,
-            }
-            vals = {
-                'name': f'DIS / {reference}',
-                'narration': reference,
-                'ref': reference,
-                'journal_id': journal_id,
-                'date': date_now,
-                'line_ids': [(0, 0, debit_vals), (0, 0, credit_vals)]
-            }
-            move = self.env['account.move'].create(vals)
-            move.action_post()
-        return True"""

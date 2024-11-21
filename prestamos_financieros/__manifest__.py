@@ -22,7 +22,6 @@
         'views/loan_request_views.xml',
         'views/repayment_lines_views.xml',
         'views/loan_documents_views.xml',
-        'views/res_config_settings_views.xml',
         'views/loan_management_menus.xml',
         'views/res_partner_views.xml',
         'report/loan_management_reports.xml',

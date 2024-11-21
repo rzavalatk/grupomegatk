@@ -2,7 +2,7 @@
 <odoo>
         <!--        Loan Request Action-->
         <record id="loan_request_action" model="ir.actions.act_window">
-            <field name="name">Loan Request</field>
+            <field name="name">Solicitud de prestamo</field>
             <field name="res_model">loan.request</field>
             <field name="view_mode">tree,form</field>
         </record>
@@ -29,7 +29,7 @@
 
         <!--        Sequence Number Loan Request Records-->
         <record id="increment_loan_reference" model="ir.sequence">
-            <field name="name">Loan Reference</field>
+            <field name="name">Referencia del prestamo</field>
             <field name="code">increment_loan_ref</field>
             <field name="prefix">PRST/LENKA/</field>
             <field name="padding">3</field>
@@ -47,7 +47,7 @@
                              style="height: 40px; margin-bottom:0px;"
                              attrs="{'invisible':[('state', 'not in', 'waiting for approval')]}"
                              groups="prestamos_financieros.loan_management_group_user">
-                            Waiting for approval from the manager
+                            A la espera de aprobación del usuario encargado
                         </div>
 
                         <field name="state" widget="statusbar"

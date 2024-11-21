@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 
 from odoo.exceptions import UserError
 import logging
+import pymssql
+
 
 _logger = logging.getLogger(__name__)
 
@@ -47,6 +49,32 @@ class AttendanceRecord(models.Model):
             self.attendance_daily_entries = asistencias_entradas
             self.attendance_daily_exits = asistencias_salidas
             #self.attendance_permisos = permisos_daily
+    
+    def conectar_sql_server():
+        try:
+            # Configuración de conexión
+            connection = pymssql.connect(
+                server="nombre_servidor_sql",  # Dirección o IP del servidor
+                user="usuario",               # Usuario de la base de datos
+                password="contraseña",        # Contraseña del usuario
+                database="nombre_base"        # Nombre de la base de datos
+            )
+            cursor = connection.cursor()
+
+            # Ejecutar una consulta
+            cursor.execute("SELECT * FROM tabla_ejemplo;")
+            registros = cursor.fetchall()
+
+            for registro in registros:
+                print(registro)
+
+            # Cerrar la conexión
+            cursor.close()
+            connection.close()
+
+        except Exception as e:
+            print("Error al conectar a la base de datos SQL Server:", e)
+
         
 class AttendanceSync(models.Model):
     _name = 'attendance.sync'
