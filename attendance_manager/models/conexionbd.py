@@ -8,7 +8,7 @@ class ConexionSQLServer(models.Model):
 
     resultado = fields.Text("Resultado de la consulta")
 
-    @api.model
+    #@api.model
     def obtener_datos_desde_sql(self):
         try:
             # Llama al archivo conexion.js con Node.js
