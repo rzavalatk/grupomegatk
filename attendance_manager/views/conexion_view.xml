@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_conexion_sqlserver_form" model="ir.ui.view">
+        <field name="name">conexion.sqlserver.form</field>
+        <field name="model">conexion.sqlserver</field>
+        <field name="arch" type="xml">
+            <form string="Conexión SQL Server">
+                <sheet>
+                    <group>
+                        <field name="resultado"/>
+                    </group>
+                    <footer>
+                        <button name="obtener_datos_desde_sql" string="Obtener Datos" type="object" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>
