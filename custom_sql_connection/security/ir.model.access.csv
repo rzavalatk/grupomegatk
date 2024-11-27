@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sql_server_connection,access_sql_server_connection,model_sql_server_connection,sql_server_connection_manager,1,1,1,1

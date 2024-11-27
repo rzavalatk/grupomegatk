@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_sql_server_connection">
+            <field name="name">Conexion a SQL Server</field>
+            <field name="description">sql_server_connection</field>
+            <field name="sequence">6</field>
+    	</record>
+    	
+        <record id="sql_server_connection_manager" model="res.groups">
+    		<field name="category_id" ref="module_sql_server_connection"/>
+            <field name="name">Administrador de BD</field>
+        </record>
+
+        
+    </data>
+</odoo>
