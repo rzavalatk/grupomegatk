@@ -8,7 +8,7 @@
     'installable': True,
     'application': False,
     'data': [
-        'views/sql_server_connection.xml',
+        'views/sql_connection_view.xml',
     ],
     "external_dependencies": {"python": [
         "pymssql",
