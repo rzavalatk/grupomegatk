@@ -8,6 +8,8 @@
     'installable': True,
     'application': False,
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/sql_connection_view.xml',
     ],
     "external_dependencies": {"python": [
