@@ -4,6 +4,9 @@
         <field name="model">sql.server.connection</field>
         <field name="arch" type="xml">
             <form string="SQL Server Connection">
+                <header>
+                    <button name="button_test_connection" type="object" string="Test Connection" class="btn-primary"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -12,9 +15,7 @@
                         <field name="username"/>
                         <field name="password" password="True"/>
                     </group>
-                    <footer>
-                        <button name="button_test_connection" type="object" string="Test Connection" class="btn-primary"/>
-                    </footer>
+                    
                 </sheet>
             </form>
         </field>
