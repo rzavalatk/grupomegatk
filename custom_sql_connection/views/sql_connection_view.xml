@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_sql_server_connection_form" model="ir.ui.view">
+        <field name="name">sql.server.connection.form</field>
+        <field name="model">sql.server.connection</field>
+        <field name="arch" type="xml">
+            <form string="SQL Server Connection">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="server"/>
+                        <field name="database"/>
+                        <field name="username"/>
+                        <field name="password" password="True"/>
+                    </group>
+                    <footer>
+                        <button name="button_test_connection" type="object" string="Test Connection" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sql_server_connection" model="ir.actions.act_window">
+        <field name="name">SQL Server Connections</field>
+        <field name="res_model">sql.server.connection</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_sql_server_connection_root" name="SQL Server Connections" parent="base.menu_administration" sequence="10"/>
+    <menuitem id="menu_sql_server_connection" name="Connections" parent="menu_sql_server_connection_root" action="action_sql_server_connection" sequence="10"/>
+</odoo>
