@@ -45,11 +45,7 @@ class SaleorderLine(models.Model):
     obj_padre = fields.Many2one(related="order_id.user_id", string="ResponsableTem")
     x_series = fields.Text("Series")
     tax_editable = fields.Boolean('tax e.')
-    price_unit = fields.Float(
-        string="Unit Price",
-        compute='_compute_price_unit',
-        digits='Product Price',
-        store=True, readonly=False, required=True, precompute=True, digits=(16, 2))
+    price_unit = fields.Float(digits=(16, 2))
     
 
     def _prepare_invoice_line(self, **optional_values):
