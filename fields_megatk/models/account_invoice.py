@@ -77,7 +77,7 @@ class Account_Move(models.Model):
                         for line in move.line_ids:
                             if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
                                 # Cambia el comercial al ID 60
-                                move.invoice_user_id = self.env['res.users'].browse(60)
+                                move.write({'invoice_user_id': 78})
                                 break  # Sal del bucle después de aplicar el cambio
 
         
