@@ -64,20 +64,27 @@ class Account_Move(models.Model):
         y cambiar el comercial si se cumplen las condiciones.
         """
         for move in self:
+            logging.warning("Entre al onchange")
             if move.invoice_payments_widget:
                 # Convierte el JSON a un diccionario
+                logging.warning("Entre a la verificacion de cambio de comercial")
                 payments_data = json.loads(move.invoice_payments_widget)
                 content = payments_data.get('content', [])
                 
                 for payment_info in content:
+                    logging.warning(payment_info + "Entre al for")
                     # Extrae el ID del diario desde el JSON
                     journal_id = payment_info.get('journal_id')
                     
                     if journal_id == 1030:  # Verifica si el diario es el ID 1030
+                        logging.warning("Entre al diario")
                         for line in move.line_ids:
                             if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                                logging.warning("Entre al precio mayorista")
                                 # Cambia el comercial al ID 60
                                 move.write({'invoice_user_id': 78})
+                                logging.warning("Entre al cambio de comercial")
+                                logging.warning(move.invoice_user_id)
                                 break  # Sal del bucle después de aplicar el cambio
 
         
