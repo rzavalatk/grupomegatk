@@ -3,6 +3,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import logging
 import math
+import json
 
 _logger = logging.getLogger(__name__)
 
@@ -56,6 +57,29 @@ class Account_Move(models.Model):
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
         return super().create(vals_list)
+    @api.onchange('invoice_payments_widget')
+    def _onchange_invoice_payments_widget(self):
+        """
+        Método onchange para verificar los pagos en el campo invoice_payments_widget
+        y cambiar el comercial si se cumplen las condiciones.
+        """
+        for move in self:
+            if move.invoice_payments_widget:
+                # Convierte el JSON a un diccionario
+                payments_data = json.loads(move.invoice_payments_widget)
+                content = payments_data.get('content', [])
+                
+                for payment_info in content:
+                    # Extrae el ID del diario desde el JSON
+                    journal_id = payment_info.get('journal_id')
+                    
+                    if journal_id == 1030:  # Verifica si el diario es el ID 1030
+                        for line in move.line_ids:
+                            if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                                # Cambia el comercial al ID 60
+                                move.invoice_user_id = self.env['res.users'].browse(60)
+                                break  # Sal del bucle después de aplicar el cambio
+
         
     #mostrar boton en factura de borrados
     def go_draft(self):
