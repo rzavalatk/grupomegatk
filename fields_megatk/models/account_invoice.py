@@ -57,35 +57,26 @@ class Account_Move(models.Model):
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
         return super().create(vals_list)
-    @api.onchange('invoice_payments_widget')
-    def _onchange_invoice_payments_widget(self):
+    
+    
+    @api.onchange('payment_reference')
+    def _onchange_payment_reference(self):
         """
-        Método onchange para verificar los pagos en el campo invoice_payments_widget
-        y cambiar el comercial si se cumplen las condiciones.
+        Método onchange para buscar el pago usando el campo payment_reference,
+        verificar el diario y las líneas de factura, y cambiar el comercial si se cumplen las condiciones.
         """
         for move in self:
-            logging.warning("Entre al onchange")
-            if move.invoice_payments_widget:
-                # Convierte el JSON a un diccionario
-                logging.warning("Entre a la verificacion de cambio de comercial")
-                payments_data = json.loads(move.invoice_payments_widget)
-                content = payments_data.get('content', [])
+            if move.payment_reference:  # Si el campo payment_reference tiene un valor
+                # Buscar el pago relacionado por su referencia
+                payment = self.env['account.payment'].search([('name', '=', move.payment_reference)], limit=1)
                 
-                for payment_info in content:
-                    logging.warning(payment_info + "Entre al for")
-                    # Extrae el ID del diario desde el JSON
-                    journal_id = payment_info.get('journal_id')
-                    
-                    if journal_id == 1030:  # Verifica si el diario es el ID 1030
-                        logging.warning("Entre al diario")
-                        for line in move.line_ids:
-                            if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
-                                logging.warning("Entre al precio mayorista")
-                                # Cambia el comercial al ID 60
-                                move.write({'invoice_user_id': 78})
-                                logging.warning("Entre al cambio de comercial")
-                                logging.warning(move.invoice_user_id)
-                                break  # Sal del bucle después de aplicar el cambio
+                if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 222
+                    for line in move.invoice_line_ids:
+                        if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                            # Cambia el comercial al ID 78 usando write
+                            move.write({'invoice_user_id': 60})
+                            break  # Sal del bucle después de aplicar el cambio
+
 
         
     #mostrar boton en factura de borrados
