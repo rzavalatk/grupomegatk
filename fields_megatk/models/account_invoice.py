@@ -59,7 +59,7 @@ class Account_Move(models.Model):
         return super().create(vals_list)
     
     
-    @api.onchange('payment_state')
+    @api.onchange('payment_reference')
     def onchange_invoice_payments_widget(self):
         """
         Método onchange para buscar el pago usando el campo payment_reference,
