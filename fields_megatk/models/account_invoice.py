@@ -76,7 +76,7 @@ class Account_Move(models.Model):
                     _logger.warning("Entra al if del diario")
                     for line in move.invoice_line_ids:
                         _logger.warning(line.precio_id.name.id)
-                        if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                        if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
                             _logger.warning("Entra al if del precio")
                             # Cambia el comercial al ID 78 usando write
                             move.write({'invoice_user_id': 60})
