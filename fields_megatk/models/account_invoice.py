@@ -59,23 +59,29 @@ class Account_Move(models.Model):
         return super().create(vals_list)
     
     
-    @api.onchange('payment_reference')
-    def _onchange_payment_reference(self):
+    @api.onchange('amount_residual')
+    def _onchange_amount_residual(self):
         """
         Método onchange para buscar el pago usando el campo payment_reference,
         verificar el diario y las líneas de factura, y cambiar el comercial si se cumplen las condiciones.
         """
         for move in self:
-            if move.payment_reference:  # Si el campo payment_reference tiene un valor
-                # Buscar el pago relacionado por su referencia
-                payment = self.env['account.payment'].search([('name', '=', move.payment_reference)], limit=1)
+            if move.invoice_payments_widget:
+                # Convierte el JSON a un diccionario
+                payments_data = json.loads(move.invoice_payments_widget)
+                content = payments_data.get('content', [])
                 
-                if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 222
-                    for line in move.invoice_line_ids:
-                        if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
-                            # Cambia el comercial al ID 78 usando write
-                            move.write({'invoice_user_id': 60})
-                            break  # Sal del bucle después de aplicar el cambio
+                for payment_info in content:
+                    # Extrae el ID del diario desde el JSON
+                    journal_id = payment_info.get('journal_id')
+                    
+                    if journal_id.id == 1030:  # Verifica si el diario es el ID 1030
+                        for line in move.invoice_line_ids:
+                            if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                                # Cambia el comercial al ID 78 usando write
+                                move.write({'invoice_user_id': 60})
+                                break  # Sal del bucle después de aplicar el cambio
+
 
 
         
