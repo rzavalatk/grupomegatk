@@ -59,7 +59,7 @@ class Account_Move(models.Model):
         return super().create(vals_list)
     
     
-    @api.onchange('payment_reference')
+    @api.onchange('certificado_deposito')
     def onchange_invoice_payments_widget(self):
         """
         Método onchange para buscar el pago usando el campo payment_reference,
@@ -67,26 +67,19 @@ class Account_Move(models.Model):
         """
         _logger.warning("Entra al metodo de onchange 1")
         for move in self:
-            _logger.warning("Entra al metodo de onchange")
-            if move.invoice_payments_widget:
-                # Convierte el JSON a un diccionario
+            if move.invoice_payments_widget:  # Si el campo payment_reference tiene un valor
                 _logger.warning("Entra al if")
-                payments_data = json.loads(move.invoice_payments_widget)
-                content = payments_data.get('content', [])
+                # Buscar el pago relacionado por su referencia
+                payment = self.env['account.payment'].search([('ref', '=', move.payment_reference)], limit=1)
                 
-                for payment_info in content:
-                    _logger.warning("Entra al for")
-                    # Extrae el ID del diario desde el JSON
-                    journal_id = payment_info.get('journal_id')
-                    
-                    if journal_id.id == 1030:  # Verifica si el diario es el ID 1030
-                        _logger.warning("Entra al if del diario")
-                        for line in move.invoice_line_ids:
-                            if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
-                                # Cambia el comercial al ID 78 usando write
-                                _logger.warning("Entra al if del precio")
-                                move.write({'invoice_user_id': self.env['res.users'].browse(60)})
-                                break  # Sal del bucle después de aplicar el cambio
+                if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 222
+                    _logger.warning("Entra al if del diario")
+                    for line in move.invoice_line_ids:
+                        if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                            _logger.warning("Entra al if del precio")
+                            # Cambia el comercial al ID 78 usando write
+                            move.write({'invoice_user_id': 60})
+                            break  # Sal del bucle después de aplicar el cambio
 
 
 
