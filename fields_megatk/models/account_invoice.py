@@ -75,6 +75,7 @@ class Account_Move(models.Model):
                 if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 222
                     _logger.warning("Entra al if del diario")
                     for line in move.invoice_line_ids:
+                        _logger.warning(line.precio_id.id)
                         if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
                             _logger.warning("Entra al if del precio")
                             # Cambia el comercial al ID 78 usando write
