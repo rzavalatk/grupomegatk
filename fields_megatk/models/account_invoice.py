@@ -66,20 +66,25 @@ class Account_Move(models.Model):
         verificar el diario y las líneas de factura, y cambiar el comercial si se cumplen las condiciones.
         """
         for move in self:
+            logging.warning("Entra al metodo de onchange")
             if move.invoice_payments_widget:
                 # Convierte el JSON a un diccionario
+                logging.warning("Entra al if")
                 payments_data = json.loads(move.invoice_payments_widget)
                 content = payments_data.get('content', [])
                 
                 for payment_info in content:
+                    logging.warning("Entra al for")
                     # Extrae el ID del diario desde el JSON
                     journal_id = payment_info.get('journal_id')
                     
                     if journal_id.id == 1030:  # Verifica si el diario es el ID 1030
+                        logging.warning("Entra al if del diario")
                         for line in move.invoice_line_ids:
                             if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
                                 # Cambia el comercial al ID 78 usando write
-                                move.write({'invoice_user_id': 60})
+                                logging.warning("Entra al if del precio")
+                                move.write({'invoice_user_id': self.env['res.users'].browse(60)})
                                 break  # Sal del bucle después de aplicar el cambio
 
 
