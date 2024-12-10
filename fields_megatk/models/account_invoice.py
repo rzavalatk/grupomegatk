@@ -59,12 +59,13 @@ class Account_Move(models.Model):
         return super().create(vals_list)
     
     
-    @api.onchange('invoice_payments_widget')
+    @api.onchange('payment_state')
     def onchange_invoice_payments_widget(self):
         """
         Método onchange para buscar el pago usando el campo payment_reference,
         verificar el diario y las líneas de factura, y cambiar el comercial si se cumplen las condiciones.
         """
+        _logger.warning("Entra al metodo de onchange 1")
         for move in self:
             _logger.warning("Entra al metodo de onchange")
             if move.invoice_payments_widget:
