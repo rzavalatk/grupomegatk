@@ -154,7 +154,7 @@ class Account_Move(models.Model):
                         for line in move.invoice_line_ids:
                             _logger.warning(f"Precio ID: {line.precio_id.id}")
                             
-                            if line.precio_id.id == 1:  # Verifica si el precio_id es igual a 1
+                            if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
                                 _logger.warning("Condición cumplida, cambiando el comercial.")
                                 
                                 time.sleep(1)
