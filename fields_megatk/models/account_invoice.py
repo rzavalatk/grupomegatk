@@ -148,24 +148,18 @@ class Account_Move(models.Model):
                 for move in self:
                     if move.payment_reference:  # Si el campo payment_reference tiene un valor
                         _logger.warning("Entra al if de payment_reference " + move.payment_reference)
-                        
                         # Buscar el pago relacionado por su referencia
-                           
-                        for line in move.invoice_line_ids:
-                            _logger.warning(f"Precio ID: {line.precio_id.id}")
-                            
-                            if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
-                                _logger.warning("Condición cumplida, cambiando el comercial.")
-                                
-                                time.sleep(1)
-                                payment = self.env['account.payment'].search([('ref', '=', move.payment_reference)], limit=1)
-                        
-                                _logger.warning(payment)
-                                if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 1030
-                                    _logger.warning("Entra al if del diario")
-                                
+                        time.sleep(1)
+                        payment = self.env['account.payment'].search([('ref', '=', move.payment_reference)], limit=1)
+                        _logger.warning(payment)
+                        if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 1030
+                            _logger.warning("Entra al if del diario")
+                            for line in move.invoice_line_ids:
+                                _logger.warning(f"Precio ID: {line.precio_id.id}")
+                                if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
+                                    _logger.warning("Condición cumplida, cambiando el comercial.")
                                     # Cambia el comercial al ID 78 usando write
-                                    move.write({'invoice_user_id': 78})
+                                    move.write({'invoice_user_id': 60})
                                     break  # Sal del bucle después de aplicar el cambi
 
         
