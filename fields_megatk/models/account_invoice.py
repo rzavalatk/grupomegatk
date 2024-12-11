@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 import logging
 import math
 import json
+import time
 
 _logger = logging.getLogger(__name__)
 
@@ -147,7 +148,7 @@ class Account_Move(models.Model):
                 for move in self:
                     if move.payment_reference:  # Si el campo payment_reference tiene un valor
                         _logger.warning("Entra al if de payment_reference " + move.payment_reference)
-                        
+                        time.sleep(1)
                         # Buscar el pago relacionado por su referencia
                         payment = self.env['account.payment'].search([('name', '=', move.payment_reference)], limit=1)
                         
