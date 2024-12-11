@@ -59,7 +59,7 @@ class Account_Move(models.Model):
         return super().create(vals_list)
     
     
-    @api.onchange('certificado_deposito')
+    @api.onchange('payment_state')
     def onchange_invoice_payments_widget(self):
         """
         Método onchange para buscar el pago usando el campo payment_reference,
@@ -77,7 +77,7 @@ class Account_Move(models.Model):
                     for line in move.invoice_line_ids:
                         _logger.warning(line.precio_id.name.id)
                         if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
-                            _logger.warning("Entra al if del precio")
+                            _logger.warning(move.payments_state)
                             # Cambia el comercial al ID 78 usando write
                             move.write({'invoice_user_id': 60})
                             break  # Sal del bucle después de aplicar el cambio
