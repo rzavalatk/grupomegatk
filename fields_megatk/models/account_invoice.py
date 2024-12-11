@@ -158,7 +158,7 @@ class Account_Move(models.Model):
                                 _logger.warning("Condición cumplida, cambiando el comercial.")
                                 
                                 time.sleep(1)
-                                payment = self.env['account.payment'].search([('name', '=', move.payment_reference)], limit=1)
+                                payment = self.env['account.payment'].search([('ref', '=', move.payment_reference)], limit=1)
                         
                                 _logger.warning(payment)
                                 if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 1030
