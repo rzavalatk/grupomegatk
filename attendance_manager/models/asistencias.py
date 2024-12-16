@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 
 from odoo.exceptions import UserError
 import logging
-import pymssql
+#import pymssql
 
 
 _logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ class AttendanceRecord(models.Model):
             self.attendance_daily_exits = asistencias_salidas
             #self.attendance_permisos = permisos_daily
     
-    def conectar_sql_server():
+    """def conectar_sql_server():
         try:
             # Configuración de conexión
             connection = pymssql.connect(
@@ -73,7 +73,7 @@ class AttendanceRecord(models.Model):
             connection.close()
 
         except Exception as e:
-            print("Error al conectar a la base de datos SQL Server:", e)
+            print("Error al conectar a la base de datos SQL Server:", e)"""
 
         
 class AttendanceSync(models.Model):
@@ -94,7 +94,7 @@ class AttendanceSync(models.Model):
     
     permiso = fields.Boolean(string='Permiso', default=False)
     
-    def obtener_asistencias(self):
+    """def obtener_asistencias(self):
         # Conectar a la base de datos de COSEC
         
         engine = create_engine('mssql+pymssql://sa:M3g@tK2012@192.168.10.12/COSEC')
@@ -105,7 +105,7 @@ class AttendanceSync(models.Model):
                 _logger.warning('row:  ' + str(row))
 
         
-        """ conn = pymssql.connect(server='192.168.10.12', user='sa', password='M3g@tK2012', database='COSEC')
+         conn = pymssql.connect(server='192.168.10.12', user='sa', password='M3g@tK2012', database='COSEC')
         cursor = conn.cursor()
 
         cursor.execute("SELECT * FROM [COSEC].[dbo].[Mx_ATDEventTrn]")
