@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from sqlalchemy import create_engine
+#from sqlalchemy import create_engine
 
 from odoo.exceptions import UserError
 import logging
