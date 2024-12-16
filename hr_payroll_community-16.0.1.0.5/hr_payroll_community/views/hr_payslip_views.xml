@@ -164,7 +164,7 @@
                 </group>
                 <notebook>
                     <page string="Worked Days &amp; Inputs">
-                        <separator string="Worked Days"/>
+                        <separator string="Worked Days and permissions"/>
                         <field name="worked_days_line_ids">
                             <tree string="Worked Days" editable="bottom">
                                 <field name="name"/>

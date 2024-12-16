@@ -5,5 +5,5 @@ class HolidaysType(models.Model):
     _inherit = "hr.leave.type"
     _description = "Time Off Type"
 
-    code = fields.Char('code')
+    code = fields.Char('codigo')
 

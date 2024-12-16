@@ -24,80 +24,80 @@ class HrPayslip(models.Model):
     struct_id = fields.Many2one('hr.payroll.structure', string='Structure',
                                 readonly=True,
                                 states={'draft': [('readonly', False)]},
-                                help='Defines the rules that have to be applied to this payslip, accordingly '
-                                     'to the contract chosen. If you let empty the field contract, this field isn\'t '
-                                     'mandatory anymore and thus the rules applied will be all the rules set on the '
-                                     'structure of all contracts of the employee valid for the chosen period')
-    name = fields.Char(string='Payslip Name', readonly=True,
+                                help='Define las reglas que deben aplicarse a este recibo de nómina, en consecuencia '
+                                     'al contrato elegido. Si deja vacío el campo contrato, este campo no es '
+                                     'ya no es obligatorio y, por lo tanto, las reglas aplicadas serán todas las reglas establecidas en el '
+                                     'estructura de todos los contratos del empleado válidos para el período elegido')
+    name = fields.Char(string='Nombre de nomina', readonly=True, compute='_compute_payslip_name',
                        states={'draft': [('readonly', False)]})
-    number = fields.Char(string='Reference', readonly=True, copy=False,
+    number = fields.Char(string='Referencia', readonly=True, copy=False,
                          help="References",
                          states={'draft': [('readonly', False)]})
-    employee_id = fields.Many2one('hr.employee', string='Employee',
-                                  required=True, readonly=True, help="Employee",
+    employee_id = fields.Many2one('hr.employee', string='Empleado',
+                                  required=True, readonly=True, help="Empleado",
                                   states={'draft': [('readonly', False)]})
-    date_from = fields.Date(string='Date From', readonly=True, required=True,
-                            help="Start date",
+    date_from = fields.Date(string='Fecha desde', readonly=True, required=True,
+                            help="Fecha de inicio",
                             default=lambda self: fields.Date.to_string(
                                 date.today().replace(day=1)),
                             states={'draft': [('readonly', False)]})
-    date_to = fields.Date(string='Date To', readonly=True, required=True,
-                          help="End date",
+    date_to = fields.Date(string='Fecha hasta', readonly=True, required=True,
+                          help="Fecha final",
                           default=lambda self: fields.Date.to_string(
                               (datetime.now() + relativedelta(months=+1, day=1,
                                                               days=-1)).date()),
                           states={'draft': [('readonly', False)]})
     # this is chaos: 4 states are defined, 3 are used ('verify' isn't) and 5 exist ('confirm' seems to have existed)
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('verify', 'Waiting'),
-        ('done', 'Done'),
-        ('cancel', 'Rejected'),
+        ('draft', 'Borrador'),
+        ('verify', 'Esperando'),
+        ('done', 'Hecho'),
+        ('cancel', 'Rechazado'),
     ], string='Status', index=True, readonly=True, copy=False, default='draft',
-        help="""* When the payslip is created the status is \'Draft\'
-                \n* If the payslip is under verification, the status is \'Waiting\'.
-                \n* If the payslip is confirmed then status is set to \'Done\'.
-                \n* When user cancel payslip the status is \'Rejected\'.""")
+        help="""* Cuando se crea el recibo de nómina el estado es \'Borrador\'
+                \n* Si el recibo de sueldo está bajo verificación, el estado es \'En espera\'.
+                \n* Si se confirma el recibo de sueldo, el estado se establece en \'Listo\'.
+                \n* Cuando el usuario cancela el recibo de pago, el estado es \'Rechazado\'.""")
     line_ids = fields.One2many('hr.payslip.line', 'slip_id',
-                               string='Payslip Lines', readonly=True,
+                               string='Líneas de nómina', readonly=True,
                                states={'draft': [('readonly', False)]})
-    company_id = fields.Many2one('res.company', string='Company', readonly=True,
-                                 copy=False, help="Company",
+    company_id = fields.Many2one('res.company', string='Compañia', readonly=True,
+                                 copy=False, help="Compañia",
                                  default=lambda self: self.env[
                                      'res.company']._company_default_get(),
                                  states={'draft': [('readonly', False)]})
     worked_days_line_ids = fields.One2many('hr.payslip.worked_days',
                                            'payslip_id',
-                                           string='Payslip Worked Days',
+                                           string='Días Laborados',
                                            copy=True, readonly=True,
-                                           help="Payslip worked days",
+                                           help="Nómina Días Laborados",
                                            states={
                                                'draft': [('readonly', False)]})
     input_line_ids = fields.One2many('hr.payslip.input', 'payslip_id',
-                                     string='Payslip Inputs',
+                                     string='Entradas de nómina',
                                      readonly=True,
                                      states={'draft': [('readonly', False)]})
-    paid = fields.Boolean(string='Made Payment Order ? ', readonly=True,
+    paid = fields.Boolean(string='¿Orden de pago realizada? ', readonly=True,
                           copy=False,
                           states={'draft': [('readonly', False)]})
-    note = fields.Text(string='Internal Note', readonly=True,
+    note = fields.Text(string='Notas internas', readonly=True,
                        states={'draft': [('readonly', False)]})
-    contract_id = fields.Many2one('hr.contract', string='Contract',
-                                  readonly=True, help="Contract",
+    contract_id = fields.Many2one('hr.contract', string='Contrato',
+                                  readonly=True, help="Contrato",
                                   states={'draft': [('readonly', False)]})
     details_by_salary_rule_category = fields.One2many('hr.payslip.line',
                                                       compute='_compute_details_by_salary_rule_category',
-                                                      string='Details by Salary Rule Category',
-                                                      help="Details from the salary rule category")
-    credit_note = fields.Boolean(string='Credit Note', readonly=True,
+                                                      string='Detalles por categoría de regla salarial',
+                                                      help="Detalles por categoría de regla salarial")
+    credit_note = fields.Boolean(string='Nota de credito', readonly=True,
                                  states={'draft': [('readonly', False)]},
-                                 help="Indicates this payslip has a refund of another")
-    payslip_run_id = fields.Many2one('hr.payslip.run', string='Payslip Batches',
+                                 help="Indica que esta nómina tiene un reembolso de otro")
+    payslip_run_id = fields.Many2one('hr.payslip.run', string='Lotes de nóminas',
                                      readonly=True,
                                      copy=False,
                                      states={'draft': [('readonly', False)]})
     payslip_count = fields.Integer(compute='_compute_payslip_count',
-                                   string="Payslip Computation Details")
+                                   string="Detalles del cálculo del recibo de nómina")
 
     def action_send_email(self):
         res = self.env.user.has_group(
@@ -123,13 +123,17 @@ class HrPayslip(models.Model):
         for payslip in self:
             payslip.payslip_count = len(payslip.line_ids)
 
+    def _compute_payslip_name(self):
+        for payslip in self:
+            payslip.name = f"Nomina de {payslip.employee_id.name} para el periodo de {payslip.date_from} - {payslip.date_to}"
+
     @api.constrains('date_from', 'date_to')
     def _check_dates(self):
 
         if any(self.filtered(
                 lambda payslip: payslip.date_from > payslip.date_to)):
             raise ValidationError(
-                _("Payslip 'Date From' must be earlier 'Date To'."))
+                _("La 'Fecha desde' del recibo de nómina debe ser anterior a la 'Fecha hasta'."))
 
     def action_payslip_draft(self):
         return self.write({'state': 'draft'})
@@ -173,26 +177,24 @@ class HrPayslip(models.Model):
         if any(self.filtered(
                 lambda payslip: payslip.state not in ('draft', 'cancel'))):
             raise UserError(
-                _('You cannot delete a payslip which is not draft or cancelled!'))
+                _('¡No se puede eliminar una nómina que no esté girada o cancelada!'))
         return super(HrPayslip, self).unlink()
 
-    # TODO move this function into hr_contract module, on hr.employee object
     @api.model
     def get_contract(self, employee, date_from, date_to):
-
         """
-        @param employee: recordset of employee
-        @param date_from: date field
-        @param date_to: date field
-        @return: returns the ids of all the contracts for the given employee that need to be considered for the given dates
+        @param employee: registro de los empleados
+        @param date_from: campo de fecha
+        @param date_to: campo de fecha
+        @return: devuelve los identificadores de todos los contratos para el empleado determinado que deben considerarse para las fechas dadas
         """
-        # a contract is valid if it ends between the given dates
+        # un contrato es válido si finaliza entre las fechas indicadas
         clause_1 = ['&', ('date_end', '<=', date_to),
                     ('date_end', '>=', date_from)]
-        # OR if it starts between the given dates
+        # O si comienza entre las fechas indicadas
         clause_2 = ['&', ('date_start', '<=', date_to),
                     ('date_start', '>=', date_from)]
-        # OR if it starts before the date_from and finish after the date_end (or never finish)
+        # O si comienza antes de la fecha_desde y termina después de la fecha_fin (o nunca termina)
         clause_3 = ['&', ('date_start', '<=', date_from), '|',
                     ('date_end', '=', False), ('date_end', '>=', date_to)]
         clause_final = [('employee_id', '=', employee.id),
@@ -209,8 +211,8 @@ class HrPayslip(models.Model):
             # set the list of contract for which the rules have to be applied
             # if we don't give the contract, then the rules to apply should be for all current contracts of the employee
             contract_ids = payslip.contract_id.ids or \
-                           self.get_contract(payslip.employee_id,
-                                             payslip.date_from, payslip.date_to)
+                self.get_contract(payslip.employee_id,
+                                  payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
             payslip.write({'line_ids': lines, 'number': number})
@@ -218,10 +220,9 @@ class HrPayslip(models.Model):
 
     @api.model
     def get_worked_day_lines(self, contracts, date_from, date_to):
-
         """
-        @param contract: Browse record of contracts
-        @return: returns a list of dict containing the input that should be applied for the given contract between date_from and date_to
+        @param contract: Explorar registro de contratos
+        @return: devuelve una lista de dictados que contiene la entrada que se debe aplicar para el contrato dado entre date_from y date_to
         """
         res = []
         # fill only if the contract as a working schedule linked
@@ -273,7 +274,7 @@ class HrPayslip(models.Model):
                                                                 day_to,
                                                                 calendar=contract.resource_calendar_id)
             attendances = {
-                'name': _("Normal Working Days paid at 100%"),
+                'name': _("Días de trabajo normales pagados al 100%"),
                 'sequence': 1,
                 'code': 'WORK100',
                 'number_of_days': work_data['days'],
@@ -299,7 +300,7 @@ class HrPayslip(models.Model):
                         'code': item.code or 'LEAVES',
                         'number_of_hours': c_leaves[item]['hours'],
                         'number_of_days': c_leaves[item][
-                                              'hours'] / work_hours,
+                            'hours'] / work_hours,
                         'contract_id': contract.id,
                     }
                     res.append(data)
@@ -309,7 +310,7 @@ class HrPayslip(models.Model):
                         leaves[item]['number_of_hours'] += c_leaves[item][
                             'hours']
                         leaves[item]['number_of_days'] += c_leaves[item][
-                                                              'hours'] / work_hours
+                            'hours'] / work_hours
                     if item not in leaves and flag == 1:
                         data = {
                             'name': item.name,
@@ -317,7 +318,7 @@ class HrPayslip(models.Model):
                             'code': holiday.holiday_status_id.code or 'GLOBAL',
                             'number_of_hours': c_leaves[item]['hours'],
                             'number_of_days': c_leaves[item][
-                                                  'hours'] / work_hours,
+                                'hours'] / work_hours,
                             'contract_id': contract.id,
                         }
                         res.append(data)
@@ -358,11 +359,11 @@ class HrPayslip(models.Model):
                                                       category.parent_id,
                                                       amount)
             localdict['categories'].dict[category.code] = category.code in \
-                                                          localdict[
-                                                              'categories'].dict and \
-                                                          localdict[
-                                                              'categories'].dict[
-                                                              category.code] + amount or amount
+                localdict[
+                'categories'].dict and \
+                localdict[
+                'categories'].dict[
+                category.code] + amount or amount
             return localdict
 
         class BrowsableObject(object):
@@ -801,14 +802,14 @@ class ResourceMixin(models.AbstractModel):
     def get_work_days_data(self, from_datetime, to_datetime,
                            compute_leaves=True, calendar=None, domain=None):
         """
-            By default the resource calendar is used, but it can be
-            changed using the `calendar` argument.
+           Por defecto se utiliza el calendario de recursos, pero puede ser
+            cambiado usando el argumento `calendario`.
 
-            `domain` is used in order to recognise the leaves to take,
-            None means default value ('time_type', '=', 'leave')
+            `dominio` se utiliza para reconocer las hojas a tomar,
+            Ninguno significa valor predeterminado ('time_type', '=', 'leave')
 
-            Returns a dict {'days': n, 'hours': h} containing the
-            quantity of working time expressed as days and as hours.
+            Devuelve un dict {'días': n, 'horas': h} que contiene el
+            cantidad de tiempo de trabajo expresado en días y en horas.
         """
         resource = self.resource_id
         calendar = calendar or self.resource_calendar_id
