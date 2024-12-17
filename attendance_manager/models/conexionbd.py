@@ -21,7 +21,7 @@ class ConexionSQLServer(models.Model):
                 server="192.168.10.12",  # Dirección o IP del servidor
                 user="sa",               # Usuario de la base de datos
                 password="M3g@tK2012",        # Contraseña del usuario
-                database="Megatk_Sistema"        # Nombre de la base de datos
+                database="COSEC"        # Nombre de la base de datos
             )
             cursor = connection.cursor()
             _loggin.warning("1")
