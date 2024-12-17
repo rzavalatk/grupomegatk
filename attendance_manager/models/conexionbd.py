@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 import subprocess
 import json
+import pymssql
 
 class ConexionSQLServer(models.Model):
     _name = "conexion.sqlserver"
@@ -11,26 +12,25 @@ class ConexionSQLServer(models.Model):
     #@api.model
     def obtener_datos_desde_sql(self):
         try:
-            # Llama al archivo conexion.js con Node.js
-            resultado = subprocess.run(
-                ["node", "attendance_manager/static/src/js/conexion.js"],  # Ruta al archivo JS
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                check=True
+            # Configuración de conexión
+            connection = pymssql.connect(
+                server="192.168.10.12",  # Dirección o IP del servidor
+                user="sa",               # Usuario de la base de datos
+                password="M3g@tK2012",        # Contraseña del usuario
+                database="Megatk_Sistema"        # Nombre de la base de datos
             )
-            
-            # La salida de Node.js estará en JSON, así que la parseamos
-            datos = json.loads(resultado.stdout)
+            cursor = connection.cursor()
 
-            # Guarda los datos en el campo "resultado"
-            self.create({"resultado": json.dumps(datos)})
+            # Ejecutar una consulta
+            cursor.execute("SELECT * FROM tabla_ejemplo;")
+            registros = cursor.fetchall()
 
-            return datos
-        except subprocess.CalledProcessError as e:
-            # Si ocurre un error al ejecutar el archivo JS, capturamos los detalles
-            raise Exception(f"Error al ejecutar el archivo JS: {e.stderr}")
-        except json.JSONDecodeError as e:
-            # Si hay un problema al decodificar el JSON
-            raise Exception(f"Error al decodificar JSON: {e}")
+            for registro in registros:
+                print(registro)
 
+            # Cerrar la conexión
+            cursor.close()
+            connection.close()
+
+        except Exception as e:
+            print("Error al conectar a la base de datos SQL Server:", e)
