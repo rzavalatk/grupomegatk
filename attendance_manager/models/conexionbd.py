@@ -2,6 +2,9 @@ from odoo import models, fields, api
 import subprocess
 import json
 import pymssql
+import logging
+
+_loggin = logging.getLogger(__name__)
 
 class ConexionSQLServer(models.Model):
     _name = "conexion.sqlserver"
@@ -26,11 +29,11 @@ class ConexionSQLServer(models.Model):
             registros = cursor.fetchall()
 
             for registro in registros:
-                print(registro)
+                _loggin.info(registro)
 
             # Cerrar la conexión
             cursor.close()
             connection.close()
 
         except Exception as e:
-            print("Error al conectar a la base de datos SQL Server:", e)
+            _loggin.error("Error al conectar a la base de datos SQL Server:", e)
