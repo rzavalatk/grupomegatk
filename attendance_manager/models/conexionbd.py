@@ -13,7 +13,7 @@ class ConexionSQLServer(models.Model):
         try:
             # Llama al archivo conexion.js con Node.js
             resultado = subprocess.run(
-                ["node", "/src/user/attendance_manager/static/src/js/conexion.js"],  # Ruta al archivo JS
+                ["node", "attendance_manager/static/src/js/conexion.js"],  # Ruta al archivo JS
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
