@@ -3,7 +3,7 @@ from odoo import models, fields, api
 
 from odoo.exceptions import UserError
 import logging
-#import pymssql
+import pymssql
 
 
 _logger = logging.getLogger(__name__)
