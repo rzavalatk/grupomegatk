@@ -15,6 +15,7 @@ class ConexionSQLServer(models.Model):
     #@api.model
     def obtener_datos_desde_sql(self):
         try:
+            _loggin.warning("0")
             # Configuración de conexión
             connection = pymssql.connect(
                 server="192.168.10.12",  # Dirección o IP del servidor
