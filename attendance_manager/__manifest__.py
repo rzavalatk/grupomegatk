@@ -25,7 +25,7 @@
     ],
     'qweb_template_dict': {
         'backend': [
-            'static/js/conexion.js',
+            'static/src/js/conexion.js',
         ],
     },
     'installable': True,
