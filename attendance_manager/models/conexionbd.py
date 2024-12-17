@@ -23,10 +23,12 @@ class ConexionSQLServer(models.Model):
                 database="Megatk_Sistema"        # Nombre de la base de datos
             )
             cursor = connection.cursor()
+            _loggin.warning("1")
 
             # Ejecutar una consulta
             cursor.execute("SELECT * FROM tabla_ejemplo;")
             registros = cursor.fetchall()
+            _loggin.warning("2")
 
             for registro in registros:
                 _loggin.info(registro)
@@ -34,6 +36,8 @@ class ConexionSQLServer(models.Model):
             # Cerrar la conexión
             cursor.close()
             connection.close()
+            
+            _loggin.warning("3")
 
         except Exception as e:
             _loggin.error("Error al conectar a la base de datos SQL Server:", e)
