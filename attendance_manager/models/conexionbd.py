@@ -47,21 +47,22 @@ class ConexionSQLServer(models.Model):
     
     def obtener_datos_desde_sql(self):
         # Conectar a la base de datos de COSEC
-        
+        _loggin.warning("0")
         engine = create_engine('mssql+pymssql://sa:M3g@tK2012@192.168.10.12/COSEC')
-
+        _loggin.warning("5")
         with engine.connect() as connection:
             result = connection.execute("SELECT * FROM [COSEC].[dbo].[Mx_ATDEventTrn]")
             for row in result:
                 _loggin.warning('row:  ' + str(row))
 
-        
+        _loggin.warning("2")
         conn = pymssql.connect(server='192.168.10.12', user='sa', password='M3g@tK2012', database='COSEC')
         cursor = conn.cursor()
 
+        _loggin.warning("3")
         cursor.execute("SELECT * FROM [COSEC].[dbo].[Mx_ATDEventTrn]")
         rows = cursor.fetchall()
-
+        _loggin.warning("4")
         for row in rows:
             _loggin.warning('row:  ' + str(row))
 
