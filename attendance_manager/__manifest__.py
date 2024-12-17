@@ -23,6 +23,11 @@
         'views/conexion_view.xml',
         
     ],
+    'qweb_template_dict': {
+        'backend': [
+            'static/js/conexion.js',
+        ],
+    },
     'installable': True,
     'application': True,
 }
