@@ -17,12 +17,12 @@ class AttendanceRecord(models.Model):
             record.name = f"Marcaciones de {record.company_id.name} a la fecha {str(record.fecha_reporte)}" if record.company_id.name else f"Marcaciones a la fecha {str(record.fecha_reporte)}"
     #Nombre del reporte
     name = fields.Char(string='Asistencia', compute='_compute_name')
-
     fecha_reporte = fields.Date(string='Fecha de reporte', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
-    
     attendance_daily_entries = fields.One2many('attendance.daily', 'attendance_record', string='Asistencias entradas')
     attendance_daily_exits = fields.One2many('attendance.daily', 'attendance_record_exists', string='Asistencias salidas')
+    
+    attendance_daily_obj = env['attendance.daily']
     
     #attendance_permisos = fields.One2many('hr.employee.permisos', 'attendance_record_permiso', string='Permisos')
     #attendance_sync = fields.One2many('attendance.sync', 'attendance_record', string='Marcaciones', required=True)
@@ -34,21 +34,21 @@ class AttendanceRecord(models.Model):
     ], string='Estado', default='draft')
 
     def evaluar(self):
-        
-        asistencias_entradas = self.env['attendance.daily'].sudo().search([('fecha', '=', self.fecha_reporte), ('company_id', '=', self.company_id.id), 
-                                                                           ('check_type', '=', 'in')])
-        
-        asistencias_salidas = self.env['attendance.daily'].sudo().search([('fecha', '=', self.fecha_reporte), ('company_id', '=', self.company_id.id), 
-                                                                           ('check_type', '=', 'out')])
-        
+        attendance_daily_obj = self.env['attendance.daily']
+        asistencias = self.env['attendance.daily'].sudo().search([('fecha', '=', self.fecha_reporte), ('company_id', '=', self.company_id.id)])
+        asistencias_list = asistencias.mapped('employee_id')
         #permisos_daily = self.env['hr.employee.permisos'].sudo().search([('fecha_inicio', '<=', self.fecha_reporte), ('fecha_fin', '>=', self.fecha_reporte), ('state', '=', 'aprobado')])  
 
+        """for empleado in asistencias_list:
+            for asistencia in empleado:
+                
+            
         if not asistencias_entradas and not asistencias_salidas:
             raise UserError('No hay registros para evaluar')
         else:
             self.attendance_daily_entries = asistencias_entradas
             self.attendance_daily_exits = asistencias_salidas
-            #self.attendance_permisos = permisos_daily
+            #self.attendance_permisos = permisos_daily"""
     
     """def conectar_sql_server():
         try:

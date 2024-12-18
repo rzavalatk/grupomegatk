@@ -49,21 +49,17 @@ class AttendanceDaily(models.Model):
                 #Esto busca las marcaciones del mismo usuario en un mismo dia para verificar si hubo entrada o porque marcan como 10 veces solo la entrada
                 marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
                 
+                #Buscamos los permisos para este dia
+                permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id) and ('fecha_inicio.date()', '>=', vals["fecha"]),
+                                                                          ('fecha_fin.date()', '<=', vals["fecha"])])
+                
+                logging.warning(permisos)
                 #Esto es para saber si es entrada o salida
                 marcacion_temp = hora_max_entrada
                 if not marcaciones:
-                    vals["check_type"] = "in"
-                else:
-                    for marcacion in marcaciones:
-                        marcacion_activ = self.time_to_milliseconds(marcacion.check_in)
-                        if marcacion_activ > rango_max_entrada:
-                            marcacion_temp = marcacion_activ
-                    if marcaciones:
-                        if hora_marcacion > hora_min_salida:
-                            if hora_marcacion > marcacion_temp:
-                                vals["check_type"] = "out"
-                    else:
-                        if hora_marcacion < hora_max_entrada:
-                            vals["check_type"] = "in"
+                    if hora_marcacion <= hora_max_entrada:
+                        vals["check_type"] = "in"
+                    elif hora_marcacion >= rango_max_entrada:
+                        vals["check_type"] = "out"
 
                 return super().create(vals)
