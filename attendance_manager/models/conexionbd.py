@@ -56,7 +56,7 @@ class ConexionSQLServer(models.Model):
                 _loggin.warning('row:  ' + str(row))
 
         _loggin.warning("2")
-        conn = pymssql.connect(server='192.168.10.12', user='sa', password='M3g@tK2012', database='COSEC')
+        conn = pymssql.connect(server='192.168.10.12', user='anviz', password='Megatk2025', database='COSEC')
         cursor = conn.cursor()
 
         _loggin.warning("3")

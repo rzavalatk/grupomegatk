@@ -16,6 +16,7 @@ class AttendanceDaily(models.Model):
         ('break', 'Hora de descanso'),
     ])
     
+    
     attendance_record = fields.Many2one('attendance.record', string='Asistencias entradas', )
     attendance_record_exists = fields.Many2one('attendance.record', string='Asistencias salidas',)
 
@@ -42,17 +43,27 @@ class AttendanceDaily(models.Model):
                 
                 hora_marcacion = self.time_to_milliseconds(vals["check_in"])
                 hora_max_entrada = self.time_to_milliseconds("07:05:00:000")
+                rango_max_entrada = self.time_to_milliseconds("08:05:00:000")
                 hora_min_salida = self.time_to_milliseconds("16:05:00:000")
                 
                 #Esto busca las marcaciones del mismo usuario en un mismo dia para verificar si hubo entrada o porque marcan como 10 veces solo la entrada
                 marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
                 
-                
-                if marcaciones:
-                    if hora_marcacion > hora_min_salida:
-                        vals["check_type"] = "out"
+                #Esto es para saber si es entrada o salida
+                marcacion_temp = hora_max_entrada
+                if not marcaciones:
+                    vals["check_type"] = "in"
                 else:
-                    if hora_marcacion < hora_max_entrada:
-                        vals["check_type"] = "in"
+                    for marcacion in marcaciones:
+                        marcacion_activ = self.time_to_milliseconds(marcacion.check_in)
+                        if marcacion_activ > rango_max_entrada:
+                            marcacion_temp = marcacion_activ
+                    if marcaciones:
+                        if hora_marcacion > hora_min_salida:
+                            if hora_marcacion > marcacion_temp:
+                                vals["check_type"] = "out"
+                    else:
+                        if hora_marcacion < hora_max_entrada:
+                            vals["check_type"] = "in"
 
                 return super().create(vals)
