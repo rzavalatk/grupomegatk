@@ -13,7 +13,7 @@ class ConexionSQLServer(models.Model):
 
     resultado = fields.Text("Resultado de la consulta")
 
-    @api.multi
+    
     def obtener_datos_desde_sql(self):
         try:
 
