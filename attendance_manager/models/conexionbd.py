@@ -13,15 +13,15 @@ class ConexionSQLServer(models.Model):
 
     resultado = fields.Text("Resultado de la consulta")
 
-    #@api.model
-    """def obtener_datos_desde_sql(self):
+    @api.model
+    def obtener_datos_desde_sql(self):
         try:
             _loggin.warning("0")
             # Configuración de conexión
             connection = pymssql.connect(
                 server="192.168.10.12",  # Dirección o IP del servidor
-                user="sa",               # Usuario de la base de datos
-                password="M3g@tK2012",        # Contraseña del usuario
+                user="anviz",               # Usuario de la base de datos
+                password="Megatk2025",        # Contraseña del usuario
                 database="COSEC"        # Nombre de la base de datos
             )
             cursor = connection.cursor()
@@ -42,10 +42,10 @@ class ConexionSQLServer(models.Model):
             _loggin.warning("3")
 
         except Exception as e:
-            _loggin.error("Error al conectar a la base de datos SQL Server:", e)"""
+            _loggin.error("Error al conectar a la base de datos SQL Server:", e)
     
     
-    def obtener_datos_desde_sql(self):
+    """def obtener_datos_desde_sql(self):
         # Conectar a la base de datos de COSEC
         _loggin.warning("0")
         engine = create_engine('mssql+pymssql://anviz:Megatk2025@192.168.10.12:1433/COSEC')
@@ -66,4 +66,4 @@ class ConexionSQLServer(models.Model):
         for row in rows:
             _loggin.warning('row:  ' + str(row))
 
-        conn.close()
+        conn.close()"""
