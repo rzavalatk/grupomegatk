@@ -16,7 +16,7 @@ class ConexionSQLServer(models.Model):
     
     def obtener_datos_desde_sql(self):
         try:
-
+            _loggin.warning("0")
             # Connection Parameters
             my_server = "192.168.10.12"
             my_user = "anviz"
@@ -27,11 +27,12 @@ class ConexionSQLServer(models.Model):
                         WHERE TABLE_TYPE = 'BASE TABLE' 
                         ORDER BY TABLE_NAME;
                         """
-
+            _loggin.warning("0")
             # Make the connection and execute the query
             conn = pymssql.connect(server=my_server, user=my_user, password=my_password, database=my_database)
             cursor = conn.cursor()
             cursor.execute(my_query)
+            _loggin.warning("0")
 
             # Check whether the query is a select statement or an insert/update/delete instruction
             if my_query.strip().split(" ")[0].lower() == "select":
@@ -41,12 +42,15 @@ class ConexionSQLServer(models.Model):
                     for x in i:
                         my_result += "\t" + str(x)
                     my_result += "\n"
+                _loggin.warning("0")
 
                 # Show the result
                 self.resultado = my_result
             else:
+                _loggin.warning("1")
                 conn.commit()
                 self.resultado = "Statement executed successfully, please check your database or make a select statement."
+                _loggin.warning("1")
             conn.close()
 
         except:
