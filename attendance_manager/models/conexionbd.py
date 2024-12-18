@@ -48,7 +48,7 @@ class ConexionSQLServer(models.Model):
     def obtener_datos_desde_sql(self):
         # Conectar a la base de datos de COSEC
         _loggin.warning("0")
-        engine = create_engine('mssql+pymssql://anviz:Megatk2025@192.168.10.12/COSEC')
+        engine = create_engine('mssql+pymssql://anviz:Megatk2025@192.168.10.12:1433/COSEC')
         _loggin.warning("5")
         with engine.connect() as connection:
             result = connection.execute("SHOW TABLES FROM COSEC")
