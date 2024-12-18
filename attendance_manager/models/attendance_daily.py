@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from datetime import datetime
 
 import logging
 class AttendanceDaily(models.Model):
