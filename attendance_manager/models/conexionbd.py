@@ -13,8 +13,49 @@ class ConexionSQLServer(models.Model):
 
     resultado = fields.Text("Resultado de la consulta")
 
+    @api.multi
+    def obtener_datos_desde_sql(self, name):
+        try:
+            import pymssql
+
+            # Connection Parameters
+            my_server = "192.168.10.12"
+            my_user = "anviz"
+            my_database = "COSEC"
+            my_password = "Megatk2025"
+            my_query = """SELECT TABLE_NAME 
+                        FROM INFORMATION_SCHEMA.TABLES 
+                        WHERE TABLE_TYPE = 'BASE TABLE' 
+                        ORDER BY TABLE_NAME;
+                        """
+
+            # Make the connection and execute the query
+            conn = pymssql.connect(server=my_server, user=my_user, password=my_password, database=my_database)
+            cursor = conn.cursor()
+            cursor.execute(my_query)
+
+            # Check whether the query is a select statement or an insert/update/delete instruction
+            if my_query.strip().split(" ")[0].lower() == "select":
+                rows = cursor.fetchall()
+                my_result = ""
+                for i in rows:
+                    for x in i:
+                        my_result += "\t" + str(x)
+                    my_result += "\n"
+
+                # Show the result
+                self.resultado = my_result
+            else:
+                conn.commit()
+                self.resultado = "Statement executed successfully, please check your database or make a select statement."
+            conn.close()
+
+        except:
+            self.resultado = "An Error Occurred, please check your parameters!\n" \
+                          "And make sure (pymssql) is installed (pip3 install pymssql)."
+
     #@api.model
-    def obtener_datos_desde_sql(self):
+    """def obtener_datos_desde_sql(self):
         try:
             _loggin.warning("0")
             # Configuración de conexión
@@ -42,7 +83,7 @@ class ConexionSQLServer(models.Model):
             _loggin.warning("3")
 
         except Exception as e:
-            _loggin.error("Error al conectar a la base de datos SQL Server:", e)
+            _loggin.error("Error al conectar a la base de datos SQL Server:", e)"""
     
     
     """def obtener_datos_desde_sql(self):
