@@ -67,6 +67,7 @@ class AttendanceDaily(models.Model):
                 #Esto es para saber si es entrada o salida
                 marcacion_temp = hora_max_entrada
                 if not marcaciones:
+                    logging.warning("No hay marcaciones")
                     if hora_marcacion <= hora_max_entrada:
                         vals["check_type"] = "in"
                     elif permisos:
@@ -83,7 +84,9 @@ class AttendanceDaily(models.Model):
                             marcacion_temp = marcacion_activ
                     
                     if permisos:
+                        logging.warning("Hasta aqui llega")
                         if hora_marcacion <= hora_min_salida and hora_fin_permiso >= hora_min_salida:
+                            logging.warning("EL PROBLEMA")
                             vals["check_type"] = "out_perm"
                     elif marcacion_temp < hora_min_salida and marcacion_temp >= rango_max_entrada:
                         vals["check_type"] = "late_out"
