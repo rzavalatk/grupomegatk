@@ -85,6 +85,7 @@ class AttendanceDaily(models.Model):
                     
                     if permisos:
                         logging.warning("Hasta aqui llega")
+                        logging.warning(hora_marcacion)
                         if hora_marcacion <= hora_min_salida and hora_fin_permiso >= hora_min_salida:
                             logging.warning("EL PROBLEMA")
                             vals["check_type"] = "out_perm"
