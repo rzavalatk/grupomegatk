@@ -14,6 +14,11 @@ class AttendanceDaily(models.Model):
     check_type = fields.Selection([
         ('in', 'Hora entrada'),
         ('out', 'Hora salida'),
+        ('late', 'Llegada tarde'),
+        ('in_perm', 'Permiso Entrada'),
+        ('out_perm', 'Permiso salida'),
+        ('late_out', 'Marco salida antes de hora'),
+        ('late_perm', 'Permiso llegada tarde'),
         ('break', 'Hora de descanso'),
     ])
     
@@ -54,13 +59,35 @@ class AttendanceDaily(models.Model):
                 permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id) and ('fecha_inicio', '>=', vals["fecha"]),
                                                                           ('fecha_fin', '<=', vals["fecha"])])
                 
+                hora_init_permiso = permisos.fecha_inicio.time()
+                hora_fin_permiso = permisos.fecha_fin.time()
+                
                 logging.warning(permisos)
                 #Esto es para saber si es entrada o salida
                 marcacion_temp = hora_max_entrada
                 if not marcaciones:
                     if hora_marcacion <= hora_max_entrada:
                         vals["check_type"] = "in"
-                    elif hora_marcacion >= rango_max_entrada:
+                    elif permisos:
+                        if hora_marcacion <= hora_init_permiso and hora_fin_permiso <= hora_min_salida:
+                            vals["check_type"] = "in_perm"
+                        else:    
+                            vals["check_type"] = "late_perm"
+                    elif hora_marcacion > hora_max_entrada:
+                        vals["check_type"] = "late"
+                elif marcaciones:
+                    for asistencia in marcaciones:
+                        marcacion_activ = self.time_to_milliseconds(asistencia.check_in)
+                        if marcacion_activ > marcacion_temp:
+                            marcacion_temp = marcacion_activ
+                    
+                    if permisos:
+                        if hora_marcacion <= hora_min_salida and hora_fin_permiso >= hora_min_salida:
+                            vals["check_type"] = "out_perm"
+                    elif marcacion_temp < hora_min_salida and marcacion_temp >= rango_max_entrada:
+                        vals["check_type"] = "late_out"
+                    elif marcacion_temp >= hora_min_salida:
                         vals["check_type"] = "out"
+                    
 
                 return super().create(vals)
