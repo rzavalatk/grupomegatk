@@ -47,10 +47,10 @@ class AttendanceDaily(models.Model):
                 
                 #LOGICA PARA CALCULAR LAS HORAS DE TRABAJO SI ES ENTRADA O SALIDA
                 
-                hora_marcacion = self.time_to_milliseconds(vals["check_in"])
-                hora_max_entrada = self.time_to_milliseconds("07:05:00:000")
-                rango_max_entrada = self.time_to_milliseconds("08:05:00:000")
-                hora_min_salida = self.time_to_milliseconds("16:05:00:000")
+                hora_marcacion = datetime.strptime(vals["check_in"], "%H:%M:%S").time()
+                hora_max_entrada = datetime.strptime("07:05:00:000", "%H:%M:%S").time()
+                rango_max_entrada = datetime.strptime("08:05:00:000", "%H:%M:%S").time()
+                hora_min_salida = datetime.strptime("16:05:00:000", "%H:%M:%S").time()
                 
                 #Esto busca las marcaciones del mismo usuario en un mismo dia para verificar si hubo entrada o porque marcan como 10 veces solo la entrada
                 marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
