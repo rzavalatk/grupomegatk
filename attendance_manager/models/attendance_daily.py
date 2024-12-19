@@ -78,7 +78,7 @@ class AttendanceDaily(models.Model):
                         vals["check_type"] = "late"
                 elif marcaciones:
                     for asistencia in marcaciones:
-                        marcacion_activ = self.time_to_milliseconds(asistencia.check_in)
+                        marcacion_activ = datetime.strptime(self.time_to_str(asistencia.check_in), "%H:%M:%S").time()
                         if marcacion_activ > marcacion_temp:
                             marcacion_temp = marcacion_activ
                     
