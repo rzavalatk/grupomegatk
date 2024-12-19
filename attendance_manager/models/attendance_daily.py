@@ -29,7 +29,7 @@ class AttendanceDaily(models.Model):
     def time_to_str(self, time_str):
         """Convierte una hora en formato HH:MM:SS:FFF a milisegundos desde las 00:00:00:000"""
         hours, minutes, seconds = map(int, time_str.split(':')[:3])
-        total_str = hours + ":" + minutes + ":" + seconds
+        total_str = str(hours) + ":" + str(minutes) + ":" + str(seconds)
         return total_str
 
     def create(self, vals):
