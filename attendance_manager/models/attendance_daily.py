@@ -90,7 +90,7 @@ class AttendanceDaily(models.Model):
                             vals["check_type"] = "out_perm"
                     elif marcacion_temp < hora_min_salida and marcacion_temp >= rango_max_entrada:
                         vals["check_type"] = "late_out"
-                    elif marcacion_temp >= hora_min_salida:
+                    else:
                         vals["check_type"] = "out"
                     
 
