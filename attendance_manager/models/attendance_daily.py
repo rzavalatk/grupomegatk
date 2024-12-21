@@ -55,13 +55,13 @@ class AttendanceDaily(models.Model):
                 marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
                 
                 #Buscamos los permisos para este dia
-                permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id)], limit=1)
+                permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id)])
                 
                 hora_init_permiso = permisos.fecha_inicio.time()
                 hora_fin_permiso = permisos.fecha_fin.time()
                 
                 for permiso in permisos:
-                    logging.warning(permiso.name)
+                    logging.warning(permiso.employe_id.name)
                 #Esto es para saber si es entrada o salida
                 marcacion_temp = hora_max_entrada
                 if not marcaciones:
