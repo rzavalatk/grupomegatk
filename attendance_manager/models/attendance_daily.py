@@ -46,19 +46,20 @@ class AttendanceDaily(models.Model):
                 
                 #LOGICA PARA CALCULAR LAS HORAS DE TRABAJO SI ES ENTRADA O SALIDA
                 
+                fecha_date = datetime.strptime(vals["fecha"], "%Y-%m-%d").date()
                 hora_marcacion = datetime.strptime(self.time_to_str(vals["check_in"]), "%H:%M:%S").time()
                 hora_max_entrada = datetime.strptime("07:05:59", "%H:%M:%S").time()
                 rango_max_entrada = datetime.strptime("08:05:00", "%H:%M:%S").time()
                 hora_min_salida = datetime.strptime("16:05:59", "%H:%M:%S").time()
                 
                 logging.warning(type(hora_marcacion))
-                logging.warning(type(vals["fecha"]))
+                logging.warning(type(fecha_date))
                 
                 #Esto busca las marcaciones del mismo usuario en un mismo dia para verificar si hubo entrada o porque marcan como 10 veces solo la entrada
-                marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
+                marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]), ('fecha', '=', fecha_date)])
                 
                 #Buscamos los permisos para este dia
-                permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id), ('fecha_inicio', '>=', datetime.combine(vals["fecha"], hora_max_entrada) ), ('fecha_fin', '<=', datetime.combine(vals["fecha"], hora_min_salida))],  limit=1)
+                permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id), ('fecha_inicio', '>=', datetime.combine(fecha_date, hora_max_entrada) ), ('fecha_fin', '<=', datetime.combine(fecha_date, hora_min_salida))],  limit=1)
                 
                 hora_init_permiso = permisos.fecha_inicio.time()
                 hora_fin_permiso = permisos.fecha_fin.time()
