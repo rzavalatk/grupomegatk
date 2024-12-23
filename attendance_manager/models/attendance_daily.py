@@ -62,7 +62,7 @@ class AttendanceDaily(models.Model):
                 
                 for permiso in permisos:
                     logging.warning(permiso.employe_id.name)
-                    logging.warning(permiso.employe_id.fecha_inicio)
+                    logging.warning(permiso.fecha_inicio)
                 #Esto es para saber si es entrada o salida
                 marcacion_temp = hora_max_entrada
                 if not marcaciones:
