@@ -75,7 +75,7 @@ class AttendanceDaily(models.Model):
                     if hora_marcacion <= hora_max_entrada:
                         vals["check_type"] = "in"
                     elif permisos:
-                        if hora_marcacion <= hora_init_permiso and hora_fin_permiso <= hora_min_salida:
+                        if hora_marcacion <= hora_fin_permiso and hora_init_permiso <= hora_max_entrada:
                             vals["check_type"] = "in_perm"
                         else:    
                             vals["check_type"] = "late_perm"
