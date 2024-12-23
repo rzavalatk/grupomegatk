@@ -61,8 +61,9 @@ class AttendanceDaily(models.Model):
                 #Buscamos los permisos para este dia
                 permisos = self.env['hr.employee.permisos'].sudo().search([('employe_id', '=', empleado.employee_id.id), ('fecha_inicio', '>=', datetime.combine(fecha_date, hora_max_entrada) ), ('fecha_fin', '>=', datetime.combine(fecha_date, hora_min_salida))],  limit=1)
                 
-                hora_init_permiso = permisos.fecha_inicio.time()
-                hora_fin_permiso = permisos.fecha_fin.time()
+                if permisos:
+                    hora_init_permiso = permisos.fecha_inicio.time()
+                    hora_fin_permiso = permisos.fecha_fin.time()
                 
                 for permiso in permisos:
                     logging.warning(permiso.employe_id.name)
