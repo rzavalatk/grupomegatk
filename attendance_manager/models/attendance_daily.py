@@ -52,7 +52,7 @@ class AttendanceDaily(models.Model):
                 hora_min_salida = datetime.strptime("16:05:59", "%H:%M:%S").time()
                 
                 logging.warning(type(hora_marcacion))
-                logging.warning(type(hora_max_entrada))
+                logging.warning(type(vals["fecha"]))
                 
                 #Esto busca las marcaciones del mismo usuario en un mismo dia para verificar si hubo entrada o porque marcan como 10 veces solo la entrada
                 marcaciones = self.env['attendance.daily'].sudo().search([('id_marcaciones', '=', vals["id_marcaciones"]) and ('fecha', '=', vals["fecha"])])
