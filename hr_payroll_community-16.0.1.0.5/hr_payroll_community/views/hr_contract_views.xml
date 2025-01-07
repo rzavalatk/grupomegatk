@@ -112,7 +112,7 @@
     </record>
 
     <record id="hr_contract_advantage_template_action" model="ir.actions.act_window">
-        <field name="name">Contract Advantage Templates</field>
+        <field name="name">Plantillas de ventajas de contrato</field>
         <field name="res_model">hr.contract.advantage.template</field>
     </record>
 

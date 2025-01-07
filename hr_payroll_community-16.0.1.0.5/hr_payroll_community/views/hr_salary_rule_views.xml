@@ -89,7 +89,7 @@
         </field>
     </record>
     <record id="action_view_hr_payroll_structure_list_form" model="ir.actions.act_window">
-        <field name="name">Salary Structures</field>
+        <field name="name">Estructuras salariales</field>
         <field name="res_model">hr.payroll.structure</field>
         <field name="view_mode">tree,kanban,form</field>
     </record>
@@ -360,7 +360,7 @@
             </field>
         </record>
         <record id="action_salary_rule_form" model="ir.actions.act_window">
-            <field name="name">Salary Rules</field>
+            <field name="name">Reglas salariales</field>
             <field name="res_model">hr.salary.rule</field>
             <field name="view_mode">tree,kanban,form</field>
             <field name="domain">[('parent_rule_id','=',False)]</field>
@@ -373,7 +373,7 @@
 
 
         <record id="act_children_salary_rules" model="ir.actions.act_window">
-            <field name="name">All Children Rules</field>
+            <field name="name">Todas las reglas hijas</field>
             <field name="res_model">hr.salary.rule</field>
             <field name="domain">[('parent_rule_id', '=', active_id)]</field>
         </record>

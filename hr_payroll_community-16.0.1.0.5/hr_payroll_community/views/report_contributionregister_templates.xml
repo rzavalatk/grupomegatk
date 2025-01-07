@@ -5,20 +5,20 @@
         <t t-foreach="docs" t-as="o">
             <t t-call="web.external_layout">
                 <div class="page">
-                    <h2>PaySlip Lines by Contribution Register</h2>
+                    <h2>Líneas de Nómina por Registro de Contribuciones</h2>
 
 
                     <div class="row mt32 mb32">
                         <div class="col-3">
-                            <strong>Register Name:</strong>
+                            <strong>Nombre de registro:</strong>
                             <p t-field="o.name"/>
                         </div>
                         <div class="col-3">
-                            <strong>Date From:</strong>
+                            <strong>Desde:</strong>
                             <p t-esc="data['form']['date_from']"/>
                         </div>
                         <div class="col-3">
-                            <strong>Date To:</strong>
+                            <strong>Hasta:</strong>
                             <p t-esc="data['form']['date_to']"/>
                         </div>
                     </div>
@@ -26,11 +26,11 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>PaySlip Name</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Quantity/Rate</th>
-                                <th>Amount</th>
+                                <th>NOmbre de planilla</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Monto</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
