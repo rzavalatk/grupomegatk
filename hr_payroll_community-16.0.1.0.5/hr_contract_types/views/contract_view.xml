@@ -9,6 +9,19 @@
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="type_id"/>
             </xpath>
+
+            <xpath expr="//notebook" position="inside">
+            <!-- Nueva hoja -->
+            <page string="Información bancaria">
+                <!-- Contenido de la nueva hoja -->
+                <group>
+                    <field name="bank"/>
+                    <field name="account_number"/>
+                    <field name="account_type"/>
+                </group>
+            </page>
+        </xpath>
+
         </field>
     </record>
 
@@ -17,7 +30,7 @@
             <field name="name">hr.contract.type.form</field>
             <field name="model">hr.contract.type</field>
             <field name="arch" type="xml">
-                <form string="Contract Type">
+                <form string="Tipo de contrato">
                     <group col="4">
                         <field colspan="4" name="name"/>
                     </group>
@@ -29,7 +42,7 @@
             <field name="name">hr.contract.type.tree</field>
             <field name="model">hr.contract.type</field>
             <field name="arch" type="xml">
-                <tree string="Contract Type">
+                <tree string="Tipo de contrato">
                     <field name="sequence" widget="handle"/>
                     <field colspan="4" name="name"/>
                 </tree>
@@ -40,15 +53,15 @@
             <field name="name">hr.contract.type.search</field>
             <field name="model">hr.contract.type</field>
             <field name="arch" type="xml">
-                <search string="Search Contract Type">
-                    <field name="name" string="Contract Type"/>
-                    <field name="sequence" string="Sequence"/>
+                <search string="Buscar tipo de contrato">
+                    <field name="name" string="Tipo de contrato"/>
+                    <field name="sequence" string="Secuencia"/>
                </search>
             </field>
         </record>
 
         <record id="action_hr_contract_type" model="ir.actions.act_window">
-            <field name="name">Contract Types</field>
+            <field name="name">Tipos de contractos</field>
             <field name="res_model">hr.contract.type</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="hr_contract_type_view_search"/>

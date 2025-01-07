@@ -99,30 +99,27 @@ class HrSalaryRule(models.Model):
     _description = 'Salary Rule'
 
     name = fields.Char(required=True, translate=True)
-    code = fields.Char(required=True,
-        help="The code of salary rules can be used as reference in computation of other rules. "
-             "In that case, it is case sensitive.")
+    code = fields.Char(required=True, help="El código que se puede utilizar en las reglas salariales.")
     sequence = fields.Integer(required=True, index=True, default=5,
-        help='Use to arrange calculation sequence')
+        help='Usar para organizar la secuencia de cálculo')
     quantity = fields.Char(default='1.0',
-        help="It is used in computation for percentage and fixed amount. "
-             "For e.g. A rule for Meal Voucher having fixed amount of "
-             u"1€ per worked day can have its quantity defined in expression "
-             "like worked_days.WORK100.number_of_days.")
-    category_id = fields.Many2one('hr.salary.rule.category', string='Category', required=True)
+        help="Se utiliza en el cálculo de porcentajes y cantidades fijas"
+             "Por ejemplo, una regla para el vale de comida que tiene una cantidad fija de "
+             u"1€ por día trabajado puede tener su cantidad definida en la expresión "
+             "como días_trabajados.TRABAJO100.número_de_días.")
+    category_id = fields.Many2one('hr.salary.rule.category', string='Categoria', required=True)
     active = fields.Boolean(default=True,
-        help="If the active field is set to false, it will allow you to hide the salary rule without removing it.")
-    appears_on_payslip = fields.Boolean(string='Appears on Payslip', default=True,
-        help="Used to display the salary rule on payslip.")
-    parent_rule_id = fields.Many2one('hr.salary.rule', string='Parent Salary Rule', index=True)
-    company_id = fields.Many2one('res.company', string='Company',
+        help="Si el campo activo se establece en falso, le permitirá ocultar la regla salarial sin eliminarla.")
+    appears_on_payslip = fields.Boolean(string='Aparece en el recibo de sueldo', default=True,
+        help="Se utiliza para mostrar la regla salarial en el recibo de nómina.")
+    parent_rule_id = fields.Many2one('hr.salary.rule', string='Regla de salario de los padres', index=True)
+    company_id = fields.Many2one('res.company', string='Compañia',
         default=lambda self: self.env['res.company']._company_default_get())
     condition_select = fields.Selection([
-        ('none', 'Always True'),
-        ('range', 'Range'),
-        ('python', 'Python Expression')
+        ('none', 'Siempre verdadera'),
+        ('range', 'Rango'),
     ], string="Condition Based on", default='none', required=True)
-    condition_range = fields.Char(string='Range Based on', default='contract.wage',
+    condition_range = fields.Char(string='Rango basado en', default='contract.wage',
         help='This will be used to compute the % fields values; in general it is on basic, '
              'but you can also use categories code fields in lowercase as a variable names '
              '(hra, ma, lta, etc.) and the variable basic.')
@@ -145,9 +142,8 @@ class HrSalaryRule(models.Model):
     condition_range_min = fields.Float(string='Minimum Range', help="The minimum amount, applied for this rule.")
     condition_range_max = fields.Float(string='Maximum Range', help="The maximum amount, applied for this rule.")
     amount_select = fields.Selection([
-        ('percentage', 'Percentage (%)'),
-        ('fix', 'Fixed Amount'),
-        ('code', 'Python Code'),
+        ('percentage', 'Porcentage (%)'),
+        ('fix', 'Cantidad Fija'),
     ], string='Amount Type', index=True, required=True, default='fix', help="The computation method for the rule amount.")
     amount_fix = fields.Float(string='Fixed Amount', digits=dp.get_precision('Payroll'))
     amount_percentage = fields.Float(string='Percentage (%)', digits=dp.get_precision('Payroll Rate'),
@@ -167,7 +163,7 @@ class HrSalaryRule(models.Model):
                     # Note: returned value have to be set in the variable 'result'
 
                     result = contract.wage * 0.10''')
-    amount_percentage_base = fields.Char(string='Percentage based on', help='result will be affected to a variable')
+    amount_percentage_base = fields.Char(string='Percentage based on', default='Sueldo', help='result will be affected to a variable')
     child_ids = fields.One2many('hr.salary.rule', 'parent_rule_id', string='Child Salary Rule', copy=True)
     register_id = fields.Many2one('hr.contribution.register', string='Contribution Register',
         help="Eventual third party involved in the salary payment of the employees.")
