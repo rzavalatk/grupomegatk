@@ -64,17 +64,18 @@ class RecorrerTickets(models.Model):
 
                             for move_line in factura.line_ids:
                                 if not flag:
-                                    for marca in sorteo_id.marcas:
-                                        if not flag:
-                                            if move_line.product_id.marca_id.name:
-                                                if marca.marcas.name:
-                                                    if move_line.product_id.marca_id.name == marca.marcas.name:
-                                                        
-                                                        if marca.fecha_inicial <= factura.invoice_date <= marca.fecha_final:
-                                                            #({'ticket': "ticket x2"})
-                                                            tickets = tickets* 2
-                                                            flag = True
-                                                            break
+                                    if sorteo_id.marcas:
+                                        for marca in sorteo_id.marcas:
+                                            if not flag:
+                                                if move_line.product_id.marca_id.name:
+                                                    if marca.name:
+                                                        if move_line.product_id.marca_id.name == marca.marcas.name:
+                                                            
+                                                            if marca.fecha_inicial <= factura.invoice_date <= marca.fecha_final:
+                                                                #({'ticket': "ticket x2"})
+                                                                tickets = tickets* 2
+                                                                flag = True
+                                                                break
                                         
                                     for producto in sorteo_id.productos:
                                         if not flag:
