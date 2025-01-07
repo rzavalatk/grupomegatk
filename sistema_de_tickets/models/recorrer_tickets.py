@@ -60,7 +60,7 @@ class RecorrerTickets(models.Model):
                                     dia_festivo = True
                                     break
                             
-                            #_logger.warning("Generando ticket 1")
+                            #_logger.warning("Generando ticket 1")  
 
                             for move_line in factura.line_ids:
                                 if not flag:
