@@ -5,3 +5,4 @@ from . import sorteo_sorteo
 from . import fechas_festivas
 from . import products
 from . import marcas
+from . import recorrer_tickets

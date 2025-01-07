@@ -25,7 +25,7 @@
         'views/fechas_festivas_view.xml',
         'views/products_view.xml',
         'views/marcas_view.xml',
-        
+        'views/recorrer_tickets_view.xml',
     ],
     'installable': True,
     'auto_install': False,
