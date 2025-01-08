@@ -61,7 +61,8 @@ class AccountMove(models.Model):
                 
                 #_logger.warning("#1 " + invoice.name )
                 
-                if invoice.invoice_user_id:
+                
+                if invoice.invoice_user_id and (invoice.move_type == 'out_invoice'):
                     if invoice.partner_id.email:
                         
                         if invoice.company_id.id == 8:
