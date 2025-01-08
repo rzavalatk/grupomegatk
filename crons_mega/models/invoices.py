@@ -25,8 +25,8 @@ class AccountMove(models.Model):
         
         for invoice in invoices:
             
-            if invoice.invoice_user_id:
-                if invoice.partner_id.email:
+            if invoice.invoice_user_id and (invoice.move_type == 'out_invoice'):
+                if invoice.partner_id.email and not invoice.x_supplier:
                     if invoice.company_id.id == 8:
                             
                         email_values = {
@@ -61,8 +61,9 @@ class AccountMove(models.Model):
                 
                 #_logger.warning("#1 " + invoice.name )
                 
-                if invoice.invoice_user_id:
-                    if invoice.partner_id.email:
+                
+                if invoice.invoice_user_id and (invoice.move_type == 'out_invoice'):
+                    if invoice.partner_id.email and not invoice.partner_id.x_supplier:
                         
                         if invoice.company_id.id == 8:
                             
