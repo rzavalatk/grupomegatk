@@ -63,7 +63,7 @@ class AccountMove(models.Model):
                 
                 
                 if invoice.invoice_user_id and (invoice.move_type == 'out_invoice'):
-                    if invoice.partner_id.email and not invoice.move.x_supplier:
+                    if invoice.partner_id.email and not invoice.partner_id.x_supplier:
                         
                         if invoice.company_id.id == 8:
                             
