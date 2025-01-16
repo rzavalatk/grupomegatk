@@ -216,7 +216,7 @@ class Account_Move(models.Model):
         tickets = 0
         flag = False
         dia_festivo = False
-        
+
         #if self.sorteo_id and self.sorteo_id.compañia.id == self.company_id.id:
         if self.sorteo_id:
             
@@ -277,7 +277,7 @@ class Account_Move(models.Model):
                     
                     # Incrementa el número de la secuencia para el próximo ticket
                     self.sorteo_id.sequence_id.sudo().write({'number_next_actual': self.sorteo_id.sequence_id.number_next_actual + 1})
-        
+
         tickets = self.env['sorteo.ticket'].search([('customer_id', '=', self.partner_id.id)],)
         self.n_tickets_acum = len(tickets)
         _logger.warning(tickets)   
