@@ -200,7 +200,8 @@ class HrSalaryRule(models.Model):
                 raise UserError(_('Wrong quantity defined for salary rule %s (%s).') % (self.name, self.code))
         elif self.amount_select == 'percentage':
             try:
-                return (float(safe_eval(self.quantity, localdict)),
+                return (float(safe_eval(self.amount_percentage_base, localdict)),
+                        float(safe_eval(self.quantity, localdict)),
                         self.amount_percentage)
             except:
                 raise UserError(_('Wrong percentage base or quantity defined for salary rule %s (%s).') % (self.name, self.code))
