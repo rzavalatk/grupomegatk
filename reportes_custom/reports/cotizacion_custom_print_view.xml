@@ -238,7 +238,7 @@
 										</tr>
 
 										<tr class="border-black1">
-											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>TAX 6%</strong></td>
+											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
 											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
 												<span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
 											</td>
