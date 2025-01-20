@@ -223,7 +223,7 @@ class HrPayslip(models.Model):
             
             for line in lines:
                 logging.warning(line)
-                if line['active'] == True:
+                if line[5] == True:
                     if line.category_id.code == 'DED':
                         deduccion += line.total
                     if line.category_id.code == 'ACRE':
