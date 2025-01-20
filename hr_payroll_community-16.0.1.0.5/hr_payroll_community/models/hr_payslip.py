@@ -220,10 +220,10 @@ class HrPayslip(models.Model):
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
-            
+            logging.warning(lines)
             for line in lines:
                 logging.warning(line)
-                if line[2].active == True:
+                if line[2]['active'] == True:
                     if line.category_id.code == 'DED':
                         deduccion += line.total
                     if line.category_id.code == 'ACRE':
