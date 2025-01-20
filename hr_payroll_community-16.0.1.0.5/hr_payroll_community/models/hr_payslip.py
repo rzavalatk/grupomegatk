@@ -220,7 +220,7 @@ class HrPayslip(models.Model):
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
-            logging.warning(lines)
+            """logging.warning(lines)
             for line in lines:
                 logging.warning(line)
                 if line[2]['active'] == True:
@@ -231,7 +231,7 @@ class HrPayslip(models.Model):
                     if line.code == 'SLDBT':
                         sueldo = payslip.contract_id.wage
                         
-            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})
+            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})"""
                     
             payslip.write({'line_ids': lines, 'number': number})
         return True
@@ -707,8 +707,10 @@ class HrPayslipLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-
+        logging.warning(vals_list)
         for values in vals_list:
+            logging.warning("-------------")
+            logging.warning(values)
             if 'employee_id' not in values or 'contract_id' not in values:
                 payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
                 values['employee_id'] = values.get(
