@@ -224,7 +224,7 @@ class HrPayslip(models.Model):
             for line in lines:
                 logging.warning(line)
                 if line[2]['active'] == True:
-                    if line.category_id.code == 'DED':
+                    if self.env['hr.salary.rule.category'].browse('id', '=',line[2]['category_id']).code == 'DED':
                         deduccion += line.total
                     if line.category_id.code == 'ACRE':
                         acreditacion += line.total
