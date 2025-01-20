@@ -134,20 +134,6 @@ class HrSalaryRule(models.Model):
              'but you can also use categories code fields in lowercase as a variable names '
              '(hra, ma, lta, etc.) and the variable basic.')
     condition_python = fields.Text(string='Python Condition', required=True,
-        default='''
-                    # Available variables:
-                    #----------------------
-                    # payslip: object containing the payslips
-                    # employee: hr.employee object
-                    # contract: hr.contract object
-                    # rules: object containing the rules code (previously computed)
-                    # categories: object containing the computed salary rule categories (sum of amount of all rules belonging to that category).
-                    # worked_days: object containing the computed worked days
-                    # inputs: object containing the computed inputs
-
-                    # Note: returned value have to be set in the variable 'result'
-
-                    result = rules.NET > categories.NET * 0.10''',
         help='Applied this rule for calculation if condition is true. You can specify condition like basic > 1000.')
     condition_range_min = fields.Float(string='Minimum Range', help="The minimum amount, applied for this rule.")
     condition_range_max = fields.Float(string='Maximum Range', help="The maximum amount, applied for this rule.")
@@ -158,21 +144,7 @@ class HrSalaryRule(models.Model):
     amount_fix = fields.Float(string='Fixed Amount', digits=dp.get_precision('Payroll'))
     amount_percentage = fields.Float(string='Percentage (%)', digits=dp.get_precision('Payroll Rate'),
         help='For example, enter 50.0 to apply a percentage of 50%')
-    amount_python_compute = fields.Text(string='Python Code',
-        default='''
-                    # Available variables:
-                    #----------------------
-                    # payslip: object containing the payslips
-                    # employee: hr.employee object
-                    # contract: hr.contract object
-                    # rules: object containing the rules code (previously computed)
-                    # categories: object containing the computed salary rule categories (sum of amount of all rules belonging to that category).
-                    # worked_days: object containing the computed worked days.
-                    # inputs: object containing the computed inputs.
-
-                    # Note: returned value have to be set in the variable 'result'
-
-                    result = contract.wage * 0.10''')
+    amount_python_compute = fields.Text(string='Python Code')
     amount_percentage_base = fields.Char(string='Percentage based on', default='Sueldo', help='result will be affected to a variable')
     child_ids = fields.One2many('hr.salary.rule', 'parent_rule_id', string='Child Salary Rule', copy=True)
     register_id = fields.Many2one('hr.contribution.register', string='Contribution Register',

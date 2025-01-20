@@ -517,6 +517,7 @@ class HrPayslip(models.Model):
                         'contract_id': contract.id,
                         'name': rule.name,
                         'code': rule.code,
+                        'active': rule.active,
                         'category_id': rule.category_id.id,
                         'sequence': rule.sequence,
                         'appears_on_payslip': rule.appears_on_payslip,
@@ -716,7 +717,7 @@ class HrPayslipLine(models.Model):
                     'contract_id') or payslip.contract_id and payslip.contract_id.id
                 if not values['contract_id']:
                     raise UserError(
-                        _('You must set a contract to create a payslip line.'))
+                        _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
         return super(HrPayslipLine, self).create(vals_list)
 
 
