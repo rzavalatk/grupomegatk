@@ -6,13 +6,13 @@
             <field name="partner_id" eval="False"/>
         </record>
 
-        <record id="BASIC" model="hr.salary.rule.category">
+        <record id="" model="hr.salary.rule.category">
             <field name="name">Basico</field>
             <field name="code">BASIC</field>
         </record>
 
         <record id="ALW" model="hr.salary.rule.category">
-            <field name="name">Asignación</field>
+            <field name="name">Acreditación</field>
             <field name="code">ALW</field>
         </record>
 
@@ -27,7 +27,7 @@
         </record>
 
         <record id="NET" model="hr.salary.rule.category">
-            <field name="name">Neto</field>
+            <field name="name">Sueldo</field>
             <field name="code">NET</field>
         </record>
 

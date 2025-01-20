@@ -79,18 +79,27 @@ class HrSalaryRuleCategory(models.Model):
 
     name = fields.Char(required=True, translate=True)
     code = fields.Char(required=True)
-    parent_id = fields.Many2one('hr.salary.rule.category', string='Parent',
-        help="Linking a salary category to its parent is used only for the reporting purpose.")
-    children_ids = fields.One2many('hr.salary.rule.category', 'parent_id', string='Children')
-    note = fields.Text(string='Description')
+    parent_id = fields.Many2one('hr.salary.rule.category', string='Padre',
+        help="La vinculación de una categoría salarial a su principal se utiliza únicamente con fines de generación de informes..")
+    children_ids = fields.One2many('hr.salary.rule.category', 'parent_id', string='Hijo')
+    note = fields.Text(string='Descripción')
     company_id = fields.Many2one('res.company', string='Company',
         default=lambda self: self.env['res.company']._company_default_get())
+    category_base = fields.Boolean('categoria base', default=False)
+    active = fields.Boolean('activa', default=True)
 
     @api.constrains('parent_id')
     def _check_parent_id(self):
 
         if not self._check_recursion():
-            raise ValidationError(_('Error! You cannot create recursive hierarchy of Salary Rule Category.'))
+            raise ValidationError(_('¡Error! No se puede crear una jerarquía recursiva de categoría de regla salarial.'))
+        
+    def unlink(self):
+        for category in self:
+            if category.category_base:
+                raise UserError(_('No se puede eliminar una categoria base, pongase en contacto con su administrador'))
+            else:
+                return super(HrSalaryRuleCategory, self).unlink()
 
 
 class HrSalaryRule(models.Model):
@@ -108,6 +117,7 @@ class HrSalaryRule(models.Model):
              u"1€ por día trabajado puede tener su cantidad definida en la expresión "
              "como días_trabajados.TRABAJO100.número_de_días.")
     category_id = fields.Many2one('hr.salary.rule.category', string='Categoria', required=True)
+    rule_base = fields.Boolean('regla base', default=False)
     active = fields.Boolean(default=True,
         help="Si el campo activo se establece en falso, le permitirá ocultar la regla salarial sin eliminarla.")
     appears_on_payslip = fields.Boolean(string='Aparece en el recibo de sueldo', default=True,
@@ -234,6 +244,14 @@ class HrSalaryRule(models.Model):
                 return 'result' in localdict and localdict['result'] or False
             except:
                 raise UserError(_('Wrong python condition defined for salary rule %s (%s).') % (self.name, self.code))
+            
+    def unlink(self):
+        for rule in self:
+            if rule.rule_base:
+                raise UserError(_('No se puede eliminar una regla base, pongase en contacto con su administrador'))
+            else:
+                return super(HrSalaryRule, self).unlink()
+        
 
 
 class HrRuleInput(models.Model):

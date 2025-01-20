@@ -204,17 +204,33 @@ class HrPayslip(models.Model):
 
     def compute_sheet(self):
         for payslip in self:
+            deduccion = 0
+            acreditacion = 0
+            sueldo = 0
+            
             number = payslip.number or self.env['ir.sequence'].next_by_code(
                 'salary.slip')
-            # delete old payslip lines
+            # eliminar líneas antiguas de nómina
             payslip.line_ids.unlink()
-            # set the list of contract for which the rules have to be applied
-            # if we don't give the contract, then the rules to apply should be for all current contracts of the employee
+            # establecer la lista de contratos a los que se deben aplicar las reglas
+            # Si no se encuentra el contrato, entonces las reglas a aplicar deberían ser para todos los contratos actuales del empleado.
             contract_ids = payslip.contract_id.ids or \
                 self.get_contract(payslip.employee_id,
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
+            
+            for line in lines:
+                if line.active == True:
+                    if line.category_id.code == 'DED':
+                        deduccion += line.total
+                    if line.category_id.code == 'ACRE':
+                        acreditacion += line.total
+                    if line.code == 'SLDBT':
+                        sueldo = payslip.contract_id.wage
+                        
+            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})
+                    
             payslip.write({'line_ids': lines, 'number': number})
         return True
 
