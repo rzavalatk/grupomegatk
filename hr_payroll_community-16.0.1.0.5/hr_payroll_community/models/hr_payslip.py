@@ -220,7 +220,7 @@ class HrPayslip(models.Model):
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
             
-            """for line in lines:
+            for line in lines:
                 if line.active == True:
                     if line.category_id.code == 'DED':
                         deduccion += line.total
@@ -229,7 +229,7 @@ class HrPayslip(models.Model):
                     if line.code == 'SLDBT':
                         sueldo = payslip.contract_id.wage
                         
-            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})"""
+            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})
                     
             payslip.write({'line_ids': lines, 'number': number})
         return True
