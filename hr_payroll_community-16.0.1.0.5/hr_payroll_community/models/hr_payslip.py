@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from logging import Logger
+import logging
 import babel
 from collections import defaultdict
 from datetime import date, datetime, time
@@ -222,7 +222,7 @@ class HrPayslip(models.Model):
                      self._get_payslip_lines(contract_ids, payslip.id)]
             
             for line in lines:
-                Logger.warning(line)
+                logging.warning(line)
                 if line.active == True:
                     if line.category_id.code == 'DED':
                         deduccion += line.total
