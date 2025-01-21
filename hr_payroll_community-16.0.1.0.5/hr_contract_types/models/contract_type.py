@@ -64,7 +64,7 @@ class ContractInherit(models.Model):
     loans = fields.Boolean('prestamos')
     loans_pay = fields.Float('Monto a pagar de prestamos')
     pensions = fields.Boolean('pensiones')
-    pensions_float = fields.Float('Monto a pagar de pensiones')
+    pensions_pay = fields.Float('Monto a pagar de pensiones')
     
     #PRESTACIONES
     vacation_pay = fields.Boolean('vacaciones')
