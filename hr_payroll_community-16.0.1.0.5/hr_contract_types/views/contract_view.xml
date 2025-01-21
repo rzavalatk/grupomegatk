@@ -14,6 +14,36 @@
                 <field name="contract_type"/>
             </xpath>
 
+            <xpath expr="//field[@name='wage']" position="after">
+                <field name="salary_type"/>
+                <field name="pay_type"/>
+                <field name="currency_id"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/group[@name='notes_group']" position="after">
+                <group >
+                    <group name="beneficios_adicionales" string="Beneficios adicionales">
+                        <field name="health"/>
+                        <field name="pension"/>
+                        <field name="vacation"/>
+                        <field name="Bonuses"/>
+                        <field name="Commissions"/>
+                        <field name="viaticos"/>
+                    </group>
+
+                    <group name="acuerdos" string="Acuerdos Adicionales">
+                        <field name="telework_modality"/>
+                        <field name="telework_days"/>
+                        <field name="flexible_schedule"/>
+                    </group>   
+                </group>
+
+                
+                
+                
+                
+            </xpath>
+
             <xpath expr="//notebook" position="inside">
             <!-- Nueva hoja -->
             <page string="Información bancaria">
@@ -22,6 +52,27 @@
                     <field name="bank"/>
                     <field name="account_number"/>
                     <field name="account_type"/>
+                </group>
+            </page>
+
+            <page name="deductionpres" string="Deducciones y Prestaciones">
+                <group>
+                    <group name="deducciones" string="Deducciones">
+                        <field name="social_security"/>
+                        <field name="social_security_pay"/>
+                        <field name="loans"/>
+                        <field name="loans_pay"/>
+                        <field name="pensions"/>
+                        <field name="pensions_pay"/>
+                    </group> 
+                    <group name="prestaciones" string="Prestaciones">
+                        <field name="vacation_pay"/>
+                        <field name="social_security_pay"/>
+                        <field name="aguinaldo"/>
+                        <field name="aguinaldo_amount"/>
+                        <field name="catorceavo"/>
+                        <field name="catorceavo_amount"/>
+                    </group> 
                 </group>
             </page>
         </xpath>

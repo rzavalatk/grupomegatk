@@ -47,7 +47,7 @@ class ContractInherit(models.Model):
         ('cheque', 'Cheque'),
         ('transferencia', 'Transferencia bancaria')
     ], string='Tipo de pago', help="Tipo de pago")
-    currency_id = fields.Many2one('res.currency', string='Currency', readonly=True,
+    currency_id = fields.Many2one('res.currency', string='Moneda de pago', readonly=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     
     #beneficios adicionales
@@ -60,13 +60,19 @@ class ContractInherit(models.Model):
     
     #DEDUCCIONES
     social_security = fields.Boolean('seguro_social')
+    social_security_pay = fields.Float('Monto a pagar de seguro social')
     loans = fields.Boolean('prestamos')
+    loans_pay = fields.Float('Monto a pagar de prestamos')
     pensions = fields.Boolean('pensiones')
+    pensions_float = fields.Float('Monto a pagar de pensiones')
     
     #PRESTACIONES
-    vacation = fields.Boolean('vacaciones')
+    vacation_pay = fields.Boolean('vacaciones')
+    vacation_amount = fields.Float('Monto a pagar de vacaciones')
     aguinaldo = fields.Boolean('aguinaldo')
+    aguinaldo_amount = fields.Float('Total a pagar de aguinaldo')
     catorceavo = fields.Boolean('14avo')
+    catorceavo_amount = fields.Float('Total a pagar de 14avo')
     
      # Acuerdos Adicionales
     telework_modality = fields.Boolean(string="Telework Modality")
