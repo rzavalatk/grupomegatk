@@ -14,10 +14,13 @@
                 <field name="contract_type"/>
             </xpath>
 
-            <xpath expr="//field[@name='wage']" position="after">
-                <field name="salary_type"/>
-                <field name="pay_type"/>
-                <field name="currency_id"/>
+            <xpath expr="//form/sheet/notebook/page[@name='information']/group[@name='salary_info']" position="after">
+                <group>
+                   <field name="salary_type"/>
+                    <field name="pay_type"/>
+                    <field name="currency_id"/> 
+                </group>
+                
             </xpath>
 
             <xpath expr="//form/sheet/notebook/page/group[@name='notes_group']" position="after">
