@@ -732,12 +732,14 @@ class HrPayslipLine(models.Model):
                     acreditaciones += values['amount_fix']
                 if values['code'] == 'SLDBT':
                     values['amount_fix'] = payslip.contract_id.wage
+                    values['amount'] = values['amount_fix']
                     sueldo = values['amount_fix']
                 
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
                     value['amount_fix'] = sueldo + acreditaciones - deducciones
+                    value['amount'] = value['amount_fix']
                     
         return super(HrPayslipLine, self).create(vals_list)
 
