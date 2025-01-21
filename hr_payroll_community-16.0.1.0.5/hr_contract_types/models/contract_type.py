@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-
+from odoo.exceptions import ValidationError
 
 class ContractType(models.Model):
     _name = 'hr.contract.type'
@@ -18,6 +18,16 @@ class ContractInherit(models.Model):
     type_id = fields.Many2one('hr.contract.type', string="Categoria de empleado",
                               required=True, help="Categoria de empleado",
                               default=lambda self: self.env['hr.contract.type'].search([], limit=1))
+    contract_type = fields.Selection(
+        [
+            ('indefinite', 'Indefinido'),
+            ('temporary', 'Temporal'),
+            ('by_project', 'Por proyecto'),
+            ('services', 'Servicios')
+        ],
+        string="Tipo de contrato",
+        required=True
+    )
     
     #Información bancaria
     bank = fields.Char(string="Banco", help="Banco")
@@ -29,7 +39,7 @@ class ContractInherit(models.Model):
     
     #INformación salarial
     salary_type = fields.Selection([
-        ('nomina', 'Nomina'),
+        ('mensual', 'Mensual'),
         ('quincenal', 'Quincenal')
     ], string='Tipo de salario', help="Tipo de salario")
     pay_type = fields.Selection([
@@ -37,6 +47,8 @@ class ContractInherit(models.Model):
         ('cheque', 'Cheque'),
         ('transferencia', 'Transferencia bancaria')
     ], string='Tipo de pago', help="Tipo de pago")
+    currency_id = fields.Many2one('res.currency', string='Currency', readonly=True,
+                                  default=lambda self: self.env.user.company_id.currency_id)
     
     #beneficios adicionales
     health = fields.Boolean(string="Seguro de salud", help="Seguro de salud")
@@ -46,11 +58,36 @@ class ContractInherit(models.Model):
     Commissions = fields.Boolean(string="Comisiones", help="Comisiones")
     viaticos = fields.Boolean(string="Viáticos", help="Viaticos")
     
-    
     #DEDUCCIONES
+    social_security = fields.Boolean('seguro_social')
+    loans = fields.Boolean('prestamos')
+    pensions = fields.Boolean('pensiones')
     
+    #PRESTACIONES
+    vacation = fields.Boolean('vacaciones')
+    aguinaldo = fields.Boolean('aguinaldo')
+    catorceavo = fields.Boolean('14avo')
     
+     # Acuerdos Adicionales
+    telework_modality = fields.Boolean(string="Telework Modality")
+    telework_days = fields.Many2many(
+        'telework.days', 
+        string="Jornadas de Teletrabajo", 
+        help="Seleccione los días que el empleado teletrabajará.",
+    )
+    flexible_schedule = fields.Boolean(string="Horario flexible")
     
+    @api.constrains('telework_modality', 'telework_days')
+    def _check_telework_days(self):
+        for record in self:
+            if record.telework_modality and not record.telework_days:
+                raise ValidationError("Debes seleccionar al menos un día de teletrabajo cuando la Modalidad de Teletrabajo esté habilitada.")
+
+class TeleworkDays(models.Model):
+    _name = 'telework.days'
+    _description = 'Telework Days'
+
+    name = fields.Char(string="Dia", required=True)
     
     
     
