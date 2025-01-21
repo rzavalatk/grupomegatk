@@ -64,7 +64,7 @@ class ContractInherit(models.Model):
     loans = fields.Boolean('prestamos')
     loans_pay = fields.Float('Monto a pagar de prestamos')
     pensions = fields.Boolean('pensiones')
-    pensions_pay = fields.Float('Monto a pagar de pensiones')
+    pensions_float = fields.Float('Monto a pagar de pensiones')
     
     #PRESTACIONES
     vacation_pay = fields.Boolean('vacaciones')
@@ -75,7 +75,7 @@ class ContractInherit(models.Model):
     catorceavo_amount = fields.Float('Total a pagar de 14avo')
     
      # Acuerdos Adicionales
-    telework_modality = fields.Boolean(string="Telework Modality")
+    telework_modality = fields.Boolean(string="Modalidad de Teletrabajo")
     telework_days = fields.Many2many(
         'telework.days', 
         string="Jornadas de Teletrabajo", 
@@ -91,7 +91,7 @@ class ContractInherit(models.Model):
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'
-    _description = 'Telework Days'
+    _description = 'Dias de teletrabajo'
 
     name = fields.Char(string="Dia", required=True)
     
