@@ -707,7 +707,9 @@ class HrPayslipLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        logging.warning(vals_list)
+        deducciones=0
+        acreditaciones=0
+        sueldo=0
         for values in vals_list:
             logging.warning("-------------")
             logging.warning(values)
@@ -720,6 +722,23 @@ class HrPayslipLine(models.Model):
                 if not values['contract_id']:
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
+            if values['active'] == True:
+                categoria = self.env['hr.salary.rule.category'].search(
+                    [('id', '=', values['category_id'])])
+                payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
+                if categoria.code == 'DED':
+                    deducciones += values['amount_fix']
+                if categoria.code == 'ACRE':
+                    acreditaciones += values['amount_fix']
+                if values['code'] == 'SLDBT':
+                    values['amount_fix'] = payslip.contract_id.wage
+                    sueldo = values['amount_fix']
+                
+        for value in vals_list:
+            if value['active'] == True:
+                if value['code'] == 'SLDNT':
+                    value['amount_fix'] = sueldo + acreditaciones - deducciones
+                    
         return super(HrPayslipLine, self).create(vals_list)
 
 
