@@ -59,19 +59,19 @@ class ContractInherit(models.Model):
     viaticos = fields.Boolean(string="Viáticos", help="Viaticos")
     
     #DEDUCCIONES
-    social_security = fields.Boolean('seguro_social')
+    social_security = fields.Boolean('Pago de seguro social')
     social_security_pay = fields.Float('Monto a pagar de seguro social')
-    loans = fields.Boolean('prestamos')
+    loans = fields.Boolean('Pago de prestamos')
     loans_pay = fields.Float('Monto a pagar de prestamos')
-    pensions = fields.Boolean('pensiones')
+    pensions = fields.Boolean('Pago de pensiones')
     pensions_float = fields.Float('Monto a pagar de pensiones')
     
     #PRESTACIONES
-    vacation_pay = fields.Boolean('vacaciones')
+    vacation_pay = fields.Boolean('Pago de vacaciones')
     vacation_amount = fields.Float('Monto a pagar de vacaciones')
-    aguinaldo = fields.Boolean('aguinaldo')
+    aguinaldo = fields.Boolean('Pago de aguinaldo')
     aguinaldo_amount = fields.Float('Total a pagar de aguinaldo')
-    catorceavo = fields.Boolean('14avo')
+    catorceavo = fields.Boolean('pago de 14avo')
     catorceavo_amount = fields.Float('Total a pagar de 14avo')
     
      # Acuerdos Adicionales
