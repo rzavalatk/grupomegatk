@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 class ContractType(models.Model):
     _name = 'hr.contract.type'
@@ -91,8 +91,47 @@ class ContractInherit(models.Model):
     
     """@api.onchange('telework_modality')
     def _onchange_telework_modality(self):
-        self.telework_days """       
+        self.telework_days """
     
+    @api.onchange('health')
+    def _onchange_health(self):
+        self.social_security = self.health
+    
+    @api.onchange('pension')
+    def _onchange_pension(self):
+        self.pensions = self.pension
+    
+    @api.onchange('vacation')
+    def _onchange_vacation(self):
+        self.vacation_pay = self.vacation  
+    
+    @api.model_create_multi               
+    def create(self, vals):
+        """
+        Esta función crea un registro en el modelo hr.contract basado en los valores
+        dado en el argumento vals.
+        :param vals: un diccionario de valores para crear un registro en el modelo hr.contract
+        :return: El registro recién creado
+        """
+        #VALIDACIONES DE DEDUCCIONES que no puedan ser menores o igual a 0 cuando esten activas para reglas salariales
+        if self.social_security and self.social_security_pay <= 0:
+            raise UserError(_('El seguro social debe ser mayor a 0'))
+        elif self.loans and self.loans_pay <= 0:
+            raise UserError(_('Los prestamos deben ser mayor a 0'))
+        elif self.pensions and self.pensions_pay <= 0:
+            raise UserError(_('Las pensiones deben ser mayor a 0'))
+        elif self.vacation_pay and self.vacation_amount <= 0:
+            raise UserError(_('El pago de vacaciones debe ser mayor a 0'))
+        elif self.aguinaldo and self.aguinaldo_amount <= 0:
+            raise UserError(_('El pago de aguinaldo debe ser mayor a 0'))
+        elif self.catorceavo and self.catorceavo_amount <= 0:
+            raise UserError(_('El pago de 14avo debe ser mayor a 0'))
+        
+        #Quiero crear reglas salariales segun si estan activas o no
+        
+        
+        
+        return super(ContractInherit, self).create(vals)
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'

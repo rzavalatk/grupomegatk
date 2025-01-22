@@ -14,6 +14,8 @@
         <record id="ALW" model="hr.salary.rule.category">
             <field name="name">Acreditación</field>
             <field name="code">ALW</field>
+            <field name="active">1</field>
+            <field name="category_base">1</field>
         </record>
 
         <record id="GROSS" model="hr.salary.rule.category">
@@ -24,11 +26,15 @@
         <record id="DED" model="hr.salary.rule.category">
             <field name="name">Deducción</field>
             <field name="code">DED</field>
+            <field name="active">1</field>
+            <field name="category_base">1</field>
         </record>
 
         <record id="NET" model="hr.salary.rule.category">
             <field name="name">Sueldo</field>
             <field name="code">NET</field>
+            <field name="active">1</field>
+            <field name="category_base">1</field>
         </record>
 
 
