@@ -63,19 +63,25 @@
                 <group>
                     <group name="deducciones" string="Deducciones">
                         <field name="social_security"/>
-                        <field name="social_security_pay"/>
+                        <field name="social_security_pay" attrs="{'invisible': [('social_security', '=', False)], 
+                            'required': [('social_security', '=', True)]}"/>
                         <field name="loans"/>
-                        <field name="loans_pay"/>
+                        <field name="loans_pay" attrs="{'invisible': [('loans', '=', False)], 
+                            'required': [('loans', '=', True)]}"/>
                         <field name="pensions"/>
-                        <field name="pensions_pay"/>
+                        <field name="pensions_pay" attrs="{'invisible': [('pensions', '=', False)], 
+                            'required': [('pensions', '=', True)]}"/>
                     </group> 
                     <group name="prestaciones" string="Prestaciones">
                         <field name="vacation_pay"/>
-                        <field name="vacation_amount"/>
+                        <field name="vacation_amount" attrs="{'invisible': [('vacation_pay', '=', False)], 
+                            'required': [('vacation_pay', '=', True)]}"/>
                         <field name="aguinaldo"/>
-                        <field name="aguinaldo_amount"/>
+                        <field name="aguinaldo_amount" attrs="{'invisible': [('aguinaldo', '=', False)], 
+                            'required': [('aguinaldo', '=', True)]}"/>
                         <field name="catorceavo"/>
-                        <field name="catorceavo_amount"/>
+                        <field name="catorceavo_amount" attrs="{'invisible': [('catorceavo', '=', False)], 
+                            'required': [('catorceavo', '=', True)]}"/>
                     </group> 
                 </group>
             </page>
