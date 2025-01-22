@@ -88,7 +88,10 @@ class ContractInherit(models.Model):
         for record in self:
             if record.telework_modality and not record.telework_days:
                 raise ValidationError("Debes seleccionar al menos un día de teletrabajo cuando la Modalidad de Teletrabajo esté habilitada.")
-            
+    
+    """@api.onchange('telework_modality')
+    def _onchange_telework_modality(self):
+        self.telework_days """       
     
 
 class TeleworkDays(models.Model):
