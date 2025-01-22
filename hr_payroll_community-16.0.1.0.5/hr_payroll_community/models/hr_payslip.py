@@ -711,8 +711,7 @@ class HrPayslipLine(models.Model):
         acreditaciones=0
         sueldo=0
         for values in vals_list:
-            logging.warning("-------------")
-            logging.warning(values)
+            
             if 'employee_id' not in values or 'contract_id' not in values:
                 payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
                 values['employee_id'] = values.get(

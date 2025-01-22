@@ -88,6 +88,8 @@ class ContractInherit(models.Model):
         for record in self:
             if record.telework_modality and not record.telework_days:
                 raise ValidationError("Debes seleccionar al menos un día de teletrabajo cuando la Modalidad de Teletrabajo esté habilitada.")
+            
+    
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'

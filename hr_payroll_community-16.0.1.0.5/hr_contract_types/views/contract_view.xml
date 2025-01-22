@@ -36,7 +36,7 @@
 
                     <group name="acuerdos" string="Acuerdos Adicionales">
                         <field name="telework_modality"/>
-                        <field name="telework_days"/>
+                        <field name="telework_days" attrs="{'invisible': [('telework_modality', '=', 'False')]}"/>
                         <field name="flexible_schedule"/>
                     </group>   
                 </group>
@@ -70,7 +70,7 @@
                     </group> 
                     <group name="prestaciones" string="Prestaciones">
                         <field name="vacation_pay"/>
-                        <field name="social_security_pay"/>
+                        <field name="vacation_amount"/>
                         <field name="aguinaldo"/>
                         <field name="aguinaldo_amount"/>
                         <field name="catorceavo"/>
