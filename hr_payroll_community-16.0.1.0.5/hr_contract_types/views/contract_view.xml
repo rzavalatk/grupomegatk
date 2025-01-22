@@ -36,7 +36,7 @@
 
                     <group name="acuerdos" string="Acuerdos Adicionales">
                         <field name="telework_modality"/>
-                        <field name="telework_days" attrs="{'invisible': [('telework_modality', '=', 'False')], 
+                        <field name="telework_days" attrs="{'invisible': [('telework_modality', '=', False)], 
                             'required': [('telework_modality', '=', True)]}"/>
                         <field name="flexible_schedule"/>
                     </group>   
