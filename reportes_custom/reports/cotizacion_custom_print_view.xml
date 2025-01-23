@@ -152,8 +152,13 @@
 								<t t-if="o.x_consignacion == 'no'">
 									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">P.U.</th>
 									<th t-if="display_discount" class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">Disc.(%)</th>
-									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">ISV</th>
-									<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">MONTO</th>
+									<t t-if="o.company_id.id not in [18]">
+										<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">ISV</th>
+									</t>
+									<t t-else="o.company_id.id in [18]">
+										<th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">TAX</th>
+									
+									</t><th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">MONTO</th>
 								</t>
 							</tr>
 					 	</thead>
@@ -238,8 +243,13 @@
 										</tr>
 
 										<tr class="border-black1">
-											<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
-											<td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
+											<t t-if="o.company_id.id not in [18]">
+												<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>ISV 15%</strong></td>
+											</t>
+											<t t-else="o.company_id.id in [18]">
+												<td style="border-top: 1px solid rgb(13, 143, 210) !important; font-family:'Arial'; font-size:14pt;  font-weight: bold;"><strong>TAX 6%</strong></td>
+											
+											</t><td class="text-right" style="border-top: 1px solid rgb(13, 143, 210) !important;font-family:'Arial'; font-size:14pt;">
 												<span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.pricelist_id.currency_id}"/>
 											</td>
 										</tr>
