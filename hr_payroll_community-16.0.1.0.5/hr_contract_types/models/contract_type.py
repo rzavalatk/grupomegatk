@@ -144,8 +144,8 @@ class ContractInherit(models.Model):
                     reglas_aplicadas.append(rule.id)
 
             vals['struct_id'] = estructura.create({
-                'name': 'Estructura de nómina para ' + record.employee_id.name,
-                'code': 'Estructura de nómina para ' + record.employee_id.name,
+                'name': 'Estructura de nómina para ' + self.employee_id.name,
+                'code': 'Estructura de nómina para ' + self.employee_id.name,
                 'rule_ids' : [(6, 0, reglas_aplicadas)]
             })
             
