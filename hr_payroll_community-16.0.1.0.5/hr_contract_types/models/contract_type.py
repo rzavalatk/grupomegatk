@@ -156,7 +156,7 @@ class ContractInherit(models.Model):
         #VERSION GRATIS DE NOMINA, SOLO PODRA CREAR 10 CONTRATOS
         
         contratos = self.env['hr.contract'].search([])
-        if len(contratos) >= 10:
+        if len(contratos) <= 10:
             _logger.warning("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
             raise UserError("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
         else:
