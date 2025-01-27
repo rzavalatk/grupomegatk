@@ -133,7 +133,7 @@ class HrSalaryRule(models.Model):
         help='This will be used to compute the % fields values; in general it is on basic, '
              'but you can also use categories code fields in lowercase as a variable names '
              '(hra, ma, lta, etc.) and the variable basic.')
-    condition_python = fields.Text(string='Python Condition', required=True,
+    condition_python = fields.Text(string='Python Condition',
         help='Applied this rule for calculation if condition is true. You can specify condition like basic > 1000.')
     condition_range_min = fields.Float(string='Minimum Range', help="The minimum amount, applied for this rule.")
     condition_range_max = fields.Float(string='Maximum Range', help="The maximum amount, applied for this rule.")
