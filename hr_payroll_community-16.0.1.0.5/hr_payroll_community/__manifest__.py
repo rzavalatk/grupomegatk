@@ -13,7 +13,6 @@
     'description': "Odoo 16 Payroll, Payroll, Odoo 15,Odoo Payroll, Odoo Community Payroll",
     'depends': ['base',
         'hr_contract',
-        'hr_holidays',
         'hr_contract_types',
     ],
     'data': [
@@ -27,7 +26,7 @@
         'views/hr_employee_views.xml',
         'data/hr_payroll_sequence.xml',
         'views/hr_payroll_report.xml',
-        #'data/hr_payroll_data.xml',
+        'data/hr_payroll_data.xml',
         'wizard/hr_payroll_contribution_register_report_views.xml',
         'views/res_config_settings_views.xml',
         'views/report_contributionregister_templates.xml',

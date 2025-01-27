@@ -711,9 +711,10 @@ class HrPayslipLine(models.Model):
         acreditaciones=0
         sueldo=0
         for values in vals_list:
-            
+            categoria = self.env['hr.salary.rule.category'].search(
+                        [('id', '=', values['category_id'])])
+            payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             if 'employee_id' not in values or 'contract_id' not in values:
-                payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
                 values['employee_id'] = values.get(
                     'employee_id') or payslip.employee_id.id
                 values['contract_id'] = values.get(
@@ -721,18 +722,27 @@ class HrPayslipLine(models.Model):
                 if not values['contract_id']:
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
+            #Aqui se hacen los calculos de el calculo de la nomina
             if values['active'] == True:
-                categoria = self.env['hr.salary.rule.category'].search(
-                    [('id', '=', values['category_id'])])
-                payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
-                if categoria.code == 'DED':
-                    deducciones += values['amount_fix']
-                if categoria.code == 'ACRE':
-                    acreditaciones += values['amount_fix']
-                if values['code'] == 'SLDBT':
-                    values['amount_fix'] = payslip.contract_id.wage
-                    values['amount'] = values['amount_fix']
-                    sueldo = values['amount_fix']
+                if values['amount_select'] == 'percentage':
+                    if categoria.code == 'DED':
+                        deducciones += values['amount_percentage'] * payslip.contract_id.wage / 100
+                    if categoria.code == 'ACRE':
+                        acreditaciones += values['amount_percentage'] * payslip.contract_id.wage / 100
+                    if values['code'] == 'SLDBT':
+                        values['amount_fix'] = payslip.contract_id.wage
+                        values['amount'] = values['amount_fix']
+                        sueldo = values['amount_fix']    
+                else:    
+                    
+                    if categoria.code == 'DED':
+                        deducciones += values['amount_fix']
+                    if categoria.code == 'ACRE':
+                        acreditaciones += values['amount_fix']
+                    if values['code'] == 'SLDBT':
+                        values['amount_fix'] = payslip.contract_id.wage
+                        values['amount'] = values['amount_fix']
+                        sueldo = values['amount_fix']
                 
         for value in vals_list:
             if value['active'] == True:

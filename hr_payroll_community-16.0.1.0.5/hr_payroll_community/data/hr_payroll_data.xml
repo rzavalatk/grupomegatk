@@ -9,6 +9,8 @@
         <record id="" model="hr.salary.rule.category">
             <field name="name">Basico</field>
             <field name="code">BASIC</field>
+            <field name="active">1</field>
+            <field name="category_base">1</field>
         </record>
 
         <record id="ALW" model="hr.salary.rule.category">
@@ -21,6 +23,8 @@
         <record id="GROSS" model="hr.salary.rule.category">
             <field name="name">Bruto</field>
             <field name="code">GROSS</field>
+            <field name="active">1</field>
+            <field name="category_base">1</field>
         </record>
 
         <record id="DED" model="hr.salary.rule.category">
@@ -31,7 +35,7 @@
         </record>
 
         <record id="NET" model="hr.salary.rule.category">
-            <field name="name">Sueldo</field>
+            <field name="name">Neto</field>
             <field name="code">NET</field>
             <field name="active">1</field>
             <field name="category_base">1</field>
@@ -46,106 +50,75 @@
 <!--            <field name="parent_id" eval="False"/>-->
 <!--        </record>-->
 
-        <record id="hr_rule_basic" model="hr.salary.rule">
-            <field name="name">Salario Basico</field>
-            <field name="sequence" eval="1"/>
-            <field name="code">BASIC</field>
-            <field name="category_id" ref="hr_payroll_community.BASIC"/>
-            <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.wage</field>
-        </record>
-
-        <record id="hr_rule_taxable" model="hr.salary.rule">
-            <field name="name">Salario Bruto</field>
-            <field name="sequence" eval="100"/>
-            <field name="code">GROSS</field>
-            <field name="category_id" ref="hr_payroll_community.GROSS"/>
-            <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = categories.BASIC + categories.ALW</field>
-        </record>
-
         <record id="hr_rule_net" model="hr.salary.rule">
             <field name="name">Salario Neto</field>
-            <field name="sequence" eval="200"/>
-            <field name="code">NET</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">SLDNT</field>
             <field name="category_id" ref="hr_payroll_community.NET"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.DED</field>
-            <field name="register_id" ref="contrib_register_employees"/>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
         </record>
 
-        <record id="hr_rule_hra" model="hr.salary.rule">
-            <field name="name">Subsidio para el alquiler de la casa</field>
-            <field name="sequence" eval="1"/>
-            <field name="code">HRA</field>
-            <field name="category_id" ref="hr_payroll_community.HRA"/>
+        <record id="hr_rule_gross" model="hr.salary.rule">
+            <field name="name">Salario Bruto</field>
+            <field name="sequence" eval="100"/>
+            <field name="code">SLDBT</field>
+            <field name="category_id" ref="hr_payroll_community.GROSS"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.hra</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
         </record>
 
-        <record id="hr_rule_da" model="hr.salary.rule">
-            <field name="name">Asignación por carestía</field>
-            <field name="sequence" eval="1"/>
-            <field name="code">DA</field>
-            <field name="category_id" ref="hr_payroll_community.DA"/>
+        <record id="hr_rule_ihss" model="hr.salary.rule">
+            <field name="name">Deduccion IHSS</field>
+            <field name="sequence" eval="200"/>
+            <field name="code">DED_IHSS</field>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.da</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
         </record>
 
-        <record id="hr_rule_travel" model="hr.salary.rule">
-            <field name="name">Subsidio de viaje</field>
+        <record id="hr_rule_bth" model="hr.salary.rule">
+            <field name="name">Cuentas por cobrar</field>
             <field name="sequence" eval="1"/>
-            <field name="code">Travel</field>
-            <field name="category_id" ref="hr_payroll_community.Travel"/>
+            <field name="code">DED_CXC</field>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.travel_allowance</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
         </record>
 
-        <record id="hr_rule_meal" model="hr.salary.rule">
-            <field name="name">Subsidio de comida</field>
+        <record id="hr_rule_llt" model="hr.salary.rule">
+            <field name="name">Deducción por llegada tarde</field>
             <field name="sequence" eval="1"/>
-            <field name="code">Meal</field>
-            <field name="category_id" ref="hr_payroll_community.Meal"/>
+            <field name="code">DED_LLT</field>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.meal_allowance</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
         </record>
 
-        <record id="hr_rule_medical" model="hr.salary.rule">
-            <field name="name">Asignación médica</field>
+        <record id="hr_rule_commision" model="hr.salary.rule">
+            <field name="name">Comisiones</field>
             <field name="sequence" eval="1"/>
-            <field name="code">Medical</field>
-            <field name="category_id" ref="hr_payroll_community.Medical"/>
+            <field name="code">ACRE_com</field>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
             <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.medical_allowance</field>
-        </record>
-
-        <record id="hr_rule_other" model="hr.salary.rule">
-            <field name="name">Otra asignación</field>
-            <field name="sequence" eval="1"/>
-            <field name="code">Other</field>
-            <field name="category_id" ref="hr_payroll_community.Other"/>
-            <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = contract.other_allowance</field>
-        </record>
-
-
-
-        <!-- Estructuras salarial -->
-
-         <record id="structure_base" model="hr.payroll.structure">
-            <field name="code">BASE</field>
-            <field name="name">Base para nuevas estructuras</field>
-            <field eval="[(6, 0, [ref('hr_rule_basic'), ref('hr_rule_taxable'),ref('hr_rule_net')])]" name="rule_ids"/>
-            <field name="company_id" ref="base.main_company"/>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
         </record>
 
         <!-- Decimal Precision -->

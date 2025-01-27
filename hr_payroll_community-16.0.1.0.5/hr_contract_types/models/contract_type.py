@@ -3,6 +3,10 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class ContractType(models.Model):
     _name = 'hr.contract.type'
     _description = 'Contract Type'
@@ -105,6 +109,21 @@ class ContractInherit(models.Model):
     def _onchange_vacation(self):
         self.vacation_pay = self.vacation  
     
+    
+    def validate_deductions(self):
+        deductions = [
+            ('social_security', 'El seguro social debe ser mayor a 0', self.social_security_pay),
+            ('loans', 'Los prestamos deben ser mayor a 0', self.loans_pay),
+            ('pensions', 'Las pensiones deben ser mayor a 0', self.pensions_pay),
+            ('vacation_pay', 'El pago de vacaciones debe ser mayor a 0', self.vacation_amount),
+            ('aguinaldo', 'El pago de aguinaldo debe ser mayor a 0', self.aguinaldo_amount),
+            ('catorceavo', 'El pago de 14avo debe ser mayor a 0', self.catorceavo_amount),
+        ]
+
+        for field, message, value in deductions:
+            if getattr(self, field) and value <= 0:
+                raise UserError(_(message))
+
     @api.model_create_multi               
     def create(self, vals):
         """
@@ -113,25 +132,37 @@ class ContractInherit(models.Model):
         :param vals: un diccionario de valores para crear un registro en el modelo hr.contract
         :return: El registro recién creado
         """
-        #VALIDACIONES DE DEDUCCIONES que no puedan ser menores o igual a 0 cuando esten activas para reglas salariales
-        if self.social_security and self.social_security_pay <= 0:
-            raise UserError(_('El seguro social debe ser mayor a 0'))
-        elif self.loans and self.loans_pay <= 0:
-            raise UserError(_('Los prestamos deben ser mayor a 0'))
-        elif self.pensions and self.pensions_pay <= 0:
-            raise UserError(_('Las pensiones deben ser mayor a 0'))
-        elif self.vacation_pay and self.vacation_amount <= 0:
-            raise UserError(_('El pago de vacaciones debe ser mayor a 0'))
-        elif self.aguinaldo and self.aguinaldo_amount <= 0:
-            raise UserError(_('El pago de aguinaldo debe ser mayor a 0'))
-        elif self.catorceavo and self.catorceavo_amount <= 0:
-            raise UserError(_('El pago de 14avo debe ser mayor a 0'))
+        #SE COMENTO EL SIGUIENTE CODIGO PARA EVALUARLO LUEGO EN UNA FORMA DE PAGO 
+        """self.validate_deductions()
         
-        #Quiero crear reglas salariales segun si estan activas o no
+        if not self.struct_id:
+            
+            estructura = self.env['hr.payroll.structure']
+            reglas_salariales = self.env['hr.salary.rule'].search(['rule_base', '=', True])
+            reglas_aplicadas = []
+            
+            for rule in reglas_salariales:
+                if rule.code in ['DED_LLT','SLDBT','SLDNT','DED_CXC']:
+                    reglas_aplicadas.append(rule.id)
+                if vals['social_security'] and rule.code == 'DED_IHSS':
+                    reglas_aplicadas.append(rule.id)
+
+            vals['struct_id'] = estructura.create({
+                'name': 'Estructura de nómina para ' + self.employee_id.name,
+                'code': 'Estructura de nómina para ' + self.employee_id.name,
+                'rule_ids' : [(6, 0, reglas_aplicadas)]
+            })"""
+            
+        #VERSION GRATIS DE NOMINA, SOLO PODRA CREAR 10 CONTRATOS
         
-        
-        
-        return super(ContractInherit, self).create(vals)
+        contratos = self.env['hr.contract'].search([])
+        if len(contratos) >= 10:
+            _logger.warning("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
+            raise UserError("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
+        else:
+            _logger.warning("Se creo el contacto")
+            return super(ContractInherit, self).create(vals)
+            
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'
