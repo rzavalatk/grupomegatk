@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_contract_type_manager,hr.contract.type.manager,model_hr_contract_type,hr_contract.group_hr_contract_manager,1,1,1,1
+access_telework_days_manager,telework.days.manager,model_telework_days,hr_contract.group_hr_contract_manager,1,1,1,1
+
