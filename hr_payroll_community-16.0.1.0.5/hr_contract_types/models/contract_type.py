@@ -128,8 +128,8 @@ class ContractInherit(models.Model):
         :param vals: un diccionario de valores para crear un registro en el modelo hr.contract
         :return: El registro recién creado
         """
-        record = self.new(vals)
-        record.validate_deductions()
+        
+        self.validate_deductions()
         
         if not self.struct_id:
             
