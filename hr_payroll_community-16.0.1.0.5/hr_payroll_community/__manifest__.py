@@ -19,7 +19,7 @@
         'security/hr_payroll_security.xml',
         'security/ir.model.access.csv',
         'wizard/hr_payroll_payslips_by_employees_views.xml',
-        'views/hr_leave_type_view.xml',
+        #'views/hr_leave_type_view.xml',
         'views/hr_contract_views.xml',
         'views/hr_salary_rule_views.xml',
         'views/hr_payslip_views.xml',
