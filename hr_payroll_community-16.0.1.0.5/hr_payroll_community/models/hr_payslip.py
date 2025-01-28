@@ -48,6 +48,7 @@ class HrPayslip(models.Model):
                               (datetime.now() + relativedelta(months=+1, day=1,
                                                               days=-1)).date()),
                           states={'draft': [('readonly', False)]})
+    total_payment = fields.Float('Total a pagar', readonly=True,)
     # this is chaos: 4 states are defined, 3 are used ('verify' isn't) and 5 exist ('confirm' seems to have existed)
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -99,6 +100,13 @@ class HrPayslip(models.Model):
                                      states={'draft': [('readonly', False)]})
     payslip_count = fields.Integer(compute='_compute_payslip_count',
                                    string="Detalles del cálculo del recibo de nómina")
+    
+    @api.onchange('contract_id')
+    def _onchange_contract_id(self):
+        if self.contract_id.salary_type == 'quincenal':
+            self.total_payment = self.contract_id.wage / 2
+        else:
+            self.total_payment = self.contract_id.wage
 
     def action_send_email(self):
         res = self.env.user.has_group(
@@ -220,18 +228,6 @@ class HrPayslip(models.Model):
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
-            """logging.warning(lines)
-            for line in lines:
-                logging.warning(line)
-                if line[2]['active'] == True:
-                    if line[2]['category_id'].code == 'DED':
-                        deduccion += line.total
-                    if line.category_id.code == 'ACRE':
-                        acreditacion += line.total
-                    if line.code == 'SLDBT':
-                        sueldo = payslip.contract_id.wage
-                        
-            lines.search([('code', '=', 'SLDNT')]).write({'amount': sueldo, 'total': sueldo + acreditacion - deduccion})"""
                     
             payslip.write({'line_ids': lines, 'number': number})
         return True
@@ -726,9 +722,9 @@ class HrPayslipLine(models.Model):
             if values['active'] == True:
                 if values['amount_select'] == 'percentage':
                     if categoria.code == 'DED':
-                        deducciones += values['amount_percentage'] * payslip.contract_id.wage / 100
+                        payslip.sudo().write({'total_payment': values['amount_percentage'] * payslip.total_payment / 100}) 
                     if categoria.code == 'ACRE':
-                        acreditaciones += values['amount_percentage'] * payslip.contract_id.wage / 100
+                        payslip.sudo().write({'total_payment': values['amount_percentage'] * payslip.total_payment / 100})
                     if values['code'] == 'SLDBT':
                         values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
@@ -751,6 +747,15 @@ class HrPayslipLine(models.Model):
                     value['amount'] = value['amount_fix']
                     
         return super(HrPayslipLine, self).create(vals_list)
+    
+    """@api.onchange('amount')
+    def _onchange_(self):
+        for line in self:
+            lines_rules = self.env['hr.payslip.line'].search(
+                'slip_id', '=', line.slip_id.id
+            )
+            for rule in lines_rules:"""
+                
 
 
 class HrPayslipWorkedDays(models.Model):

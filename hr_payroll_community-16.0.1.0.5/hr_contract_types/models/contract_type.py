@@ -2,9 +2,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
-
 import logging
-
 _logger = logging.getLogger(__name__)
 
 class ContractType(models.Model):
@@ -14,7 +12,6 @@ class ContractType(models.Model):
 
     name = fields.Char(string='Tipo de contrato', required=True, help="Nombre")
     sequence = fields.Integer(help="Indica la secuencia de visualización de una lista de contratos.", default=10)
-
 
 class ContractInherit(models.Model):
     _inherit = 'hr.contract'
@@ -32,7 +29,6 @@ class ContractInherit(models.Model):
         string="Tipo de contrato",
         required=True
     )
-    
     #Información bancaria
     bank = fields.Char(string="Banco", help="Banco")
     account_number = fields.Char(string="Cuenta bancaria", help="Cuenta bancaria")
@@ -40,7 +36,6 @@ class ContractInherit(models.Model):
         ('ahorro', 'Ahorro'),
         ('corriente', 'Corriente')
     ], string='Tipo de cuenta bancaria', help="Tipo de cuenta bancaria")
-    
     #INformación salarial
     salary_type = fields.Selection([
         ('mensual', 'Mensual'),
@@ -53,7 +48,6 @@ class ContractInherit(models.Model):
     ], string='Tipo de pago', help="Tipo de pago")
     currency_id = fields.Many2one('res.currency', string='Moneda de pago', readonly=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
-    
     #beneficios adicionales
     health = fields.Boolean(string="Seguro de salud", help="Seguro de salud")
     pension = fields.Boolean(string="Seguro de pension", help="Seguro de pension")
@@ -61,7 +55,6 @@ class ContractInherit(models.Model):
     Bonuses = fields.Boolean(string="Bonificaciones", help="Bonificaciones")
     Commissions = fields.Boolean(string="Comisiones", help="Comisiones")
     viaticos = fields.Boolean(string="Viáticos", help="Viaticos")
-    
     #DEDUCCIONES
     social_security = fields.Boolean('Pago de seguro social')
     social_security_pay = fields.Float('Monto a pagar de seguro social')
@@ -69,7 +62,6 @@ class ContractInherit(models.Model):
     loans_pay = fields.Float('Monto a pagar de prestamos')
     pensions = fields.Boolean('Pago de pensiones')
     pensions_pay = fields.Float('Monto a pagar de pensiones')
-    
     #PRESTACIONES
     vacation_pay = fields.Boolean('Pago de vacaciones')
     vacation_amount = fields.Float('Monto a pagar de vacaciones')
@@ -77,8 +69,7 @@ class ContractInherit(models.Model):
     aguinaldo_amount = fields.Float('Total a pagar de aguinaldo')
     catorceavo = fields.Boolean('pago de 14avo')
     catorceavo_amount = fields.Float('Total a pagar de 14avo')
-    
-     # Acuerdos Adicionales
+    # Acuerdos Adicionales
     telework_modality = fields.Boolean(string="Modalidad de Teletrabajo")
     telework_days = fields.Many2many(
         'telework.days', 
@@ -92,11 +83,7 @@ class ContractInherit(models.Model):
         for record in self:
             if record.telework_modality and not record.telework_days:
                 raise ValidationError("Debes seleccionar al menos un día de teletrabajo cuando la Modalidad de Teletrabajo esté habilitada.")
-    
-    """@api.onchange('telework_modality')
-    def _onchange_telework_modality(self):
-        self.telework_days """
-    
+
     @api.onchange('health')
     def _onchange_health(self):
         self.social_security = self.health
@@ -109,7 +96,6 @@ class ContractInherit(models.Model):
     def _onchange_vacation(self):
         self.vacation_pay = self.vacation  
     
-    
     def validate_deductions(self):
         deductions = [
             ('social_security', 'El seguro social debe ser mayor a 0', self.social_security_pay),
@@ -119,11 +105,10 @@ class ContractInherit(models.Model):
             ('aguinaldo', 'El pago de aguinaldo debe ser mayor a 0', self.aguinaldo_amount),
             ('catorceavo', 'El pago de 14avo debe ser mayor a 0', self.catorceavo_amount),
         ]
-
         for field, message, value in deductions:
             if getattr(self, field) and value <= 0:
                 raise UserError(_(message))
-
+            
     @api.model_create_multi               
     def create(self, vals):
         """
@@ -152,17 +137,12 @@ class ContractInherit(models.Model):
                 'code': 'Estructura de nómina para ' + self.employee_id.name,
                 'rule_ids' : [(6, 0, reglas_aplicadas)]
             })"""
-            
         #VERSION GRATIS DE NOMINA, SOLO PODRA CREAR 10 CONTRATOS
-        
         contratos = self.env['hr.contract'].search([])
-        if len(contratos) <= 10:
-            _logger.warning("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
+        if len(contratos) >= 10:
             raise UserError("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
         else:
-            _logger.warning("Se creo el contacto")
-            return super(ContractInherit, self).create(vals)
-            
+            return super(ContractInherit, self).create(vals)   
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'

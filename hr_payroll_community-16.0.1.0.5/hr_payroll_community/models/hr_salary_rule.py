@@ -151,6 +151,10 @@ class HrSalaryRule(models.Model):
         help="Eventual third party involved in the salary payment of the employees.")
     input_ids = fields.One2many('hr.rule.input', 'input_id', string='Inputs', copy=True)
     note = fields.Text(string='Description')
+    en_base_a = fields.Selection([
+        ('sueldo', 'Sueldo completo'),
+        ('quincena', 'Quincena'),
+    ], string='En base a:')
 
     @api.constrains('parent_rule_id')
     def _check_parent_rule_id(self):
