@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Campos Actualizacion company",
+    'name': "Campos Actualizacion compani",
 
     'summary': """Campos de referencia de localidad y pertenencia de empresa""",
 
