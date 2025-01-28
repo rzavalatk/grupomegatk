@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Real Esttate",
+    'name': "Real Estate",
 
     'summary': """Modulo estate de prueba""",
 
