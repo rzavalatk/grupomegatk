@@ -2,9 +2,7 @@
 <odoo>
 
     <menuitem id="estate_menu_root" name="Estate">
-        <menuitem id="estate_menu_pn" name="EstateL1">
-            <menuitem id="estate_menu_action" action="test_model_action"/>
-        </menuitem>
+        
     </menuitem>
 
 </odoo>
