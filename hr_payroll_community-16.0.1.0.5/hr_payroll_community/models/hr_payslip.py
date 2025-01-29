@@ -110,7 +110,6 @@ class HrPayslip(models.Model):
         else:
             self.total_payment = self.contract_id.wage
             
-
     def action_send_email(self):
         res = self.env.user.has_group(
             'hr_payroll_community.group_hr_payroll_community_manager')
@@ -736,10 +735,12 @@ class HrPayslipLine(models.Model):
                     if categoria.code == 'DED':
                         #payslip.sudo().write({'total_payment': payslip.total_payment - (values['amount_percentage'] * payslip.total_payment / 100)})
                         pay -= (values['amount_percentage'] * payslip.total_payment / 100)
+                        sueldo = pay
                         _logger.warning("Primera deduccion :" + str(pay)) 
                     if categoria.code == 'ACRE':
                         #payslip.sudo().write({'total_payment': payslip.total_payment + (values['amount_percentage'] * payslip.total_payment / 100)})
                         pay += (values['amount_percentage'] * payslip.total_payment / 100)
+                        sueldo = pay
                         _logger.warning("Primera acre :" + str(pay)) 
                     if values['code'] == 'SLDBT':
                         if payslip.contract_id.salary_type == 'quincenal':
@@ -754,10 +755,12 @@ class HrPayslipLine(models.Model):
                     if categoria.code == 'DED':
                         #payslip.sudo().write({'total_payment': payslip.total_payment - values['amount_fix']})
                         pay -= values['amount_fix']
+                        sueldo = pay
                         _logger.warning("Segunda deduccion :" + str(pay)) 
                     if categoria.code == 'ACRE':
                         #payslip.sudo().write({'total_payment': payslip.total_payment + values['amount_fix']})
                         pay += values['amount_fix']
+                        sueldo = pay
                         _logger.warning("Segunda acre :" + str(pay)) 
                     if values['code'] == 'SLDBT':
                         if payslip.contract_id.salary_type == 'quincenal':
@@ -771,8 +774,7 @@ class HrPayslipLine(models.Model):
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
-                    payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
-                    value['amount_fix'] = payslip.total_payment
+                    value['amount_fix'] = sueldo
                     value['amount'] = value['amount_fix']
                     
         return super(HrPayslipLine, self).create(vals_list)
