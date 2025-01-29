@@ -161,6 +161,7 @@
                     <field name="struct_id" attrs="{'required':[('contract_id','!=',False)]}"/>
                     <field name="name"/>
                     <field name="credit_note"/>
+                    <field name="total_payment" />
                 </group>
                 <notebook>
                     <page string="Dias trabajados &amp; Entradas">
