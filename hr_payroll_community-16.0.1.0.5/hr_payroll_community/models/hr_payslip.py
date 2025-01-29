@@ -773,13 +773,14 @@ class HrPayslipLine(models.Model):
                     
         return super(HrPayslipLine, self).create(vals_list)
     
-    """@api.onchange('amount')
+    @api.onchange('amount')
     def _onchange_(self):
         for line in self:
             lines_rules = self.env['hr.payslip.line'].search(
                 'slip_id', '=', line.slip_id.id
             )
-            for rule in lines_rules:"""
+            _logger.warning("Contneido de lines_rules %s", lines_rules)
+                
                 
 
 
