@@ -50,7 +50,7 @@ class HrPayslip(models.Model):
                               (datetime.now() + relativedelta(months=+1, day=1,
                                                               days=-1)).date()),
                           states={'draft': [('readonly', False)]})
-    total_payment = fields.Float('Total a pagar', readonly=True,)
+    total_payment = fields.Float('Total a pagar', readonly=True, compute='_compute_total_payment')
     # this is chaos: 4 states are defined, 3 are used ('verify' isn't) and 5 exist ('confirm' seems to have existed)
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -109,6 +109,7 @@ class HrPayslip(models.Model):
             self.total_payment = self.contract_id.wage / 2
         else:
             self.total_payment = self.contract_id.wage
+            
 
     def action_send_email(self):
         res = self.env.user.has_group(
@@ -124,6 +125,12 @@ class HrPayslip(models.Model):
 
             mail_template.send_mail(self.id, force_send=True,
                                     email_values=email_values)
+    
+    def _compute_total_payment(self):
+        if self.contract_id.salary_type == 'quincenal':
+            self.total_payment = self.contract_id.wage / 2
+        else:
+            self.total_payment = self.contract_id.wage
 
     def _compute_details_by_salary_rule_category(self):
         for payslip in self:
