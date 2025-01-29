@@ -713,6 +713,7 @@ class HrPayslipLine(models.Model):
                         [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             pay = payslip.total_payment
+            _logger.warning("Sueldo a pagar: " + str(payslip.number))
             _logger.warning("Sueldo a pagar: " + str(pay))
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
@@ -763,7 +764,8 @@ class HrPayslipLine(models.Model):
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
-                    value['amount_fix'] = sueldo
+                    payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
+                    value['amount_fix'] = payslip.total_payment
                     value['amount'] = value['amount_fix']
                     
         return super(HrPayslipLine, self).create(vals_list)
