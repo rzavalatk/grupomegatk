@@ -776,7 +776,7 @@ class HrPayslipLine(models.Model):
     @api.onchange('amount')
     def _onchange_(self):
         for line in self:
-            lines_rules = self.env['hr.payslip.line'].search([('slip_id', '=', line.slip_id.id)])
+            lines_rules = self.env['hr.payslip.line'].search([('slip_id', '=', line.slip_id)])
             _logger.warning("Contneido de lines_rules %s", lines_rules)
                 
                 
