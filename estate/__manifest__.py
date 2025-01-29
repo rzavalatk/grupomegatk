@@ -11,6 +11,7 @@
         'security/ir.model.access.csv',
         'views/estate_menu.xml',
         'views/estate_property_views.xml',
+        'views/estate_basic_view.xml',
     ],
     'installable': True,
     'application': True,
