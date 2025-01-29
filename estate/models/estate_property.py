@@ -16,3 +16,12 @@ class estate_property(models.Model):
     active = fields.Boolean(string="Activo", default=True)
     garage = fields.Boolean(string="Garage", default=True)
     living_area = fields.Integer(string="Area de vivienda", default=1)
+    state = fields.Selection([
+        ('new', 'Nuevo'),
+        ('offer_get', 'Oferta recibida'),
+        ('offer_accept', 'Oferta aceptada'),
+        ('sell', 'Vendido'),
+        ('cancelled', 'Cancelado')],
+        required=True,
+        default='new'
+        )
