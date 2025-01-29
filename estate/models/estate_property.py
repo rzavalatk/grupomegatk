@@ -7,6 +7,7 @@ class estate_property(models.Model):
     name = fields.Char(string="Nombre", required=True)
     description = fields.Text(string="Descripcion")
     postcode = fields.Char(string="Codigo postal")
+    fecha_exist = fields.Date(string="En venta desde")
     price_exp = fields.Float(string="Precio Esperado", required=True)
     price_sell = fields.Float(string="Precio de venta", readonly=True)
     image = fields.Binary(string="Imagen")
