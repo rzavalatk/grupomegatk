@@ -14,6 +14,8 @@ from odoo.addons import decimal_precision as dp
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_utils
 
+_logger = logging.getLogger(__name__)
+
 # This will generate 16th of days
 ROUNDING_FACTOR = 16
 
@@ -711,6 +713,7 @@ class HrPayslipLine(models.Model):
                         [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             pay = payslip.total_payment
+            _logger.warning("Sueldo a pagar: " + str(pay))
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
                     'employee_id') or payslip.employee_id.id
@@ -724,33 +727,37 @@ class HrPayslipLine(models.Model):
                 if values['amount_select'] == 'percentage':
                     if categoria.code == 'DED':
                         #payslip.sudo().write({'total_payment': payslip.total_payment - (values['amount_percentage'] * payslip.total_payment / 100)})
-                        pay -= (values['amount_percentage'] * payslip.total_payment / 100) 
+                        pay -= (values['amount_percentage'] * payslip.total_payment / 100)
+                        _logger.warning("Primera deduccion :" + str(pay)) 
                     if categoria.code == 'ACRE':
                         #payslip.sudo().write({'total_payment': payslip.total_payment + (values['amount_percentage'] * payslip.total_payment / 100)})
                         pay += (values['amount_percentage'] * payslip.total_payment / 100)
+                        _logger.warning("Primera acre :" + str(pay)) 
                     if values['code'] == 'SLDBT':
                         if payslip.contract_id.salary_type == 'quincenal':
                             values['amount_fix'] = payslip.contract_id.wage / 2
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                        sueldo = pay
+                        #sueldo = pay
                            
                 else:    
                     
                     if categoria.code == 'DED':
                         #payslip.sudo().write({'total_payment': payslip.total_payment - values['amount_fix']})
                         pay -= values['amount_fix']
+                        _logger.warning("Segunda deduccion :" + str(pay)) 
                     if categoria.code == 'ACRE':
                         #payslip.sudo().write({'total_payment': payslip.total_payment + values['amount_fix']})
                         pay += values['amount_fix']
+                        _logger.warning("Segunda acre :" + str(pay)) 
                     if values['code'] == 'SLDBT':
                         if payslip.contract_id.salary_type == 'quincenal':
                             values['amount_fix'] = payslip.contract_id.wage / 2
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                        sueldo = pay
+                        #sueldo = pay
                         
                 
         for value in vals_list:
