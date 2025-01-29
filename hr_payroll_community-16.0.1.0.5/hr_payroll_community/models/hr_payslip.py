@@ -768,7 +768,8 @@ class HrPayslipLine(models.Model):
                 if value['code'] == 'SLDNT':
                     value['amount_fix'] = sueldo
                     value['amount'] = value['amount_fix']
-                    self.env['hr.payslip'].browse(value.get('slip_id')).write({'total_payment': sueldo})
+                    self.slip_id.write({'total_payment': sueldo})
+                    break
                     
         return super(HrPayslipLine, self).create(vals_list)
     
