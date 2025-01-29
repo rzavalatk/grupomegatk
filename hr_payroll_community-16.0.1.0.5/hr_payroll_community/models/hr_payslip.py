@@ -722,28 +722,34 @@ class HrPayslipLine(models.Model):
             if values['active'] == True:
                 if values['amount_select'] == 'percentage':
                     if categoria.code == 'DED':
-                        payslip.sudo().write({'total_payment': values['amount_percentage'] * payslip.total_payment / 100}) 
+                        payslip.sudo().write({'total_payment': payslip.total_payment - (values['amount_percentage'] * payslip.total_payment / 100)}) 
                     if categoria.code == 'ACRE':
-                        payslip.sudo().write({'total_payment': values['amount_percentage'] * payslip.total_payment / 100})
+                        payslip.sudo().write({'total_payment': payslip.total_payment + (values['amount_percentage'] * payslip.total_payment / 100)})
                     if values['code'] == 'SLDBT':
-                        values['amount_fix'] = payslip.contract_id.wage
+                        if payslip.contract_id.salary_type == 'quincenal':
+                            values['amount_fix'] = payslip.contract_id.wage / 2
+                        else:
+                            values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
                         sueldo = values['amount_fix']    
                 else:    
                     
                     if categoria.code == 'DED':
-                        deducciones += values['amount_fix']
+                        payslip.sudo().write({'total_payment': payslip.total_payment - values['amount_fix']})
                     if categoria.code == 'ACRE':
-                        acreditaciones += values['amount_fix']
+                        payslip.sudo().write({'total_payment': payslip.total_payment + values['amount_fix']})
                     if values['code'] == 'SLDBT':
-                        values['amount_fix'] = payslip.contract_id.wage
+                        if payslip.contract_id.salary_type == 'quincenal':
+                            values['amount_fix'] = payslip.contract_id.wage / 2
+                        else:
+                            values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
                         sueldo = values['amount_fix']
                 
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
-                    value['amount_fix'] = sueldo + acreditaciones - deducciones
+                    value['amount_fix'] = payslip.total_payment
                     value['amount'] = value['amount_fix']
                     
         return super(HrPayslipLine, self).create(vals_list)
