@@ -7,7 +7,9 @@
             <form string="">
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <h1 class="mb32">
+                            <field name="name" class="mb16"/>
+                        </h1>
                         <field name="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
@@ -15,6 +17,14 @@
                     </group>
                     <notebook>
                         <page string="description">
+                            <label for="description"/>
+                            <field id="description" name="description"/>
+                            <label for="description"/>
+                            <field id="description" name="description"/>
+                            <label for="description"/>
+                            <field id="description" name="description"/>
+                            <label for="description"/>
+                            <field id="description" name="description"/>
                             <label for="description"/>
                             <field id="description" name="description"/>
                         </page>
