@@ -7,9 +7,11 @@
             <form string="">
                 <sheet>
                     <group>
-                        <h1>
-                            <field name="name" readonly="True"/>
-                        </h1>
+                        <header>
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </header>
                         <field name="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
