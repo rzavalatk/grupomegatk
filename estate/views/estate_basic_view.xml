@@ -5,7 +5,7 @@
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <list string="">
-                <field name="name"/>
+                <field name="Title"/>
             </list>
         </field>
     </record>
