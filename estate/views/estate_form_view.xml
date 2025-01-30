@@ -8,7 +8,7 @@
                 <sheet>
                     <group>
                         <h1>
-                            <field name="name"/>
+                            <field name="name" readonly="True"/>
                         </h1>
                         <field name="postcode"/>
                         <field name="price_exp"/>
@@ -23,8 +23,7 @@
                             <field id="bathrooms" name="bathrooms"/>
                             <label for="state"/>
                             <field id="state" name="state"/>
-                        </page>
-                                                       
+                        </page>                                 
                     </notebook>
                 </sheet>
             </form>
