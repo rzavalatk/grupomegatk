@@ -14,7 +14,7 @@
                         <field name="price_sell"/>
                     </group>
                     <notebook>
-                        <page name="description">
+                        <page string="description">
                             <field name="description"/>
                             <field name="bedrooms"/>
                             <field name="estate"/>
