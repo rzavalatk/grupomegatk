@@ -19,8 +19,8 @@
                         <page string="description">
                             <label for="description"/>
                             <field id="description" name="description"/>
-                            <label for="bathroom"/>
-                            <field id="bathroom" name="bathroom"/>
+                            <label for="bathrooms"/>
+                            <field id="bathrooms" name="bathrooms"/>
                             <label for="state"/>
                             <field id="state" name="state"/>
                         </page>
