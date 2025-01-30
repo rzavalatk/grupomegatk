@@ -6,6 +6,11 @@
         <field name="arch" type="xml">
             <tree string="">
                 <field name="name"/>
+                <field name="postcode"/>
+                <field name="bedrooms"/>
+                <field name="price_exp"/>
+                <field name="price_sell"/>
+                <field name="fecha_exist"/>
             </tree>
         </field>
     </record>
