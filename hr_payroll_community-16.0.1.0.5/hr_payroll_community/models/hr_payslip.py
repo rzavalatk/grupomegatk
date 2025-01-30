@@ -791,9 +791,7 @@ class HrPayslipLine(models.Model):
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
         result = super(HrPayslipLine, self).write(values)
-        # Recalcular el total en la nómina
-        for line in self:
-            line.slip_id._compute_total_payment()
+        
         
         return result                
                 
