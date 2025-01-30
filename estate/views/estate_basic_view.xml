@@ -4,7 +4,9 @@
         <field name="name">estate.property.view.list</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-
+            <list string="">
+                <field name="name"/>
+            </list>
         </field>
     </record>
 </odoo>
