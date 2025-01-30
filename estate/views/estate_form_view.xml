@@ -17,7 +17,7 @@
                         <page string="description">
                             <field name="description"/>
                             <field name="bedrooms"/>
-                            <field name="estate"/>
+                            <field name="state"/>
                             <field name="bathrooms"/>                            
                         </page>
                     </notebook>
