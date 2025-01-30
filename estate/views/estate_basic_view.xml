@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-       <record id="estate_property_view" model="ir.ui.view">
+    <record id="estate_property_view" model="ir.ui.view">
         <field name="name">estate.property.list</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <list string="Channel">
+            <list string="">
                 <field name="name"/>
             </list>
         </field>
