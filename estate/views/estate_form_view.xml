@@ -12,12 +12,10 @@
                                 <field name="name" readonly="True"/>
                             </h1>
                         </header>
-                        <div>
-                            <field name="postcode"/>
-                            <field name="price_exp"/>
-                            <field name="fecha_exist"/>
-                            <field name="price_sell"/>
-                        </div>
+                        <field name="postcode"/>
+                        <field name="price_exp"/>
+                        <field name="fecha_exist"/>
+                        <field name="price_sell"/>
                     </group>
                     <notebook>
                         <page string="description">
