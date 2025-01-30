@@ -11,13 +11,12 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <div style="display: grid; grid-template-columns: repeat(2, 50%); ">
-                        <label for="postcode"/>  
+                    <group style="display: grid; grid-template-columns: repeat(2, 50%); ">  
                         <field name="postcode" id="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
                         <field name="price_sell"/>
-                    </div>
+                    </group>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
