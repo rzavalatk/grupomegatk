@@ -18,7 +18,9 @@
                     <notebook>
                         <page string="description">
                             <label for="description"/>
-                            <field id="description" name="description"/>
+                            <div>
+                                <field id="description" name="description"/>
+                            </div>
                             <label for="bathrooms"/>
                             <field id="bathrooms" name="bathrooms"/>
                             <label for="state"/>
