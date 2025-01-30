@@ -11,7 +11,7 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <group style="display: grid; grid-template-columns: repeat(2, 50%); ">  
+                    <group style="display: grid; grid-template-columns: repeat(4, 25%); ">  
                         <field name="postcode" id="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
