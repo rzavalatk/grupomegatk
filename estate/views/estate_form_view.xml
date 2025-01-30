@@ -11,14 +11,18 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <group>
-                        <field name="postcode"/>
-                        <field name="price_exp"/>
-                    </group>
-                    <group>
-                        <field name="fecha_exist"/>
-                        <field name="price_sell"/>
-                    </group>
+                    <div class="">
+                        <group>
+                            <field name="postcode"/>
+                            <field name="price_exp"/>
+                        </group>
+                    </div>
+                    <div class="">
+                        <group>
+                            <field name="fecha_exist"/>
+                            <field name="price_sell"/>
+                        </group>
+                    </div>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
