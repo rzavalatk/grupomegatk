@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="estate_property_view" model="ir.ui.view">
-        <field name="name"></field>
+        <field name="name">estate.property.view.list</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <list string="Estate">
+            <tree string="">
                 <field name="Title"/>
-            </list>
+            </tree>
         </field>
     </record>
 </odoo>
