@@ -7,7 +7,7 @@
             <form string="">
                 <sheet>
                     <header>
-                        <h1>
+                        <h1 style="decoration: none;">
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
