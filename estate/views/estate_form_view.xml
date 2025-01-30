@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="">
                 <sheet>
-                    <group>
+                    <div>
                         <header>
                             <h1>
                                 <field name="name" readonly="True"/>
@@ -16,7 +16,7 @@
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
                         <field name="price_sell"/>
-                    </group>
+                    </div>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
