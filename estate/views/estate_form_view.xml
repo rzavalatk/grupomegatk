@@ -6,17 +6,17 @@
         <field name="arch" type="xml">
             <form string="">
                 <sheet>
-                    <div>
-                        <header>
-                            <h1>
-                                <field name="name" readonly="True"/>
-                            </h1>
-                        </header>
+                    <header>
+                        <h1>
+                            <field name="name" readonly="True"/>
+                        </h1>
+                    </header>
+                    <group>
                         <field name="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
                         <field name="price_sell"/>
-                    </div>
+                    </group>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
