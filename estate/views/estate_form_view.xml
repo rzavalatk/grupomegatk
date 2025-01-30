@@ -13,6 +13,14 @@
                         <field name="fecha_exist"/>
                         <field name="price_sell"/>
                     </group>
+                    <notebook>
+                        <page name="description">
+                            <field name="description"/>
+                            <field name="bedrooms"/>
+                            <field name="estate"/>
+                            <field name="bathrooms"/>                            
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
