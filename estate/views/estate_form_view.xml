@@ -15,11 +15,9 @@
                     </group>
                     <notebook>
                         <page string="description">
-                            <field string="description" name="description"/>
-                            <field name="bedrooms"/>
-                            <field name="state"/>
-                            <field name="bathrooms"/>                            
+                            <field name="description"/>
                         </page>
+                                                       
                     </notebook>
                 </sheet>
             </form>
