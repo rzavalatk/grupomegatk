@@ -15,7 +15,7 @@
                     </group>
                     <notebook>
                         <page string="description">
-                            <field name="description"/>
+                            <field string="description" name="description"/>
                             <field name="bedrooms"/>
                             <field name="state"/>
                             <field name="bathrooms"/>                            
