@@ -12,7 +12,8 @@
                         </h1>
                     </header>
                     <div>
-                        <field name="postcode"/>
+                        <label for="postcode"/>  
+                        <field name="postcode" id="postcode"/>
                         <field name="price_exp"/>
                         <field name="fecha_exist"/>
                         <field name="price_sell"/>
