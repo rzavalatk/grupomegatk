@@ -773,14 +773,29 @@ class HrPayslipLine(models.Model):
                     
         return super(HrPayslipLine, self).create(vals_list)
     
-    @api.onchange('amount')
-    def _onchange_(self):
+
+    def write(self, values):
+        # Lógica para actualizar el sueldo neto en la nómina cuando se edita amount o sueldo
         for line in self:
-            lines_rules = self.env['hr.payslip.line'].search([('slip_id', '=', line.slip_id.id)])
-            for line in lines_rules:
-                
-                _logger.warning("Contneido de lines_rules %s", line)
-                
+            payslip = line.slip_id
+            categoria = line.category_id
+            # Si se edita el campo amount
+            for rule in payslip.line_ids:
+                if rule.code == 'SLDNT':
+                    if 'amount' in values:
+                        if categoria.code == 'DED':
+                            rule.amount -= (values['amount'])
+                            payslip.total_payment = rule.amount
+                        elif categoria.code == 'ACRE':
+                            rule.amount += (values['amount'])
+                            payslip.total_payment = rule.amount
+        # Llamar al método write original para guardar los cambios
+        result = super(HrPayslipLine, self).write(values)
+        # Recalcular el total en la nómina
+        for line in self:
+            line.slip_id._compute_total_payment()
+        
+        return result                
                 
 
 
