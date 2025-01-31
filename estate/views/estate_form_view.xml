@@ -31,7 +31,7 @@
                     </group>
                     <notebook>
                         <page string="description">
-                            <div style="display: grid; grid-template-columns:repeat(2, 35%);">
+                            <div style="display: grid; grid-template-columns:repeat(2, 15%);">
                                 <label for="description"/>
                                 <field id="description" name="description"/>
                                 <label for="bathrooms"/>
