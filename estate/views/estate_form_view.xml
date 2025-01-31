@@ -12,19 +12,19 @@
                         </h1>
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(4, 25%); ">  
-                        <div style="display: block;">
+                        <div style="display: flex;">
                             <label for="description"/>
                             <field name="postcode" id="postcode"/>
                         </div>
-                        <div style="display: block;">
+                        <div style="display: flex;">
                             <label for="price_exp"/>
                             <field name="price_exp" id="price_exp"/>
                         </div>
-                        <div style="display: block;">
+                        <div style="display: flex;">
                             <label for="fecha_exist"/>
                             <field name="fecha_exist" id="fecha_exist"/>
                         </div>
-                        <div style="display: block;">
+                        <div style="display: flex;">
                             <label for="price_sell"/>
                             <field name="price_sell" id="price_sell"/>
                         </div>
