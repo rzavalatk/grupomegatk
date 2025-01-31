@@ -13,7 +13,7 @@
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(2, 30%); ">  
                         <div style="display: flex;">
-                            <label for="description"/>
+                            <label for="description" class="oe_inline"/>
                             <field name="postcode" id="postcode"/>
                         </div>
                         <div style="display: flex;">
