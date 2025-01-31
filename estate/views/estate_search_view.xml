@@ -9,7 +9,7 @@
             <field name="name" string="Estado" />
             <field name="state"/>
             <separator/>
-             <filter string="State Property" name="state" domain="[('state', '=', 'new'), '|', ('state', '=', 'offer_get')]"/>
+             <filter string="State Property" name="states" domain="[('state', '=', 'new'), '|', ('state', '=', 'offer_get')]"/>
             <group expand="1" string="Group By">
                 <filter string="Postcode" name="postcode" context="{'group_by':'postcode', 'residual_visible':True}"/>
             </group>
