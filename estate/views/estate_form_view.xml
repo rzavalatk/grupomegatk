@@ -11,7 +11,7 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <group style="display: grid; grid-template-columns: repeat(2, 40%); ">  
+                    <group style="display: grid; grid-template-columns: repeat(2, 30%); ">  
                         <div style="display: grid; grid-template-columns: repeat(2, 40%)">
                             <label for="postcode"/>
                             <field name="postcode" id="postcode"/>
