@@ -1,6 +1,14 @@
-<record id="estate_property_view_search" model="ir.ui.view">
+<record id="estate.property_view_search" model="ir.ui.view">
     <field name="name">estate.property.view.search</field>
     <field name="model">estate.property</field>
     <field name="arch" type="xml">
+        <search string="">
+            <field name="name" string="Estado" />
+            <field name="state"/>
+            <separator/>
+            <group expand="1" string="Group By">
+                <filter string="Postcode" name="postcode" context="{'group_by':'postcode', 'residual_visible':True}"/>
+            </group>
+        </search>
     </field>
 </record>
