@@ -12,7 +12,7 @@
                         </h1>
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(2, 35%); ">  
-                        <div style="display: grid; grid-template-columns: repeat(2, 40%)">
+                        <div style="display: grid; grid-template-columns: repeat(2, 50%)">
                             <label for="postcode"/>
                             <field name="postcode" id="postcode"/>
                         </div>
@@ -31,14 +31,14 @@
                     </group>
                     <notebook>
                         <page string="description">
-                            <label for="description"/>
-                            <div>
+                            <div style="display: grid; grid-template-columns:repeat(2, 35%);">
+                                <label for="description"/>
                                 <field id="description" name="description"/>
+                                <label for="bathrooms"/>
+                                <field id="bathrooms" name="bathrooms"/>
+                                <label for="state"/>
+                                <field id="state" name="state"/>
                             </div>
-                            <label for="bathrooms"/>
-                            <field id="bathrooms" name="bathrooms"/>
-                            <label for="state"/>
-                            <field id="state" name="state"/>
                         </page>                                 
                     </notebook>
                 </sheet>
