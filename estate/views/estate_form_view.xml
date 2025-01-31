@@ -8,7 +8,7 @@
                 <sheet>
                     <header>
                         <h1 style="decoration: none;">
-                            <field name="name" readonly="True"/>
+                            <field name="name"/>
                         </h1>
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(2, 35%); ">  
