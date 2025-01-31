@@ -31,7 +31,7 @@
                     </group>
                     <notebook>
                         <page string="description">
-                            <div style="display: grid; grid-template-columns:repeat(2, 15%);">
+                            <div style="display: grid; grid-template-columns:repeat(2, 15%);" class="oe_inline">
                                 <label for="description"/>
                                 <field id="description" name="description"/>
                                 <label for="bathrooms"/>
@@ -46,3 +46,4 @@
         </field>
     </record>
 </odoo>
+ 
