@@ -12,8 +12,8 @@
                         </h1>
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(2, 40%); ">  
-                        <div style="display: grid; grid-template-columns: repeat(2, 50%)">
-                            <label for="description"/>
+                        <div style="display: grid; grid-template-columns: repeat(2, 40%)">
+                            <label for="postcode"/>
                             <field name="postcode" id="postcode"/>
                         </div>
                         <div style="display: grid; grid-template-columns: repeat(2, 50%);">
