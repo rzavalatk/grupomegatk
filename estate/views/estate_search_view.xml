@@ -1,10 +1,15 @@
-<record id="estate.property_view_search" model="ir.ui.view">
-    <field name="name">estate.property.view.search</field>
-    <field name="model">estate.property</field>
-    <field name="arch" type="xml">
-        <search string="Property">
-            <field name="state" string="Estado"/>
-            <field name="state"/>
-        </search>
-    </field>
-</record>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="estate.property_view_search" model="ir.ui.view">
+        <field name="name">estate.property.view.search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search string="Property">
+                <field name="state" string="Estado"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>
