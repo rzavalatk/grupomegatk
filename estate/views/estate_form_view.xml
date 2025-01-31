@@ -12,22 +12,22 @@
                         </h1>
                     </header>
                     <group class="oe_inline">  
-                        <div>
+                        
                             <label for="description" class="oe_inline"/>
                             <field name="postcode" id="postcode"/>
-                        </div>
-                        <div>
+                        
+                        
                             <label for="price_exp" class="oe_inline"/>
                             <field name="price_exp" id="price_exp"/>
-                        </div>
-                        <div>
+                        
+                        
                             <label for="fecha_exist" class="oe_inline"/>
                             <field name="fecha_exist" id="fecha_exist"/>
-                        </div>
-                        <div>
+                        
+                        
                             <label for="price_sell" class="oe_inline"/>
                             <field name="price_sell" id="price_sell"/>
-                        </div>
+                        
                     </group>
                     <notebook>
                         <page string="description">
