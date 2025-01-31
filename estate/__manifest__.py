@@ -13,6 +13,7 @@
         'views/estate_property_views.xml',
         'views/estate_tree_view.xml',
         'views/estate_form_view.xml',
+        'views/estate_search_view.xml',
     ],
     'installable': True,
     'application': True,
