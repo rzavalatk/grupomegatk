@@ -13,7 +13,7 @@
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(2, 35%); ">  
                         <div style="display: flex;">
-                            <label for="description" class="oe_inline"/>
+                            <label for="description"/>
                             <field name="postcode" id="postcode"/>
                         </div>
                         <div style="display: flex;">
@@ -21,7 +21,7 @@
                             <field name="price_exp" id="price_exp"/>
                         </div>
                         <div style="display: flex;">
-                            <label for="fecha_exist"/>
+                            <label for="fecha_exist" style="display;=: inline-block"/>
                             <field name="fecha_exist" id="fecha_exist"/>
                         </div>
                         <div style="display: flex;">
