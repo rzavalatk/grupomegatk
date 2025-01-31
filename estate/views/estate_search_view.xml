@@ -2,8 +2,8 @@
     <field name="name">estate.property.view.search</field>
     <field name="model">estate.property</field>
     <field name="arch" type="xml">
-        <search string="">
-            <field name="name" string="Estado" />
+        <search string="Property">
+            <field name="state" string="Estado"/>
             <field name="state"/>
         </search>
     </field>
