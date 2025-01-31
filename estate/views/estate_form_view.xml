@@ -12,10 +12,18 @@
                         </h1>
                     </header>
                     <group style="display: grid; grid-template-columns: repeat(4, 25%); ">  
-                        <field name="postcode" id="postcode"/>
-                        <field name="price_exp"/>
-                        <field name="fecha_exist"/>
-                        <field name="price_sell"/>
+                        <div class="">
+                            <field name="postcode" id="postcode"/>
+                        </div>
+                        <div class="">
+                            <field name="price_exp"/>
+                        </div>
+                        <div class="">
+                            <field name="fecha_exist"/>
+                        </div>
+                        <div class="">
+                            <field name="price_sell"/>
+                        </div>
                     </group>
                     <notebook>
                         <page string="description">
