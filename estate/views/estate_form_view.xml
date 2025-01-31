@@ -11,12 +11,24 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <div class="oe_inline">  
-                        <field name="postcode" id="postcode"/>
-                        <field name="price_exp" id="price_exp"/>
-                        <field name="fecha_exist" id="fecha_exist"/>
-                        <field name="price_sell" id="price_sell"/> 
-                    </div>
+                    <group style="display: grid; grid-template-columns: repeat(2, 35%); ">  
+                        <div style="display: flex;">
+                            <label for="description" class="oe_inline"/>
+                            <field name="postcode" id="postcode"/>
+                        </div>
+                        <div style="display: flex;">
+                            <label for="price_exp"/>
+                            <field name="price_exp" id="price_exp"/>
+                        </div>
+                        <div style="display: flex;">
+                            <label for="fecha_exist"/>
+                            <field name="fecha_exist" id="fecha_exist"/>
+                        </div>
+                        <div style="display: flex;">
+                            <label for="price_sell"/>
+                            <field name="price_sell" id="price_sell"/>
+                        </div>
+                    </group>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
