@@ -11,24 +11,12 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </header>
-                    <group class="oe_inline">  
-                        
-                            
-                            <field name="postcode" id="postcode"/>
-                        
-                        
-                            
-                            <field name="price_exp" id="price_exp"/>
-                        
-                        
-                            
-                            <field name="fecha_exist" id="fecha_exist"/>
-                        
-                        
-                            
-                            <field name="price_sell" id="price_sell"/>
-                        
-                    </group>
+                    <div class="oe_inline">  
+                        <field name="postcode" id="postcode"/>
+                        <field name="price_exp" id="price_exp"/>
+                        <field name="fecha_exist" id="fecha_exist"/>
+                        <field name="price_sell" id="price_sell"/> 
+                    </div>
                     <notebook>
                         <page string="description">
                             <label for="description"/>
