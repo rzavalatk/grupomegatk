@@ -11,6 +11,7 @@
         'mail',
     ],
     'data': [
+        'security/groups.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [
