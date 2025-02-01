@@ -19,5 +19,5 @@
     ],
     'auto_install': True,
     'application': True,
-    'auto?_install': False,
+    'auto_install': False,
 }
