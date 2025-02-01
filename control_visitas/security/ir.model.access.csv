@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_registro_visitas,access_registro_visitas,control_visitas.model_registro_visitas,group_control_visitas,1,1,1,1
