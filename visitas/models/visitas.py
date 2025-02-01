@@ -8,7 +8,6 @@ class Visitas(models.Model):
     fecha = fields.Datetime(string = 'Fecha', default = fields.Datetime.now())
     region = fields.Char(string = 'Region', compute = "_compute_region", store=True)
     user_id = fields.Many2one('res.users', string = 'Usuario', default = lambda self: self.env.user)
-    sucursal = fields.Char(string = 'Sucursal')
     
     api.depends('user_id')
     def _compute_region(self):
