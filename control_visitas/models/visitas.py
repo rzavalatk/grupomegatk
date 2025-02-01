@@ -8,5 +8,4 @@ class Visitas(models.Model):
     fecha = fields.Datetime(string = 'Fecha', default = fields.Datetime.now())
     region = fields.Char(string = 'Region')
     user_id = fields.Many2one('res.users', string = 'Usuario', default = lambda self: self.env.user)
-    
-    
+    sucursal = fields.Char(string = 'Sucursal')
