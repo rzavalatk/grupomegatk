@@ -10,7 +10,7 @@
         'base'
     ],
     'data': [
-        ''
+        'views/menu_view.xml'
     ],
     'auto_install': False,
     'application': True,
