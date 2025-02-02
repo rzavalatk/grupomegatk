@@ -1,8 +1,8 @@
 {
     'name': 'Control de Visitas',
     'version': '1.0',
-    'description': 'Gestión de visitas en las sucursales',
-    'summary': 'Gestión de visitas',
+    'description': 'Modulo para controlar visitas a las diferentes sucursales',
+    'summary': 'Modulo para controlar visitas',
     'author': 'Alexander Reyes',
     'license': 'LGPL-3',
     'category': 'uncategorized',
