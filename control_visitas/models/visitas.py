@@ -10,7 +10,7 @@ class Visitas(models.Model):
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
 
-    @api.depends('region')
+    @api.depends('user_id')
     def _compute_region(self):
         for record in self:
             record.region = record.user_id.ubicacion_vendedor
