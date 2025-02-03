@@ -33,11 +33,10 @@
         <field name="arch" type="xml">
             <form>
                 <group>
-                    <button string="Visita Administración" type="object"/>
-                    <!-- <button string="Visita Tienda Megatk" type="object" name="visita_tienda_megatk"/>
+                    <button string="Visita Administración" type="object" name="visita_administracion"/>
                     <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                     <button string="Visita Lenka" type="object" name="visita_lenka"/>
-                    <button string="Visita Clínica" type="object" name="visita_clinica"/>-->
+                    <button string="Visita Clínica" type="object" name="visita_clinica"/>
                 </group>
             </form>
         </field>

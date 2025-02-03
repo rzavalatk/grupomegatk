@@ -22,4 +22,18 @@ class Visitas(models.Model):
             raise ValidationError("No se pueden registrar esta visita en SPS")
         return super(Visitas, self).create(vals)
         
-        
+    def visita_administracion(self):
+        self.create({'name': 'Visita Administración'})
+
+    def visita_tienda_megatk(self):
+        self.create({'name': 'Visita Tienda Megatk'})
+
+    def visita_tienda_meditek(self):
+        self.create({'name': 'Visita Tienda Meditek'})
+
+    def visita_lenka(self):
+        self.create({'name': 'Visita Lenka'})
+
+    def visita_clinica(self):
+        self.create({'name': 'Visita Clínica'})
+            
