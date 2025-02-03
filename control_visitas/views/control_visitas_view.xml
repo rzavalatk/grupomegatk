@@ -14,7 +14,6 @@
         </field>
     </record>
 
-
     <record id="view_visitas_tree" model="ir.ui.view">
         <field name="name">control.visitas.tree</field>
         <field name="model">control.visitas</field>
