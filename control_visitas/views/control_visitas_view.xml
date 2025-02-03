@@ -41,10 +41,4 @@
             </form>
         </field>
     </record>
-
-    <record id="action_visitas" model="ir.actions.act_window">
-        <field name="name">Visitas</field>
-        <field name="res_model">control.visitas</field>
-        <field name="view_mode">tree,form</field>
-    </record>
 </odoo>

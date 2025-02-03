@@ -4,4 +4,10 @@
         <menuitem id="menu_visitas_root" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
         <menuitem id="menu_visitas" name="Visitas" parent="menu_visitas_root" sequence="20" action="action_visitas"/>
     </data>
+    
+    <record id="action_visitas" model="ir.actions.act_window">
+        <field name="name">Visitas</field>
+        <field name="res_model">control.visitas</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 </odoo>
