@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <menuitem id="cv_menu_root" name="Control de Visitas">
-        <menuitem id="cv_menu_fl" name="Estate_primer">
-            <menuitem id="cv_menu_action" action="cv_action"/>
+    <data noupdate="1">
+        <menuitem id="cv_menu_root" name="Control de Visitas">
+            <menuitem id="cv_menu_fl" name="">
+                <menuitem id="cv_menu_action" action="cv_action"/>
+            </menuitem>
         </menuitem>
-    </menuitem>
-
+    </data>
 </odoo>
