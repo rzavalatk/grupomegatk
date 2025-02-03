@@ -42,9 +42,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_visitas_root" name="Visitas"/>
-    <menuitem id="menu_visitas" name="Visitas" parent="menu_visitas_root" action="action_visitas"/>
-
     <record id="action_visitas" model="ir.actions.act_window">
         <field name="name">Visitas</field>
         <field name="res_model">control.visitas</field>
