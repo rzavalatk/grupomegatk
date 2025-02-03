@@ -27,6 +27,22 @@
         </field>
     </record>
 
+    <record id="view_visitas_buttons" model="ir.ui.view">
+        <field name="name">control.visitas.buttons</field>
+        <field name="model">control.visitas</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <button string="Visita Administración" type="object"/>
+                    <!-- <button string="Visita Tienda Megatk" type="object" name="visita_tienda_megatk"/>
+                    <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                    <button string="Visita Lenka" type="object" name="visita_lenka"/>
+                    <button string="Visita Clínica" type="object" name="visita_clinica"/>-->
+                </group>
+            </form>
+        </field>
+    </record>
+
     <menuitem id="menu_visitas_root" name="Visitas"/>
     <menuitem id="menu_visitas" name="Visitas" parent="menu_visitas_root" action="action_visitas"/>
 
