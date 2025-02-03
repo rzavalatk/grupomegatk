@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_visitas" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
+        <menuitem id="menu_visitas_root" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
     </data>
 </odoo>
