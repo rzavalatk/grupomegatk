@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="cv_menu_root" name="Control de Visitas">
+        <menuitem id="cv_menu_fl" name="Estate_primer">
+            <menuitem id="cv_menu_action" action="estate_property_action"/>
+        </menuitem>
+    </menuitem>
+
+</odoo>
