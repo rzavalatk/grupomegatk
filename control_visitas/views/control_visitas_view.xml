@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
         <menuitem id="cv_menu_root" name="Control de Visitas">
-            <menuitem id="cv_menu_fl" name="">
+            <menuitem id="cv_menu_fl" name="Reportes">
                 <menuitem id="cv_menu_action" action="cv_action"/>
             </menuitem>
         </menuitem>
