@@ -10,7 +10,8 @@
         'base'
     ],
     'data': [
-        'views/menu_view.xml'
+        'views/menu_action.xml',
+        'views/menu_view.xml',
     ],
     'auto_install': False,
     'application': True,
