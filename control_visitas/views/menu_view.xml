@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_visitas" name="Control Visitas" sequence="10"/>
+        <menuitem id="menu_visitas" name="Control Visitas" sequence="10" web_icon="reports,static/description/REPORTES.png"/>
         <menuitem id="menu_visitas_registros" name="Registros" parent="menu_visitas" sequence="20"/>
         <menuitem id="menu_visitas_reportes" name="Reportes" parent="menu_visitas" sequence="30"/>
     </data>
