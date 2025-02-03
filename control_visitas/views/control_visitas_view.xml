@@ -3,7 +3,7 @@
 
     <menuitem id="cv_menu_root" name="Control de Visitas">
         <menuitem id="cv_menu_fl" name="Estate_primer">
-            <menuitem id="cv_menu_action" action="estate_property_action"/>
+            <menuitem id="cv_menu_action" action="cv_action"/>
         </menuitem>
     </menuitem>
 
