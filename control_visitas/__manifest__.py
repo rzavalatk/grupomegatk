@@ -11,7 +11,6 @@
     ],
     'data': [
         'views/control_visitas_view.xml',
-        'views/control_visitas_action.xml',
     ],
     'auto_install': False,
     'application': True,

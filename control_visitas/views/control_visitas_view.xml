@@ -1,10 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
-        <menuitem id="cv_menu_root" name="Control de Visitas">
-            <menuitem id="cv_menu_fl" name="Reportes">
-                <menuitem id="cv_menu_action" action="cv_action"/>
-            </menuitem>
-        </menuitem>
-    </data>
+    <record id="view_visitas_tree" model="ir.ui.view">
+        <field name="name">control.visitas.visitas.tree</field>
+        <field name="model">control.visitas.visitas</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="region"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_visitas_form" model="ir.ui.view">
+        <field name="name">control.visitas.visitas.form</field>
+        <field name="model">control.visitas.visitas</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="fecha"/>
+                        <field name="region"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_visitas_buttons" model="ir.ui.view">
+        <field name="name">control.visitas.visitas.buttons</field>
+        <field name="model">control.visitas.visitas</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <button string="Visita Administración" type="object" name="visita_administracion"/>
+                    <button string="Visita Tienda Megatk" type="object" name="visita_tienda_megatk"/>
+                    <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                    <button string="Visita Lenka" type="object" name="visita_lenka"/>
+                    <button string="Visita Clínica" type="object" name="visita_clinica"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_visitas_root" name="Visitas"/>
+    <menuitem id="menu_visitas" name="Visitas" parent="menu_visitas_root" action="action_visitas"/>
+
+    <record id="action_visitas" model="ir.actions.act_window">
+        <field name="name">Visitas</field>
+        <field name="res_model">control.visitas.visitas</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 </odoo>
