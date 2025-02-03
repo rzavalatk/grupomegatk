@@ -13,12 +13,12 @@ class Visitas(models.Model):
     @api.depends('region')
     def _compute_region(self):
         for record in self:
-            record.region = record.user_id.region
+            record.region = record.user_id.ubicacion_vendedor
             
     @api.model
     def create(self, vals):
         user = self.env.user
-        if user.region == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
         return super(Visitas, self).create(vals)
         
