@@ -10,7 +10,7 @@
         'base'
     ],
     'data': [
-        'views/main_menu.xml',
+        
         'views/control_visitas_view.xml',
     ],
     'auto_install': False,
