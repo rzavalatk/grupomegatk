@@ -1,12 +1,13 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import datetime
 
 class Visitas(models.Model):
     _name = 'control.visitas'
     _description = 'Control de Visitas'
     
     name = fields.Char(string='Nombre')
-    fecha = fields.Date(string='Fecha', default=lambda self:self.fields.DateTime.now())
+    fecha = fields.Date(string='Fecha', default=lambda self:self.datetime.now())
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
 
