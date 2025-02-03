@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <menuitem id="menu_visitas" name="Control Visitas" sequence="10"/>
-        <menuitem id="menu_visitas_registros" name="Inventario" parent="menu_reports" sequence="20"/>
-        <menuitem id="menu_visitas_reportes" name="Contabilidad" parent="menu_reports" sequence="30"/>
+        <menuitem id="menu_visitas_registros" name="Registros" parent="menu_visitas" sequence="20"/>
+        <menuitem id="menu_visitas_reportes" name="Reportes" parent="menu_visitas" sequence="30"/>
     </data>
 </odoo>
 <!-- 
