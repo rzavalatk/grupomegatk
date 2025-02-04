@@ -14,7 +14,10 @@ class Visitas(models.Model):
     @api.depends('user_id')
     def _compute_region(self):
         for record in self:
-            record.region = record.user_id.ubicacion_vendedor[0][1]
+            if record.user_id.ubicacion_vendedor == 2:
+                record.region = "SPS"
+            elif record.user_id.ubicacion_vendedor == 3:
+                record.region = "TGU"
             
     @api.model
     def create(self, vals):
