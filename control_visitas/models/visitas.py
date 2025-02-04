@@ -20,6 +20,8 @@ class Visitas(models.Model):
     @api.model
     def create(self, vals):
         user = self.env.user
+        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        vals['fecha'] = pytz.utc.localize(self.fecha_inicio).astimezone(user_tz)
         #if self.fecha:
         #    user_tz = pytz.timezone(self.env.context.get('tz') or user.tz)
          #3   fecha = pytz.utc.localize(self.fecha).astimezone(user_tz)
