@@ -36,17 +36,22 @@ class Visitas(models.Model):
         return True
         
     def visita_administracion(self):
-        self.create({'name': 'Visita Administración'})
+        if self.validarRegion:
+            self.create({'name': 'Visita Administración'})
 
     def visita_tienda_megatk(self):
-        self.create({'name': 'Visita Tienda Megatk'})
+        if self.validarRegion:
+            self.create({'name': 'Visita Tienda Megatk'})
 
     def visita_tienda_meditek(self):
-        self.create({'name': 'Visita Tienda Meditek'})
+        if self.validarRegion:
+            self.create({'name': 'Visita Tienda Meditek'})
 
     def visita_lenka(self):
-        self.create({'name': 'Visita Lenka'})
+        if self.validarRegion:
+            self.create({'name': 'Visita Lenka'})
 
     def visita_clinica(self):
-        self.create({'name': 'Visita Clínica'})
+        if self.validarRegion:
+            self.create({'name': 'Visita Clínica'})
             
