@@ -29,29 +29,30 @@ class Visitas(models.Model):
             record.fecha = datetime.now()
             
     @api.model
-    def validarRegion(self, vals):
+    def create(self, vals):
         user = self.env.user
         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
-        return True
+        if not vals.get('name') == "":
+            return super(Visitas, self).create(vals)
         
     def visita_administracion(self):
-        if self.validarRegion:
-            self.create({'name': 'Visita Administración'})
+        
+        self.create({'name': 'Visita Administración'})
 
     def visita_tienda_megatk(self):
-        if self.validarRegion:
-            self.create({'name': 'Visita Tienda Megatk'})
+        
+        self.create({'name': 'Visita Tienda Megatk'})
 
     def visita_tienda_meditek(self):
-        if self.validarRegion:
-            self.create({'name': 'Visita Tienda Meditek'})
+        
+        self.create({'name': 'Visita Tienda Meditek'})
 
     def visita_lenka(self):
-        if self.validarRegion:
-            self.create({'name': 'Visita Lenka'})
+        
+        self.create({'name': 'Visita Lenka'})
 
     def visita_clinica(self):
-        if self.validarRegion:
-            self.create({'name': 'Visita Clínica'})
+        
+        self.create({'name': 'Visita Clínica'})
             
