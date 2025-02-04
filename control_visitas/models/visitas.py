@@ -20,10 +20,10 @@ class Visitas(models.Model):
     @api.model
     def create(self, vals):
         user = self.env.user
-        if self.fecha:
-            user_tz = pytz.timezone(self.env.context.get('tz') or user.tz)
-            fecha = pytz.utc.localize(self.fecha).astimezone(user_tz)
-            vals['fecha'] = fecha.replace(tzinfo=None)
+        #if self.fecha:
+        #    user_tz = pytz.timezone(self.env.context.get('tz') or user.tz)
+         #3   fecha = pytz.utc.localize(self.fecha).astimezone(user_tz)
+           # vals['fecha'] = fecha.replace(tzinfo=None)
 
         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
