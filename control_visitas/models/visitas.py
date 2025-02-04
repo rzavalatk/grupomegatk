@@ -10,10 +10,11 @@ class Visitas(models.Model):
     fecha = fields.Datetime(string='Fecha', default=datetime.now())
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
+    
     @api.depends('user_id')
     def _compute_region(self):
         for record in self:
-            record.region = record.user_id.ubicacion_vendedor.name
+            record.region = record.user_id.ubicacion_vendedor[1]
             
     @api.model
     def create(self, vals):
