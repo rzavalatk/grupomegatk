@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import datetime
+import pytz
 
 class Visitas(models.Model):
     _name = 'control.visitas'
@@ -19,6 +20,9 @@ class Visitas(models.Model):
     @api.model
     def create(self, vals):
         user = self.env.user
+        user_tz = pytz.timezone(self.env.context.get('tz') or user.tz)
+        vals['fecha'] = pytz.utc.localize(self.fecha).astimezone(user_tz)
+
         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
         return super(Visitas, self).create(vals)
