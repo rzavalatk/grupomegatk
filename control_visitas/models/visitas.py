@@ -11,6 +11,7 @@ class Visitas(models.Model):
     fecha = fields.Datetime(string='Fecha', default=datetime.now())
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
+    zona = fields.Char(string='Zona', default=lambda self: self.env.user.tz)
     
     @api.depends('user_id')
     def _compute_region(self):
