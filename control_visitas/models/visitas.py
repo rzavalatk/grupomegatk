@@ -7,7 +7,7 @@ class Visitas(models.Model):
     _name = 'control.visitas'
     _description = 'Control de Visitas'
     
-    name = fields.Char(string='Nombres')
+    name = fields.Char(string='Nombre')
     fecha = fields.Datetime(string='Fecha', compute='_compute_fecha', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)

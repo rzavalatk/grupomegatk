@@ -9,5 +9,5 @@
         <field name="view_mode">tree,form</field>
     </record>
     
-    <menuitem id="menu_visitas" name="Visitas" parent="menu_visitas_root" sequence="30" action="action_visitas"/>
+    <menuitem id="menu_visitas" name="Reportes" parent="menu_visitas_root" sequence="20" action="action_visitas"/>
 </odoo>
