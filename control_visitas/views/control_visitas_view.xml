@@ -5,19 +5,19 @@
         <field name="arch" type="xml">
             <form>
                 <div style="display: grid; grid-template-columns: repeat(2, 30%);">
-                    <div style="margin: 100px 0; background-color: coral;">
+                    <div style="background-color: coral;">
                         <button  string="Visita Administración" type="object" name="visita_administracion"/>
                     </div>
-                    <div style="margin: 100px 0; background-color: coral;">
+                    <div style="background-color: coral;">
                         <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                     </div>
-                    <div style="margin: 100px 0; background-color: coral;">
+                    <div style="background-color: coral;">
                         <button string="Visita Lenka" type="object" name="visita_lenka"/>
                     </div>
-                    <div style="margin: 100px 0; background-color: coral;">
+                    <div style="background-color: coral;">
                         <button string="Visita Clínica" type="object" name="visita_clinica"/>
                     </div>
-                    <div style="margin: 100px 0; background-color: coral;">
+                    <div style="background-color: coral;">
                         <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
                     </div>
                 </div>
