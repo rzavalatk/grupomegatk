@@ -4,15 +4,13 @@
         <field name="model">control.visitas</field>
         <field name="arch" type="xml">
             <form>
-                <group>
-                    <div style="display: grid; grid-template-columns: repeat(2, 50%);">
-                        <button string="Visita Administración" type="object" name="visita_administracion"/>
-                        <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
-                        <button string="Visita Lenka" type="object" name="visita_lenka"/>
-                        <button string="Visita Clínica" type="object" name="visita_clinica"/>
-                        <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
-                    </div>
-                </group>
+                <div style="display: grid; grid-template-columns: repeat(2, 50%);">
+                    <button string="Visita Administración" type="object" name="visita_administracion"/>
+                    <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                    <button string="Visita Lenka" type="object" name="visita_lenka"/>
+                    <button string="Visita Clínica" type="object" name="visita_clinica"/>
+                    <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
+                </div>
             </form>
         </field>
     </record>
