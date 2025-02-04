@@ -19,7 +19,7 @@ class Visitas(models.Model):
             record.region = record.user_id.ubicacion_vendedor
             
     @api.depends('user_id')
-    def _compute_region(self):
+    def _compute_zona(self):
         for record in self:
             record.zona = record.user_id.tz
             
