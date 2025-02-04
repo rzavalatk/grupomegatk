@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from datetime import datetime
+from datetime import datetime as dt
 import pytz
 
 class Visitas(models.Model):
@@ -8,8 +8,10 @@ class Visitas(models.Model):
     _description = 'Control de Visitas'
     
     name = fields.Char(string='Nombre')
-    fecha = fields.Datetime(string='Fecha', default=datetime.now())
+    fecha = fields.Datetime(string='Fecha', default=dt.now())
     region = fields.Char(string='Region', compute='_compute_region', store=True)
+    date = fields.Date("Hasta la Fecha", default=lambda self: dt.now(
+        pytz.timezone(self.env.context.get('tz') or self.env.user.tz)).date())
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
     
     @api.depends('user_id')
