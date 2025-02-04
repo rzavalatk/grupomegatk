@@ -1,40 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   
-    <menuitem id="menu_visitas_root" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
 
-    <record id="action_visitas" model="ir.actions.act_window">
-        <field name="name">Registro</field>
-        <field name="res_model">control.visitas</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <record id="view_visitas_buttons" model="ir.ui.view">
-        <field name="name">control.visitas.buttons</field>
-        <field name="model">control.visitas</field>
-        <field name="arch" type="xml">
-            <form>
-                <div style="display: grid; grid-template-columns: repeat(2, 30%);">
-                    <div style="background-color: coral;">
-                        <button  string="Visita Administración" type="object" name="visita_administracion"/>
-                    </div>
-                    <div style=" background-color: coral;">
-                        <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
-                    </div>
-                    <div style=" background-color: coral;">
-                        <button string="Visita Lenka" type="object" name="visita_lenka"/>
-                    </div>
-                    <div style=" background-color: coral;">
-                        <button string="Visita Clínica" type="object" name="visita_clinica"/>
-                    </div>
-                    <div style=" background-color: coral;">
-                        <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
-                    </div>
-                </div>
-            </form>
-        </field>
-    </record>
-
-    
-    <menuitem id="menu_visitas" name="Reportes" parent="menu_visitas_root" sequence="20" action="action_visitas"/>
 </odoo>

@@ -13,7 +13,6 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/control_visitas_view.xml',
-        'views/main_menu.xml',
     ],
     'auto_install': False,
     'application': True,
