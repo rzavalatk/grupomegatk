@@ -5,11 +5,11 @@
         <field name="arch" type="xml">
             <form>
                 <div style="display: grid; grid-template-columns: repeat(2, 50%);">
-                    <button string="Visita Administración" type="object" name="visita_administracion"/>
-                    <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
-                    <button string="Visita Lenka" type="object" name="visita_lenka"/>
-                    <button string="Visita Clínica" type="object" name="visita_clinica"/>
-                    <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
+                    <button style="padding: 15px 0" string="Visita Administración" type="object" name="visita_administracion"/>
+                    <button style="padding: 15px 0" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                    <button style="padding: 15px 0" string="Visita Lenka" type="object" name="visita_lenka"/>
+                    <button style="padding: 15px 0" string="Visita Clínica" type="object" name="visita_clinica"/>
+                    <button style="padding: 15px 0" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
                 </div>
             </form>
         </field>
