@@ -9,6 +9,7 @@
                     <button string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                     <button string="Visita Lenka" type="object" name="visita_lenka"/>
                     <button string="Visita Clínica" type="object" name="visita_clinica"/>
+                    <button string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
                 </group>
             </form>
         </field>
