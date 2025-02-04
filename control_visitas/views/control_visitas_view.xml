@@ -15,8 +15,8 @@
         <field name="model">control.visitas</field>
         <field name="arch" type="xml">
             <form>
-                <div style="display: grid; grid-template-columns: repeat(2, 30%);">
-                    <div>
+                <div style="display: grid; grid-template-columns: repeat(2, 30%); gap: 20px;">
+                    <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Administración" type="object" name="visita_administracion"/>
                     </div>
                     <div>
