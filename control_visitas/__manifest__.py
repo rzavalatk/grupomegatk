@@ -12,8 +12,8 @@
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'views/main_menu.xml',
         'views/control_visitas_view.xml',
+        'views/main_menu.xml',
     ],
     'auto_install': False,
     'application': True,
