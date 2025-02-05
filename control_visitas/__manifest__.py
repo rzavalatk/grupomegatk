@@ -14,7 +14,7 @@
         'security/ir.model.access.csv',
         'views/main_menu.xml',   
     ],
-    'assests': {
+    'assets': {
         'web.assets_backend': [
             '/control_visitas/static/src/xml/visitas_menu_template.xml',
             '/control_visitas/static/src/js/vistas_menu_action.js',
