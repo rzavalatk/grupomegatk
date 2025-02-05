@@ -61,7 +61,7 @@ class Visitas(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Redireccionar',
             'res_model': 'control.visitas',
-            'view_mode': 'form',
+            'view_mode': 'tree, form',
             'target': 'current',
         }
             
