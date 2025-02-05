@@ -1,8 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import datetime
-from odoo import http
-from odoo.http import request
 
 class Visitas(models.Model):
     _name = 'control.visitas'
@@ -12,52 +10,59 @@ class Visitas(models.Model):
     fecha = fields.Datetime(string='Fecha', compute='_compute_fecha', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
-    zona = fields.Char(string='Zona', compute='_compute_zona', store=True)
     
     @api.depends('user_id')
     def _compute_region(self):
         for record in self:
             record.region = record.user_id.ubicacion_vendedor
-            
-    @api.depends('user_id')
-    def _compute_zona(self):
-        for record in self:
-            record.zona = record.user_id.tz
 
     @api.depends('user_id')
     def _compute_fecha(self):
         for record in self:
             record.fecha = datetime.now()
             
-    @api.model
-    def create(self, vals):
+    # @api.model
+    # def create(self, vals):
+    #     user = self.env.user
+    #     if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+    #         raise ValidationError("No se pueden registrar esta visita en SPS")
+    #     return super(Visitas, self).create(vals)    
+    @api.model   
+    def visita_administracion(self, vals):
         user = self.env.user
         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
-        return super(Visitas, self).create(vals)    
-        
-    def visita_administracion(self):
-        
-        self.create({'name': 'Visita Administración'})
+        else:
+            self.create({'name': 'Visita Administración'})
+    @api.model
+    def visita_tienda_megatk(self, vals):
+        user = self.env.user
+        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+            raise ValidationError("No se pueden registrar esta visita en SPS")
+        else:
+            self.create({'name': 'Visita Tienda Megatk'})
 
-    def visita_tienda_megatk(self):
-        
-        self.create({'name': 'Visita Tienda Megatk'})
-
-    def visita_tienda_meditek(self):
-        
-        self.create({'name': 'Visita Tienda Meditek'})
-
-    def visita_lenka(self):
-        
-        self.create({'name': 'Visita Lenka'})
-
-    def visita_clinica(self):
-        
-        self.redireccionar()
-        self.create({'name': 'Visita Clínica'})
-            
-    @http.route('/web#action=1816&model=control.visitas&view_type=list&menu_id=1175&cids=8', type='http', auth="user", website=True)
-    def redireccionar(self): 
-        return request.redirect('/web#action=1816&model=control.visitas&view_type=list&menu_id=1175&cids=8')
+    @api.model
+    def visita_tienda_meditek(self, vals):
+        user = self.env.user
+        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+            raise ValidationError("No se pueden registrar esta visita en SPS")
+        else:    
+            self.create({'name': 'Visita Tienda Meditek'})
+    
+    @api.model
+    def visita_lenka(self, vals):
+        user = self.env.user
+        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+            raise ValidationError("No se pueden registrar esta visita en SPS")
+        else:
+            self.create({'name': 'Visita Lenka'})
+    
+    @api.model
+    def visita_clinica(self, vals):
+        user = self.env.user
+        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+            raise ValidationError("No se pueden registrar esta visita en SPS")
+        else:
+            self.create({'name': 'Visita Clínica'})
             
