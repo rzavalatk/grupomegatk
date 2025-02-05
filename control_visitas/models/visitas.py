@@ -53,13 +53,15 @@ class Visitas(models.Model):
 
     def visita_clinica(self):
         
-        self.create({'name': 'Visita Clínica'})
         self.redireccionar()
+        self.create({'name': 'Visita Clínica'})
             
     def redireccionar(self): 
         return {
-            'type': 'ir.actions.act_url',
-            'url': 'https://www.google.com',
+            'type': 'ir.actions.act_window',
+            'name': 'Redireccionar',
+            'res_model': 'control.visitas',
+            'view_mode': 'form',
             'target': 'current',
         }
             
