@@ -19,16 +19,16 @@
                     <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Administración" type="object" name="visita_administracion"/>
                     </div>
-                    <div>
+                    <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                     </div>
-                    <div>
+                    <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Lenka" type="object" name="visita_lenka"/>
                     </div>
-                    <div>
+                    <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Clínica" type="object" name="visita_clinica"/>
                     </div>
-                    <div>
+                    <div style="display: inline-block;">
                         <button class="oe_highlight" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
                     </div>
                 </div>
