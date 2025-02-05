@@ -12,10 +12,15 @@
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'views/main_menu.xml',
-        
+        'views/main_menu.xml',   
     ],
+    'assests': {
+        'web.assets_backend': [
+            '/control_visitas/static/src/xml/visitas_menu_template.js',
+            '/control_visitas/static/src/js/vistas_menu_action.js',
+        ],
+    },
     'auto_install': False,
-    'application': True,
+    'application': False,
     'installable': True
 }

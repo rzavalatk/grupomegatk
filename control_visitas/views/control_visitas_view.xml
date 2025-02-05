@@ -1,4 +1,4 @@
-<odoo>
+<!-- <odoo>
 
     <menuitem id="menu_visitas_root" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
 
@@ -16,10 +16,10 @@
         <field name="arch" type="xml">
             <tree>
                 <button class="oe_highlight" string="Visita Administración" type="object" name="visita_administracion"/>
-                <!-- <button class="oe_highlight" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                <button class="oe_highlight" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                 <button class="oe_highlight" string="Visita Lenka" type="object" name="visita_lenka"/>
                 <button class="oe_highlight" string="Visita Clínica" type="object" name="visita_clinica"/>
-                <button class="oe_highlight" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/> -->
+                <button class="oe_highlight" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
             </tree>
         </field>
     </record>
@@ -36,7 +36,7 @@
         </field>
     </record>
 
-    <!-- <record id="view_visitas_form" model="ir.ui.view">
+    <record id="view_visitas_form" model="ir.ui.view">
         <field name="name">control.visitas.form</field>
         <field name="model">control.visitas</field>
         <field name="arch" type="xml">
@@ -50,7 +50,7 @@
                 </sheet>
             </form>
         </field>
-    </record> -->
+    </record>
 
     
-</odoo>
+</odoo> -->
