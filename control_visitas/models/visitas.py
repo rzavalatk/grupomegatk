@@ -60,6 +60,6 @@ class Visitas(models.Model):
         return {
             'type': 'ir.actions.act_url',
             'url': 'https://www.google.com',
-            'target': 'self',
+            'target': 'current',
         }
             
