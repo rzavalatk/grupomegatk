@@ -1,5 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  
+  <div id="root">
+    <div class="container pt-5">
+        <div class="row align-items-stretch">
+            <div class="c-dashboardInfo"
+                    id="new_state">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                        Nuevo
+                        <svg
+                                class="MuiSvgIcon-root-19"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                role="presentation">
+                            <path fill="none"
+                                    d="M0 0h24v24H0z"/>
+                            <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                            </path>
+                        </svg>
+                    </h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                            id="new_state_value">
+                    </span>
+                </div>
+            </div>
+            <div class="c-dashboardInfo"
+                    id="in_progress_state">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                        En progreso
+                        <svg
+                                class="MuiSvgIcon-root-19"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                role="presentation">
+                            <path fill="none"
+                                    d="M0 0h24v24H0z"/>
+                            <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                            </path>
+                        </svg>
+                    </h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                            id="inprogress_value">
+                    </span>
+                </div>
+            </div>
+            <div class="c-dashboardInfo"
+                    id="cancelled_state">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                        Cancelado
+                        <svg
+                                class="MuiSvgIcon-root-19"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                role="presentation">
+                            <path fill="none"
+                                    d="M0 0h24v24H0z"/>
+                            <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                            </path>
+                        </svg>
+                    </h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                            id="canceled_value">
+
+                    </span>
+                </div>
+            </div>
+            <div class="c-dashboardInfo"
+                    id="done_state">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                        Hecho
+                        <svg
+                                class="MuiSvgIcon-root-19"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                role="presentation">
+                            <path fill="none"
+                                    d="M0 0h24v24H0z"/>
+                            <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                            </path>
+                        </svg>
+                    </h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                            id="done_value">
+                    </span>
+                </div>
+            </div>
+            <div class="c-dashboardInfo"
+                    id="closed_state">
+                <div class="wrap">
+                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                        Cerrado
+                        <svg
+                                class="MuiSvgIcon-root-19"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                role="presentation">
+                            <path fill="none"
+                                    d="M0 0h24v24H0z"/>
+                            <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                            </path>
+                        </svg>
+                    </h4>
+                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                            id="closed_value">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </odoo>
