@@ -60,9 +60,10 @@ class Visitas(models.Model):
     
     @api.model
     def visita_clinica(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:
-            self.env['control.visitas'].create({'name': 'Visita Clínica'})
+        # user = self.env.user
+        # if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+        #     raise ValidationError("No se pueden registrar esta visita en SPS")
+        # else:
+        #     self.env['control.visitas'].create({'name': 'Visita Clínica'})
+        pass
             
