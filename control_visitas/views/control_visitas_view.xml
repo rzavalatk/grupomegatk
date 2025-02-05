@@ -44,7 +44,6 @@
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="region"/>
-                <field name="zona"/>
             </tree>
         </field>
     </record>
@@ -59,7 +58,6 @@
                         <field name="name"/>
                         <field name="fecha"/>
                         <field name="region"/>
-                        <field name="zona"/>
                     </group>
                 </sheet>
             </form>
