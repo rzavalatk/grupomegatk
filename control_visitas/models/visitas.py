@@ -64,5 +64,5 @@ class Visitas(models.Model):
         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
             raise ValidationError("No se pueden registrar esta visita en SPS")
         else:
-            self.create({'name': 'Visita Clínica'})
+            self.env['control.visitas'].create({'name': 'Visita Clínica'})
             
