@@ -71,7 +71,7 @@
 
         <menuitem id="control_visitas_report"
                   name="Reportes"
-                  parent="helpdesk_dashboard_menu_root"
+                  parent="control_visitas_menu_root"
                   sequence="2"
                   action="control_visitas_report_action"/>
 </odoo>
