@@ -1,7 +1,8 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import datetime
-import pytz
+from odoo import http
+from odoo.http import request
 
 class Visitas(models.Model):
     _name = 'control.visitas'
@@ -56,12 +57,7 @@ class Visitas(models.Model):
         self.redireccionar()
         self.create({'name': 'Visita Clínica'})
             
+    @http.route('/web#action=1816&model=control.visitas&view_type=list&menu_id=1175&cids=8', type='http', auth="user", website=True)
     def redireccionar(self): 
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Redireccionar',
-            'res_model': 'control.visitas',
-            'view_mode': 'tree, form',
-            'target': 'current',
-        }
+        return request.redirect('/web#action=1816&model=control.visitas&view_type=list&menu_id=1175&cids=8')
             
