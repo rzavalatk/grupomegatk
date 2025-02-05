@@ -54,4 +54,12 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         if not vals.get('name') == "":
             self.create({'name': 'Visita Clínica'})
+            self.redireccionar()
+            
+    def redireccionar(self): 
+        return {
+            'type': 'ir.actions.act_url',
+            'url': 'https://www.google.com',
+            'target': 'self',
+        }
             
