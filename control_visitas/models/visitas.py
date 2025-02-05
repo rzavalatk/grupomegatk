@@ -21,49 +21,51 @@ class Visitas(models.Model):
         for record in self:
             record.fecha = datetime.now()
             
-    # @api.model
-    # def create(self, vals):
+    @api.model
+    def create(self, vals):
+         user = self.env.user
+         if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+             raise ValidationError("No se pueden registrar esta visita en SPS")
+         return super(Visitas, self).create(vals)  
+    
+      
+    # @api.model   
+    # def visita_administracion(self, vals):
     #     user = self.env.user
     #     if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
     #         raise ValidationError("No se pueden registrar esta visita en SPS")
-    #     return super(Visitas, self).create(vals)    
-    @api.model   
-    def visita_administracion(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:
-            self.create({'name': 'Visita Administración'})
-    @api.model
-    def visita_tienda_megatk(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:
-            self.create({'name': 'Visita Tienda Megatk'})
+    #     else:
+    #         self.create({'name': 'Visita Administración'})
+    # @api.model
+    # def visita_tienda_megatk(self, vals):
+    #     user = self.env.user
+    #     if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+    #         raise ValidationError("No se pueden registrar esta visita en SPS")
+    #     else:
+    #         self.create({'name': 'Visita Tienda Megatk'})
 
-    @api.model
-    def visita_tienda_meditek(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:    
-            self.create({'name': 'Visita Tienda Meditek'})
+    # @api.model
+    # def visita_tienda_meditek(self, vals):
+    #     user = self.env.user
+    #     if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+    #         raise ValidationError("No se pueden registrar esta visita en SPS")
+    #     else:    
+    #         self.create({'name': 'Visita Tienda Meditek'})
     
-    @api.model
-    def visita_lenka(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:
-            self.create({'name': 'Visita Lenka'})
+    # @api.model
+    # def visita_lenka(self, vals):
+    #     user = self.env.user
+    #     if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+    #         raise ValidationError("No se pueden registrar esta visita en SPS")
+    #     else:
+    #         self.create({'name': 'Visita Lenka'})
     
-    @api.model
-    def visita_clinica(self, vals):
-        # user = self.env.user
-        # if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-        #     raise ValidationError("No se pueden registrar esta visita en SPS")
-        # else:
-        #     self.env['control.visitas'].create({'name': 'Visita Clínica'})
-        pass
+    # @api.model
+    # def visita_clinica(self, vals):
+    #     # user = self.env.user
+    #     # if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+    #     #     raise ValidationError("No se pueden registrar esta visita en SPS")
+    #     # else:
+    #     #     self.env['control.visitas'].create({'name': 'Visita Clínica'})
+    #     pass
             
