@@ -35,13 +35,13 @@
                 <group>
                     <button class="oe_highlight" string="Visita Administración" type="object" name="visita_administracion"/>
                 
-                    <button class="oe_highlight" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
+                    <!-- <button class="oe_highlight" string="Visita Tienda Meditek" type="object" name="visita_tienda_meditek"/>
                 
                     <button class="oe_highlight" string="Visita Lenka" type="object" name="visita_lenka"/>
                 
                     <button class="oe_highlight" string="Visita Clínica" type="object" name="visita_clinica"/>
                 
-                    <button class="oe_highlight" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/>
+                    <button class="oe_highlight" string="Visita Tienda MegaTK" type="object" name="visita_tienda_megatk"/> -->
                 </group>    
             </tree>
         </field>
