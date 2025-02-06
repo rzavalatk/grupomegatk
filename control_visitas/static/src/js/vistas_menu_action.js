@@ -18,24 +18,24 @@ var CustomDashboard = AbstractAction.extend({
             self.$el.find("#megatk_value").text(result.megatk);
 
             self.$el.find("#admin_state").click(function () {
-                self.$el.find("#admin_state").click(function () {
-                    // Ejecutar el método en el servidor
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_administracion',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        self.do_action({
-                            name: 'Visitas Adiminstración',
-                            type: 'ir.actions.act_window',
-                            res_model: 'control.visitas',
-                            view_mode: 'tree,form',
-                            views: [[false, 'form'], [false, 'list']],
-                            domain: [['name', '=', result.admin_name]],
-                        });
-                    })
-                });
+                
+                // Ejecutar el método en el servidor
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_administracion',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    // Cargar la vista después de ejecutar el método
+                    self.do_action({
+                        name: 'control.visitas.view.tree',
+                        type: 'ir.actions.act_window',
+                        res_model: 'control.visitas',
+                        view_mode: 'tree,form',
+                        views: [[false, 'form'], [false, 'list']],
+                        domain: [['name', '=', result.admin_name]],
+                    });
+                })
+              
             })
             self.$el.find("#megatk_state").click(function () {
                 self.do_action({
