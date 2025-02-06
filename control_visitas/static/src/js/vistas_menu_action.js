@@ -29,6 +29,7 @@ var CustomDashboard = AbstractAction.extend({
                 self.do_action({
                     model: 'control.visitas',
                     type: 'ir.actions.act_window',
+                    view_mode: 'tree',
                     method: 'visita_administracion',
                     args: [result.admin_name],
                 }).then(function (result) {
