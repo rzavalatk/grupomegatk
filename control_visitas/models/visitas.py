@@ -30,12 +30,8 @@ class Visitas(models.Model):
     
       
     @api.model   
-    def visita_administracion(self, vals):
-        user = self.env.user
-        if user.ubicacion_vendedor == "SPS" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se pueden registrar esta visita en SPS")
-        else:
-            self.create({'name': 'Visita Administración'})
+    def visita_administracion(self):
+        self.create({'name': 'Visita Administración'})
             
     # @api.model
     # def visita_tienda_megatk(self, vals):
