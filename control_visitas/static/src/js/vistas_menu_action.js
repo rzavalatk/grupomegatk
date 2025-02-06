@@ -40,7 +40,7 @@ var CustomDashboard = AbstractAction.extend({
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
-                    self.reload();
+                    window.location.reload();
                     
                 }).catch(function (error) {
                     // Manejar el error
@@ -55,7 +55,7 @@ var CustomDashboard = AbstractAction.extend({
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
-                    self.reload();
+                    window.location.reload();
                     
                 }).catch(function (error) {
                     // Manejar el error
@@ -70,7 +70,7 @@ var CustomDashboard = AbstractAction.extend({
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
-                    self.reload();
+                    window.location.reload();
                     
                 }).catch(function (error) {
                     // Manejar el error
@@ -85,7 +85,7 @@ var CustomDashboard = AbstractAction.extend({
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
-                    self.reload();
+                    window.location.reload();
                     
                 }).catch(function (error) {
                     // Manejar el error
