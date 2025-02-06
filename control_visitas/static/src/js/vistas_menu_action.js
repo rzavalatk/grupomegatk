@@ -26,7 +26,7 @@ var CustomDashboard = AbstractAction.extend({
                 //     args: [result.admin_name],
                 //     domain: [['name', '=', result.admin_name]],
                 // })
-                self._rpc({
+                self.do_action({
                     model: 'control.visitas',
                     method: 'visita_administracion',
                     args: [result.admin_name],
