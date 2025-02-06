@@ -23,11 +23,8 @@ var CustomDashboard = AbstractAction.extend({
                     self._rpc({
                         model: 'control.visitas',
                         method: 'visita_administracion',
-                        args: [result.megatk_name],
+                        args: [result.admin_name],
                     }).then(function (resultado) {
-                        // Mostrar un mensaje de éxito
-                        self.do_notify("Éxito", resultado.message);
-                
                         // Cargar la vista después de ejecutar el método
                         self.do_action({
                             name: 'Visitas Ad',
@@ -35,7 +32,7 @@ var CustomDashboard = AbstractAction.extend({
                             res_model: 'control.visitas',
                             view_mode: 'tree,form',
                             views: [[false, 'form'], [false, 'list']],
-                            domain: [['name', '=', result.megatk_name]],
+                            domain: [['name', '=', result.admin_name]],
                         });
                     })
                 });
