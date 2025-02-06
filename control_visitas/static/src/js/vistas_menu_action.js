@@ -30,18 +30,14 @@ var CustomDashboard = AbstractAction.extend({
                 
                         // Cargar la vista después de ejecutar el método
                         self.do_action({
-                            name: 'Visitas Administración',
+                            name: 'Visitas Ad',
                             type: 'ir.actions.act_window',
                             res_model: 'control.visitas',
                             view_mode: 'tree,form',
                             views: [[false, 'form'], [false, 'list']],
                             domain: [['name', '=', result.megatk_name]],
                         });
-                    }).catch(function (error) {
-                        // Mostrar un mensaje de error
-                        console.error("Error al ejecutar el método", error);
-                        self.do_warn("Error", "Ocurrió un error al ejecutar el método.");
-                    });
+                    })
                 });
             })
             self.$el.find("#megatk_state").click(function () {
