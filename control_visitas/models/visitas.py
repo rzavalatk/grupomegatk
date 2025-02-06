@@ -30,7 +30,7 @@ class Visitas(models.Model):
     
       
     @api.model   
-    def visita_administracion(self):
+    def visita_administracion(self, admin):
         self.create({'name': 'Visita Administración'})
             
     # @api.model
