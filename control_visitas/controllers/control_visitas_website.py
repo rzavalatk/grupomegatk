@@ -9,15 +9,15 @@ class ControlVisitasWebsite(http.Controller):
     def control_visitas_dashboard(self):
         
         visitas_admin = request.env['control.visitas'].search(
-            [('name', '=', 'Visita Administración')], limit=1).id
+            [('name', '=', 'Visita Administración')]).id
         visitas_megatk = request.env['control.visitas'].search(
-            [('name', '=', 'Visita Tienda Megatk')], limit=1).id
+            [('name', '=', 'Visita Tienda Megatk')]).id
         visitas_mediatek = request.env['control.visitas'].search(
-            [('name', '=', 'Visita Tienda Meditek')], limit=1).id
+            [('name', '=', 'Visita Tienda Meditek')]).id
         visitas_lenka = request.env['control.visitas'].search(
-            [('name', '=', 'Visita Lenka')], limit=1).id
+            [('name', '=', 'Visita Lenka')]).id
         visitas_clinica = request.env['control.visitas'].search(
-            [('name', '=', 'Visita Clínica')], limit=1).id
+            [('name', '=', 'Visita Clínica')]).id
         
         admin = request.env["help.ticket"].search_count(
             [('name', 'in', visitas_admin)])
