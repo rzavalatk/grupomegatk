@@ -29,25 +29,25 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Tienda Megatk')])
         megatk_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Megatk')])
-        megatk_ls = [data.id for data in megatk_name]
+        megatk_ls = [data.name for data in megatk_name]
         #..........................................    
         mediatek = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Tienda Meditek')])
         meditek_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Meditek')])
-        mediatek_ls = [data.id for data in meditek_name]
+        mediatek_ls = [data.name for data in meditek_name]
         #..........................................    
         lenka = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Lenka')])
         lenka_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Lenka')])
-        lenka_ls = [data.id for data in lenka_name]
+        lenka_ls = [data.name for data in lenka_name]
         #..........................................    
         clinica = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Clínica')])
         clinica_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Clínica')])
-        clinica_ls = [data.id for data in clinica_name]
+        clinica_ls = [data.name for data in clinica_name]
         #..........................................    
            
         dashboard_values = {
