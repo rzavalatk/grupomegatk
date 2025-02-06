@@ -31,7 +31,7 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Tienda Megatk')])
         megatk_ls = [data.name for data in megatk_name]
         #..........................................    
-        mediatek = request.env["control.visitas"].search_count(
+        meditek = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Tienda Meditek')])
         meditek_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Meditek')])
@@ -53,7 +53,7 @@ class ControlVisitasWebsite(http.Controller):
         dashboard_values = {
                 'admin': admin,
                 'clinica': clinica,
-                'mediatek': mediatek,
+                'mediatek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
                 'admin_name': admin_ls,
