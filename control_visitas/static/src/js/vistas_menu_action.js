@@ -37,9 +37,9 @@ var CustomDashboard = AbstractAction.extend({
                     domain: [['id', '=', result.megatk_id]],
                 })
             })
-            self.$el.find("#mediatek_state").click(function () {
+            self.$el.find("#meditek_state").click(function () {
                 self.do_action({
-                    name: 'Visitas Mediatek',
+                    name: 'Visitas Meditek',
                     type: 'ir.actions.act_window',
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
