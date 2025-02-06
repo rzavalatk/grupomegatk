@@ -24,7 +24,7 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.admin_id]],
+                    domain: [['name', '=', result.admin_id]],
                 })
             })
             self.$el.find("#megatk_state").click(function () {
@@ -34,7 +34,7 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.megatk_id]],
+                    domain: [['name', '=', result.megatk_id]],
                 })
             })
             self.$el.find("#meditek_state").click(function () {
@@ -44,7 +44,7 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.mediatek_id]],
+                    domain: [['name', '=', result.mediatek_id]],
                 })
             })
             self.$el.find("#lenka_state").click(function () {
@@ -54,7 +54,7 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.lenka_id]],
+                    domain: [['name', '=', result.lenka_id]],
                 })
             })
             self.$el.find("#clinica_state").click(function () {
@@ -64,7 +64,7 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.clinica_id]],
+                    domain: [['name', '=', result.clinica_id]],
                 })
             })
         })
