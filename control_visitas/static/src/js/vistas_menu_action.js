@@ -26,15 +26,12 @@ var CustomDashboard = AbstractAction.extend({
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
-                    self.do_action({
-                        name: 'control_visitas_view_tree',
-                        type: 'ir.actions.act_window',
-                        res_model: 'control.visitas',
-                        view_mode: 'tree',
-                        views: [[false, 'list']],
-                        domain: [['name', '=', result.admin_name]],
-                    });
-                })
+                    window.location.reload();
+                    
+                }).catch(function (error) {
+                    // Manejar el error
+                    console.error(error);
+                });
               
             })
             self.$el.find("#megatk_state").click(function () {
@@ -46,6 +43,7 @@ var CustomDashboard = AbstractAction.extend({
                     views: [[false, 'form'],[false, 'list']],
                     domain: [['name', '=', result.megatk_name]],
                 })
+
             })
             self.$el.find("#meditek_state").click(function () {
                 self.do_action({
