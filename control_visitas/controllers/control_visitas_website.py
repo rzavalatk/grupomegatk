@@ -20,33 +20,33 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Clínica')], limit=1).id
         
         admin = request.env["help.ticket"].search_count(
-            [('stage_id', 'in', visitas_admin)])
+            [('name', 'in', visitas_admin)])
         admin_id = request.env["help.ticket"].search(
-            [('stage_id', 'in', visitas_admin)])
+            [('name', 'in', visitas_admin)])
         admin_ls = [data.id for data in admin_id]
         #..........................................    
         megatk = request.env["help.ticket"].search_count(
-            [('stage_id', 'in', visitas_megatk)])
+            [('name', 'in', visitas_megatk)])
         megatk_id = request.env["help.ticket"].search(
-            [('stage_id', 'in', visitas_megatk)])
+            [('name', 'in', visitas_megatk)])
         megatk_ls = [data.id for data in megatk_id]
         #..........................................    
         mediatek = request.env["help.ticket"].search_count(
-            [('stage_id', 'in', visitas_mediatek)])
+            [('name', 'in', visitas_mediatek)])
         mediatek_id = request.env["help.ticket"].search(
-            [('stage_id', 'in', visitas_mediatek)])
+            [('name', 'in', visitas_mediatek)])
         mediatek_ls = [data.id for data in mediatek_id]
         #..........................................    
         lenka = request.env["help.ticket"].search_count(
-            [('stage_id', 'in', visitas_lenka)])
+            [('name', 'in', visitas_lenka)])
         lenka_id = request.env["help.ticket"].search(
-            [('stage_id', 'in', visitas_lenka)])
+            [('name', 'in', visitas_lenka)])
         lenka_ls = [data.id for data in lenka_id]
         #..........................................    
         clinica = request.env["help.ticket"].search_count(
-            [('stage_id', 'in', visitas_clinica)])
+            [('name', 'in', visitas_clinica)])
         clinica_id = request.env["help.ticket"].search(
-            [('stage_id', 'in', visitas_clinica)])
+            [('name', 'in', visitas_clinica)])
         clinica_ls = [data.id for data in clinica_id]
         #..........................................    
            
