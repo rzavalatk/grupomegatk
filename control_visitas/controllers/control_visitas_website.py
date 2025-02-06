@@ -53,7 +53,7 @@ class ControlVisitasWebsite(http.Controller):
         dashboard_values = {
                 'admin': admin,
                 'clinica': clinica,
-                'mediatek': meditek,
+                'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
                 'admin_name': admin_ls,
