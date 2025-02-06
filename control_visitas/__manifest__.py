@@ -21,6 +21,6 @@
         ],
     },
     'auto_install': False,
-    'application': False,
+    'application': True,
     'installable': True
 }
