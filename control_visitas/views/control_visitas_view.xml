@@ -5,9 +5,9 @@
     <field name="model">control.visitas</field>
     <field name="arch" type="xml">
         <tree>
-            <field name="Lugar"/>
-            <field name="Fecha y Hors"/>
-            <field name="Region"/>
+            <field name="name"/>
+            <field name="fecha"/>
+            <field name="region"/>
         </tree>
     </field>
 </record>
