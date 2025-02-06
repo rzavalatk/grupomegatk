@@ -9,8 +9,12 @@ class Visitas(models.Model):
     name = fields.Char(string='Nombre')
     fecha = fields.Datetime(string='Fecha', compute='_compute_fecha', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
-    user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user)
+    user_id = fields.Many2one('res.users', string='Usuario', compute='_compute_usuario', store=True)
     
+    def _compute_usuario(self):
+        for record in self:
+            record.user_id = self.env.user
+            
     @api.depends('user_id')
     def _compute_region(self):
         for record in self:
@@ -20,6 +24,7 @@ class Visitas(models.Model):
     def _compute_fecha(self):
         for record in self:
             record.fecha = datetime.now()
+            
             
     @api.model
     def create(self, vals):
