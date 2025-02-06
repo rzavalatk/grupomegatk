@@ -1,3 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="control_visitas_view_tree" model="ir.ui.view">
+    <field name="name">control.visitas.view.tree</field>
+    <field name="model">control.visitas</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="Lugar"/>
+            <field name="Fecha y Hors"/>
+            <field name="Region"/>
+        </tree>
+    </field>
+</record>
+</odoo>
+
 <!-- <odoo>
 
     <menuitem id="menu_visitas_root" name="Control Visitas" sequence="10" web_icon="control_visitas/description/REPORTES.png"/>
