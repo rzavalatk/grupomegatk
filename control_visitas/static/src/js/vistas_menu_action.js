@@ -18,26 +18,30 @@ var CustomDashboard = AbstractAction.extend({
             self.$el.find("#megatk_value").text(result.megatk);
 
             self.$el.find("#admin_state").click(function () {
-                // self.do_action({
-                //     name: 'Visitas Administración',
-                //     type: 'ir.actions.server',
-                //     res_model: 'control.visitas',
-                //     method: 'visita_administracion',
-                //     args: [result.admin_name],
-                //     domain: [['name', '=', result.admin_name]],
-                // })
-                self.do_action({
-                    model: 'control.visitas',
-                    type: 'ir.actions.act_window',
-                    view_mode: 'tree',
-                    method: 'visita_administracion',
-                    args: [result.admin_name],
-                }).then(function (result) {
-                    // Manejar el resultado si es necesario
-                    console.log("Método ejecutado correctamente", result);
-                }).catch(function (error) {
-                    // Manejar el error si ocurre
-                    console.error("Error al ejecutar el método", error);
+                self.$el.find("#megatk_state").click(function () {
+                    // Ejecutar el método en el servidor
+                    self._rpc({
+                        model: 'control.visitas',
+                        method: 'visita_administracion',
+                        args: [result.megatk_name],
+                    }).then(function (resultado) {
+                        // Mostrar un mensaje de éxito
+                        self.do_notify("Éxito", resultado.message);
+                
+                        // Cargar la vista después de ejecutar el método
+                        self.do_action({
+                            name: 'Visitas Administración',
+                            type: 'ir.actions.act_window',
+                            res_model: 'control.visitas',
+                            view_mode: 'tree,form',
+                            views: [[false, 'form'], [false, 'list']],
+                            domain: [['name', '=', result.megatk_name]],
+                        });
+                    }).catch(function (error) {
+                        // Mostrar un mensaje de error
+                        console.error("Error al ejecutar el método", error);
+                        self.do_warn("Error", "Ocurrió un error al ejecutar el método.");
+                    });
                 });
             })
             self.$el.find("#megatk_state").click(function () {
