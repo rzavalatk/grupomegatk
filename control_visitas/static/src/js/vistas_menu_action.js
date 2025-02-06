@@ -27,7 +27,7 @@ var CustomDashboard = AbstractAction.extend({
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método
                     self.do_action({
-                        name: 'Administración',
+                        name: 'control_visitas_view_tree',
                         type: 'ir.actions.act_window',
                         res_model: 'control.visitas',
                         view_mode: 'tree',
