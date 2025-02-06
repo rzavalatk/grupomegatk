@@ -18,7 +18,7 @@ var CustomDashboard = AbstractAction.extend({
             self.$el.find("#megatk_value").text(result.megatk);
 
             self.$el.find("#admin_state").click(function () {
-                self.$el.find("#megatk_state").click(function () {
+                self.$el.find("#admin_state").click(function () {
                     // Ejecutar el método en el servidor
                     self._rpc({
                         model: 'control.visitas',
@@ -27,7 +27,7 @@ var CustomDashboard = AbstractAction.extend({
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el método
                         self.do_action({
-                            name: 'Visitas Ad',
+                            name: 'Visitas Adiminstración',
                             type: 'ir.actions.act_window',
                             res_model: 'control.visitas',
                             view_mode: 'tree,form',
