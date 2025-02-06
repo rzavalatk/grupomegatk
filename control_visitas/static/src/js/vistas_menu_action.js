@@ -28,7 +28,7 @@ var CustomDashboard = AbstractAction.extend({
                 // })
                 self._rpc({
                     model: 'control.visitas',
-                    method: 'vst_administracion',
+                    method: 'visita_administracion',
                     args: [result.admin_name],
                 }).then(function (result) {
                     // Manejar el resultado si es necesario
