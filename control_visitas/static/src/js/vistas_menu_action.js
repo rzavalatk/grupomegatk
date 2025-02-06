@@ -31,7 +31,7 @@ var CustomDashboard = AbstractAction.extend({
                         type: 'ir.actions.act_window',
                         res_model: 'control.visitas',
                         view_mode: 'tree,form',
-                        views: [[false, 'form'], [control.visitas.view.tree, 'list']],
+                        views: [[false, 'form'], [control_visitas_view_tree, 'list']],
                         domain: [['name', '=', result.admin_name]],
                     });
                 })
