@@ -18,24 +18,14 @@ var CustomDashboard = AbstractAction.extend({
             self.$el.find("#megatk_value").text(result.megatk);
 
             self.$el.find("#admin_state").click(function () {
-                // self.do_action({
-                //     name: 'Visitas Administración',
-                //     type: 'ir.actions.act_window',
-                //     res_model: 'control.visitas',
-                //     view_mode: 'tree,form',
-                //     views: [[false, 'form'],[false, 'list']],
-                //     domain: [['name', '=', result.admin_name]],
-                // })
-                self.rpc({
-                    model: 'control.visitas',
+                self.do_action({
+                    name: 'Visitas Administración',
+                    type: 'ir.actions.server',
+                    res_model: 'control.visitas',
                     method: 'visita_administracion',
-                    args: [],  // Puedes pasar argumentos si el método los requiere
-                    kwargs: {}, // Para argumentos clave-valor (opcional)
-                }).then(function (result) {
-                    console.log("Respuesta del servidor:", result);
-                }).catch(function (error) {
-                    console.error("Error en la llamada RPC:", error);
-                });
+                    args: [result.admin_name],
+                    domain: [['name', '=', result.admin_name]],
+                })
             })
             self.$el.find("#megatk_state").click(function () {
                 self.do_action({
