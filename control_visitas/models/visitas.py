@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from lxml import etree
+
 
 from datetime import datetime
 
@@ -22,9 +22,6 @@ class Visitas(models.Model):
     def _compute_fecha(self):
         for record in self:
             record.fecha = datetime.now()
-            
-            
-    
             
     @api.model
     def create(self, vals):
