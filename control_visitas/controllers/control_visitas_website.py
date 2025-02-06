@@ -35,7 +35,7 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Tienda Meditek')])
         meditek_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Meditek')])
-        mediatek_ls = [data.name for data in meditek_name]
+        meditek_ls = [data.name for data in meditek_name]
         #..........................................    
         lenka = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Lenka')])
@@ -58,7 +58,7 @@ class ControlVisitasWebsite(http.Controller):
                 'lenka': lenka,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
-                'meditek_name': mediatek_ls,
+                'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
             }

@@ -19,32 +19,32 @@ var CustomDashboard = AbstractAction.extend({
 
             self.$el.find("#admin_state").click(function () {
                 self.do_action({
-                    name: 'Visitas Admin',
+                    name: 'Visitas Administración',
                     type: 'ir.actions.act_window',
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.admin_id]],
+                    domain: [['name', '=', result.admin_name]],
                 })
             })
             self.$el.find("#megatk_state").click(function () {
                 self.do_action({
-                    name: 'Visitas MegaTK',
+                    name: 'Visitas Tienda MegaTK',
                     type: 'ir.actions.act_window',
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.megatk_id]],
+                    domain: [['name', '=', result.megatk_name]],
                 })
             })
             self.$el.find("#meditek_state").click(function () {
                 self.do_action({
-                    name: 'Visitas Meditek',
+                    name: 'Visitas Tienda Meditek',
                     type: 'ir.actions.act_window',
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.mediatek_id]],
+                    domain: [['name', '=', result.meditek_name]],
                 })
             })
             self.$el.find("#lenka_state").click(function () {
@@ -54,17 +54,17 @@ var CustomDashboard = AbstractAction.extend({
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.lenka_id]],
+                    domain: [['name', '=', result.lenka_name]],
                 })
             })
             self.$el.find("#clinica_state").click(function () {
                 self.do_action({
-                    name: 'Visitas Admin',
+                    name: 'Visitas Clinica',
                     type: 'ir.actions.act_window',
                     res_model: 'control.visitas',
                     view_mode: 'tree,form',
                     views: [[false, 'form'],[false, 'list']],
-                    domain: [['id', '=', result.clinica_id]],
+                    domain: [['name', '=', result.clinica_name]],
                 })
             })
         })
