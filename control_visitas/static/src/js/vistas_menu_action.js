@@ -21,7 +21,7 @@ var CustomDashboard = AbstractAction.extend({
                 // Ejecutar el método en el servidor
                 self._rpc({
                     model: 'control.visitas',
-                    method: 'visita_clinica',
+                    method: 'visita_administracion',
                     args: [result.admin_name],
                 }).then(function (resultado) {
                     // Cargar la vista después de ejecutar el método

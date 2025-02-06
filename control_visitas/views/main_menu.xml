@@ -64,7 +64,7 @@
                   
                    -->
         <record id="control_visitas_report_action" model="ir.actions.act_window">
-            <field name="name">Control Visitas Report</field>
+            <field name="name">Reporte de Visitas</field>
             <field name="res_model">control.visitas</field>
             <field name="view_mode">graph,search</field>
         </record>
@@ -74,4 +74,16 @@
                   parent="control_visitas_menu_root"
                   sequence="2"
                   action="control_visitas_report_action"/>
+
+        <record id="control_visitas_record_action" model="ir.actions.act_window">
+            <field name="name">Registros de Visitas</field>
+            <field name="res_model">control.visitas</field>
+            <field name="view_mode">tree, form</field>
+        </record>
+
+        <menuitem id="control_visitas_record"
+                  name="Registros"
+                  parent="control_visitas_menu_root"
+                  sequence="3"
+                  action="control_visitas_record_action"/>
 </odoo>
