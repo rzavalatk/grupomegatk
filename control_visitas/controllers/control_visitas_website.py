@@ -4,8 +4,8 @@ from odoo.http import request
 
 
 class ControlVisitasWebsite(http.Controller):
-    h
-    @http.route(['/control_visitas'], type='json', auth='public')
+    
+    @http.route('/control_visitas', type='json', auth='public', website=True)
     def control_visitas_dashboard(self):
         
         visitas_admin = request.env['control.visitas'].search(
@@ -19,35 +19,35 @@ class ControlVisitasWebsite(http.Controller):
         visitas_clinica = request.env['control.visitas'].search(
             [('name', '=', 'Visita Clínica')], limit=1).id
         
-        admin = request.env["control.visitas"].search_count(
-            [('name', 'in', visitas_admin)])
-        admin_id = request.env["control.visitas"].search(
-            [('name', 'in', visitas_admin)])
-        admin_ls = [data.name for data in admin_id]
+        admin = request.env["help.ticket"].search_count(
+            [('stage_id', 'in', visitas_admin)])
+        admin_id = request.env["help.ticket"].search(
+            [('stage_id', 'in', visitas_admin)])
+        admin_ls = [data.id for data in admin_id]
         #..........................................    
-        megatk = request.env["control.visitas"].search_count(
-            [('name', 'in', visitas_megatk)])
-        megatk_id = request.env["control.visitas"].search(
-            [('name', 'in', visitas_megatk)])
-        megatk_ls = [data.name for data in megatk_id]
+        megatk = request.env["help.ticket"].search_count(
+            [('stage_id', 'in', visitas_megatk)])
+        megatk_id = request.env["help.ticket"].search(
+            [('stage_id', 'in', visitas_megatk)])
+        megatk_ls = [data.id for data in megatk_id]
         #..........................................    
-        mediatek = request.env["control.visitas"].search_count(
-            [('name', 'in', visitas_mediatek)])
-        mediatek_id = request.env["control.visitas"].search(
-            [('name', 'in', visitas_mediatek)])
-        mediatek_ls = [data.name for data in mediatek_id]
+        mediatek = request.env["help.ticket"].search_count(
+            [('stage_id', 'in', visitas_mediatek)])
+        mediatek_id = request.env["help.ticket"].search(
+            [('stage_id', 'in', visitas_mediatek)])
+        mediatek_ls = [data.id for data in mediatek_id]
         #..........................................    
-        lenka = request.env["control.visitas"].search_count(
-            [('name', 'in', visitas_lenka)])
-        lenka_id = request.env["control.visitas"].search(
-            [('name', 'in', visitas_lenka)])
-        lenka_ls = [data.name for data in lenka_id]
+        lenka = request.env["help.ticket"].search_count(
+            [('stage_id', 'in', visitas_lenka)])
+        lenka_id = request.env["help.ticket"].search(
+            [('stage_id', 'in', visitas_lenka)])
+        lenka_ls = [data.id for data in lenka_id]
         #..........................................    
-        clinica = request.env["control.visitas"].search_count(
-            [('name', 'in', visitas_clinica)])
-        clinica_id = request.env["control.visitas"].search(
-            [('name', 'in', visitas_clinica)])
-        clinica_ls = [data.name for data in clinica_id]
+        clinica = request.env["help.ticket"].search_count(
+            [('stage_id', 'in', visitas_clinica)])
+        clinica_id = request.env["help.ticket"].search(
+            [('stage_id', 'in', visitas_clinica)])
+        clinica_ls = [data.id for data in clinica_id]
         #..........................................    
            
         dashboard_values = {
