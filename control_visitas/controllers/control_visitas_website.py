@@ -5,7 +5,7 @@ from odoo.http import request
 
 class ControlVisitasWebsite(http.Controller):
     
-    @http.route('/control_visitas', type='json', auth='public', website=True)
+    @http.route(['/control_visitas'], type='json', auth='public', website=True)
     def control_visitas_dashboard(self):
         
         visitas_admin = request.env['control.visitas'].search(
