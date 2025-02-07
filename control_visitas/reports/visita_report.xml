@@ -27,12 +27,4 @@
             </t>
         </t>
     </template>
-
-    <!-- Definición del reporte -->
-    <record id="action_report_visita" model="ir.actions.report">
-        <field name="name">Reporte de Visitas</field>
-        <field name="model">control.visitas</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">control_visitas.report_visita</field>
-    </record>
 </odoo>

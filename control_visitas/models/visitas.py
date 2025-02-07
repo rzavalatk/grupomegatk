@@ -9,7 +9,6 @@ class Visitas(models.Model):
     name = fields.Char(string='Nombre')
     fecha = fields.Datetime(string='Fecha y Hora', compute='_compute_fecha', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
-    region_user = fields.Char(string='Region Odoo', compute='_compute_region_env', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     
     @api.depends('user_id')
@@ -25,18 +24,12 @@ class Visitas(models.Model):
         for record in self:
             record.fecha = datetime.now()
  
-    @api.depends('user_id')
-    def _compute_region_env(self):
-        if self.env.user.ubicacion_vendedor == '3':
-            self.region_user = 'TGU'
-            
     @api.model
     def create(self, vals):
          user = self.env.user
          if user.ubicacion_vendedor == "2" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
              raise ValidationError("No se puede registrar esta visita en SPS")
          return super(Visitas, self).create(vals)  
-    
       
     @api.model   
     def visita_administracion(self, admin):
