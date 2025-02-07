@@ -9,10 +9,10 @@ class ReportVisita(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, docids, data=None):
-        _logger.info(f"docids recibido: {docids}")
+        _logger.warning(f"docids recibido: {docids}")
 
         docs = self.env['control.visitas'].browse(docids)
-        _logger.info(f"Registros obtenidos: {docs}")
+        _logger.warning(f"Registros obtenidos: {docs}")
 
         return {
             'docs': docs,
