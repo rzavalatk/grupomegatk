@@ -1,12 +1,27 @@
 <odoo>
     <template id="report_visita">
-          <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
                 <div class="page">
-                    <h2>Reporte de Visita</h2>
-                    <p><strong>Nombre:</strong> <t t-esc="doc.name"/></p>
-                    <p><strong>Fecha:</strong> <t t-esc="doc.date"/></p>
-                    <p><strong>Descripción:</strong> <t t-esc="doc.description"/></p>
+                    <h2>Reporte de Visitas</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Fecha</th>
+                                <th>Región</th>
+                                <th>Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="visita">
+                                <td><span t-field="visita.name"/></td>
+                                <td><span t-field="visita.fecha"/></td>
+                                <td><span t-field="visita.region"/></td>
+                                <td><span t-field="visita.user_id"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </t>
         </t>
