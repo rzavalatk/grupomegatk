@@ -9,7 +9,7 @@ class Visitas(models.Model):
     name = fields.Char(string='Nombre')
     fecha = fields.Datetime(string='Fecha y Hora', compute='_compute_fecha', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
-    region_user = fields.Char(string='Region Odoo')
+    region_user = fields.Char(string='Region Odoo', compute='_compute_region_env', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     
     @api.depends('user_id')

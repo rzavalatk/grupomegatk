@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!--        Helpdesk dashboard action-->
+
         <record id="control_visita_action" model="ir.actions.client">
             <field name="name">Control de Visitas</field>
             <field name="tag">control_visitas_tag</field>
         </record>
-<!--        Helpdesk module menus-->
         <menuitem id="control_visitas_menu_root"
                   name="Control de Visitas"
                   action="control_visita_action"
