@@ -4,7 +4,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class ReportVisita(models.AbstractModel):
-    _name = 'report_visita.control_visitas'
+    _name = 'report.visita'
 
     @api.model
     def _get_report_values(self, docids, data=None):
