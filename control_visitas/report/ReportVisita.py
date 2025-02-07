@@ -13,7 +13,11 @@ class ReportVisita(models.AbstractModel):
         
         docs = self.env['control.visitas'].browse(docids)
         _logger.info(f"Registros obtenidos: {docs}")
+
+        report = self.env.ref('control_visitas.control_visitas.report_pdf')
+        report_values = report._get_report_values(self.env['control.visita'].browse(1), data=None)
         
+        _logger.info(f"Reporte obtenido: {report_values}")       
         return {
             'docs': docs,
         }
