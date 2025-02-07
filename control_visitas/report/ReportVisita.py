@@ -7,9 +7,9 @@ class ReportVisita(models.AbstractModel):
     _name = 'control_visitas.report_pdf'
     _description = 'Reporte de Visitas' 
 
+    raise ValueError("¡Se ejecutó _get_report_values!") 
     @api.model
     def _get_report_values(self, docids, data=None):
-        raise ValueError("¡Se ejecutó _get_report_values!")
 
         _logger.warning(f"docids recibido: {docids}")
 
