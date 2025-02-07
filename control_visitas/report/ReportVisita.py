@@ -4,7 +4,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class ReportVisita(models.AbstractModel):
-    _name = 'control_visitas.report'
+    _name = 'control_visitas.report_pdf'
     _description = 'Reporte de Visitas' 
 
     @api.model
