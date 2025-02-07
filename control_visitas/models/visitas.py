@@ -24,7 +24,7 @@ class Visitas(models.Model):
  
     @api.depends('user_id')
     def _compute_region_env(self):
-        if self.env.user.ubicacion_vendedor == 3:
+        if self.env.user.ubicacion_vendedor == '3':
             self.region_user = 'TGU'
             
     @api.model
