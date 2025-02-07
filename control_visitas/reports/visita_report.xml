@@ -31,7 +31,7 @@
             string="Reporte de Visitas"
             model="control.visitas"
             report_type="qweb-pdf"
-            name="control_visitas.report_visita"
-            file="control_visitas.report_visita"
+            report_name="control_visitas.report_visita"
+            paperformat="a4"
             attachment_use="False"/>
 </odoo>
