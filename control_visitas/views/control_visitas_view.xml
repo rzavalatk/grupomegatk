@@ -8,7 +8,6 @@
             <field name="name"/>
             <field name="fecha"/>
             <field name="region"/>
-            <field name="region_user"/>
         </tree>
     </field>
 </record>
