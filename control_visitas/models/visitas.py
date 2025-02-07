@@ -1,6 +1,10 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from reports import ReportVisita as rp
+import logging
 from datetime import datetime
+
+_logger = logging.getLogger(__name__)
 
 class Visitas(models.Model):
     _name = 'control.visitas'
@@ -51,4 +55,5 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-            
+    datos = lambda self: self.env['report.control_visitas.report_visita']._get_report_values([1])
+    _logger.info(f"Datos obtenidos: {datos}")
