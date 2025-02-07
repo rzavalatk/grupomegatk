@@ -17,7 +17,7 @@ class ReportVisita(models.AbstractModel):
         report = self.env.ref('control_visitas.control_visitas.report_pdf')
         report_values = report._get_report_values(self.env['control.visita'].browse(1))
         
-        _logger.info(f"Reporte obtenido: {report_values}")       
+        _logger.warning(f"Reporte obtenido: {report_values}")       
         return {
             'docs': docs,
         }
