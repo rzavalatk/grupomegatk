@@ -93,7 +93,7 @@
             <field name="report_name">control.visitas.report_visita</field>
         </record>
 
-        <menuitem id="control_visitas_record"
+        <menuitem id="control_visitas_report_pdf"
                   name="Reporte PDF"
                   parent="control_visitas_menu_root"
                   sequence="4"
