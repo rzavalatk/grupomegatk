@@ -86,7 +86,7 @@
                   sequence="3"
                   action="control_visitas_record_action"/>
 
-        <record id="action_report_visita" model="ir.actions.report">
+        <record id="report_visita_control_visitas" model="ir.actions.report">
             <field name="name">Registros PDF</field>
             <field name="model">control.visitas</field>
             <field name="report_type">qweb-pdf</field>
@@ -97,5 +97,5 @@
                   name="Reporte PDF"
                   parent="control_visitas_menu_root"
                   sequence="4"
-                  action="action_report_visita"/>
+                  action="report_visita_control_visitas"/>
 </odoo>
