@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from reports import ReportVisita as rp
+
 import logging
 from datetime import datetime
 
