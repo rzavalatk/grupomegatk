@@ -55,5 +55,5 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-    datos = lambda self: self.env['report.control_visitas.report_visita']._get_report_values([1])
-    _logger.info(f"Datos obtenidos: {datos}")
+    # datos = lambda self: self.env['report.control_visitas.report_visita']._get_report_values([1])
+    # _logger.info(f"Datos obtenidos: {datos}")
