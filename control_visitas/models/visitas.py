@@ -53,3 +53,6 @@ class Visitas(models.Model):
         
     # datos = lambda self: self.env['report.control_visitas.report_visita']._get_report_values([1])
     # _logger.info(f"Datos obtenidos: {datos}")
+    
+    report = lambda self: self.env.ref('control_visitas.control_visitas.report_pdf')
+    report_values = report._get_report_values(lambda self: self.env['control.visita'].browse(1))
