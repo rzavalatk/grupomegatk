@@ -34,6 +34,7 @@
         <field name="model">control.visitas</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">control_visitas.report_visita</field>
-        <field name="paperformat_id" ref="report.paperformat_euro"/>
+        <field name="paperformat_id" ref="base.paperformat_A4"/>
+
     </record>
 </odoo>
