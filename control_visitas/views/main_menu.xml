@@ -91,7 +91,6 @@
             <field name="model">control.visitas</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">control_visitas.report_visita</field>
-            <field name="file">control_visitas.report_visita</field>
         </record>
 
         <menuitem id="control_visitas_report_pdf"
