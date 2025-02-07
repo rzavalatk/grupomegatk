@@ -1,6 +1,6 @@
 <odoo>
     <!-- Definición del template para el informe -->
-    <template id="report_visita">
+    <template id="control_visitas.report_pdf">
         <t t-call="web.html_container">
             <t t-call="web.internal_layout">
                 <div class="page">
