@@ -1,10 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
-import logging
 from datetime import datetime
-
-_logger = logging.getLogger(__name__)
 
 class Visitas(models.Model):
     _name = 'control.visitas'

@@ -90,7 +90,7 @@
             <field name="name">Registros PDF</field>
             <field name="model">control.visitas</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">report.control_visitas.report_visita</field>
+            <field name="report_name">report_visita.control_visitas</field>
         </record>
 
         <menuitem id="control_visitas_report_pdf"
