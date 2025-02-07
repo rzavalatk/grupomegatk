@@ -13,7 +13,8 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/control_visitas_view.xml',
-        'views/main_menu.xml',   
+        'views/main_menu.xml',
+        'reports/visita_report.xml'   
     ],
     'assets': {
         'web.assets_backend': [
