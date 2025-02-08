@@ -11,6 +11,6 @@
             <p>Equipo de Control de Visitas</p>
             ]]>
         </field>
-        <field name="attachment_ids" eval="[(6, 0, [ref('action_enviar_correo_reporte_window')])]"/>
+        <field name="attachment_ids" eval="[(6, 0, [ref('report_pdf')])]"/>
     </record>
 </odoo>
