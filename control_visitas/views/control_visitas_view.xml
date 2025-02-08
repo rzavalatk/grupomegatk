@@ -11,11 +11,9 @@
                         name="enviar_correo_con_reporte"/>
         </header>
         <tree>
-            <sheet>
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="region"/>
-            </sheet>
         </tree>
     </field>
 </record>
