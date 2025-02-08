@@ -41,7 +41,7 @@ class ReportMonthChannelTemplate(models.AbstractModel):
         return OrderedDict((m, True) for m in months).keys()
     
     #@api.model
-    def _get_report_values(self, docids, data=None):
+    def _values(self, docids, data=None):
         Report = self.env['ir.actions.report']._get_report_from_name('multi_chatbot_connector.report_month_channel_template')
         channels = self.env['im_livechat.channel'].sudo().browse(data['form'][0].get('channel_ids', []))
         fromdate = False; todate = False

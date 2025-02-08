@@ -1,0 +1,16 @@
+<odoo>
+    <record id="email_template_visita" model="mail.template">
+        <field name="name">Email Template Visita</field>
+        <field name="model_id" ref="control_visitas.model_control_visitas"/>
+        <field name="subject">Reporte de Visita</field>
+        <field name="body_html">
+            <![CDATA[
+            <p>Hola,</p>
+            <p>Adjunto encontrarás el reporte de visitas.</p>
+            <p>Saludos,</p>
+            <p>Equipo de Control de Visitas</p>
+            ]]>
+        </field>
+        <field name="attachment_ids" eval="[(6, 0, [ref('control_visitas.action_report_visita')])]"/>
+    </record>
+</odoo>
