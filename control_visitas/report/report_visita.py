@@ -3,7 +3,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class ReportVisita(models.AbstractModel):
+class Report_Visita(models.AbstractModel):
     _name = 'control_visitas.report_pdf'
     _description = 'Reporte de Visitas' 
 
