@@ -10,13 +10,13 @@
                         class="btn-primary oe_highlight"
                         name="enviar_correo_con_reporte"/>
         </header>
-        <form>
+        <tree>
             <sheet>
                 <field name="name"/>
                 <field name="fecha"/>
                 <field name="region"/>
             </sheet>
-        </form>
+        </tree>
     </field>
 </record>
 </odoo>
