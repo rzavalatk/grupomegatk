@@ -97,7 +97,7 @@
         <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
             <field name="name">Enviar Correo con Reporte</field>
             <field name="res_model">control.visitas</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">form</field>
             <field name="target">new</field>
             <field name="context">{'default_enviar_correo': True}</field>
         </record>
