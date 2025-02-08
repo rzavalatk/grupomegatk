@@ -96,10 +96,11 @@
         <!-- Acción de ventana para enviar el correo -->
         <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
             <field name="name">Enviar Correo con Reporte</field>
-            <field name="res_model">control.visitas</field>
-            <field name="view_mode">tree</field>
-            <field name="target">new</field>
-            <field name="context">{'default_enviar_correo': True}</field>
+            <field name="model_id" ref="control_visitas"/>
+            <field name="state">code</field>
+            <field name="code">
+                control_visitas.enviar_correo_con_reporte()
+            </field> 
         </record>
 
         <!-- Menú para la acción de ventana -->
