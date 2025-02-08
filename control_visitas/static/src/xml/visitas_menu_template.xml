@@ -114,6 +114,11 @@
                 .dropdown:hover .dropdown-content {display: block;}
                 .dropdown:hover .dropbtn {background-color: #3e8e41;}
             </style>
+            <header>
+                <div>
+                    <button string="Enviar Reporte por Correo" type="object" class="btn-primary oe_highlight" name="enviar_correo_con_reporte"/>
+                </div>
+            </header>
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
