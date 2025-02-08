@@ -5,12 +5,12 @@
     <field name="model">control.visitas</field>
     <field name="arch" type="xml">
         <tree>
-        <header>
-            <button string="Enviar Reporte por Correo"
-                        type="object"
-                        class="btn-primary oe_highlight"
-                        name="enviar_correo_con_reporte"/>
-        </header>
+            <header>
+                <button string="Enviar Reporte por Correo"
+                            type="object"
+                            class="btn-primary oe_highlight"
+                            name="enviar_correo_con_reporte"/>
+            </header>
             <field name="name"/>
             <field name="fecha"/>
             <field name="region"/>
