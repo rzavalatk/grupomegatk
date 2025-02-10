@@ -35,26 +35,33 @@
                   sequence="3"
                   action="control_visitas_record_action"/>
 
-        <menuitem id="control_visitas_report_pdf"
+        <record id="action_generar_pdf" model="ir.actions.server">
+            <field name="name">Generar Reporte PDF</field>
+            <field name="model_id" ref="control.visitas"/>
+            <field name="state">code</field>
+            <field name="code">
+                pdf_base64 = control.visitas.generar_pdf()
+                action = {
+                    'type': 'ir.actions.act_url',
+                    'url': '/web/content/?model=control.visitas&amp;id=' + str(model.id) + '&amp;filename=reporte_visitas.pdf&amp;field=datas&amp;download=true',
+                    'target': 'self',
+                }
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_generar_pdf"
+            name="Generar Reporte PDF"
+            action="action_generar_pdf"
+            parent="control_visitas_menu_root"
+            sequence="5"/>
+
+        <!-- <menuitem id="control_visitas_report_pdf"
                   name="Reporte PDF"
                   parent="control_visitas_menu_root"
                   sequence="4"
-                  action="control_visitas_report_pdf_action"/>
-
-                  
-        <record id="control_visitas_mail_action" model="ir.actions.act_window">
-            <field name="name">Enviar Correo con Reporte</field>
-            <field name="res_model">control.visitas</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="context">{'default_enviar_correo': True}</field>
-        </record>
-
-         <menuitem id="control_visitas_mail_pdf"
-                name="Email"
-                action="control_visitas_mail_action"
-                sequence='10'
-                parent="control_visitas_menu_root"/>           
+                  action="control_visitas_report_pdf_action"/> -->
+         
 
          <!-- Acción de ventana para enviar el correo
         <record id="action_enviar_correo" model="ir.actions.act_window">
