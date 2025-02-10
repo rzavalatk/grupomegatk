@@ -56,7 +56,7 @@ class Visitas(models.Model):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
     def send_email(self,email,cc="",contexto={}):
-        template = self.env.ref('crons_mega.email_template_marca_productos')
+        template = self.env.ref('control_visitas.email_template_visita')
         email_values = {
             'email_from': 'azelaya@megatk.com',
             'email_to': "alexdreyesmt@gmail.com",
