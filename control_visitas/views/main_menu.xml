@@ -37,7 +37,7 @@
 
         <record id="action_generar_pdf" model="ir.actions.server">
             <field name="name">Generar Reporte PDF</field>
-            <field name="model_id" ref="model_control_visitas"/>
+            <field name="model">control.visitas</field>
             <field name="state">code</field>
             <field name="code">
 pdf_base64 = model.generar_pdf()&#10;
