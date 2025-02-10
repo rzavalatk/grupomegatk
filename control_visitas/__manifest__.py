@@ -11,6 +11,7 @@
         'mail',
     ],
     'data': [
+        'wizard/wizard.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/control_visitas_view.xml',

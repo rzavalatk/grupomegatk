@@ -55,36 +55,15 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-    def enviar_correo_con_reporte(self):
-        """
-        Envía un correo electrónico con el reporte adjunto.
-        """
-        # Obtener el template de correo
-        template = self.env.ref('control_visitas.email_template_reporte_visitas', raise_if_not_found=False)
-        if not template:
-            _logger.error("Plantilla de correo no encontrada.")
-            return
-
-        # Obtener el reporte PDF
-        report = self.env['ir.actions.report']._get_report_from_name('control_visitas.report_pdf')
-        pdf_content, _ = report._render_qweb_pdf(self.ids)
-
-        # Adjuntar el PDF al correo
-        attachment = self.env['ir.attachment'].create({
-            'name': f"Reporte_Visitas_{self.name}.pdf",
-            'type': 'binary',
-            'datas': base64.b64encode(pdf_content),
-            'res_model': 'control.visitas',
-            'res_id': self.id,
-            'mimetype': 'application/pdf',
+    def send_email(self,email,cc="",contexto={}):
+        template = self.env.ref('crons_mega.email_template_marca_productos')
+        email_values = {
+            'email_from': 'azelaya@megatk.com',
+            'email_to': "alexdreyesmt@gmail.com",
+            'email_cc': cc
+        }
+        template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
+        self.write({
+            'state': 'done'
         })
-
-        # Enviar el correo
-        if self.user_id.email:
-            template.send_mail(self.id, force_send=True, email_values={
-                'attachment_ids': [attachment.id],
-                'email_to': 'alexdreyesmt@gmail.com',
-            })
-            _logger.warning(f"Correo enviado a alexdreyesmt@gmail.com")
-        else:
-            _logger.warning(f"No se encontró un correo para el usuario ar")   
+        return True  
