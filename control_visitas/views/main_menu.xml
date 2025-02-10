@@ -92,7 +92,33 @@
                   sequence="4"
                   action="control_visitas_report_pdf_action"/>
 
-         <!-- Acción de ventana para enviar el correo -->
+            <record id="account_cierre_mail_view" model="ir.ui.view">
+            <field name="name">control.visitas.mail.view</field>
+            <field name="model">control.visitas</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="mail" />
+                            <field name="cc" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Enviar" name="obtener_mail" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_cierre_mail_action" model="ir.actions.act_window">
+            <field name="name">Destinatario</field>
+            <field name="res_model">control.visitas</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>          
+
+         <!-- Acción de ventana para enviar el correo
         <record id="action_enviar_correo" model="ir.actions.act_window">
             <field name="name">Enviar Correo con Reporte</field>
             <field name="res_model">control.visitas</field>
@@ -105,23 +131,5 @@
                 name="Enviar Reporte por Correo"
                 action="action_enviar_correo"
                 sequence='5'
-                parent="control_visitas_menu_root"/> 
-
-        <!-- Acción de ventana para enviar el correo
-        <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
-            <field name="name">Enviar Correo con Reporte</field>
-            <field name="model_id" ref="control_visitas.control_visitas"/>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="context">{'default_enviar_correo': True}</field>
-        </record>
-
-         Menú para la acción de ventana 
-        <menuitem id="menu_enviar_correo_reporte"
-                name="Enviar Reporte por Correo"
-                action="action_enviar_correo_reporte_window"
-                sequence='5'
-                parent="control_visitas_menu_root"/> -->
-
-
+                parent="control_visitas_menu_root"/>  -->
 </odoo>
