@@ -55,15 +55,15 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-    # def send_email(self,email,cc="",contexto={}):
-    #     template = self.env.ref('control_visitas.email_template_visita')
-    #     email_values = {
-    #         'email_from': 'azelaya@megatk.com',
-    #         'email_to': "alexdreyesmt@gmail.com",
-    #         'email_cc': cc
-    #     }
-    #     template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
-    #     self.write({
-    #         'state': 'done'
-    #     })
-    #     return True  
+    def send_email(self,email,cc="",contexto={}):
+        template = self.env.ref('control_visitas.email_template_visita')
+        email_values = {
+            'email_from': 'azelaya@megatk.com',
+            'email_to': "alexdreyesmt@gmail.com",
+            'email_cc': cc
+        }
+        template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
+        self.write({
+            'state': 'done'
+        })
+        return True  
