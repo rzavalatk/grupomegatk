@@ -60,7 +60,7 @@ class Visitas(models.Model):
     def generar_pdf(self):
         report = self.env['ir.actions.report']._get_report_from_name('control_visitas.report_pdf') 
         
-        pdf_content = report._render_qweb_pdf(self.ids)
+        pdf_content = report._render_qweb_pdf(self.id)
         
         pdf_base64 = base64.b64encode(pdf_content)
         
