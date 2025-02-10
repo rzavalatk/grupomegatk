@@ -92,10 +92,13 @@
                   sequence="4"
                   action="control_visitas_report_pdf_action"/>
 
-        <record id="action_enviar_correo" model="ir.actions.act_window">
-            <field name="name">Envio de correo</field>
+         <!-- Acción de ventana para enviar el correo -->
+        <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
+            <field name="name">Enviar Correo con Reporte</field>
             <field name="res_model">control.visitas</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree</field>
+            <field name="target">new</field>
+            <field name="context">{'default_enviar_correo': True}</field>
         </record>
 
          <menuitem id="menu_enviar_correo_reporte"
