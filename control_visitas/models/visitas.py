@@ -67,19 +67,3 @@ class Visitas(models.Model):
             'state': 'done'
         })
         return True  
-    
-    
-class ModelMail(models.TransientModel):
-    _name = "control.visitas.mail"
-    _description = "description"
-
-    mail = fields.Char("Destinatarios")
-    cc = fields.Char("CC")
-    
-    
-    def obtener_mail(self):
-        active_id = self._context.get('active_id')
-        active_model = self._context.get('active_model')
-        # print("/////////////",active_id,active_model,"////////////////")
-        cierre_id = self.env[active_model].browse(active_id)
-        cierre_id.send_email(self.mail,self.cc)
