@@ -23,7 +23,7 @@
         <record id="control_visitas_mail_action" model="ir.actions.act_window">
             <field name="name">Destinatario</field>
             <field name="res_model">control.visitas.mail</field>
-            <field name="target">control_visitas_mail_view</field>
+            <field name="target">new</field>
             <field name="view_mode">form</field>
         </record>
 

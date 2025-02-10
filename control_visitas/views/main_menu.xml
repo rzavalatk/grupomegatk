@@ -41,6 +41,15 @@
                   sequence="4"
                   action="control_visitas_report_pdf_action"/>
 
+                  
+        <record id="control_visitas_mail_action" model="ir.actions.act_window">
+            <field name="name">Enviar Correo con Reporte</field>
+            <field name="res_model">control.visitas</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_enviar_correo': True}</field>
+        </record>
+
          <menuitem id="control_visitas_mail_pdf"
                 name="Email"
                 action="control_visitas_mail_action"
