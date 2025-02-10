@@ -53,7 +53,7 @@
          <menuitem id="control_visitas_mail_pdf"
                 name="Email"
                 action="control_visitas_mail_action"
-                sequence='5'
+                sequence='10'
                 parent="control_visitas_menu_root"/>           
 
          <!-- Acción de ventana para enviar el correo
