@@ -93,7 +93,7 @@
                   action="control_visitas_report_pdf_action"/>
 
         
-        <!-- Acción de ventana para enviar el correo -->
+        <!-- Acción de ventana para enviar el correo
         <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
             <field name="name">Enviar Correo con Reporte</field>
             <field name="model_id" ref="control_visitas.control_visitas"/>
@@ -102,12 +102,12 @@
             <field name="context">{'default_enviar_correo': True}</field>
         </record>
 
-        <!-- Menú para la acción de ventana -->
+         Menú para la acción de ventana 
         <menuitem id="menu_enviar_correo_reporte"
                 name="Enviar Reporte por Correo"
                 action="action_enviar_correo_reporte_window"
                 sequence='5'
-                parent="control_visitas_menu_root"/>
+                parent="control_visitas_menu_root"/> -->
 
 
 </odoo>
