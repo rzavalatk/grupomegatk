@@ -28,7 +28,7 @@
         </t>
     </template>
 
-    <record id="control_visitas_report_pdf_action" model="ir.actions.server">
+    <record id="control_visitas_report_pdf_action" model="ir.actions.report">
         <field name="name">Registros PDF</field>
         <field name="model_id" ref="model_control_visitas"/>
         <field name="report_type">qweb-pdf</field>
