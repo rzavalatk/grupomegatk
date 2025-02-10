@@ -60,6 +60,9 @@ class Visitas(models.Model):
     def generar_pdf(self):
         report = self.env['ir.actions.report']._get_report_from_name('control_visitas.report_pdf') 
         
+        if not report:
+            raise ValueError("No se encontró el informe 'control_visitas.report_visitas'")
+        
         pdf_content = report._render_qweb_pdf(self.id)
         
         pdf_base64 = base64.b64encode(pdf_content)
