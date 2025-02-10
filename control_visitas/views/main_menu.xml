@@ -95,7 +95,7 @@
         <record id="action_enviar_correo" model="ir.actions.act_window">
             <field name="name">Envio de correo</field>
             <field name="res_model">control.visitas</field>
-            <field name="view_model">tree,form</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
          <menuitem id="menu_enviar_correo_reporte"
