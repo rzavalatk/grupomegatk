@@ -93,7 +93,7 @@
                   action="control_visitas_report_pdf_action"/>
 
          <!-- Acción de ventana para enviar el correo -->
-        <record id="action_enviar_correo_reporte_window" model="ir.actions.act_window">
+        <record id="action_enviar_correo" model="ir.actions.act_window">
             <field name="name">Enviar Correo con Reporte</field>
             <field name="res_model">control.visitas</field>
             <field name="view_mode">tree</field>
