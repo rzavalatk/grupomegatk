@@ -40,12 +40,12 @@
             <field name="model_id" ref="model_control_visitas"/>
             <field name="state">code</field>
             <field name="code">
-                pdf_base64 = model.generar_pdf()
-                action = {
-                    'type': 'ir.actions.act_url',
-                    'url': '/web/content/?model=control.visitas&amp;id=' + str(control.visitas) + '&amp;filename=reporte_visitas.pdf&amp;field=datas&amp;download=true',
-                    'target': 'self',
-                }
+                pdf_base64 = model.generar_pdf()&#10;
+                action = {&#10;
+                    'type': 'ir.actions.act_url',&#10;
+                    'url': '/web/content/?model=control.visitas&amp;id=' + str(control.visitas) + '&amp;filename=reporte_visitas.pdf&amp;field=datas&amp;download=true',&#10;
+                    'target': 'self',&#10;
+                }&#10;
             </field>
         </record>
 
