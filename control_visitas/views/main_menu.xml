@@ -41,8 +41,8 @@
                   sequence="4"
                   action="control_visitas_report_pdf_action"/>
 
-         <menuitem id="menu_enviar_correo_reporte"
-                name="Enviar Reporte por Correo"
+         <menuitem id="control_visitas_mail_pdf"
+                name="Email"
                 action="control_visitas_mail_action"
                 sequence='5'
                 parent="control_visitas_menu_root"/>           
