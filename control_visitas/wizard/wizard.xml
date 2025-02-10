@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-      <record id="account_cierre_mail_view" model="ir.ui.view">
+      <record id="control_visitas_mail_view" model="ir.ui.view">
             <field name="name">control.visitas.mail.view</field>
             <field name="model">control.visitas.mail</field>
             <field name="arch" type="xml">
