@@ -42,7 +42,7 @@
             <field name="code">
 pdf_base64 = model.generar_pdf()&#10;
 if not model.id:&#10;
-raise ValueError("El ID del modelo es inválido")&#10;
+    raise ValueError("El ID del modelo es inválido")&#10;
 action = {&#10;
 'type': 'ir.actions.act_url',&#10;
 'url': '/web/content/?model=control.visitas&amp;id=' + str(model.id) + '&amp;filename=reporte_visitas.pdf&amp;field=datas&amp;download=true',&#10;
