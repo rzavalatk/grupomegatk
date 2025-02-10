@@ -63,7 +63,7 @@ class Visitas(models.Model):
         if not report:
             raise ValueError("No se encontró el informe 'control_visitas.report_pdf'")
         
-        pdf_content = report._render_qweb_pdf(self.id)
+        pdf_content = report._render_qweb_pdf("model_control_visitas")
         
         pdf_base64 = base64.b64encode(pdf_content)
         
