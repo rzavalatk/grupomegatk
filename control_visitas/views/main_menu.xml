@@ -94,7 +94,7 @@
 
             <record id="account_cierre_mail_view" model="ir.ui.view">
             <field name="name">control.visitas.mail.view</field>
-            <field name="model">control.visitas</field>
+            <field name="model">control.visitas.mail</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -113,7 +113,7 @@
 
         <record id="account_cierre_mail_action" model="ir.actions.act_window">
             <field name="name">Destinatario</field>
-            <field name="res_model">control.visitas</field>
+            <field name="res_model">control.visitas.mail</field>
             <field name="target">new</field>
             <field name="view_mode">form</field>
         </record>          

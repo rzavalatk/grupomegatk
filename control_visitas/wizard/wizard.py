@@ -3,7 +3,7 @@ from odoo import fields, models
 
 
 class ModelMail(models.TransientModel):
-    _name = "account.cierre.mail"
+    _name = "control.visitas.mail"
     _description = "description"
 
     mail = fields.Char("Destinatarios")
