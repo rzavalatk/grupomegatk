@@ -38,7 +38,7 @@
         <menuitem
             id="menu_visitas_report_pdf"
             name="Reporte de visitas (PDF)"
-            action="action_report_visitas"
+            action="control_visitas_report_pdf_action"
             parent="control_visitas_menu_root"
             sequence="4"/>
 
