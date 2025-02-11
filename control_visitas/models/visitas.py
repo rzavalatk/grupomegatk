@@ -28,8 +28,8 @@ class Visitas(models.Model):
     def _compute_fecha(self):
         
         lista = self.env['control.visitas'].search([('name', '=', 'Visita Administración')])
-        rec = self.env['control.visitas'].browse([370])
-        _logger.warning(f"Registros obtenidos: {lista}")
+        rec = self.env['control.visitas'].browse(370)
+        _logger.warning(f"Registros obtenidos: {rec}")
         for record in self:
             record.fecha = datetime.now()
  
