@@ -35,27 +35,10 @@
                   sequence="3"
                   action="control_visitas_record_action"/>
 
-        <record id="action_generar_pdf" model="ir.actions.server">
-            <field name="name">Generar Reporte PDF</field>
-            <field name="model_id" ref="model_control_visitas"/>
-            <field name="state">code</field>
-            <field name="code">
-pdf_base64 = model.generar_pdf()&#10;
-if not model.id:&#10;
-    raise ValueError("El ID del modelo es inválido")&#10;
-action = {&#10;
-'type': 'ir.actions.act_url',&#10;
-'url': '/web/content/?model=control.visitas&amp;id=' + str(model_control_visitas) + '&amp;filename=reporte_visitas.pdf&amp;field=datas&amp;download=true',&#10;
-'target': 'self',&#10;
-}&#10;
-action
-            </field>
-        </record>
-
         <menuitem
             id="menu_generar_pdf"
             name="Generar Reporte PDF"
-            action="action_generar_pdf"
+            action="control_visitas_report_pdf_action"
             parent="control_visitas_menu_root"
             sequence="5"/>
 
