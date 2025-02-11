@@ -5,6 +5,7 @@
     <field name="model">control.visitas</field>
     <field name="arch" type="xml">
         <tree>
+        <button string="Prueba" type="object" class="oe_highlight"/>
             <field name="name"/>
             <field name="fecha"/>
             <field name="region"/>
