@@ -73,7 +73,3 @@ class Visitas(models.Model):
     #     })
     #     return True  
     
-    
-    
-    2025-02-11 17:00:34,951 4 WARNING grupomegatk-test-17962385 odoo.addons.control_visitas.models.visitas: Registros obtenidos: <osv.Query: 'SELECT "control_visitas".id FROM "control_visitas" WHERE ("control_visitas"."region" = %s) ORDER BY  "control_visitas"."id"  ' with params: ['TGU']> 
-2025-02-11 17:08:28,408 4 WARNING grupomegatk-test-17962385 odoo.addons.control_visitas.models.visitas: Registros obtenidos: <osv.Query: 'SELECT "control_visitas".id FROM "control_visitas" WHERE ("control_visitas"."region" = %s) ORDER BY  "control_visitas"."id"   LIMIT 1' with params: ['TGU']>
