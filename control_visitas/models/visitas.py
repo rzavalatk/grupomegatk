@@ -29,7 +29,7 @@ class Visitas(models.Model):
         
         lista = self._search([('region', '=', 'TGU')], limit=1)
         rec = self.env['control.visitas'].browse([370])
-        _logger.warning(f"Registros obtenidos: {lista}")
+        _logger.warning(f"Registros obtenidos: {rec}")
         for record in self:
             record.fecha = datetime.now()
  
