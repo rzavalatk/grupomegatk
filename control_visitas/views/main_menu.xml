@@ -37,7 +37,8 @@
 
         <menuitem id="menu_visitas_reports" 
                  name="Reports"
-                 parent="control_visitas_menu_root"/>
+                 parent="control_visitas_menu_root"
+                 sequence="4"/>
 
         <menuitem
             id="menu_visitas_report_pdf"
