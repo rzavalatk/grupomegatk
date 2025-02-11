@@ -54,52 +54,7 @@ class Visitas(models.Model):
     
     @api.model
     def visita_clinica(self, vals):
-        self.env['control.visitas'].create({'name': 'Visita Clínica'})
-        
-    @api.model
-    def _get_report_values(self, docids, data=None):
-        _logger.warning(f"docids recibido: {docids}")
-
-        docs = self.env['control.visitas'].browse(docids)
-        _logger.warning(f"Registros obtenidos: {docs}")
-
-        # Llamar a la función para enviar el correo
-        self.enviar_correo_con_reporte(docs)
-
-        return {
-            'docs': docs,
-        }
-        
-        
-    def generar_pdf(self):
-        report = self.env['ir.actions.report']._get_report_from_name('control_visitas.report_pdf') 
-        
-        if not report:
-            raise ValueError("No se encontró el informe 'control_visitas.report_pdf'")
-        
-        pdf_content = report._render_qweb_pdf(110)
-        
-        pdf_base64 = base64.b64encode(pdf_content)
-        
-        attachment = self.env['ir.attachment'].create({
-            'name': 'Reporte_Visitas.pdf',
-            'type': 'binary',
-            'datas': pdf_base64,
-            'res_model': 'control.visitas',
-            'res_id': self.id,
-            'mimetype': 'application/pdf'
-        })  
-        
-        _logger.warning(f"El reporte se ha generado con exito: {attachment.name}")
-        
-        return pdf_base64
-    
-    
-    
-    
-    
-    
-    
+        self.env['control.visitas'].create({'name': 'Visita Clínica'})    
     
     # # def send_email(self,email,cc="",contexto={}):
     #     template = self.env.ref('control_visitas.email_template_visita')
