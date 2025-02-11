@@ -28,7 +28,7 @@ class Visitas(models.Model):
     def _compute_fecha(self):
         
         lista = self._search([('region', '=', 'TGU')], limit=1)
-        _logger.warning(f"Registros obtenidos: {lista.id, lista.name, lista.region}")
+        _logger.warning(f"Registros obtenidos: {lista.id}, {lista.name}, {lista.region}")
         for record in self:
             record.fecha = datetime.now()
  
