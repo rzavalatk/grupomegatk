@@ -27,7 +27,7 @@ class Visitas(models.Model):
     @api.depends('user_id')
     def _compute_fecha(self):
         
-        lista = self._search([('region', '=', 'TGU')])
+        lista = self._search([('region', '=', 'TGU')], limit=1)
         _logger.warning(f"Registros obtenidos: {lista}")
         for record in self:
             record.fecha = datetime.now()
@@ -71,3 +71,7 @@ class Visitas(models.Model):
     #         'state': 'done'
     #     })
     #     return True  
+    
+    
+    
+    
