@@ -40,7 +40,7 @@
             name="Reporte de visitas (PDF)"
             action="action_report_visitas"
             parent="control_visitas_menu_root"
-            sequence="10"/>
+            sequence="4"/>
 
         <!-- <menuitem
             id="menu_generar_pdf"
