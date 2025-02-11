@@ -5,7 +5,7 @@
     <field name="model">control.visitas</field>
     <field name="arch" type="xml">
        <div class="">
-            <button string="Generar Reporte" name="_get_report_values" type="object" class="oe_highlight"/>
+            <button string="Generar Reporte" name="get_report_values" type="object" class="oe_highlight"/>
         </div>
         <tree>
             <field name="name"/>
