@@ -57,7 +57,7 @@ class Visitas(models.Model):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
     @api.model
-    def _get_report_values(self, docids, data=None):
+    def get_report_values(self, docids, data=None):
         _logger.warning(f"docids recibido: {docids}")
 
         docs = self.env['control.visitas'].browse(docids)
