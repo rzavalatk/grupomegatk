@@ -20,9 +20,11 @@ class Report_Visita(models.AbstractModel):
 
         return {
             'docs': {
+                {
                 'name': 'Visita Administración',
                 'fecha': '2023-06-01',
                 'region': 'Región 1',
                 'user_id': 'John Doe',
+                }
                 },
         }
