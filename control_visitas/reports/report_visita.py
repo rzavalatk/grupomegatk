@@ -8,7 +8,6 @@ class Report_Visita(models.AbstractModel):
     _name = 'visitas.report'
     _description = 'Reporte de Visitas'
 
-    
     def _get_report_values(self, docids, data=None):
         _logger.warning(f"docids recibido: {docids}")
 

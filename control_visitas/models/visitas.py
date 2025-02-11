@@ -58,7 +58,10 @@ class Visitas(models.Model):
     
     @api.model
     def visita_clinica(self, vals):
-        self.env['control.visitas'].create({'name': 'Visita Clínica'})    
+        self.env['control.visitas'].create({'name': 'Visita Clínica'}) 
+        
+    report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
+    pdf = report._render_qweb_pdf(docids=[370, 371, 372])  # Pasar los IDs de los registros   
     
     # # def send_email(self,email,cc="",contexto={}):
     #     template = self.env.ref('control_visitas.email_template_visita')
