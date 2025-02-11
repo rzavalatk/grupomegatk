@@ -70,5 +70,5 @@ class Visitas(models.Model):
     #     self.write({
     #         'state': 'done'
     #     })
-    #     return True  
+    #     return True
     
