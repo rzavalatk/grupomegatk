@@ -19,5 +19,10 @@ class Report_Visita(models.AbstractModel):
         self.enviar_correo_con_reporte(docs)
 
         return {
-            'docs': docs,
+            'docs': {
+                'name': 'Visita Administración',
+                'fecha': '2023-06-01',
+                'region': 'Región 1',
+                'user_id': 'John Doe',
+                },
         }
