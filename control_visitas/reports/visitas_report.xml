@@ -1,6 +1,6 @@
 <odoo>
     <!-- Definición del template para el informe -->
-    <template id="report_pdf">
+    <template id="report_visitas">
         <t t-call="web.html_container">
             <t t-call="web.internal_layout">
                 <div class="page">
@@ -28,12 +28,21 @@
         </t>
     </template>
 
-    <record id="control_visitas_report_pdf_action" model="ir.actions.report">
+    <report 
+        id="action_report_visitas"
+        string="Reporte de Visitas"
+        model="control_visitas.visitas"
+        report_type="qweb-pdf"
+        name="control_visitas.report_visitas"
+        file="control_visitas.report_visitas"
+    />
+
+    <!-- <record id="control_visitas_report_pdf_action" model="ir.actions.report">
         <field name="name">Registros PDF</field>
         <field name="model">control.visitas</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">control_visitas.report_pdf</field>
         <field name="report_file">control_visitas.report_pdf</field>
         <field name="binding_type">report</field>
-    </record>
+    </record> -->
 </odoo>

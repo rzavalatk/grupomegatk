@@ -16,7 +16,7 @@
         'views/control_visitas_view.xml',
         'views/main_menu.xml',
         'views/control_visita_mail.xml',
-        'report/visita_report.xml',
+        'reports/visitas_report.xml',
         'data/mail_template.xml',   
     ],
     'assets': {
