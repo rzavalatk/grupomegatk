@@ -36,7 +36,7 @@
                   action="control_visitas_record_action"/>
 
         <menuitem
-            id="registro_visitas_menu"
+            id="control_visitas_registro_menu"
             name="Registro de Visitas"
             parent="control_visitas_menu_root"
             sequence="4"/>

@@ -50,7 +50,7 @@
             id="registro_visitas_menu"
             name="Visitas"
             action="registro_visitas_action"
-            parent="registro_visitas_menu"
+            parent="control_visitas_registro_menu"
             sequence="10"/>
 
     </data>
