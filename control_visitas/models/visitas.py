@@ -1,7 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from odoo.tools import pdf
-from datetime import datetime
+from datetime import date, datetime
 import logging
 import base64
 
@@ -12,9 +12,12 @@ class Visitas(models.Model):
     _description = 'Control de Visitas'
     
     name = fields.Char(string='Nombre')
-    fecha = fields.Datetime(string='Fecha y Hora', compute='_compute_fecha', store=True)
+    fecha = fields.Date(string='Fecha', compute='_compute_fecha', store=True)
+    hora = fields.Char(string='Hora', compute='_compute_hora', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
+    
+    registro_visita = fields.Many2one('registro.visitas', 'visita_diaria', string='Visitas Diarias')
     
     @api.depends('user_id')
     def _compute_region(self):
@@ -26,12 +29,13 @@ class Visitas(models.Model):
 
     @api.depends('user_id')
     def _compute_fecha(self):
-        
-        lista = self.env['control.visitas'].search([('id', '=', '370')])
-        rec = self.env['control.visitas'].browse(370)
-        _logger.warning(f"Registros obtenidos con browse: {rec.fecha}")
         for record in self:
-            record.fecha = datetime.now()
+            record.fecha = date.today()
+            
+    @api.depends('user_id')
+    def _compute_hora(self):
+        for record in self:
+            record.fecha = datetime.now().strftime('%H:%M:%S')
  
     @api.model
     def create(self, vals):
@@ -75,4 +79,7 @@ class Visitas(models.Model):
     #         'state': 'done'
     #     })
     #     return True  
+    # lista = self.env['control.visitas'].search([('id', '=', '370')])
+    # rec = self.env['control.visitas'].browse(370)
+    # _logger.warning(f"Registros obtenidos con browse: {rec.fecha}")
     

@@ -27,3 +27,4 @@ class Report_Visita(models.AbstractModel):
                 }
                 },
         }
+""" crear un metodo """

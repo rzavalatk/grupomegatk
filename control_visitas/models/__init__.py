@@ -1,2 +1,2 @@
 from . import visitas
-from . import visitas_mail
+from . import visitas_record

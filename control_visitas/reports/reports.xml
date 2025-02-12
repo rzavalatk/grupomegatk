@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+           id="action_report_visitas"
+           model="registro.visitas"
+           string="Registro de Visitas" 
+           report_type="qweb-pdf" 
+           name="control_visitas.report_visitas_template" 
+           file="control_visitas.report_visitas_template" 
+           print_report_name="Registro_de_Visitas_" 
+           paperformat="formatos_papel_mega.report_paperformat_ducumentos" 
+        />
+    </data>
+</odoo>

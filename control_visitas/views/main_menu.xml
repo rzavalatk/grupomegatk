@@ -35,12 +35,12 @@
                   sequence="3"
                   action="control_visitas_record_action"/>
 
-        <menuitem
+        <!-- <menuitem
             id="menu_visitas_report_pdf"
             name="Reporte de visitas (PDF)"
             action="control_visitas_report_pdf_action"
             parent="control_visitas_menu_root"
-            sequence="4"/>
+            sequence="4"/> -->
 
         <!-- <menuitem
             id="menu_generar_pdf"
