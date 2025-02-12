@@ -54,7 +54,7 @@
 
         <menuitem
             id="registro_visitas_menu"
-            name="Visitas"
+            name="Visitas Diarias"
             action="registro_visitas_action"
             parent="control_visitas_registro"
             sequence="10"/>

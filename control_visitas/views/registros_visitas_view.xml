@@ -9,7 +9,7 @@
         
         <menuitem
             id="control_registros_menu"
-            name="Registros Totales"
+            name="Historial Completo"
             action="control_visitas_record_action"
             parent="control_visitas_record"
             sequence="10"/>

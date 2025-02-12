@@ -20,7 +20,7 @@ class Visitas_Record(models.Model):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
         
         if not visitas:
-            raise UserError("No hay registros de visitas")
+            raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visita_diaria = visitas
             

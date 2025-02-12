@@ -9,7 +9,7 @@
 
         <menuitem
                 id="report_action_menu"
-                name="Reportes Graficos"
+                name="Graficos"
                 action="control_visitas_report_action"
                 parent="control_visitas_report"
                 sequence="10"/>

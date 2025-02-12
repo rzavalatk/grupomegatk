@@ -14,9 +14,6 @@ class Report_Visita(models.AbstractModel):
         docs = self.env['control.visitas'].browse(docids)
         _logger.warning(f"Registros obtenidos: {docs}")
 
-        # Llamar a la función para enviar el correo
-        self.enviar_correo_con_reporte(docs)
-
         return {
             'docs': {
                 {
@@ -27,4 +24,3 @@ class Report_Visita(models.AbstractModel):
                 }
                 },
         }
-""" crear un metodo """
