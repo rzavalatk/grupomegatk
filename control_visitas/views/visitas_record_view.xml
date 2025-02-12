@@ -24,7 +24,7 @@
                         </group>
                         <notebook>
                             <page name="registros" string="Registros">
-                                <field>
+                                <field name="registro_visita">
                                     <tree>
                                         <field name="name" />
                                         <field name="fecha" />
