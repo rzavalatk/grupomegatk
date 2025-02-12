@@ -19,7 +19,7 @@
                         <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
-                        <group name="registro_visita">
+                        <group>
                             <field name="fecha_reporte" />
                         </group>
                         <notebook>
