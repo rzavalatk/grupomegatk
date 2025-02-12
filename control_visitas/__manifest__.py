@@ -16,8 +16,7 @@
         'views/main_menu.xml',
         'views/visitas_record_view.xml',
         'views/visitas_view.xml',
-        'reports/visitas_report.xml',
-        'data/mail_template.xml',   
+        'reports/visitas_report.xml',   
     ],
     'assets': {
         'web.assets_backend': [
