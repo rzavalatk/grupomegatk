@@ -35,6 +35,12 @@
                   sequence="3"
                   action="control_visitas_record_action"/>
 
+        <menuitem
+            id="registro_visitas_menu"
+            name="Registro de Visitas"
+            parent="control_visitas_menu_root"
+            sequence="4"/>
+
         <!-- <menuitem
             id="menu_visitas_report_pdf"
             name="Reporte de visitas (PDF)"

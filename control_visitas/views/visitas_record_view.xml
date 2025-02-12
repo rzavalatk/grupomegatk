@@ -6,13 +6,56 @@
             <field name="model">visitas.record</field>
             <field name="arch" type="xml">
                 <tree >
-                    <field name="" />
-                    <field name="" />
-                    <field name="" />
+                    <field name="name" />
+                    <field name="fecha" />
+                    <field name="hora" />
+                    <field name="region" />
+                    <field name="user_id" />
                 </tree>
             </field> 
         </record>
-        
+        <record id="registro_visitas_view_form" model="ir.ui.view">
+            <field name="name">registro.visitas.view.form</field>
+            <field name="model">registro.visitas</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <header>
+                        <button string="Agrupar Registros" name="agrupar_registro" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="fecha_reporte" />
+                        </group>
+                        <notebook>
+                            <page name="registros" string="Registros">
+                                <field name="visita_diaria">
+                                    <tree string="">
+                                        <field name="name" />
+                                        <field name="fecha" />
+                                        <field name="hora" />
+                                        <field name="region" />
+                                        <field name="user_id" />  
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="registro_visitas_action" model="ir.actions.act_window">
+            <field name="name">Registros de Visitas</field>
+            <field name="res_model">registro.visitas</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="registro_visitas_menu"
+            name="Visitas"
+            action="registro_visitas_action"
+            parent="registro_visitas_menu"
+            sequence="10"/>
 
     </data>
 </odoo>
