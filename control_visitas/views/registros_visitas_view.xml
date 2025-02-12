@@ -11,7 +11,7 @@
             id="control_registros_menu"
             name="Registros Totales"
             action="control_visitas_record_action"
-            parent="control_visitas_record"
+            parent="menu_enviar_correo_reporte"
             sequence="10"/>
     
     </data>
