@@ -42,7 +42,7 @@
         </record>
 
          <menuitem id="menu_enviar_correo_reporte"
-                name="Enviar Reporte por Correo"
+                name="Generar Documento"
                 action="action_enviar_correo"
                 sequence='40'
                 parent="control_visitas_menu_root"/> 
