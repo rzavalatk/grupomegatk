@@ -20,7 +20,7 @@
                     </header>
                     <sheet>
                         <group>
-                            <field name="fecha_reporte" />
+                            <field name="visita_diaria" />
                         </group>
                         <notebook>
                             <page name="registros" string="Registros">
