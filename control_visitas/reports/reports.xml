@@ -3,7 +3,7 @@
     <data>
         <report
            id="action_report_visitas"
-           model="registro.visitas"
+           model="control.visitas"
            string="Registro de Visitas" 
            report_type="qweb-pdf" 
            name="control_visitas.report_visitas_template" 

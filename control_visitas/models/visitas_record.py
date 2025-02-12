@@ -25,5 +25,8 @@ class Visitas_Record(models.Model):
             self.visita_diaria = visitas
             
         return visitas
+    
+    def print_pdf(self):
+        return self.env.ref('control_visitas.ir_actions_report_control_visitas').report_action(self)
         
         
