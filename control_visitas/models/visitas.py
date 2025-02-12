@@ -17,7 +17,7 @@ class Visitas(models.Model):
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     
-    registro_visita = fields.Many2one('registro.visitas', 'visita_diaria', string='Visitas Diarias')
+    # registro_visita = fields.Many2one('registro.visitas', 'visita_diaria', string='Visitas Diarias')
     
     @api.depends('user_id')
     def _compute_region(self):
