@@ -11,6 +11,12 @@
                   web_icon="control_visitas,static/description/control.png"
                   sequence="10"/>
 
+        <menuitem
+            id="control_visitas_registro_menu"
+            name="Registro de Visitas"
+            parent="control_visitas_menu_root"
+            sequence="20"/>
+
         <record id="control_visitas_report_action" model="ir.actions.act_window">
             <field name="name">Reporte de Visitas</field>
             <field name="res_model">control.visitas</field>
@@ -20,7 +26,7 @@
         <menuitem id="control_visitas_report"
                   name="Reportes"
                   parent="control_visitas_menu_root"
-                  sequence="20"
+                  sequence="30"
                   action="control_visitas_report_action"/>
 
         <record id="control_visitas_record_action" model="ir.actions.act_window">
@@ -32,14 +38,9 @@
         <menuitem id="control_visitas_record"
                   name="Registros"
                   parent="control_visitas_menu_root"
-                  sequence="30"
+                  sequence="40"
                   action="control_visitas_record_action"/>
 
-        <menuitem
-            id="control_visitas_registro_menu"
-            name="Registro de Visitas"
-            parent="control_visitas_menu_root"
-            sequence="40"/>
 
         <!-- <menuitem
             id="menu_visitas_report_pdf"
