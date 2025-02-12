@@ -34,11 +34,9 @@
 
          <!-- Acción de ventana para enviar el correo -->
         <record id="action_enviar_correo" model="ir.actions.act_window">
-            <field name="name">Enviar Correo con Reporte</field>
-            <field name="res_model">control.visitas</field>
-            <field name="view_mode">tree</field>
-            <field name="target">new</field>
-            <field name="context">{'default_enviar_correo': True}</field>
+                 <field name="name">Registros de Visitas</field>
+            <field name="res_model">registro.visitas</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
          <menuitem id="control_visitas_registro"
