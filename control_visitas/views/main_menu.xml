@@ -6,33 +6,8 @@
             <field name="tag">control_visitas_tag</field>
         </record>
         <menuitem id="control_visitas_menu_root" name="Control de Visitas" action="control_visita_action" web_icon="control_visitas,static/description/control.png" sequence="10"/>
-        <!-- <menuitem id="control_visitas_registro" name="Registro de Visitas" parent="control_visitas_menu_root" sequence="50"/> -->
-        <menuitem id="control_visitas_record" name="Registros" parent="control_visitas_menu_root" sequence="30"/>
+        <menuitem id="control_visitas_registro" name="Registro de Visitas" parent="control_visitas_menu_root" sequence="20"/>
+        <menuitem id="control_visitas_record" name="Registros Generales" parent="control_visitas_menu_root" sequence="30"/>
         <menuitem id="control_visitas_report" name="Reportes" parent="control_visitas_menu_root" sequence="40"/>
-
-
-        <!-- <menuitem
-            id="menu_visitas_report_pdf"
-            name="Reporte de visitas (PDF)"
-            action="control_visitas_report_pdf_action"
-            parent="control_visitas_menu_root"
-            sequence="4"/> -->
-
-        <!-- <menuitem
-            id="menu_generar_pdf"
-            name="Generar Reporte PDF"
-            action="control_visitas_report_pdf_action"
-            parent="control_visitas_menu_root"
-            sequence="5"/> -->
-
-        <!-- <menuitem id="control_visitas_report_pdf"
-                  name="Reporte PDF"
-                  parent="control_visitas_menu_root"
-                  sequence="4"
-                  action="control_visitas_report_pdf_action"/> -->
-         
-
-         <!-- Acción de ventana para enviar el correo -->
-
-        <menuitem id="control_visitas_registro" name="Generar Registro" action="control_visita_action" sequence="20"/>
+        
 </odoo>
