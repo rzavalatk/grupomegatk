@@ -35,7 +35,7 @@ class Visitas(models.Model):
     @api.depends('user_id')
     def _compute_hora(self):
         for record in self:
-            record.fecha = datetime.now().strftime('%H:%M:%S')
+            record.hora = datetime.now().strftime('%H:%M:%S')
  
     @api.model
     def create(self, vals):
