@@ -16,7 +16,7 @@
             <field name="arch" type="xml">
                 <form string="">
                     <header>
-                        <button string="Agrupar Registros" name="agrupar_registro" type="object" class="oe_highlight"/>
+                        <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <group>
