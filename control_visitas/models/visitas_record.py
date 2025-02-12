@@ -7,7 +7,10 @@ class Visitas_Record(models.Model):
     _name = 'registro.visitas'
     _description = 'Modelo de visitas diarias a las sucursales'
     
-    name_reporte = fields.Char(string='Reporte', required=True)
+    def _compute_name(self):
+        for record in self:
+            record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
+    name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     fecha_reporte = fields.Date(string='Fecha', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
