@@ -14,6 +14,8 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/main_menu.xml',
+        'views/registros_visitas_view.xml',
+        'views/reportes_visitas_view.xml',
         'views/visitas_record_view.xml',
         'views/visitas_view.xml',
         'reports/visitas_report.xml',   
