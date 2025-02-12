@@ -20,5 +20,7 @@ class Visitas_Record(models.Model):
             raise UserError("No hay registros de visitas")
         else:
             self.visita_diaria = visitas
+            
+        return visitas
         
         

@@ -6,6 +6,7 @@
             <field name="model">registro.visitas</field>
             <field name="arch" type="xml">
                 <tree >
+                    <field name="name_reporte" />
                     <field name="fecha_reporte" />
                 </tree>
             </field> 
