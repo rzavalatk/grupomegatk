@@ -21,6 +21,11 @@
                     </header>
                     <sheet>
                         <group>
+                            <div>
+                                <h1>
+                                    <field name="name_reporte" />
+                                </h1>
+                            </div>
                             <field name="fecha_reporte" />
                         </group>
                         <notebook>
