@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 from odoo.tools import pdf
 from datetime import date, datetime
 import logging
-import base64
+import pytz
 
 _logger = logging.getLogger(__name__)
 
@@ -35,7 +35,11 @@ class Visitas(models.Model):
     @api.depends('user_id')
     def _compute_hora(self):
         for record in self:
-            record.hora = datetime.now().strftime('%H:%M:%S, %Z')
+            hora_utc = datetime.now(pytz.utc)
+            
+            zona_horaria = pytz.timezone(record.user_id.tz)
+            hora_local = hora_utc.astimezone(zona_horaria)
+            record.hora = hora_local.strftime("%H:%M:%S")
  
     @api.model
     def create(self, vals):
