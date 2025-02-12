@@ -18,6 +18,7 @@
         'views/reportes_visitas_view.xml',
         'views/visitas_record_view.xml',
         'views/visitas_view.xml',
+        'reports/reports.xml',   
         'reports/visitas_report.xml',   
     ],
     'assets': {
