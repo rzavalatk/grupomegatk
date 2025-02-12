@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <record id="visitas_record_view_tree" model="ir.ui.view">
-            <field name="name">visitas.record.view.tree</field>
-            <field name="model">visitas.record</field>
+            <field name="name">registro.visitas.view.tree</field>
+            <field name="model">registro.visitas</field>
             <field name="arch" type="xml">
                 <tree >
                     <field name="name" />
