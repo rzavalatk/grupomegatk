@@ -10,6 +10,7 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Fecha</th>
+                                <th>Hora</th>
                                 <th>Región</th>
                                 <th>Usuario</th>
                             </tr>
@@ -18,6 +19,7 @@
                             <tr t-foreach="docs" t-as="visita">
                                 <td><span t-field="visita.name"/></td>
                                 <td><span t-field="visita.fecha"/></td>
+                                <td><span t-field="visita.hora"/></td>
                                 <td><span t-field="visita.region"/></td>
                                 <td><span t-field="visita.user_id"/></td>
                             </tr>
