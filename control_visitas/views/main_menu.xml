@@ -41,8 +41,8 @@
             <field name="context">{'default_enviar_correo': True}</field>
         </record>
 
-         <menuitem id="menu_enviar_correo_reporte"
-                name="Generar Documento"
+         <menuitem id="control_visitas_registro"
+                name="Registro de Visitas"
                 action="action_enviar_correo"
                 sequence='40'
                 parent="control_visitas_menu_root"/> 
