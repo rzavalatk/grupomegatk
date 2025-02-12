@@ -42,7 +42,7 @@
 
         <record id="registro_visitas_action" model="ir.actions.act_window">
             <field name="name">Registros de Visitas</field>
-            <field name="res_model">control.visitas</field>
+            <field name="res_model">registro.visitas</field>
             <field name="view_mode">tree,form</field>
         </record>
 
