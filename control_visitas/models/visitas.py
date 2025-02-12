@@ -37,11 +37,16 @@ class Visitas(models.Model):
         for record in self:
             hora_utc = datetime.now(pytz.utc)
             
-            zona_horaria_usuario = pytz.timezone(record.user_id.tz)
-            zona_horaria = pytz.timezone(zona_horaria_usuario)
+            zona_horaria_usuario = self.env.user.tz or 'UTC'
             
-            hora_local = hora_utc.astimezone(zona_horaria)
-            record.hora = hora_local.strftime('%H:%M:%S')
+            if hasattr(zona_horaria_usuario, 'zone'):
+                zona_horaria = zona_horaria_usuario
+            else:
+                zona_horaria = pytz.timezone(zona_horaria_usuario)
+            
+            
+            hora_local = hora_utc.astimezone(zona_horaria).strftime('%H:%M:%S')
+            record.hora = hora_local
  
     @api.model
     def create(self, vals):
