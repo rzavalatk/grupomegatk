@@ -76,7 +76,7 @@ class Visitas(models.Model):
         
     def send_email(self, email=None, cc=""):
         registros = self.env['control.visitas'].search([('fecha', '=', self.fecha)])
-        visitas = self.env['control.visitas'].search([(registros)])
+        visitas = self.env['control.visitas'].browse([(registros)])
         _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {visitas}")
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
