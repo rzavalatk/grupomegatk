@@ -55,7 +55,7 @@
                     padding: 0.3em;
                     }
                 </style>
-                <div>
+                <div class="page">
                     <h2 class="texto_centro">Registro de Visitas</h2>
                     <div class="tabla_centrada">
                         <table>
