@@ -27,6 +27,6 @@ class Visitas_Record(models.Model):
         return visitas
     
     def print_pdf(self):
-        return self.env.ref('control_visitas.report_pdf').report_action(self)
+        return self.env.ref('control_visitas.report_visitas_template').report_action(self)
         
         
