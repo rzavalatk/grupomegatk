@@ -45,6 +45,7 @@ class Visitas_Record(models.Model):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         
         if not visitas:
+            _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
             raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visitas_registradas = visitas
