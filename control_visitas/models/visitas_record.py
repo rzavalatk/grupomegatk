@@ -51,7 +51,7 @@ class Visitas_Record(models.Model):
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
         email_values = {
-            'name_reporte': self.name_reporte,
+            'name': self.name_reporte,
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': "alexdreyesmt@gmail.com",
             'email_cc': cc,
