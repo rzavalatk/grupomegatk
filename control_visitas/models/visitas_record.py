@@ -11,7 +11,6 @@ class Visitas_Record(models.Model):
         for record in self:
             record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
             
-    @api.depends('user_id')
     def _compute_fecha(self):
         for record in self:
             record.fecha_act = date.today()
