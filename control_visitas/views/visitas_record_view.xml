@@ -18,7 +18,6 @@
                 <form string="">
                     <header>
                         <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
-                        <button string="Imprimir Registros" name="print_pdf" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
