@@ -17,17 +17,14 @@ class Visitas_Record(models.Model):
             
    
             
-    fecha_act = fields.Date(string='Fecha', compute='_compute_fecha', store=True)
+    fecha_act = fields.Date(string='Fecha', defau=date.today() ,store=True)
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     fecha_reporte = fields.Date(string='Fecha', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
     visitas_registradas = ""
-    @api.depends('fecha_reporte')
-    def _compute_fecha(self):
-        for record in self:
-            record.fecha_act = date.today()
+
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
