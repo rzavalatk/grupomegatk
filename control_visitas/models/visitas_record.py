@@ -47,7 +47,8 @@ class Visitas_Record(models.Model):
         email_values = {
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': "alexdreyesmt@gmail.com",
-            'email_cc': cc
+            'email_cc': cc,
+            'visitas_registradas':self.visitas_registradas   
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({

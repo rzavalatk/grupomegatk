@@ -11,7 +11,9 @@
             <field name="nextcall" eval="datetime.now(pytz.timezone('America/Tegucigalpa')).strftime('%Y-%m-%d 10:58:00')" />
             <field ref="control_visitas.model_registro_visitas" name="model_id" />
             <field name="state">code</field>
-            <field name="code">model.send_email()</field>
+            <field name="code">
+model.send_email()
+            </field>
             <field eval="False" name="doall"/>
             <!--<field name="function">True</field>-->
         </record>
