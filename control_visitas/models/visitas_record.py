@@ -2,6 +2,10 @@
 from odoo import fields, models, api
 from odoo.exceptions import UserError
 from datetime import date
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class Visitas_Record(models.Model):
     _name = 'registro.visitas'
@@ -35,6 +39,8 @@ class Visitas_Record(models.Model):
         return visitas
     
     def send_email(self, email=None, cc=""):
+        _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
+        
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         
         if not visitas:
