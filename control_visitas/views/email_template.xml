@@ -70,7 +70,7 @@
                             <th>Usuario</th>
                         </thead>
                         <tbody>
-                            <t t-foreach="object.visitas_registradas" t-as="visita">
+                            <t t-foreach="object" t-as="visita">
                                 <tr>
                                     <th><t t-out="visita.name"/></th>
                                     <th><t t-out="visita.fecha"/></th>
