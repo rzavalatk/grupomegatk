@@ -55,31 +55,31 @@
                     padding: 0.3em;
                     }
                 </style>
-                <div class="page">
-                    <h2 class="texto_centro">Registro de Visitas</h2>
-                    <div class="tabla_centrada">
-                        <table>
-                            <thead>
-                                <th>Nombre</th>
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Region</th>
-                                <th>Usuario</th>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="object.visita_diaria" t-as="visita">
-                                    <tr>
-                                        <th><t t-out="visita.name"/></th>
-                                        <th><t t-out="visita.fecha"/></th>
-                                        <th><t t-out="visita.hora"/></th>
-                                        <th><t t-out="visita.region"/></th>
-                                        <th><t t-out="visita.user_id"/></th>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </div>
+            
+                <h2 class="texto_centro">Registro de Visitas</h2>
+                <div class="tabla_centrada">
+                    <table>
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Region</th>
+                            <th>Usuario</th>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.visita_diaria" t-as="visita">
+                                <tr>
+                                    <th><t t-out="visita.name"/></th>
+                                    <th><t t-out="visita.fecha"/></th>
+                                    <th><t t-out="visita.hora"/></th>
+                                    <th><t t-out="visita.region"/></th>
+                                    <th><t t-out="visita.user_id"/></th>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
                 </div>
+            
                 <br/>
                 <br/>
                 <br/>
