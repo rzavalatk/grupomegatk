@@ -34,7 +34,7 @@ class Visitas_Record(models.Model):
             
         return visitas
     
-    def send_email(self, email, cc=""):
+    def send_email(self, email=None, cc=""):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         
         if not visitas:
