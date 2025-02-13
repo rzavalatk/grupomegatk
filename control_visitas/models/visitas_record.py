@@ -23,7 +23,8 @@ class Visitas_Record(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
-    visitas_registradas = ""
+    visitas_registradas = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
+ 
 
     
     def agrupar_registros(self):
