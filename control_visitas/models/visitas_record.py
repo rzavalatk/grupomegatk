@@ -39,26 +39,7 @@ class Visitas_Record(models.Model):
             
         return visitas
     
-    def send_email(self, email=None, cc=""):
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.visitas_registradas}")
-        # if not visitas:
-        #     raise UserError("No hay registros de visitas en esa fecha")
-        # else:
-        #     self.visitas_registradas = visitas
-        
-        template = self.env.ref(
-            'control_visitas.email_template_registro_visitas')
-        email_values = {
-            'email_from': 'megatk.no_reply@megatk.com',
-            'email_to': "alexdreyesmt@gmail.com",
-            'email_cc': cc,
-            'visitas_registradas':self.visitas_registradas   
-        }
-        template.send_mail(self.id, email_values=email_values, force_send=True)
-        self.write({
-            'state': 'done'
-        })
-        return True
+   
     
 
     

@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from odoo.tools import pdf
 from datetime import date, datetime
 import logging
@@ -72,7 +72,29 @@ class Visitas(models.Model):
     
     @api.model
     def visita_clinica(self, vals):
-        self.env['control.visitas'].create({'name': 'Visita Clínica'}) 
+        self.env['control.visitas'].create({'name': 'Visita Clínica'})
+        
+    def send_email(self, email=None, cc=""):
+        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha)])
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {visitas}")
+        if not visitas:
+            raise UserError("No hay registros de visitas en esa fecha")
+        else:
+            visitas_registradas = visitas
+        
+        template = self.env.ref(
+            'control_visitas.email_template_registro_visitas')
+        email_values = {
+            'email_from': 'megatk.no_reply@megatk.com',
+            'email_to': "alexdreyesmt@gmail.com",
+            'email_cc': cc,
+            'visitas_registradas':visitas_registradas   
+        }
+        template.send_mail(self.id, email_values=email_values, force_send=True)
+        self.write({
+            'state': 'done'
+        })
+        return True
         
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
     # pdf = report._render_qweb_pdf(docids=[370, 371, 372])  # Pasar los IDs de los registros   
