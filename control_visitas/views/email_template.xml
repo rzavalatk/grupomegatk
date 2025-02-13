@@ -4,7 +4,7 @@
         <record id="email_template_registro_visitas" model="mail.template">
             <field name="name">Reporte Diario</field>
             <field name="model_id" ref="model_control_visitas"/>
-            <field name="subject">Registro {{object.name}} {{object.region}}</field>
+            <field name="subject">Registro {{object.name_reporte}}</field>
             <field name="email_from">{{user.email_formatted | safe}}</field>
             <field name="email_to">{{user.email_formatted | safe}}</field>
             <field name="email_cc">{{user.email_formatted | safe}}</field>
@@ -70,7 +70,7 @@
                             <th>Usuario</th>
                         </thead>
                         <tbody>
-                            <t t-foreach="object.visitas_registradas" t-as="visita">
+                            <t t-foreach="object." t-as="visita">
                                 <tr>
                                     <th><t t-out="visita.name"/></th>
                                     <th><t t-out="visita.fecha"/></th>
