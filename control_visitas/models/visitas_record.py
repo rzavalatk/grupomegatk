@@ -46,7 +46,7 @@ class Visitas_Record(models.Model):
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
-            visitas_registradas = visitas
+            self.visita_diaria = visitas
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
@@ -54,7 +54,7 @@ class Visitas_Record(models.Model):
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': "alexdreyesmt@gmail.com",
             'email_cc': cc,
-            'visitas_registradas':visitas_registradas   
+            'visitas_registradas':self.visita_diaria   
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
