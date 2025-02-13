@@ -17,7 +17,7 @@ class Visitas_Record(models.Model):
             
    
             
-    fecha_act = fields.Date(string='Fecha', defau=date.today() ,store=True)
+    # fecha_act = fields.Date(string='Fecha', defau=date.today() ,store=True)
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     fecha_reporte = fields.Date(string='Fecha', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
@@ -28,8 +28,8 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.fecha_act}")
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.fecha_reporte}")
+        # visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
@@ -39,10 +39,10 @@ class Visitas_Record(models.Model):
     
     def send_email(self, email=None, cc=""):
         
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
+        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
         
         if not visitas:
-            _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
+            _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_reporte}")
             raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visitas_registradas = visitas
