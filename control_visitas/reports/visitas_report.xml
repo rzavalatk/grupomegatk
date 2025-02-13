@@ -17,11 +17,11 @@
                         </thead>
                         <tbody>
                             <tr t-foreach="docs" t-as="visita">
-                                <td><span t-field="visita.visita_diaria.name"/></td>
-                                <td><span t-field="visita.visita_diaria.fecha"/></td>
-                                <td><span t-field="visita.visita_diaria.hora"/></td>
-                                <td><span t-field="visita.visita_diaria.region"/></td>
-                                <td><span t-field="visita.visita_diaria.user_id"/></td>
+                                <td><span t-field="visita.name"/></td>
+                                <td><span t-field="visita.fecha"/></td>
+                                <td><span t-field="visita.hora"/></td>
+                                <td><span t-field="visita.region"/></td>
+                                <td><span t-field="visita.user_id"/></td>
                             </tr>
                         </tbody>
                     </table>
