@@ -31,7 +31,7 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.fecha_act}")
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
@@ -45,7 +45,7 @@ class Visitas_Record(models.Model):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         
         if not visitas:
-            _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
+            _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
             raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visitas_registradas = visitas
