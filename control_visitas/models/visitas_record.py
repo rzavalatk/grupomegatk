@@ -29,7 +29,7 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        self.visitas_registradas = self.env['control.visitas'].browse(visitas) 
+        self.write({'visitas_registradas': [(6, 0, visitas.ids)]}) 
         _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.visitas_registradas}")
         # visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
