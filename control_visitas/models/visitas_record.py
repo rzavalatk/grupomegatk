@@ -28,7 +28,8 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.fecha_reporte}")
+        self.visitas_registradas = visitas
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {visitas}")
         # visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
@@ -38,14 +39,11 @@ class Visitas_Record(models.Model):
         return visitas
     
     def send_email(self, email=None, cc=""):
-        
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        
-        if not visitas:
-            _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_reporte}")
-            raise UserError("No hay registros de visitas en esa fecha")
-        else:
-            self.visitas_registradas = visitas
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.visitas_registradas}")
+        # if not visitas:
+        #     raise UserError("No hay registros de visitas en esa fecha")
+        # else:
+        #     self.visitas_registradas = visitas
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
