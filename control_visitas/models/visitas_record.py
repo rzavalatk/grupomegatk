@@ -15,9 +15,7 @@ class Visitas_Record(models.Model):
         for record in self:
             record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
             
-    def _compute_fecha(self):
-        for record in self:
-            record.fecha_act = date.today()
+   
             
     fecha_act = fields.Date(string='Fecha', compute='_compute_fecha', store=True)
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
@@ -26,10 +24,14 @@ class Visitas_Record(models.Model):
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
     visitas_registradas = ""
-    
+    @api.depends('fecha_reporte')
+    def _compute_fecha(self):
+        for record in self:
+            record.fecha_act = date.today()
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
+        _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
         
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
@@ -39,7 +41,6 @@ class Visitas_Record(models.Model):
         return visitas
     
     def send_email(self, email=None, cc=""):
-        _logger.warning(f"FECHA ACTUAL CORREO: {self.fecha_act}")
         
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         
