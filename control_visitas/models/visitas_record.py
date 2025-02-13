@@ -21,6 +21,8 @@ class Visitas_Record(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
+    visitas_registradas = ""
+    
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
@@ -38,7 +40,7 @@ class Visitas_Record(models.Model):
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
-            self.visita_diaria = visitas
+            self.visitas_registradas = visitas
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
