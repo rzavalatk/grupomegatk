@@ -26,5 +26,26 @@ class Visitas_Record(models.Model):
             
         return visitas
     
+    def send_email(self, email, cc=""):
+        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
+        
+        if not visitas:
+            raise UserError("No hay registros de visitas en esa fecha")
+        else:
+            self.visita_diaria = visitas
+        
+        template = self.env.ref(
+            'control_visitas.email_template_registro_visitas')
+        email_values = {
+            'email_from': 'megatk.no_reply@megatk.com',
+            'email_to': email,
+            'email_cc': cc
+        }
+        template.send_mail(self.id, email_values=email_values, force_send=True)
+        self.write({
+            'state': 'done'
+        })
+        return True
+    
 
     

@@ -1,31 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-      <record id="control_visitas_mail_view" model="ir.ui.view">
-            <field name="name">control.visitas.mail.view</field>
-            <field name="model">control.visitas.mail</field>
-            <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                        <group>
-                            <field name="mail" />
-                            <field name="cc" />
-                        </group>
-                    </sheet>
-                    <footer>
-                        <button string="Enviar" name="obtener_mail" type="object" class="btn-primary"/>
-                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
+         <record id="cierre_diario_send_email" model="ir.cron">
+            <field name="name">visitas.diarias.send.email</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="datetime.now(pytz.timezone('America/Guatemala')).strftime('%Y-%m-%d 09:38:00')" />
+            <field ref="control_visitas.model_registro_visitas" name="model_id" />
+            <field name="state">code</field>
+            <field name="code">model.send_email()</field>
+            <field eval="False" name="doall"/>
+            <!--<field name="function">True</field>-->
         </record>
-
-        <record id="control_visitas_mail_action" model="ir.actions.act_window">
-            <field name="name">Destinatario</field>
-            <field name="res_model">control.visitas.mail</field>
-            <field name="target">new</field>
-            <field name="view_mode">form</field>
-        </record>
-
     </data>
 </odoo>
