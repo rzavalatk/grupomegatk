@@ -82,6 +82,7 @@ class Visitas(models.Model):
     def send_email(self, email=None, cc=""):
         self.fecha_act = self.definir_fecha()
         registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
+        lista = self.env['control.visitas'].search([('id', '=', '370')])
         visitas = self.env['control.visitas'].browse([(registros)])
         _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
         # if not registros:
@@ -97,7 +98,7 @@ class Visitas(models.Model):
             'email_to': "alexdreyesmt@gmail.com",
             'email_cc': cc,  
         }
-        template.send_mail([370,371,372], email_values=email_values, force_send=True)
+        template.send_mail(lista, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
