@@ -62,7 +62,7 @@ class Visitas_Record(models.Model):
          
         correo = "alexdreyesmt@gmail.com"
         
-        self.send_mail(correo)
+        self.send_email(correo)
     
     
     
