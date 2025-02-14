@@ -4,7 +4,7 @@
         <record id="email_template_registro_visitas" model="mail.template">
             <field name="name">Reporte Diario</field>
             <field name="model_id" ref="model_registro_visitas"/>
-            <field name="subject">Registro</field>
+            <field name="subject">Registro {{object.name_reporte}}</field>
             <field name="email_from">{{user.email_formatted}}</field>
             <field name="email_to">alexdreyesmt@gmail.com</field>
             <field name="email_cc"></field>
