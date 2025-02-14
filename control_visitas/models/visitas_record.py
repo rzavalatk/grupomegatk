@@ -37,7 +37,7 @@ class Visitas_Record(models.Model):
             
         return visitas
     
-    
+    @api.model    
     def send_email(self, email=None, cc=""):
         
         template = self.env.ref(
