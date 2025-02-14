@@ -83,7 +83,7 @@ class Visitas(models.Model):
     def send_email(self, email=None, cc=""):
         
         template = self.env.ref(
-            'control_visitas.email_template_registro_visitas')
+            'control_visitas.email_template_control_visitas')
         email_values = {
 
             'email_from': 'megatk.no_reply@megatk.com',
