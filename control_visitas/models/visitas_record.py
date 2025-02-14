@@ -43,7 +43,7 @@ class Visitas_Record(models.Model):
             raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visita_diaria = visitas
-            _logger.warning(f"Registros encontrados: {self.visita_diaria}")
+            _logger.warning(f"Registros encontrados: {visitas}")
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
