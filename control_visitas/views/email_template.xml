@@ -61,7 +61,9 @@
             
                 <h2 class="texto_centro">Registro de Visitas</h2>
                 <div>
+                <p class="texto_centro">
                     Reporte de los registros de las visitas del dia.
+                </p>
                 </div>
                 <div class="tabla_centrada">
                     <table>

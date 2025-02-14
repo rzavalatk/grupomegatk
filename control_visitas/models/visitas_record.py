@@ -24,11 +24,9 @@ class Visitas_Record(models.Model):
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
     
-    
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-        self.write({'visitas_registradas': [(6, 0, visitas.ids)]}) 
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN AGRUPAR: {self.visitas_registradas}")
+       
         # visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
@@ -39,6 +37,12 @@ class Visitas_Record(models.Model):
     
     @api.model    
     def send_email(self, email=None, cc=""):
+        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
+        
+        if not visitas:
+            raise UserError("No hay registros de visitas en esa fecha")
+        else:
+            self.visita_diaria = visitas
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
