@@ -84,7 +84,7 @@ class Visitas(models.Model):
         registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
         lista = self.env['control.visitas'].search([('id', '=', '370')])
         visitas = self.env['control.visitas'].browse([(registros)])
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {lista}")
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
         # if not registros:
         #     raise UserError("No hay registros de visitas en esa fecha ")
         # else:
