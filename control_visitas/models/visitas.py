@@ -81,22 +81,13 @@ class Visitas(models.Model):
         return fec_filtro 
         
     def send_email(self, email=None, cc=""):
-        self.fecha_act = date.today()
-        registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
-        lista = self.env['control.visitas'].search([('id', '=', '370')])
-        visitas = self.env['control.visitas'].browse([(registros)])
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
-        # if not registros:
-        #     raise UserError("No hay registros de visitas en esa fecha ")
-        # else:
-        #     visita_diaria = registros
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
         email_values = {
 
             'email_from': 'megatk.no_reply@megatk.com',
-            'email_to': "alexdreyesmt@gmail.com",
+            'email_to': email,
             'email_cc': cc,  
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
@@ -104,7 +95,18 @@ class Visitas(models.Model):
             'state': 'done'
         })
         return True
-        
+    
+    
+    def datos(self):
+        template = self.env.ref('control_visitas.email_template_control_visitas')
+        registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
+        if not registros:
+             raise UserError("No hay registros de visitas en esa fecha ")
+         
+        correo = "alexdreyesmt@gmail.com"
+        for registro in registros:
+            template.send_mail(registro.id, correo,force_send=True)
+    
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
     # pdf = report._render_qweb_pdf(docids=[370, 371, 372])  # Pasar los IDs de los registros   
     
