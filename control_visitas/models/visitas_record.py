@@ -37,7 +37,7 @@ class Visitas_Record(models.Model):
     
     @api.model    
     def send_email(self, email=None, cc=""):
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
+        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
         
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
