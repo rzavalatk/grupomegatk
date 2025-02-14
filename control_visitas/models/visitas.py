@@ -84,10 +84,10 @@ class Visitas(models.Model):
         registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
         visitas = self.env['control.visitas'].browse([(registros)])
         _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {self.fecha_act}")
-        if not registros:
-            raise UserError("No hay registros de visitas en esa fecha ")
-        else:
-            visita_diaria = registros
+        # if not registros:
+        #     raise UserError("No hay registros de visitas en esa fecha ")
+        # else:
+        #     visita_diaria = registros
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
