@@ -63,7 +63,7 @@ class Visitas_Record(models.Model):
          
         correo = "alexdreyesmt@gmail.com"
         for registro in registros:
-            template.send_mail(registro.id, correo,force_send=True)
+            template.send_mail(correo)
     
     
     
