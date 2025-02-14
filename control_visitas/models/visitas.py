@@ -74,7 +74,29 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-    
+    def send_email(self, email=None, cc=""):
+        registros = self.env['control.visitas'].search([('fecha', '=', self.fecha)])
+        visitas = self.env['control.visitas'].browse([(registros)])
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {visitas}")
+        if not visitas:
+            raise UserError("No hay registros de visitas en esa fecha")
+        else:
+            self.visita_diaria = visitas
+        
+        template = self.env.ref(
+            'control_visitas.email_template_registro_visitas')
+        email_values = {
+
+            'email_from': 'megatk.no_reply@megatk.com',
+            'email_to': "alexdreyesmt@gmail.com",
+            'email_cc': cc,
+            'visitas_registradas':self.visita_diaria   
+        }
+        template.send_mail(self.id, email_values=email_values, force_send=True)
+        self.write({
+            'state': 'done'
+        })
+        return True
         
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
     # pdf = report._render_qweb_pdf(docids=[370, 371, 372])  # Pasar los IDs de los registros   
