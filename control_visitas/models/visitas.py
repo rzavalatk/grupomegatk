@@ -77,11 +77,11 @@ class Visitas(models.Model):
         
     def definir_fecha(self):
         fec_filtro = date.today()
-        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN DEFEC: {fec_filtro}")
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN: {fec_filtro}")
         return fec_filtro 
         
     def send_email(self, email=None, cc=""):
-        self.fecha_act = self.definir_fecha()
+        self.fecha_act = date.today()
         registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
         lista = self.env['control.visitas'].search([('id', '=', '370')])
         visitas = self.env['control.visitas'].browse([(registros)])
