@@ -18,7 +18,7 @@ class Visitas(models.Model):
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     
     registro_visita = fields.Many2one('registro.visitas', string='Visitas Diarias')
-    fecha_act = fields.Date(string='Fecha')
+    fecha_act = fields.Date(string='Fecha Actual')
     
     @api.depends('user_id')
     def _compute_region(self):
