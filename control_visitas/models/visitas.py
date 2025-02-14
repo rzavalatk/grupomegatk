@@ -97,7 +97,7 @@ class Visitas(models.Model):
             'email_to': "alexdreyesmt@gmail.com",
             'email_cc': cc,  
         }
-        template.send_mail(self.id, email_values=email_values, force_send=True)
+        template.send_mail(visita_diaria, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
