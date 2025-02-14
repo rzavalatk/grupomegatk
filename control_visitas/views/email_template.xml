@@ -3,7 +3,7 @@
     <data>
         <record id="email_template_registro_visitas" model="mail.template">
             <field name="name">Reporte Diario</field>
-            <field name="model_id" ref="model_control_visitas"/>
+            <field name="model_id" ref="model_registro_visitras"/>
             <field name="subject">Registro {{object.name}}</field>
             <field name="email_from">{{user.email_formatted}}</field>
             <field name="email_to">alexdreyesmt@gmail.com</field>
@@ -60,6 +60,9 @@
                 </style>
             
                 <h2 class="texto_centro">Registro de Visitas</h2>
+                <div>
+                    Reporte de los registros de las visitas del dia.
+                </div>
                 <div class="tabla_centrada">
                     <table>
                         <thead>
@@ -70,7 +73,7 @@
                             <th>Usuario</th>
                         </thead>
                         <tbody>
-                            <t t-foreach="object" t-as="visita">
+                            <t t-foreach="object.visita_diaria" t-as="visita">
                                 <tr>
                                     <th><t t-out="visita.name"/></th>
                                     <th><t t-out="visita.fecha"/></th>

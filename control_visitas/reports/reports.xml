@@ -3,7 +3,7 @@
     <data>
         <record id="action_report_visitas" model="ir.actions.report">
             <field name="name">Registro de Visitas</field>
-            <field name="model">control.visitas</field>
+            <field name="model">registro.visitas</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">control_visitas.report_visitas_template</field>
             <field name="report_file">control_visitas.report_visitas_template</field>
