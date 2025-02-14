@@ -23,9 +23,7 @@ class Visitas_Record(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
-    visitas_registradas = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas Temp')
- 
-
+    
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
@@ -56,7 +54,7 @@ class Visitas_Record(models.Model):
         })
         return True
     
-    
+    @api.model
     def datos(self):
         template = self.env.ref('control_visitas.email_template_control_visitas')
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
