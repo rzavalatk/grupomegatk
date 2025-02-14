@@ -77,6 +77,7 @@ class Visitas(models.Model):
         
     def definir_fecha(self):
         fec_filtro = date.today()
+        _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN DEFEC: {fec_filtro}")
         return fec_filtro 
         
     def send_email(self, email=None, cc=""):
