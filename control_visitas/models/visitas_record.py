@@ -38,12 +38,12 @@ class Visitas_Record(models.Model):
     @api.model    
     def send_email(self, email=None, cc=""):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
-        
+        sel
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
-            self.visita_diaria = visitas
-            _logger.warning(f"Registros encontrados: {visitas}")
+            self.visita_diaria.env['control.visitas'].sudo().browse(visitas.ids)
+            _logger.warning(f"Registros encontrados: {self.visita_diaria}")
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
