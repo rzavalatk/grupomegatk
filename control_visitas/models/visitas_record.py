@@ -41,7 +41,7 @@ class Visitas_Record(models.Model):
     def send_email(self, email=None, cc=""):
         
         template = self.env.ref(
-            'control_visitas.email_template_control_visitas')
+            'control_visitas.email_template_registro_visitas')
         email_values = {
 
             'email_from': 'megatk.no_reply@megatk.com',
@@ -56,7 +56,7 @@ class Visitas_Record(models.Model):
     
     @api.model
     def datos(self):
-        template = self.env.ref('control_visitas.email_template_control_visitas')
+        template = self.env.ref('control_visitas.email_template_registro_visitas')
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha ")
