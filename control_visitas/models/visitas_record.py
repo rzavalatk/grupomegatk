@@ -56,14 +56,13 @@ class Visitas_Record(models.Model):
     
     @api.model
     def datos(self):
-        template = self.env.ref('control_visitas.email_template_registro_visitas')
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha ")
          
         correo = "alexdreyesmt@gmail.com"
-        for registro in registros:
-            template.send_mail(correo)
+        
+        self.send_mail(correo)
     
     
     
