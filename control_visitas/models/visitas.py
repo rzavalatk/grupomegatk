@@ -18,6 +18,7 @@ class Visitas(models.Model):
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     
     registro_visita = fields.Many2one('registro.visitas', string='Visitas Diarias')
+    fecha_act = fields.Date(string='Fecha')
     
     @api.depends('user_id')
     def _compute_region(self):
@@ -74,8 +75,13 @@ class Visitas(models.Model):
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
+    def definir_fecha(self):
+        fec_filtro = date.today()
+        return fec_filtro 
+        
     def send_email(self, email=None, cc=""):
-        registros = self.env['control.visitas'].search([('fecha', '=', self.fecha)])
+        self.fecha_act = self.definir_fecha()
+        registros = self.env['control.visitas'].search([('fecha', '=', self.fecha_act)])
         visitas = self.env['control.visitas'].browse([(registros)])
         _logger.warning(f"FECHA ACTUAL CORREO DESDE FUN SEND: {visitas}")
         if not visitas:
