@@ -89,8 +89,7 @@ class Visitas(models.Model):
 
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': "alexdreyesmt@gmail.com",
-            'email_cc': cc,
-            'visitas_registradas':visita_diaria   
+            'email_cc': cc,  
         }
         template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
