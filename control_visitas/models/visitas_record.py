@@ -42,7 +42,7 @@ class Visitas_Record(models.Model):
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
-            self.visita_diaria.env['control.visitas'].sudo().browse(visitas.ids)
+            self.visita_diaria.env['control.visitas'].sudo().browse(428)
             _logger.warning(f"Registros encontrados: {self.visita_diaria}")
         
         template = self.env.ref(
