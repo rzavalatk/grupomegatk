@@ -57,7 +57,7 @@ class Visitas_Record(models.Model):
         ids_visit = []
         for visita in visitas:
             ids_visit.append(visita.id)
-        template.send_mail(ids_visit, email_values=email_values, force_send=True)
+        template.send_mail([id for id in ids_visit], email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
