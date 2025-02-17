@@ -120,9 +120,9 @@
                         <div class="row">
                             <div class="col"
                                 style="margin-top: 28px;margin-left: 88px;height: 48px;">
-                                <h2 class="section-header" style="color:#4a5c9a;">
+                                <h1 class="section-header" style="color:#4a5c9a; font-size: 20px;">
                                     Control de Visitas
-                                </h2>
+                                </h1>
                             </div>
                         </div>
                         <div class="c-dashboardInfo"
