@@ -75,15 +75,7 @@
                             <th>Usuario</th>
                         </thead>
                         <tbody>
-                            <t t-foreach="object" t-as="visita">
-                                <tr>
-                                    <th><t t-out="visita.name"/></th>
-                                    <th><t t-out="visita.fecha"/></th>
-                                    <th><t t-out="visita.hora"/></th>
-                                    <th><t t-out="visita.region"/></th>
-                                    <th><t t-out="visita.user_id.name"/></th>
-                                </tr>
-                            </t>
+                            {{ctx.get('body')}}
                         </tbody>
                     </table>
                 </div>

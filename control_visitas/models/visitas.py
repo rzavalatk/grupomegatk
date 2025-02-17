@@ -75,14 +75,14 @@ class Visitas(models.Model):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
     @api.model    
-    def send_email(self, email=None, cc=""):
-        visitas = self.env['control.visitas'].search([('fecha', '=', date.today())])
+    def send_email(self, email=None, cc="", contexto={}):
+        # visitas = self.env['control.visitas'].search([('fecha', '=', date.today())])
         
-        if not visitas:
-            raise UserError("No hay registros de visitas en esa fecha 2")
-        else:
-            visita_diaria = self.env['control.visitas'].browse([428])
-            _logger.warning(f"Registros encontrados: {visitas.ids}")
+        # if not visitas:
+        #     raise UserError("No hay registros de visitas en esa fecha 2")
+        # else:
+        #     visita_diaria = self.env['control.visitas'].browse([428])
+        #     _logger.warning(f"Registros encontrados: {visitas.ids}")
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
@@ -91,7 +91,7 @@ class Visitas(models.Model):
             'email_cc': cc,  
         }
             
-        template.send_mail(visitas.ids.id, email_values=email_values, force_send=True)
+        template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
@@ -99,13 +99,38 @@ class Visitas(models.Model):
     
     @api.model
     def datos(self):
+        html = ""
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha 1")
          
+        visitas = []
+        for visita in registros:
+            visitas.append({
+                'nombre': visita.name,
+                'fecha': visita.fecha,
+                'hora': visita.hora,
+                'region': visita.region,
+                'usuario': visita.user_id.name
+            })
+            
+        contexto = {}
+        for visita in visitas:
+            html += "<tr>"
+            html += f"""
+                <th>{visita['nombre']}</th>
+                <th>{visita['fecha']}</th>
+                <th>{visita['hora']}</th>
+                <th>{visita['region']}</th>
+                <th>{visita['usuario']}</th>
+            """
+            html += "</tr>"
+            
         correo = "alexdreyesmt@gmail.com"
         
-        self.send_email(correo)
+        contexto['body'] = html 
+        
+        self.send_email(correo, contexto)
         
     
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
