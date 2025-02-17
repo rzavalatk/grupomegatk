@@ -130,7 +130,7 @@
                                     Filtrar por:
                                 </b>
                                 <select id="filter_selection"
-                                        style="width: 50%;padding:10px;border-radius:10px; background:white;">
+                                        style="width: 50%;border-radius:10px; background:white;">
                                     <option id="this_year" value="this_year"
                                             selected="">Por Año
                                     </option>
