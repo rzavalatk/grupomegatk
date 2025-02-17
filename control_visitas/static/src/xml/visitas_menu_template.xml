@@ -124,6 +124,23 @@
                                     Control de Visitas
                                 </h1>
                             </div>
+                            <div class="col-md-4 d-flex justify-content-end bg-light"
+                             style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px">
+                                <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
+                                    Filtrar por:
+                                </b>
+                                <select id="filter_selection"
+                                        style="width: 50%;padding:10px;border-radius:10px; background:white;">
+                                    <option id="this_year" value="this_year"
+                                            selected="">Por Año
+                                    </option>
+                                    <option id="this_month"
+                                            value="this_month">Por mes
+                                    </option>
+                                    <option id="this_week" value="this_week">Por semana
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <div class="c-dashboardInfo"
                                 id="admin_state">
