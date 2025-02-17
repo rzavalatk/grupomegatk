@@ -92,7 +92,7 @@ class Visitas(models.Model):
             'body_html': contexto
         }
             
-        template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
+        template.send_mail(self.id, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
