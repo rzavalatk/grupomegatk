@@ -9,6 +9,7 @@
             <field name="email_to">{{user.email_formatted}}</field>
             <field name="email_cc">{{user.email_formatted}}</field>
             <field name="body_html" type="html">
+                {{user.body_html}}
                 <!-- <style>
                     .cuadro {
                     border-color: #000;
