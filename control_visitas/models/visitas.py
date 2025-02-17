@@ -128,7 +128,9 @@ class Visitas(models.Model):
             
         correo = "alexdreyesmt@gmail.com"
         
-        contexto['body'] = html 
+        contexto['body'] = html
+        
+        _logger.warning(f"body: {contexto['body']}")
         
         self.send_email(correo, contexto)
         
