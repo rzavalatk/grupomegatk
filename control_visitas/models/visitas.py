@@ -76,14 +76,6 @@ class Visitas(models.Model):
         
     @api.model    
     def send_email(self, email=None, cc="", contexto={}):
-        # visitas = self.env['control.visitas'].search([('fecha', '=', date.today())])
-        
-        # if not visitas:
-        #     raise UserError("No hay registros de visitas en esa fecha 2")
-        # else:
-        #     visita_diaria = self.env['control.visitas'].browse([428])
-        #     _logger.warning(f"Registros encontrados: {visitas.ids}")
-        
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
         email_values = {
@@ -196,18 +188,18 @@ class Visitas(models.Model):
             """
             html += "</tr>"
             
-        # html += """
-        #                 </tbody>
-        #             </table>
-        #         </div>
-        #         <br/>
-        #         <br/>
-        #         <br/>
-        #         <br/>
-        #         <div class="footer">
-        #             <span>**** Mensaje automático de Odoo, no responder. ****</span>
-        #         </div>
-        #     """
+        html += """
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="footer">
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
+                </div>
+            """
             
         correo = "alexdreyesmt@gmail.com"
         cc = "alexdreyes@yahoo.es"
@@ -218,23 +210,3 @@ class Visitas(models.Model):
         
         self.send_email(correo, cc, html)
         
-    
-    # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
-    # pdf = report._render_qweb_pdf(docids=[370, 371, 372])  # Pasar los IDs de los registros   
-    
-    # # def send_email(self,email,cc="",contexto={}):
-    #     template = self.env.ref('control_visitas.email_template_visita')
-    #     email_values = {
-    #         'email_from': 'azelaya@megatk.com',
-    #         'email_to': "alexdreyesmt@gmail.com",
-    #         'email_cc': cc
-    #     }
-    #     template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
-    #     self.write({
-    #         'state': 'done'
-    #     })
-    #     return True  
-    # lista = self.env['control.visitas'].search([('id', '=', '370')])
-    # rec = self.env['control.visitas'].browse(370)
-    # _logger.warning(f"Registros obtenidos con browse: {rec.fecha}")
-    

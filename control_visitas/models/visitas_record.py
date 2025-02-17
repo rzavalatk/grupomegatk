@@ -11,9 +11,6 @@ class Visitas_Record(models.Model):
     _name = 'registro.visitas'
     _description = 'Modelo de visitas diarias a las sucursales'
     
-  
-            
-    # fecha_act = fields.Date(string='Fecha', defau=date.today() ,store=True)
     fecha_reporte = fields.Date(string='Fecha', required=True)
     def _compute_name(self):
         for record in self:
@@ -26,52 +23,10 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
-       
-        # visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_act)])
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
             self.visita_diaria = visitas
             
         return visitas
-    
-    # @api.model    
-    # def send_email(self, email=None, cc=""):
-    #     visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
-        
-    #     if not visitas:
-    #         raise UserError("No hay registros de visitas en esa fecha")
-    #     else:
-    #         self.visita_diaria = self.env['control.visitas'].browse([428])
-    #         _logger.warning(f"Registros encontrados: {visitas}")
-        
-    #     template = self.env.ref(
-    #         'control_visitas.email_template_registro_visitas')
-    #     email_values = {
-    #         'email_to': email,
-    #         'email_cc': cc,  
-    #     }
-        
-        
-    #     template.send_mail(visitas.ids, email_values=email_values, force_send=True)
-    #     self.write({
-    #         'state': 'done'
-    #     })
-    #     return True
-    
-    # @api.model
-    # def datos(self):
-    #     registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
-    #     if not registros:
-    #          raise UserError("No hay registros de visitas en esa fecha ")
-         
-    #     correo = "alexdreyesmt@gmail.com"
-        
-    #     self.send_email(correo)
-    
-    
-    
-   
-    
-
      

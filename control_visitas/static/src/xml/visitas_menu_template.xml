@@ -117,6 +117,7 @@
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
+                        <h1>Control de Visitas</h1>
                         <div class="c-dashboardInfo"
                                 id="admin_state">
                             <div class="wrap">

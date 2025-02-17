@@ -6,7 +6,7 @@
             <field name="model_id" ref="model_control_visitas"/>
             <field name="subject">Registro</field>
             <field name="email_from">{{user.email_formatted}}</field>
-            <field name="email_to">alexdreyesmt@gmail.com</field>
+            <field name="email_to">{{user.email_formatted}}</field>
             <field name="email_cc">{{user.email_formatted}}</field>
             <field name="body_html" type="html">
                 <style>
