@@ -117,7 +117,12 @@
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
-                        <h1>Control de Visitas</h1>
+                        <div class="col"
+                             style="margin-top: 28px;margin-left: 88px;height: 48px;">
+                            <h2 class="section-header" style="color:#4a5c9a;">
+                                Control de Visitas
+                            </h2>
+                        </div>
                         <div class="c-dashboardInfo"
                                 id="admin_state">
                             <div class="wrap">
