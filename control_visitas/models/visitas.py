@@ -92,7 +92,7 @@ class Visitas(models.Model):
         }
         
         
-        template.send_mail(visitas.ids, email_values=email_values, force_send=True)
+        template.send_mail(visitas.id, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
         })
