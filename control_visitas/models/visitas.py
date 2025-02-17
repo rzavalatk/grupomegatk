@@ -196,18 +196,18 @@ class Visitas(models.Model):
             """
             html += "</tr>"
             
-        html += """
-                        </tbody>
-                    </table>
-                </div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <div class="footer">
-                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
-                </div>
-            """
+        # html += """
+        #                 </tbody>
+        #             </table>
+        #         </div>
+        #         <br/>
+        #         <br/>
+        #         <br/>
+        #         <br/>
+        #         <div class="footer">
+        #             <span>**** Mensaje automático de Odoo, no responder. ****</span>
+        #         </div>
+        #     """
             
         correo = "alexdreyesmt@gmail.com"
         cc = "alexdreyes@yahoo.es"
