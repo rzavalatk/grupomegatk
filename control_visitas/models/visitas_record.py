@@ -35,39 +35,39 @@ class Visitas_Record(models.Model):
             
         return visitas
     
-    @api.model    
-    def send_email(self, email=None, cc=""):
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
+    # @api.model    
+    # def send_email(self, email=None, cc=""):
+    #     visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
         
-        if not visitas:
-            raise UserError("No hay registros de visitas en esa fecha")
-        else:
-            self.visita_diaria = self.env['control.visitas'].browse([428])
-            _logger.warning(f"Registros encontrados: {visitas}")
+    #     if not visitas:
+    #         raise UserError("No hay registros de visitas en esa fecha")
+    #     else:
+    #         self.visita_diaria = self.env['control.visitas'].browse([428])
+    #         _logger.warning(f"Registros encontrados: {visitas}")
         
-        template = self.env.ref(
-            'control_visitas.email_template_registro_visitas')
-        email_values = {
-            'email_to': email,
-            'email_cc': cc,  
-        }
+    #     template = self.env.ref(
+    #         'control_visitas.email_template_registro_visitas')
+    #     email_values = {
+    #         'email_to': email,
+    #         'email_cc': cc,  
+    #     }
         
         
-        template.send_mail(visitas.ids, email_values=email_values, force_send=True)
-        self.write({
-            'state': 'done'
-        })
-        return True
+    #     template.send_mail(visitas.ids, email_values=email_values, force_send=True)
+    #     self.write({
+    #         'state': 'done'
+    #     })
+    #     return True
     
-    @api.model
-    def datos(self):
-        registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
-        if not registros:
-             raise UserError("No hay registros de visitas en esa fecha ")
+    # @api.model
+    # def datos(self):
+    #     registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
+    #     if not registros:
+    #          raise UserError("No hay registros de visitas en esa fecha ")
          
-        correo = "alexdreyesmt@gmail.com"
+    #     correo = "alexdreyesmt@gmail.com"
         
-        self.send_email(correo)
+    #     self.send_email(correo)
     
     
     
