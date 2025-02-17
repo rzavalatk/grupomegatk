@@ -75,7 +75,7 @@
                             <th>Usuario</th>
                         </thead>
                         <tbody>
-                            {{ctx.get('body')}}
+                           <t t-esc="ctx.get('body')"/>
                         </tbody>
                     </table>
                 </div>
