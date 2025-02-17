@@ -76,10 +76,10 @@ class Visitas(models.Model):
         
     @api.model    
     def send_email(self, email=None, cc=""):
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '=', date.today())])
+        visitas = self.env['control.visitas'].search([('fecha', '=', date.today())])
         
         if not visitas:
-            raise UserError("No hay registros de visitas en esa fecha")
+            raise UserError("No hay registros de visitas en esa fecha 2")
         else:
             visita_diaria = self.env['control.visitas'].browse([428])
             _logger.warning(f"Registros encontrados: {visitas}")
@@ -104,7 +104,7 @@ class Visitas(models.Model):
     def datos(self):
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
         if not registros:
-             raise UserError("No hay registros de visitas en esa fecha ")
+             raise UserError("No hay registros de visitas en esa fecha 1")
          
         correo = "alexdreyesmt@gmail.com"
         
