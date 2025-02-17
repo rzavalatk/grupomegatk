@@ -19,8 +19,9 @@ class ControlVisitasWebsite(http.Controller):
         # visitas_clinica = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Clínica')], limit=1).id
         
+        week = str(dt.date.today() - dt.timedelta(days=3))
         admin = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today())])
+            [('name', '=', 'Visita Administración'), ('fecha', '=', week)])
         admin_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Administración')])
         admin_ls = [data.name for data in admin_name]
