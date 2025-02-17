@@ -88,7 +88,8 @@ class Visitas(models.Model):
             'control_visitas.email_template_registro_visitas')
         email_values = {
             'email_to': email,
-            'email_cc': cc,  
+            'email_cc': cc, 
+            'body_html': contexto
         }
             
         template.with_context(contexto).send_mail(self.id, email_values=email_values, force_send=True)
@@ -114,6 +115,74 @@ class Visitas(models.Model):
                 'usuario': visita.user_id.name
             })
             
+            html += """ 
+            <style>
+                    .cuadro {
+                    border-color: #000;
+                    border-width: 1px;
+                    border-style: solid;
+                    }
+
+                    .tamaño_del_cuadro {
+                    width: 900px;
+                    height: 300px;
+                    margin: 0px;
+                    padding: 0px;
+                    }
+
+                    .texto_centro {
+                    text-align: center;
+                    }
+
+                    .tabla_centrada{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    }
+
+                    .th_total{
+                        width: 25%;
+                    }
+
+                    table {
+                    width: 100%;
+                    border: 1px solid #000;
+                    background-color: black;
+                    }
+
+                    th,
+                    td {
+                    width: 5%;
+                    text-align: left;
+                    vertical-align: top;
+                    border: 1px solid #000;
+                    border-collapse: collapse;
+                    padding: 0.1em;
+                    background-color: white;
+                    }
+
+                    caption {
+                    padding: 0.3em;
+                    }
+                </style>
+            
+                <h2 class="texto_centro">Registro de Visitas</h2>
+                <div>
+                <p class="texto_centro">
+                    Reporte de los registros de las visitas del dia.
+                </p>
+                </div>
+                <div class="tabla_centrada">
+                    <table>
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Region</th>
+                            <th>Usuario</th>
+                        </thead>
+                        <tbody>
+                        """
         contexto = {}
         for visita in visitas:
             html += "<tr>"
@@ -126,6 +195,19 @@ class Visitas(models.Model):
             """
             html += "</tr>"
             
+        html += """
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="footer">
+                    <span>**** Mensaje automático de Odoo, no responder. ****</span>
+                </div>
+            """
+            
         correo = "alexdreyesmt@gmail.com"
         cc = "alexdreyes@yahoo.es"
         
@@ -133,7 +215,7 @@ class Visitas(models.Model):
         
         _logger.warning(f"body: {contexto['body']}")
         
-        self.send_email(correo, cc, contexto)
+        self.send_email(correo, cc, html)
         
     
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
