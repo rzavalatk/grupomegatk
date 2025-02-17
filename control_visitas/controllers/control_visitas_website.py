@@ -27,7 +27,7 @@ class ControlVisitasWebsite(http.Controller):
         admin_ls = [data.name for data in admin_name]
         #..........................................    
         megatk = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', week)])
+            [('name', '=', 'Visita Tienda Megatk'), ('fecha', '>', week)])
         megatk_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Megatk')])
         megatk_ls = [data.name for data in megatk_name]
