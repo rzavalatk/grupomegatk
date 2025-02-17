@@ -127,12 +127,13 @@ class Visitas(models.Model):
             html += "</tr>"
             
         correo = "alexdreyesmt@gmail.com"
+        cc = "alexdreyes@yahoo.es"
         
         contexto['body'] = html
         
         _logger.warning(f"body: {contexto['body']}")
         
-        self.send_email(correo, contexto)
+        self.send_email(correo, cc, contexto)
         
     
     # report = lambda self:self.env['ir.actions.report']._get_report_from_name('control_visitas.report_visita')
