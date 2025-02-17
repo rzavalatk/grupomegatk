@@ -20,31 +20,31 @@ class ControlVisitasWebsite(http.Controller):
         #     [('name', '=', 'Visita Clínica')], limit=1).id
         
         admin = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Administración')])
+            [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today())])
         admin_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Administración')])
         admin_ls = [data.name for data in admin_name]
         #..........................................    
         megatk = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Tienda Megatk')])
+            [('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', dt.date.today())])
         megatk_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Megatk')])
         megatk_ls = [data.name for data in megatk_name]
         #..........................................    
         meditek = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Tienda Meditek')])
+            [('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', dt.date.today())])
         meditek_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Meditek')])
         meditek_ls = [data.name for data in meditek_name]
         #..........................................    
         lenka = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Lenka')])
+            [('name', '=', 'Visita Lenka'), ('fecha', '=', dt.date.today())])
         lenka_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Lenka')])
         lenka_ls = [data.name for data in lenka_name]
         #..........................................    
         clinica = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Clínica')])
+            [('name', '=', 'Visita Clínica'), ('fecha', '=', dt.date.today())])
         clinica_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
