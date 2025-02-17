@@ -81,7 +81,7 @@
                                     <th><t t-out="visita.fecha"/></th>
                                     <th><t t-out="visita.hora"/></th>
                                     <th><t t-out="visita.region"/></th>
-                                    <th><t t-out="visita.user_id"/></th>
+                                    <th><t t-out="visita.user_id.name"/></th>
                                 </tr>
                             </t>
                         </tbody>
