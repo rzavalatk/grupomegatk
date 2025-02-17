@@ -125,7 +125,7 @@
                                 </h1>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end bg-light"
-                             style="margin-top: 20px;margin-right: 20px;">
+                             style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
                                 <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
                                     Filtrar por:
                                 </b>
@@ -140,7 +140,7 @@
                                     <option id="this_week" value="this_week">Por semana
                                     </option>
                                 </select>
-                            </div>
+                        </div>
                         </div>
                         <div class="c-dashboardInfo"
                                 id="admin_state">
