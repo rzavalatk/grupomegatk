@@ -21,13 +21,13 @@ class ControlVisitasWebsite(http.Controller):
         
         week = str(dt.date.today() - dt.timedelta(days=3))
         admin = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Administración'), ('fecha', '=', week)])
+            [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today())])
         admin_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Administración')])
         admin_ls = [data.name for data in admin_name]
         #..........................................    
         megatk = request.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', dt.date.today())])
+            [('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', week)])
         megatk_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Tienda Megatk')])
         megatk_ls = [data.name for data in megatk_name]
