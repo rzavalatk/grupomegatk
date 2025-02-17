@@ -82,7 +82,7 @@ class Visitas(models.Model):
             raise UserError("No hay registros de visitas en esa fecha 2")
         else:
             visita_diaria = self.env['control.visitas'].browse([428])
-            _logger.warning(f"Registros encontrados: {visitas}")
+            _logger.warning(f"Registros encontrados: {visitas.ids}")
         
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
@@ -90,10 +90,7 @@ class Visitas(models.Model):
             'email_to': email,
             'email_cc': cc,  
         }
-        
-        vis = [433, 434, 435, 436, 437]
-        
-        
+            
         template.send_mail(self.ids, email_values=email_values, force_send=True)
         self.write({
             'state': 'done'
