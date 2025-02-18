@@ -11,11 +11,15 @@ class Visitas_Record(models.Model):
     _name = 'registro.visitas'
     _description = 'Modelo de visitas diarias a las sucursales'
     
-    fecha_reporte = fields.Date(string='Fecha Inicial', required=True)
-    fecha_final = fields.Date(string='Fecha Final')
+    fecha_reporte = fields.Date(string='Fecha Inicial:', required=True)
+    fecha_final = fields.Date(string='Fecha Final:')
     def _compute_name(self):
         for record in self:
-            record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
+            if record.fecha_final:
+                record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)} - {str(record.fecha_final)}"
+            else:
+                record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
+                
          
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
