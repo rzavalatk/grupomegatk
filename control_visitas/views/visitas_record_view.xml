@@ -7,7 +7,6 @@
             <field name="arch" type="xml">
                 <tree >
                     <field name="name_reporte" />
-                    <field name="descripcion" />
                     <field name="fecha_reporte" />
                     <field name="fecha_final" />
                 </tree>
@@ -28,7 +27,9 @@
                             </h1>
                         </div>
                         <group>
+                            <field name="descripcion" />
                             <field name="fecha_reporte" />
+                            <field name="fecha_final" />
                         </group>
                         <notebook>
                             <page name="registros" string="Registros">
