@@ -11,7 +11,6 @@ class Visitas_Record(models.Model):
     _name = 'registro.visitas'
     _description = 'Modelo de visitas diarias a las sucursales'
     
-    descripcion = fields.Char(string='Descripcion', default="si solo desea el reporte de un dia solo seleccione la fecha inicial", readonly=True)
     fecha_reporte = fields.Date(string='Fecha', required=True)
     fecha_final = fields.Date(string='Fecha Final')
     def _compute_name(self):
@@ -24,7 +23,11 @@ class Visitas_Record(models.Model):
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
     
     def agrupar_registros(self):
-        visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
+        if self.fecha_final:
+            visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
+        else:
+            visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte)])
+        
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
