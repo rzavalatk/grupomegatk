@@ -10,7 +10,7 @@ var CustomDashboard = AbstractAction.extend({
 
     start: function () {
         var self = this;
-        ajax.rpc('/control_visitas_dia').then(function (result) {
+        ajax.rpc('/control_visitas').then(function (result) {
             self.$el.find("#admin_value").text(result.admin);
             self.$el.find("#meditek_value").text(result.meditek);
             self.$el.find("#lenka_value").text(result.lenka);
