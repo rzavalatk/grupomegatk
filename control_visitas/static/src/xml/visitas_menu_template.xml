@@ -131,16 +131,16 @@
                                 </b>
                                 <select id="filter_selection"
                                         style="width: 50%;padding:10px;border-radius:10px; background:white;">
-                                    <option id="this_year" value="this_year" selected="">
+                                    <option id="this_day" value="this_day" selected="">
                                         Por Dia
                                     </option>
-                                    <option id="this_month" value="this_month">
+                                    <option id="this_week" value="this_week">
                                         Por Semana
                                     </option>
-                                    <option id="this_week" value="this_week">
+                                    <option id="this_month" value="this_month">
                                         Por Mes
                                     </option>
-                                    <option id="this_week" value="this_week">
+                                    <option id="this_year" value="this_year">
                                         Por Año
                                     </option>
                                 </select>
