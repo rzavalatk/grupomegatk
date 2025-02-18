@@ -16,7 +16,10 @@ class Visitas_Record(models.Model):
     def _compute_name(self):
         for record in self:
             if record.fecha_final:
-                record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)} - {str(record.fecha_final)}"
+                if record.fecha_final < record.fecha_reporte:
+                    record.name_reporte = f"Reporte de Visitas"
+                else:
+                    record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)} - {str(record.fecha_final)}"
             else:
                 record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
                 
@@ -28,7 +31,10 @@ class Visitas_Record(models.Model):
     
     def agrupar_registros(self):
         if self.fecha_final:
-            visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
+            if self.fecha_final < self.fecha_reporte:
+                raise UserError("La fecha final debe ser mayor a la fecha inicial")
+            else:
+                visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
         else:
             visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte)])
         
