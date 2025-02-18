@@ -23,7 +23,7 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="name_reporte" style="width: 80%;"/>
+                                <field name="name_reporte" style="width: 80%; font-size: 12px;"/>
                             </h1>
                         </div>
                         <div style="display: flex; flex-direction: column;">
