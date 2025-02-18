@@ -27,9 +27,9 @@
                             </h1>
                         </div>
                         <group>
-                            <div class="">
-                                <p class="">si solo desea el reporte de un dia solo seleccione la fecha inicial</p>
-                            </div>
+                           
+                            <p class="">si solo desea el reporte de un dia solo seleccione la fecha inicial</p>
+                            
                             <field name="fecha_reporte" />
                             <field name="fecha_final" />
                         </group>
