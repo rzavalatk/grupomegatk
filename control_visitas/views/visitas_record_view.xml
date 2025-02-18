@@ -7,7 +7,9 @@
             <field name="arch" type="xml">
                 <tree >
                     <field name="name_reporte" />
+                    <field name="descripcion" />
                     <field name="fecha_reporte" />
+                    <field name="fecha_final" />
                 </tree>
             </field> 
         </record>
