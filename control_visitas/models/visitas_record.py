@@ -89,7 +89,7 @@ class Visitas_Record(models.Model):
               record.fecha,
               record.hora,
               record.region,
-              record.user_id
+              record.user_id.name
               
             )
             for record in self.visita_diaria
