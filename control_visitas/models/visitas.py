@@ -179,7 +179,7 @@ class Visitas(models.Model):
                         """
          
         visitas = []
-        conteo = []
+        conteo = {}
         for visita in registros:
             visitas.append({
                 'nombre': visita.name,
