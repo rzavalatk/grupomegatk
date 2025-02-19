@@ -289,6 +289,10 @@ class Visitas(models.Model):
                         </tbody>
                     </table>
                 </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div class="footer">
                     <span>**** Mensaje automático de Odoo, no responder. ****</span>
                 </div>
