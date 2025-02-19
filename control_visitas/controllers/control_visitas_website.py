@@ -66,7 +66,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route('/control_visitas_dia', type='json', auth='public', website=True)
-    def control_visitas_dashboard(self):
+    def control_visitas_dashboard_dia(self):
         
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
@@ -126,7 +126,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route('/control_visitas_semana', type='json', auth='public', website=True)
-    def control_visitas_dashboard(self):
+    def control_visitas_dashboard_semana(self):
         
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
