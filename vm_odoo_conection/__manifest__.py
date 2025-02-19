@@ -13,7 +13,7 @@
     'depends': ['base', 'hr'],
     'data': [
         "views/add_attributes_view.xml",
-        #"security/ir.model.access.csv"
+        "security/ir.model.access.csv"
     ],
     'installable': True,
     'application': True,
