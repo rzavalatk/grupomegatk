@@ -5,7 +5,6 @@
         <field name="model">attr.employee</field>
         <field name="arch" type="xml">
             <tree string="Editar datos de empleados para VM" editable="top">
-                <field name="name"/>
                 <field name="credit"/>
                 <field name="number_card"/>
                 <field name="available_credit"/>
