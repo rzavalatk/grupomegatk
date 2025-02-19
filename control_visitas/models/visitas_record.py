@@ -4,6 +4,10 @@ from odoo.exceptions import UserError
 from datetime import date
 import logging
 
+import base64
+import io
+from odoo.tools.misc import xlsxwriter
+
 _logger = logging.getLogger(__name__)
 
 
@@ -44,4 +48,100 @@ class Visitas_Record(models.Model):
             self.visita_diaria = visitas
             
         return visitas
-     
+    
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # Crear hojas de Excel
+        worksheet = workbook.add_worksheet('Visitas')
+        
+        #Definir formatos
+        currency_format = workbook.add_format({'num_format': 'L#,##0.00', 'align': 'center'})
+        number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
+        header_format = workbook.add_format({'bold': True, 'align': 'center'})
+        
+        #Funcion para escribir encabezados y datos en una hoja y ajustar el tamano de las columnas
+        def escribir_hoja(worksheet,encabezados, datos, col_widths, formatos):
+            #Ajustar tamanio de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            #Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado, header_format)
+                
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value, formatos[col])
+                row += 1
+                
+        #Encabezados y anchos de columnas
+        encabezados_report_visita = ['Nombre', 'Fecha', 'Hora', 'Región', 'Usuario']
+        col_widths_report_visita = [30, 45, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        formatos_report_visitas = [None, None, None, None, None]  # Formatos para cada columna
+        
+        datos = [
+            (
+              record.name,
+              record.fecha,
+              record.hora,
+              record.region,
+              record.user_id
+              
+            )
+            for record in self.visita_diaria
+        ]
+        
+        #Escribir datos en las hojas correspondientes y ajustar tamanio de las columnas
+        escribir_hoja(worksheet, encabezados_report_visita, datos, col_widths_report_visita, formatos_report_visitas)
+        
+        workbook.close()
+        output.seek(0)
+        
+        #Crear el adjunto
+        if self.fecha_final:
+            attachment = self.env["ir.attachment"].create({
+                'name':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
+                'type':'binary',
+                'datas':base64.b64encode(output.getvalue()),
+                'store_frame':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
+                'mimetype':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            })
+        else:
+            attachment = self.env["ir.attachment"].create({
+                'name':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
+                'type':'binary',
+                'datas':base64.b64encode(output.getvalue()),
+                'store_frame':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
+                'mimetype':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            })
+            
+        #Devolver la accion para descargar el archivo
+        return {
+            'type':'ir.actions.act_url',
+            'url':f'/web/content/{attachment.id}?download=true',
+            'target':'self',
+        }
+                           
+    def generate_excel(self):
+        vals = []
+        for line in self.report_differences:
+            
+            vals.append({
+                'Producto': line.product_id,
+                'Cantidad Inicial': line.quantity_from,
+                'Cantidad Actual': line.quantity_to,
+                'Cantidad movida': line.quantity_difference,
+                'Compañia': self.company_id,
+                'Fecha hace 6 meses': self.date_from,
+                'Fecha actual': self.date_to,
+            })
+        return {
+            'data': vals,
+            'name': self.name
+            }
+        
+    
