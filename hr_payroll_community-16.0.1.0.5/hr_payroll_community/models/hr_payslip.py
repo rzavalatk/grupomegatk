@@ -791,8 +791,6 @@ class HrPayslipLine(models.Model):
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
         result = super(HrPayslipLine, self).write(values)
-        
-        
         return result                
                 
 

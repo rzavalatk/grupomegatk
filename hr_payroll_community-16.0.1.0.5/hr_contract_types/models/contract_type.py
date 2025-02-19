@@ -19,16 +19,6 @@ class ContractInherit(models.Model):
     type_id = fields.Many2one('hr.contract.type', string="Categoria de empleado",
                               required=True, help="Categoria de empleado",
                               default=lambda self: self.env['hr.contract.type'].search([], limit=1))
-    contract_type = fields.Selection(
-        [
-            ('indefinite', 'Indefinido'),
-            ('temporary', 'Temporal'),
-            ('by_project', 'Por proyecto'),
-            ('services', 'Servicios')
-        ],
-        string="Tipo de contrato",
-        required=True
-    )
     #Información bancaria
     bank = fields.Char(string="Banco", help="Banco")
     account_number = fields.Char(string="Cuenta bancaria", help="Cuenta bancaria")
@@ -117,26 +107,6 @@ class ContractInherit(models.Model):
         :param vals: un diccionario de valores para crear un registro en el modelo hr.contract
         :return: El registro recién creado
         """
-        #SE COMENTO EL SIGUIENTE CODIGO PARA EVALUARLO LUEGO EN UNA FORMA DE PAGO 
-        """self.validate_deductions()
-        
-        if not self.struct_id:
-            
-            estructura = self.env['hr.payroll.structure']
-            reglas_salariales = self.env['hr.salary.rule'].search(['rule_base', '=', True])
-            reglas_aplicadas = []
-            
-            for rule in reglas_salariales:
-                if rule.code in ['DED_LLT','SLDBT','SLDNT','DED_CXC']:
-                    reglas_aplicadas.append(rule.id)
-                if vals['social_security'] and rule.code == 'DED_IHSS':
-                    reglas_aplicadas.append(rule.id)
-
-            vals['struct_id'] = estructura.create({
-                'name': 'Estructura de nómina para ' + self.employee_id.name,
-                'code': 'Estructura de nómina para ' + self.employee_id.name,
-                'rule_ids' : [(6, 0, reglas_aplicadas)]
-            })"""
         #VERSION GRATIS DE NOMINA, SOLO PODRA CREAR 10 CONTRATOS
         contratos = self.env['hr.contract'].search([])
         if len(contratos) >= 10:
@@ -149,6 +119,3 @@ class TeleworkDays(models.Model):
     _description = 'Dias de teletrabajo'
 
     name = fields.Char(string="Dia", required=True)
-    
-    
-    

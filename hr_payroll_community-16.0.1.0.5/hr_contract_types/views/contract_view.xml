@@ -10,9 +10,9 @@
                 <field name="type_id"/>
             </xpath>
 
-            <xpath expr="//field[@name='date_end']" position="after">
+            <!--<xpath expr="//field[@name='date_end']" position="after">
                 <field name="contract_type"/>
-            </xpath>
+            </xpath>-->
 
             <xpath expr="//form/sheet/notebook/page[@name='information']/group[@name='salary_info']" position="after">
                 <group>
