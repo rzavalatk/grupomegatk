@@ -94,7 +94,7 @@ var CustomDashboard = AbstractAction.extend({
             })
 
             self.$el.find("#filter_selection").change(function(e) {
-                console.log(e)
+                
                 var target = $(e.target)
                 var value = target.val()
 
@@ -105,7 +105,7 @@ var CustomDashboard = AbstractAction.extend({
                         self.$el.find("#lenka_value").text(result.lenka);
                         self.$el.find("#clinica_value").text(result.clinica);
                         self.$el.find("#megatk_value").text(result.megatk);
-
+                        console.log(e)
                         self.$el.find("#admin_state").click(function () {
                             // Ejecutar el método en el servidor
                             self._rpc({
