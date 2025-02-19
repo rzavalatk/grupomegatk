@@ -4,7 +4,7 @@
         <field name="name">hr.employee.newview.tree</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <tree string="Editar datos de empleados para VM">
+            <tree string="Editar datos de empleados para VM" editable="top">
                 <field name="name"/>
                 <field name="credit"/>
                 <field name="number_card"/>
