@@ -4,8 +4,8 @@ class attributes_employee(models.Model):
     _inherit = "hr.employee"
     _description = "Empleado"
 
-    credit = fields.Float(string ='Credito Semanal', default='100')
+    credit = fields.Float(string ='Credito Semanal', default=100)
     number_card = fields.Integer(string='Número de tarjeta')
-    available_credit = fields.Float(string = 'Credito disponible', default = '0')
+    available_credit = fields.Float(string = 'Credito disponible', default = 0)
 
        
