@@ -63,7 +63,7 @@ class Account_Move(models.Model):
             
             
             # Verifica si el asiento contable es manual ('entry')
-            if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088] and vals.get('line_ids'):
+            if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088]:
                 updated_lines = []
                 for line in vals['line_ids']:
                     _logger.warning(line)
