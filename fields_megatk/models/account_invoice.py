@@ -57,7 +57,11 @@ class Account_Move(models.Model):
                                 raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
-        
+            _logger.warning("Aqui empezamos")
+            _logger.warning(vals.get('move_type'))
+            _logger.warning(vals.get("journal_id"))
+            
+            
             # Verifica si el asiento contable es manual ('entry')
             if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088] and vals.get('line_ids'):
                 updated_lines = []
