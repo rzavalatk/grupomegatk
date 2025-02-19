@@ -66,7 +66,7 @@ class Account_Move(models.Model):
             if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088]:
                 updated_lines = []
                 
-                for line in vals.get('line_ids'):
+                for line in self.line_ids:
                     _logger.warning(line)
                     line_vals = line[2]  # Diccionario con los valores de la línea
                     _logger.warning(line_vals)
