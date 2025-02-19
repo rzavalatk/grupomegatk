@@ -46,8 +46,7 @@ class Account_Move(models.Model):
             term_id = vals.get('invoice_payment_term_id')
             if term_id:
                 term = self.env['account.payment.term'].browse(term_id)
-                _logger.warning(term.line_ids)
-                _logger.warning(term.line_ids.days)
+                
                 if term.line_ids and any(line.days > 0 for line in term.line_ids):
                     partner = self.env['res.partner'].browse(vals.get('partner_id'))
                     if partner:
@@ -63,11 +62,16 @@ class Account_Move(models.Model):
             if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088] and vals.get('line_ids'):
                 updated_lines = []
                 for line in vals['line_ids']:
+                    _logger.warning(line)
                     line_vals = line[2]  # Diccionario con los valores de la línea
+                    _logger.warning(line_vals)
                     if line_vals.get('account_id') in [8672,8670]:
+                        _logger.warning("pase 1")
                         if vals.get('company_id') == 8:
+                            _logger.warning("pase 2")
                             line_vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
                         elif vals.get('company_id') == 9:
+                            _logger.warning("pase 3")
                             line_vals['account_id'] = 2680
                     updated_lines.append((0, 0, line_vals))
                 vals['line_ids'] = updated_lines
@@ -161,17 +165,13 @@ class Account_Move(models.Model):
             if new_pmt_state == 'paid':
                 for move in self:
                     if move.payment_reference:  # Si el campo payment_reference tiene un valor
-                        _logger.warning("Entra al if de payment_reference " + move.payment_reference)
+                        
                         # Buscar el pago relacionado por su referencia
                         time.sleep(1)
                         payment = self.env['account.payment'].search([('ref', '=', move.payment_reference)], limit=1)
-                        _logger.warning(payment)
                         if payment and payment.journal_id.id == 1030:  # Verifica si el diario del pago es el ID 1030
-                            _logger.warning("Entra al if del diario")
                             for line in move.invoice_line_ids:
-                                _logger.warning(f"Precio ID: {line.precio_id.id}")
                                 if line.precio_id.name.id == 1:  # Verifica si el precio_id es igual a 1
-                                    _logger.warning("Condición cumplida, cambiando el comercial.")
                                     # Cambia el comercial al ID 78 usando write
                                     move.write({'invoice_user_id': 60})
                                     break  # Sal del bucle después de aplicar el cambi
