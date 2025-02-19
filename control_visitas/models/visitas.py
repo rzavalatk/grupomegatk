@@ -189,7 +189,7 @@ class Visitas(models.Model):
                 'usuario': visita.user_id.name
             })
             
-        conteo.append({
+        conteo = {
             'admin_TGU': admin_TGU,
             'megatk_TGU': megatk_TGU,
             'meditek_TGU': meditek_TGU,
@@ -200,7 +200,7 @@ class Visitas(models.Model):
             'meditek_SPS': meditek_SPS,
             'lenka_SPS': lenka_SPS,
             'clinica_SPS': clinica_SPS,
-        })
+        }
             
         contexto = {}
         for visita in visitas:
