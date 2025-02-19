@@ -19,7 +19,7 @@
                 <form string="">
                     <header>
                         <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
-                        <button string="Generar Excel" name="exportar_excel" states='aprobado' type="object" class="btn-primary"/>
+                        <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
