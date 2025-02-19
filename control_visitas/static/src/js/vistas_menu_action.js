@@ -94,6 +94,7 @@ var CustomDashboard = AbstractAction.extend({
             })
 
             self.$el.find("#filter_selection").change(function(e) {
+                console.log(e)
                 var target = $(e.target)
                 var value = target.val()
 
@@ -182,7 +183,7 @@ var CustomDashboard = AbstractAction.extend({
                         })
                     })
                 } else if (value = "this_month") {
-                    ajax.rpc('/control_visitas_semana').then(function(result) {
+                    ajax.rpc('/control_visitas_semana').then(function (result) {
                         self.$el.find("#admin_value").text(result.admin);
                         self.$el.find("#meditek_value").text(result.meditek);
                         self.$el.find("#lenka_value").text(result.lenka);
