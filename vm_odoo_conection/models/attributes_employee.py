@@ -4,9 +4,8 @@ class attributes_employee(models.Model):
     _inherit = "hr.employee"
     _description = "Empleado"
 
-    """name = fields.Many2one('hr.employee',string='Nombre')"""
-    credit = fields.Float('Credito')
+    credit = fields.Float(string ='Credito Semanal', default='100')
     number_card = fields.Integer(string='Número de tarjeta')
-    available_credit = fields.Float('Credito disponible')
+    available_credit = fields.Float(string = 'Credito disponible', default = '0')
 
        
