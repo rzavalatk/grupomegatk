@@ -60,12 +60,13 @@ class Account_Move(models.Model):
             _logger.warning("Aqui empezamos")
             _logger.warning(vals.get('move_type'))
             _logger.warning(vals.get("journal_id"))
-            
+            _logger.warning(vals)
             
             # Verifica si el asiento contable es manual ('entry')
             if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088]:
                 updated_lines = []
-                for line in vals['line_ids']:
+                
+                for line in vals.get('line_ids'):
                     _logger.warning(line)
                     line_vals = line[2]  # Diccionario con los valores de la línea
                     _logger.warning(line_vals)
