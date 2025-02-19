@@ -6,12 +6,5 @@
             <field name="res_model">control.visitas</field>
             <field name="view_mode">graph,search</field>
         </record>
-
-        <menuitem
-                id="report_action_menu"
-                name="Graficos"
-                action="control_visitas_report_action"
-                parent="control_visitas_report"
-                sequence="10"/>
     </data>
 </odoo>

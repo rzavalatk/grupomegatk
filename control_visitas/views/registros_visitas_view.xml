@@ -6,13 +6,5 @@
             <field name="res_model">control.visitas</field>
             <field name="view_mode">tree</field>
         </record>
-        
-        <menuitem
-            id="control_registros_menu"
-            name="Historial Completo"
-            action="control_visitas_record_action"
-            parent="control_visitas_record"
-            sequence="10"/>
-    
     </data>
 </odoo>

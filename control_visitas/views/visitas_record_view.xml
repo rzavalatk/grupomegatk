@@ -64,12 +64,5 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem
-            id="registro_visitas_menu"
-            name="Visitas Diarias"
-            action="registro_visitas_action"
-            parent="control_visitas_registro"
-            sequence="10"/>
-
     </data>
 </odoo>

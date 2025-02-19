@@ -6,8 +6,8 @@
             <field name="tag">control_visitas_tag</field>
         </record>
         <menuitem id="control_visitas_menu_root" name="Control de Visitas" action="control_visita_action" web_icon="control_visitas,static/description/control.png" sequence="10"/>
-        <menuitem id="control_visitas_registro" name="Reportes" parent="control_visitas_menu_root" sequence="20"/>
-        <menuitem id="control_visitas_record" name="Registros" parent="control_visitas_menu_root" sequence="30"/>
-        <menuitem id="control_visitas_report" name="Estadisticas" parent="control_visitas_menu_root" sequence="40"/>
+        <menuitem id="control_visitas_registro" name="Reportes" parent="control_visitas_menu_root" action="registro_visitas_action" sequence="20"/>
+        <menuitem id="control_visitas_record" name="Registros" parent="control_visitas_menu_root" action="control_visitas_record_action" sequence="30"/>
+        <menuitem id="control_visitas_report" name="Estadisticas" parent="control_visitas_menu_root" action="control_visitas_report_action" sequence="40"/>
         
 </odoo>

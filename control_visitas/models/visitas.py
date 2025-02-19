@@ -101,7 +101,7 @@ class Visitas(models.Model):
         clinica_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         
         admin_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'SPS')])
-        megatk_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda MegaTK"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        megatk_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Megatk"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         meditek_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         lenka_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Lenka"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         clinica_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'SPS')])
