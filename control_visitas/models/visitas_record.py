@@ -95,6 +95,8 @@ class Visitas_Record(models.Model):
             for record in self.visita_diaria
         ]
         
+        _logger.warning(f'Datos de archivo xlsx {datos}')
+        
         #Escribir datos en las hojas correspondientes y ajustar tamanio de las columnas
         escribir_hoja(worksheet, encabezados_report_visita, datos, col_widths_report_visita, formatos_report_visitas)
         
