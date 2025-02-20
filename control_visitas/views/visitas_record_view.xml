@@ -29,9 +29,6 @@
                             </h1>
                         </div>
                         <div style="display: flex; flex-direction: column;">
-                            <div class="">
-                                <p class="">*Si solo desea generar el reporte de un dia solo seleccione la fecha inicial</p>
-                            </div>
                             <div>
                                 <label for="fecha_reporte"/>
                                 <field name="fecha_reporte" />
@@ -44,7 +41,7 @@
                         <notebook>
                             <page name="registros" string="Registros">
                                 <field name="visita_diaria">
-                                    <tree editable="bottom">
+                                    <tree editable="false">
                                         <field name="name" />
                                         <field name="fecha" />
                                         <field name="hora" />

@@ -39,14 +39,14 @@ class Visitas_Record(models.Model):
         ], default='borrador')
     
     def agrupar_registros(self):
-        if self.fecha_final:
+        if self.fecha_final and self.fecha_reporte:
             if self.fecha_final < self.fecha_reporte:
                 self.write({'state': 'borrador'})
                 raise UserError("La fecha final debe ser mayor a la fecha inicial")
+            elif self.fecha_final == self.fecha_reporte:
+                visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
             else:
-                visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
-        else:
-            visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte)])
+                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
         
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
