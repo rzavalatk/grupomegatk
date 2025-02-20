@@ -90,7 +90,7 @@ class Visitas_Record(models.Model):
                 
         #Encabezados y anchos de columnas
         encabezados_report_visita = ['Nombre', 'Fecha', 'Hora', 'Región', 'Usuario']
-        col_widths_report_visita = [30, 45, 25, 25, 25]  # Ajusta estos valores según sea necesario
+        col_widths_report_visita = [25, 20, 20, 20, 20]  # Ajusta estos valores según sea necesario
         formatos_report_visitas = [None, None, None, None, None]  # Formatos para cada columna
         
         datos = [
