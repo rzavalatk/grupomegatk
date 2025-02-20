@@ -317,22 +317,23 @@ class AccountMoveLine(models.Model):
     nombre_empresa_report = fields.Char(string='referencia de factura/Empresa (Reporte)', compute='_compute_ref_empresa', )
     numero_interno_report = fields.Char(string='referencia de factura/Numero Interno (Reporte)', compute='_compute_ref_empresa', )
     
-    def create(self, vals):
-        # Verifica si la línea pertenece a un asiento contable manual ('entry')
-        _logger.warning("Account move line")
-        _logger.warning(vals.get('move_id'))
-        _logger.warning(vals.get('account_id'))
-        if vals.get('move_id') and vals.get('account_id') in [8672,8670]:
-            _logger.warning("PASE LO DEL MOVE LINE")
-            move = self.env['account.move'].browse(vals['move_id'])
-            if move.move_type == 'entry':
-                if vals.get('company_id') == 8:
-                    _logger.warning("pase 2 SM")
-                    vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
-                elif vals.get('company_id') == 9:
-                    _logger.warning("pase 3 AM")
-                    vals['account_id'] = 2680
-        return super(AccountMoveLine, self).create(vals)
+    def create(self, vals_list):
+        for vals in vals_list:
+            # Verifica si la línea pertenece a un asiento contable manual ('entry')
+            _logger.warning("Account move line")
+            _logger.warning(vals.get('move_id'))
+            _logger.warning(vals.get('account_id'))
+            if vals.get('move_id') and vals.get('account_id') in [8672,8670]:
+                _logger.warning("PASE LO DEL MOVE LINE")
+                move = self.env['account.move'].browse(vals['move_id'])
+                if move.move_type == 'entry':
+                    if vals.get('company_id') == 8:
+                        _logger.warning("pase 2 SM")
+                        vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
+                    elif vals.get('company_id') == 9:
+                        _logger.warning("pase 3 AM")
+                        vals['account_id'] = 2680
+            return super(AccountMoveLine, self).create(vals)
     
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
