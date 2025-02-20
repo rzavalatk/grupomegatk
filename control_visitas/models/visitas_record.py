@@ -20,13 +20,13 @@ class Visitas_Record(models.Model):
 
     def _compute_name(self):
         for record in self:
-            if record.fecha_final:
+            if record.fecha_final and record.fecha_reporte:
                 if record.fecha_final < record.fecha_reporte:
                     record.name_reporte = f"Reporte de Visitas"
-                else:
+                elif record.fecha_final > record.fecha_reporte:
                     record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)} - {str(record.fecha_final)}"
-            else:
-                record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
+                else:
+                    record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
                 
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
