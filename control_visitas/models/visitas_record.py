@@ -113,14 +113,15 @@ class Visitas_Record(models.Model):
         output.seek(0)
         
         #Crear el adjunto
-        if self.fecha_final:
-            attachment = self.env["ir.attachment"].create({
-                'name':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
-                'type':'binary',
-                'datas':base64.b64encode(output.getvalue()),
-                'store_fname':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
-                'mimetype':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            })
+        if self.fecha_final and self.fecha_reporte:
+            if self.fecha_reporte < self.fecha_final:
+                attachment = self.env["ir.attachment"].create({
+                    'name':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
+                    'type':'binary',
+                    'datas':base64.b64encode(output.getvalue()),
+                    'store_fname':f'reporte_control_visitas_{self.fecha_reporte}_{self.fecha_final}.xlsx',
+                    'mimetype':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                })
         else:
             attachment = self.env["ir.attachment"].create({
                 'name':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
