@@ -95,7 +95,7 @@ class Visitas(models.Model):
         html = ""
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
         admin_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'TGU')])
-        megatk_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda MegaTK"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        megatk_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Megatk"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         meditek_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         lenka_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Lenka"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         clinica_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
