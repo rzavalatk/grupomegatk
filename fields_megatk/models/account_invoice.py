@@ -294,6 +294,22 @@ class AccountMoveLine(models.Model):
     nombre_empresa_report = fields.Char(string='referencia de factura/Empresa (Reporte)', compute='_compute_ref_empresa', )
     numero_interno_report = fields.Char(string='referencia de factura/Numero Interno (Reporte)', compute='_compute_ref_empresa', )
     
+    def create(self, vals_list):
+        for vals in vals_list:
+            # ✅ Ignorar cuentas que no sean 8672 o 8670
+            if vals.get('account_id') not in [8672, 8670]:
+                _logger.warning(f"Ignorado account_id: {vals.get('account_id')}")
+                continue
+            move = self.env['account.move'].browse(vals['move_id'])
+            if move.move_type == 'entry':
+                if move.journal_id.id == 1088:  # Caso de Meditek
+                    if vals.get('account_id') == 8672:
+                        vals['account_id'] = 2680
+                elif move.journal_id.id == 1087:
+                    if vals.get('account_id') == 8670:
+                        vals['account_id'] = 2676
+        return super(AccountMoveLine, self).create(vals_list)
+    
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
         for line in self:
