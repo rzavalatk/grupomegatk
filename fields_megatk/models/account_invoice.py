@@ -339,8 +339,8 @@ class AccountMoveLine(models.Model):
                         _logger.warning("se cambio a 2680")
                 elif move.journal_id.id == 1087:
                     if vals.get('account_id') == 8670:
-                        vals['account_id'] = 2680
-                        _logger.warning("cambio a 2680")
+                        vals['account_id'] = 2676
+                        _logger.warning("cambio a 2676")
 
         return super(AccountMoveLine, self).create(vals_list)
 
