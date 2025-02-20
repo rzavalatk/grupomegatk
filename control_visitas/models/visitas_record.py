@@ -41,6 +41,7 @@ class Visitas_Record(models.Model):
     def agrupar_registros(self):
         if self.fecha_final:
             if self.fecha_final < self.fecha_reporte:
+                self.write({'state': 'borrador'})
                 raise UserError("La fecha final debe ser mayor a la fecha inicial")
             else:
                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
@@ -52,6 +53,8 @@ class Visitas_Record(models.Model):
         else:
             self.visita_diaria = visitas
             
+        self.write({'state': 'aprobado'})
+                    
         return visitas
     
     def exportar_excel(self):
