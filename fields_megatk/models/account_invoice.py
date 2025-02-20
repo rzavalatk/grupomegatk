@@ -327,6 +327,7 @@ class AccountMoveLine(models.Model):
                 _logger.warning("PASE LO DEL MOVE LINE")
                 move = self.env['account.move'].browse(vals['move_id'])
                 if move.move_type == 'entry':
+                    _logger.warning("entre al move type")
                     if vals.get('company_id') == 8:
                         _logger.warning("pase 2 SM")
                         vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
