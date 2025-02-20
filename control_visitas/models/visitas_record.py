@@ -27,11 +27,16 @@ class Visitas_Record(models.Model):
             else:
                 record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
                 
-         
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     
     visita_diaria = fields.One2many('control.visitas', 'registro_visita', string='Registro Visitas')
+    
+    state = fields.Selection([
+        ('borrador', 'Borrador'),
+        ('aprobado', 'Aprobado'),
+        ('rechazado', 'Rechazado'),
+        ], default='borrador')
     
     def agrupar_registros(self):
         if self.fecha_final:
@@ -90,7 +95,6 @@ class Visitas_Record(models.Model):
               record.hora,
               record.region,
               record.user_id.name
-              
             )
             for record in self.visita_diaria
         ]
