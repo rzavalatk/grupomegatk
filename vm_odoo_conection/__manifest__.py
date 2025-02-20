@@ -12,8 +12,9 @@
     'version': '0.1',
     'depends': ['base', 'hr'],
     'data': [
-        "views/add_attributes_view.xml",
+        #"views/add_attributes_view.xml",
         #"security/ir.model.access.csv"
+        "views/view_vending_machine.xml"
     ],
     'installable': True,
     'application': True,
