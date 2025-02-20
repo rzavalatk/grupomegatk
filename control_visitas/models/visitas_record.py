@@ -27,6 +27,8 @@ class Visitas_Record(models.Model):
                     record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)}"
                 else:
                     record.name_reporte = f"Reporte de Visitas {str(record.fecha_reporte)} - {str(record.fecha_final)}"
+            else:
+                record.name_reporte = f"Reporte de Visitas"
                 
     name_reporte = fields.Char(string='Reporte', compute='_compute_name')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
