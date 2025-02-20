@@ -36,7 +36,6 @@ class Visitas_Record(models.Model):
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
-        ('rechazado', 'Rechazado'),
         ], default='borrador')
     
     def agrupar_registros(self):

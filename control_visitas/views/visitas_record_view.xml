@@ -44,7 +44,7 @@
                         <notebook>
                             <page name="registros" string="Registros">
                                 <field name="visita_diaria">
-                                    <tree>
+                                    <tree editable="bottom">
                                         <field name="name" />
                                         <field name="fecha" />
                                         <field name="hora" />
