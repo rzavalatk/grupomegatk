@@ -337,7 +337,7 @@ class AccountMoveLine(models.Model):
                         if vals.get('account_id') == 8670:
                             vals['account_id'] = 2680
                             _logger.warning("cambio a 2680")    
-            return super(AccountMoveLine, self).create(vals)
+        return super(AccountMoveLine, self).create(vals)
     
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
