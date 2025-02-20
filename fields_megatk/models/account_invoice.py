@@ -321,6 +321,7 @@ class AccountMoveLine(models.Model):
         for vals in vals_list:
             # Verifica si la línea pertenece a un asiento contable manual ('entry')
             _logger.warning("Account move line")
+            _logger.warning(vals)
             _logger.warning(vals.get('move_id'))
             _logger.warning(vals.get('account_id'))
             if vals.get('move_id') and vals.get('account_id') in [8672,8670]:
