@@ -319,25 +319,31 @@ class AccountMoveLine(models.Model):
     
     def create(self, vals_list):
         for vals in vals_list:
-            # Verifica si la línea pertenece a un asiento contable manual ('entry')
             _logger.warning("Account move line")
             _logger.warning(vals)
             _logger.warning(vals.get('move_id'))
             _logger.warning(vals.get('account_id'))
-            if vals.get('move_id') and vals.get('account_id') in [8672,8670]:
-                _logger.warning("PASE LO DEL MOVE LINE")
-                move = self.env['account.move'].browse(vals['move_id'])
-                if move.move_type == 'entry':
-                    _logger.warning("entre al move type")
-                    if move.journal_id == 1088: #Caso de Meditek
-                        if vals.get('account_id') == 8672:
-                            vals['account_id'] = 2680
-                            _logger.warning("se cambio a 2680")    
-                    elif move.journal_id == 1087:
-                        if vals.get('account_id') == 8670:
-                            vals['account_id'] = 2680
-                            _logger.warning("cambio a 2680")    
-        return super(AccountMoveLine, self).create(vals)
+
+            # ✅ Ignorar cuentas que no sean 8672 o 8670
+            if vals.get('account_id') not in [8672, 8670]:
+                _logger.warning(f"Ignorado account_id: {vals.get('account_id')}")
+                continue
+
+            _logger.warning("PASE LO DEL MOVE LINE")
+            move = self.env['account.move'].browse(vals['move_id'])
+            if move.move_type == 'entry':
+                _logger.warning("entre al move type")
+                if move.journal_id.id == 1088:  # Caso de Meditek
+                    if vals.get('account_id') == 8672:
+                        vals['account_id'] = 2680
+                        _logger.warning("se cambio a 2680")
+                elif move.journal_id.id == 1087:
+                    if vals.get('account_id') == 8670:
+                        vals['account_id'] = 2680
+                        _logger.warning("cambio a 2680")
+
+        return super(AccountMoveLine, self).create(vals_list)
+
     
     @api.depends('move_id.invoice_origin')
     def _compute_responsable_cotizacion(self):
