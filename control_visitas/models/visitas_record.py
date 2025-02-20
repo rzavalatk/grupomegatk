@@ -124,7 +124,7 @@ class Visitas_Record(models.Model):
                 'name':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
                 'type':'binary',
                 'datas':base64.b64encode(output.getvalue()),
-                'store_frame':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
+                'store_fname':f'reporte_control_visitas_{self.fecha_reporte}.xlsx',
                 'mimetype':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             })
             
