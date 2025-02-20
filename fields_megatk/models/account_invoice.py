@@ -329,12 +329,14 @@ class AccountMoveLine(models.Model):
                 move = self.env['account.move'].browse(vals['move_id'])
                 if move.move_type == 'entry':
                     _logger.warning("entre al move type")
-                    if vals.get('company_id') == 8:
-                        _logger.warning("pase 2 SM")
-                        vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
-                    elif vals.get('company_id') == 9:
-                        _logger.warning("pase 3 AM")
-                        vals['account_id'] = 2680
+                    if move.journal_id == 1088: #Caso de Meditek
+                        if vals.get('account_id') == 8672:
+                            vals['account_id'] = 2680
+                            _logger.warning("se cambio a 2680")    
+                    elif move.journal_id == 1087:
+                        if vals.get('account_id') == 8670:
+                            vals['account_id'] = 2680
+                            _logger.warning("cambio a 2680")    
             return super(AccountMoveLine, self).create(vals)
     
     @api.depends('move_id.invoice_origin')
