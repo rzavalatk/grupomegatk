@@ -20,6 +20,7 @@
                     <header>
                         <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
                         <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador, aporbado, rechazado"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
