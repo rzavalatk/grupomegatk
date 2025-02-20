@@ -16,7 +16,7 @@ class Visitas_Record(models.Model):
     _description = 'Modelo de visitas diarias a las sucursales'
     
     fecha_reporte = fields.Date(string='Fecha Inicial:', required=True, readonly=True,  states={'borrador': [('readonly', False)]})
-    fecha_final = fields.Date(string='Fecha Final:', readonly=True, states={'borrador': [('readonly', False)]})
+    fecha_final = fields.Date(string='Fecha Final:', required=True, readonly=True, states={'borrador': [('readonly', False)]})
 
     def _compute_name(self):
         for record in self:
