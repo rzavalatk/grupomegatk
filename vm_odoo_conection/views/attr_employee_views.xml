@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista de árbol para attr.employee -->
+    <record id="view_employee_tree_new" model="ir.ui.view">
+        <field name="name">attr.employee.tree</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree string="Empleados">
+                <field name="name"/>
+                <field name="credito"/>
+                <field name="credito_disponible"/>
+                <field name="numero_tarjeta"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir la vista de árbol -->
+    <record id="action_open_view_employee_tree_new" model="ir.actions.act_window">
+        <field name="name">Vending Compras</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_employee_tree_new"/>
+    </record>
+
+    <!-- Menú principal -->
+    <menuitem
+        id="menu_hr_vm"
+        name="Vending machine"
+        sequence="45"
+        parent="hr.menu_hr_root"/>
+
+    <!-- Submenú que abre la vista de árbol -->
+    <menuitem
+        id="model_name_menu"
+        name="vending compras"
+        action="action_open_view_employee_tree_new"
+        sequence="2"
+        parent="menu_hr_vm"/>
+</odoo>

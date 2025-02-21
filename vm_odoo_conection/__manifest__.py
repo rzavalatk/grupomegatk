@@ -14,7 +14,8 @@
     'data': [
         #"views/add_attributes_view.xml",
         #"security/ir.model.access.csv"
-        "views/view_vending_machine.xml"
+        #"views/view_vending_machine.xml"
+        "views/attr_employee_views.xml"
     ],
     'installable': True,
     'application': True,

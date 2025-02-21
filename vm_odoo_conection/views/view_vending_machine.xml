@@ -3,7 +3,7 @@
 
     <record id="inherit_view_vending_machine" model="ir.ui.view">
         <field name="name">hr.employee.base.inherit.vending</field>
-        <field name="model">attr.employee</field>
+        <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
             <tree string = "Editar datos de empleados para VM" editable="top">
@@ -16,7 +16,7 @@
     </record>
      <record id="new_credit_view" model="ir.actions.act_window">
             <field name="name">Credito vending machine</field>
-            <field name="res_model">hr.employee.base</field>
+            <field name="res_model">hr.employee</field>
             <field name="view_mode">tree</field>
         </record>
     <menuitem
