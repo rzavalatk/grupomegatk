@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Vista de árbol para attr.employee -->
-    <record id="view_employee_tree_new" model="ir.ui.view">
-        <field name="name">attr.employee.tree</field>
+    <!-- Nueva vista de árbol para la Vending Machine -->
+    <record id="view_vending_employee_tree" model="ir.ui.view">
+        <field name="name">vending.employee.tree</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <tree string="Empleados">
+            <tree string="Vending Compras">
                 <field name="name"/>
                 <field name="credito"/>
                 <field name="credito_disponible"/>
@@ -14,12 +14,14 @@
         </field>
     </record>
 
-    <!-- Acción para abrir la vista de árbol -->
-    <record id="action_open_view_employee_tree_new" model="ir.actions.act_window">
+    <!-- Acción para abrir la nueva vista de árbol -->
+    <record id="action_open_vending_employee_tree" model="ir.actions.act_window">
         <field name="name">Vending Compras</field>
         <field name="res_model">hr.employee</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_employee_tree_new"/>
+        <field name="view_id" ref="view_vending_employee_tree"/>
+        <field name="context">{'search_default_filter_employees': 1}</field>
+        <field name="domain">[]</field>
     </record>
 
     <!-- Menú principal -->
@@ -29,11 +31,11 @@
         sequence="45"
         parent="hr.menu_hr_root"/>
 
-    <!-- Submenú que abre la vista de árbol -->
+    <!-- Submenú que abre la nueva vista de árbol -->
     <menuitem
         id="model_name_menu"
         name="vending compras"
-        action="action_open_view_employee_tree_new"
+        action="action_open_vending_employee_tree"
         sequence="2"
         parent="menu_hr_vm"/>
 </odoo>
