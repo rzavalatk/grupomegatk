@@ -18,8 +18,9 @@
             <field name="arch" type="xml">
                 <form string="">
                     <header>
-                        <button string="Agrupar Registros" name="agrupar_registros" type="object" class="oe_highlight"/>
-                        <button string="Generar Excel" name="exportar_excel" type="object" class="btn-primary"/>
+                        <button string="Agrupar Registros" name="agrupar_registros" states="borrador" type="object" class="oe_highlight"/>
+                        <button string="Generar Excel" name="exportar_excel" states="aprobado" type="object" class="btn-primary"/>
+                        <button string="Editar Reporte" name="editar_reporte" states="aprobado" type="object" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="borrador, aporbado, rechazado"/>
                     </header>
                     <sheet>

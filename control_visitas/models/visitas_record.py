@@ -59,6 +59,9 @@ class Visitas_Record(models.Model):
                     
         return visitas
     
+    def editar_reporte(self):
+        self.write({'state': 'borrador'})
+    
     def exportar_excel(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
