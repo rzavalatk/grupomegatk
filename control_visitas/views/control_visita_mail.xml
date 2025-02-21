@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="visitas_diarias_send_email" model="ir.cron">
+            <field name="name">visitas.diarias.send.email</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="datetime.now(pytz.timezone('America/Tegucigalpa')).strftime('%Y-%m-%d 21:59:59')" />
+            <field ref="control_visitas.model_control_visitas" name="model_id" />
+            <field name="state">code</field>
+            <field name="code">
+            model.datos()
+            </field>
+            <field eval="False" name="doall"/>
+            <!--<field name="function">True</field>-->
+        </record>
+    </data>
+</odoo>

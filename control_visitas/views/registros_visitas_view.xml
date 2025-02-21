@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="control_visitas_record_action" model="ir.actions.act_window">
+            <field name="name">Registros de Visitas</field>
+            <field name="res_model">control.visitas</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</odoo>
