@@ -45,7 +45,7 @@ class Visitas(models.Model):
                 zona_horaria = pytz.timezone(zona_horaria_usuario)
             
             hora_local = hora_utc.astimezone(zona_horaria).strftime('%H:%M:%S')
-            _logger.warning(f"Hora local: {zona_horaria}")
+            _logger.warning(f"Hora local: {zona_horaria_usuario}")
             record.hora = hora_local
  
     @api.model
