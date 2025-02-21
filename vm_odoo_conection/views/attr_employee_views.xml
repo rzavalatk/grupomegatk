@@ -9,7 +9,7 @@
                 <field name="name"/>
                 <field name="credito"/>
                 <field name="credito_disponible"/>
-                <field name="numero_tarjeta"/>
+                <field name="numero_tarjeta" class="text-right"/>
             </tree>
         </field>
     </record>
