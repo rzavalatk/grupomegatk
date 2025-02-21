@@ -43,11 +43,11 @@
                             <page name="registros" string="Registros">
                                 <field name="visita_diaria">
                                     <tree editable="false" create="false" delete="false">
-                                        <field name="name" />
+                                        <field readonly='1' name="name" />
                                         <field name="fecha" />
                                         <field name="hora" />
                                         <field name="region" />
-                                        <field name="user_id" />  
+                                        <field readonly='1' name="user_id" />  
                                     </tree>
                                 </field>
                             </page>
