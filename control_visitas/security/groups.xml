@@ -15,7 +15,7 @@
         <record id="module_category_visitas" model="ir.module.category">
             <field name="name">Modulo de visitas</field>
             <field name="description">Modulo de visitas</field>
-            <field name="sequence">10</field>
+            <field name="sequence">5</field>
         </record>
 
         <record id="visitas_manager" model="res.groups">
