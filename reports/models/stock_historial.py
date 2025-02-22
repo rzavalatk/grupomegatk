@@ -64,18 +64,19 @@ class StockReportHistory(models.Model):
         productos = self.env['product.product'].search([])
         inventario = []
         
-        if date.today() == date_report:
+        if date.today() == date_report.date():
             for producto in productos:
                 if producto.active:
                     if producto.detailed_type not in ['consu','service']:
                         if producto.list_price > 0:
                             self.product_list.append(producto.id)
                             inventario[producto.id] = producto.qty_available
-                            _logger.warning("Aqui ando, hoy es el dia")
-                            
+            
+            _logger.warning("Aqui ando, hoy es el dia")                
             products_idsg = [[product_id, quantity] for product_id, quantity in inventario.items()]
         else:
             #Diccionario para acumular las cantidades por producto
+            _logger.warning("Aqui no entro")
             product_quantities = {}
             products_idsg = []
             #Recorre todos los movimientos y acumula las cantidades en el diccionario
