@@ -57,30 +57,7 @@ class Account_Move(models.Model):
                                 raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
-            _logger.warning("Aqui empezamos")
-            _logger.warning(vals.get('move_type'))
-            _logger.warning(vals.get("journal_id"))
-            _logger.warning(vals)
             
-            # Verifica si el asiento contable es manual ('entry')
-            if vals.get('move_type') == 'entry' and vals.get("journal_id") in [1087,1088]:
-                updated_lines = []
-                
-                for line in self.line_ids:
-                    _logger.warning(line)
-                    line_vals = line[2]  # Diccionario con los valores de la línea
-                    _logger.warning(line_vals)
-                    if line_vals.get('account_id') in [8672,8670]:
-                        _logger.warning("pase 1")
-                        if vals.get('company_id') == 8:
-                            _logger.warning("pase 2")
-                            line_vals['account_id'] = 2676  # Cambia a la cuenta a pendiente de deposito
-                        elif vals.get('company_id') == 9:
-                            _logger.warning("pase 3")
-                            line_vals['account_id'] = 2680
-                    updated_lines.append((0, 0, line_vals))
-                vals['line_ids'] = updated_lines
-        
         return super().create(vals_list)
     
     
@@ -319,29 +296,18 @@ class AccountMoveLine(models.Model):
     
     def create(self, vals_list):
         for vals in vals_list:
-            _logger.warning("Account move line")
-            _logger.warning(vals)
-            _logger.warning(vals.get('move_id'))
-            _logger.warning(vals.get('account_id'))
-
             # ✅ Ignorar cuentas que no sean 8672 o 8670
             if vals.get('account_id') not in [8672, 8670]:
                 _logger.warning(f"Ignorado account_id: {vals.get('account_id')}")
                 continue
-
-            _logger.warning("PASE LO DEL MOVE LINE")
             move = self.env['account.move'].browse(vals['move_id'])
             if move.move_type == 'entry':
-                _logger.warning("entre al move type")
                 if move.journal_id.id == 1088:  # Caso de Meditek
                     if vals.get('account_id') == 8672:
                         vals['account_id'] = 2680
-                        _logger.warning("se cambio a 2680")
                 elif move.journal_id.id == 1087:
                     if vals.get('account_id') == 8670:
                         vals['account_id'] = 2676
-                        _logger.warning("cambio a 2676")
-
         return super(AccountMoveLine, self).create(vals_list)
 
     

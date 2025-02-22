@@ -1,7 +1,7 @@
 from itertools import groupby
 
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, date
 import time
 
 import base64
@@ -54,33 +54,45 @@ class StockReportHistory(models.Model):
         self.write({'state': 'aprobado'})
 
 
-    def _generate_report_lines(self, date, field_name):
+    def _generate_report_lines(self, date_report, field_name):
 
         StockQuant = self.env['stock.valuation.layer']
 
         quants = StockQuant.search(['&',
-                                    ('create_date', '<=', date),
+                                    ('create_date', '<=', date_report),
                                     ('company_id', '=', self.company_id.id)])
+        productos = self.env['product.product'].search([])
+        inventario = []
+        
+        if date.today() == date_report:
+            for producto in productos:
+                if producto.active:
+                    if producto.detailed_type not in ['consu','service']:
+                        if producto.list_price > 0:
+                            self.product_list.append(producto.id)
+                            inventario[producto.id] = producto.qty_available
+                            
+            products_idsg = [[product_id, quantity] for product_id, quantity in inventario.items()]
+        else:
+            #Diccionario para acumular las cantidades por producto
+            product_quantities = {}
+            products_idsg = []
+            #Recorre todos los movimientos y acumula las cantidades en el diccionario
+            for quant in quants:
+                if quant.product_id.active:
+                    if quant.product_id.detailed_type not in ['consu','service']:
+                        if quant.product_id.list_price > 0:
+                            product_id = quant.product_id.id
+                            quantity = quant.quantity
 
-        # Diccionario para acumular las cantidades por producto
-        product_quantities = {}
-        products_idsg = []
-        # Recorre todos los movimientos y acumula las cantidades en el diccionario
-        for quant in quants:
-            if quant.product_id.active:
-                if quant.product_id.detailed_type not in ['consu','service']:
-                    if quant.product_id.list_price > 0:
-                        product_id = quant.product_id.id
-                        quantity = quant.quantity
+                            if product_id in product_quantities:
+                                product_quantities[product_id] += quantity
+                            else:
+                                product_quantities[product_id] = quantity
+                                self.product_list.append(quant.product_id)
 
-                        if product_id in product_quantities:
-                            product_quantities[product_id] += quantity
-                        else:
-                            product_quantities[product_id] = quantity
-                            self.product_list.append(quant.product_id)
-
-        # Transforma el diccionario en la lista self.products_idsg
-        products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
+            # Transforma el diccionario en la lista self.products_idsg
+            products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
 
         #_logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
 
