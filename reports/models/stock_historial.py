@@ -69,7 +69,7 @@ class StockReportHistory(models.Model):
                 if producto.active:
                     if producto.detailed_type not in ['consu','service']:
                         if producto.list_price > 0:
-                            self.product_list.append(producto.id)
+                            self.product_list.append(producto)
                             inventario[producto.id] = producto.qty_available
             
             _logger.warning("Aqui ando, hoy es el dia")                
