@@ -16,7 +16,7 @@ class Visitas(models.Model):
     hora = fields.Char(string='Hora', compute='_compute_hora', store=True)
     region = fields.Char(string='Region', compute='_compute_region', store=True)
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
-    
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     registro_visita = fields.Many2one('registro.visitas', string='Visitas Diarias')
     
     @api.depends('user_id')
