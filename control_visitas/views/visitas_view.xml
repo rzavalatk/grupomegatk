@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="control_visitas_view_tree" model="ir.ui.view">
+    <field name="name">control.visitas.view.tree</field>
+    <field name="model">control.visitas</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+            <field name="fecha"/>
+            <field name="hora"/>
+            <field name="region"/>
+        </tree>
+    </field>
+</record>
+</odoo>
