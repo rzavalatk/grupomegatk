@@ -71,6 +71,7 @@ class StockReportHistory(models.Model):
                         if producto.list_price > 0:
                             self.product_list.append(producto.id)
                             inventario[producto.id] = producto.qty_available
+                            _logger.warning("Aqui ando, hoy es el dia")
                             
             products_idsg = [[product_id, quantity] for product_id, quantity in inventario.items()]
         else:
