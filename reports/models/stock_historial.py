@@ -62,7 +62,7 @@ class StockReportHistory(models.Model):
                                     ('create_date', '<=', date_report),
                                     ('company_id', '=', self.company_id.id)])
         productos = self.env['product.product'].search([])
-        inventario = []
+        inventario = {}
         
         if date.today() == date_report.date():
             for producto in productos:
