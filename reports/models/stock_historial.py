@@ -93,7 +93,9 @@ class StockReportHistory(models.Model):
             products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
             
         if field_name == 'report_lines_from':
-            self.product_list_1 = products_idsg
+
+            for lines_product in products_idsg:
+                self.product_list_1.append([lines_product[0], lines_product[1]])
             
             if len(products_idsg) >= 1:
                 lines = []
