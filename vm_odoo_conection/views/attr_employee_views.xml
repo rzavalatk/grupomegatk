@@ -6,8 +6,8 @@
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
             <tree string="Vending Compras" editable = "top">
-                <field name="name"/>
-                <field name="credito"/>
+                <field name="name" readonly="1"/>
+                <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
                 <field name="numero_tarjeta" class="text-right"/>
             </tree>
