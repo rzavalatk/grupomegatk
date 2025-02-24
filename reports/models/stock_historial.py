@@ -43,6 +43,7 @@ class StockReportHistory(models.Model):
         'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
     
     product_list = []
+    product_list_1 = []
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
