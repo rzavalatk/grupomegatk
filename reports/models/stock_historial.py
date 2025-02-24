@@ -21,8 +21,6 @@ class StockReportHistory(models.Model):
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-   
-
     name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
@@ -34,7 +32,6 @@ class StockReportHistory(models.Model):
         ('rechazado', 'Rechazado'),
         ], default='borrador')
     
-
     report_lines_from = fields.One2many(
         'stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
     report_lines_to = fields.One2many(
@@ -43,6 +40,7 @@ class StockReportHistory(models.Model):
         'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
     
     product_list = []
+    product_list_1 = []
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
@@ -71,12 +69,10 @@ class StockReportHistory(models.Model):
                         if producto.list_price > 0:
                             self.product_list.append(producto)
                             inventario[producto.id] = producto.qty_available
-            
-            _logger.warning("Aqui ando, hoy es el dia")                
+                            
             products_idsg = [[product_id, quantity] for product_id, quantity in inventario.items()]
         else:
             #Diccionario para acumular las cantidades por producto
-            _logger.warning("Aqui no entro")
             product_quantities = {}
             products_idsg = []
             #Recorre todos los movimientos y acumula las cantidades en el diccionario
@@ -95,20 +91,36 @@ class StockReportHistory(models.Model):
 
             # Transforma el diccionario en la lista self.products_idsg
             products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
-
-        #_logger.warning("tamaño de products idsg: " + str(len(products_idsg)))
-
-        if len(products_idsg) >= 1:
             
+        if field_name == 'report_lines_from':
+            self.product_list_1 = products_idsg
+            
+            if len(products_idsg) >= 1:
+                lines = []
+                for line_product in products_idsg:
+                    lines.append((0, 0, {
+                        'product_id': line_product[0],
+                        'quantity': line_product[1],
+                    }))
 
-            lines = []
-            for line_product in products_idsg:
-                lines.append((0, 0, {
-                    'product_id': line_product[0],
-                    'quantity': line_product[1],
-                }))
+                self.write({field_name: lines})
+        
+        if field_name == 'report_lines_to':
+            orden_referencia = [item[0] for item in self.product_list_1]
+            products_idsg_ordenado = sorted(
+                products_idsg,
+                key=lambda x: orden_referencia.index(x[0]) if x[0] in orden_referencia else len(orden_referencia)
+            )
+            if len(products_idsg_ordenado) >= 1:
+                lines = []
+                for line_product in products_idsg_ordenado:
+                    lines.append((0, 0, {
+                        'product_id': line_product[0],
+                        'quantity': line_product[1],
+                    }))
 
-            self.write({field_name: lines})
+                self.write({field_name: lines})
+        
 
     def _calculate_differences(self):
         self.ensure_one()
