@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <data>
+        <record id="group_control_visitas" model="res.groups">
+            <field name="name">Control de Visitas</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]" />
+        </record>
+
+        <record id="group_registro_visitas" model="res.groups">
+            <field name="name">Registro de Visitas</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]" />
+        </record>
+    </data> -->
+    <data>
+        <record id="module_category_control_visitas" model="ir.module.category">
+            <field name="name">Control de Visitas</field>
+            <field name="description">Control de Visitas</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="visitas_manager" model="res.groups">
+            <field name="category_id" ref="module_category_control_visitas" />
+            <field name="name">Registro Visitas</field>
+        </record>
+
+        <record id="registros_manager" model="res.groups">
+            <field name="category_id" ref="module_category_control_visitas" />
+            <field name="name">Reportes Visitas</field>
+        </record>
+    
+    </data>
+    
+</odoo>
