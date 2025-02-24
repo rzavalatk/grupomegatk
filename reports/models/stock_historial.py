@@ -59,7 +59,7 @@ class StockReportHistory(models.Model):
         quants = StockQuant.search(['&',
                                     ('create_date', '<=', date_report),
                                     ('company_id', '=', self.company_id.id)])
-        productos = self.env['product.product'].search(['company_id', '=', self.company_id.id])
+        productos = self.env['product.product'].search([('company_id', '=', self.company_id.id)])
         inventario = {}
         
         if date.today() == date_report.date():
