@@ -49,6 +49,24 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
         #..........................................    
+        gerencia = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Gerencia'), ('fecha', '=', dt.date.today())])
+        gerencia_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Gerencia')])
+        gerencia_ls = [data.name for data in gerencia_name]
+        #..........................................    
+        soporte = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Soporte'), ('fecha', '=', dt.date.today())])
+        soporte_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Soporte')])
+        soporte_ls = [data.name for data in soporte_name]
+        #..........................................    
+        otros = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Otros'), ('fecha', '=', dt.date.today())])
+        otros_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Otros')])
+        otros_ls = [data.name for data in otros_name]
+        #..........................................    
            
         dashboard_values = {
                 'admin': admin,
@@ -56,11 +74,17 @@ class ControlVisitasWebsite(http.Controller):
                 'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
+                'gerencia': gerencia,
+                'soporte': soporte,
+                'otros': otros,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
                 'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
+                'gerencia_name': gerencia_ls,
+                'soporte_name': soporte_ls,
+                'otros_name': otros_ls
             }
         
         return dashboard_values    
@@ -109,6 +133,24 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
         #..........................................    
+        gerencia = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Gerencia'), ('fecha', '=', dt.date.today())])
+        gerencia_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Gerencia')])
+        gerencia_ls = [data.name for data in gerencia_name]
+        #..........................................    
+        soporte = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Soporte'), ('fecha', '=', dt.date.today())])
+        soporte_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Soporte')])
+        soporte_ls = [data.name for data in soporte_name]
+        #..........................................    
+        otros = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Otros'), ('fecha', '=', dt.date.today())])
+        otros_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Otros')])
+        otros_ls = [data.name for data in otros_name]
+        #..........................................    
            
         dashboard_values = {
                 'admin': admin,
@@ -116,11 +158,17 @@ class ControlVisitasWebsite(http.Controller):
                 'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
+                'gerencia': gerencia,
+                'soporte': soporte,
+                'otros': otros,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
                 'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
+                'gerencia_name': gerencia_ls,
+                'soporte_name': soporte_ls,
+                'otros_name': otros_ls
             }
         
         return dashboard_values    
@@ -172,6 +220,24 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
         #..........................................    
+        gerencia = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Gerencia'), ('fecha', '>', semana)])
+        gerencia_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Gerencia')])
+        gerencia_ls = [data.name for data in gerencia_name]
+        #..........................................    
+        soporte = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Soporte'), ('fecha', '>', semana)])
+        soporte_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Soporte')])
+        soporte_ls = [data.name for data in soporte_name]
+        #..........................................    
+        otros = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Otros'), ('fecha', '>', semana)])
+        otros_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Otros')])
+        otros_ls = [data.name for data in otros_name]
+        #..........................................    
            
         dashboard_values = {
                 'admin': admin,
@@ -179,16 +245,22 @@ class ControlVisitasWebsite(http.Controller):
                 'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
+                'gerencia': gerencia,
+                'soporte': soporte,
+                'otros': otros,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
                 'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
+                'gerencia_name': gerencia_ls,
+                'soporte_name': soporte_ls,
+                'otros_name': otros_ls
             }
         
         return dashboard_values    
     
-    @http.route('/control_visitas_semana', type='json', auth='public', website=True)
+    @http.route('/control_visitas_mes', type='json', auth='public', website=True)
     def control_visitas_dashboard_mes(self):
         
         # visitas_admin = request.env['control.visitas'].search(
@@ -234,6 +306,24 @@ class ControlVisitasWebsite(http.Controller):
         clinica_name = request.env["control.visitas"].search(
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
+      #..........................................    
+        gerencia = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Gerencia'), ('fecha', '>', mes)])
+        gerencia_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Gerencia')])
+        gerencia_ls = [data.name for data in gerencia_name]
+        #..........................................    
+        soporte = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Soporte'), ('fecha', '>', mes)])
+        soporte_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Soporte')])
+        soporte_ls = [data.name for data in soporte_name]
+        #..........................................    
+        otros = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Otros'), ('fecha', '>', mes)])
+        otros_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Otros')])
+        otros_ls = [data.name for data in otros_name]
         #..........................................    
            
         dashboard_values = {
@@ -242,16 +332,22 @@ class ControlVisitasWebsite(http.Controller):
                 'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
+                'gerencia': gerencia,
+                'soporte': soporte,
+                'otros': otros,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
                 'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
+                'gerencia_name': gerencia_ls,
+                'soporte_name': soporte_ls,
+                'otros_name': otros_ls
             }
         
         return dashboard_values    
     
-    @http.route('/control_visitas_semana', type='json', auth='public', website=True)
+    @http.route('/control_visitas_anio', type='json', auth='public', website=True)
     def control_visitas_dashboard_anio(self):
         
         # visitas_admin = request.env['control.visitas'].search(
@@ -298,6 +394,24 @@ class ControlVisitasWebsite(http.Controller):
             [('name', '=', 'Visita Clínica')])
         clinica_ls = [data.name for data in clinica_name]
         #..........................................    
+        gerencia = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Gerencia'), ('fecha', '>', anio)])
+        gerencia_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Gerencia')])
+        gerencia_ls = [data.name for data in gerencia_name]
+        #..........................................    
+        soporte = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Soporte'), ('fecha', '>', anio)])
+        soporte_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Soporte')])
+        soporte_ls = [data.name for data in soporte_name]
+        #..........................................    
+        otros = request.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Otros'), ('fecha', '>', anio)])
+        otros_name = request.env["control.visitas"].search(
+            [('name', '=', 'Visita Otros')])
+        otros_ls = [data.name for data in otros_name]
+        #..........................................    
            
         dashboard_values = {
                 'admin': admin,
@@ -305,11 +419,17 @@ class ControlVisitasWebsite(http.Controller):
                 'meditek': meditek,
                 'megatk': megatk,
                 'lenka': lenka,
+                'gerencia': gerencia,
+                'soporte': soporte,
+                'otros': otros,
                 'admin_name': admin_ls,
                 'clinica_name': clinica_ls,
                 'meditek_name': meditek_ls,
                 'megatk_name': megatk_ls,
                 'lenka_name': lenka_ls,
+                'gerencia_name': gerencia_ls,
+                'soporte_name': soporte_ls,
+                'otros_name': otros_ls
             }
         
         return dashboard_values    

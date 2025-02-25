@@ -74,6 +74,18 @@ class Visitas(models.Model):
     @api.model
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
+    
+    @api.model
+    def visita_gerencia(self, vals):
+        self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+    
+    @api.model
+    def visita_soporte(self, vals):
+        self.env['control.visitas'].create({'name': 'Visita Soporte'})
+    
+    @api.model
+    def visita_otros(self, vals):
+        self.env['control.visitas'].create({'name': 'Visita Otros'})
         
     @api.model    
     def send_email(self, email=None, cc="", contexto={}):
@@ -100,12 +112,18 @@ class Visitas(models.Model):
         meditek_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         lenka_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Lenka"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         clinica_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        gerencia_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        soporte_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        otros_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         
         admin_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         megatk_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Megatk"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         meditek_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         lenka_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Lenka"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         clinica_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        gerencia_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        soporte_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        otros_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha 1")
@@ -196,11 +214,17 @@ class Visitas(models.Model):
             'meditek_TGU': meditek_TGU,
             'lenka_TGU': lenka_TGU,
             'clinica_TGU': clinica_TGU,
+            'gerencia_TGU': gerencia_TGU,
+            'soporte_TGU': soporte_TGU,
+            'otros_TGU': otros_TGU,
             'admin_SPS': admin_SPS,
             'megatk_SPS': megatk_SPS,
             'meditek_SPS': meditek_SPS,
             'lenka_SPS': lenka_SPS,
             'clinica_SPS': clinica_SPS,
+            'gerencia_SPS': gerencia_SPS,
+            'soporte_SPS': soporte_SPS,
+            'otros_SPS': otros_SPS,
         }
             
         contexto = {}
@@ -285,6 +309,39 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['clinica_SPS']}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Gerencia
+                                </th>
+                                <th>
+                                    {conteo['gerencia_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['gerencia_SPS']}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Soporte
+                                </th>
+                                <th>
+                                    {conteo['soporte_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['soporte_SPS']}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Otros
+                                </th>
+                                <th>
+                                    {conteo['otros_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['otros_SPS']}
                                 </th>
                             </tr>
                         </tbody>

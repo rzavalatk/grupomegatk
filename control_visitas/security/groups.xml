@@ -24,7 +24,7 @@
         </record>
 
         <record id="registros_manager" model="res.groups">
-            <field name="category_id" ref="module_category_control_visitas" />
+            <field name="category_id" ref="module_category_control_visitas"/>
             <field name="name">Reportes Visitas</field>
         </record>
     
