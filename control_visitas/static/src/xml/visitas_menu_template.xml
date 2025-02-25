@@ -5,7 +5,7 @@
             <style>
                 .c-dashboardInfo {
                 margin-bottom: 15px;
-                width: 20%;
+                width: 60%;
                 }
                 .c-dashboardInfo .wrap {
                 background: #ffffff;
@@ -124,6 +124,7 @@
                 .dashboard-grid {
                     display: grid;
                     grid-template-columns: repeat(4, 2fr);
+                    row-gap: 20px;
                 }
             </style>
             <div id="root">
