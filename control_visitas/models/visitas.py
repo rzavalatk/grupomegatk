@@ -217,14 +217,6 @@ class Visitas(models.Model):
             'gerencia_TGU': gerencia_TGU,
             'soporte_TGU': soporte_TGU,
             'otros_TGU': otros_TGU,
-            'admin_SPS': admin_SPS,
-            'megatk_SPS': megatk_SPS,
-            'meditek_SPS': meditek_SPS,
-            'lenka_SPS': lenka_SPS,
-            'clinica_SPS': clinica_SPS,
-            'gerencia_SPS': gerencia_SPS,
-            'soporte_SPS': soporte_SPS,
-            'otros_SPS': otros_SPS,
         }
             
         contexto = {}
@@ -263,9 +255,6 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['admin_TGU']}
                                 </th>
-                                <th>
-                                    {conteo['admin_SPS']}
-                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -273,9 +262,6 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['megatk_TGU']}
-                                </th>
-                                <th>
-                                    {conteo['megatk_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -285,9 +271,6 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['meditek_TGU']}
                                 </th>
-                                <th>
-                                    {conteo['meditek_SPS']}
-                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -295,9 +278,6 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['lenka_TGU']}
-                                </th>
-                                <th>
-                                    {conteo['lenka_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -307,9 +287,6 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['clinica_TGU']}
                                 </th>
-                                <th>
-                                    {conteo['clinica_SPS']}
-                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -317,9 +294,6 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['gerencia_TGU']}
-                                </th>
-                                <th>
-                                    {conteo['gerencia_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -329,9 +303,6 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['soporte_TGU']}
                                 </th>
-                                <th>
-                                    {conteo['soporte_SPS']}
-                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -339,9 +310,6 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['otros_TGU']}
-                                </th>
-                                <th>
-                                    {conteo['otros_SPS']}
                                 </th>
                             </tr>
                         </tbody>
