@@ -236,7 +236,6 @@ class Visitas(models.Model):
                         <thead>
                             <th>Sucursal</th>
                             <th>Tegucigalpa</th>
-                            <th>San Pedro Sula</th>
                         </thead>
                         <tbody>
                             <tr>
