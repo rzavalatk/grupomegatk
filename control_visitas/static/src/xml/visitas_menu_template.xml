@@ -201,6 +201,39 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="c-dashboardInfo"
+                                id="soporte_state">
+                            <div class="wrap">
+                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                    Visita Soporte
+                                </h4>
+                                <span class="hind-font caption-12 c-dashboardInfo__count"
+                                        id="soporte_value">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c-dashboardInfo"
+                                id="gerencia_state">
+                            <div class="wrap">
+                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                    Visita Gerencia
+                                </h4>
+                                <span class="hind-font caption-12 c-dashboardInfo__count"
+                                        id="gerencia_value">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c-dashboardInfo"
+                                id="otros_state">
+                            <div class="wrap">
+                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                    Visita Otros
+                                </h4>
+                                <span class="hind-font caption-12 c-dashboardInfo__count"
+                                        id="otros_value">
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
