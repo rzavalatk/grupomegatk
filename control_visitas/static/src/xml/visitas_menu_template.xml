@@ -123,7 +123,7 @@
                 .dropdown:hover .dropbtn {background-color: #3e8e41;}
                 .dashboard-grid {
                     display: grid;
-                    grid-template-columns: repeat(4, 1fr);
+                    grid-template-columns: repeat(4, 2fr);
                 }
             </style>
             <div id="root">
