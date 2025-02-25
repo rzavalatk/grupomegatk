@@ -121,6 +121,10 @@
                 .dropdown-content a:hover {background-color: #ddd;}
                 .dropdown:hover .dropdown-content {display: block;}
                 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+                .dashboard-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
@@ -154,7 +158,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div style="dislpay: grid; grid-template-columns: repeat(4, 1fr);">
+                        <div class="dashboard-grid">
                             <div class="c-dashboardInfo"
                                     id="admin_state">
                                 <div class="wrap">
