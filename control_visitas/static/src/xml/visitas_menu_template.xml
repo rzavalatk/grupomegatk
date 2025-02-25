@@ -5,7 +5,8 @@
             <style>
                 .c-dashboardInfo {
                 margin-bottom: 15px;
-                width: 20%;
+                width: 60%;
+                height: 180px;
                 }
                 .c-dashboardInfo .wrap {
                 background: #ffffff;
@@ -70,6 +71,14 @@
                 background: linear-gradient(81.67deg, #ff647c 0%, #1f5dc5
                 100%);
                 }
+                .c-dashboardInfo:nth-child(7) .wrap:after {
+                background: linear-gradient(81.67deg, #ff647c 0%, #1f5dc5
+                100%);
+                }
+                .c-dashboardInfo:nth-child(8) .wrap:after {
+                background: linear-gradient(81.67deg, #ff647c 0%, #1f5dc5
+                100%);
+                }
                 .c-dashboardInfo__title svg {
                 color: #d7d7d7;
                 margin-left: 5px;
@@ -113,11 +122,16 @@
                 .dropdown-content a:hover {background-color: #ddd;}
                 .dropdown:hover .dropdown-content {display: block;}
                 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+                .dashboard-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 2fr);
+                    row-gap: 20px;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
-                        <div class="row" style="align-items: baseline;">
+                        <div class="row" style="align-items: baseline; height: 120px;">
                             <div class="col"
                                 style="margin-top: 28px;margin-left: 88px; margin-bottom: 80px; height: 48px;">
                                 <h1 class="section-header" style="color:#4a5c9a; font-size: 20px;">
@@ -146,59 +160,94 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="c-dashboardInfo"
-                                id="admin_state">
-                            <div class="wrap">
-                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
-                                    Visita Administración
-                                </h4>
-                                <span class="hind-font caption-12 c-dashboardInfo__count"
-                                        id="admin_value">
-                                </span>
+                        <div class="dashboard-grid">
+                            <div class="c-dashboardInfo"
+                                    id="admin_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Administración
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="admin_value">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="c-dashboardInfo"
-                                id="megatk_state">
-                            <div class="wrap">
-                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
-                                    Visita Tienda MegaTK
-                                </h4>
-                                <span class="hind-font caption-12 c-dashboardInfo__count"
-                                        id="megatk_value">
-                                </span>
+                            <div class="c-dashboardInfo"
+                                    id="megatk_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Tienda MegaTK
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="megatk_value">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="c-dashboardInfo"
-                                id="meditek_state">
-                            <div class="wrap">
-                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
-                                    Visita Tienda Meditek
-                                </h4>
-                                <span class="hind-font caption-12 c-dashboardInfo__count"
-                                        id="meditek_value">
-                                </span>
+                            <div class="c-dashboardInfo"
+                                    id="meditek_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Tienda Meditek
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="meditek_value">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="c-dashboardInfo"
-                                id="lenka_state">
-                            <div class="wrap">
-                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
-                                    Visita Lenka
-                                </h4>
-                                <span class="hind-font caption-12 c-dashboardInfo__count"
-                                        id="lenka_value">
-                                </span>
+                            <div class="c-dashboardInfo"
+                                    id="lenka_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Lenka
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="lenka_value">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="c-dashboardInfo"
-                                id="clinica_state">
-                            <div class="wrap">
-                                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
-                                    Visita Clinica
-                                </h4>
-                                <span class="hind-font caption-12 c-dashboardInfo__count"
-                                        id="clinica_value">
-                                </span>
+                            <div class="c-dashboardInfo"
+                                    id="clinica_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Clinica
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="clinica_value">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="c-dashboardInfo"
+                                    id="soporte_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Soporte
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="soporte_value">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="c-dashboardInfo"
+                                    id="gerencia_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Gerencia
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="gerencia_value">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="c-dashboardInfo"
+                                    id="otros_state">
+                                <div class="wrap">
+                                    <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                                        Visita Otros
+                                    </h4>
+                                    <span class="hind-font caption-12 c-dashboardInfo__count"
+                                            id="otros_value">
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
