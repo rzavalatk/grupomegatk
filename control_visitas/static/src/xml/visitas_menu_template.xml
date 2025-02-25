@@ -131,7 +131,7 @@
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
-                        <div class="row" style="align-items: baseline;">
+                        <div class="row" style="align-items: baseline; height: 120px;">
                             <div class="col"
                                 style="margin-top: 28px;margin-left: 88px; margin-bottom: 80px; height: 48px;">
                                 <h1 class="section-header" style="color:#4a5c9a; font-size: 20px;">
