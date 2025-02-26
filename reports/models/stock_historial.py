@@ -141,6 +141,7 @@ class StockReportHistory(models.Model):
             else:
                 qty_to = 0
             
+            
             if qty_from != 0:
                 if qty_to != 0:
                     if (qty_from - qty_to) == 0:

@@ -14,7 +14,7 @@
         </record>
 
         <record id="ALW" model="hr.salary.rule.category">
-            <field name="name">Acreditación</field>
+            <field name="name">Asignación</field>
             <field name="code">ALW</field>
             <field name="active">1</field>
             <field name="category_base">1</field>

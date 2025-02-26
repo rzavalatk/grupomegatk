@@ -733,7 +733,7 @@ class HrPayslipLine(models.Model):
                     if categoria.code == 'DED':
                         pay -= (values['amount_percentage'] * payslip.total_payment / 100)
                         sueldo = pay
-                    if categoria.code == 'ACRE':
+                    if categoria.code == 'ALW':
                         pay += (values['amount_percentage'] * payslip.total_payment / 100)
                         sueldo = pay 
                     if values['code'] == 'SLDBT':
@@ -750,7 +750,7 @@ class HrPayslipLine(models.Model):
                         #payslip.sudo().write({'total_payment': payslip.total_payment - values['amount_fix']})
                         pay -= values['amount_fix']
                         sueldo = pay
-                    if categoria.code == 'ACRE':
+                    if categoria.code == 'ALW':
                         #payslip.sudo().write({'total_payment': payslip.total_payment + values['amount_fix']})
                         pay += values['amount_fix']
                         sueldo = pay
@@ -786,7 +786,7 @@ class HrPayslipLine(models.Model):
                         if categoria.code == 'DED':
                             rule.amount -= (values['amount'])
                             payslip.write({'total_payment': rule.amount})
-                        elif categoria.code == 'ACRE':
+                        elif categoria.code == 'ALW':
                             rule.amount += (values['amount'])
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
