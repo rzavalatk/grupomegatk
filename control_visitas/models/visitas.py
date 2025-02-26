@@ -114,7 +114,7 @@ class Visitas(models.Model):
         clinica_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         gerencia_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         soporte_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'TGU')])
-        otros_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        otros_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Otros"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha 1")
@@ -314,11 +314,11 @@ class Visitas(models.Model):
                 </div>
             """
             
-        # correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com"
-        # cc = "soporte@megatk.com"
+        correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com"
+        cc = "soporte@megatk.com"
         
-        correo = "alexdreyes@megatk.com,alexdreyesf@yahoo.es"
-        cc = "noobalex12@gmail.com"
+        # correo = "alexdreyes@megatk.com,alexdreyesf@yahoo.es"
+        # cc = "noobalex12@gmail.com"
         
         contexto['body'] = html
         
