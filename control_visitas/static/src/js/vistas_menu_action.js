@@ -533,7 +533,7 @@ var CustomDashboard = AbstractAction.extend({
                            });
                        })
                     })
-                } else if (value = "this_yearQ") {
+                } else if (value = "this_year") {
                     ajax.rpc('/control_visitas_anio').then(function (result) {
                         self.$el.find("#admin_value").text(result.admin);
                         self.$el.find("#meditek_value").text(result.meditek);
@@ -670,3 +670,4 @@ var CustomDashboard = AbstractAction.extend({
 core.action_registry.add('control_visitas_tag', CustomDashboard);
 return CustomDashboard;
 });
+
