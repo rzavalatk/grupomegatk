@@ -19,5 +19,5 @@ class EmployeeController(http.Controller):
             'name': employee.name,
             'credito': employee.credito,
             'credito_disponible': employee.credito_disponible,
-            'numero_de_tarjeta': employee.numero_de_tarjeta,
+            'numero_tarjeta': employee.numero_tarjeta,
         }
