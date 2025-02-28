@@ -1,14 +1,13 @@
 {
-    'name': 'Geolocalizacion',  
+    'name': 'Localizacion',  
     'version': '1.0',
-    'description': 'Geolocalizacion',
-    'summary': 'Geolocalizacion de los usuarios',
+    'description': 'localizacion',
+    'summary': 'localizacion de los usuarios',
     'author': 'Alexander Reyes',
     'license': 'LGPL-3',
     'category': 'uncategorized',
     'depends': [
         'base', 
-        'hr'
     ],
     'data': [
         'security/groups.xml',
