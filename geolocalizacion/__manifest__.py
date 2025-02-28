@@ -10,6 +10,11 @@
         'base', 
         'hr'
     ],
+    'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+    ],
     'auto_install': False,
     'application': True,
+    'installable': True
 }
