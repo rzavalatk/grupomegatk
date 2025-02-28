@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="module_category_geolocalizacion" model="ir.module.category">
+            <field name="name">Geolocalizacion</field>
+            <field name="description">Geolocalizacion</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="viaje_manager" model="res.groups">
+            <field name="category_id" ref="module_category_geolocalizacion" />
+            <field name="name">Geolocalizar</field>
+        </record>
+    </data>
+</odoo>
