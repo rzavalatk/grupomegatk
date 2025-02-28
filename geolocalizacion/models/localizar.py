@@ -5,8 +5,8 @@ import pytz
 
 _logger = logging.getLogger(__name__)
 
-class ControlViaje(models.Model):
-    _name = 'viaje.check'
+class Localizar(models.Model):
+    _name = 'localizar'
     _description = 'Controla las coordenadas de los viajes'
     
     name = fields.Char(string='Nombre', default=lambda self: self.env.user.name)
