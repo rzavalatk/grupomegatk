@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_viaje_check,access_viaje_check,model_viaje_check,viaje_manager,1,1,1,1
+access_viaje_check,access_viaje_check,model_viaje_check,group_localizar,1,1,1,1
