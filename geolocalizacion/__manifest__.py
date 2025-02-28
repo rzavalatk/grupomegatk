@@ -12,6 +12,7 @@
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'views/localizar_view.xml',
         'views/main_menu.xml',
     ],
     'auto_install': False,
