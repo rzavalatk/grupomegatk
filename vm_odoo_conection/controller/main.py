@@ -1,5 +1,6 @@
 from odoo import http
 from odoo.http import request
+import logging
 
 class EmployeeController(http.Controller):
 
