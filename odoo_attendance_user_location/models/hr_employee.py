@@ -22,6 +22,7 @@
 from geopy.geocoders import Nominatim
 from odoo import exceptions, fields, models, _
 
+
 class HrEmployee(models.AbstractModel):
     """Inherits HR Employee model"""
     _inherit = 'hr.employee'
