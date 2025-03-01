@@ -8,9 +8,9 @@ class EmployeeController(http.Controller):
 
     @http.route('/api/validate_card', type='json', auth='public', methods=['POST'])
     def validate_card(self, **kwargs):
-        _logger.info("Datos recibidos: %s", kwargs)  # Log para ver los datos recibidos
-        _logger.info("Tipo de datos recibidos: %s", type(kwargs))  # Log para ver el tipo de datos
-        card_code = kwargs.get('card_code')
+        data = request.jsonrequest  # Acceder al cuerpo de la solicitud
+        _logger.info("Datos recibidos: %s", data)  # Log para ver los datos recibidos
+        card_code = data.get('card_code')
         if not card_code:
             _logger.error("Código de tarjeta no proporcionado")
             return {'error': 'Código de tarjeta no proporcionado'}
