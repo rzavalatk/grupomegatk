@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem
-        id="localizacion_menu"
-        name="Localizacion"
-        sequence="10"/>
+    <record id="localizacion_menu_action" model="ir.actions.act_window">
+        <field name="name">Localizacion</field>
+        <field name="res_model">localizacion</field>
+        <field name="view_mode">tree, form</field>
+    </record>
 
-        
+    <menuitem
+        id="localizacion_menu_root"
+        name="Localizacion"
+        sequence="10"
+        action="localizacion_menu_action"/>
+
+    
 
 </odoo>
