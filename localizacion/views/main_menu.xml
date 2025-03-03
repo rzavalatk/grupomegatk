@@ -11,7 +11,8 @@
         id="localizacion_menu_root"
         name="Localizacion"
         sequence="10"
-        action="localizacion_menu_action"/>
+        action="localizacion_menu_action"
+        web_icon="localizacion,static/description/localizar.png"/>
 
     
 
