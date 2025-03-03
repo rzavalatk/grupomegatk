@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="localizacion_menu"
+        name="Localizacion"
+        sequence="10"/>
+
+        
+
+</odoo>
