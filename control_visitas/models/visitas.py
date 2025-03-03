@@ -314,7 +314,7 @@ class Visitas(models.Model):
                 </div>
             """
             
-        correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com"
+        correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com,dcolindres@megatk.com"
         cc = "soporte@megatk.com"
         
         contexto['body'] = html
