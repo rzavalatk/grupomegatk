@@ -33,6 +33,7 @@ class EmployeeController(http.Controller):
                 'credito': employee.credito,
                 'credito_disponible': employee.credito_disponible,
                 'numero_tarjeta': employee.numero_tarjeta,
+                'error' : None
             }
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
