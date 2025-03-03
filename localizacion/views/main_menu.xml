@@ -4,7 +4,7 @@
     <record id="localizacion_menu_action" model="ir.actions.act_window">
         <field name="name">Localizacion</field>
         <field name="res_model">localizacion</field>
-        <field name="view_mode">tree, form</field>
+        <field name="view_mode">tree</field>
     </record>
 
     <menuitem
