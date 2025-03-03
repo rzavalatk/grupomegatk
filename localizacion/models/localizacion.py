@@ -6,4 +6,5 @@ class Localizacion(models.Model):
     _name = "localizacion"
     _description = "Localizacion"
     
-    pass
+    name = fields.Char("Localizacion")
+    fecha = fields.Date("Fecha")
