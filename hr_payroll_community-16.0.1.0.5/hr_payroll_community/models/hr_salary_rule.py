@@ -139,7 +139,7 @@ class HrSalaryRule(models.Model):
     condition_range_max = fields.Float(string='Maximum Range', help="The maximum amount, applied for this rule.")
     amount_select = fields.Selection([
         ('percentage', 'Porcentage (%)'),
-        ('fix', 'Cantidad Fija'),
+        ('fix', 'Cantidad Fija'), 
     ], string='Amount Type', index=True, required=True, default='fix', help="The computation method for the rule amount.")
     amount_fix = fields.Float(string='Fixed Amount', digits=dp.get_precision('Payroll'))
     amount_percentage = fields.Float(string='Percentage (%)', digits=dp.get_precision('Payroll Rate'),
