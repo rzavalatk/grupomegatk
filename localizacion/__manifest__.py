@@ -1,21 +1,19 @@
 {
-    'name': 'Localizacion',  
+    'name': 'Localizacion',
     'version': '1.0',
-    'description': 'localizacion',
-    'summary': 'localizacion de los usuarios',
+    'description': 'Modulo de localizacion de repartidores',
+    'summary': 'Modulo de localizacion de repartidores',
     'author': 'Alexander Reyes',
     'license': 'LGPL-3',
     'category': 'uncategorized',
     'depends': [
-        'base', 
+        'base'
     ],
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'views/localizar_view.xml',
-        'views/main_menu.xml',
     ],
     'auto_install': False,
     'application': True,
-    'installable': True
+    'installable': True,
 }
