@@ -1,4 +1,4 @@
-odoo.define('localizacion.user_card', function (require) {
+odoo.define('localizacion.localizacion_menu_action', function (require) {
     "use strict";
 
     var core = require('web.core');
