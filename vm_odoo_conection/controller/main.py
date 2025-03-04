@@ -32,8 +32,7 @@ class EmployeeController(http.Controller):
                 'name': employee.name,
                 'credito': float(employee.credito),
                 'credito_disponible': float(employee.credito_disponible),
-                'numero_tarjeta': str(employee.numero_tarjeta),
-                'error': None
+                'numero_tarjeta': str(employee.numero_tarjeta)
             }
             _logger.info("Respuesta JSON enviada: %s", json.dumps(response_data))
             return json.dumps(response_data)  # Serializar manualmente la respuesta
