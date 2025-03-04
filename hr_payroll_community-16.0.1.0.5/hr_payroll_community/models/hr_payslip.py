@@ -255,7 +255,7 @@ class HrPayslip(models.Model):
             day_to = datetime.combine(fields.Date.from_string(date_to),
                                       time.max)
 
-            # compute leave days
+            """# compute leave days
             leaves = {}
 
             calendar = contract.resource_calendar_id
@@ -289,7 +289,7 @@ class HrPayslip(models.Model):
                     current_leave_struct['number_of_hours'] += hours
                     if work_hours:
                         current_leave_struct[
-                            'number_of_days'] += hours / work_hours
+                            'number_of_days'] += hours / work_hours"""
 
             # compute worked days
             work_data = contract.employee_id.get_work_days_data(day_from,
