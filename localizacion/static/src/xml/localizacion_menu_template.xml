@@ -14,7 +14,7 @@
                             <h5 class="card-title" t-field="user.name"/>
                             
                             <!-- Botón para mostrar el mensaje -->
-                            <button class="btn btn-primary" id="button">Mostrar Mensaje</button>
+                            <button class="btn btn-primary" t-on-click="showMessage">Mostrar Mensaje</button>
                         </div>
                     </div>
                 </div>
