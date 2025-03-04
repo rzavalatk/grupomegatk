@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="localizacion_menu_action" model="ir.actions.client">
+    <record id="localizacion_menu" model="ir.actions.client">
         <field name="name">Localizacion</field>
         <field name="tag">user_card</field>
     </record>
@@ -10,7 +10,7 @@
         id="localizacion_menu_root"
         name="Localizacion"
         sequence="10"
-        action="localizacion_menu_action"
+        action="localizacion_menu"
         web_icon="localizacion,static/description/localizar.png"/>
 
     
