@@ -2,7 +2,7 @@ odoo.define('localizacion.user_card', function (require) {
     "use strict";
 
     var core = require('web.core');
-    var Widget = require('web.widget');
+    var Widget = require('web.public.widget');
 
     var UserCard = Widget.extend({
         template: 'LocalizacionMenu',
