@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="localizacion_menu_action" model="ir.actions.act_window">
+    <record id="localizacion_menu_action" model="ir.actions.client">
         <field name="name">Localizacion</field>
-        <field name="res_model">localizacion</field>
-        <field name="view_mode">tree</field>
+        <field name="tag">localizacion_tag</field>
     </record>
 
     <menuitem

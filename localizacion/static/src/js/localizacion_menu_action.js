@@ -17,7 +17,7 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
         },
     });
 
-    core.action_registry.add('user_card', UserCard);
+    core.action_registry.add('localizacion_tag', UserCard);
 
     return UserCard;
 });
