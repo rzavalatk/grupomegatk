@@ -4,7 +4,7 @@
         <div class="row">
             <div class="root">
                 <div class="container mt-4">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card btn-primary" style="width: 18rem;">
                         <div>Prueba</div>
                     </div>
                 </div>
