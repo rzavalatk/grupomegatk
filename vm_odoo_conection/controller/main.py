@@ -28,6 +28,8 @@ class EmployeeController(http.Controller):
 
             # Devolver la información del empleado
             _logger.info("Empleado encontrado: %s", employee.name)
+            _logger.info("Datos del empleado: name=%s, credito=%s, credito_disponible=%s, numero_tarjeta=%s",
+            employee.name, employee.credito, employee.credito_disponible, employee.numero_tarjeta)
             return {
                 'name': employee.name,
                 'credito': employee.credito,
