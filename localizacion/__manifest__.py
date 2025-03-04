@@ -15,6 +15,12 @@
         'views/localizacion_view.xml',  
         'views/main_menu.xml',
     ],
+    'assets' : {
+        'web.assets_backend': [
+            '/localizacion/static/src/xml/localizacion_menu_template.xml',
+            '/localizacion/static/src/js/localizacion_menu_action.js'
+        ]    
+    },
     'auto_install': False,
     'application': True,
     'installable': True,

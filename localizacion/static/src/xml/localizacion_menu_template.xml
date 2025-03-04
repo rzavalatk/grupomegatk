@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+    <t t-name="LocalizacionMenu">
+        <div class="row">
+            <div class="root">
+                <div class="container mt-4">
+                    <div class="card" style="width: 18rem;">
+                        <!-- Foto del usuario -->
+                        <img t-if="user.image" t-att-src="image_data_uri(user.image)" class="card-img-top" alt="User Image"/>
+                        <img t-else="" src="/web/static/src/img/placeholder.png" class="card-img-top" alt="Placeholder Image"/>
+                        
+                        <!-- Nombre del usuario -->
+                        <div class="card-body">
+                            <h5 class="card-title" t-field="user.name"/>
+                            
+                            <!-- Botón para mostrar el mensaje -->
+                            <button class="btn btn-primary" t-on-click="showMessage">Mostrar Mensaje</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
