@@ -28,13 +28,15 @@ class EmployeeController(http.Controller):
 
             # Devolver la información del empleado
             _logger.info("Empleado encontrado: %s", employee.name)
-            return {
+            response_data = {
                 'name': employee.name,
                 'credito': employee.credito,
                 'credito_disponible': employee.credito_disponible,
                 'numero_tarjeta': employee.numero_tarjeta,
                 'error' : None
             }
+            _logger.info("Respuesta JSON enviada: %s", json.dumps(response_data))
+            return response_data
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
             return {'error': str(e)}
