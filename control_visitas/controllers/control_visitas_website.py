@@ -15,7 +15,7 @@ class ControlVisitasWebsite(http.Controller):
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
-            reg = reg
+            reg = "TGU"
             
         _logger.warning(f"region {reg}")
         # visitas_admin = request.env['control.visitas'].search(
