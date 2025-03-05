@@ -10,7 +10,7 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas', type='json', auth='public', website=True)
     def control_visitas_dashboard(self):
-        cod_reg = request.env["control.visitas"]
+        cod_reg = request.env.user.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
