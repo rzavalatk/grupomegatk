@@ -10,14 +10,14 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas', type='json', auth='public', website=True)
     def control_visitas_dashboard(self):
-        cod_reg = request.env["control.visitas"].user_id
+        cod_reg = request.env["control.visitas"].user_id.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
             reg = reg
             
-        _logger.warning(f"region {reg}")
+        _logger.warning(f"region {cod_reg}")
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
         # visitas_megatk = request.env['control.visitas'].search(
