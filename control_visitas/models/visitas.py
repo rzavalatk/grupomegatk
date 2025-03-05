@@ -107,6 +107,7 @@ class Visitas(models.Model):
     def datos(self):
         html = ""
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
+        
         admin_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         megatk_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Megatk"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         meditek_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'TGU')])
@@ -115,6 +116,16 @@ class Visitas(models.Model):
         gerencia_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         soporte_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         otros_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Otros"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        
+        
+        admin_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        megatk_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Megatk"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        meditek_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Tienda Meditek"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        lenka_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Lenka"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        clinica_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Clínica"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        gerencia_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        soporte_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        otros_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Otros"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha 1")
@@ -208,6 +219,14 @@ class Visitas(models.Model):
             'gerencia_TGU': gerencia_TGU,
             'soporte_TGU': soporte_TGU,
             'otros_TGU': otros_TGU,
+            'admin_SPS': admin_SPS,
+            'megatk_SPS': megatk_SPS,
+            'meditek_SPS': meditek_SPS,
+            'lenka_SPS': lenka_SPS,
+            'clinica_SPS': clinica_SPS,
+            'gerencia_SPS': gerencia_SPS,
+            'soporte_SPS': soporte_SPS,
+            'otros_SPS': otros_SPS,
         }
             
         contexto = {}
@@ -236,6 +255,7 @@ class Visitas(models.Model):
                         <thead>
                             <th>Sucursal</th>
                             <th>Tegucigalpa</th>
+                            <th>San Pedro Sula</th>
                         </thead>
                         <tbody>
                             <tr>
@@ -245,6 +265,9 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['admin_TGU']}
                                 </th>
+                                <th>
+                                    {conteo['admin_SPS']}
+                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -252,6 +275,9 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['megatk_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['megatk_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -261,6 +287,9 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['meditek_TGU']}
                                 </th>
+                                <th>
+                                    {conteo['meditek_SPS']}
+                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -268,6 +297,9 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['lenka_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['lenka_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -277,6 +309,9 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['clinica_TGU']}
                                 </th>
+                                <th>
+                                    {conteo['clinica_SPS']}
+                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -284,6 +319,9 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['gerencia_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['gerencia_SPS']}
                                 </th>
                             </tr>
                             <tr>
@@ -293,6 +331,9 @@ class Visitas(models.Model):
                                 <th>
                                     {conteo['soporte_TGU']}
                                 </th>
+                                <th>
+                                    {conteo['soporte_SPS']}
+                                </th>
                             </tr>
                             <tr>
                                 <th>
@@ -300,6 +341,9 @@ class Visitas(models.Model):
                                 </th>
                                 <th>
                                     {conteo['otros_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['otros_SPS']}
                                 </th>
                             </tr>
                         </tbody>

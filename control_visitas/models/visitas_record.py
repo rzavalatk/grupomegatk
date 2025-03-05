@@ -41,14 +41,22 @@ class Visitas_Record(models.Model):
         ], default='borrador')
     
     def agrupar_registros(self):
+        cod_reg = self.env.user.ubicacion_vendedor
+        
+        if cod_reg == "2":
+            reg = "SPS"
+        elif cod_reg == "3":
+            reg = "TGU"
+            
+
         if self.fecha_final and self.fecha_reporte:
             if self.fecha_final < self.fecha_reporte:
                 self.write({'state': 'borrador'})
                 raise UserError("La fecha final debe ser mayor a la fecha inicial")
             elif self.fecha_final == self.fecha_reporte:
-                visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
+                visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte),('region', '=', reg)])
             else:
-                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
+                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final),('region', '=', reg)])
         
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
@@ -140,23 +148,4 @@ class Visitas_Record(models.Model):
             'url':f'/web/content/{attachment.id}?download=true',
             'target':'self',
         }
-                           
-    def generate_excel(self):
-        vals = []
-        for line in self.report_differences:
             
-            vals.append({
-                'Producto': line.product_id,
-                'Cantidad Inicial': line.quantity_from,
-                'Cantidad Actual': line.quantity_to,
-                'Cantidad movida': line.quantity_difference,
-                'Compañia': self.company_id,
-                'Fecha hace 6 meses': self.date_from,
-                'Fecha actual': self.date_to,
-            })
-        return {
-            'data': vals,
-            'name': self.name
-            }
-        
-    
