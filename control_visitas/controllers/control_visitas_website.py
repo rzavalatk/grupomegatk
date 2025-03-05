@@ -1,6 +1,9 @@
 import datetime as dt
 from odoo import http
 from odoo.http import request
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class ControlVisitasWebsite(http.Controller):
@@ -13,6 +16,8 @@ class ControlVisitasWebsite(http.Controller):
             reg = "SPS"
         elif cod_reg == "3":
             reg = reg
+            
+        _logger.warning(f"region {reg}")
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
         # visitas_megatk = request.env['control.visitas'].search(
