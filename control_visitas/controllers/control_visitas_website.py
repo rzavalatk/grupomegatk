@@ -18,16 +18,7 @@ class ControlVisitasWebsite(http.Controller):
             reg = "TGU"
             
         _logger.warning(f"region {reg}")
-        # visitas_admin = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Administración')], limit=1).id
-        # visitas_megatk = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Megatk')], limit=1).id
-        # visitas_mediatek = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Meditek')], limit=1).id
-        # visitas_lenka = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Lenka')], limit=1).id
-        # visitas_clinica = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Clínica')], limit=1).id
+
         
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', reg)])
@@ -108,16 +99,7 @@ class ControlVisitasWebsite(http.Controller):
         elif cod_reg == "3":
             reg = "TGU"
             
-        # visitas_admin = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Administración')], limit=1).id
-        # visitas_megatk = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Megatk')], limit=1).id
-        # visitas_mediatek = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Meditek')], limit=1).id
-        # visitas_lenka = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Lenka')], limit=1).id
-        # visitas_clinica = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Clínica')], limit=1).id
+
         
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', reg)])
@@ -198,16 +180,7 @@ class ControlVisitasWebsite(http.Controller):
         elif cod_reg == "3":
             reg = "TGU"
         
-        # visitas_admin = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Administración')], limit=1).id
-        # visitas_megatk = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Megatk')], limit=1).id
-        # visitas_mediatek = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Meditek')], limit=1).id
-        # visitas_lenka = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Lenka')], limit=1).id
-        # visitas_clinica = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Clínica')], limit=1).id
+
         
         hoy = dt.date.today()
         semana = str(hoy - dt.timedelta(days=7)) + ' '
@@ -291,16 +264,7 @@ class ControlVisitasWebsite(http.Controller):
         elif cod_reg == "3":
             reg = "TGU"
         
-        # visitas_admin = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Administración')], limit=1).id
-        # visitas_megatk = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Megatk')], limit=1).id
-        # visitas_mediatek = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Meditek')], limit=1).id
-        # visitas_lenka = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Lenka')], limit=1).id
-        # visitas_clinica = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Clínica')], limit=1).id
+
         
         hoy = dt.date.today()
         mes = str(hoy - dt.timedelta(days=30)) + ' '
@@ -384,16 +348,7 @@ class ControlVisitasWebsite(http.Controller):
         elif cod_reg == "3":
             reg = "TGU"
         
-        # visitas_admin = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Administración')], limit=1).id
-        # visitas_megatk = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Megatk')], limit=1).id
-        # visitas_mediatek = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Tienda Meditek')], limit=1).id
-        # visitas_lenka = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Lenka')], limit=1).id
-        # visitas_clinica = request.env['control.visitas'].search(
-        #     [('name', '=', 'Visita Clínica')], limit=1).id
+
         
         hoy = dt.date.today()
         anio = str(hoy - dt.timedelta(days=365)) + ' '
