@@ -101,13 +101,13 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas_dia', type='json', auth='public', website=True)
     def control_visitas_dashboard_dia(self):
-        cod_reg = self.env.user.ubicacion_vendedor
+        cod_reg = request.env.user.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
-            reg = reg
-        
+            reg = "TGU"
+            
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
         # visitas_megatk = request.env['control.visitas'].search(
@@ -191,12 +191,12 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas_semana', type='json', auth='public', website=True)
     def control_visitas_dashboard_semana(self):
-        cod_reg = self.env.user.ubicacion_vendedor
+        cod_reg = request.env.user.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
-            reg = reg
+            reg = "TGU"
         
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
@@ -284,12 +284,12 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas_mes', type='json', auth='public', website=True)
     def control_visitas_dashboard_mes(self):
-        cod_reg = self.env.user.ubicacion_vendedor
+        cod_reg = request.env.user.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
-            reg = reg
+            reg = "TGU"
         
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
@@ -377,12 +377,12 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route('/control_visitas_anio', type='json', auth='public', website=True)
     def control_visitas_dashboard_anio(self):
-        cod_reg = self.env.user.ubicacion_vendedor
+        cod_reg = request.env.user.ubicacion_vendedor
         reg = ""
         if cod_reg == "2":
             reg = "SPS"
         elif cod_reg == "3":
-            reg = reg
+            reg = "TGU"
         
         # visitas_admin = request.env['control.visitas'].search(
         #     [('name', '=', 'Visita Administración')], limit=1).id
