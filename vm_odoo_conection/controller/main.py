@@ -18,13 +18,13 @@ class EmployeeController(http.Controller):
             card_code = data.get('card_code')
             if not card_code:
                 _logger.error("Código de tarjeta no proporcionado")
-                return json.dumps({'error': 'Código de tarjeta no proporcionado'})
+                return {'error': 'Código de tarjeta no proporcionado'}
 
             # Buscar el empleado por el número de tarjeta
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
                 _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
-                return json.dumps({'error': 'Empleado no encontrado'})
+                return {'error': 'Empleado no encontrado'}
 
             # Devolver la información del empleado
             _logger.info("Empleado encontrado: %s", employee.name)
@@ -34,8 +34,8 @@ class EmployeeController(http.Controller):
                 'credito_disponible': float(employee.credito_disponible),
                 'numero_tarjeta': str(employee.numero_tarjeta)
             }
-            _logger.info("Respuesta JSON enviada: %s", json.dumps(response_data))
-            return json.dumps(response_data)  # Serializar manualmente la respuesta
+            _logger.info("Respuesta JSON enviada: %s", response_data)
+            return response_data  # Devolver el diccionario directamente
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
-            return json.dumps({'error': str(e)})
+            return {'error': str(e)}
