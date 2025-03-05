@@ -31,8 +31,7 @@ class EmployeeController(http.Controller):
             response_data = {
                 'name': employee.name,
                 'credito': float(employee.credito),
-                'credito_disponible': float(employee.credito_disponible),
-                'numero_tarjeta': str(employee.numero_tarjeta)
+                'credito_disponible': float(employee.credito_disponible)
             }
             _logger.info("Respuesta JSON enviada: %s", response_data)
             return response_data  # Devolver el diccionario directamente
