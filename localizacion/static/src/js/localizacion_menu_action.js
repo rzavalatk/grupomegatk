@@ -2,11 +2,11 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
     "use strict";
 
     var core = require('web.core');
-    var Widget = require('web.public.widget');
+    var AbstractAction = require('web.AbstractAction');
 
-    var UserCard = Widget.extend({
+    var UserCard = AbstractAction.extend({
         template: 'LocalizacionMenu',
-        
+  
         events: {
             'click .btn-primary': '_onClickButton',
         },
