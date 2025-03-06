@@ -293,7 +293,7 @@ class HrPayslip(models.Model):
                     if work_hours:
                         current_leave_struct[
                             'number_of_days'] += hours / work_hours
-                        
+                    
             #Buscar permisos en hr.leave
             """permisos = self.env['hr.leave'].search(['&','&','&',
                                                     ('employee_id','=',self.employee_id.id),
