@@ -15,15 +15,15 @@ class EmployeeController(http.Controller):
             _logger.info("Datos recibidos: %s", data)
 
             # Extraer el código de la tarjeta
-            card_code = data.get('card_code')
-            if not card_code:
+            cardCode = data.get('cardCode')
+            if not cardCode:
                 _logger.error("Código de tarjeta no proporcionado")
                 return {'error': 'Código de tarjeta no proporcionado'}
 
             # Buscar el empleado por el número de tarjeta
-            employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
+            employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', cardCode)], limit=1)
             if not employee:
-                _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardCode)
                 return {'error': 'Empleado no encontrado'}
 
             # Devolver la información del empleado
