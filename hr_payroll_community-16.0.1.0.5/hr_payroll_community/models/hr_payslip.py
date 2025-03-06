@@ -259,8 +259,8 @@ class HrPayslip(models.Model):
             leaves = {}
             calendar = contract.resource_calendar_id
             tz = timezone(calendar.tz)
-            day_leave_intervals = contract.employee_id.list_leaves(day_from,
-                                                                   day_to,
+            day_leave_intervals = contract.employee_id.list_leaves(self.date_from,
+                                                                   self.date_to,
                                                                    calendar=contract.resource_calendar_id)
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
@@ -290,13 +290,16 @@ class HrPayslip(models.Model):
                             'number_of_days'] += hours / work_hours
                         
             #Buscar permisos en hr.leave
-            permisos = self.env['hr.leave'].search(['&','&','&',
+            """permisos = self.env['hr.leave'].search(['&','&','&',
                                                     ('employee_id','=',self.employee_id.id),
                                                     ('state','=','validate'),
                                                     ('request_date_from','>=',self.date_from),
                                                     ('request_date_to','<=',self.date_to),
                                                     ])
             logging.warning(permisos)
+            
+            for permiso in permisos:"""
+                
             
             # compute worked days
             work_data = contract.employee_id.get_work_days_data(day_from,
