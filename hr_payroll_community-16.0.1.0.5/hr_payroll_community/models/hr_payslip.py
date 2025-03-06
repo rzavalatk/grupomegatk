@@ -291,7 +291,7 @@ class HrPayslip(models.Model):
                         
             #Buscar permisos en hr.leave
             permisos = self.env['hr.leave'].search(['&','&','&',
-                                                    ('employee_id','=',self.employee_id),
+                                                    ('employee_id','=',self.employee_id.id),
                                                     ('state','=','validate'),
                                                     ('request_date_from','>=',self.date_from),
                                                     ('request_date_to','<=',self.date_to),
