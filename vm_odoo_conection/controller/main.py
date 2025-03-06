@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class EmployeeController(http.Controller):
 
-    @http.route('/api/validate_card', type='json', auth='public', methods=['POST'])
+    @http.route('/api/validate_card', type='json', auth='user', methods=['POST'])
     def validate_card(self, **kwargs):
         try:
             # Obtener el cuerpo de la solicitud JSON
