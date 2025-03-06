@@ -254,13 +254,18 @@ class HrPayslip(models.Model):
                                         time.min)
             day_to = datetime.combine(fields.Date.from_string(date_to),
                                       time.max)
+            
+            days_from = datetime.combine(fields.Date.from_string(self.date_from),
+                                        time.min)
+            days_to = datetime.combine(fields.Date.from_string(self.date_to),
+                                      time.max)
 
             # compute leave days
             leaves = {}
             calendar = contract.resource_calendar_id
             tz = timezone(calendar.tz)
-            day_leave_intervals = contract.employee_id.list_leaves(self.date_from,
-                                                                   self.date_to,
+            day_leave_intervals = contract.employee_id.list_leaves(days_from,
+                                                                   days_to,
                                                                    calendar=contract.resource_calendar_id)
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
