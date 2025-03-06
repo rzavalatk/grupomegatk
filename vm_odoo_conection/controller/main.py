@@ -18,35 +18,23 @@ class EmployeeController(http.Controller):
             cardCode = data.get('cardCode')
             if not cardCode:
                 _logger.error("Código de tarjeta no proporcionado")
-                return {
-                    'status': 'error',
-                    'error': 'Código de tarjeta no proporcionado'
-                }
+                return {'error': 'Código de tarjeta no proporcionado'}
 
             # Buscar el empleado por el número de tarjeta
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', cardCode)], limit=1)
             if not employee:
-                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardCode)
-                return {
-                    'status': 'error',
-                    'error': 'Empleado no encontrado'
-                }
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardode)
+                return {'error': 'Empleado no encontrado'}
 
             # Devolver la información del empleado
             _logger.info("Empleado encontrado: %s", employee.name)
             response_data = {
-                'status': 'success',
-                'data': {
-                    'name': employee.name,
-                    'credito': float(employee.credito),
-                    'credito_disponible': float(employee.credito_disponible)
-                }
+                'name': employee.name,
+                'credito': float(employee.credito),
+                'credito_disponible': float(employee.credito_disponible)
             }
             _logger.info("Respuesta JSON enviada: %s", response_data)
             return response_data  # Devolver el diccionario directamente
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
-            return {
-                'status': 'error',
-                'error': str(e)
-            }
+            return {'error': str(e)}
