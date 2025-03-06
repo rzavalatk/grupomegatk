@@ -23,7 +23,7 @@ class EmployeeController(http.Controller):
             # Buscar el empleado por el número de tarjeta
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', cardCode)], limit=1)
             if not employee:
-                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardode)
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardCode)
                 return {'error': 'Empleado no encontrado'}
 
             # Devolver la información del empleado
@@ -33,7 +33,10 @@ class EmployeeController(http.Controller):
                 'credito': float(employee.credito),
                 'credito_disponible': float(employee.credito_disponible)
             }
-            _logger.info("Respuesta JSON enviada: %s", response_data)
+
+            # Log de la respuesta que se enviará
+            _logger.info("Respuesta JSON que se enviará: %s", response_data)
+
             return response_data  # Devolver el diccionario directamente
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
