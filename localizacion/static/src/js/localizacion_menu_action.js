@@ -8,10 +8,10 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
         template: 'LocalizacionMenu',
   
         events: {
-            'click .btn-primary': '_onClickButton',
+            'change #filter_selection': '_onChangeFilter',
         },
 
-        _onClickButton: function (ev) {
+        _onChangeFilter: function (ev) {
             ev.preventDefault();
             alert('¡Hola! Este es un mensaje de ejemplo.');
         },
