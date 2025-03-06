@@ -14,6 +14,19 @@ class EmployeeController(http.Controller):
             data = json.loads(request.httprequest.data)
             _logger.info("Datos recibidos: %s", data)
 
+            # Verificar la API Key (opcional, si estás usando autenticación con API Key)
+            api_key = request.httprequest.headers.get('Authorization')
+            if not api_key or not api_key.startswith('Bearer '):
+                _logger.error("API Key no proporcionada o inválida")
+                return {
+                    "jsonrpc": "2.0",
+                    "id": None,
+                    "result": {
+                        "status": "error",
+                        "status_msg": "API Key no proporcionada o inválida"
+                    }
+                }
+
             # Extraer el código de la tarjeta
             cardCode = data.get('cardCode')
             if not cardCode:
