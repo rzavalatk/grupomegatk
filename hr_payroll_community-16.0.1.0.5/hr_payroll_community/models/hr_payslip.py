@@ -262,12 +262,22 @@ class HrPayslip(models.Model):
             day_leave_intervals = contract.employee_id.list_leaves(day_from,
                                                                    day_to,
                                                                    calendar=contract.resource_calendar_id)
+            permisos = self.env['hr.leave'].search(['&','&','&',
+                                                    ('employee_id','=',self.employee_id.id),
+                                                    ('state','=','validate'),
+                                                    ('request_date_from','>=',self.date_from),
+                                                    ('request_date_to','<=',self.date_to),
+                                                    ])
             
-            logging.warning(day_leave_intervals)
+            for permiso in permisos:
+                logging.warning(permiso.request_date_from, permiso.request_date_to, permiso)
+            
             logging.warning(f"Obteniendo permisos desde: {day_from} hasta: {day_to}")
+            logging.warning(day_leave_intervals)
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
+                logging.warning("Entre")
                 logging.warning(day, hours, leave)
                 work_hours = calendar.get_work_hours_count(
                     tz.localize(datetime.combine(day, time.min)),
@@ -295,12 +305,7 @@ class HrPayslip(models.Model):
                             'number_of_days'] += hours / work_hours
                     
             #Buscar permisos en hr.leave
-            """permisos = self.env['hr.leave'].search(['&','&','&',
-                                                    ('employee_id','=',self.employee_id.id),
-                                                    ('state','=','validate'),
-                                                    ('request_date_from','>=',self.date_from),
-                                                    ('request_date_to','<=',self.date_to),
-                                                    ])
+            """
             logging.warning(permisos)
             
             for permiso in permisos:"""
