@@ -271,11 +271,8 @@ class HrPayslip(models.Model):
             logging.warning(permisos)
             for permiso in permisos:
                 logging.warning("Entre")
-                logging.warning(permiso)
-                logging.warning(permiso.request_date_from, permiso.request_date_to, permiso)
-            
-            logging.warning(f"Obteniendo permisos desde: {day_from} hasta: {day_to}")
-            logging.warning(day_leave_intervals)
+                logging.warning(permiso.request_date_from)
+                logging.warning("---")
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
