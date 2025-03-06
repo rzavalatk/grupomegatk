@@ -140,6 +140,21 @@
                             </div>
                             <div class="col-md-4 d-flex justify-content-end bg-light"
                              style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
+                                <div class="col-md-4 d-flex justify-content-end bg-light"
+                                    style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
+                                    <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
+                                    Filtrar por ciudad:
+                                    </b>
+                                    <select id="filter_region"
+                                        style="width: 50%;padding:10px;border-radius:10px; background:white;">
+                                        <option id="reg_tgu" value="reg_tgu" selected="">
+                                            Tegucigalpa
+                                        </option>
+                                        <option id="reg_sps" value="reg_sps">
+                                            San Pedro Sula
+                                        </option>
+                                    </select>
+                                </div>
                                 <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
                                     Filtrar por:
                                 </b>
@@ -156,21 +171,6 @@
                                     </option>
                                     <option id="this_year" value="this_year">
                                         Por Año
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 d-flex justify-content-end bg-light"
-                             style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
-                                <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
-                                    Filtrar por ciudad:
-                                </b>
-                                <select id="filter_selection"
-                                        style="width: 50%;padding:10px;border-radius:10px; background:white;">
-                                    <option id="reg_tgu" value="reg_tgu" selected="">
-                                        Tegucigalpa
-                                    </option>
-                                    <option id="reg_sps" value="reg_sps">
-                                        San Pedro Sula
                                     </option>
                                 </select>
                             </div>
