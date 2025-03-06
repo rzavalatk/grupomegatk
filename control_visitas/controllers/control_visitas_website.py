@@ -7,12 +7,6 @@ _logger = logging.getLogger(__name__)
 
 
 class ControlVisitasWebsite(http.Controller):
-    cod_reg = request.env.user.ubicacion_vendedor
-    reg = ""
-    if cod_reg == "2":
-        reg = "SPS"
-    elif cod_reg == "3":
-        reg = "TGU"
     
     @http.route(f'/control_visitas_tgu', type='json', auth='public', website=True)
     def control_visitas_dashboard(self):
