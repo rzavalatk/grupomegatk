@@ -698,9 +698,10 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         start: function () {
+            var self = this;
 
             this._updateView();
-            
+            self.value_filtro = self.$el.find("#filter_selection").val();
             return this._super.apply(this, arguments);
                     
         },
