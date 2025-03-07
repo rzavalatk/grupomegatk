@@ -701,7 +701,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         start: function () {
             var self = this;
             
-            this.value_filtro = this.$el.find("#filter_region").val();
+            this.value_filtro = "reg_tgu";
             this._updateView();
             
             return this._super.apply(this, arguments);
