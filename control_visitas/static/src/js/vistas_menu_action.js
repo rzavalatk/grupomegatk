@@ -56,7 +56,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                         args: [result.admin_name],
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el self.reload();
-                        self.$el.find("#admin_value").text(result.admin);
+                        self.$el.find("#admin_value").text(resultado.admin);
                         
                     }).catch(function (error) {
                         // Manejar el error
