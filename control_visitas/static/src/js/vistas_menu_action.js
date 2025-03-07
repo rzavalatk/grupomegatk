@@ -57,7 +57,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                         args: [result.admin_name],
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el self.reload();
-                        self.$el.find("#admin_value").text(resultado);
+                        if(reg == "_tgu") {
+                            self.$el.find("#admin_value").text(resultado['admin_tgu']);
+                        } else if (reg == "_sps") {
+                            self.$el.find("#admin_value").text(resultado['admin_sps']);
+                        }
                         
                     }).catch(function (error) {
                         // Manejar el error

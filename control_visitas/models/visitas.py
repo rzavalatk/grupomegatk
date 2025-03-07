@@ -58,12 +58,16 @@ class Visitas(models.Model):
     @api.model   
     def visita_administracion(self, admin):
         self.create({'name': 'Visita Administración'})
-        admin_val = self.env["control.visitas"].search_count(
-            [('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
         
-        logging.warning("Conteo admin: %s", admin_val)
+        admin_vals = {
+            'admin_tgu': admin_val_tgu,
+            'admin_sps': admin_val_sps
+        }
+        logging.warning("Conteo admin: %s", admin_vals)
         
-        return admin_val
+        return admin_vals
         
             
     @api.model
