@@ -15,12 +15,15 @@ var CustomDashboard = AbstractAction.extend({
     _onChangeFilter: function (ev) {
         ev.preventDefault();
         var value = ev.target.value;
+        return value
     },
 
     start: function () {
         
-            
+         var val = _onChangeFilter;
         var self = this;
+        console.log(val);
+        
 
         if (value == "reg_tgu") {
             ajax.rpc('/control_visitas_tgu').then(function (result) {
