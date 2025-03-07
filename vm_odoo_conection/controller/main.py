@@ -47,7 +47,7 @@ class EmployeeController(http.Controller):
             return self._json_response("success", "Success", response_data)
 
         except Exception as e:
-            _logger.exception("Error en el controlador: %s", e)
+            _logger.exception("Error en el controlador")
             return self._json_response("error", str(e))
 
     def _json_response(self, status, status_msg, data=None):
@@ -60,6 +60,7 @@ class EmployeeController(http.Controller):
                 "data": data if data else {}
             }
         }
+        _logger.info("Respuesta JSON generada: %s", response_data)
         return Response(
             json.dumps(response_data),
             content_type='application/json',
