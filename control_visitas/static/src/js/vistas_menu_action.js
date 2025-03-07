@@ -39,7 +39,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _updateUI: function (reg) {
             var self = this;
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-                self.$el.find("#admin_value").text(result.admin);
+               
                 self.$el.find("#meditek_value").text(result.meditek);
                 self.$el.find("#lenka_value").text(result.lenka);
                 self.$el.find("#clinica_value").text(result.clinica);
@@ -56,7 +56,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                         args: [result.admin_name],
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el self.reload();
-                        window.location.reload();
+                        self.$el.find("#admin_value").text(result.admin);
                         
                     }).catch(function (error) {
                         // Manejar el error
@@ -183,7 +183,6 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
-                            console.log(e)
                             self.$el.find("#admin_state").click(function () {
                                 // Ejecutar el método en el servidor
                                 self._rpc({
