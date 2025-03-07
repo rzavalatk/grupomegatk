@@ -8,7 +8,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
     var CustomDashboard = AbstractAction.extend({
         template: 'VisitasMenuDashboard',
 
-        value_filtro: null,
+        value_filtro: "reg_tgu",
         
         events: {
             'change #filter_region': '_onChangeFilter',
@@ -698,7 +698,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         start: function () {
-            this.value_filtro = "reg_tgu";
+
             this._updateView();
             
             return this._super.apply(this, arguments);
