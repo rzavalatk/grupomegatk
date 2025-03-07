@@ -26,11 +26,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             var self = this;
             var reg = "";
 
-            if(this.value_filtro == "reg_tgu") {
+            if(self.value_filtro == "reg_tgu") {
                 reg = "_tgu";
                 self._updateUI(reg);
                 
-            } else if(this.value_filtro == "reg_sps") {
+            } else if(self.value_filtro == "reg_sps") {
                 reg = "_sps";
                 self._updateUI(reg);
             }
