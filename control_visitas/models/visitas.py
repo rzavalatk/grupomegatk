@@ -58,6 +58,11 @@ class Visitas(models.Model):
     @api.model   
     def visita_administracion(self, admin):
         self.create({'name': 'Visita Administración'})
+        admin_val = self.env["control.visitas"].search_count(
+            [('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        
+        return admin_val
+        
             
     @api.model
     def visita_tienda_megatk(self, vals):
