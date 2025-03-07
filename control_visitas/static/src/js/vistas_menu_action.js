@@ -20,7 +20,7 @@ var CustomDashboard = AbstractAction.extend({
 
     start: function () {
         
-        var val = value_filtro;
+        var val = this.value_filtro;
         var self = this;
         console.log(val);
 
