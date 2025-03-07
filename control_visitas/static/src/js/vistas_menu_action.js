@@ -16,7 +16,7 @@ var CustomDashboard = AbstractAction.extend({
 
     _onChangeFilter: function (ev) {
         ev.preventDefault();
-        console.log("desde onchange " + this.value_filtro);
+        console.log(this.value_filtro);
         // this.value_filtro = ev.target.value;
         // console.log(value_filtro);
          
@@ -26,7 +26,7 @@ var CustomDashboard = AbstractAction.extend({
         
         var val = this.value_filtro;
         var self = this;
-        console.log(val);
+        console.log("desde start " + val);
 
         if (val == "reg_tgu") {
             ajax.rpc('/control_visitas_tgu').then(function (result) {
