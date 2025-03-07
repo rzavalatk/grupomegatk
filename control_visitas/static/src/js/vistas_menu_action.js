@@ -11,7 +11,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         value_filtro: null,
         
         events: {
-            'change #filter_region': '_onChangeFilter',
+            'change #filter_selection': '_onChangeFilter',
         },
 
         _onChangeFilter: function (ev) {
