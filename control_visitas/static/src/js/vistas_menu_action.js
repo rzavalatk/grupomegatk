@@ -23,7 +23,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         _updateView: function () {
-            var self = this;
+            
             var reg = "";
 
             if(this.value_filtro == "reg_tgu") {
@@ -37,6 +37,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         _updateUI: function (reg) {
+            var self = this;
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
@@ -697,8 +698,6 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         start: function () {
-            var self = this;
-            
             this.value_filtro = "reg_tgu";
             this._updateView();
             
@@ -709,4 +708,3 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
     core.action_registry.add('control_visitas_tag', CustomDashboard);
     return CustomDashboard;
 });
-
