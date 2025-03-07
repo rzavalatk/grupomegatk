@@ -11,7 +11,7 @@ var CustomDashboard = AbstractAction.extend({
     value_filtro: null,
     
     events: {
-        'change #filter_selection': '_onChangeFilter',
+        'change #filter_region': '_onChangeFilter',
     },
 
     _onChangeFilter: function (ev) {
@@ -26,7 +26,7 @@ var CustomDashboard = AbstractAction.extend({
         var self = this;
         console.log(val);
 
-        if (value == "reg_tgu") {
+        if (val == "reg_tgu") {
             ajax.rpc('/control_visitas_tgu').then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
@@ -686,7 +686,7 @@ var CustomDashboard = AbstractAction.extend({
             })//final filter
         }
 
-        if (value == "reg_sps") {
+        if (val == "reg_sps") {
             ajax.rpc('/control_visitas_sps').then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
