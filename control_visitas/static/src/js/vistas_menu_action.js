@@ -16,9 +16,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _onChangeFilter: function (ev) {
             ev.preventDefault();
-            console.log(this.value_filtro);
+            console.log("Desde onChangeFilter " + this.value_filtro);
             this.value_filtro = ev.target.value;
-            console.log(this.value_filtro);
+            console.log("Desde onChangeFilter " + this.value_filtro);
             this._updateView();
         },
 
@@ -702,6 +702,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
             this._updateView();
             self.value_filtro = self.$el.find("#filter_selection").val();
+            console.log("Desde start " + self.value_filtro);
+            
             return this._super.apply(this, arguments);
                     
         },
