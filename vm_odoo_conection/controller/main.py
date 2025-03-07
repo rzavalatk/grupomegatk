@@ -1,7 +1,7 @@
+from odoo import http
+from odoo.http import request
 import json
 import logging
-from odoo import http
-from odoo.http import request, Response
 
 _logger = logging.getLogger(__name__)
 
@@ -14,55 +14,27 @@ class EmployeeController(http.Controller):
             data = json.loads(request.httprequest.data)
             _logger.info("Datos recibidos: %s", data)
 
-            # Verificar la API Key (si se usa autenticación basada en API Key)
-            api_key = request.httprequest.headers.get('Authorization')
-            if not api_key or not api_key.startswith('Bearer '):
-                _logger.error("API Key no proporcionada o inválida")
-                return self._json_response("error", "API Key no proporcionada o inválida")
-
             # Extraer el código de la tarjeta
-            card_code = data.get('cardCode')
+            card_code = data.get('card_code')
             if not card_code:
                 _logger.error("Código de tarjeta no proporcionado")
-                return self._json_response("error", "Código de tarjeta no proporcionado")
+                return {'error': 'Código de tarjeta no proporcionado'}
 
-            # Buscar el empleado por número de tarjeta
+            # Buscar el empleado por el número de tarjeta
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
                 _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
-                return self._json_response("error", "Empleado no encontrado")
+                return {'error': 'Empleado no encontrado'}
 
-            # Construir la respuesta con la información del empleado
+            # Devolver la información del empleado
+            _logger.info("Empleado encontrado: %s", employee.name)
             response_data = {
-                "status": "success",
-                "status_msg": "Success",
-                "data": {
-                    "name": employee.name,
-                    "credito": float(employee.credito),
-                    "credito_disponible": float(employee.credito_disponible)
-                }
+                'name': employee.name,
+                'credito': float(employee.credito),
+                'credito_disponible': float(employee.credito_disponible)
             }
-
             _logger.info("Respuesta JSON enviada: %s", response_data)
-            return self._json_response("success", "Success", response_data)
-
+            return response_data  # Devolver el diccionario directamente
         except Exception as e:
-            _logger.exception("Error en el controlador")
-            return self._json_response("error", str(e))
-
-    def _json_response(self, status, status_msg, data=None):
-        response_data = {
-            "jsonrpc": "2.0",
-            "id": None,
-            "result": {
-                "status": status,
-                "status_msg": status_msg,
-                "data": data if data else {}
-            }
-        }
-        _logger.info("Respuesta JSON generada: %s", response_data)
-        return Response(
-            json.dumps(response_data),
-            content_type='application/json',
-            status=200
-        )
+            _logger.error("Error en el controlador: %s", str(e))
+            return {'error': str(e)} 
