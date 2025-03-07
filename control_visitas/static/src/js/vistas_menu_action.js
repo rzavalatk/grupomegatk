@@ -7,6 +7,8 @@ var rpc = require('web.rpc');
 var ajax = require('web.ajax');
 var CustomDashboard = AbstractAction.extend({
     template: 'VisitasMenuDashboard',
+
+    value_filtro: null,
     
     events: {
         'change #filter_selection': '_onChangeFilter',
@@ -14,7 +16,7 @@ var CustomDashboard = AbstractAction.extend({
 
     _onChangeFilter: function (ev) {
         ev.preventDefault();
-        var value_filtro = ev.target.value;
+        this.value_filtro = ev.target.value;
         return value_filtro
     },
 
