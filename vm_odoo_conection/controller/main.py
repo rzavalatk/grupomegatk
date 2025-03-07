@@ -51,16 +51,13 @@ class EmployeeController(http.Controller):
             return self._json_response("error", str(e))
 
     def _json_response(self, status, status_msg, data=None):
-        """
-        Función auxiliar para construir respuestas JSON-RPC2 estándar.
-        """
         response_data = {
             "jsonrpc": "2.0",
             "id": None,
             "result": {
                 "status": status,
                 "status_msg": status_msg,
-                "data": data if data else None
+                "data": data if data else {}
             }
         }
         return Response(
