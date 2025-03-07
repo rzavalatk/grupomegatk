@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 class ControlVisitasWebsite(http.Controller):
     
     @http.route(f'/control_visitas_tgu', type='json', auth='public', website=True)
-    def control_visitas_dashboard(self):
+    def control_visitas_dashboard_tgu(self):
       
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "TGU")])
@@ -82,7 +82,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route('/control_visitas_dia_tgu', type='json', auth='public', website=True)
-    def control_visitas_dashboard_dia(self):
+    def control_visitas_dashboard_dia_tgu(self):
       
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "TGU")])
@@ -155,7 +155,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_semana_tgu', type='json', auth='public', website=True)
-    def control_visitas_dashboard_semana(self):
+    def control_visitas_dashboard_semana_tgu(self):
       
         hoy = dt.date.today()
         semana = str(hoy - dt.timedelta(days=7)) + ' '
@@ -231,7 +231,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_mes_tgu', type='json', auth='public', website=True)
-    def control_visitas_dashboard_mes(self):
+    def control_visitas_dashboard_mes_tgu(self):
     
         hoy = dt.date.today()
         mes = str(hoy - dt.timedelta(days=30)) + ' '
@@ -307,7 +307,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_anio_tgu', type='json', auth='public', website=True)
-    def control_visitas_dashboard_anio(self):
+    def control_visitas_dashboard_anio_tgu(self):
       
         hoy = dt.date.today()
         anio = str(hoy - dt.timedelta(days=365)) + ' '
@@ -382,7 +382,7 @@ class ControlVisitasWebsite(http.Controller):
         
         return dashboard_values    
     @http.route(f'/control_visitas_sps', type='json', auth='public', website=True)
-    def control_visitas_dashboard(self):
+    def control_visitas_dashboard_sps(self):
       
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "SPS")])
@@ -455,7 +455,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_dia_sps', type='json', auth='public', website=True)
-    def control_visitas_dashboard_dia(self):
+    def control_visitas_dashboard_dia_sps(self):
       
         admin = request.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "SPS")])
@@ -528,7 +528,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_semana_sps', type='json', auth='public', website=True)
-    def control_visitas_dashboard_semana(self):
+    def control_visitas_dashboard_semana_sps(self):
       
         hoy = dt.date.today()
         semana = str(hoy - dt.timedelta(days=7)) + ' '
@@ -604,7 +604,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_mes_sps', type='json', auth='public', website=True)
-    def control_visitas_dashboard_mes(self):
+    def control_visitas_dashboard_mes_sps(self):
     
         hoy = dt.date.today()
         mes = str(hoy - dt.timedelta(days=30)) + ' '
@@ -680,7 +680,7 @@ class ControlVisitasWebsite(http.Controller):
         return dashboard_values    
     
     @http.route(f'/control_visitas_anio_sps', type='json', auth='public', website=True)
-    def control_visitas_dashboard_anio(self):
+    def control_visitas_dashboard_anio_sps(self):
       
         hoy = dt.date.today()
         anio = str(hoy - dt.timedelta(days=365)) + ' '
