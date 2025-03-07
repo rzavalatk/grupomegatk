@@ -65,7 +65,7 @@ class Visitas(models.Model):
             'admin_tgu': admin_val_tgu,
             'admin_sps': admin_val_sps
         }
-        logging.warning("Conteo admin: %s", admin_vals)
+        logging.warning("Conteo admin: %s", admin_vals['admin_tgu'])
         
         return admin_vals
         
