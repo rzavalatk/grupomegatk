@@ -8,7 +8,7 @@ var ajax = require('web.ajax');
 var CustomDashboard = AbstractAction.extend({
     template: 'VisitasMenuDashboard',
 
-    value_filtro: null,
+    value_filtro: "reg_tgu",
     
     events: {
         'change #filter_region': '_onChangeFilter',
