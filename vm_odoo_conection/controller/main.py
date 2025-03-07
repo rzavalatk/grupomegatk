@@ -34,9 +34,13 @@ class EmployeeController(http.Controller):
 
             # Construir la respuesta con la información del empleado
             response_data = {
-                "name": employee.name,
-                "credito": float(employee.credito),
-                "credito_disponible": float(employee.credito_disponible)
+                "status": "success",
+                "status_msg": "Success",
+                "data": {
+                    "name": employee.name,
+                    "credito": float(employee.credito),
+                    "credito_disponible": float(employee.credito_disponible)
+                }
             }
 
             _logger.info("Respuesta JSON enviada: %s", response_data)
