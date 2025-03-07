@@ -38,7 +38,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _updateUI: function (reg) {
             var self = this;
-            ajax.jasonrpc(`/control_visitas${reg}`).then(function (result) {
+            ajax.rpc(`/control_visitas${reg}`).then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
                 self.$el.find("#lenka_value").text(result.lenka);
