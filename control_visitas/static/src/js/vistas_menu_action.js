@@ -57,7 +57,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el self.reload();
                         document.getElementById('admin_value').innerText = resultado.admin;
-                        
+                        self.reaload();
                     }).catch(function (error) {
                         // Manejar el error
                         console.error(error);
