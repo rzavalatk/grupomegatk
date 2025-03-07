@@ -54,7 +54,7 @@ class EmployeeController(http.Controller):
         """
         Función auxiliar para construir respuestas JSON-RPC2 estándar.
         """
-        return {
+        response_data = {
             "jsonrpc": "2.0",
             "id": None,
             "result": {
@@ -63,3 +63,8 @@ class EmployeeController(http.Controller):
                 "data": data if data else None
             }
         }
+        return Response(
+            json.dumps(response_data),
+            content_type='application/json',
+            status=200
+        )
