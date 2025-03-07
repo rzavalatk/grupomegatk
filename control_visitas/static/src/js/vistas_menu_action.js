@@ -72,7 +72,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                         args: [result.admin_name],
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el método
-                        self.$el.find("#admin_value").text(resultado['megatk_tgu']);
+                        self.$el.find("#admin_value").text(resultado);
                         
                     }).catch(function (error) {
                         // Manejar el error
