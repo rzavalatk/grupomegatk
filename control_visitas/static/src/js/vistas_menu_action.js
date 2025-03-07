@@ -23,7 +23,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         _updateView: function () {
-            
+            var self = this;
             var reg = "";
 
             if(this.value_filtro == "reg_tgu") {
