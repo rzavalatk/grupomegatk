@@ -39,7 +39,6 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _updateUI: function (reg) {
             var self = this;
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-                self.$el.off();
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
                 self.$el.find("#lenka_value").text(result.lenka);
@@ -48,7 +47,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#gerencia_value").text(result.gerencia);
                 self.$el.find("#soporte_value").text(result.soporte);
                 self.$el.find("#otros_value").text(result.otros);
-    
+                
+                self.$el.off();
                 self.$el.find("#admin_state").click(function () {
                     // Ejecutar el método en el servidor
                     self._rpc({
