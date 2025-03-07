@@ -48,7 +48,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#soporte_value").text(result.soporte);
                 self.$el.find("#otros_value").text(result.otros);
                 
-                self.$el.off();
+                // self.$el.off();
                 self.$el.find("#admin_state").click(function () {
                     // Ejecutar el método en el servidor
                     self._rpc({
