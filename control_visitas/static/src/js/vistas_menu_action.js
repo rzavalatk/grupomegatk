@@ -24,14 +24,17 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _updateView: function () {
             var self = this;
+            var reg = "";
 
             if(this.value_filtro == "reg_tgu") {
                 ajax.rpc('/control_visitas_tgu').then(function (result) {
-                    self._updateUI(result, reg="_tgu");
+                    reg = "_tgu";
+                    self._updateUI(result, reg);
                 });
             } else if(this.value_filtro == "reg_sps") {
                 ajax.rpc('/control_visitas_sps').then(function (result) {
-                    self._updateUI(result, reg="_sps");
+                    reg = "_sps";
+                    self._updateUI(result, reg);
                 });
             }
         },
