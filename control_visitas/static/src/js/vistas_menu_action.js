@@ -42,7 +42,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             ajax.jsonRpc(`/control_visitas${reg}`, 'call', {
                 'admin_val': admin_val
             }).then(function (result) {
-                self.$el.find("#admin_value").text(result.admin);
+                $("#admin_value").text(result.admin);
                 // self.$el.find("#meditek_value").text(result.meditek);
                 // self.$el.find("#lenka_value").text(result.lenka);
                 // self.$el.find("#clinica_value").text(result.clinica);
