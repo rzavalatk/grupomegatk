@@ -16,9 +16,9 @@ var CustomDashboard = AbstractAction.extend({
 
     _onChangeFilter: function (ev) {
         ev.preventDefault();
-        console.log(value_filtro);
-        this.value_filtro = ev.target.value;
-        console.log(value_filtro);
+        console.log("desde onchange", this.value_filtro);
+        // this.value_filtro = ev.target.value;
+        // console.log(value_filtro);
          
     },
 
