@@ -1,7 +1,7 @@
-from odoo import http
-from odoo.http import request
 import json
 import logging
+from odoo import http
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
@@ -14,70 +14,48 @@ class EmployeeController(http.Controller):
             data = json.loads(request.httprequest.data)
             _logger.info("Datos recibidos: %s", data)
 
-            # Verificar la API Key (opcional, si estás usando autenticación con API Key)
+            # Verificar la API Key (si se usa autenticación basada en API Key)
             api_key = request.httprequest.headers.get('Authorization')
             if not api_key or not api_key.startswith('Bearer '):
                 _logger.error("API Key no proporcionada o inválida")
-                return {
-                    "jsonrpc": "2.0",
-                    "id": None,
-                    "result": {
-                        "status": "error",
-                        "status_msg": "API Key no proporcionada o inválida"
-                    }
-                }
+                return self._json_response("error", "API Key no proporcionada o inválida")
 
             # Extraer el código de la tarjeta
-            cardCode = data.get('cardCode')
-            if not cardCode:
+            card_code = data.get('cardCode')
+            if not card_code:
                 _logger.error("Código de tarjeta no proporcionado")
-                return {
-                    "jsonrpc": "2.0",
-                    "id": None,
-                    "result": {
-                        "status": "error",
-                        "status_msg": "Código de tarjeta no proporcionado"
-                    }
-                }
+                return self._json_response("error", "Código de tarjeta no proporcionado")
 
-            # Buscar el empleado por el número de tarjeta
-            employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', cardCode)], limit=1)
+            # Buscar el empleado por número de tarjeta
+            employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
-                _logger.error("Empleado no encontrado para el código de tarjeta: %s", cardCode)
-                return {
-                    "jsonrpc": "2.0",
-                    "id": None,
-                    "result": {
-                        "status": "error",
-                        "status_msg": "Empleado no encontrado"
-                    }
-                }
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
+                return self._json_response("error", "Empleado no encontrado")
 
-            # Devolver la información del empleado en formato JSON-RPC2
+            # Construir la respuesta con la información del empleado
             response_data = {
-                "jsonrpc": "2.0",
-                "id": None,
-                "result": {
-                    "status": "success",
-                    "status_msg": "Success",
-                    "data": {
-                        "name": employee.name,
-                        "credito": float(employee.credito),
-                        "credito_disponible": float(employee.credito_disponible)
-                    }
-                }
+                "name": employee.name,
+                "credito": float(employee.credito),
+                "credito_disponible": float(employee.credito_disponible)
             }
 
             _logger.info("Respuesta JSON enviada: %s", response_data)
-            return response_data
+            return self._json_response("success", "Success", response_data)
 
         except Exception as e:
-            _logger.error("Error en el controlador: %s", str(e))
-            return {
-                "jsonrpc": "2.0",
-                "id": None,
-                "result": {
-                    "status": "error",
-                    "status_msg": str(e)
-                }
+            _logger.exception("Error en el controlador")
+            return self._json_response("error", str(e))
+
+    def _json_response(self, status, status_msg, data=None):
+        """
+        Función auxiliar para construir respuestas JSON-RPC2 estándar.
+        """
+        return {
+            "jsonrpc": "2.0",
+            "id": None,
+            "result": {
+                "status": status,
+                "status_msg": status_msg,
+                "data": data if data else None
             }
+        }
