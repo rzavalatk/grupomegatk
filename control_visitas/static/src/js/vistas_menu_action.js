@@ -38,9 +38,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _updateUI: function (reg) {
             var self = this;
-            self.$el.off();
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-                self.$el.find("#admin_value").text(result.admin);
+                self.$el.off();
+                // self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
                 self.$el.find("#lenka_value").text(result.lenka);
                 self.$el.find("#clinica_value").text(result.clinica);
@@ -48,7 +48,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#gerencia_value").text(result.gerencia);
                 self.$el.find("#soporte_value").text(result.soporte);
                 self.$el.find("#otros_value").text(result.otros);
-                
+    
                 self.$el.find("#admin_state").click(function () {
                     // Ejecutar el método en el servidor
                     self._rpc({
@@ -57,11 +57,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                         args: [result.admin_name],
                     }).then(function (resultado) {
                         // Cargar la vista después de ejecutar el self.reload();
-                        if(reg == "_tgu") {
-                            self.$el.find("#admin_value").text(resultado['admin_tgu']);
-                        } else if (reg == "_sps") {
-                            self.$el.find("#admin_value").text(resultado['admin_sps']);
-                        }
+                        self.$el.find("#admin_value").text(resultado);
                         
                     }).catch(function (error) {
                         // Manejar el error
