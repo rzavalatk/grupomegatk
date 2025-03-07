@@ -38,15 +38,18 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _updateUI: function (reg) {
             var self = this;
-            ajax.rpc(`/control_visitas${reg}`).then(function (result) {
+            var admin_val = $("#admin_value").data('admin_value');
+            ajax.jasonRpc(`/control_visitas${reg}`, 'call', {
+                'admin_val': admin_val
+            }).then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
-                self.$el.find("#meditek_value").text(result.meditek);
-                self.$el.find("#lenka_value").text(result.lenka);
-                self.$el.find("#clinica_value").text(result.clinica);
-                self.$el.find("#megatk_value").text(result.megatk);
-                self.$el.find("#gerencia_value").text(result.gerencia);
-                self.$el.find("#soporte_value").text(result.soporte);
-                self.$el.find("#otros_value").text(result.otros);
+                // self.$el.find("#meditek_value").text(result.meditek);
+                // self.$el.find("#lenka_value").text(result.lenka);
+                // self.$el.find("#clinica_value").text(result.clinica);
+                // self.$el.find("#megatk_value").text(result.megatk);
+                // self.$el.find("#gerencia_value").text(result.gerencia);
+                // self.$el.find("#soporte_value").text(result.soporte);
+                // self.$el.find("#otros_value").text(result.otros);
     
                 self.$el.find("#admin_state").click(function () {
                     // Ejecutar el método en el servidor
