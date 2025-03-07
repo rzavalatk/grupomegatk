@@ -61,6 +61,8 @@ class Visitas(models.Model):
         admin_val = self.env["control.visitas"].search_count(
             [('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
         
+        logging.warning("Conteo admin: %s", admin_val)
+        
         return admin_val
         
             
