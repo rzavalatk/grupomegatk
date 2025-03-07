@@ -18,7 +18,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             ev.preventDefault();
             console.log(this.value_filtro);
             this.value_filtro = ev.target.value;
-            console.log(value_filtro);
+            console.log(this.value_filtro);
             this._updateView();
         },
 
