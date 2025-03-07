@@ -13,6 +13,7 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
 
         _onChangeFilter: function (ev) {
             ev.preventDefault();
+            console.log(ev);
             alert('¡Hola! Este es un mensaje de ejemplo.');
         },
     });
