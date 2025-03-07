@@ -39,7 +39,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _updateUI: function (reg) {
             var self = this;
             var admin_val = $("#admin_value").data('admin_value');
-            ajax.jasonRpc(`/control_visitas${reg}`, 'call', {
+            ajax.jsonRpc(`/control_visitas${reg}`, 'call', {
                 'admin_val': admin_val
             }).then(function (result) {
                 self.$el.find("#admin_value").text(result.admin);
