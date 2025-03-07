@@ -700,11 +700,12 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         start: function () {
             var self = this;
 
-            // self.value_filtro = self.$el.find("#filter_region").val();
-            self.value_filtro = 'reg_sps';
-            //self.value_filtro = 'reg_tgu';
-            self._updateView();
-            console.log("Desde start " + self.value_filtro);        
+            self.value_filtro = self.$el.find("#filter_region").val();
+            this._updateView();
+            console.log("Desde start " + self.value_filtro);
+            
+            return this._super.apply(this, arguments);
+                    
         },
     })
     core.action_registry.add('control_visitas_tag', CustomDashboard);
