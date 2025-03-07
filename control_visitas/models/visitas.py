@@ -73,7 +73,9 @@ class Visitas(models.Model):
     @api.model
     def visita_tienda_megatk(self, vals):
         self.create({'name': 'Visita Tienda Megatk'})
+        megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
 
+        return megatk_val_tgu
     @api.model
     def visita_tienda_meditek(self, vals):    
         self.create({'name': 'Visita Tienda Meditek'})
