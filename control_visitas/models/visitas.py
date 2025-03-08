@@ -53,7 +53,7 @@ class Visitas(models.Model):
          return super(Visitas, self).create(vals)  
       
     @api.model   
-    def visita_administracion(self, admin):
+    def visita_administracion(self):
         self.create({'name': 'Visita Administración'})
         
         admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -68,7 +68,7 @@ class Visitas(models.Model):
         
             
     @api.model
-    def visita_tienda_megatk(self, vals):
+    def visita_tienda_megatk(self):
         self.create({'name': 'Visita Tienda Megatk'})
         
         megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -81,7 +81,7 @@ class Visitas(models.Model):
                 
         return megatk_vals
     @api.model
-    def visita_tienda_meditek(self, vals):    
+    def visita_tienda_meditek(self):    
         self.create({'name': 'Visita Tienda Meditek'})
         meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "TGU")])
         meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "SPS")])
@@ -94,7 +94,7 @@ class Visitas(models.Model):
         return meditek_vals
     
     @api.model
-    def visita_lenka(self, vals):    
+    def visita_lenka(self):    
         self.create({'name': 'Visita Lenka'})
         
         lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenak'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -108,7 +108,7 @@ class Visitas(models.Model):
         return lenka_vals
     
     @api.model
-    def visita_clinica(self, vals):
+    def visita_clinica(self):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
         clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clinica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -122,7 +122,7 @@ class Visitas(models.Model):
         return clinica_vals
     
     @api.model
-    def visita_gerencia(self, vals):
+    def visita_gerencia(self):
         self.env['control.visitas'].create({'name': 'Visita Gerencia'})
         
         gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -136,7 +136,7 @@ class Visitas(models.Model):
         return gerencia_vals
     
     @api.model
-    def visita_soporte(self, vals):
+    def visita_soporte(self):
         self.env['control.visitas'].create({'name': 'Visita Soporte'})
         
         soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "TGU")])
@@ -150,7 +150,7 @@ class Visitas(models.Model):
         return soporte_vals
     
     @api.model
-    def visita_otros(self, vals):
+    def visita_otros(self):
         self.env['control.visitas'].create({'name': 'Visita Otros'})
         
         otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "TGU")])
