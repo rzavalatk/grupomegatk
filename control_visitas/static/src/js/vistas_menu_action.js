@@ -138,6 +138,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
             // Obtener los datos iniciales
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
+
+                console.log("Desde updateui " + reg);
                 
                 // Eliminar eventos anteriores para evitar duplicación
                 self.$el.off('click', '#admin_state');
