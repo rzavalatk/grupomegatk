@@ -236,6 +236,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             })
             
             self.value_filtro = self.$el.find("#filter_region").val();
+
+            console.log("Desde start " + self.value_filtro);
             
             this._updateView();
             console.log("Desde start " + self.value_filtro);
