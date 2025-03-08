@@ -37,4 +37,32 @@ class EmployeeController(http.Controller):
             return response_data  # Devolver el diccionario directamente
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
-            return {'error': str(e)} 
+            return {'error': str(e)}
+
+    @http.route('/api/update_credit', type='json', auth='public', methods=['POST'])
+    def update_credit(self, **kwargs):
+        try:
+            # Obtener el cuerpo de la solicitud JSON
+            data = json.loads(request.httprequest.data)
+            _logger.info("Datos recibidos para actualizar crédito: %s", data)
+
+            # Extraer el código de la tarjeta y el nuevo crédito
+            card_code = data.get('card_code')
+            new_credit = data.get('new_credit')
+            if not card_code or new_credit is None:
+                _logger.error("Datos incompletos para actualizar el crédito")
+                return {'error': 'Datos incompletos'}
+
+            # Buscar el empleado por el número de tarjeta
+            employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
+            if not employee:
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
+                return {'error': 'Empleado no encontrado'}
+
+            # Actualizar el crédito disponible
+            employee.write({'credito_disponible': new_credit})
+            _logger.info("Crédito actualizado para el empleado: %s", employee.name)
+            return {'success': True}
+        except Exception as e:
+            _logger.error("Error en el controlador: %s", str(e))
+            return {'error': str(e)}
