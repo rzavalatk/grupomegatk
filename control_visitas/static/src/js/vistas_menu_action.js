@@ -28,12 +28,12 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
             if(self.value_filtro == "reg_tgu") {
                 reg = "_tgu";
-                self._updateUI(reg);   
+                self._updateUI(reg);
+                
             } else if(self.value_filtro == "reg_sps") {
                 reg = "_sps";
                 self._updateUI(reg);
             }
-            
         },
 
         _updateUI: function (reg) {
@@ -216,18 +216,19 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             var self = this;
 
             ajax.rpc('/control_visitas_user_reg').then(function (result) {
-
-                if(result.user_reg == "TGU") {
-                    self.value_filtro = "reg_tgu";
-                } else if(result.user_reg == "SPS") {
-                    self.value_filtro = "reg_sps";
+                if(result.user_reg == "3") {
+                    self.$el.find("#filter_region").val("reg_tgu");
+                } else if(result.user_reg == "2") {
+                    self.$el.find("#filter_region").val("reg_sps");
                 }
-
-                self._updateView();
-                console.log("Desde start " + self.value_filtro);
-                
-                return self._super.apply(self, arguments);
             })
+            self.value_filtro = self.$el.find("#filter_region").val();
+            
+            this._updateView();
+            console.log("Desde start " + self.value_filtro);
+            
+            return this._super.apply(this, arguments);
+                    
         },
     })
     core.action_registry.add('control_visitas_tag', CustomDashboard);
