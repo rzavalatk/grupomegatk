@@ -223,10 +223,10 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     self.value_filtro = "reg_sps";
                 }
 
-                this._updateView();
+                self._updateView();
                 console.log("Desde start " + self.value_filtro);
                 
-                return this._super.apply(this, arguments);
+                return self._super.apply(self, arguments);
             })
         },
     })
