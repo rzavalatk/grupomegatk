@@ -142,10 +142,10 @@
                                 Filtrar por ciudad:
                                 </b>
                                 <select id="filter_region" style="width: 50%;padding:10px;border-radius:10px; background:white;" disabled='True'>
-                                    <option id="reg_tgu" value="reg_tgu" selected="">
+                                    <option id="reg_tgu" value="reg_tgu" >
                                         Tegucigalpa
                                     </option>
-                                    <option id="reg_sps" value="reg_sps">
+                                    <option id="reg_sps" value="reg_sps" selected="True">
                                         San Pedro Sula
                                     </option>
                                 </select>
