@@ -38,8 +38,117 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _updateUI: function (reg) {
             var self = this;
+        
+            // Definir funciones con nombre para manejar los eventos click
+            function manejarClickAdminState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_administracion',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickMegatkState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_tienda_megatk',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    self.$el.find("#megatk_value").text(resultado);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickMeditekState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_tienda_meditek',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickLenkaState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_lenka',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickClinicaState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_clinica',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickGerenciaState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_gerencia',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickSoporteState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_soporte',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            function manejarClickOtrosState() {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_otros',
+                    args: [result.admin_name],
+                }).then(function (resultado) {
+                    window.location.reload();
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        
+            // Obtener los datos iniciales
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-                self.$el.off('click', '.wrap');
+                // Eliminar eventos anteriores para evitar duplicación
+                self.$el.off('click', '#admin_state', manejarClickAdminState);
+                self.$el.off('click', '#megatk_state', manejarClickMegatkState);
+                self.$el.off('click', '#meditek_state', manejarClickMeditekState);
+                self.$el.off('click', '#lenka_state', manejarClickLenkaState);
+                self.$el.off('click', '#clinica_state', manejarClickClinicaState);
+                self.$el.off('click', '#gerencia_state', manejarClickGerenciaState);
+                self.$el.off('click', '#soporte_state', manejarClickSoporteState);
+                self.$el.off('click', '#otros_state', manejarClickOtrosState);
+        
+                // Actualizar los valores en la interfaz
                 self.$el.find("#admin_value").text(result.admin);
                 self.$el.find("#meditek_value").text(result.meditek);
                 self.$el.find("#lenka_value").text(result.lenka);
@@ -48,263 +157,31 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#gerencia_value").text(result.gerencia);
                 self.$el.find("#soporte_value").text(result.soporte);
                 self.$el.find("#otros_value").text(result.otros);
-    
-                self.$el.find("#admin_state").click(function () {
-                    // Ejecutar el método en el servidor
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_administracion',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el self.reload();
-                        self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#megatk_state").click(function () {
-                    // Ejecutar el método en el servidor
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_tienda_megatk',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        self.$el.find("#megatk_value").text(resultado);
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#meditek_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_tienda_meditek',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#lenka_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_lenka',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#clinica_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_clinica',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#gerencia_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_gerencia',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#soporte_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_soporte',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-                self.$el.find("#otros_state").click(function () {
-                        // Ejecutar el método en el servidor
-                        self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_otros',
-                        args: [result.admin_name],
-                    }).then(function (resultado) {
-                        // Cargar la vista después de ejecutar el método
-                        window.location.reload();
-                        
-                    }).catch(function (error) {
-                        // Manejar el error
-                        console.error(error);
-                    });
-                })
-    
-                self.$el.find("#filter_selection").change(function(e) {
-                    
-                    var target = $(e.target)
-                    var value = target.val()
-                    var val_filter = value + reg
-    
+        
+                // Registrar los eventos click con las funciones con nombre
+                // self.$el.on('click', '#admin_state', manejarClickAdminState);
+                // self.$el.on('click', '#megatk_state', manejarClickMegatkState);
+                // self.$el.on('click', '#meditek_state', manejarClickMeditekState);
+                // self.$el.on('click', '#lenka_state', manejarClickLenkaState);
+                // self.$el.on('click', '#clinica_state', manejarClickClinicaState);
+                // self.$el.on('click', '#gerencia_state', manejarClickGerenciaState);
+                // self.$el.on('click', '#soporte_state', manejarClickSoporteState);
+                // self.$el.on('click', '#otros_state', manejarClickOtrosState);
+        
+                // Manejar el cambio en el filtro
+                self.$el.find("#filter_selection").off('change').on('change', function (e) {
+                    var target = $(e.target);
+                    var value = target.val();
+                    var val_filter = value + reg;
+        
                     if (val_filter == `this_day${reg}`) {
-                        
-                        ajax.rpc(`/control_visitas_dia${reg}`).then(function(result) {
+                        ajax.rpc(`/control_visitas_dia${reg}`).then(function (result) {
                             self.$el.find("#admin_value").text(result.admin);
                             self.$el.find("#meditek_value").text(result.meditek);
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
-                            self.$el.find("#admin_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_administracion',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el self.reload();
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#megatk_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_megatk',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#meditek_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_meditek',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#lenka_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_lenka',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#clinica_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_clinica',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#gerencia_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_gerencia',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#soporte_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_soporte',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#otros_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_otros',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                        })
+                        });
                     } else if (val_filter == `this_week${reg}`) {
                         ajax.rpc(`/control_visitas_semana${reg}`).then(function (result) {
                             self.$el.find("#admin_value").text(result.admin);
@@ -312,128 +189,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
-    
-                            self.$el.find("#admin_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_administracion',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el self.reload();
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#megatk_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_megatk',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#meditek_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_meditek',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#lenka_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_lenka',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#clinica_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_clinica',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#gerencia_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_gerencia',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#soporte_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_soporte',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#otros_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_otros',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                        })
+                        });
                     } else if (val_filter == `this_month${reg}`) {
                         ajax.rpc(`/control_visitas_mes${reg}`).then(function (result) {
                             self.$el.find("#admin_value").text(result.admin);
@@ -441,128 +197,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
-    
-                            self.$el.find("#admin_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_administracion',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el self.reload();
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#megatk_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_megatk',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#meditek_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_meditek',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#lenka_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_lenka',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#clinica_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_clinica',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#gerencia_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_gerencia',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#soporte_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_soporte',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#otros_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_otros',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                        })
+                        });
                     } else if (val_filter == `this_year${reg}`) {
                         ajax.rpc(`/control_visitas_anio${reg}`).then(function (result) {
                             self.$el.find("#admin_value").text(result.admin);
@@ -570,131 +205,10 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
-    
-                            self.$el.find("#admin_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_administracion',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el self.reload();
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#megatk_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_megatk',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#meditek_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_tienda_meditek',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#lenka_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_lenka',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#clinica_state").click(function () {
-                                    // Ejecutar el método en el servidor
-                                    self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_clinica',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#gerencia_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_gerencia',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#soporte_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_soporte',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                            self.$el.find("#otros_state").click(function () {
-                                // Ejecutar el método en el servidor
-                                self._rpc({
-                                    model: 'control.visitas',
-                                    method: 'visita_otros',
-                                    args: [result.admin_name],
-                                }).then(function (resultado) {
-                                    // Cargar la vista después de ejecutar el método
-                                    window.location.reload();
-                                    
-                                }).catch(function (error) {
-                                    // Manejar el error
-                                    console.error(error);
-                                });
-                            })
-                        })
+                        });
                     }
-                })
-            });    
+                });
+            });
         },
 
         start: function () {

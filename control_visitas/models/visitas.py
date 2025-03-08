@@ -36,14 +36,11 @@ class Visitas(models.Model):
     def _compute_hora(self):
         for record in self:
             hora_utc = datetime.now(pytz.utc)
-            
             zona_horaria_usuario = self.env.user.tz or 'UTC'
-            
             if hasattr(zona_horaria_usuario, 'zone'):
                 zona_horaria = zona_horaria_usuario
             else:
                 zona_horaria = pytz.timezone(zona_horaria_usuario)
-            
             hora_local = hora_utc.astimezone(zona_horaria).strftime('%H:%M:%S')
             _logger.warning(f"Hora local: {zona_horaria_usuario}")
             record.hora = hora_local
@@ -58,6 +55,7 @@ class Visitas(models.Model):
     @api.model   
     def visita_administracion(self, admin):
         self.create({'name': 'Visita Administración'})
+        
         admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
         admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
         
@@ -65,40 +63,105 @@ class Visitas(models.Model):
             'admin_tgu': admin_val_tgu,
             'admin_sps': admin_val_sps
         }
-        logging.warning("Conteo admin: %s", admin_vals['admin_tgu'])
-        
+                
         return admin_vals
         
             
     @api.model
     def visita_tienda_megatk(self, vals):
         self.create({'name': 'Visita Tienda Megatk'})
+        
         megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-
-        return megatk_val_tgu
+        megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        megatk_vals = {
+            'megatk_tgu': megatk_val_tgu,
+            'megatk_sps': megatk_val_sps
+        }
+                
+        return megatk_vals
     @api.model
     def visita_tienda_meditek(self, vals):    
         self.create({'name': 'Visita Tienda Meditek'})
+        meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        meditek_vals = {
+            'meditek_tgu': meditek_val_tgu,
+            'meditek_sps': meditek_val_sps
+        }
+                
+        return meditek_vals
     
     @api.model
     def visita_lenka(self, vals):    
         self.create({'name': 'Visita Lenka'})
+        
+        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenak'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenak'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        lenka_vals = {
+            'lenka_tgu': lenka_val_tgu,
+            'lenka_sps': lenka_val_sps
+        }
+                
+        return lenka_vals
     
     @api.model
     def visita_clinica(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
+        
+        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clinica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clinica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        clinica_vals = {
+            'clinica_tgu': clinica_val_tgu,
+            'clinica_sps': clinica_val_sps
+        }
+                
+        return clinica_vals
     
     @api.model
     def visita_gerencia(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+        
+        gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        gerencia_vals = {
+            'gerencia_tgu': gerencia_val_tgu,
+            'gerencia_sps': gerencia_val_sps
+        }
+                
+        return gerencia_vals
     
     @api.model
     def visita_soporte(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Soporte'})
+        
+        soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        soporte_vals = {
+            'soporte_tgu': soporte_val_tgu,
+            'soporte_sps': soporte_val_sps
+        }
+                
+        return soporte_vals
     
     @api.model
     def visita_otros(self, vals):
         self.env['control.visitas'].create({'name': 'Visita Otros'})
+        
+        otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        otros_vals = {
+            'otros_tgu': otros_val_tgu,
+            'otros_sps': otros_val_sps
+        }
+                
+        return otros_vals
         
     @api.model    
     def send_email(self, email=None, cc="", contexto={}):
