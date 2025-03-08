@@ -239,7 +239,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             })
             
 
-            console.log("Desde start " + self.value_filtro);
+            console.log("Desde start rpc" + self.value_filtro);
             
             this._updateView();
             
