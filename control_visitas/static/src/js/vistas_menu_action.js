@@ -22,15 +22,15 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             this._updateView();
         },
 
-        _updateView: function () {
+        _updateView: function (value_filtro) {
             var self = this;
             var reg = "";
 
-            if(self.value_filtro == "reg_tgu") {
+            if(value_filtro == "reg_tgu") {
                 reg = "_tgu";
                 self._updateUI(reg);
                 
-            } else if(self.value_filtro == "reg_sps") {
+            } else if(value_filtro == "reg_sps") {
                 reg = "_sps";
                 self._updateUI(reg);
             }
@@ -237,12 +237,12 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 
                 self.value_filtro = self.$el.find("#filter_region").val();
                 console.log("Desde start rpc value " + self.value_filtro);
+                self._updateView(self.value_filtro);
             })
             
 
             console.log("Desde start " + self.value_filtro);
             
-            this._updateView();
             
             return this._super.apply(this, arguments);
                     
