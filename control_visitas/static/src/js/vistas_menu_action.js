@@ -194,6 +194,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
+                            self.$el.find("#gerencia_value").text(result.gerencia);
+                            self.$el.find("#soporte_value").text(result.soporte);
+                            self.$el.find("#otros_value").text(result.otros);   
                         });
                     } else if (val_filter == `this_week${reg}`) {
                         ajax.rpc(`/control_visitas_semana${reg}`).then(function (result) {
@@ -202,6 +205,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
+                            self.$el.find("#gerencia_value").text(result.gerencia);
+                            self.$el.find("#soporte_value").text(result.soporte);
+                            self.$el.find("#otros_value").text(result.otros);
                         });
                     } else if (val_filter == `this_month${reg}`) {
                         ajax.rpc(`/control_visitas_mes${reg}`).then(function (result) {
@@ -210,6 +216,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
+                            self.$el.find("#gerencia_value").text(result.gerencia);
+                            self.$el.find("#soporte_value").text(result.soporte);
+                            self.$el.find("#otros_value").text(result.otros);
                         });
                     } else if (val_filter == `this_year${reg}`) {
                         ajax.rpc(`/control_visitas_anio${reg}`).then(function (result) {
@@ -218,6 +227,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                             self.$el.find("#lenka_value").text(result.lenka);
                             self.$el.find("#clinica_value").text(result.clinica);
                             self.$el.find("#megatk_value").text(result.megatk);
+                            self.$el.find("#gerencia_value").text(result.gerencia);
+                            self.$el.find("#soporte_value").text(result.soporte);
+                            self.$el.find("#otros_value").text(result.otros);
                         });
                     }
                 });
@@ -228,22 +240,23 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             var self = this;
 
             ajax.rpc('/control_visitas_user_reg').then(function (result) {
-                if(result.user_reg == "3") {
-                    self.$el.find("#filter_region").val("reg_tgu");
-                } else if(result.user_reg == "2") {
-                    self.$el.find("#filter_region").val("reg_sps");
+                if(result.user_email != 'lmoran@megatk.com') {
+                    if(result.user_reg == "3") {
+                        self.$el.find("#filter_region").val("reg_tgu");
+                    } else if(result.user_reg == "2") {
+                        self.$el.find("#filter_region").val("reg_sps");
+                    }
+                    console.log("Desde start rpc elemento " + self.$el.find("#filter_region").val());
+                    
+                    self.value_filtro = self.$el.find("#filter_region").val();
+                    console.log("Desde start rpc value " + self.value_filtro);
+                    self._updateView(self.value_filtro);
+                } else {
+                    self.$el.find("#filter_region").prop('disabled', false);
+                    self.value_filtro = self.$el.find("#filter_region").val();
                 }
-                console.log("Desde start rpc elemento " + self.$el.find("#filter_region").val());
-                
-                self.value_filtro = self.$el.find("#filter_region").val();
-                console.log("Desde start rpc value " + self.value_filtro);
-                self._updateView(self.value_filtro);
             })
-            
 
-            console.log("Desde start " + self.value_filtro);
-            
-            
             return this._super.apply(this, arguments);
                     
         },
