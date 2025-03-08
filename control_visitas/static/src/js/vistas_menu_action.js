@@ -158,6 +158,16 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#gerencia_value").text(result.gerencia);
                 self.$el.find("#soporte_value").text(result.soporte);
                 self.$el.find("#otros_value").text(result.otros);
+                
+                console.log("Desde updateui " + result.admin);
+                console.log("Desde updateui " + result.meditek);
+                console.log("Desde updateui " + result.lenka);
+                console.log("Desde updateui " + result.clinica);
+                console.log("Desde updateui " + result.megatk);
+                console.log("Desde updateui " + result.gerencia);
+                console.log("Desde updateui " + result.soporte);
+                console.log("Desde updateui " + result.otros);
+                
         
                 // Registrar los eventos click con las funciones con nombre
                 self.$el.on('click', '#admin_state', manejarClickAdminState);
@@ -222,6 +232,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     self.$el.find("#filter_region").val("reg_sps");
                 }
             })
+            
             self.value_filtro = self.$el.find("#filter_region").val();
             
             this._updateView();
