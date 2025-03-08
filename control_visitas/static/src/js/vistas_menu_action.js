@@ -223,13 +223,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     self.value_filtro = "reg_sps";
                 }
 
+                this._updateView();
+                console.log("Desde start " + self.value_filtro);
+                
+                return this._super.apply(this, arguments);
             })
-            
-            this._updateView();
-            console.log("Desde start " + self.value_filtro);
-            
-            return this._super.apply(this, arguments);
-                    
         },
     })
     core.action_registry.add('control_visitas_tag', CustomDashboard);
