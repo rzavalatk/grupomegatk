@@ -138,6 +138,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
             // Obtener los datos iniciales
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
+                $('#reg_sps').prop('selected', True);
+
                 // Eliminar eventos anteriores para evitar duplicación
                 self.$el.off('click', '#admin_state');
                 self.$el.off('click', '#megatk_state');

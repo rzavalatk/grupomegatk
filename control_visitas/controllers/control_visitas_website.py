@@ -10,6 +10,8 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route(f'/control_visitas_tgu', type='json', auth='public', website=True)
     def control_visitas_dashboard_tgu(self):
+        
+        user_reg = request.env.user.ubicacion_vendedor
       
         admin = request.env["control.visitas"].search_count(
              [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "TGU")])
