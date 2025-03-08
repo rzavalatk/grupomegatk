@@ -10,9 +10,7 @@ class ControlVisitasWebsite(http.Controller):
     
     @http.route(f'/control_visitas_tgu', type='json', auth='public', website=True)
     def control_visitas_dashboard_tgu(self):
-        
-        user_reg = request.env.user.ubicacion_vendedor
-      
+    
         admin = request.env["control.visitas"].search_count(
              [('name', '=', 'Visita Administración'), ('fecha', '=', dt.date.today()),('region', '=', "TGU")])
         admin_name = request.env["control.visitas"].search(
@@ -756,3 +754,10 @@ class ControlVisitasWebsite(http.Controller):
             }
         
         return dashboard_values    
+    
+    
+    @http.route(f'/control_visitas_user_reg', type='json', auth='public', website=True)
+    def user_region(self) :
+        user_reg = request.env.user.ubicacion_vendedor
+        
+        return {"user_reg": user_reg} 
