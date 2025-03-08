@@ -138,8 +138,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
             // Obtener los datos iniciales
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-                $('#reg_sps').prop('selected', true);
-
+                
                 // Eliminar eventos anteriores para evitar duplicación
                 self.$el.off('click', '#admin_state');
                 self.$el.off('click', '#megatk_state');
@@ -216,7 +215,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         start: function () {
             var self = this;
 
-            self.value_filtro = self.$el.find("#filter_region").val();
+            // self.value_filtro = self.$el.find("#filter_region").val();
+            $('#reg_sps').prop('selected', true);
             this._updateView();
             console.log("Desde start " + self.value_filtro);
             
