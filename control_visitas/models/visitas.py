@@ -97,8 +97,8 @@ class Visitas(models.Model):
     def visita_lenka(self):    
         self.create({'name': 'Visita Lenka'})
         
-        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenak'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenak'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "SPS")])
         
         lenka_vals = {
             'lenka_tgu': lenka_val_tgu,
@@ -111,8 +111,8 @@ class Visitas(models.Model):
     def visita_clinica(self):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
-        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clinica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clinica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
         
         clinica_vals = {
             'clinica_tgu': clinica_val_tgu,
