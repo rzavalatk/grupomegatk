@@ -58,7 +58,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_tienda_megatk',
                     args: [],
                 }).then(function (resultado) {
-                    self.$el.find("#megatk_value").text(resultado);
+                    self.$el.find("#megatk_value").text(resultado[`megatk${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -70,7 +70,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_tienda_meditek',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#meditek_value").text(resultado[`meditek${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -82,7 +82,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_lenka',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#lenka_value").text(resultado[`lenka${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -94,7 +94,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_clinica',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -106,7 +106,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_gerencia',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#gerencia_value").text(resultado[`gerencia${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -118,7 +118,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_soporte',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#soporte_value").text(resultado[`soporte${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -130,7 +130,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_otros',
                     args: [],
                 }).then(function (resultado) {
-                    window.location.reload();
+                    self.$el.find("#otros_value").text(resultado[`otros${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
