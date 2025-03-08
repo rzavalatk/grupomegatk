@@ -233,6 +233,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 } else if(result.user_reg == "2") {
                     self.$el.find("#filter_region").val("reg_sps");
                 }
+                console.log("Desde start " + self.$el.find("#filter_region").val());
                 
                 self.value_filtro = self.$el.find("#filter_region").val();
             })
