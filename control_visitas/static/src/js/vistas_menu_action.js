@@ -40,7 +40,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             var self = this;
         
             // Definir funciones con nombre para manejar los eventos click
-            function manejarClickAdminState() {
+            const manejarClickAdminState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_administracion',
@@ -52,7 +52,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickMegatkState() {
+            const manejarClickMegatkState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_megatk',
@@ -64,7 +64,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickMeditekState() {
+            const manejarClickMeditekState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_meditek',
@@ -76,7 +76,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickLenkaState() {
+            const manejarClickLenkaState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_lenka',
@@ -88,7 +88,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickClinicaState() {
+            const manejarClickClinicaState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_clinica',
@@ -100,7 +100,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickGerenciaState() {
+            const manejarClickGerenciaState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_gerencia',
@@ -112,7 +112,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickSoporteState() {
+            const manejarClickSoporteState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_soporte',
@@ -124,7 +124,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 });
             }
         
-            function manejarClickOtrosState() {
+            const manejarClickOtrosState = () => {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_otros',
@@ -139,14 +139,14 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             // Obtener los datos iniciales
             ajax.rpc(`/control_visitas${reg}`).then(function (result) {
                 // Eliminar eventos anteriores para evitar duplicación
-                self.$el.off('click', '#admin_state', manejarClickAdminState);
-                self.$el.off('click', '#megatk_state', manejarClickMegatkState);
-                self.$el.off('click', '#meditek_state', manejarClickMeditekState);
-                self.$el.off('click', '#lenka_state', manejarClickLenkaState);
-                self.$el.off('click', '#clinica_state', manejarClickClinicaState);
-                self.$el.off('click', '#gerencia_state', manejarClickGerenciaState);
-                self.$el.off('click', '#soporte_state', manejarClickSoporteState);
-                self.$el.off('click', '#otros_state', manejarClickOtrosState);
+                self.$el.off('click', '#admin_state');
+                self.$el.off('click', '#megatk_state');
+                self.$el.off('click', '#meditek_state');
+                self.$el.off('click', '#lenka_state');
+                self.$el.off('click', '#clinica_state');
+                self.$el.off('click', '#gerencia_state');
+                self.$el.off('click', '#soporte_state');
+                self.$el.off('click', '#otros_state');
         
                 // Actualizar los valores en la interfaz
                 self.$el.find("#admin_value").text(result.admin);
@@ -159,14 +159,14 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self.$el.find("#otros_value").text(result.otros);
         
                 // Registrar los eventos click con las funciones con nombre
-                // self.$el.on('click', '#admin_state', manejarClickAdminState);
-                // self.$el.on('click', '#megatk_state', manejarClickMegatkState);
-                // self.$el.on('click', '#meditek_state', manejarClickMeditekState);
-                // self.$el.on('click', '#lenka_state', manejarClickLenkaState);
-                // self.$el.on('click', '#clinica_state', manejarClickClinicaState);
-                // self.$el.on('click', '#gerencia_state', manejarClickGerenciaState);
-                // self.$el.on('click', '#soporte_state', manejarClickSoporteState);
-                // self.$el.on('click', '#otros_state', manejarClickOtrosState);
+                self.$el.on('click', '#admin_state', manejarClickAdminState);
+                self.$el.on('click', '#megatk_state', manejarClickMegatkState);
+                self.$el.on('click', '#meditek_state', manejarClickMeditekState);
+                self.$el.on('click', '#lenka_state', manejarClickLenkaState);
+                self.$el.on('click', '#clinica_state', manejarClickClinicaState);
+                self.$el.on('click', '#gerencia_state', manejarClickGerenciaState);
+                self.$el.on('click', '#soporte_state', manejarClickSoporteState);
+                self.$el.on('click', '#otros_state', manejarClickOtrosState);
         
                 // Manejar el cambio en el filtro
                 self.$el.find("#filter_selection").off('change').on('change', function (e) {
