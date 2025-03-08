@@ -44,7 +44,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_administracion',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
                 }).catch(function (error) {
@@ -56,7 +56,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_megatk',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     self.$el.find("#megatk_value").text(resultado);
                 }).catch(function (error) {
@@ -68,7 +68,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_meditek',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
@@ -80,7 +80,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_lenka',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
@@ -92,7 +92,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_clinica',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
@@ -104,7 +104,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_gerencia',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
@@ -116,7 +116,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_soporte',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
@@ -128,7 +128,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_otros',
-                    args: [result.admin_name],
+                    args: [],
                 }).then(function (resultado) {
                     window.location.reload();
                 }).catch(function (error) {
