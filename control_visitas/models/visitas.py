@@ -64,7 +64,7 @@ class Visitas(models.Model):
             'admin_tgu': admin_val_tgu,
             'admin_sps': admin_val_sps
         }
-        _logger.warning(f"Último registro: {ultimo_registro}")        
+        _logger.warning(f"Último registro: {ultimo_registro.hora}")        
         return admin_vals
         
             
