@@ -35,10 +35,10 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             reg = this.value_filtro;
             console.log("Desde deleteRecord " + reg);
             
-            ajax.rpc(`/delete_record${reg}`).then(function (result) {
-                // self.$el.off('click', '#admin_state');
-                // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
-            })
+            // ajax.rpc(`/delete_record${reg}`).then(function (result) {
+            //     // self.$el.off('click', '#admin_state');
+            //     // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
+            // })
 
             // const manejarClickDeleteAdmin = () => {
             //     self._rpc({
