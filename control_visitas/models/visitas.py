@@ -58,7 +58,8 @@ class Visitas(models.Model):
         
         admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
         admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        ultimo_registro = self.env["control.visitas"].search([], order='fecha desc', limit=1)
+    
         admin_vals = {
             'admin_tgu': admin_val_tgu,
             'admin_sps': admin_val_sps
