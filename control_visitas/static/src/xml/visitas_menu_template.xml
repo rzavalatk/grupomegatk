@@ -180,7 +180,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div style="background-color: red;  paddin: 20px;">
+                            <div style="background-color: red; paddin: 10px;">
                                 <span class="btn_admin">-</span>
                             </div>
                             <div class="c-dashboardInfo" id="megatk_state">
