@@ -180,8 +180,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <div id="btn_admin" class="c-dashboardInfo" style="background-color: red; paddin: 10px;">
-                                <span value="borrar">-</span>
+                            <div id="btn_admin" class="c-dashboardInfo" value="borrar" style="background-color: red; paddin: 10px;">
+                                <span>-</span>
                             </div>
                             <div class="c-dashboardInfo" id="megatk_state">
                                 <div class="wrap">
