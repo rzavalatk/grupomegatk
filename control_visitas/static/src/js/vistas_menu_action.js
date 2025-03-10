@@ -19,7 +19,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             console.log("Desde onChangeFilter " + this.value_filtro);
             this.value_filtro = ev.target.value;
             console.log("Desde onChangeFilter " + this.value_filtro);
-            this._updateView();
+            this._updateView(this.value_filtro);
         },
 
         _updateView: function (value_filtro) {
