@@ -32,7 +32,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         _deleteRecord: function () {
-            reg = this.value_filtro;
+            var reg = this.value_filtro;
             console.log("Desde deleteRecord " + reg);
             
             // ajax.rpc(`/delete_record${reg}`).then(function (result) {
