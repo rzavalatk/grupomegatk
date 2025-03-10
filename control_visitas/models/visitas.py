@@ -162,8 +162,6 @@ class Visitas(models.Model):
         }
                 
         return otros_vals
-    
-    ultimo_registro = self.env['mi.modelo'].search([], order='create_date desc', limit=1)
         
     @api.model    
     def send_email(self, email=None, cc="", contexto={}):
