@@ -276,7 +276,7 @@ class HrPayslip(models.Model):
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
                 logging.warning("-*-")
-                logging.warning(leave.holiday_id)
+                logging.warning(leave.id)
                 work_hours = calendar.get_work_hours_count(
                     tz.localize(datetime.combine(day, time.min)),
                     tz.localize(datetime.combine(day, time.max)),
@@ -284,10 +284,10 @@ class HrPayslip(models.Model):
                 )
                 if len(leave) > 1:
                     for each in leave:
-                        if each.holiday_id:
+                        if each.id:
                             multi_leaves.append(each.holiday_id)
                 else:
-                    holiday = leave.holiday_id
+                    holiday = leave.id
                     current_leave_struct = leaves.setdefault(
                         holiday.holiday_status_id, {
                             'name': holiday.holiday_status_id.name or _(
