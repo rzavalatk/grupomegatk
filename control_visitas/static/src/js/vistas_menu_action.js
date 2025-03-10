@@ -23,6 +23,12 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             this._updateView(this.value_filtro);
         },
 
+        _deleteAdminRecord: function (ev) {
+            ev.preventDefault();
+    
+            console.log("Desde deleteAdminRecord " + ev.target.value);
+        },
+
         _updateView: function (value_filtro) {
             var self = this;
             var reg = "";
