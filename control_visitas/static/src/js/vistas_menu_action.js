@@ -254,6 +254,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 } else {
                     self.$el.find("#filter_region").prop('disabled', false);
                     self.value_filtro = self.$el.find("#filter_region").val("reg_tgu");
+                    console.log("Desde start rpc value " + self.value_filtro);
+                    
                 }
             })
 
