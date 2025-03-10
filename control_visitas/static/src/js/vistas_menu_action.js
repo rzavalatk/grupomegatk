@@ -12,6 +12,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         events: {
             'change #filter_region': '_onChangeFilter',
+            'click #btn_admin': '_deleteAdminRecord',
         },
 
         _onChangeFilter: function (ev) {

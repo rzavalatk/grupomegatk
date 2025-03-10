@@ -180,6 +180,9 @@
                                     </span>
                                 </div>
                             </div>
+                            <div>
+                                <span class="btn_admin">-</span>
+                            </div>
                             <div class="c-dashboardInfo" id="megatk_state">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
