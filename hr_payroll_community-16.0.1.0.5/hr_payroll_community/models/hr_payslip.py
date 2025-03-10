@@ -270,20 +270,13 @@ class HrPayslip(models.Model):
                                                     ('request_date_from','>=',self.date_from),
                                                     ('request_date_to','<=',self.date_to),
                                                     ])
-            logging.warning(permisos)
             for permiso in permisos:
-                logging.warning("Entre")
-                logging.warning(permiso.request_date_from)
-                logging.warning(permiso.request_date_to)
-                logging.warning(permiso) 
                 day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))
-                
-                logging.warning(day_leave_intervals)
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
-                
-                logging.warning(day, hours, leave)
+                logging.warning("-*-")
+                logging.warning(leave)
                 work_hours = calendar.get_work_hours_count(
                     tz.localize(datetime.combine(day, time.min)),
                     tz.localize(datetime.combine(day, time.max)),
