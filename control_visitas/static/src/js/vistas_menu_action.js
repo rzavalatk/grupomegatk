@@ -36,8 +36,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             var reg = this.value_filtro;
             if (reg == "reg_tgu") {
         
-                self.$el.off('click', '#admin_state');
-                self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
+                // self.$el.off('click', '#admin_state');
+                // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
             } else {
                 
             }
