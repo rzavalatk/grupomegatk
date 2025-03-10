@@ -760,8 +760,7 @@ class ControlVisitasWebsite(http.Controller):
     def user_region(self) :
         user_reg = request.env.user.ubicacion_vendedor
         user_email = request.env.user.login
-        
-        
+    
         return {
                 "user_reg": user_reg,
                 "user_email": user_email  
