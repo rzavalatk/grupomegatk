@@ -47,12 +47,10 @@ class Visitas(models.Model):
  
     @api.model
     def create(self, vals):
-        user = self.env.user
-        # ultimo_registro = self.env['control.visitas'].search([], order='fecha desc, hora desc', limit=1)
-        # _logger.warning(f"ultimo_registro: {ultimo_registro}")
-        if user.ubicacion_vendedor == "2" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
-            raise ValidationError("No se puede registrar esta visita en SPS")
-        return super(Visitas, self).create(vals)  
+         user = self.env.user
+         if user.ubicacion_vendedor == "2" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
+             raise ValidationError("No se puede registrar esta visita en SPS")
+         return super(Visitas, self).create(vals)  
       
     @api.model   
     def visita_administracion(self):
