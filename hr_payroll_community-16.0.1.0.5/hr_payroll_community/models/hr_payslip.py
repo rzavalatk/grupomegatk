@@ -276,9 +276,7 @@ class HrPayslip(models.Model):
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
                 logging.warning("-*-")
-                logging.warning(day)
-                logging.warning(hours)
-                logging.warning(leave)
+                logging.warning(leave[0])
                 work_hours = calendar.get_work_hours_count(
                     tz.localize(datetime.combine(day, time.min)),
                     tz.localize(datetime.combine(day, time.max)),
