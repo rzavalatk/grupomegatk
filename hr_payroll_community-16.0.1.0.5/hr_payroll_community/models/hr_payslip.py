@@ -254,14 +254,16 @@ class HrPayslip(models.Model):
                                         time.min)
             day_to = datetime.combine(fields.Date.from_string(date_to),
                                       time.max)
+            
+            day_leave_intervals = []
 
             # compute leave days
             leaves = {}
             calendar = contract.resource_calendar_id
             tz = timezone(calendar.tz)
-            day_leave_intervals = contract.employee_id.list_leaves(day_from,
+            """day_leave_intervals = contract.employee_id.list_leaves(day_from,
                                                                    day_to,
-                                                                   calendar=contract.resource_calendar_id)
+                                                                   calendar=contract.resource_calendar_id)"""
             permisos = self.env['hr.leave'].search(['&','&','&',
                                                     ('employee_id','=',self.employee_id.id),
                                                     ('state','=','validate'),
@@ -271,8 +273,8 @@ class HrPayslip(models.Model):
             logging.warning(permisos)
             for permiso in permisos:
                 logging.warning("Entre")
-                logging.warning(permiso.request_date_from, permiso.request_date_to, permiso)
-                logging.warning(permiso.request_date_to, permiso)
+                logging.warning(permiso.request_date_from)
+                logging.warning(permiso.request_date_to)
                 logging.warning(permiso) 
                 day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))
                 
