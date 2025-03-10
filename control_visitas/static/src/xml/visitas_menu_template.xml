@@ -181,7 +181,7 @@
                                 </div>
                             </div>
                             <div class="c-dashboardInfo" style="background-color: red; paddin: 10px;">
-                                <span class="btn_admin" value="borrar">-</span>
+                                <span id="btn_admin" value="borrar">-</span>
                             </div>
                             <div class="c-dashboardInfo" id="megatk_state">
                                 <div class="wrap">
