@@ -26,6 +26,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteAdminRecord: function (ev) {
             ev.preventDefault();
     
+            console.log(ev.target.attributes.value.value);
             
 
             this._deleteRecord();
@@ -33,24 +34,30 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         _deleteRecord: function () {
             var reg = this.value_filtro;
-            console.log("Desde deleteRecord " + reg);
+            if (reg == "reg_tgu") {
+        
+                self.$el.off('click', '#admin_state');
+                self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
+            } else {
+                
+            }
             
             // ajax.rpc(`/delete_record${reg}`).then(function (result) {
             //     // self.$el.off('click', '#admin_state');
             //     // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
             // })
 
-            // const manejarClickDeleteAdmin = () => {
-            //     self._rpc({
-            //         model: 'control.visitas',
-            //         method: 'visita_administracion',
-            //         args: [],
-            //     }).then(function (resultado) {
-            //         self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-            //     }).catch(function (error) {
-            //         console.error(error);
-            //     });
-            // }
+            const manejarClickDeleteAdmin = () => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: 'visita_administracion',
+                    args: [],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
         },
 
         _updateView: function (value_filtro) {
