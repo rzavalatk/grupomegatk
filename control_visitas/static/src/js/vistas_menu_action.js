@@ -26,7 +26,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteAdminRecord: function (ev) {
             ev.preventDefault();
     
-            console.log("Desde deleteAdminRecord " + ev.target.value);
+            console.log("Desde deleteAdminRecord " + ev);
         },
 
         _updateView: function (value_filtro) {
