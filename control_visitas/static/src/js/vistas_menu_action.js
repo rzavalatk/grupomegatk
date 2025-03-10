@@ -26,7 +26,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteAdminRecord: function (ev) {
             ev.preventDefault();
     
-            console.log(ev.attributes);
+            console.log(ev.target.value);
             
 
             this._deleteRecord();
