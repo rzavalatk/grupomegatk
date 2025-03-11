@@ -192,7 +192,7 @@
                             </div>
                         </div>
                         <div class="dashboard-grid">
-                            <div class="c-dashboardInfo" id="admin_state">
+                            <div class="c-dashboardInfo" >
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Administración
@@ -203,7 +203,7 @@
                                         <div id="administracion" class="btn btn-eliminar btn_admin">
                                             <span>-</span>
                                         </div>
-                                        <div class="btn btn-agregar">
+                                        <div class="btn btn-agregar" id="admin_state">
                                             <span>+</span>
                                         </div>
                                     </div>
