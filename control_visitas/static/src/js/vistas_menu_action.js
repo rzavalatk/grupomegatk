@@ -88,6 +88,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     args: [zona, registro],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    console.log("Desde delete record " + self.$el.find("#admin_value").text());
+                    
                 }).catch(function (error) {
                     console.error(error);
                 });
