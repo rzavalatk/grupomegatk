@@ -65,26 +65,49 @@ class Visitas(models.Model):
             if filtro == "this_day":
                 admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])
                 admin_val_sps = 0
+                
+                admin_vals = {
+                    'admin_tgu': admin_val_tgu,
+                    'admin_sps': admin_val_sps
+                }
+               
+                return admin_vals 
             elif filtro == "this_week":
                 admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', semana),('region', '=', "TGU")])
                 admin_val_sps = 0
+                
+                admin_vals = {
+                    'admin_tgu': admin_val_tgu,
+                    'admin_sps': admin_val_sps
+                }
+                    
+                return admin_vals 
             elif filtro == "this_month":
                 admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', mes),('region', '=', "TGU")])
                 admin_val_sps = 0
+                
+                admin_vals = {
+                    'admin_tgu': admin_val_tgu,
+                    'admin_sps': admin_val_sps
+                }
+                    
+                return admin_vals   
             elif filtro == "this_year":
                 admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
             admin_val_tgu = 0
             admin_val_sps = 0
             
+            admin_vals = {
+                'admin_tgu': admin_val_tgu,
+                'admin_sps': admin_val_sps
+            }
+                
+            return admin_vals
+            
         _logger.warning("Valores obtenidos: " + str(self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])))
         
-        admin_vals = {
-            'admin_tgu': admin_val_tgu,
-            'admin_sps': admin_val_sps
-        }
-               
-        return admin_vals   
+          
             
     @api.model
     def visita_tienda_megatk(self, zona, filtro):
