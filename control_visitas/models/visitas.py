@@ -164,10 +164,10 @@ class Visitas(models.Model):
     def borrar_administracion(self, zona, filtro):
         admin_val_tgu = ""
         admin_val_sps = ""
-        hoy = date.today()
-        semana = str(hoy - date.timedelta(days=7)) + ' '
-        mes = str(hoy - date.timedelta(days=30)) + ' '
-        anio = str(hoy - date.timedelta(days=365)) + ' '
+        hoy = datetime.today()
+        semana = str(hoy - datetime.timedelta(days=7)) + ' '
+        mes = str(hoy - datetime.timedelta(days=30)) + ' '
+        anio = str(hoy - datetime.timedelta(days=365)) + ' '
         
         if zona == "TGU":
             last_admin = self.env["control.visitas"].search([('name', '=', 'Visita Administración'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
