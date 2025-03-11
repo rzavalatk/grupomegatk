@@ -761,50 +761,7 @@ class ControlVisitasWebsite(http.Controller):
         user_reg = request.env.user.ubicacion_vendedor
         user_email = request.env.user.login
         
-        
         return {
                 "user_reg": user_reg,
                 "user_email": user_email  
                 }
-    
-    @http.route(f'/delete_record_tgu', type='json', auth='public', website=True)    
-    def delete_record_tgu(self):
-        last_admin = self.env["control.visitas"].search([('name', '=', 'Visita Administración'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_megatk = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Megatk'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_meditek = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Meditek'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_lenka = self.env["control.visitas"].search([('name', '=', 'Visita Lenka'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_clinica = self.env["control.visitas"].search([('name', '=', 'Visita Clínica'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_gerencia = self.env["control.visitas"].search([('name', '=', 'Visita Gerencia'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_soporte = self.env["control.visitas"].search([('name', '=', 'Visita Soporte'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        last_otros = self.env["control.visitas"].search([('name', '=', 'Visita Otros'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-        
-        last_records = {
-            'last_admin':last_admin,
-            'last_megatk':last_megatk,
-            'last_meditek':last_meditek,
-            'last_lenka':last_lenka,
-            'last_clinica':last_clinica,
-            'last_gerencia':last_gerencia,
-            'last_soporte':last_soporte,
-            'last_otros':last_otros,
-        }
-        
-        return last_records
-    
-    @http.route(f'/delete_record_sps', type='json', auth='public', website=True)    
-    def delete_record_sps(self):
-        last_megatk = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Megatk'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
-        last_meditek = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Meditek'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
-        last_gerencia = self.env["control.visitas"].search([('name', '=', 'Visita Gerencia'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
-        last_soporte = self.env["control.visitas"].search([('name', '=', 'Visita Soporte'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
-        last_otros = self.env["control.visitas"].search([('name', '=', 'Visita Otros'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
-    
-        last_records = {
-            'last_megatk':last_megatk,
-            'last_meditek':last_meditek,
-            'last_gerencia':last_gerencia,
-            'last_soporte':last_soporte,
-            'last_otros':last_otros,
-        }
-        
-        return last_records
