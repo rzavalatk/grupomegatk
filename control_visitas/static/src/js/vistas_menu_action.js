@@ -33,6 +33,23 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         },
 
         _deleteRecord: function (tienda) {
+            const manejarClickDeleteAdmin = (zona, registro) => {
+                var metodo = "borrar_" + tienda;
+                console.log("Desde delete record manejarClickDeleteAdmin " + metodo);
+                
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, registro],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    console.log("Desde delete record " + self.$el.find("#admin_value").text());
+                    
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+
             var reg = "";   
             var zona = "";
             console.log("Desde _deleterecord " + this.value_filtro);
@@ -85,22 +102,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             // })
             manejarClickDeleteAdmin(zona);
 
-            const manejarClickDeleteAdmin = (zona, registro) => {
-                var metodo = "borrar_" + tienda;
-                console.log("Desde delete record manejarClickDeleteAdmin " + metodo);
-                
-                self._rpc({
-                    model: 'control.visitas',
-                    method: metodo,
-                    args: [zona, registro],
-                }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                    console.log("Desde delete record " + self.$el.find("#admin_value").text());
-                    
-                }).catch(function (error) {
-                    console.error(error);
-                });
-            }
+         
         },
 
         _updateView: function (value_filtro) {
