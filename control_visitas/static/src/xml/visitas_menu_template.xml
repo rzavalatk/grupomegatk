@@ -142,6 +142,9 @@
                 .btn-agregar {
                     background-color: green;
                 }
+                .btn:hover {
+                    background-color: rgba(red, 1.5)
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
