@@ -44,7 +44,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 zona = "SPS";
                 reg = "_sps";
             }
-            console.log("Desde _deleterecord " + reg);
+            console.log("Desde _deleterecord /delete_record" + reg);
             
             ajax.rpc(`/delete_record${reg}`).then(function (result) {
                 var registro = "";
