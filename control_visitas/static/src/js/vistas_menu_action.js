@@ -36,7 +36,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         _deleteRecord: function (tienda) {
             var self = this;
-            self.filtro_diasself.$el.find("#filter_selection").val();
+            self.filtro_dias = self.$el.find("#filter_selection").val();
             
             const manejarClickDeleteAdmin = (zona) => {
                 var metodo = "borrar_" + tienda;
