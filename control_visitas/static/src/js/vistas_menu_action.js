@@ -46,8 +46,6 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                    console.log("Desde delete record " + self.$el.find("#admin_value").text());
-                    
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -59,14 +57,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             if (this.value_filtro == "reg_tgu") {
                 zona = "TGU";
                 reg = "_tgu";
-                console.log("Desde _deleterecord " + this.value_filtro);
             } else if (this.value_filtro == "reg_sps") {
                 zona = "SPS";
                 reg = "_sps";
             }
-
             manejarClickDeleteAdmin(zona);
-
         },
 
         _updateView: function (value_filtro) {
@@ -88,10 +83,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
             // Definir funciones con nombre para manejar los eventos click
             const manejarClickAdminState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_administracion',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
                 }).catch(function (error) {
@@ -100,10 +96,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickMegatkState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_megatk',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#megatk_value").text(resultado[`megatk${reg}`]);
                 }).catch(function (error) {
@@ -112,10 +109,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickMeditekState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_tienda_meditek',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#meditek_value").text(resultado[`meditek${reg}`]);
                 }).catch(function (error) {
@@ -124,10 +122,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickLenkaState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_lenka',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#lenka_value").text(resultado[`lenka${reg}`]);
                 }).catch(function (error) {
@@ -136,10 +135,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickClinicaState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_clinica',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
                 }).catch(function (error) {
@@ -148,10 +148,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickGerenciaState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_gerencia',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#gerencia_value").text(resultado[`gerencia${reg}`]);
                 }).catch(function (error) {
@@ -160,10 +161,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickSoporteState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_soporte',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#soporte_value").text(resultado[`soporte${reg}`]);
                 }).catch(function (error) {
@@ -172,10 +174,11 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             }
         
             const manejarClickOtrosState = () => {
+                var zona = reg == "_tgu" ? "TGU" : "SPS";
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_otros',
-                    args: [],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#otros_value").text(resultado[`otros${reg}`]);
                 }).catch(function (error) {
