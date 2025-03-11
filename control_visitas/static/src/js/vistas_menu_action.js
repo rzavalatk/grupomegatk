@@ -91,6 +91,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 }).then(function (resultado) {
                     console.log( self.$el.find("#admin_value").val());
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    console.log( self.$el.find("#admin_value").val());
                 }).catch(function (error) {
                     console.error(error);
                 });
