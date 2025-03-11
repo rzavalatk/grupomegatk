@@ -191,13 +191,13 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
-                                </div>
-                                <div>
-                                    <div class="btn btn-eliminar">
-                                        <span>+</span>
-                                    </div>
-                                    <div class="btn btn-agregar">
-                                        <span>-</span>
+                                    <div>
+                                        <div class="btn btn-eliminar">
+                                            <span>+</span>
+                                        </div>
+                                        <div class="btn btn-agregar">
+                                            <span>-</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div><!-- fin admin state-->
