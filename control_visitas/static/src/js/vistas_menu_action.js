@@ -89,9 +89,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: 'visita_administracion',
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    console.log( self.$el.find("#admin_value").val());
+                    console.log( self.$el.find("#admin_value").text());
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                    console.log( self.$el.find("#admin_value").val());
+                    console.log( self.$el.find("#admin_value").text());
                 }).catch(function (error) {
                     console.error(error);
                 });
