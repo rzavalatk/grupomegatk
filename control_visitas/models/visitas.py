@@ -165,7 +165,8 @@ class Visitas(models.Model):
         return otros_vals
     @api.model   
     def borrar_administracion(self, zona):
-        
+        admin_val_tgu = ""
+        admin_val_sps = ""
         
         if zona == "TGU":
             last_admin = self.env["control.visitas"].search([('name', '=', 'Visita Administración'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
