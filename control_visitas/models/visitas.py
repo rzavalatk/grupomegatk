@@ -1,7 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError, UserError
 from odoo.tools import pdf
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import logging
 import pytz
 
@@ -164,10 +164,10 @@ class Visitas(models.Model):
     def borrar_administracion(self, zona, filtro):
         admin_val_tgu = ""
         admin_val_sps = ""
-        hoy = datetime.today()
-        semana = str(hoy - datetime.timedelta(days=7)) + ' '
-        mes = str(hoy - datetime.timedelta(days=30)) + ' '
-        anio = str(hoy - datetime.timedelta(days=365)) + ' '
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
         if zona == "TGU":
             last_admin = self.env["control.visitas"].search([('name', '=', 'Visita Administración'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
