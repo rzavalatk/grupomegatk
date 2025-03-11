@@ -74,7 +74,7 @@ class Visitas(models.Model):
         elif zona == "SPS":
             admin_val_sps = 0
             
-        _logger.warning(f"Valores obtenidos: {admin_val_tgu}")
+        _logger.warning(f"Valores obtenidos: {hoy}")
         
         admin_vals = {
             'admin_tgu': admin_val_tgu,
