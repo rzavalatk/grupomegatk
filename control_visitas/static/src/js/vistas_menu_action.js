@@ -45,7 +45,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self._updateUI(reg);
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
                     console.log("Desde delete record " + self.$el.find("#admin_value").text());
                     
                 }).catch(function (error) {
