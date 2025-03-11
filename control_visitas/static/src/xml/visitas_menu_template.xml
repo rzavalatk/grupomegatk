@@ -142,8 +142,11 @@
                 .btn-agregar {
                     background-color: green;
                 }
-                .btn:hover {
-                    background-color: rgba(red, 1.5)
+                .btn-eliminar:hover {
+                    background-color: darkred;
+                }
+                .btn-agregar:hover {
+                    background-color: darkgreen;
                 }
             </style>
             <div id="root">
