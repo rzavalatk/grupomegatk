@@ -193,7 +193,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
-                                    <div>
+                                    <div style="display: flex; "> 
                                         <div class="btn btn-eliminar">
                                             <span>+</span>
                                         </div>
