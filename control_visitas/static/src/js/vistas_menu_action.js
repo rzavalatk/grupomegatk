@@ -39,56 +39,56 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             
             if (this.value_filtro == "reg_tgu") {
                 zona = "TGU";
-                reg = "_tgu";
             } else if (this.value_filtro == "reg_sps") {
                 zona = "SPS";
-                reg = "_sps";
             }
             console.log("Desde _deleterecord /delete_record" + reg);
             
-            ajax.rpc(`/delete_record${reg}`).then(function (result) {
-                var registro = "";
-                console.log("Desde delete record ajax " + result);
+            // ajax.rpc(`/delete_record${reg}`).then(function (result) {
+            //     var registro = "";
+            //     console.log("Desde delete record ajax " + result);
                 
-                if(zona == 'TGU') {
-                    if (tienda == 'administracion') {
-                        registro = result.last_admin;
-                        console.log("Desde delete record " + registro);
+            //     if(zona == 'TGU') {
+            //         if (tienda == 'administracion') {
+            //             registro = result.last_admin;
+            //             console.log("Desde delete record " + registro);
                         
-                    } else if (tienda == 'tienda_megatk') {
-                        registro = result.last_megatk;
-                    } else if (tienda == 'tienda_meditek') {
-                        registro = result.last_meditek;
-                    } else if (tienda == 'lenka') {
-                        registro = result.last_lenka;
-                    } else if (tienda == 'clinica') {
-                        registro = result.last_clinica;
-                    } else if (tienda == 'gerencia') {
-                        registro = result.last_gerencia;
-                    } else if (tienda == 'soporte') {
-                        registro = result.last_soporte;
-                    } else if (tienda == 'otros') {
-                        registro = result.last_otros;
-                    } 
-                } else if (zona == 'SPS') {
-                    if (tienda == 'tienda_megatk') {
-                        registro = result.last_megatk;
-                    } else if (tienda == 'tienda_meditek') {
-                        registro = result.last_meditek;
-                    } else if (tienda == 'gerencia') {
-                        registro = result.last_gerencia;
-                    } else if (tienda == 'soporte') {
-                        registro = result.last_soporte;
-                    } else if (tienda == 'otros') {
-                        registro = result.last_otros;
-                    } 
-                } 
+            //         } else if (tienda == 'tienda_megatk') {
+            //             registro = result.last_megatk;
+            //         } else if (tienda == 'tienda_meditek') {
+            //             registro = result.last_meditek;
+            //         } else if (tienda == 'lenka') {
+            //             registro = result.last_lenka;
+            //         } else if (tienda == 'clinica') {
+            //             registro = result.last_clinica;
+            //         } else if (tienda == 'gerencia') {
+            //             registro = result.last_gerencia;
+            //         } else if (tienda == 'soporte') {
+            //             registro = result.last_soporte;
+            //         } else if (tienda == 'otros') {
+            //             registro = result.last_otros;
+            //         } 
+            //     } else if (zona == 'SPS') {
+            //         if (tienda == 'tienda_megatk') {
+            //             registro = result.last_megatk;
+            //         } else if (tienda == 'tienda_meditek') {
+            //             registro = result.last_meditek;
+            //         } else if (tienda == 'gerencia') {
+            //             registro = result.last_gerencia;
+            //         } else if (tienda == 'soporte') {
+            //             registro = result.last_soporte;
+            //         } else if (tienda == 'otros') {
+            //             registro = result.last_otros;
+            //         } 
+            //     } 
 
-                manejarClickDeleteAdmin(zona, registro);
-            })
+            // })
+            manejarClickDeleteAdmin(zona);
 
             const manejarClickDeleteAdmin = (zona, registro) => {
                 var metodo = "borrar_" + tienda;
+                console.log("Desde delete record manejarClickDeleteAdmin " + metodo);
+                
                 self._rpc({
                     model: 'control.visitas',
                     method: metodo,
