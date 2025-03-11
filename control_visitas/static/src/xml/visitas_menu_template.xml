@@ -131,9 +131,9 @@
                     margin: 5px;
                     padding: 5px 10px;
                     border-radius: 5px;
-                    font-size: 8px;
+                    font-size: 14px;
                     font-color: white;
-                    width: 100%;
+                    width: 50%;
 
                 }
                 .btn-eliminar {
