@@ -30,6 +30,7 @@
         'views/permisos_views.xml',
         'views/hr_views.xml',
         'views/email_template.xml',
+        'views/hr_leave_view.xml',
         
     ]
 }

@@ -2,3 +2,4 @@
 
 from . import hr
 from . import permisos
+from . import hr_leave
