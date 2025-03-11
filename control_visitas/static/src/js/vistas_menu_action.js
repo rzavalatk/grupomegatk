@@ -101,7 +101,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             //     } 
 
             // })
-            manejarClickDeleteAdmin(zona, registro);
+            manejarClickDeleteAdmin(zona);
 
         },
 
