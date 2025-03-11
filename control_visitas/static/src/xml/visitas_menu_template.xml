@@ -192,7 +192,7 @@
                             </div>
                         </div>
                         <div class="dashboard-grid">
-                            <div class="c-dashboardInfo" id="admin_state">
+                            <div class="c-dashboardInfo" >
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Administración
@@ -200,16 +200,16 @@
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
                                     <div style="display: flex; "> 
-                                        <div class="btn btn-eliminar">
+                                        <div id="administracion" class="btn btn-eliminar btn_admin">
                                             <span>-</span>
                                         </div>
-                                        <div class="btn btn-agregar">
+                                        <div id="admin_state" class="btn btn-agregar">
                                             <span>+</span>
                                         </div>
                                     </div>
                                 </div>
                             </div><!-- fin admin state-->
-                            <div id="administracion" class="c-dashboardInfo btn_admin" value="borrar" style="background-color: red; paddin: 10px;">
+                            <div  class="c-dashboardInfo btn_admin" value="borrar" style="background-color: red; paddin: 10px;">
                                 <span>-</span>
                             </div>
                             <div class="c-dashboardInfo" id="megatk_state">
