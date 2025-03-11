@@ -163,6 +163,118 @@ class Visitas(models.Model):
         }
                 
         return otros_vals
+    @api.model   
+    def borrar_administracion(self, zona, registro):
+        registro.unlink()
+        
+        if zona == "TGU":
+            admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        elif zona == "SPS":
+            admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+
+        admin_vals = {
+            'admin_tgu': admin_val_tgu,
+            'admin_sps': admin_val_sps
+        }
+               
+        return admin_vals
+        
+            
+    @api.model
+    def borrar_tienda_megatk(self):
+        self.create({'name': 'Visita Tienda Megatk'})
+        
+        megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        megatk_vals = {
+            'megatk_tgu': megatk_val_tgu,
+            'megatk_sps': megatk_val_sps
+        }
+                
+        return megatk_vals
+    @api.model
+    def borrar_tienda_meditek(self):    
+        self.create({'name': 'Visita Tienda Meditek'})
+        meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        meditek_vals = {
+            'meditek_tgu': meditek_val_tgu,
+            'meditek_sps': meditek_val_sps
+        }
+                
+        return meditek_vals
+    
+    @api.model
+    def borrar_lenka(self):    
+        self.create({'name': 'Visita Lenka'})
+        
+        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        lenka_vals = {
+            'lenka_tgu': lenka_val_tgu,
+            'lenka_sps': lenka_val_sps
+        }
+                
+        return lenka_vals
+    
+    @api.model
+    def borrar_clinica(self):
+        self.env['control.visitas'].create({'name': 'Visita Clínica'})
+        
+        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        clinica_vals = {
+            'clinica_tgu': clinica_val_tgu,
+            'clinica_sps': clinica_val_sps
+        }
+                
+        return clinica_vals
+    
+    @api.model
+    def borrar_gerencia(self):
+        self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+        
+        gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        gerencia_vals = {
+            'gerencia_tgu': gerencia_val_tgu,
+            'gerencia_sps': gerencia_val_sps
+        }
+                
+        return gerencia_vals
+    
+    @api.model
+    def borrar_soporte(self):
+        self.env['control.visitas'].create({'name': 'Visita Soporte'})
+        
+        soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        soporte_vals = {
+            'soporte_tgu': soporte_val_tgu,
+            'soporte_sps': soporte_val_sps
+        }
+                
+        return soporte_vals
+    
+    @api.model
+    def borrar_otros(self):
+        self.env['control.visitas'].create({'name': 'Visita Otros'})
+        
+        otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
+        otros_vals = {
+            'otros_tgu': otros_val_tgu,
+            'otros_sps': otros_val_sps
+        }
+                
+        return otros_vals
         
     @api.model    
     def send_email(self, email=None, cc="", contexto={}):

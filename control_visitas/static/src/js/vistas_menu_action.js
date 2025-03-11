@@ -12,7 +12,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         events: {
             'change #filter_region': '_onChangeFilter',
-            'click #btn_admin': '_deleteAdminRecord',
+            'click .btn_admin': '_deleteAdminRecord',
         },
 
         _onChangeFilter: function (ev) {
@@ -27,31 +27,65 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             ev.preventDefault();
     
             console.log(ev.currentTarget.id);
-            
+            var tienda = ev.currentTarget.id;
 
-            this._deleteRecord();
+            this._deleteRecord(tienda);
         },
 
-        _deleteRecord: function () {
-            var reg = this.value_filtro;
-            if (reg == "reg_tgu") {
-        
-                // self.$el.off('click', '#admin_state');
-                // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
-            } else {
-                
+        _deleteRecord: function (tienda) {
+            var reg = "";   
+            var zona = "";
+            if (this.value_filtro == "reg_tgu") {
+                zona = "TGU";
+                reg = "_tgu";
+            } else if (this.value_filtro == "reg_sps") {
+                zona = "SPS";
+                reg = "_sps";
             }
             
-            // ajax.rpc(`/delete_record${reg}`).then(function (result) {
-            //     // self.$el.off('click', '#admin_state');
-            //     // self.$el.on('click', '#admin_state', manejarClickDeleteAdmin)
-            // })
+            ajax.rpc(`/delete_record${reg}`).then(function (result) {
+                var registro = "";
+                if(zona == 'TGU') {
+                    if (tienda == 'administracion') {
+                        registro = result.last_admin;
+                    } else if (tienda == 'tienda_megatk') {
+                        registro = result.last_megatk;
+                    } else if (tienda == 'tienda_meditek') {
+                        registro = result.last_meditek;
+                    } else if (tienda == 'lenka') {
+                        registro = result.last_lenka;
+                    } else if (tienda == 'clinica') {
+                        registro = result.last_clinica;
+                    } else if (tienda == 'gerencia') {
+                        registro = result.last_gerencia;
+                    } else if (tienda == 'soporte') {
+                        registro = result.last_soporte;
+                    } else if (tienda == 'otros') {
+                        registro = result.last_otros;
+                    } 
+                } else if (zona == 'SPS') {
+                    if (tienda == 'tienda_megatk') {
+                        registro = result.last_megatk;
+                    } else if (tienda == 'tienda_meditek') {
+                        registro = result.last_meditek;
+                    } else if (tienda == 'gerencia') {
+                        registro = result.last_gerencia;
+                    } else if (tienda == 'soporte') {
+                        registro = result.last_soporte;
+                    } else if (tienda == 'otros') {
+                        registro = result.last_otros;
+                    } 
+                } 
 
-            const manejarClickDeleteAdmin = () => {
+                manejarClickDeleteAdmin(zona, registro);
+            })
+
+            const manejarClickDeleteAdmin = (zona, registro) => {
+                var metodo = "borrar_" + tienda;
                 self._rpc({
                     model: 'control.visitas',
-                    method: 'visita_administracion',
-                    args: [],
+                    method: metodo,
+                    args: [zona, registro],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
                 }).catch(function (error) {
