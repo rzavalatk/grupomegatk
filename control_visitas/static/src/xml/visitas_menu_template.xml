@@ -6,7 +6,7 @@
                 .c-dashboardInfo {
                 margin-bottom: 15px;
                 width: 70%;
-                height: 200px;
+                height: 190px;
                 }
                 .c-dashboardInfo .wrap {
                 background: #ffffff;
@@ -45,12 +45,12 @@
                 background: linear-gradient(82.59deg, #00c48c 0%, #00a173
                 100%);
                 }
-                .wrap:hover{
+                <!-- .wrap:hover{
                 -webkit-transform: scale(1.2);
                 -ms-transform: scale(1.2);
                 transform: scale(1.2);
                 transition: 1s ease;
-                }
+                } -->
                 .c-dashboardInfo:nth-child(2) .wrap:after {
                 background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2
                 100%);
@@ -195,10 +195,10 @@
                                     </span>
                                     <div style="display: flex; "> 
                                         <div class="btn btn-eliminar">
-                                            <span>+</span>
+                                            <span>-</span>
                                         </div>
                                         <div class="btn btn-agregar">
-                                            <span>-</span>
+                                            <span>+</span>
                                         </div>
                                     </div>
                                 </div>
