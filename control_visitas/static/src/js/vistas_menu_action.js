@@ -48,6 +48,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 if(zona == 'TGU') {
                     if (tienda == 'administracion') {
                         registro = result.last_admin;
+                        console.log("Desde delete record " + registro);
+                        
                     } else if (tienda == 'tienda_megatk') {
                         registro = result.last_megatk;
                     } else if (tienda == 'tienda_meditek') {
