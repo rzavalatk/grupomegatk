@@ -74,7 +74,7 @@ class Visitas(models.Model):
         elif zona == "SPS":
             admin_val_sps = 0
             
-        _logger.warning("Valores obtenidos: " + self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")]))
+        _logger.warning("Valores obtenidos: " + str(self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])))
         
         admin_vals = {
             'admin_tgu': admin_val_tgu,
