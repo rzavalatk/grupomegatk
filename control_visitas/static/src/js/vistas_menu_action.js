@@ -47,6 +47,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             
             ajax.rpc(`/delete_record${reg}`).then(function (result) {
                 var registro = "";
+                console.log("Desde delete record ajax " + result);
+                
                 if(zona == 'TGU') {
                     if (tienda == 'administracion') {
                         registro = result.last_admin;
