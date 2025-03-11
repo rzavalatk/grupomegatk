@@ -127,6 +127,19 @@
                     grid-template-columns: repeat(4, 2fr);
                     row-gap: 20px;
                 }
+                .btn {
+                    margin: 5px;
+                    padding: 2px 5px;
+                    border-radius: 5px;
+                    font-size: 8px;
+                    font-color: white;
+                }
+                .btn-eliminar {
+                    background-color: red;
+                }
+                .btn-agregar {
+                    background-color: green;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
@@ -179,7 +192,15 @@
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
                                 </div>
-                            </div>
+                                <div>
+                                    <div class="btn btn-eliminar">
+                                        <span>+</span>
+                                    </div>
+                                    <div class="btn btn-agregar">
+                                        <span>-</span>
+                                    </div>
+                                </div>
+                            </div><!-- fin admin state-->
                             <div id="administracion" class="c-dashboardInfo btn_admin" value="borrar" style="background-color: red; paddin: 10px;">
                                 <span>-</span>
                             </div>

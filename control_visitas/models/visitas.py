@@ -53,113 +53,281 @@ class Visitas(models.Model):
          return super(Visitas, self).create(vals)  
       
     @api.model   
-    def visita_administracion(self):
-        self.create({'name': 'Visita Administración'})
+    def visita_administracion(self, zona, filtro):
+        admin_val_tgu = ""
+        admin_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+        if zona == "TGU":
+            self.create({'name': 'Visita Administración'})
+            if filtro == "this_day":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            admin_val_sps = 0
 
         admin_vals = {
             'admin_tgu': admin_val_tgu,
-            'admin_sps': 0
+            'admin_sps': admin_val_sps
         }
-                
-        return admin_vals    
+               
+        return admin_vals   
             
     @api.model
-    def visita_tienda_megatk(self):
-        self.create({'name': 'Visita Tienda Megatk'})
+    def visita_tienda_megatk(self, zona, filtro):
+        megatk_val_tgu = ""
+        megatk_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            self.create({'name': 'Visita Tienda Megatk'})
+            if filtro == "this_day":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            self.create({'name': 'Visita Tienda Megatk'})
+            if filtro == "this_day":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', anio),('region', '=', "SPS")])
         megatk_vals = {
             'megatk_tgu': megatk_val_tgu,
             'megatk_sps': megatk_val_sps
         }
-                
+               
         return megatk_vals
     
     @api.model
-    def visita_tienda_meditek(self):    
-        self.create({'name': 'Visita Tienda Meditek'})
-        meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+    def visita_tienda_meditek(self, zona, filtro):    
+        meditek_val_tgu = ""
+        meditek_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
+        if zona == "TGU":
+            self.create({'name': 'Visita Tienda Meditek'})
+            if filtro == "this_day":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            self.create({'name': 'Visita Tienda Meditek'})
+            if filtro == "this_day":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         meditek_vals = {
             'meditek_tgu': meditek_val_tgu,
             'meditek_sps': meditek_val_sps
         }
-                
+               
         return meditek_vals
     
     @api.model
-    def visita_lenka(self):    
-        self.create({'name': 'Visita Lenka'})
+    def visita_lenka(self, zona, filtro):    
+        lenka_val_tgu = ""
+        lenka_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        
-        
+        if zona == "TGU":
+            self.create({'name': 'Visita Lenka'})
+            if filtro == "this_day":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            lenka_val_sps = 0
+
         lenka_vals = {
             'lenka_tgu': lenka_val_tgu,
-            'lenka_sps': 0
+            'lenka_sps': lenka_val_sps
         }
-                
+               
         return lenka_vals
     
     @api.model
-    def visita_clinica(self):
-        self.env['control.visitas'].create({'name': 'Visita Clínica'})
+    def visita_clinica(self, zona, filtro):
         
-        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
         
+        clinica_val_tgu = ""
+        clinica_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
+        
+        if zona == "TGU":
+            last_clinica = self.env["control.visitas"].search([('name', '=', 'Visita Clínica'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_clinica.unlink()
+            if filtro == "this_day":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            clinica_val_sps = 0
+
         clinica_vals = {
             'clinica_tgu': clinica_val_tgu,
-            'clinica_sps': 0
+            'clinica_sps': clinica_val_sps
         }
-                
+               
         return clinica_vals
     
     @api.model
-    def visita_gerencia(self):
-        self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+    def visita_gerencia(self, zona, filtro):
         
-        gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        gerencia_val_tgu = ""
+        gerencia_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
+        if zona == "TGU":
+            self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+            if filtro == "this_day":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+            if filtro == "this_day":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         gerencia_vals = {
             'gerencia_tgu': gerencia_val_tgu,
             'gerencia_sps': gerencia_val_sps
         }
-                
+               
         return gerencia_vals
     
     @api.model
-    def visita_soporte(self):
-        self.env['control.visitas'].create({'name': 'Visita Soporte'})
+    def visita_soporte(self, zona, filtro):
         
-        soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        soporte_val_tgu = ""
+        soporte_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
+        if zona == "TGU":
+            self.env['control.visitas'].create({'name': 'Visita Soporte'})
+            if filtro == "this_day":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            self.env['control.visitas'].create({'name': 'Visita Soporte'})
+            if filtro == "this_day":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         soporte_vals = {
             'soporte_tgu': soporte_val_tgu,
             'soporte_sps': soporte_val_sps
         }
-                
+               
         return soporte_vals
     
     @api.model
-    def visita_otros(self):
-        self.env['control.visitas'].create({'name': 'Visita Otros'})
+    def visita_otros(self, zona, filtro):
+        otros_val_tgu = ""
+        otros_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            self.env['control.visitas'].create({'name': 'Visita Otros'})
+            if filtro == "this_day":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            self.env['control.visitas'].create({'name': 'Visita Otros'})
+            if filtro == "this_day":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         otros_vals = {
             'otros_tgu': otros_val_tgu,
             'otros_sps': otros_val_sps
         }
-                
+               
         return otros_vals
+    
     @api.model   
     def borrar_administracion(self, zona, filtro):
         admin_val_tgu = ""
@@ -192,99 +360,257 @@ class Visitas(models.Model):
         
             
     @api.model
-    def borrar_tienda_megatk(self):
-        self.create({'name': 'Visita Tienda Megatk'})
+    def borrar_tienda_megatk(self, zona, filtro):
+        megatk_val_tgu = ""
+        megatk_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_megatk = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Megatk'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_megatk.unlink()
+            if filtro == "this_day":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            last_megatk = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Megatk'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
+            last_megatk.unlink()
+            if filtro == "this_day":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', anio),('region', '=', "SPS")])
         megatk_vals = {
             'megatk_tgu': megatk_val_tgu,
             'megatk_sps': megatk_val_sps
         }
-                
+               
         return megatk_vals
+    
     @api.model
-    def borrar_tienda_meditek(self):    
-        self.create({'name': 'Visita Tienda Meditek'})
-        meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+    def borrar_tienda_meditek(self, zona, filtro):    
+        meditek_val_tgu = ""
+        meditek_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
+        if zona == "TGU":
+            last_meditek = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Meditek'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_meditek.unlink()
+            if filtro == "this_day":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            last_meditek = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Meditek'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
+            last_meditek.unlink()
+            if filtro == "this_day":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         meditek_vals = {
             'meditek_tgu': meditek_val_tgu,
             'meditek_sps': meditek_val_sps
         }
-                
+               
         return meditek_vals
     
     @api.model
-    def borrar_lenka(self):    
-        self.create({'name': 'Visita Lenka'})
+    def borrar_lenka(self, zona, filtro):    
+        lenka_val_tgu = ""
+        lenka_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_lenka = self.env["control.visitas"].search([('name', '=', 'Visita Lenka'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_lenka.unlink()
+            if filtro == "this_day":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            lenka_val_sps = 0
+
         lenka_vals = {
             'lenka_tgu': lenka_val_tgu,
             'lenka_sps': lenka_val_sps
         }
-                
+               
         return lenka_vals
     
     @api.model
-    def borrar_clinica(self):
-        self.env['control.visitas'].create({'name': 'Visita Clínica'})
+    def borrar_clinica(self, zona, filtro):
+        clinica_val_tgu = ""
+        clinica_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_clinica = self.env["control.visitas"].search([('name', '=', 'Visita Clínica'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_clinica.unlink()
+            if filtro == "this_day":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            clinica_val_sps = 0
+
         clinica_vals = {
             'clinica_tgu': clinica_val_tgu,
             'clinica_sps': clinica_val_sps
         }
-                
+               
         return clinica_vals
     
     @api.model
-    def borrar_gerencia(self):
-        self.env['control.visitas'].create({'name': 'Visita Gerencia'})
+    def borrar_gerencia(self, zona, filtro):
+        gerencia_val_tgu = ""
+        gerencia_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_gerencia = self.env["control.visitas"].search([('name', '=', 'Visita Gerencia'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_gerencia.unlink()
+            if filtro == "this_day":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            last_gerencia = self.env["control.visitas"].search([('name', '=', 'Visita Gerencia'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
+            last_gerencia.unlink()
+            if filtro == "this_day":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         gerencia_vals = {
             'gerencia_tgu': gerencia_val_tgu,
             'gerencia_sps': gerencia_val_sps
         }
-                
+               
         return gerencia_vals
     
     @api.model
-    def borrar_soporte(self):
-        self.env['control.visitas'].create({'name': 'Visita Soporte'})
+    def borrar_soporte(self, zona, filtro):
+        soporte_val_tgu = ""
+        soporte_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_soporte = self.env["control.visitas"].search([('name', '=', 'Visita Soporte'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_soporte.unlink()
+            if filtro == "this_day":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            last_soporte = self.env["control.visitas"].search([('name', '=', 'Visita Soporte'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
+            last_soporte.unlink()
+            if filtro == "this_day":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         soporte_vals = {
             'soporte_tgu': soporte_val_tgu,
             'soporte_sps': soporte_val_sps
         }
-                
+               
         return soporte_vals
     
     @api.model
-    def borrar_otros(self):
-        self.env['control.visitas'].create({'name': 'Visita Otros'})
+    def borrar_otros(self, zona, filtro):
+        otros_val_tgu = ""
+        otros_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - timedelta(days=7)) + ' '
+        mes = str(hoy - timedelta(days=30)) + ' '
+        anio = str(hoy - timedelta(days=365)) + ' '
         
-        otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        
+        if zona == "TGU":
+            last_otros = self.env["control.visitas"].search([('name', '=', 'Visita Otros'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
+            last_otros.unlink()
+            if filtro == "this_day":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', anio),('region', '=', "TGU")])
+        elif zona == "SPS":
+            last_otros = self.env["control.visitas"].search([('name', '=', 'Visita Otros'),('region', '=', "SPS")], order='fecha desc, hora desc', limit=1)
+            last_otros.unlink()
+            if filtro == "this_day":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', hoy),('region', '=', "SPS")])
+            elif filtro == "this_week":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', semana),('region', '=', "SPS")])
+            elif filtro == "this_month":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', mes),('region', '=', "SPS")])
+            elif filtro == "this_year":
+                otros_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>=', anio),('region', '=', "SPS")])
+
         otros_vals = {
             'otros_tgu': otros_val_tgu,
             'otros_sps': otros_val_sps
         }
-                
+               
         return otros_vals
         
     @api.model    
