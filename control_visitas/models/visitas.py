@@ -116,6 +116,7 @@ class Visitas(models.Model):
         gerencia_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         soporte_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'TGU')])
         otros_TGU = self.env['control.visitas'].search_count([('name', '=', "Visita Otros"),('fecha', '=', date.today()),('region', '=', 'TGU')])
+        total_TGU = self.env['control.visitas'].search_count([('fecha', '=', date.today()),('region', '=', 'TGU')])
         
         
         admin_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Administración"),('fecha', '=', date.today()),('region', '=', 'SPS')])
@@ -126,6 +127,7 @@ class Visitas(models.Model):
         gerencia_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Gerencia"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         soporte_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Soporte"),('fecha', '=', date.today()),('region', '=', 'SPS')])
         otros_SPS = self.env['control.visitas'].search_count([('name', '=', "Visita Otros"),('fecha', '=', date.today()),('region', '=', 'SPS')])
+        total_SPS = self.env['control.visitas'].search_count([('fecha', '=', date.today()),('region', '=', 'SPS')])
         
         if not registros:
              raise UserError("No hay registros de visitas en esa fecha 1")
@@ -180,36 +182,8 @@ class Visitas(models.Model):
                     padding: 0.3em;
                     }
                 </style>
-            
-                <h2 class="texto_centro">Registro de Visitas</h2>
-                <div>
-                <p class="texto_centro">
-                    Reporte de los registros de las visitas del dia.
-                </p>
-                </div>
-                <div class="tabla_centrada">
-                    <table>
-                        <thead>
-                            <th>Nombre</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Region</th>
-                            <th>Usuario</th>
-                        </thead>
-                        <tbody>
-                        """
-         
-        visitas = []
-        conteo = {}
-        for visita in registros:
-            visitas.append({
-                'nombre': visita.name,
-                'fecha': visita.fecha,
-                'hora': visita.hora,
-                'region': visita.region,
-                'usuario': visita.user_id.name
-            })
-            
+                """
+        
         conteo = {
             'admin_TGU': admin_TGU,
             'megatk_TGU': megatk_TGU,
@@ -219,6 +193,7 @@ class Visitas(models.Model):
             'gerencia_TGU': gerencia_TGU,
             'soporte_TGU': soporte_TGU,
             'otros_TGU': otros_TGU,
+            'total_TGU': total_TGU,
             'admin_SPS': admin_SPS,
             'megatk_SPS': megatk_SPS,
             'meditek_SPS': meditek_SPS,
@@ -227,28 +202,10 @@ class Visitas(models.Model):
             'gerencia_SPS': gerencia_SPS,
             'soporte_SPS': soporte_SPS,
             'otros_SPS': otros_SPS,
+            'total_SPS': total_SPS
         }
-            
-        contexto = {}
-        for visita in visitas:
-            html += "<tr>"
-            html += f"""
-                <th>{visita['nombre']}</th>
-                <th>{visita['fecha']}</th>
-                <th>{visita['hora']}</th>
-                <th>{visita['region']}</th>
-                <th>{visita['usuario']}</th>
-            """
-            html += "</tr>"
-            
+                
         html += f"""
-                        </tbody>
-                    </table>
-                </div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
                 <h2 class="texto_centro">Conteo de visitas por sucursal</h2>
                 <div class="tabla_centrada">
                     <table>
@@ -346,6 +303,63 @@ class Visitas(models.Model):
                                     {conteo['otros_SPS']}
                                 </th>
                             </tr>
+                            <tr>
+                                <th>
+                                    {conteo['total_TGU']}
+                                </th>
+                                <th>
+                                    {conteo['total_SPS']}
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <h2 class="texto_centro">Registro de Visitas</h2>
+                <div>
+                <p class="texto_centro">
+                    Reporte de los registros de las visitas del dia.
+                </p>
+                </div>
+                <div class="tabla_centrada">
+                    <table>
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Region</th>
+                            <th>Usuario</th>
+                        </thead>
+                        <tbody>
+                        """
+         
+        visitas = []
+        conteo = {}
+        for visita in registros:
+            visitas.append({
+                'nombre': visita.name,
+                'fecha': visita.fecha,
+                'hora': visita.hora,
+                'region': visita.region,
+                'usuario': visita.user_id.name
+            })
+            
+        contexto = {}
+        for visita in visitas:
+            html += "<tr>"
+            html += f"""
+                <th>{visita['nombre']}</th>
+                <th>{visita['fecha']}</th>
+                <th>{visita['hora']}</th>
+                <th>{visita['region']}</th>
+                <th>{visita['usuario']}</th>
+            """
+            html += "</tr>"
+            
+        html += f"""
                         </tbody>
                     </table>
                 </div>
@@ -358,8 +372,10 @@ class Visitas(models.Model):
                 </div>
             """
             
-        correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com,dcolindres@megatk.com"
-        cc = "soporte@megatk.com"
+        # correo = "dvasquez@megatk.com,jmoran@meditekhn.com,lmoran@megatk.com,nfuentes@meditekhn.com,yalvarado@megatk.com,dcolindres@megatk.com"
+        # cc = "soporte@megatk.com"
+        correo = "alexdreyesmt@gmail.com"
+        cc = ""
         
         contexto['body'] = html
         
