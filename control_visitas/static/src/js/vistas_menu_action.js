@@ -9,6 +9,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         template: 'VisitasMenuDashboard',
 
         value_filtro: null,
+
+        filtro_dias: null,
         
         events: {
             'change #filter_region': '_onChangeFilter',
@@ -34,13 +36,14 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         _deleteRecord: function (tienda) {
             var self = this;
+            console.log("Desde _deleterecord " + self.filtro_dias);
             
             const manejarClickDeleteAdmin = (zona) => {
                 var metodo = "borrar_" + tienda;
                 self._rpc({
                     model: 'control.visitas',
                     method: metodo,
-                    args: [zona],
+                    args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self._updateUI(reg);
                     console.log("Desde delete record " + self.$el.find("#admin_value").text());
@@ -230,8 +233,9 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     var target = $(e.target);
                     var value = target.val();
                     var val_filter = value + reg;
-        
+                    self.filtro_dias = val_filter;
                     if (val_filter == `this_day${reg}`) {
+                        
                         ajax.rpc(`/control_visitas_dia${reg}`).then(function (result) {
                             self.$el.find("#admin_value").text(result.admin);
                             self.$el.find("#meditek_value").text(result.meditek);
