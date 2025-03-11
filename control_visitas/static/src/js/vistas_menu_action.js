@@ -35,12 +35,12 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteRecord: function (tienda) {
             var self = this;
             
-            const manejarClickDeleteAdmin = (zona, registro) => {
+            const manejarClickDeleteAdmin = (zona) => {
                 var metodo = "borrar_" + tienda;
                 self._rpc({
                     model: 'control.visitas',
                     method: metodo,
-                    args: [zona, registro],
+                    args: [zona],
                 }).then(function (resultado) {
                     self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
                     console.log("Desde delete record " + self.$el.find("#admin_value").text());
