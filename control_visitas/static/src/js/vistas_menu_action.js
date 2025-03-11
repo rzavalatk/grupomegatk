@@ -35,6 +35,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteRecord: function (tienda) {
             var reg = "";   
             var zona = "";
+            console.log("Desde _deleterecord " + this.value_filtro);
+            
             if (this.value_filtro == "reg_tgu") {
                 zona = "TGU";
                 reg = "_tgu";
