@@ -8,7 +8,7 @@
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
-            <field name="nextcall" eval="datetime.now(pytz.timezone('America/Tegucigalpa')).strftime('%Y-%m-%d 22:59:59')" />
+            <field name="nextcall" eval="datetime.now(pytz.timezone('America/Tegucigalpa')).strftime('%Y-%m-%d 23:59:59')" />
             <field ref="control_visitas.model_control_visitas" name="model_id" />
             <field name="state">code</field>
             <field name="code">

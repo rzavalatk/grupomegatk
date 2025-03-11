@@ -305,6 +305,9 @@ class Visitas(models.Model):
                             </tr>
                             <tr>
                                 <th>
+                                    TOTAL
+                                </th>
+                                <th>
                                     {conteo['total_TGU']}
                                 </th>
                                 <th>
