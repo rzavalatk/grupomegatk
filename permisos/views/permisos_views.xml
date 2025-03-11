@@ -68,6 +68,8 @@
                 </group>
                 <group string='Motivo'>
                   <field name="justificacion" placeholder='Justificación de Ausencia' attrs='{"readonly": [["state","!=","draft"]]}' nolabel="1"/>
+                  <field name="hora" widget="float_time"/>
+
                   
                 </group>
               </group>

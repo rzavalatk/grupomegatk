@@ -37,11 +37,7 @@ class HrPermisos(models.Model):
 	department_id = fields.Integer(string="Departamento")
 	sequence_id = fields.Many2one('ir.sequence', "Prestamo")
 	por_empresa = fields.Boolean('Por Empresa:', default=False)
-
-	
-	"""@api.onchange('employe_id')
-	def _onchange_employe(self):
-		self.department_id = self.employe_id.department_id.id"""
+	hora = fields.Float('Hora', help="Hora en formato HH:MM")
 
 	@api.onchange('fecha_fin','fecha_inicio')
 	def _onchange_fechafin(self):
