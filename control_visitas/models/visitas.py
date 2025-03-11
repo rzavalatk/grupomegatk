@@ -164,7 +164,7 @@ class Visitas(models.Model):
                 
         return otros_vals
     @api.model   
-    def borrar_administracion(self, zona, registro):
+    def borrar_administracion(self, zona):
         
         
         if zona == "TGU":
