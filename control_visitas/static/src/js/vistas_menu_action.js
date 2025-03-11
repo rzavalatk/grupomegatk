@@ -14,7 +14,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             'change #filter_region': '_onChangeFilter',
             'click .btn_admin': '_deleteAdminRecord',
         },
-
+        
         _onChangeFilter: function (ev) {
             ev.preventDefault();
             console.log("Desde onChangeFilter " + this.value_filtro);
@@ -31,11 +31,10 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
             this._deleteRecord(tienda);
         },
-
+        
         _deleteRecord: function (tienda) {
-            var reg = "";   
-            var zona = "";
-            console.log("Desde _deleterecord " + this.value_filtro);
+            var self = this;
+            
             const manejarClickDeleteAdmin = (zona, registro) => {
                 var metodo = "borrar_" + tienda;
                 self._rpc({
@@ -50,56 +49,60 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     console.error(error);
                 });
             }
+            var reg = "";   
+            var zona = "";
+            console.log("Desde _deleterecord " + this.value_filtro);
             
             if (this.value_filtro == "reg_tgu") {
                 zona = "TGU";
                 reg = "_tgu";
+                console.log("Desde _deleterecord " + this.value_filtro);
             } else if (this.value_filtro == "reg_sps") {
                 zona = "SPS";
                 reg = "_sps";
             }
-            console.log("Desde _deleterecord /delete" + reg);
             
-            ajax.rpc(`/delete_record${reg}`).then(function (result) {
-                var registro = "";
-                console.log("Desde delete record ajax " + result);
+            // ajax.rpc(`/delete_record${reg}`).then(function (result) {
+            //     var registro = "";
+            //     console.log("Desde delete record ajax " + result);
                 
-                if(zona == 'TGU') {
-                    if (tienda == 'administracion') {
-                        registro = result.last_admin;
-                        console.log("Desde delete record " + registro);
+            //     if(zona == 'TGU') {
+            //         if (tienda == 'administracion') {
+            //             registro = result.last_admin;
+            //             console.log("Desde delete record " + registro);
                         
-                    } else if (tienda == 'tienda_megatk') {
-                        registro = result.last_megatk;
-                    } else if (tienda == 'tienda_meditek') {
-                        registro = result.last_meditek;
-                    } else if (tienda == 'lenka') {
-                        registro = result.last_lenka;
-                    } else if (tienda == 'clinica') {
-                        registro = result.last_clinica;
-                    } else if (tienda == 'gerencia') {
-                        registro = result.last_gerencia;
-                    } else if (tienda == 'soporte') {
-                        registro = result.last_soporte;
-                    } else if (tienda == 'otros') {
-                        registro = result.last_otros;
-                    } 
-                } else if (zona == 'SPS') {
-                    if (tienda == 'tienda_megatk') {
-                        registro = result.last_megatk;
-                    } else if (tienda == 'tienda_meditek') {
-                        registro = result.last_meditek;
-                    } else if (tienda == 'gerencia') {
-                        registro = result.last_gerencia;
-                    } else if (tienda == 'soporte') {
-                        registro = result.last_soporte;
-                    } else if (tienda == 'otros') {
-                        registro = result.last_otros;
-                    } 
-                } 
+            //         } else if (tienda == 'tienda_megatk') {
+            //             registro = result.last_megatk;
+            //         } else if (tienda == 'tienda_meditek') {
+            //             registro = result.last_meditek;
+            //         } else if (tienda == 'lenka') {
+            //             registro = result.last_lenka;
+            //         } else if (tienda == 'clinica') {
+            //             registro = result.last_clinica;
+            //         } else if (tienda == 'gerencia') {
+            //             registro = result.last_gerencia;
+            //         } else if (tienda == 'soporte') {
+            //             registro = result.last_soporte;
+            //         } else if (tienda == 'otros') {
+            //             registro = result.last_otros;
+            //         } 
+            //     } else if (zona == 'SPS') {
+            //         if (tienda == 'tienda_megatk') {
+            //             registro = result.last_megatk;
+            //         } else if (tienda == 'tienda_meditek') {
+            //             registro = result.last_meditek;
+            //         } else if (tienda == 'gerencia') {
+            //             registro = result.last_gerencia;
+            //         } else if (tienda == 'soporte') {
+            //             registro = result.last_soporte;
+            //         } else if (tienda == 'otros') {
+            //             registro = result.last_otros;
+            //         } 
+            //     } 
 
-                manejarClickDeleteAdmin(zona, registro);
-            })
+            // })
+            manejarClickDeleteAdmin(zona, registro);
+
         },
 
         _updateView: function (value_filtro) {
