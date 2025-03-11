@@ -57,16 +57,13 @@ class Visitas(models.Model):
         self.create({'name': 'Visita Administración'})
         
         admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
-        ultimo_registro = self.env["control.visitas"].search([('name', '=', 'Visita Tienda Meditek')], order='fecha desc, hora desc', limit=1)
 
         admin_vals = {
             'admin_tgu': admin_val_tgu,
-            'admin_sps': admin_val_sps
+            'admin_sps': 0
         }
-        _logger.warning(f"Último registro: {ultimo_registro.hora} y {ultimo_registro.fecha}")        
-        return admin_vals
-        
+                
+        return admin_vals    
             
     @api.model
     def visita_tienda_megatk(self):
@@ -81,6 +78,7 @@ class Visitas(models.Model):
         }
                 
         return megatk_vals
+    
     @api.model
     def visita_tienda_meditek(self):    
         self.create({'name': 'Visita Tienda Meditek'})
@@ -99,11 +97,11 @@ class Visitas(models.Model):
         self.create({'name': 'Visita Lenka'})
         
         lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        lenka_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+        
         
         lenka_vals = {
             'lenka_tgu': lenka_val_tgu,
-            'lenka_sps': lenka_val_sps
+            'lenka_sps': 0
         }
                 
         return lenka_vals
@@ -113,11 +111,10 @@ class Visitas(models.Model):
         self.env['control.visitas'].create({'name': 'Visita Clínica'})
         
         clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "TGU")])
-        clinica_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', date.today()),('region', '=', "SPS")])
         
         clinica_vals = {
             'clinica_tgu': clinica_val_tgu,
-            'clinica_sps': clinica_val_sps
+            'clinica_sps': 0
         }
                 
         return clinica_vals
@@ -167,14 +164,24 @@ class Visitas(models.Model):
     def borrar_administracion(self, zona, filtro):
         admin_val_tgu = ""
         admin_val_sps = ""
+        hoy = date.today()
+        semana = str(hoy - date.timedelta(days=7)) + ' '
+        mes = str(hoy - date.timedelta(days=30)) + ' '
+        anio = str(hoy - date.timedelta(days=365)) + ' '
         
         if zona == "TGU":
-            
             last_admin = self.env["control.visitas"].search([('name', '=', 'Visita Administración'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
             last_admin.unlink()
-            admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "TGU")])
+            if filtro == "this_day":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])
+            elif filtro == "this_week":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', semana),('region', '=', "TGU")])
+            elif filtro == "this_month":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', mes),('region', '=', "TGU")])
+            elif filtro == "this_year":
+                admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
-            admin_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', date.today()),('region', '=', "SPS")])
+            admin_val_sps = 0
 
         admin_vals = {
             'admin_tgu': admin_val_tgu,
