@@ -129,10 +129,12 @@
                 }
                 .btn {
                     margin: 5px;
-                    padding: 2px 5px;
+                    padding: 5px 10px;
                     border-radius: 5px;
                     font-size: 8px;
                     font-color: white;
+                    width: 100%;
+
                 }
                 .btn-eliminar {
                     background-color: red;
