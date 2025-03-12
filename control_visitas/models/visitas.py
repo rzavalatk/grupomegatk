@@ -70,6 +70,8 @@ class Visitas(models.Model):
                     'admin_tgu': admin_val_tgu,
                     'admin_sps': admin_val_sps
                 }
+                
+                _logger.warning(f"admin_vals_tgu: {admin_vals}")
                
                 return admin_vals 
             elif filtro == "this_week":
