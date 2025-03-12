@@ -15,7 +15,34 @@
             <field name="justificacion"/>
             <field name="cubierto_employe_id" />
           </xpath>
+          
+          <xpath expr="//field[@name='request_date_from']" position="attributes">
+           <attribute name="attrs">{'invisible': [('request_unit_hours', '!=', False)]}</attribute> 
+          </xpath>
 
+          <xpath expr="//field[@name='request_hour_from']" position="attributes">
+            <attribute name="attrs">{"invisible": [["request_unit_hours","!=",False]]}</attribute>
+          </xpath>
+          <xpath expr="//field[@name='request_hour_to']" position="attributes">
+            <attribute name="attrs">{"invisible": [["request_unit_hours","!=",False]]}</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[4]/label[1]" position="attributes">
+            <attribute name="attrs">{"invisible": [["request_unit_hours","!=",False]]}</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[4]/label[1]" position="attributes">
+            <attribute name="attrs">{"invisible": [["request_unit_hours","!=",False]]}</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/label[4]" position="attributes">
+            <attribute name="attrs">{"invisible": [["request_unit_hours","!=",False]]}</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[2]" position="inside">
+            <field name="datetm_from" attrs="{'invisible': [('request_unit_half', '=', False), ('request_unit_hours', '=', False)], 'required': [('request_unit_hours', '=', True)]}"/>
+            <field name="datetm_to" attrs="{'invisible': [('request_unit_half', '=', False), ('request_unit_hours', '=', False)], 'required': [('request_unit_hours', '=', True)]}"/>
+          </xpath>
 
         </field>
     </record>
