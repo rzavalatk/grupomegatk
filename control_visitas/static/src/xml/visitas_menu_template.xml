@@ -5,8 +5,8 @@
             <style>
                 .c-dashboardInfo {
                 margin-bottom: 15px;
-                width: 60%;
-                height: 180px;
+                width: 70%;
+                height: 190px;
                 }
                 .c-dashboardInfo .wrap {
                 background: #ffffff;
@@ -45,12 +45,12 @@
                 background: linear-gradient(82.59deg, #00c48c 0%, #00a173
                 100%);
                 }
-                .wrap:hover{
+                <!-- .wrap:hover{
                 -webkit-transform: scale(1.2);
                 -ms-transform: scale(1.2);
                 transform: scale(1.2);
                 transition: 1s ease;
-                }
+                } -->
                 .c-dashboardInfo:nth-child(2) .wrap:after {
                 background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2
                 100%);
@@ -127,24 +127,59 @@
                     grid-template-columns: repeat(4, 2fr);
                     row-gap: 20px;
                 }
+                .btn {
+                    margin: 0px 5px;
+                    padding: 0px 10px;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    color: white;
+                    width: 50%;
+
+                }
+                .btn-eliminar {
+                    background-color: red;
+                }
+                .btn-agregar {
+                    background-color: green;
+                }
+                .btn-eliminar:hover {
+                    background-color: darkred;
+                }
+                .btn-agregar:hover {
+                    background-color: darkgreen;
+                }
+                .btn-container {
+                    display: flex;
+                    margin-top: 14px;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
                     <div class="row align-items-stretch">
                         <div class="row" style="align-items: baseline; height: 120px;">
-                            <div class="col"
-                                style="margin-top: 28px;margin-left: 88px; margin-bottom: 80px; height: 48px;">
+                            <div class="col" style="margin-top: 28px;margin-left: 88px; margin-bottom: 80px; height: 48px;">
                                 <h1 class="section-header" style="color:#4a5c9a; font-size: 20px;">
                                     Control de Visitas
                                 </h1>
                             </div>
-                            <div class="col-md-4 d-flex justify-content-end bg-light"
-                             style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
+                            <div class="col-md-4 d-flex justify-content-end bg-light" style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
+                                <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
+                                Filtrar por ciudad:
+                                </b>
+                                <select id="filter_region" style="width: 50%;padding:10px;border-radius:10px; background:white;" disabled='True'>
+                                    <option id="reg_tgu" value="reg_tgu">
+                                        Tegucigalpa
+                                    </option>
+                                    <option id="reg_sps" value="reg_sps">
+                                        San Pedro Sula
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-end bg-light" style="margin-top: 20px;margin-right: 20px; padding-bottom: 40px; align-items: center">
                                 <b style="white-space: nowrap;padding-right: 8px;padding-top: 8px;">
                                     Filtrar por:
                                 </b>
-                                <select id="filter_selection"
-                                        style="width: 50%;padding:10px;border-radius:10px; background:white;">
+                                <select id="filter_selection" style="width: 50%;padding:10px;border-radius:10px; background:white;">
                                     <option id="this_day" value="this_day" selected="">
                                         Por Dia
                                     </option>
@@ -161,92 +196,140 @@
                             </div>
                         </div>
                         <div class="dashboard-grid">
-                            <div class="c-dashboardInfo"
-                                    id="admin_state">
+                            <div class="c-dashboardInfo" >
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Administración
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="admin_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="administracion" class="btn btn-eliminar btn-admin">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="admin_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="c-dashboardInfo"
-                                    id="megatk_state">
+                            </div><!-- fin admin state-->
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Tienda MegaTK
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="megatk_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="megatk_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="tienda_megatk" class="btn btn-eliminar btn-megatk">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="megatk_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="meditek_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Tienda Meditek
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="meditek_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="meditek_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="tienda_meditek" class="btn btn-eliminar btn-meditek">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="meditek_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="lenka_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Lenka
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="lenka_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="lenka_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="lenka" class="btn btn-eliminar btn-lenka">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="lenka_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="clinica_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Clinica
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="clinica_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="clinica_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="clinica" class="btn btn-eliminar btn-clinica">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="clinica_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="soporte_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Soporte
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="soporte_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="soporte_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="soporte" class="btn btn-eliminar btn-soporte">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="soporte_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="gerencia_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Gerencia
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="gerencia_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="gerencia_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="gerencia" class="btn btn-eliminar btn-gerencia">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="gerencia_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo"
-                                    id="otros_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Otros
                                     </h4>
-                                    <span class="hind-font caption-12 c-dashboardInfo__count"
-                                            id="otros_value">
+                                    <span class="hind-font caption-12 c-dashboardInfo__count" id="otros_value">
                                     </span>
+                                    <div class="btn-container"> 
+                                        <div id="otros" class="btn btn-eliminar btn-otros">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="otros_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
