@@ -148,6 +148,10 @@
                 .btn-agregar:hover {
                     background-color: darkgreen;
                 }
+                .btn-container {
+                    display: flex;
+                    margin-top: 14px;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
@@ -199,7 +203,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="administracion" class="btn btn-eliminar btn-admin">
                                             <span>-</span>
                                         </div>
@@ -233,7 +237,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="meditek_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="tienda_meditek" class="btn btn-eliminar btn-meditek">
                                             <span>-</span>
                                         </div>
@@ -250,7 +254,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="lenka_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="lenka" class="btn btn-eliminar btn-lenka">
                                             <span>-</span>
                                         </div>
@@ -267,7 +271,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="clinica_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="clinica" class="btn btn-eliminar btn-clinica">
                                             <span>-</span>
                                         </div>
@@ -284,7 +288,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="soporte_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="soporte" class="btn btn-eliminar btn-soporte">
                                             <span>-</span>
                                         </div>
@@ -301,7 +305,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="gerencia_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="gerencia" class="btn btn-eliminar btn-gerencia">
                                             <span>-</span>
                                         </div>
@@ -318,7 +322,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="otros_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="otros" class="btn btn-eliminar btn-otros">
                                             <span>-</span>
                                         </div>
