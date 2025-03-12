@@ -254,7 +254,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
                     self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
-                    logger.info("result clinica " + resultado[`clinica${reg}`]);
+                    console.log("result clinica " + resultado[`clinica${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
