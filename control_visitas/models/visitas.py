@@ -217,8 +217,6 @@ class Visitas(models.Model):
     
     @api.model
     def visita_clinica(self, zona, filtro):
-        
-        
         clinica_val_tgu = ""
         clinica_val_sps = ""
         hoy = date.today()
@@ -227,8 +225,7 @@ class Visitas(models.Model):
         anio = str(hoy - timedelta(days=365)) + ' '
         
         if zona == "TGU":
-            last_clinica = self.env["control.visitas"].search([('name', '=', 'Visita Clínica'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
-            last_clinica.unlink()
+            self.create({'name': 'Visita Clínica'})
             if filtro == "this_day" or filtro == "this_day_tgu":
                 clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
