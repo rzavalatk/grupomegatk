@@ -14,14 +14,14 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         events: {
             'change #filter_region': '_onChangeFilter',
-            'click .btn-admin': '_deleteRecord',
-            'click .btn-megatk': '_deleteRecord',
-            'click .btn-meditek': '_deleteRecord',
-            'click .btn-lenka': '_deleteRecord',
-            'click .btn-clinica': '_deleteRecord',
-            'click .btn-gerencia': '_deleteRecord',
-            'click .btn-soporte': '_deleteRecord',
-            'click .btn-otros': '_deleteRecord',
+            'click .btn-admin': '_onClickDeleteRecord',
+            'click .btn-megatk': '_onClickDeleteRecord',
+            'click .btn-meditek': '_onClickDeleteRecord',
+            'click .btn-lenka': '_onClickDeleteRecord',
+            'click .btn-clinica': '_onClickDeleteRecord',
+            'click .btn-gerencia': '_onClickDeleteRecord',
+            'click .btn-soporte': '_onClickDeleteRecord',
+            'click .btn-otros': '_onClickDeleteRecord',
         },
         
         _onChangeFilter: function (ev) {
@@ -32,7 +32,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             this._updateView(this.value_filtro);
         },
 
-        _deleteRecord: function (ev) {
+        _onClickDeleteRecord: function (ev) {
             ev.preventDefault();
     
             console.log("desde deleteRecord " + ev.currentTarget.id);
