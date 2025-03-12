@@ -200,7 +200,7 @@
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="admin_value">
                                     </span>
                                     <div style="display: flex; "> 
-                                        <div id="administracion" class="btn btn-eliminar btn_admin">
+                                        <div id="administracion" class="btn btn-eliminar btn-admin">
                                             <span>-</span>
                                         </div>
                                         <div class="btn btn-agregar" id="admin_state">
@@ -209,22 +209,38 @@
                                     </div>
                                 </div>
                             </div><!-- fin admin state-->
-                            <div class="c-dashboardInfo" id="megatk_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Tienda MegaTK
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="megatk_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="tienda_megatk" class="btn btn-eliminar btn-megatk">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="megatk_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo" id="meditek_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Tienda Meditek
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="meditek_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="tienda_meditek" class="btn btn-eliminar btn-meditek">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="meditek_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="c-dashboardInfo" id="lenka_state">
@@ -234,6 +250,14 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="lenka_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="lenka" class="btn btn-eliminar btn-lenka">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="lenka_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="c-dashboardInfo" id="clinica_state">
@@ -243,24 +267,48 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="clinica_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="clinica" class="btn btn-eliminar btn-clinica">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="clinica_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo" id="soporte_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Soporte
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="soporte_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="soporte" class="btn btn-eliminar btn-soporte">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="soporte_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="c-dashboardInfo" id="gerencia_state">
+                            <div class="c-dashboardInfo">
                                 <div class="wrap">
                                     <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
                                         Visita Gerencia
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="gerencia_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="gerencia" class="btn btn-eliminar btn-gerencia">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="gerencia_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="c-dashboardInfo" id="otros_state">
@@ -270,6 +318,14 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="otros_value">
                                     </span>
+                                    <div style="display: flex; "> 
+                                        <div id="otros" class="btn btn-eliminar btn-otros">
+                                            <span>-</span>
+                                        </div>
+                                        <div class="btn btn-agregar" id="otros_state">
+                                            <span>+</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

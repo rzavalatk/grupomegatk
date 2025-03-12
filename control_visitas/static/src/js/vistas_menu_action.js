@@ -14,7 +14,14 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         events: {
             'change #filter_region': '_onChangeFilter',
-            'click .btn_admin': '_deleteAdminRecord',
+            'click .btn-admin': '_deleteRecord',
+            'click .btn-megatk': '_deleteRecord',
+            'click .btn-meditek': '_deleteRecord',
+            'click .btn-lenka': '_deleteRecord',
+            'click .btn-clinica': '_deleteRecord',
+            'click .btn-gerencia': '_deleteRecord',
+            'click .btn-soporte': '_deleteRecord',
+            'click .btn-otros': '_deleteRecord',
         },
         
         _onChangeFilter: function (ev) {
@@ -25,7 +32,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             this._updateView(this.value_filtro);
         },
 
-        _deleteAdminRecord: function (ev) {
+        _deleteRecord: function (ev) {
             ev.preventDefault();
     
             console.log(ev.currentTarget.id);
@@ -36,10 +43,18 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         
         _deleteRecord: function (tienda) {
             var self = this;
-            self.filtro_dias = self.$el.find("#filter_selection").val();
-            
-            const manejarClickDeleteAdmin = (zona) => {
-                var metodo = "borrar_" + tienda;
+            var reg = "";   
+            var zona = "";
+            var clave = "borrar_";
+            if (this.value_filtro == "reg_tgu") {
+                zona = "TGU";
+                reg = "_tgu";
+            } else if (this.value_filtro == "reg_sps") {
+                zona = "SPS";
+                reg = "_sps";
+            }
+
+            const manejarClickDeleteAdmin = (zona, metodo) => {
                 self._rpc({
                     model: 'control.visitas',
                     method: metodo,
@@ -50,18 +65,110 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     console.error(error);
                 });
             }
-            var reg = "";   
-            var zona = "";
-            console.log("Desde _deleterecord " + this.value_filtro);
-            
-            if (this.value_filtro == "reg_tgu") {
-                zona = "TGU";
-                reg = "_tgu";
-            } else if (this.value_filtro == "reg_sps") {
-                zona = "SPS";
-                reg = "_sps";
+            const manejarClickDeleteMegatk = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
             }
-            manejarClickDeleteAdmin(zona);
+            const manejarClickDeleteMeditek = (zona, metodo) => {
+
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+            const manejarClickDeleteLenka = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+            const manejarClickDeleteClinica = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+            const manejarClickDeleteGerencia = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+            const manejarClickDeleteSoporte = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+            const manejarClickDeleteOtros = (zona, metodo) => {
+                self._rpc({
+                    model: 'control.visitas',
+                    method: metodo,
+                    args: [zona, self.filtro_dias],
+                }).then(function (resultado) {
+                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+
+            if(tienda == "administracion") {
+                clave = clave + tienda; 
+                manejarClickDeleteAdmin(zona, clave);
+            } else if (tienda == "tienda_megatk") {
+                clave = clave + tienda;
+                manejarClickDeleteMegatk(zona, clave);
+            } else if (tienda == "tienda_meditek") {
+                clave = clave + tienda;
+                manejarClickDeleteMeditek(zona, clave);
+            } else if (tienda == "lenka") {
+                clave = clave + tienda;
+                manejarClickDeleteLenka(zona, clave);
+            } else if (tienda == "clinica") {
+                clave = clave + tienda;
+                manejarClickDeleteClinica(zona, clave);
+            } else if (tienda == "gerencia") {
+                clave = clave + tienda;
+                manejarClickDeleteGerencia(zona, clave);
+            } else if (tienda == "soporte") {
+                clave = clave + tienda;
+                manejarClickDeleteSoporte(zona, clave);
+            } else if (tienda == "otros") {
+                clave = clave + tienda;
+                manejarClickDeleteOtros(zona, clave);
+            }
         },
 
         _updateView: function (value_filtro) {
