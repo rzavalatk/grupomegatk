@@ -10,6 +10,9 @@
                 <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
                 <field name="numero_tarjeta" class="text-right"/>
+                <header>
+                <button string="Recargar" type="object" class="btn-primary"/>
+                </header>
             </tree>
         </field>
     </record>
