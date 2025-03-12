@@ -84,6 +84,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
             // Definir funciones con nombre para manejar los eventos click
             const manejarClickAdminState = () => {
                 var zona = reg == "_tgu" ? "TGU" : "SPS";
+                console.log("filtro dias " + self.filtro_dias);
+                
                 self._rpc({
                     model: 'control.visitas',
                     method: 'visita_administracion',
