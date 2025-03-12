@@ -220,7 +220,7 @@
                                     </h4>
                                     <span class="hind-font caption-12 c-dashboardInfo__count" id="megatk_value">
                                     </span>
-                                    <div style="display: flex; "> 
+                                    <div class="btn-container"> 
                                         <div id="tienda_megatk" class="btn btn-eliminar btn-megatk">
                                             <span>-</span>
                                         </div>
