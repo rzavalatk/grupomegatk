@@ -124,7 +124,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.create({'name': 'Visita Tienda Megatk'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -134,7 +134,7 @@ class Visitas(models.Model):
                 megatk_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
             self.create({'name': 'Visita Tienda Megatk'})
-            if filtro == "this_day_sps":
+            if filtro == "this_day" or filtro == "this_day_sps":
                 megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '=', hoy),('region', '=', "SPS")])
             elif filtro == "this_week_sps":
                 megatk_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Megatk'), ('fecha', '>=', semana),('region', '=', "SPS")])
@@ -160,7 +160,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.create({'name': 'Visita Tienda Meditek'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -170,7 +170,7 @@ class Visitas(models.Model):
                 meditek_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
             self.create({'name': 'Visita Tienda Meditek'})
-            if filtro == "this_day_sps":
+            if filtro == "this_day" or filtro == "this_day_sps":
                 meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '=', hoy),('region', '=', "SPS")])
             elif filtro == "this_week_sps":
                 meditek_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Tienda Meditek'), ('fecha', '>=', semana),('region', '=', "SPS")])
@@ -197,7 +197,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.create({'name': 'Visita Lenka'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 lenka_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Lenka'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -229,7 +229,7 @@ class Visitas(models.Model):
         if zona == "TGU":
             last_clinica = self.env["control.visitas"].search([('name', '=', 'Visita Clínica'),('region', '=', "TGU")], order='fecha desc, hora desc', limit=1)
             last_clinica.unlink()
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 clinica_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Clínica'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -259,7 +259,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.env['control.visitas'].create({'name': 'Visita Gerencia'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -269,7 +269,7 @@ class Visitas(models.Model):
                 gerencia_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
             self.env['control.visitas'].create({'name': 'Visita Gerencia'})
-            if filtro == "this_day_sps":
+            if filtro == "this_day" or filtro == "this_day_sps":
                 gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '=', hoy),('region', '=', "SPS")])
             elif filtro == "this_week_sps":
                 gerencia_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Gerencia'), ('fecha', '>=', semana),('region', '=', "SPS")])
@@ -297,7 +297,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.env['control.visitas'].create({'name': 'Visita Soporte'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "TGU")])
@@ -307,7 +307,7 @@ class Visitas(models.Model):
                 soporte_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', anio),('region', '=', "TGU")])
         elif zona == "SPS":
             self.env['control.visitas'].create({'name': 'Visita Soporte'})
-            if filtro == "this_day_sps":
+            if filtro == "this_day" or filtro == "this_day_sps":
                 soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '=', hoy),('region', '=', "SPS")])
             elif filtro == "this_week_sps":
                 soporte_val_sps = self.env["control.visitas"].search_count([('name', '=', 'Visita Soporte'), ('fecha', '>=', semana),('region', '=', "SPS")])
