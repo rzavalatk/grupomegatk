@@ -305,7 +305,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     console.log("Desde start rpc elemento " + self.$el.find("#filter_region").val());
                     
                     self.value_filtro = self.$el.find("#filter_region").val();
-                    console.log("Desde start rpc value " + self.value_filtro);
+                    self.filtro_dias = self.$el.find("#filter_selection").val();
+                    console.log("Desde start rpc value " + self.value_filtro + " filtro " + self.filtro_dias);
                     self._updateView(self.value_filtro);
                 } else {
                     self.$el.find("#filter_region").prop('disabled', false);
