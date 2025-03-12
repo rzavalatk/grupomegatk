@@ -71,7 +71,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#megatk_value").text(resultado[`megatk${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -83,7 +83,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#meditek_value").text(resultado[`meditek${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -94,7 +94,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#lenka_value").text(resultado[`lenka${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -105,7 +105,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -116,7 +116,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#gerencia_value").text(resultado[`gerencia${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -127,7 +127,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#soporte_value").text(resultado[`soporte${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -138,7 +138,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                     method: metodo,
                     args: [zona, self.filtro_dias],
                 }).then(function (resultado) {
-                    self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
+                    self.$el.find("#otros_value").text(resultado[`otros${reg}`]);
                 }).catch(function (error) {
                     console.error(error);
                 });
