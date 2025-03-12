@@ -64,7 +64,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.create({'name': 'Visita Administración'})
-            if filtro == "this_day_tgu":
+            if filtro == "this_day" or filtro == "this_day_tgu":
                 admin_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Administración'), ('fecha', '=', hoy),('region', '=', "TGU")])
                 admin_val_sps = 0
                 
