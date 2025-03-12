@@ -35,7 +35,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
         _deleteRecord: function (ev) {
             ev.preventDefault();
     
-            console.log(ev.currentTarget.id);
+            console.log("desde deleteRecord " + ev.currentTarget.id);
             var tienda = ev.currentTarget.id;
 
             this._deleteRecord(tienda);
