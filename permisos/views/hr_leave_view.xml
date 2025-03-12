@@ -40,7 +40,9 @@
           </xpath>
 
           <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[2]" position="inside">
+            <span class="text-muted"> De </span>
             <field name="datetm_from" attrs="{'invisible': [('request_unit_half', '=', False), ('request_unit_hours', '=', False)], 'required': [('request_unit_hours', '=', True)]}"/>
+            <span class="text-muted"> A </span>          
             <field name="datetm_to" attrs="{'invisible': [('request_unit_half', '=', False), ('request_unit_hours', '=', False)], 'required': [('request_unit_hours', '=', True)]}"/>
           </xpath>
 
