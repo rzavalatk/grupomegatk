@@ -60,6 +60,8 @@ class Visitas(models.Model):
         mes = str(hoy - timedelta(days=30)) + ' '
         anio = str(hoy - timedelta(days=365)) + ' '
         
+        _logger.warning(f"zona {zona} y filtro {filtro}")
+        
         if zona == "TGU":
             self.create({'name': 'Visita Administración'})
             if filtro == "this_day":
