@@ -11,7 +11,7 @@
                 <field name="credito_disponible"/>
                 <field name="numero_tarjeta" class="text-right"/>
                 <header>
-                <button string="Recargar" type="object" class="btn-primary"/>
+                <button string="Recargar" type="object" class="btn-primary" name="recargar_credito"/>
                 </header>
             </tree>
         </field>
