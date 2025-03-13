@@ -1,4 +1,4 @@
-odoo.define('leaflet_map.LeafletMap', function (require) {
+odoo.define('localizacion.LeafletMap', function (require) {
   "use strict";
 
   const { Widget } = require('web.Widget');
