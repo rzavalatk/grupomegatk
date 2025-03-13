@@ -7,7 +7,7 @@
     'license': 'LGPL-3',
     'category': 'uncategorized',
     'depends': [
-        'base'
+        'base', 'web'
     ],
     'data': [
         'security/groups.xml',
