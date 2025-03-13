@@ -8,7 +8,7 @@
 
     <record id="view_leaflet_map" model="ir.ui.view">
         <field name="name">leaflet.map.view</field>
-        <field name="model">res.partner</field>
+        <field name="model">localizacion</field>
         <field name="arch" type="xml">
             <form string="Leaflet Map">
                 <sheet>
@@ -25,7 +25,7 @@
     <menuitem id="menu_leaflet_map" name="Leaflet Map" action="action_leaflet_map"/>
     <record id="action_leaflet_map" model="ir.actions.act_window">
         <field name="name">Leaflet Map</field>
-        <field name="res_model">res.partner</field>
+        <field name="res_model">localizacion</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_leaflet_map"/>
     </record>
