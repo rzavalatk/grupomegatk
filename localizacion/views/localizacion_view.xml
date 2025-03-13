@@ -1,13 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="localizacion_view_tree" model="ir.ui.view">
-        <field name="name">localizacion.view.tree</field>
-        <field name="model">localizacion</field>
+    <template id="leaflet_map_view" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        </xpath>
+    </template>
+
+    <record id="view_leaflet_map" model="ir.ui.view">
+        <field name="name">leaflet.map.view</field>
+        <field name="model">res.partner</field>
         <field name="arch" type="xml">
-            <tree>
-                <field name="name" />
-                <field name="fecha" />
-            </tree>
+            <form string="Leaflet Map">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Mapa con Leaflet</h1>
+                    </div>
+                    <div id="map" style="height: 400px; width: 100%;"></div>
+                    <p id="coordinates"></p>
+                </sheet>
+            </form>
         </field>
+    </record>
+
+    <menuitem id="menu_leaflet_map" name="Leaflet Map" action="action_leaflet_map"/>
+    <record id="action_leaflet_map" model="ir.actions.act_window">
+        <field name="name">Leaflet Map</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_leaflet_map"/>
     </record>
 </odoo>
