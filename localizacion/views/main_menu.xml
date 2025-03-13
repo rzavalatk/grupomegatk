@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <record id="localizacion_menu_action" model="ir.actions.act_window">
-        <field name="name">Localizacion</field>
+     <record id="action_leaflet_map" model="ir.actions.act_window">
+        <field name="name">Leaflet Map</field>
         <field name="res_model">localizacion</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_leaflet_map"/>
     </record>
 
     <menuitem
         id="localizacion_menu_root"
         name="Localizacion"
         sequence="10"
-        action="localizacion_menu_action"
+        action="action_leaflet_map"
         web_icon="localizacion,static/description/localizar.png"/>
 
         
