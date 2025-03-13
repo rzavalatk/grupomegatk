@@ -1,26 +1,57 @@
-odoo.define('localizacion.LeafletMap', function (require) {
-  "use strict";
+odoo.define('localizacion.localizacion_menu_action', function (require) {
+    "use strict";
 
-  const { Widget } = require('web.Widget');
+    var core = require('web.core');
+    var AbstractAction = require('web.AbstractAction');
 
-  const LeafletMap = Widget.extend({
-      template: 'LeafletMap',
-      start: function () {
-          // Inicializar el mapa
-          const map = L.map('map').setView([40.4168, -3.7038], 6); // Centro en España
+    var UserCard = AbstractAction.extend({
+        template: 'LocalizacionMenu',
+  
+        events: {
+            'change #filter_selection': '_onChangeFilter',
+        },
 
-          // Añadir capa de OpenStreetMap
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '© OpenStreetMap contributors'
-          }).addTo(map);
+        _onChangeFilter: function (ev) {
+            ev.preventDefault();
+            console.log(ev.target.value);
+            if ("geolocation" in navigator) {
+                // El navegador soporta la API de Geolocalización
+                navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                    var self = this;
+                    // Éxito al obtener la ubicación
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    console.log(`Latitud: ${latitude}, Longitud: ${longitude}`);
+                    alert(`Latitud: ${latitude}, Longitud: ${longitude}`);
+                    self.$el.find(".latitud").text(latitude);
+                    self.$el.find(".longitud").text(longitude);
+                  },
+                  (error) => {
+                    // Error al obtener la ubicación
+                    switch (error.code) {
+                      case error.PERMISSION_DENIED:
+                        console.error("El usuario denegó la solicitud de geolocalización.");
+                        break;
+                      case error.POSITION_UNAVAILABLE:
+                        console.error("La información de ubicación no está disponible.");
+                        break;
+                      case error.TIMEOUT:
+                        console.error("La solicitud de geolocalización ha expirado.");
+                        break;
+                      default:
+                        console.error("Ocurrió un error desconocido.");
+                    }
+                  }
+                );
+              } else {
+                // El navegador no soporta la API de Geolocalización
+                console.error("Geolocalización no es soportada por este navegador.");
+              }
+        },
+    });
 
-          // Escuchar clics en el mapa
-          map.on('click', function (e) {
-              const { lat, lng } = e.latlng;
-              document.getElementById('coordinates').innerText = `Latitud: ${lat.toFixed(4)}, Longitud: ${lng.toFixed(4)}`;
-          });
-      },
-  });
+    core.action_registry.add('localizacion_tag', UserCard);
 
-  return LeafletMap;
+    return UserCard;
 });
