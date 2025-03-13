@@ -13,7 +13,6 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/localizacion_view.xml',  
-        'views/main_menu.xml',
     ],
     'assets' : {
         'web.assets_backend': [
