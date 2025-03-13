@@ -17,8 +17,8 @@
     ],
     'assets' : {
         'web.assets_backend': [
-            '/localizacion/static/src/xml/localizacion_menu_template.xml',
-            '/localizacion/static/src/js/localizacion_menu_action.js'
+            '/localizacion/static/src/js/localizacion_menu_action.js',
+            'https://unpkg.com/leaflet/dist/leaflet.css',
         ]    
     },
     'auto_install': False,
