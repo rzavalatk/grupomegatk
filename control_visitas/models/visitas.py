@@ -45,14 +45,14 @@ class Visitas(models.Model):
             _logger.warning(f"Hora local: {zona_horaria_usuario}")
             record.hora = hora_local
  
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
          user = self.env.user
          if user.ubicacion_vendedor == "2" and vals.get('name') in ["Visita Lenka", "Visita Clínica", "Visita Administración"]:
              raise ValidationError("No se puede registrar esta visita en SPS")
          return super(Visitas, self).create(vals)  
       
-    @api.model   
+    @api.model_create_multi   
     def visita_administracion(self, zona, filtro):
     
         hoy = date.today()
@@ -113,7 +113,7 @@ class Visitas(models.Model):
         
           
             
-    @api.model
+    @api.model_create_multi
     def visita_tienda_megatk(self, zona, filtro):
         megatk_val_tgu = ""
         megatk_val_sps = ""
@@ -149,7 +149,7 @@ class Visitas(models.Model):
                
         return megatk_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_tienda_meditek(self, zona, filtro):    
         meditek_val_tgu = ""
         meditek_val_sps = ""
@@ -186,7 +186,7 @@ class Visitas(models.Model):
                
         return meditek_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_lenka(self, zona, filtro):    
         lenka_val_tgu = ""
         lenka_val_sps = ""
@@ -215,7 +215,7 @@ class Visitas(models.Model):
                
         return lenka_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_clinica(self, zona, filtro):
         clinica_val_tgu = ""
         clinica_val_sps = ""
@@ -244,7 +244,7 @@ class Visitas(models.Model):
                
         return clinica_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_gerencia(self, zona, filtro):
         
         gerencia_val_tgu = ""
@@ -282,7 +282,7 @@ class Visitas(models.Model):
                
         return gerencia_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_soporte(self, zona, filtro):
         
         soporte_val_tgu = ""
@@ -320,7 +320,7 @@ class Visitas(models.Model):
                
         return soporte_vals
     
-    @api.model
+    @api.model_create_multi
     def visita_otros(self, zona, filtro):
         otros_val_tgu = ""
         otros_val_sps = ""
@@ -357,7 +357,7 @@ class Visitas(models.Model):
                
         return otros_vals
     
-    @api.model   
+    @api.model_create_multi   
     def borrar_administracion(self, zona, filtro):
         admin_val_tgu = ""
         admin_val_sps = ""
@@ -388,7 +388,7 @@ class Visitas(models.Model):
         return admin_vals
         
             
-    @api.model
+    @api.model_create_multi
     def borrar_tienda_megatk(self, zona, filtro):
         megatk_val_tgu = ""
         megatk_val_sps = ""
@@ -426,7 +426,7 @@ class Visitas(models.Model):
                
         return megatk_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_tienda_meditek(self, zona, filtro):    
         meditek_val_tgu = ""
         meditek_val_sps = ""
@@ -465,7 +465,7 @@ class Visitas(models.Model):
                
         return meditek_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_lenka(self, zona, filtro):    
         lenka_val_tgu = ""
         lenka_val_sps = ""
@@ -495,7 +495,7 @@ class Visitas(models.Model):
                
         return lenka_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_clinica(self, zona, filtro):
         clinica_val_tgu = ""
         clinica_val_sps = ""
@@ -525,7 +525,7 @@ class Visitas(models.Model):
                
         return clinica_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_gerencia(self, zona, filtro):
         gerencia_val_tgu = ""
         gerencia_val_sps = ""
@@ -564,7 +564,7 @@ class Visitas(models.Model):
                
         return gerencia_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_soporte(self, zona, filtro):
         soporte_val_tgu = ""
         soporte_val_sps = ""
@@ -603,7 +603,7 @@ class Visitas(models.Model):
                
         return soporte_vals
     
-    @api.model
+    @api.model_create_multi
     def borrar_otros(self, zona, filtro):
         otros_val_tgu = ""
         otros_val_sps = ""
@@ -642,7 +642,7 @@ class Visitas(models.Model):
                
         return otros_vals
         
-    @api.model    
+    @api.model_create_multi    
     def send_email(self, email=None, cc="", contexto={}):
         template = self.env.ref(
             'control_visitas.email_template_registro_visitas')
@@ -658,7 +658,7 @@ class Visitas(models.Model):
         })
         return True
     
-    @api.model
+    @api.model_create_multi
     def datos(self):
         html = ""
         registros = self.env['control.visitas'].search([('fecha', '=', date.today())])
