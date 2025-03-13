@@ -23,6 +23,14 @@
                         </option>
                     </select>
                 </div>
+                <div>
+                    <div class="">
+                        <span class="longitud"></span>
+                    </div>
+                    <div class="">
+                        <span class="latitud"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </t>

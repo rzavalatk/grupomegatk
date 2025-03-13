@@ -18,11 +18,14 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
                 // El navegador soporta la API de Geolocalización
                 navigator.geolocation.getCurrentPosition(
                   (position) => {
+                    var self = this;
                     // Éxito al obtener la ubicación
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
                     console.log(`Latitud: ${latitude}, Longitud: ${longitude}`);
                     alert(`Latitud: ${latitude}, Longitud: ${longitude}`);
+                    self.$el.find(".latitud").text(latitude);
+                    self.$el.find(".longitud").text(longitude);
                   },
                   (error) => {
                     // Error al obtener la ubicación
