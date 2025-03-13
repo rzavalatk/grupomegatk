@@ -22,6 +22,7 @@ odoo.define('localizacion.localizacion_menu_action', function (require) {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
                     console.log(`Latitud: ${latitude}, Longitud: ${longitude}`);
+                    alert(`Latitud: ${latitude}, Longitud: ${longitude}`);
                   },
                   (error) => {
                     // Error al obtener la ubicación
