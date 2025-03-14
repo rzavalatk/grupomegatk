@@ -8,6 +8,6 @@ class HrEmployee(models.Model):
     numero_tarjeta= fields.Char(string='Número de Tarjeta', help='Número de tarjeta del empleado', default='vacio')
     credito_a_recargar = fields.Float(string='Prueba', default= 1000.0)
 
-    def recargar_credito():
+    def recargar_credito(self):
 
         pass
