@@ -5,10 +5,10 @@
         <field name="name">vending.employee.tree</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-                <header>
+            <tree string="Vending Compras" editable = "top">
+            <header>
                 <button string="Recargar" type="object" class="btn-primary" name="recargar_credito"/>
                 </header>
-            <tree string="Vending Compras" editable = "top">
                 <field name="name" readonly="1"/>
                 <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
