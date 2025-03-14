@@ -5,9 +5,9 @@
         <field name="name">vending.employee.tree</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <tree string="Empleados credito" editable = "top">
-            <header>
-                <button string="Recargar" type="object" class="btn-primary" name="recargar_credito"/>
+            <tree string="Empleados crédito" editable="top">
+                <header>
+                    <button name="action_recargar_creditos" type="object" string="Recargar Créditos" class="btn-primary"/>
                 </header>
                 <field name="name" readonly="1"/>
                 <field name="credito" readonly="1"/>
@@ -19,7 +19,7 @@
 
     <!-- Acción para abrir la nueva vista de árbol -->
     <record id="action_open_vending_employee_tree" model="ir.actions.act_window">
-        <field name="name">Empleado credito</field>
+        <field name="name">Empleado crédito</field>
         <field name="res_model">hr.employee</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_vending_employee_tree"/>
