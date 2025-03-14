@@ -14,7 +14,7 @@
         </field>
     </record>
 
-    <!-- Acción para abrir la nueva vista de árbol -->
+    <!-- Acción para abrir la nueva vista de árbol con el botón en la barra superior -->
     <record id="action_open_vending_employee_tree" model="ir.actions.act_window">
         <field name="name">Empleado crédito</field>
         <field name="res_model">hr.employee</field>
