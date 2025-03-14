@@ -19,8 +19,6 @@
         'web.assets_backend': [
             '/localizacion/static/src/xml/localizacion_menu_template.xml',
             '/localizacion/static/src/js/localizacion_menu_action.js',
-            '/localizacion/static/src/lib/leaflet.js',
-            '/localizacion/static/src/lib/leaflet.css',
         ], 
         'web.assets_frontend': [
             '/localizacion/static/src/lib/leaflet.js',
