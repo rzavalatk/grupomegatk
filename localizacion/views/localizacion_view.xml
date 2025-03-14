@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- <record id="localizacion_view_tree" model="ir.ui.view">
+    <record id="localizacion_view_tree" model="ir.ui.view">
         <field name="name">localizacion.view.tree</field>
         <field name="model">localizacion</field>
         <field name="arch" type="xml">
@@ -9,51 +9,5 @@
                 <field name="fecha" />
             </tree>
         </field>
-    </record> -->
-        <!-- Cargar CSS y JS de Leaflet en el backend -->
- <template id="assets_backend" inherit_id="web.assets_backend">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" href="/nombre_modulo/static/lib/leaflet.css"/>
-            <script src="/nombre_modulo/static/lib/leaflet.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Inicializar el mapa
-                    const map = L.map('map').setView([40.4168, -3.7038], 6); // Centro en España
-
-                    // Añadir capa de OpenStreetMap
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap contributors'
-                    }).addTo(map);
-
-                    // Añadir un marcador
-                    L.marker([40.4168, -3.7038]).addTo(map)
-                        .bindPopup('¡Hola, este es un marcador en Madrid!')
-                        .openPopup();
-                });
-            </script>
-        </xpath>
-    </template>
-
-    <record id="view_leaflet_map" model="ir.ui.view">
-        <field name="name">leaflet.map.view</field>
-        <field name="model">res.partner</field>
-        <field name="arch" type="xml">
-            <form string="Leaflet Map">
-                <sheet>
-                    <div class="oe_title">
-                        <h1>Mapa con Leaflet</h1>
-                    </div>
-                    <div id="map" style="height: 400px; width: 100%;"></div>
-                </sheet>
-            </form>
-        </field>
     </record>
-
-    <!-- Cargar CSS y JS de Leaflet en el frontend -->
-    <template id="assets_frontend" inherit_id="web.assets_frontend">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" href="/localizacion/static/lib/leaflet.css"/>
-            <script src="/localizacion/static/lib/leaflet.js"></script>
-        </xpath>
-    </template>
 </odoo>
