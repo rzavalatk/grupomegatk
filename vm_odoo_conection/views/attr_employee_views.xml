@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <tree string="Empleados crédito" editable="top">
                 <header>
-                    <button name="recargar_creditos" type="object" string="Recargar Créditos" class="btn-primary"/>
+                    <button name="recargar_credito" type="object" string="Recargar Créditos" class="btn-primary"/>
                 </header>
                 <field name="name" readonly="1"/>
                 <field name="credito" readonly="1"/>
