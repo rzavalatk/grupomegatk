@@ -31,8 +31,6 @@
         <field name="binding_model_id" ref="hr.model_hr_employee"/>
         <field name="state">code</field>
         <field name="code">
-            for record in records:
-                record.credito_disponible = record.credito
         </field>
     </record>
 
