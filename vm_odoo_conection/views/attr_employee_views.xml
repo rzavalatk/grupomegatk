@@ -24,15 +24,14 @@
         <field name="domain">[]</field>
     </record>
 
-    <!-- Agregar el botón en la barra superior (junto al botón "Nuevo") -->
-    <record id="hr_employee_action_toolbar" model="ir.ui.view">
-        <field name="name">hr.employee.tree.toolbar</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_tree"/>
+    <!-- Agregar el botón en la toolbar base de Odoo -->
+    <record id="base_toolbar_button" model="ir.ui.view">
+        <field name="name">base.toolbar.button</field>
+        <field name="model">ir.ui.view</field>
+        <field name="inherit_id" ref="web.webclient_layout"/>
         <field name="arch" type="xml">
-            <!-- Asegúrate de que el xpath apunte correctamente a la barra de herramientas -->
-            <xpath expr="//div[contains(@class, 'o_cp_buttons')]" position="inside">
-                <!-- Botón que llama a la función recargar_credito -->
+            <!-- Agregar el botón en la toolbar base -->
+            <xpath expr="//div[@class='o_cp_buttons']" position="inside">
                 <button string="Recargar Créditos" type="object" name="recargar_credito" class="btn-primary"/>
             </xpath>
         </field>
