@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_gps_root" name="GPS"  web_icon="localizacion,static/description/localizar.png"/>
-    <menuitem id="menu_gps_locations" name="Ubicaciones" parent="menu_gps_root" action="action_gps_locations"/>
+    <menuitem id="menu_gps_root" name="GPS" action="action_gps_locations" web_icon="localizacion,static/description/localizar.png"/>
 
     <record id="action_gps_locations" model="ir.actions.act_window">
         <field name="name">Ubicaciones GPS</field>
