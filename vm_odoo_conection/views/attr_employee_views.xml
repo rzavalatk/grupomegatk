@@ -50,7 +50,7 @@
         </xpath>-->
         <xpath expr="//tree/header" position="inside">
             <!-- Agrega el nuevo botón al lado del botón "Nuevo" -->
-            <button string="Nuevo Botón" type="object" name="hr_employee_action_server" class="btn-primary"/>
+            <button string="Nuevo Botón" type="object" name="recargar_credito" class="btn-primary"/>
         </xpath>
         </field>
     </record>
