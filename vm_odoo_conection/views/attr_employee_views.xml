@@ -25,7 +25,7 @@
     </record>
 
     <!-- Botón en la barra de acciones de la vista -->
-    <record id="hr_employee_action_server" model="ir.actions.server">
+    <!--<record id="hr_employee_action_server" model="ir.actions.server">
         <field name="name">Recargar Créditos</field>
         <field name="model_id" ref="hr.model_hr_employee"/>
         <field name="binding_model_id" ref="hr.model_hr_employee"/>
@@ -34,17 +34,17 @@
         </field>
     </record>
 
-    <!-- Agregar el botón en la barra superior (junto al botón "Nuevo") -->
+    
     <record id="hr_employee_action_toolbar" model="ir.ui.view">
         <field name="name">hr.employee.tree.toolbar</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//div[@class='o_cp_buttons']" position="inside">
+             <xpath expr="//div[@class='o_cp_buttons']" position="inside">
                 <button name="hr_employee_action_server" type="action" string="Recargar Créditos" class="btn-primary"/>
-            </xpath>-->
+            </xpath>
         </field>
-    </record>
+    </record> -->
 
     <!-- Menú principal -->
     <menuitem
