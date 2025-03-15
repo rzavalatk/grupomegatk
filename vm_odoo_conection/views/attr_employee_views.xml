@@ -30,7 +30,7 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@class='o_cp_buttons']" position="inside">
+            <xpath expr="//tree/header" position="inside">
                 <!-- Botón que llama a la función recargar_credito -->
                 <button string="Recargar Créditos" type="object" name="recargar_credito" class="btn-primary"/>
             </xpath>
