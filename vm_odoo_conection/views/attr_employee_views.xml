@@ -40,9 +40,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@class='o_cp_buttons']" position="inside">
+            <!-- <xpath expr="//div[@class='o_cp_buttons']" position="inside">
                 <button name="hr_employee_action_server" type="action" string="Recargar Créditos" class="btn-primary"/>
-            </xpath>
+            </xpath>-->
         </field>
     </record>
 
