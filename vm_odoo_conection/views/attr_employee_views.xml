@@ -42,11 +42,15 @@
         <field name="arch" type="xml">
             <!-- <xpath expr="//div[@class='o_cp_buttons']" position="inside">
                 <button name="hr_employee_action_server" type="action" string="Recargar Créditos" class="btn-primary"/>
-            </xpath>-->
+            </xpath>
             <xpath expr="//tree" position="before">
             <div class="oe_button_box">
                 <button string="Nuevo Botón" type="object" name="hr_employee_action_toolbar" class="btn-primary"/>
                 </div>
+        </xpath>-->
+        <xpath expr="//tree/header" position="inside">
+            <!-- Agrega el nuevo botón al lado del botón "Nuevo" -->
+            <button string="Nuevo Botón" type="object" name="hr_employee_action_toolbar" class="btn-primary"/>
         </xpath>
         </field>
     </record>
