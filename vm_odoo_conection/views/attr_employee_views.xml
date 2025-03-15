@@ -10,6 +10,7 @@
                 <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
                 <field name="numero_tarjeta" class="text-right"/>  
+                <button name="recargar_credito" string="Recargar_credito" type="object" class="oe_highlight"/>
             </tree>
         </field>
     </record>
@@ -23,19 +24,6 @@
         <field name="context">{'search_default_filter_employees': 1}</field>
         <field name="domain">[]</field>
     </record>
-
-    <!-- Agregar el botón en la toolbar base de Odoo -->
-    <record id="base_toolbar_button" model="ir.ui.view">
-    <field name="name">base.toolbar.button</field>
-    <field name="model">ir.ui.view</field>
-    <field name="inherit_id" ref="web.layout"/> <!-- Heredar de la vista base -->
-    <field name="arch" type="xml">
-        <!-- Agregar el botón en la toolbar -->
-        <xpath expr="//div[contains(@class, 'o_cp_buttons')]" position="inside">
-            <button string="Recargar Créditos" type="object" name="recargar_credito" class="btn-primary"/>
-        </xpath>
-    </field>
-</record>
 
     <!-- Menú principal -->
     <menuitem
