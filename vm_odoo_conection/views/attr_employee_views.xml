@@ -14,7 +14,7 @@
         </field>
     </record>
 
-    <!-- Acción para abrir la nueva vista de árbol con el botón en la barra superior -->
+    <!-- Acción para abrir la nueva vista de árbol -->
     <record id="action_open_vending_employee_tree" model="ir.actions.act_window">
         <field name="name">Empleado crédito</field>
         <field name="res_model">hr.employee</field>
@@ -24,34 +24,16 @@
         <field name="domain">[]</field>
     </record>
 
-    <!-- Botón en la barra de acciones de la vista -->
-    <record id="hr_employee_action_server" model="ir.actions.server">
-        <field name="name">Recargar Créditos</field>
-        <field name="model_id" ref="hr.model_hr_employee"/>
-        <field name="binding_model_id" ref="hr.model_hr_employee"/>
-        <field name="state">code</field>
-        <field name="code">
-        </field>
-    </record>
-
     <!-- Agregar el botón en la barra superior (junto al botón "Nuevo") -->
     <record id="hr_employee_action_toolbar" model="ir.ui.view">
         <field name="name">hr.employee.tree.toolbar</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//div[@class='o_cp_buttons']" position="inside">
-                <button name="hr_employee_action_server" type="action" string="Recargar Créditos" class="btn-primary"/>
+            <xpath expr="//div[@class='o_cp_buttons']" position="inside">
+                <!-- Botón que llama a la función recargar_credito -->
+                <button string="Recargar Créditos" type="object" name="recargar_credito" class="btn-primary"/>
             </xpath>
-            <xpath expr="//tree" position="before">
-            <div class="oe_button_box">
-                <button string="Nuevo Botón" type="object" name="hr_employee_action_toolbar" class="btn-primary"/>
-                </div>
-        </xpath>-->
-        <xpath expr="//tree/header" position="inside">
-            <!-- Agrega el nuevo botón al lado del botón "Nuevo" -->
-            <button string="Nuevo Botón" type="object" name="recargar_credito" class="btn-primary"/>
-        </xpath>
         </field>
     </record>
 
