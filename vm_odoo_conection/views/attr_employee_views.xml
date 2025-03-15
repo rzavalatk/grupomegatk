@@ -28,7 +28,7 @@
     <record id="base_toolbar_button" model="ir.ui.view">
         <field name="name">base.toolbar.button</field>
         <field name="model">ir.ui.view</field>
-        <field name="inherit_id" ref="web.webclient_layout"/>
+        <field name="inherit_id" ref="web.layout"/>
         <field name="arch" type="xml">
             <!-- Agregar el botón en la toolbar base -->
             <xpath expr="//div[@class='o_cp_buttons']" position="inside">
