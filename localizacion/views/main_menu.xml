@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <menuitem id="menu_gps_root" name="GPS"  web_icon="localizacion,static/description/localizar.png"/>
+    <menuitem id="menu_gps_locations" name="Ubicaciones" parent="menu_gps_root" action="action_gps_locations"/>
 
-    <record id="localizacion_menu_action" model="ir.actions.client">
-        <field name="name">Localizacion</field>
-        <field name="tag">localizacion_tag</field>
+    <record id="action_gps_locations" model="ir.actions.act_window">
+        <field name="name">Ubicaciones GPS</field>
+        <field name="res_model">gps.location</field>
+        <field name="view_mode">tree,form</field>
     </record>
-
-    <menuitem
-        id="localizacion_menu_root"
-        name="Localizacion"
-        sequence="10"
-        action="localizacion_menu_action"
-        web_icon="localizacion,static/description/localizar.png"/>
 
         
 </odoo>

@@ -1,57 +1,70 @@
-odoo.define('localizacion.localizacion_menu_action', function (require) {
-    "use strict";
+odoo.define('gps_localizacion.GpsButton', function (require) {
+  "use strict";
 
-    var core = require('web.core');
-    var AbstractAction = require('web.AbstractAction');
+  var core = require('web.core');
+  var Widget = require('web.Widget');
+  var rpc = require('web.rpc');
 
-    var UserCard = AbstractAction.extend({
-        template: 'LocalizacionMenu',
-  
-        events: {
-            'change #filter_selection': '_onChangeFilter',
-        },
+  var GpsButton = Widget.extend({
+      template: 'GpsButton',
+      events: {
+          'click .toggle-gps': 'onToggleGps',
+      },
 
-        _onChangeFilter: function (ev) {
-            ev.preventDefault();
-            console.log(ev.target.value);
-            if ("geolocation" in navigator) {
-                // El navegador soporta la API de Geolocalización
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    var self = this;
-                    // Éxito al obtener la ubicación
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    console.log(`Latitud: ${latitude}, Longitud: ${longitude}`);
-                    alert(`Latitud: ${latitude}, Longitud: ${longitude}`);
-                    self.$el.find(".latitud").text(latitude);
-                    self.$el.find(".longitud").text(longitude);
+      init: function (parent, options) {
+          this._super.apply(this, arguments);
+          this.isTracking = false;
+          this.intervalId = null;
+      },
+
+      onToggleGps: function () {
+          var self = this;
+          if (this.isTracking) {
+              // Detener el seguimiento
+              clearInterval(this.intervalId);
+              this.isTracking = false;
+              this.$el.find('.toggle-gps').text('Iniciar GPS');
+          } else {
+              // Iniciar el seguimiento
+              this.isTracking = true;
+              this.$el.find('.toggle-gps').text('Detener GPS');
+              this.intervalId = setInterval(function () {
+                  self.getLocation();
+              }, 5 * 60 * 1000); // Intervalo de 5 minutos
+          }
+      },
+
+      getLocation: function () {
+          var self = this;
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                  function (position) {
+                      var latitude = position.coords.latitude;
+                      var longitude = position.coords.longitude;
+                      self.saveLocation(latitude, longitude);
                   },
-                  (error) => {
-                    // Error al obtener la ubicación
-                    switch (error.code) {
-                      case error.PERMISSION_DENIED:
-                        console.error("El usuario denegó la solicitud de geolocalización.");
-                        break;
-                      case error.POSITION_UNAVAILABLE:
-                        console.error("La información de ubicación no está disponible.");
-                        break;
-                      case error.TIMEOUT:
-                        console.error("La solicitud de geolocalización ha expirado.");
-                        break;
-                      default:
-                        console.error("Ocurrió un error desconocido.");
-                    }
+                  function (error) {
+                      console.error("Error obteniendo la ubicación: ", error);
                   }
-                );
-              } else {
-                // El navegador no soporta la API de Geolocalización
-                console.error("Geolocalización no es soportada por este navegador.");
-              }
-        },
-    });
+              );
+          } else {
+              console.error("Geolocalización no soportada en este navegador.");
+          }
+      },
 
-    core.action_registry.add('localizacion_tag', UserCard);
+      saveLocation: function (latitude, longitude) {
+          rpc.query({
+              route: '/gps/save_location',
+              params: {
+                  latitude: latitude,
+                  longitude: longitude,
+              },
+          }).then(function (result) {
+              console.log("Ubicación guardada:", result);
+          });
+      },
+  });
 
-    return UserCard;
+  core.action_registry.add('gps_button', GpsButton);
+  return GpsButton;
 });
