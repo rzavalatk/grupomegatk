@@ -8,9 +8,9 @@
             <tree string="Empleados crédito" editable="top">
                 <field name="name" readonly="1"/>
                 <field name="numero_tarjeta" class="text-right"/> 
-                <field name="credito"/>
-                <field name="credito_disponible"/>
-                <field name="gastado" />
+                <field name="credito" readonly="1"/>
+                <field name="credito_disponible" readonly="1"/>
+                <field name="gastado"  readonly="1"/>
             </tree>
         </field>
     </record>
