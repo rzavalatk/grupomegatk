@@ -1,0 +1,15 @@
+/* Espacio entre las columnas */
+.pos-receipt-column-container {
+    display: flex;
+    justify-content: space-between; /* Distribuye el espacio entre las columnas */
+    padding: 0 10px; /* Agrega padding a los lados */
+}
+
+/* Alineación de las columnas */
+.pos-receipt-left-align {
+    text-align: left;
+}
+
+.pos-receipt-right-align {
+    text-align: right;
+}

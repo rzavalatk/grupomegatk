@@ -5,5 +5,10 @@
                 <script type="text/javascript" src="/pos_category_wise_receipt/static/src/js/pos_receipt.js"/>
              </xpath>
         </template>
+        <template id="assets" inherit_id="point_of_sale.assets">
+            <xpath expr="//link[last()]" position="after">
+                <link rel="stylesheet" href="/pos_category_wise_receipt/static/src/css/pos_receipt.css"/>
+            </xpath>
+        </template>
     </data>
 </odoo>
