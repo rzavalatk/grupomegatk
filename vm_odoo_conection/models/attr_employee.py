@@ -3,7 +3,12 @@ from odoo import models, fields
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    credito= fields.Float(string='Crédito asignado', help='Crédito total del empleado', default=100.0)
-    credito_disponible= fields.Float(string='Crédito Disponible', help='Crédito disponible del empleado', default =0.0)
-    numero_tarjeta= fields.Char(string='Número de Tarjeta', help='Número de tarjeta del empleado', default='vacio')
-    
+    credito= fields.Float(string='Crédito asignado', help='Crédito total del empleado')
+    credito_disponible= fields.Float(string='Crédito Disponible', help='Crédito disponible del empleado')
+    numero_tarjeta= fields.Char(string='Número de Tarjeta', help='Número de tarjeta del empleado')
+    gastado = fields.Float(string='Gastado', help='Credito gastado desde el 1 del mes hasta la fecha')
+
+    def reiniciar_gastado(self):
+        empleados = self.search([])  # Obtener todos los empleados
+        for empleado in empleados:
+            empleado.write({'gastado': empleado.credito})  # Asignar el valor de 'credito' a 'gastado'

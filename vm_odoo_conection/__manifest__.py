@@ -14,7 +14,8 @@
     'data': [
         "security/ir.model.access.csv",
         "views/attr_employee_views.xml",
-        "wizard/wizard.xml"
+        "wizard/wizard.xml",
+        "data/cron.xml"
 
     ],
     'installable': True,
