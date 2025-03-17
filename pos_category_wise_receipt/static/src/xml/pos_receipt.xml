@@ -32,6 +32,8 @@
                                             <t t-esc="orderline.get_quantity_str_with_unit()"/>
                                         </span>
                                         <span>  </span>
+                                    </td>
+                                    <td>
                                         <span class="pos-receipt-right-align">
                                             <t t-esc="env.pos.format_currency(orderline.get_display_price())"/>
                                         </span>
