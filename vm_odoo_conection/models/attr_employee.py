@@ -15,8 +15,5 @@ class HrEmployee(models.Model):
 
     @api.depends('credito', 'credito_disponible')
     def _compute_gastado(self):
-        """
-        Método para calcular el campo 'gastado' como 'credito - credito_disponible'.
-        """
         for empleado in self:
             empleado.gastado = empleado.credito - empleado.credito_disponible
