@@ -9,6 +9,6 @@ class HrEmployee(models.Model):
     gastado = fields.Float(string='Gastado', help='Credito gastado desde el 1 del mes hasta la fecha')
 
     def reiniciar_gastado(self):
-        empleados = self.search([])  # Obtener todos los empleados
+        empleados = self.search([])  
         for empleado in empleados:
-            empleado.write({'gastado': empleado.credito})  # Asignar el valor de 'credito' a 'gastado'
+            empleado.write({'gastado': empleado.credito})
