@@ -1,6 +1,7 @@
 from odoo import models, fields
 
 class HrEmployee(models.Model):
+    _name = 'attr.employee'
     _inherit = 'hr.employee'
 
     credito= fields.Float(string='Crédito por semana', help='Crédito total del empleado', default=100.0)
