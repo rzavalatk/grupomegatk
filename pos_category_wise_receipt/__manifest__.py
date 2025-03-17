@@ -30,7 +30,8 @@
     'assets': {
             'point_of_sale.assets': [
                 'pos_category_wise_receipt/static/src/js/pos_receipt.js',
-                'pos_category_wise_receipt/static/src/xml/pos_receipt.xml'
+                'pos_category_wise_receipt/static/src/xml/pos_receipt.xml',
+                'pos_category_wise_receipt/static/src/css/pos_receipt.xml',
             ]
     },
     'images': ['static/description/banner.png'],
