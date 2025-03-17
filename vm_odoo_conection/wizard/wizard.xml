@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista del wizard -->
+    <record id="view_wizard_vm_actualizacion_form" model="ir.ui.view">
+        <field name="name">wizard.vm_actualizacion.form</field>
+        <field name="model">wizard.vm_actualizacion</field>
+        <field name="arch" type="xml">
+            <form string="Recargar Crédito">
+                <group>
+                    <field name="recargar_credito"/>
+                </group>
+                <footer>
+                    <button string="Recargar" type="object" name="credito_a_recargar" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard -->
+    <record id="action_wizard_vm_actualizacion" model="ir.actions.act_window">
+        <field name="name">Recargar Crédito</field>
+        <field name="res_model">wizard.vm_actualizacion</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menú para abrir el wizard -->
+    <menuitem
+        id="menu_wizard_vm_actualizacion"
+        name="Recargar Crédito"
+        action="action_wizard_vm_actualizacion"
+        sequence="10"
+        parent="menu_hr_vm"/>
+</odoo>

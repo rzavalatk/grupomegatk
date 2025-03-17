@@ -13,7 +13,9 @@
     'depends': ['base', 'hr'],
     'data': [
         #"security/ir.model.access.csv"
-        "views/attr_employee_views.xml"
+        "views/attr_employee_views.xml",
+        "wizard/wizard.xml"
+
     ],
     'installable': True,
     'application': True,
