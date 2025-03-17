@@ -37,6 +37,27 @@ class HrLeave(models.Model):
                 self.horas = 0
                 self.minutos = 0
                 self.env.user.notify_warning(message='La fecha final debe ser mayor o igual a la inicial')
+    
+    @api.onchange('request_date_from','request_date_to')
+    def _onchange_request_datetm_ft(self):
+        if self.request_date_from and self.request_date_to:
+            user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+            """fecha_inicial = pytz.utc.localize(self.datetm_from).astimezone(user_tz)
+            fecha_fin = pytz.utc.localize(self.datetm_to).astimezone(user_tz)"""
+
+            if self.request_date_to >= self.request_date_from:
+                permiso = self.calcularPermiso(self.request_date_from,self.request_date_to)
+                if not isinstance(permiso,str):
+                    self.dias = permiso['D']
+                    self.horas = permiso['H']
+                    self.minutos = permiso['M']
+                    """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
+                    self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
+            else:
+                self.dias = 0
+                self.horas = 0
+                self.minutos = 0
+                self.env.user.notify_warning(message='La fecha final debe ser mayor o igual a la inicial')
             
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
