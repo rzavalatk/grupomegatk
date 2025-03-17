@@ -41,6 +41,9 @@
                                 </t>
                             </tr>
                         </tr>
+                        <br/>
+                        <br/>
+                        <br/>
                         <tr class="pos-receipt-amount">
                             <td class="pos-receipt-right-align">
                                <t t-esc="env.pos.format_currency(sum)"/>
