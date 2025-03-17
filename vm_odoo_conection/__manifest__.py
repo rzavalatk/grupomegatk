@@ -12,7 +12,7 @@
     'version': '0.1',
     'depends': ['base', 'hr'],
     'data': [
-        #"security/ir.model.access.csv"
+        "security/ir.model.access.csv",
         "views/attr_employee_views.xml",
         "wizard/wizard.xml"
 
