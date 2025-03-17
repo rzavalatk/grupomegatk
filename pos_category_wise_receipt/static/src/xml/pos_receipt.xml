@@ -28,10 +28,11 @@
                                                     discount
                                                 </div>
                                             </t>
-                                            <span>-</span>
-                                            <t t-esc="orderline.get_quantity_str_with_unit()"/>
                                         </span>
-                                        <span>  </span>
+                                    </td>
+                                    <td>
+                                        <span>-</span>
+                                        <t t-esc="orderline.get_quantity_str_with_unit()"/>
                                     </td>
                                     <td>
                                         <span class="pos-receipt-right-align">
