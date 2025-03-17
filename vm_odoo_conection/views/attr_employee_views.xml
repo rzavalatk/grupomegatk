@@ -7,9 +7,9 @@
         <field name="arch" type="xml">
             <tree string="Empleados crédito" editable="top">
                 <field name="name" readonly="1"/>
+                <field name="numero_tarjeta" class="text-right"/> 
                 <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
-                <field name="numero_tarjeta" class="text-right"/> 
                 <field name="gastado" />
             </tree>
         </field>
