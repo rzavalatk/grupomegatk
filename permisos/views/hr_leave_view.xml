@@ -13,7 +13,7 @@
 
           <xpath expr="//field[@name='supported_attachment_ids']" position="after">
             <field name="justificacion"/>
-            <field name="cubierto_employe_id" />
+            <field name="cubierto_employee_id" />
           </xpath>
           
           <xpath expr="//field[@name='request_date_from']" position="attributes">
