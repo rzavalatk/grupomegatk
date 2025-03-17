@@ -9,7 +9,8 @@
                 <field name="name" readonly="1"/>
                 <field name="credito" readonly="1"/>
                 <field name="credito_disponible"/>
-                <field name="numero_tarjeta" class="text-right"/>  
+                <field name="numero_tarjeta" class="text-right"/> 
+                <field name="gastado" />
             </tree>
         </field>
     </record>
@@ -23,7 +24,7 @@
         <field name="context">{'search_default_filter_employees': 1}</field>
         <field name="domain">[]</field>
     </record>
-    
+
     <!-- Menú principal -->
     <menuitem
         id="menu_hr_vm"

@@ -5,7 +5,7 @@
         <field name="name">Reiniciar campo 'gastado' el primer día del mes</field>
         <field name="model_id" ref="hr.model_hr_employee"/>
         <field name="state">code</field>
-        <field name="code">model.reiniciar_gastado()</field>
+        <field name="code">model.reiniciar_credito_disponible()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">months</field>
         <field name="numbercall">-1</field>
