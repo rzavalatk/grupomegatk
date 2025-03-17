@@ -161,7 +161,8 @@ class HrLeave(models.Model):
                             'permisos_minutos': minutos_resultante})
         else:
             self.env.user.notify_success(message='Permiso aprobado')
-
+        
+        return super(HrLeave, self).action_approve()
         """template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_aprobado')
         email_values_jefe = {'email_to': 'erodriguez@megatk.com'}
         template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
