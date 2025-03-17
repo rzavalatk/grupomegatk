@@ -153,8 +153,7 @@ class HrLeave(models.Model):
 
         return dias, horas, minutos_resultante
 			
-    def action_approve(self):
-        self.write({'state': 'aprobado'})
+    def action_approve(self):  
         if self.holiday_status_id.vacaciones:
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl('resta')
             self.employee_id.sudo().write({'permisos_dias': dias,
