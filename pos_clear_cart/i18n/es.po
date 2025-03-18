@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* bsi_pos_clear_cart
+# 	* pos_clear_cart
 #
 msgid ""
 msgstr ""
@@ -15,9 +15,9 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: bsi_pos_clear_cart
+#. module: pos_clear_cart
 #. openerp-web
-#: code:addons/bsi_pos_clear_cart/static/src/xml/pos_clear_cart.xml:0
+#: code:addons/pos_clear_cart/static/src/xml/pos_clear_cart.xml:0
 #, python-format
 msgid "Clear Cart"
 msgstr "Vaciar carrito"
