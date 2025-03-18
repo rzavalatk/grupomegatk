@@ -18,6 +18,12 @@ class HrLeave(models.Model):
     dias = fields.Integer(string='Días', default=0)
     horas = fields.Integer(string='Horas', default=0)
     minutos = fields.Integer(string='Minutos', default=0)
+    
+    entrada = time(7, 0, 0)
+    medio_dia = time(12, 0, 0)
+    tarde = time(13, 0, 0)
+    salida = time(16, 0, 0)
+    
 
     @api.onchange('datetm_from', 'datetm_to')
     def _onchange_datetm_ft(self):
@@ -91,19 +97,19 @@ class HrLeave(models.Model):
             dateEnd = datetimeEnd
             if self.request_unit_half:
                 if self.request_date_from_period == 'am':
-                    timeInit =time(7, 0, 0)  # 07:00 AM
-                    timeEnd = time(12, 0, 0)  # 12:00 PM
+                    timeInit = self.entrada  # 07:00 AM
+                    timeEnd = self.medio_dia  # 12:00 PM
                 else:
-                    timeInit = time(13, 0, 0)  # 07:00 AM
-                    timeEnd = time(16, 0, 0)  # 12:00 PM
+                    timeInit = self.tarde  # 07:00 AM
+                    timeEnd = self.salida  # 12:00 PM
             else:
-                timeInit = time(7, 0, 0)  # 07:00 AM
-                timeEnd = time(16, 0, 0)  # 12:00 PM
+                timeInit = self.entrada # 07:00 AM
+                timeEnd = self.salida  # 12:00 PM
         else:
             dateInit = datetimeInit
             dateEnd = datetimeEnd
-            timeInit = time(7, 0, 0)
-            timeEnd = time(16, 0, 0)
+            timeInit = self.entrada
+            timeEnd = self.salida
             
 
         res = {
