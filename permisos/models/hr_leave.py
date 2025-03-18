@@ -39,13 +39,16 @@ class HrLeave(models.Model):
             fecha_fin = pytz.utc.localize(self.datetm_to).astimezone(user_tz)
 
             if fecha_fin >= fecha_inicial:
-                permiso = self.calcularPermiso(fecha_inicial, fecha_fin)
-                if not isinstance(permiso, str):
-                    self.dias = permiso['D']
-                    self.horas = permiso['H']
-                    self.minutos = permiso['M']
-                    """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
-                    self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
+                if self.request_unit_hours: 
+                    permiso = self.calcularPermiso(fecha_inicial, fecha_fin)
+                    if not isinstance(permiso, str):
+                        self.dias = permiso['D']
+                        self.horas = permiso['H']
+                        self.minutos = permiso['M']
+                        self.number_of_days = self.dias
+                        _logger.warning("horas personalizadas: " + str(self.dias, self.horas, self.minutos))
+                        """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
+                        self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
             else:
                 self.dias = 0
                 self.horas = 0
@@ -56,27 +59,26 @@ class HrLeave(models.Model):
     @api.onchange('request_date_from', 'request_date_to')
     def _onchange_request_datetm_ft(self):
         if self.request_date_from and self.request_date_to:
-            user_tz = pytz.timezone(
-                self.env.context.get('tz') or self.env.user.tz)
-            """fecha_inicial = pytz.utc.localize(self.datetm_from).astimezone(user_tz)
-            fecha_fin = pytz.utc.localize(self.datetm_to).astimezone(user_tz)"""
-
             if self.request_date_to >= self.request_date_from:
-                permiso = self.calcularPermiso(
-                    self.request_date_from, self.request_date_to)
-                if not isinstance(permiso, str):
-                    self.dias = permiso['D']
-                    self.horas = permiso['H']
-                    self.minutos = permiso['M']
-                    """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
-                    self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
+                self.dias = self.number_of_days_display
+                self.horas = 0
+                self.minutos = 0
+                _logger.warning("dia completo: " + str(self.dias, self.horas, self.minutos))
             else:
                 self.dias = 0
                 self.horas = 0
                 self.minutos = 0
                 self.env.user.notify_warning(
                     message='La fecha final debe ser mayor o igual a la inicial')
-
+        else:
+            if self.request_unit_half and self.request_date_from:
+                self.dias = 0
+                self.horas = self.number_of_hours_display
+                self.minutos = 0
+                _logger.warning("unit half: " + str(self.dias, self.horas, self.minutos))
+                
+                
+    
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
             dateInit + timedelta(n) for n in range(int((dateEnd - dateInit).days))
@@ -88,34 +90,10 @@ class HrLeave(models.Model):
         return len(datesClear)
 
     def calcularPermiso(self, datetimeInit, datetimeEnd):
-        timeInit = self.entrada
-        timeEnd = self.salida
-            
-        if isinstance(datetimeInit, datetime):
-            dateInit = datetimeInit.date()
-            dateEnd = datetimeEnd.date()
-            timeInit = datetimeInit.time()
-            timeEnd = datetimeEnd.time()
-        elif isinstance(datetimeInit, date):
-            dateInit = datetimeInit
-            dateEnd = datetimeEnd
-            if self.request_unit_half:
-                if self.request_date_from_period == 'am':
-                    timeInit = self.entrada  # 07:00 AM
-                    timeEnd = self.medio_dia  # 12:00 PM
-                else:
-                    timeInit = self.tarde  # 07:00 AM
-                    timeEnd = self.salida  # 12:00 PM
-            else:
-                timeInit = self.entrada # 07:00 AM
-                timeEnd = self.salida  # 12:00 PM
-        else:
-            dateInit = datetimeInit
-            dateEnd = datetimeEnd
-            timeInit = self.entrada
-            timeEnd = self.salida
-            
-
+        dateInit = datetimeInit.date()
+        dateEnd = datetimeEnd.date()
+        timeInit = datetimeInit.time()
+        timeEnd = datetimeEnd.time()
         res = {
             'D': 0,
             'H': 0,
@@ -192,7 +170,7 @@ class HrLeave(models.Model):
                 return "Error en las fechas."
             else:
                 res['D'], res['H'], res['M'] = rang, time, minutes
-        _logger.warning(res)
+        
         return res
 
     def vacaciones_restantes_empl(self, operacion):
