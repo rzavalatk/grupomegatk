@@ -12,7 +12,7 @@
                                  "pos_clear_cart/static/src/xml/pos_clear_cart.xml",],
         
     },
-    "images": ["static/description/Pos Clear Cart Banner.gif"],
+    "images": [],
     "qweb": [],
     "license": "LGPL-3",
     "installable": True,
