@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from datetime import datetime, time, date
+from datetime import datetime, time, date, timedelta
 import pytz
 import logging
 
@@ -79,7 +79,7 @@ class HrLeave(models.Model):
 
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
-            dateInit + datetime.timedelta(n) for n in range(int((dateEnd - dateInit).days))
+            dateInit + timedelta(n) for n in range(int((dateEnd - dateInit).days))
         ]
         datesClear = []
         for date in dates:
