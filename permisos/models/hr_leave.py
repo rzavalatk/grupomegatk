@@ -46,7 +46,7 @@ class HrLeave(models.Model):
                         self.horas = permiso['H']
                         self.minutos = permiso['M']
                         self.number_of_days = self.dias
-                        _logger.warning("horas personalizadas: " + str(self.dias, self.horas, self.minutos))
+                        _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
                         """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
                         self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
             else:
@@ -63,7 +63,7 @@ class HrLeave(models.Model):
                 self.dias = self.number_of_days_display
                 self.horas = 0
                 self.minutos = 0
-                _logger.warning("dia completo: " + str(self.dias, self.horas, self.minutos))
+                _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
             else:
                 self.dias = 0
                 self.horas = 0
@@ -75,7 +75,7 @@ class HrLeave(models.Model):
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
-                _logger.warning("unit half: " + str(self.dias, self.horas, self.minutos))
+                _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
                 
                 
     
