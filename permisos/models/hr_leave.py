@@ -2,6 +2,10 @@
 from odoo import models, fields, api
 from datetime import datetime, time, date
 import pytz
+import logging
+
+
+_logger = logging.getLogger(__name__)
 
 
 class HrLeave(models.Model):
@@ -188,6 +192,7 @@ class HrLeave(models.Model):
                 return "Error en las fechas."
             else:
                 res['D'], res['H'], res['M'] = rang, time, minutes
+        _logger.warning(res)
         return res
 
     def vacaciones_restantes_empl(self, operacion):
