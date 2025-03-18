@@ -59,7 +59,7 @@ class HrLeave(models.Model):
     @api.onchange('request_date_from', 'request_date_to')
     def _onchange_request_datetm_ft(self):
         if self.request_date_from and self.request_date_to:
-            if self.request_date_to >= self.request_date_from:
+            if self.request_date_to >= self.request_date_from and not self.request_unit_half:
                 self.dias = self.number_of_days_display
                 self.horas = 0
                 self.minutos = 0
