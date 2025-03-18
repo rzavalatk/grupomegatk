@@ -12,7 +12,7 @@
                                     <t t-esc="category"/>
                                 </h3>
                             </p>
-                            <tr style="display: grid; grid-template-columns: repeat(3, 1fr); width: 100%;" t-foreach="orderlines.orderlines"
+                            <tr style="display: grid; grid-template-columns: 2fr 1fr 1fr; width: 100%;" t-foreach="orderlines.orderlines"
                                 t-as="orderline" t-key="orderline.id">
                                 <t t-if="orderline.product.pos_categ_id[1] == category">
                                     <td class="pos-receipt-column-container">
