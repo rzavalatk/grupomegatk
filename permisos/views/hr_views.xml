@@ -17,7 +17,7 @@
             <field name="fecha_ingreso"/>
           </xpath>
 
-          <xpath expr="//form/header/button[@name='1113']" position="after">
+          <!--<xpath expr="//form/header/button[@name='1113']" position="after">
         
             <button name="%(action_permisos_wizard)d" type="action" string="Permiso General" class="oe_highlight" />  
          
@@ -30,7 +30,7 @@
             name="%(action_emplyee_permiso_personal)d"
             string="Permisos">
           </button>
-        </xpath>
+        </xpath>-->
 
         </field>
     </record>
