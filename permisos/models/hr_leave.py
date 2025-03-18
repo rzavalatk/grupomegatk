@@ -83,14 +83,18 @@ class HrLeave(models.Model):
             dateEnd = datetimeEnd.date()
             timeInit = datetimeInit.time()
             timeEnd = datetimeEnd.time()
-        elif isinstance(datetimeInit, datetime.date) and self.request_unit_half:
+        elif isinstance(datetimeInit, datetime.date):
             dateInit = datetimeInit
             dateEnd = datetimeEnd
-            if self.request_date_from_period == 'am':
-                timeInit = datetime.time(7, 0)  # 07:00 AM
-                timeEnd = datetime.time(12, 0)  # 12:00 PM
+            if self.request_unit_half:
+                if self.request_date_from_period == 'am':
+                    timeInit = datetime.time(7, 0)  # 07:00 AM
+                    timeEnd = datetime.time(12, 0)  # 12:00 PM
+                else:
+                    timeInit = datetime.time(13, 0)  # 07:00 AM
+                    timeEnd = datetime.time(16, 0)  # 12:00 PM
             else:
-                timeInit = datetime.time(13, 0)  # 07:00 AM
+                timeInit = datetime.time(7, 0)  # 07:00 AM
                 timeEnd = datetime.time(16, 0)  # 12:00 PM
         else:
             dateInit = datetimeInit
