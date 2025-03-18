@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from datetime import datetime, time
+from datetime import datetime, time, date
 import pytz
 
 
@@ -83,7 +83,7 @@ class HrLeave(models.Model):
             dateEnd = datetimeEnd.date()
             timeInit = datetimeInit.time()
             timeEnd = datetimeEnd.time()
-        elif isinstance(datetimeInit, datetime.date):
+        elif isinstance(datetimeInit, date):
             dateInit = datetimeInit
             dateEnd = datetimeEnd
             if self.request_unit_half:
