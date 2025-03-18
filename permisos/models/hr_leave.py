@@ -78,6 +78,9 @@ class HrLeave(models.Model):
         return len(datesClear)
 
     def calcularPermiso(self, datetimeInit, datetimeEnd):
+        timeInit = time(7, 0, 0)
+        timeEnd = time(16, 0, 0)
+            
         if isinstance(datetimeInit, datetime):
             dateInit = datetimeInit.date()
             dateEnd = datetimeEnd.date()
@@ -88,19 +91,19 @@ class HrLeave(models.Model):
             dateEnd = datetimeEnd
             if self.request_unit_half:
                 if self.request_date_from_period == 'am':
-                    timeInit =time(7, 0)  # 07:00 AM
-                    timeEnd = time(12, 0)  # 12:00 PM
+                    timeInit =time(7, 0, 0)  # 07:00 AM
+                    timeEnd = time(12, 0, 0)  # 12:00 PM
                 else:
-                    timeInit = time(13, 0)  # 07:00 AM
-                    timeEnd = time(16, 0)  # 12:00 PM
+                    timeInit = time(13, 0, 0)  # 07:00 AM
+                    timeEnd = time(16, 0, 0)  # 12:00 PM
             else:
-                timeInit = time(7, 0)  # 07:00 AM
-                timeEnd = time(16, 0)  # 12:00 PM
+                timeInit = time(7, 0, 0)  # 07:00 AM
+                timeEnd = time(16, 0, 0)  # 12:00 PM
         else:
             dateInit = datetimeInit
             dateEnd = datetimeEnd
-            timeInit = time(7, 0)
-            timeEnd = time(16, 0)
+            timeInit = time(7, 0, 0)
+            timeEnd = time(16, 0, 0)
             
 
         res = {
