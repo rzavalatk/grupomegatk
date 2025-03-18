@@ -84,8 +84,8 @@ class HrLeave(models.Model):
         return len(datesClear)
 
     def calcularPermiso(self, datetimeInit, datetimeEnd):
-        timeInit = time(7, 0, 0)
-        timeEnd = time(16, 0, 0)
+        timeInit = self.entrada
+        timeEnd = self.salida
             
         if isinstance(datetimeInit, datetime):
             dateInit = datetimeInit.date()
