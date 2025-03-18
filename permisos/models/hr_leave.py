@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-import datetime
+from datetime import datetime, time
 import pytz
 
 
@@ -87,16 +87,17 @@ class HrLeave(models.Model):
             dateInit = datetimeInit
             dateEnd = datetimeEnd
             if self.request_date_from_period == 'am':
-                timeInit = time(7, 0)  # 07:00 AM
-                timeEnd = time(12, 0)  # 12:00 PM
+                timeInit = datetime.time(7, 0)  # 07:00 AM
+                timeEnd = datetime.time(12, 0)  # 12:00 PM
             else:
-                timeInit = time(13, 0)  # 07:00 AM
-                timeEnd = time(16, 0)  # 12:00 PM
+                timeInit = datetime.time(13, 0)  # 07:00 AM
+                timeEnd = datetime.time(16, 0)  # 12:00 PM
         else:
             dateInit = datetimeInit
             dateEnd = datetimeEnd
-            timeInit = time(7, 0)
-            timeEnd = time(16, 0)
+            timeInit = datetime.time(7, 0)
+            timeEnd = datetime.time(16, 0)
+            
 
         res = {
             'D': 0,
