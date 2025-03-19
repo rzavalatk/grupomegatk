@@ -232,10 +232,10 @@ class HrLeave(models.Model):
         email_values_jefe = {'email_to': 'erodriguez@megatk.com'}
         template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
         
-    def create(self):
+    def create(self, vals):
         _logger.warning("Datos antes del create")
         _logger.warning(self.dias)
         _logger.warning(self.horas)
         _logger.warning(self.minutos)
 
-        return super(HrLeave, self).create()
+        return super(HrLeave, self).create(vals)
