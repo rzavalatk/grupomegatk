@@ -211,7 +211,10 @@ class HrLeave(models.Model):
     def action_approve(self):
         _logger.warning(self.holiday_status_id.vacaciones)
         if self.holiday_status_id.vacaciones:
-            
+            _logger.warning("Datos antes de vaciaciones restantes empl")
+            _logger.warning(self.dias)
+            _logger.warning(self.horas)
+            _logger.warning(self.minutos)
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
            
