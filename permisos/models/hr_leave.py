@@ -62,7 +62,8 @@ class HrLeave(models.Model):
         if not self.request_unit_half:
             if self.request_date_from and self.request_date_to:
                 if self.request_date_to >= self.request_date_from:
-                    self.dias = self.number_of_days_display
+                    self.sudo().write({'dias': self.number_of_days_display})
+                    #self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
                     _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
