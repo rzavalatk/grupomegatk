@@ -231,3 +231,11 @@ class HrLeave(models.Model):
         """template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_aprobado')
         email_values_jefe = {'email_to': 'erodriguez@megatk.com'}
         template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
+        
+    def create(self):
+        _logger.warning("Datos antes del create")
+        _logger.warning(self.dias)
+        _logger.warning(self.horas)
+        _logger.warning(self.minutos)
+
+        return super(HrLeave, self).create()
