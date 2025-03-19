@@ -206,6 +206,12 @@ class HrLeave(models.Model):
             _logger.warning("Permiso aprobado")
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
+            _logger.warning(dias)
+            _logger.warning(horas)
+            _logger.warning(minutos_resultante)
+            """self.env['hr.employee'].sudo().write({'permisos_dias': dias,
+                                                 'permisos_horas': horas,
+                                                 'permisos_minutos': minutos_resultante})"""
             self.employee_id.sudo().write({'permisos_dias': dias,
                                            'permisos_horas': horas,
                                            'permisos_minutos': minutos_resultante})
