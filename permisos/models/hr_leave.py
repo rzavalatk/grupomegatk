@@ -56,20 +56,22 @@ class HrLeave(models.Model):
                 self.env.user.notify_warning(
                     message='La fecha final debe ser mayor o igual a la inicial')
 
-    @api.onchange('request_date_from', 'request_date_to')
+    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period')
     def _onchange_request_datetm_ft(self):
-        if self.request_date_from and self.request_date_to:
-            if self.request_date_to >= self.request_date_from and not self.request_unit_half:
-                self.dias = self.number_of_days_display
-                self.horas = 0
-                self.minutos = 0
-                _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
-            else:
-                self.dias = 0
-                self.horas = 0
-                self.minutos = 0
-                self.env.user.notify_warning(
-                    message='La fecha final debe ser mayor o igual a la inicial')
+        
+        if not self.request_unit_half:
+            if self.request_date_from and self.request_date_to:
+                if self.request_date_to >= self.request_date_from:
+                    self.dias = self.number_of_days_display
+                    self.horas = 0
+                    self.minutos = 0
+                    _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
+                else:
+                    self.dias = 0
+                    self.horas = 0
+                    self.minutos = 0
+                    self.env.user.notify_warning(
+                        message='La fecha final debe ser mayor o igual a la inicial')
         else:
             if self.request_unit_half and self.request_date_from:
                 self.dias = 0
