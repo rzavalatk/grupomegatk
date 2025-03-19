@@ -176,10 +176,18 @@ class HrLeave(models.Model):
         return res
 
     def vacaciones_restantes_empl(self, operacion):
+        _logger.warning("Prueba de vacaciones restantes empl")
         minutos_actuales = (self.employee_id.permisos_dias * 480) + (
             self.employee_id.permisos_horas * 60) + self.employee_id.permisos_minutos
+        _logger.warning(self.employee_id.permisos_dias)
+        _logger.warning(self.employee_id.permisos_horas)
+        _logger.warning(self.employee_id.permisos_minutos)
         minutos_solicitados = (self.dias * 480) + \
             (self.horas * 60) + self.minutos
+        _logger.warning("datos solicitados")
+        _logger.warning(self.dias)
+        _logger.warning(self.horas)
+        _logger.warning(self.minutos)
         minutos_resultante = minutos_actuales - \
             minutos_solicitados if operacion == 'resta' else minutos_actuales + minutos_solicitados
         dias = 0
@@ -190,7 +198,7 @@ class HrLeave(models.Model):
         else:
             dias = int(minutos_resultante / 480)
             minutos_resultante = minutos_resultante - (dias * 480)
-
+        
         if minutos_resultante % 60 == 0:
             horas = minutos_resultante / 60
             minutos_resultante = 0
@@ -203,12 +211,10 @@ class HrLeave(models.Model):
     def action_approve(self):
         _logger.warning(self.holiday_status_id.vacaciones)
         if self.holiday_status_id.vacaciones:
-            _logger.warning("Permiso aprobado")
+            
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
-            _logger.warning(dias)
-            _logger.warning(horas)
-            _logger.warning(minutos_resultante)
+           
             """self.env['hr.employee'].sudo().write({'permisos_dias': dias,
                                                  'permisos_horas': horas,
                                                  'permisos_minutos': minutos_resultante})"""
