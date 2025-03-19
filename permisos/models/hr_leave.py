@@ -40,14 +40,14 @@ class HrLeave(models.Model):
 
             if fecha_fin >= fecha_inicial:
                 if self.request_unit_hours: 
-                    permiso = self.calcularPermiso(fecha_inicial, fecha_fin)
+                    """permiso = self.calcularPermiso(fecha_inicial, fecha_fin)
                     if not isinstance(permiso, str):
                         self.dias = permiso['D']
                         self.horas = permiso['H']
                         self.minutos = permiso['M']
                         self.number_of_days = self.dias
                         _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
-                        """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
+                        self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
                         self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
             else:
                 self.dias = 0
