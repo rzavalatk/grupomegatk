@@ -24,8 +24,7 @@ class EmployeeController(http.Controller):
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
                 _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
-                response_data = null
-                return response_data
+                return {'error': 'Empleado no encontrado'}
 
             # Devolver la información del empleado
             _logger.info("Empleado encontrado: %s", employee.name)
@@ -57,8 +56,8 @@ class EmployeeController(http.Controller):
             # Buscar el empleado por el número de tarjeta
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
-                _logger.error("Empleado no encontrado para el código de tarjeta prueba: %s", card_code)
-                return {'error': 'Empleado no encontrado prueba'}
+                _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
+                return {'error': 'Empleado no encontrado'}
 
             # Actualizar el crédito disponible
             employee.write({'credito_disponible': new_credit})
