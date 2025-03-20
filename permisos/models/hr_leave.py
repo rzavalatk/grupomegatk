@@ -237,14 +237,15 @@ class HrLeave(models.Model):
         template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
         
     def create(self, vals):
-        if vals['request_unit_hours'] == True:
-            vals['dias'], vals['horas'], vals['minutos'] = self._onchange_datetm_ft
-        else:
-            vals['dias'], vals['horas'], vals['minutos'] = self._onchange_request_datetm_ft
-        
-        _logger.warning("Datos antes del create")
-        _logger.warning(vals['dias'])
-        _logger.warning(vals['horas'])
-        _logger.warning(vals['minutos'])
+        for value in vals:
+            if value['request_unit_hours'] == True:
+                value['dias'], value['horas'], value['minutos'] = self._onchange_datetm_ft
+            else:
+                value['dias'], value['horas'], value['minutos'] = self._onchange_request_datetm_ft
+            
+            _logger.warning("Datos antes del create")
+            _logger.warning(value['dias'])
+            _logger.warning(value['horas'])
+            _logger.warning(value['minutos'])
 
         return super(HrLeave, self).create(vals)
