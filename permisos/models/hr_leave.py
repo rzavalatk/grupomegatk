@@ -47,14 +47,14 @@ class HrLeave(models.Model):
                         self.minutos = permiso['M']
                         self.number_of_days = self.dias
                         _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
-                        return self.dias, self.horas, self.minutos
+                        #return self.dias, self.horas, self.minutos
             else:
                 self.dias = 0
                 self.horas = 0
                 self.minutos = 0
                 self.env.user.notify_warning(
                     message='La fecha final debe ser mayor o igual a la inicial')
-                return self.dias, self.horas, self.minutos
+                #return self.dias, self.horas, self.minutos
 
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period')
     def _onchange_request_datetm_ft(self):
@@ -67,21 +67,21 @@ class HrLeave(models.Model):
                     self.horas = 0
                     self.minutos = 0
                     _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
-                    return self.dias, self.horas, self.minutos
+                    #return self.dias, self.horas, self.minutos
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
                     self.env.user.notify_warning(
                         message='La fecha final debe ser mayor o igual a la inicial')
-                    return self.dias, self.horas, self.minutos
+                    #return self.dias, self.horas, self.minutos
         else:
             if self.request_unit_half and self.request_date_from:
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
                 _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
-                return self.dias, self.horas, self.minutos
+                #return self.dias, self.horas, self.minutos
                 
                 
     
@@ -238,14 +238,14 @@ class HrLeave(models.Model):
         
     def create(self, vals):
         for value in vals:
-            if value['request_unit_hours'] == True:
+            """if value['request_unit_hours'] == True:
                 value['dias'], value['horas'], value['minutos'] = self._onchange_datetm_ft
             else:
                 value['dias'], value['horas'], value['minutos'] = self._onchange_request_datetm_ft
             
             _logger.warning("Datos antes del create")
             _logger.warning(value['dias'])
-            _logger.warning(value['horas'])
-            _logger.warning(value['minutos'])
+            _logger.warning(value['horas'])"""
+            _logger.warning(value)
 
         return super(HrLeave, self).create(vals)
