@@ -241,8 +241,8 @@ class HrLeave(models.Model):
         for value in vals:
             _logger.warning(value)
             _logger.warning("Datos antes del create")
-            _logger.warning(value.dias)
-            _logger.warning(value.horas)
-            _logger.warning(value.minutos)
+            _logger.warning(value['dias'])
+            _logger.warning(value['horas'])
+            _logger.warning(value['minutos'])
 
         return super(HrLeave, self).create(vals)
