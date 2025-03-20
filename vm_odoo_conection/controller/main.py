@@ -24,11 +24,7 @@ class EmployeeController(http.Controller):
             employee = request.env['hr.employee'].sudo().search([('numero_tarjeta', '=', card_code)], limit=1)
             if not employee:
                 _logger.error("Empleado no encontrado para el código de tarjeta: %s", card_code)
-                response_data = {
-                    'name': null,
-                    'credito': null,
-                    'credito_disponible': null
-                }
+                response_data = null
                 return response_data
 
             # Devolver la información del empleado
