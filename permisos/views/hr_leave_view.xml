@@ -14,6 +14,11 @@
           <xpath expr="//field[@name='supported_attachment_ids']" position="after">
             <field name="justificacion"/>
             <field name="cubierto_employee_id" />
+            <field name="dias" invisible="1"/>
+            <field name="minutos" invisible="1"/>
+            <field name="horas" invisible="1"/>
+
+
           </xpath>
           
           <xpath expr="//field[@name='request_date_from']" position="attributes">
