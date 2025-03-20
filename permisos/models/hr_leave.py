@@ -238,6 +238,7 @@ class HrLeave(models.Model):
         
     def create(self, vals):
         
+        _logger.warning(vals)
         _logger.warning("Datos antes del create")
         _logger.warning(self.dias)
         _logger.warning(self.horas)
