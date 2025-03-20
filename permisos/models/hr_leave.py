@@ -47,14 +47,14 @@ class HrLeave(models.Model):
                         self.minutos = permiso['M']
                         self.number_of_days = self.dias
                         _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
-                        """self.fecha_inicio_txt = str(fecha_inicial.strftime("%d-%m-%Y %H:%M:%S"))
-                        self.fecha_fin_txt = str(fecha_fin.strftime("%d-%m-%Y %H:%M:%S"))"""
+                        return self.dias, self.horas, self.minutos
             else:
                 self.dias = 0
                 self.horas = 0
                 self.minutos = 0
                 self.env.user.notify_warning(
                     message='La fecha final debe ser mayor o igual a la inicial')
+                return self.dias, self.horas, self.minutos
 
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period')
     def _onchange_request_datetm_ft(self):
@@ -67,18 +67,21 @@ class HrLeave(models.Model):
                     self.horas = 0
                     self.minutos = 0
                     _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
+                    return self.dias, self.horas, self.minutos
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
                     self.env.user.notify_warning(
                         message='La fecha final debe ser mayor o igual a la inicial')
+                    return self.dias, self.horas, self.minutos
         else:
             if self.request_unit_half and self.request_date_from:
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
                 _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
+                return self.dias, self.horas, self.minutos
                 
                 
     
@@ -234,9 +237,14 @@ class HrLeave(models.Model):
         template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
         
     def create(self, vals):
+        if vals.get('request_unit_hours') == True:
+            vals['dias'], vals['horas'], vals['minutos'] = self._onchange_datetm_ft
+        else:
+            vals['dias'], vals['horas'], vals['minutos'] = self._onchange_request_datetm_ft
+        
         _logger.warning("Datos antes del create")
-        _logger.warning(self.dias)
-        _logger.warning(self.horas)
-        _logger.warning(self.minutos)
+        _logger.warning(vals.get('dias'))
+        _logger.warning(vals.get('horas'))
+        _logger.warning(vals.get('minutos'))
 
         return super(HrLeave, self).create(vals)
