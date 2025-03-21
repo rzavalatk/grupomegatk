@@ -1,7 +1,7 @@
 from odoo import models, fields
 
-class Transaccion(models.Model):
-    _name = 'transaccion'
+class Transacciones(models.Model):
+    _name = 'transaccion.Transacciones'
     _description = 'Transacciones realizadas por los empleados'
 
     empleado_id = fields.Many2one('hr.employee', string='Empleado', required=True)
