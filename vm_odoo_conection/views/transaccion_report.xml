@@ -14,21 +14,6 @@
         </field>
     </record>
 
-    <!-- Vista de búsqueda para las transacciones -->
-    <record id="view_transaccion_filter" model="ir.ui.view">
-        <field name="name">transaccion.filter</field>
-        <field name="model">transaccion</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="empleado_id"/>
-                <field name="fecha_transaccion"/>
-                <filter string="Este Mes" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-%m-01'))]"/>
-                <filter string="Este Año" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-01-01'))]"/>
-                <filter string="Por Empleado" name="group_by_empleado" context="{'group_by': 'empleado_id'}"/>
-            </search>
-        </field>
-    </record>
-
     <!-- Acción para abrir la vista de lista -->
     <record id="action_transaccion_tree" model="ir.actions.act_window">
         <field name="name">Transacciones</field>
