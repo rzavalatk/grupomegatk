@@ -77,4 +77,4 @@ class EmployeeController(http.Controller):
             return {'success': True}
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
-            return {'error': str(e)}
+            return {'error': str(e)}   
