@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Vista de lista para las transacciones -->
+    <record id="view_transaccion_tree" model="ir.ui.view">
+        <field name="name">transaccion.tree</field>
+        <field name="model">transaccion</field>
+        <field name="arch" type="xml">
+            <tree string="Transacciones">
+                <field name="empleado_id" string="Empleado"/>
+                <field name="fecha_transaccion" string="Fecha de Transacción"/>
+                <field name="producto_consumido" string="Producto Consumido"/>
+                <field name="cantidad_gastada" string="Cantidad Gastada"/>
+            </tree>
+        </field>
+    </record>
 
-    
-<template id="view_transaccion_custom_template">
-    <t t-call="web.layout">
-        <t t-set="title">Reporte de Transacciones</t>
-        <div class="o_content">
-            <div class="container">
-                <h1>Reporte de Transacciones</h1>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Empleado</th>
-                            <th>Fecha de Transacción</th>
-                            <th>Producto Consumido</th>
-                            <th>Cantidad Gastada</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="docs" t-as="transaccion">
-                            <tr>
-                                <td><span t-field="transaccion.empleado_id.name"/></td>
-                                <td><span t-field="transaccion.fecha_transaccion"/></td>
-                                <td><span t-field="transaccion.producto_consumido"/></td>
-                                <td><span t-field="transaccion.cantidad_gastada"/></td>
-                            </tr>
-                        </t>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </t>
-</template>
-<record id="action_transaccion_custom_view" model="ir.actions.act_window">
-    <field name="name">Reporte de Transacciones</field>
-    <field name="res_model">transaccion</field>
-    <field name="view_mode">form</field>
-    <field name="target">current</field>
-    <field name="view_id" ref="view_transaccion_custom_template"/>
-</record>
-<record id="view_transaccion_filter" model="ir.ui.view">
-    <field name="name">transaccion.filter</field>
-    <field name="model">transaccion</field>
-    <field name="arch" type="xml">
-        <search>
-            <filter string="Este Mes" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-%m-01'))]"/>
-            <filter string="Este Año" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-01-01'))]"/>
-            <filter string="Por Empleado" name="group_by_empleado" context="{'group_by': 'empleado_id'}"/>
-        </search>
-    </field>
-</record>
+    <!-- Vista de búsqueda para las transacciones -->
+    <record id="view_transaccion_filter" model="ir.ui.view">
+        <field name="name">transaccion.filter</field>
+        <field name="model">transaccion</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="empleado_id"/>
+                <field name="fecha_transaccion"/>
+                <filter string="Este Mes" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-%m-01'))]"/>
+                <filter string="Este Año" domain="[('fecha_transaccion', '>=', context_today().strftime('%Y-01-01'))]"/>
+                <filter string="Por Empleado" name="group_by_empleado" context="{'group_by': 'empleado_id'}"/>
+            </search>
+        </field>
+    </record>
 
+    <!-- Acción para abrir la vista de lista -->
+    <record id="action_transaccion_tree" model="ir.actions.act_window">
+        <field name="name">Transacciones</field>
+        <field name="res_model">transaccion</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_transaccion_tree"/>
+    </record>
+
+    <!-- Menú para acceder a la vista de lista -->
     <menuitem
-    id="menu_transaccion_custom_report"
-    name="Reporte de Transacciones"
-    action="action_transaccion_custom_view"
-    sequence="30"
-    parent="menu_hr_vm"/>
+        id="menu_transaccion_tree"
+        name="Reporte de Transacciones"
+        action="action_transaccion_tree"
+        sequence="30"
+        parent="menu_hr_vm"/>
 </odoo>
