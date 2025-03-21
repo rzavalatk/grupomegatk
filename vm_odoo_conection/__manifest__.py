@@ -14,7 +14,7 @@
     'data': [
         "security/ir.model.access.csv",
         "views/attr_employee_views.xml",
-        "views/transaccion_report.xml"
+        "views/transaccion_report.xml",
         "wizard/wizard.xml",
         "data/cron.xml"
 
