@@ -61,8 +61,8 @@ class EmployeeController(http.Controller):
 
             # Actualizar el crédito disponible y el monto gastado
             employee.write({
-                'credito_disponible': new_credit,
-                'monto_gastado': employee.monto_gastado + cantidad_gastada
+                'credito_disponible': new_credit,  # Actualizar el crédito disponible
+                'monto_gastado': employee.monto_gastado + cantidad_gastada  # Sumar al monto gastado
             })
 
             # Registrar la transacción
@@ -77,4 +77,4 @@ class EmployeeController(http.Controller):
             return {'success': True}
         except Exception as e:
             _logger.error("Error en el controlador: %s", str(e))
-            return {'error': str(e)}   
+            return {'error': str(e)}
