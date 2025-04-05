@@ -9,7 +9,7 @@
        <form string="Transaction Type">
        <header>
     <!-- Tus botones existentes -->
-    <button name="%(action_report_hr_employee_permission)d" 
+    <button name="%(permisos.action_report_hr_employee_permission)d" 
             string="Descargar Permiso" 
             type="action" 
             class="oe_highlight" 

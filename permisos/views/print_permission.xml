@@ -114,11 +114,9 @@
     <field name="name">Formulario de Permiso</field>
     <field name="model">hr.employee.permisos</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">tu_modulo.report_hr_employee_permission</field>
-    <field name="report_file">tu_modulo.report_hr_employee_permission</field>
+    <field name="report_name">permisos.report_hr_employee_permission</field>
+    <field name="report_file">permisos.report_hr_employee_permission</field>
     <field name="binding_model_id" ref="model_hr_employee_permisos"/>
-    <field name="binding_type">report</field>
-    <field name="print_report_name">'Formulario_Permiso_%s' % (object.name)</field>
 </record>
 
 
