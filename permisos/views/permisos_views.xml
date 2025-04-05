@@ -7,6 +7,15 @@
       <field name="model">hr.employee.permisos</field>
       <field name="arch" type="xml">
        <form string="Transaction Type">
+       <header>
+    <!-- Tus botones existentes -->
+    <button name="%(action_report_hr_employee_permission)d" 
+            string="Descargar Permiso" 
+            type="action" 
+            class="oe_highlight" 
+            states="pendiente,aprobado"/>
+    <field name="state" widget="statusbar" nolabel="1"/> 
+</header>
             <header> 
               <button name="solicitar" type="object" string="Solicitar" states="draft" 
                 class="oe_highlight"/>
