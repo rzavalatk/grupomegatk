@@ -154,9 +154,10 @@
                         <p>LUGAR Y FECHA</p>
                         <p><span t-field="o.create_date" t-field-options='{"format": "long"}'/></p>
                     </td>
-                    <td style="width: 50%; text-align: right;">
+                     <td style="width: 50%; text-align: right;">
                         <p>NOMBRE JEFE INMEDIATO</p>
-                        <p style="border-bottom: 1px solid black; min-height: 20px;"></p>
+                        <p><span t-field="o.employe_id.parent_id.name"/></p>
+                        <div class="signature-line"></div>
                     </td>
                 </tr>
                 <tr>
