@@ -5,6 +5,30 @@
 
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
     <t t-call="web.html_container">
+    <style>
+            .selected {
+                font-weight: bold;
+                background-color: #f0f0f0;
+            }
+            table {
+                width: 100%;
+                margin-bottom: 15px;
+                border-collapse: collapse;
+            }
+            td, th {
+                padding: 5px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            .underline {
+                border-bottom: 1px solid black;
+                min-height: 20px;
+            }
+            .header h1 {
+                color: #2E86C1;
+                margin-bottom: 5px;
+            }
+        </style>
         <t t-foreach="docs" t-as="o">
             <div class="header" style="text-align: center; margin-bottom: 20px;">
                 <h1>AREA DE RECURSOS HUMANOS</h1>
