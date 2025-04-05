@@ -31,6 +31,7 @@
         'views/print_permission.xml',
         'views/hr_views.xml',
         'views/email_template.xml',
+        'static/src/css/report_styles.css',
         
         
     ]

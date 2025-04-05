@@ -1,0 +1,17 @@
+
+    .selected {
+        font-weight: bold;
+        background-color: #f0f0f0;
+    }
+    table {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    td, th {
+        padding: 5px;
+        text-align: left;
+    }
+    .underline {
+        border-bottom: 1px solid black;
+        min-height: 20px;
+    }
