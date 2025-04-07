@@ -1,7 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_hr_employee_permission" name="Formulario de Permiso">
-        <t t-call="web.html_container">
+
+<template id="report_hr_employee_permission" name="Formulario de Permiso">
+    <xpath expr="//head" position="inside">
+        <link rel="stylesheet" href="/permisos/static/src/css/report_styles.css"/>
+    </xpath>
+    <t t-call="web.html_container">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    margin: 1.5cm;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .header h1 {
+                    font-size: 16px;
+                    margin-bottom: 5px;
+                    text-transform: uppercase;
+                }
+                .header h2, .header h3 {
+                    font-size: 14px;
+                    margin: 5px 0;
+                    text-transform: uppercase;
+                }
+                .info-table {
+                    width: 100%;
+                    margin: 10px 0;
+                    border-collapse: collapse;
+                }
+                .info-table td {
+                    padding: 5px;
+                    vertical-align: top;
+                }
+                .options-table {
+                    width: 100%;
+                    margin: 15px 0;
+                    border-collapse: collapse;
+                }
+                .options-table td {
+                    border: 1px solid #000;
+                    padding: 8px;
+                    text-align: left;
+                    position: relative;
+                    padding-left: 25px;
+                }
+                .checkmark {
+                    position: absolute;
+                    left: 5px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 16px;
+                }
+                .underline {
+                    border-bottom: 1px solid #000;
+                    min-height: 20px;
+                    padding: 0 5px;
+                    width: 100%;
+                    display: block;
+                }
+                .signature-table {
+                    width: 100%;
+                    margin-top: 40px;
+                }
+                .signature-table td {
+                    padding: 5px;
+                    vertical-align: top;
+                }
+                .signature-line {
+                    border-top: 1px solid #000;
+                    width: 80%;
+                    margin-top: 25px;
+                }
+                .selected {
+                    background-color: #f0f0f0;
+                }
+            </style>
+            
             <t t-foreach="docs" t-as="o">
                 <div class="header">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
@@ -127,15 +204,16 @@
                 </table>
             </t>
         </t>
-    </template>
+</template>
+<record id="action_report_hr_employee_permission" model="ir.actions.report">
+    <field name="name">Formulario de Permiso</field>
+    <field name="model">hr.employee.permisos</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">permisos.report_hr_employee_permission</field>
+    <field name="report_file">permisos.report_hr_employee_permission</field>
+    <field name="binding_model_id" ref="model_hr_employee_permisos"/>
+</record>
 
-    <record id="action_report_hr_employee_permission" model="ir.actions.report">
-        <field name="name">Formulario de Permiso</field>
-        <field name="model">hr.employee.permisos</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">permisos.report_hr_employee_permission</field>
-        <field name="report_file">permisos.report_hr_employee_permission</field>
-        <field name="binding_model_id" ref="model_hr_employee_permisos"/>
-        <field name="paperformat_id" ref="report.paperformat_a4"/>
-    </record>
+
+
 </odoo>
