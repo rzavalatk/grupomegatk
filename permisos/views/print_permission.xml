@@ -16,17 +16,17 @@
                     margin-bottom: 20px;
                 }
                 .header h1 {
-                    font-size: 16px;
+                    font-size: 10px;
                     margin-bottom: 5px;
                     text-transform: uppercase;
                 }
                 .header h2, .header h3 {
-                    font-size: 14px;
+                    font-size: 10px;
                     margin: 5px 0;
                     text-transform: uppercase;
                 }
                 .info-table {
-                    margin-top: -25px;
+                    margin-top: -100px;
                     width: 100%;
                     margin: 10px 0;
                     border-collapse: collapse;
