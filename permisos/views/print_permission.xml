@@ -11,7 +11,7 @@
     </template>
 
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
-            <t t-call = "web.report_layout">
+            <t t-call = "web.Tests_Assets_Bundle">
             <t t-foreach="docs" t-as="o">
                 <main>
                 <!-- 
