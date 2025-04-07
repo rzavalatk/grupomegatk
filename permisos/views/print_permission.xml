@@ -3,8 +3,8 @@
 
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
         <html>
+        <meta charset="UTF-8">
         <head>
-        <meta charset="utf-8"/>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -26,7 +26,7 @@
                     text-transform: uppercase;
                 }
                 .info-table {
-                    margin-top: -100px;
+                    margin-top: -200px;
                     width: 100%;
                     margin: 10px 0;
                     border-collapse: collapse;
@@ -208,6 +208,7 @@
             </t>
             
             </body>
+        </meta>
         </html>
     </template>
 <record id="action_report_hr_employee_permission" model="ir.actions.report">
