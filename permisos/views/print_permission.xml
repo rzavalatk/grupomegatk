@@ -2,8 +2,9 @@
 <odoo>
 
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
-        <t t-call="web.html_container">
-        <main>
+        <html>
+        <head>
+        <meta charset="utf-8"/>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -77,7 +78,8 @@
                     background-color: #f0f0f0;
                 }
             </style>
-            
+            </head>
+            <body>
             <t t-foreach="docs" t-as="o">
                 <div class="header">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
@@ -202,8 +204,8 @@
                     </tr>
                 </table>
             </t>
-            </main>
-        </t>
+            </body>
+        </html>
     </template>
 <record id="action_report_hr_employee_permission" model="ir.actions.report">
     <field name="name">Formulario de Permiso</field>
