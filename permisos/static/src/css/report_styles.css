@@ -3,68 +3,68 @@ body {
     font-size: 12px;
     margin: 1.5cm;
 }
-.header {
+.header-report-permission {
     text-align: center;
     margin-bottom: 20px;
 }
-.header h1 {
+.header-report-permission h1 {
     font-size: 16px;
     margin-bottom: 5px;
     text-transform: uppercase;
 }
-.header h2, .header h3 {
+.header-report-permission h2, .header h3 {
     font-size: 14px;
     margin: 5px 0;
     text-transform: uppercase;
 }
-.info-table {
+.info-table-report-permission {
     width: 100%;
     margin: 10px 0;
     border-collapse: collapse;
 }
-.info-table td {
+.info-table-report-permission td {
     padding: 5px;
     vertical-align: top;
 }
-.options-table {
+.options-table-report-permission {
     width: 100%;
     margin: 15px 0;
     border-collapse: collapse;
 }
-.options-table td {
+.options-table-report-permission td {
     border: 1px solid #000;
     padding: 8px;
     text-align: left;
     position: relative;
     padding-left: 25px;
 }
-.checkmark {
+.checkmark-report-permission {
     position: absolute;
     left: 5px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 16px;
 }
-.underline {
+.underline-report-permission {
     border-bottom: 1px solid #000;
     min-height: 20px;
     padding: 0 5px;
     width: 100%;
     display: block;
 }
-.signature-table {
+.signature-table-report-permission {
     width: 100%;
     margin-top: 40px;
 }
-.signature-table td {
+.signature-table-report-permission td {
     padding: 5px;
     vertical-align: top;
 }
-.signature-line {
+.signature-line-report-permission {
     border-top: 1px solid #000;
     width: 80%;
     margin-top: 25px;
 }
-.selected {
+.selected-report-permission {
     background-color: #f0f0f0;
 }

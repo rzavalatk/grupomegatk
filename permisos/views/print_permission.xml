@@ -7,13 +7,13 @@
     </xpath>
     <t t-call="web.html_container">            
             <t t-foreach="docs" t-as="o">
-                <div class="header">
+                <div class="header-report-permission">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
                     <h2>AUSENCIAS DE PERSONAL</h2>
                     <h3>A la Gerencia de Recursos Humanos informo:</h3>
                 </div>
 
-                <table class="info-table">
+                <table class="info-table-report-permission">
                     <tr>
                         <td style="width: 50%;">Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> de <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> <span t-field="o.fecha_inicio" t-field-options='{"format": "YYYY"}'/></td>
                         <td style="width: 50%;">el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/></td>
@@ -33,24 +33,24 @@
 
                 <div style="margin-bottom: 20px;">
                     <p>Por tanto, autorizo para aplicar lo siguiente:</p>
-                    <table class="options-table">
+                    <table class="options-table-report-permission">
                         <tr>
                             <td t-attf-class="#{'selected' if o.cargo == 'vacaciones' else ''}">
-                                <span class="checkmark" t-if="o.cargo == 'vacaciones'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.cargo == 'vacaciones'">✓</span>
                                 CARGAR A VACACIONES
                             </td>
                             <td t-attf-class="#{'selected' if o.cargo == 'deducir' else ''}">
-                                <span class="checkmark" t-if="o.cargo == 'deducir'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.cargo == 'deducir'">✓</span>
                                 DEDUCIR DEL SUELDO
                             </td>
                         </tr>
                         <tr>
                             <td t-attf-class="#{'selected' if o.cargo == 'permiso' else ''}">
-                                <span class="checkmark" t-if="o.cargo == 'permiso'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.cargo == 'permiso'">✓</span>
                                 PERMISO SIN NINGÚN CARGO
                             </td>
                             <td t-attf-class="#{'selected' if o.cargo == 'incapacidad' else ''}">
-                                <span class="checkmark" t-if="o.cargo == 'incapacidad'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.cargo == 'incapacidad'">✓</span>
                                 ADJUNTO INCAPACIDAD
                             </td>
                         </tr>
@@ -59,7 +59,7 @@
 
                 <div style="margin-bottom: 20px;">
                     <p>JUSTIFICACION DE LA ACCION:</p>
-                    <span class="underline"><span t-field="o.justificacion"/></span>
+                    <span class="underline-report-permission"><span t-field="o.justificacion"/></span>
                 </div>
 
                 <div style="margin-bottom: 20px;">
@@ -71,24 +71,24 @@
 
                 <div style="margin-bottom: 20px;">
                     <p>EL EMPLEADO REPORTO SU AUSENCIA:</p>
-                    <table class="options-table">
+                    <table class="options-table-report-permission">
                         <tr>
                             <td t-attf-class="#{'selected' if o.reporto == 'anticipacion' else ''}">
-                                <span class="checkmark" t-if="o.reporto == 'anticipacion'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.reporto == 'anticipacion'">✓</span>
                                 CON ANTICIPACIÓN
                             </td>
                             <td t-attf-class="#{'selected' if o.reporto == 'telefono' else ''}">
-                                <span class="checkmark" t-if="o.reporto == 'telefono'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.reporto == 'telefono'">✓</span>
                                 LLAMÓ POR TELÉFONO
                             </td>
                         </tr>
                         <tr>
                             <td t-attf-class="#{'selected' if o.reporto == 'mensaje' else ''}">
-                                <span class="checkmark" t-if="o.reporto == 'mensaje'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.reporto == 'mensaje'">✓</span>
                                 ENVIÓ MENSAJE
                             </td>
                             <td t-attf-class="#{'selected' if o.reporto == 'otro' else ''}">
-                                <span class="checkmark" t-if="o.reporto == 'otro'">✓</span>
+                                <span class="checkmark-report-permission" t-if="o.reporto == 'otro'">✓</span>
                                 OTRO
                             </td>
                         </tr>
@@ -99,7 +99,7 @@
                     <p>ENVÍO: Llaves de Escritorio, de Archivo: SI / NO</p>
                 </div>
 
-                <table class="signature-table">
+                <table class="signature-table-report-permission">
                     <tr>
                         <td style="width: 50%;">
                             <p>LUGAR Y FECHA</p>
@@ -108,13 +108,13 @@
                         <td style="width: 50%; text-align: right;">
                             <p>NOMBRE JEFE INMEDIATO</p>
                             <p><span t-field="o.employe_id.parent_id.name"/></p>
-                            <div class="signature-line"></div>
+                            <div class="signature-line-report-permission"></div>
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 50%;">
                             <p>FIRMA JEFE INMEDIATO</p>
-                            <div class="signature-line"></div>
+                            <div class="signature-line-report-permission"></div>
                         </td>
                         <td style="width: 50%; text-align: right;">
                             <p>NOMBRE EMPLEADO</p>
@@ -125,7 +125,7 @@
                         <td></td>
                         <td style="text-align: right;">
                             <p>FIRMA EMPLEADO</p>
-                            <div class="signature-line"></div>
+                            <div class="signature-line-report-permission"></div>
                         </td>
                     </tr>
                 </table>
