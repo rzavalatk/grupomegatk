@@ -14,7 +14,7 @@
             <t t-call = "web.report_layout">
             <t t-foreach="docs" t-as="o">
                 <main>
-
+                <!-- 
                 <style>
                     body, html, div, p, table, tr, td, h1, h2, h3 {
                             margin: 0 !important;
@@ -96,7 +96,7 @@
                     .selected {
                         background-color: #f0f0f0;
                     }
-                </style>
+                </style> -->
                 <div class="header">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
                     <h2>AUSENCIAS DE PERSONAL</h2>
