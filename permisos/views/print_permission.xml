@@ -2,86 +2,91 @@
 <odoo>
 
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
-        <html>
-        <meta charset="UTF-8">
-        <head>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
-                    margin: 1.5cm;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-                .header h1 {
-                    font-size: 10px;
-                    margin-bottom: 5px;
-                    text-transform: uppercase;
-                }
-                .header h2, .header h3 {
-                    font-size: 10px;
-                    margin: 5px 0;
-                    text-transform: uppercase;
-                }
-                .info-table {
-                    margin-top: -200px;
-                    width: 100%;
-                    margin: 10px 0;
-                    border-collapse: collapse;
-                }
-                .info-table td {
-                    padding: 5px;
-                    vertical-align: top;
-                }
-                .options-table {
-                    width: 100%;
-                    margin: 15px 0;
-                    border-collapse: collapse;
-                }
-                .options-table td {
-                    border: 1px solid #000;
-                    padding: 8px;
-                    text-align: left;
-                    position: relative;
-                    padding-left: 25px;
-                }
-                .checkmark {
-                    position: absolute;
-                    left: 5px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    font-size: 16px;
-                }
-                .underline {
-                    border-bottom: 1px solid #000;
-                    min-height: 20px;
-                    padding: 0 5px;
-                    width: 100%;
-                    display: block;
-                }
-                .signature-table {
-                    width: 100%;
-                    margin-top: 40px;
-                }
-                .signature-table td {
-                    padding: 5px;
-                    vertical-align: top;
-                }
-                .signature-line {
-                    border-top: 1px solid #000;
-                    width: 80%;
-                    margin-top: 25px;
-                }
-                .selected {
-                    background-color: #f0f0f0;
-                }
-            </style>
-            </head>
-            <body>
+            <t t-call = "web.minimal_layout">
             <t t-foreach="docs" t-as="o">
-                <main>
+                <main style="margin: 0; padding: o; font-family: Arial;">
+                <style>
+                    body, html, div, p, table, tr, td, h1, h2, h3 {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            border: 0 !important;
+                            font-size: 100% !important;
+                            font: inherit !important;
+                            vertical-align: baseline !important;
+                            font-family: Arial !important;
+                        }
+                    body {
+                        font-family: Arial, sans-serif;
+                        font-size: 12px;
+                        margin: 1.5cm;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    .header h1 {
+                        font-size: 10px;
+                        margin-bottom: 5px;
+                        text-transform: uppercase;
+                    }
+                    .header h2, .header h3 {
+                        font-size: 10px;
+                        margin: 5px 0;
+                        text-transform: uppercase;
+                    }
+                    .info-table {
+                        margin-top: -200px;
+                        width: 100%;
+                        margin: 10px 0;
+                        border-collapse: collapse;
+                    }
+                    .info-table td {
+                        padding: 5px;
+                        vertical-align: top;
+                    }
+                    .options-table {
+                        width: 100%;
+                        margin: 15px 0;
+                        border-collapse: collapse;
+                    }
+                    .options-table td {
+                        border: 1px solid #000;
+                        padding: 8px;
+                        text-align: left;
+                        position: relative;
+                        padding-left: 25px;
+                    }
+                    .checkmark {
+                        position: absolute;
+                        left: 5px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-size: 16px;
+                    }
+                    .underline {
+                        border-bottom: 1px solid #000;
+                        min-height: 20px;
+                        padding: 0 5px;
+                        width: 100%;
+                        display: block;
+                    }
+                    .signature-table {
+                        width: 100%;
+                        margin-top: 40px;
+                    }
+                    .signature-table td {
+                        padding: 5px;
+                        vertical-align: top;
+                    }
+                    .signature-line {
+                        border-top: 1px solid #000;
+                        width: 80%;
+                        margin-top: 25px;
+                    }
+                    .selected {
+                        background-color: #f0f0f0;
+                    }
+                </style>
                 <div class="header">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
                     <h2>AUSENCIAS DE PERSONAL</h2>
@@ -203,14 +208,12 @@
                             <div class="signature-line"></div>
                         </td>
                     </tr>
-                </table>
-            </main>
+                </table> 
+                </main>
+                </t>       
             </t>
-            
-            </body>
-        </meta>
-        </html>
     </template>
+
 <record id="action_report_hr_employee_permission" model="ir.actions.report">
     <field name="name">Formulario de Permiso</field>
     <field name="model">hr.employee.permisos</field>
