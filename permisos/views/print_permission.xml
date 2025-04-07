@@ -81,6 +81,7 @@
             </head>
             <body>
             <t t-foreach="docs" t-as="o">
+                <main>
                 <div class="header">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
                     <h2>AUSENCIAS DE PERSONAL</h2>
@@ -203,7 +204,9 @@
                         </td>
                     </tr>
                 </table>
+            </main>
             </t>
+            
             </body>
         </html>
     </template>
