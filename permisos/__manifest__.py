@@ -31,6 +31,10 @@
         'views/permisos_views.xml',
         'views/hr_views.xml',
         'views/email_template.xml',
-        'static/src/css/report_styles.css'
-    ]
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'permisos/static/src/css/report_styles.css',
+        ],
+    }
 }
