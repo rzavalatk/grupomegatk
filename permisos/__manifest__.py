@@ -32,9 +32,5 @@
         'views/hr_views.xml',
         'views/email_template.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'permisos/static/src/css/report_styles.css',
-        ],
-    }
+    
 }
