@@ -93,6 +93,7 @@
                         background-color: #f0f0f0;
                     }
                 </style>
+                <body>
                 <div class="header-print-permission">
                     <h1>AREA DE RECURSOS HUMANOS</h1>
                     <h2>AUSENCIAS DE PERSONAL</h2>
@@ -215,8 +216,10 @@
                         </td>
                     </tr>
                 </table> 
+            </body>
                 </main>
-                </t>       
+                </t>   
+                
             </t>
     </template>
 
