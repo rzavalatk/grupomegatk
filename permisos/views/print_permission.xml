@@ -105,8 +105,8 @@
 
                 <table class="info-table">
                     <tr>
-                        <td style="width: 50%;">Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> de <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> <span t-field="o.fecha_inicio" t-field-options='{"format": "YYYY"}'/></td>
-                        <td style="width: 50%;">el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/></td>
+                        <td >Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> de <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> <span t-field="o.fecha_inicio" t-field-options='{"format": "YYYY"}'/></td>
+                        <td >el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/></td>
                     </tr>
                     <tr>
                         <td colspan="2">quien se desempeña como: <span t-field="o.employe_id.job_id.name"/> en el area de <span t-field="o.employe_id.department_id.name"/></td>
