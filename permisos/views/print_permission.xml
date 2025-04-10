@@ -4,10 +4,10 @@
 <template id="report_hr_employee_permission" name="Formulario de Permiso">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
-            <main style="margin: 0; padding: 0; font-family: Arial;">
+            <main style="margin: 0; padding: 0; font-family: Arial; font-size: 12px;">
                 <!-- Encabezado -->
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h1 style="font-size: 16px; margin-bottom: 5px; text-transform: uppercase;">AREA DE RECURSOS HUMANOS</h1>
+                <div style="text-align: center; margin-bottom: 20px; margin-top: 0;">
+                    <h1 style="font-size: 16px; margin-bottom: 5px; text-transform: uppercase; margin-top: 0;">AREA DE RECURSOS HUMANOS</h1>
                     <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
                     <h3 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">A la Gerencia de Recursos Humanos informo:</h3>
                 </div>
@@ -16,9 +16,9 @@
                 <table style="width: 100%; margin: 10px 0; border-collapse: collapse;">
                     <tr>
                         <td style="width: 50%; padding: 5px; vertical-align: top;">
-                            Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> 
-                            de <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> 
-                            <span t-field="o.fecha_inicio" t-field-options='{"format": "YYYY"}'/>
+                            Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> de 
+                            <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> 
+                            <span t-field="o.fecha_inicio" t-field-options='{"format": "yyyy"}'/>
                         </td>
                         <td style="width: 50%; padding: 5px; vertical-align: top;">
                             el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
@@ -117,7 +117,7 @@
                 </div>
 
                 <!-- Firmas -->
-                <table style="width: 100%; margin-top: 40px;">
+                <table style="width: 100%; margin-top: 40px; page-break-before: always;">
                     <tr>
                         <td style="width: 50%; padding: 5px; vertical-align: top;">
                             <p style="margin: 5px 0;">LUGAR Y FECHA</p>
@@ -160,6 +160,7 @@
     <field name="report_file">permisos.report_hr_employee_permission</field>
     <field name="binding_model_id" ref="model_hr_employee_permisos"/>
     <field name="paperformat_id" eval="False"/>
+    <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
 </record>
 
 </odoo>
