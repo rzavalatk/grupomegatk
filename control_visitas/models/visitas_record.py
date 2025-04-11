@@ -48,15 +48,14 @@ class Visitas_Record(models.Model):
         elif cod_reg == "3":
             reg = "TGU"
             
-
         if self.fecha_final and self.fecha_reporte:
             if self.fecha_final < self.fecha_reporte:
                 self.write({'state': 'borrador'})
                 raise UserError("La fecha final debe ser mayor a la fecha inicial")
             elif self.fecha_final == self.fecha_reporte:
-                visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte),('region', '=', reg)])
+                visitas = self.env['control.visitas'].sudo().search([('fecha', '=', self.fecha_reporte)])
             else:
-                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final),('region', '=', reg)])
+                 visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
         
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
