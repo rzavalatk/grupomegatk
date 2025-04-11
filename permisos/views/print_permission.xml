@@ -9,35 +9,31 @@
             <t t-call="permisos.report_hr_employee_permission" t-lang="lang"/>
           </t>
         </t>
-      </template>
+    </template>
 
     <template id="report_hr_employee_permission" name="Formulario de Permiso">
-        <t t-call="web.report_layout">
+        <t t-call="web.external_layout">
             <t t-set="o" t-value="docs[0]"/>
-            <main style="margin: 0; padding: 0; font-family: Arial; font-size: 12px;">
-                <!-- Eliminar márgenes del contenedor principal -->
-                <div style="position: absolute; top: 0; left: 0; right: 0;">
-                    <!-- Encabezado sin márgenes -->
-                    <div style="text-align: center; margin: 0; padding: 0;">
-                        <h1 style="font-size: 16px; margin: 0; padding: 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
-                        <h2 style="font-size: 14px; margin: 2px 0; padding: 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
-                        <h3 style="font-size: 14px; margin: 2px 0; padding: 0; text-transform: uppercase;">A la Gerencia de Recursos Humanos informo:</h3>
-                    </div>
+            <div class="page" style="font-family: Arial; font-size: 11px; margin: 0; padding: 0;">
+                <!-- Encabezado -->
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <h1>ÁREA DE RECURSOS HUMANOS</h1>
+                    <h2>AUSENCIAS DE PERSONAL</h2>
+                    <h3>A LA GERENCIA DE RECURSOS HUMANOS INFORMO:</h3>
+                </div>
                 
                 <!-- Información del empleado -->
-                <table style="width: 100%; margin: 10px 0; border-collapse: collapse;">
+                <table style="margin-bottom: 10px;">
                     <tr>
-                        <td style="width: 50%; padding: 5px; vertical-align: top;">
-                            Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "d"}'/> de 
-                            <span t-field="o.fecha_inicio" t-field-options='{"format": "MMMM"}'/> 
-                            <span t-field="o.fecha_inicio" t-field-options='{"format": "yyyy"}'/>
+                        <td style="width: 50%;">
+                            Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                         </td>
-                        <td style="width: 50%; padding: 5px; vertical-align: top;">
+                        <td style="width: 50%;">
                             el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding: 5px; vertical-align: top;">
+                        <td colspan="2">
                             quien se desempeña como: <span t-field="o.employe_id.job_id.name"/> 
                             en el area de <span t-field="o.employe_id.department_id.name"/>
                         </td>
@@ -45,35 +41,37 @@
                 </table>
 
                 <!-- Fechas de ausencia -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">No se presentó a laborar en la(s) siguiente(s) fecha(s):</p>
-                    <p style="margin: 5px 0;">
-                        <span t-field="o.fecha_inicio_txt"/>
-                        <span t-if="o.fecha_fin and o.fecha_fin != o.fecha_inicio"> - <span t-field="o.fecha_fin_txt"/></span>
+                <div style="margin-bottom: 10px;">
+                    <p>No se presentó a laborar en la(s) siguiente(s) fecha(s):</p>
+                    <p>
+                        <span t-field="o.fecha_inicio" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/>
+                        <span t-if="o.fecha_fin and o.fecha_fin != o.fecha_inicio"> - 
+                            <span t-field="o.fecha_fin" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/>
+                        </span>
                     </p>
                 </div>
 
                 <!-- Opciones de cargo -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">Por tanto, autorizo para aplicar lo siguiente:</p>
-                    <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
+                <div style="margin-bottom: 10px;">
+                    <p>Por tanto, autorizo para aplicar lo siguiente:</p>
+                    <table style="margin: 5px 0;">
                         <tr>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative; background-color: #f0f0f0;">
-                                <span t-if="o.cargo == 'vacaciones'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.cargo == 'vacaciones'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 CARGAR A VACACIONES
                             </td>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.cargo == 'deducir'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.cargo == 'deducir'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 DEDUCIR DEL SUELDO
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.cargo == 'permiso'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.cargo == 'permiso'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 PERMISO SIN NINGÚN CARGO
                             </td>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.cargo == 'incapacidad'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.cargo == 'incapacidad'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 ADJUNTO INCAPACIDAD
                             </td>
                         </tr>
@@ -81,42 +79,40 @@
                 </div>
 
                 <!-- Justificación -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">JUSTIFICACION DE LA ACCION:</p>
-                    <span style="border-bottom: 1px solid #000; min-height: 20px; padding: 0 5px; width: 100%; display: block;">
+                <div style="margin-bottom: 10px;">
+                    <p>JUSTIFICACION DE LA ACCION:</p>
+                    <div style="border-bottom: 1px solid #000; min-height: 18px; padding: 0 5px;">
                         <span t-field="o.justificacion"/>
-                    </span>
+                    </div>
                 </div>
 
                 <!-- Empleado cubierto -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">LA AUSENCIA DE EL (LA) EMPLEADO (A) FUE CUBIERTA POR:</p>
-                    <p style="margin: 5px 0;">
-                        SR. (SRITA.) <span t-field="o.cubierto_employe_id.name" t-esc="o.cubierto_employe_id.name or 'NADIE'"/>
-                    </p>
+                <div style="margin-bottom: 10px;">
+                    <p>LA AUSENCIA DE EL (LA) EMPLEADO (A) FUE CUBIERTA POR:</p>
+                    <p>SR. (SRITA.) <span t-field="o.cubierto_employe_id.name" t-esc="o.cubierto_employe_id.name or 'NADIE'"/></p>
                 </div>
 
                 <!-- Reporte de ausencia -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">EL EMPLEADO REPORTO SU AUSENCIA:</p>
-                    <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
+                <div style="margin-bottom: 15px;">
+                    <p>EL EMPLEADO REPORTO SU AUSENCIA:</p>
+                    <table style="margin: 5px 0;">
                         <tr>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.reporto == 'anticipacion'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.reporto == 'anticipacion'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 CON ANTICIPACIÓN
                             </td>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.reporto == 'telefono'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.reporto == 'telefono'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 LLAMÓ POR TELÉFONO
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.reporto == 'mensaje'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.reporto == 'mensaje'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 ENVIÓ MENSAJE
                             </td>
-                            <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
-                                <span t-if="o.reporto == 'otro'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                            <td style="border: 1px solid #000; padding: 3px 3px 3px 20px; width: 50%; position: relative;">
+                                <span t-if="o.reporto == 'otro'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
                                 OTRO
                             </td>
                         </tr>
@@ -124,54 +120,54 @@
                 </div>
 
                 <!-- Envío de llaves -->
-                <div style="margin-bottom: 20px;">
-                    <p style="margin: 5px 0;">ENVÍO: Llaves de Escritorio, de Archivo: SI / NO</p>
+                <div style="margin-bottom: 15px;">
+                    <p>ENVÍO: Llaves de Escritorio, de Archivo: SI / NO</p>
                 </div>
 
                 <!-- Firmas -->
-                <table style="width: 100%; margin-top: 40px; page-break-before: always;">
+                <table style="margin-top: 30px; page-break-inside: avoid;">
                     <tr>
-                        <td style="width: 50%; padding: 5px; vertical-align: top;">
-                            <p style="margin: 5px 0;">LUGAR Y FECHA</p>
-                            <p style="margin: 5px 0;"><span t-field="o.create_date" t-field-options='{"format": "dd/MM/yyyy"}'/></p>
+                        <td style="width: 50%;">
+                            <p>LUGAR Y FECHA</p>
+                            <p><span t-field="o.create_date" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/></p>
                         </td>
-                        <td style="width: 50%; text-align: right; padding: 5px; vertical-align: top;">
-                            <p style="margin: 5px 0;">NOMBRE JEFE INMEDIATO</p>
-                            <p style="margin: 5px 0;"><span t-field="o.employe_id.parent_id.name"/></p>
-                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 25px;"></div>
+                        <td style="width: 50%; text-align: right;">
+                            <p>NOMBRE JEFE INMEDIATO</p>
+                            <p><span t-field="o.employe_id.parent_id.name"/></p>
+                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 20px; margin-left: auto;"></div>
+                            <p style="margin-top: 5px;">FIRMA JEFE INMEDIATO</p>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 50%; padding: 5px; vertical-align: top;">
-                            <p style="margin: 5px 0;">FIRMA JEFE INMEDIATO</p>
-                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 25px;"></div>
+                        <td style="width: 50%;">
+                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 20px;"></div>
                         </td>
-                        <td style="width: 50%; text-align: right; padding: 5px; vertical-align: top;">
-                            <p style="margin: 5px 0;">NOMBRE EMPLEADO</p>
-                            <p style="margin: 5px 0;"><span t-field="o.employe_id.name"/></p>
+                        <td style="width: 50%; text-align: right;">
+                            <p>NOMBRE EMPLEADO</p>
+                            <p><span t-field="o.employe_id.name"/></p>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 50%; padding: 5px; vertical-align: top;"></td>
-                        <td style="width: 50%; text-align: right; padding: 5px; vertical-align: top;">
-                            <p style="margin: 5px 0;">FIRMA EMPLEADO</p>
-                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 25px;"></div>
+                        <td style="width: 50%;"></td>
+                        <td style="width: 50%; text-align: right;">
+                            <div style="border-top: 1px solid #000; width: 80%; margin-top: 20px; margin-left: auto;"></div>
+                            <p style="margin-top: 5px;">FIRMA EMPLEADO</p>
                         </td>
                     </tr>
                 </table>
             </div>
-            </main>
         </t>
-</template>
+    </template>
 
-<record id="action_report_hr_employee_permission" model="ir.actions.report">
-    <field name="name">Formulario de Permiso</field>
-    <field name="model">hr.employee.permisos</field>
-    <field name="report_type">qweb-pdf</field>
-    <field name="report_name">permisos.report_hr_employee_permission</field>
-    <field name="report_file">permisos.report_hr_employee_permission</field>
-    <field name="binding_model_id" ref="model_hr_employee_permisos"/>
-    <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
-</record>
-
+    <record id="action_report_hr_employee_permission" model="ir.actions.report">
+        <field name="name">Formulario de Permiso</field>
+        <field name="model">hr.employee.permisos</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">permisos.report_hr_employee_permission</field>
+        <field name="report_file">permisos.report_hr_employee_permission</field>
+        <field name="binding_model_id" ref="model_hr_employee_permisos"/>
+        <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
+        <!-- Configuración específica para wkhtmltopdf -->
+        <field name="paperformat_id" ref="report.paperformat_euro"/>
+    </record>
 </odoo>
