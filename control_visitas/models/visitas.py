@@ -18,6 +18,7 @@ class Visitas(models.Model):
     user_id = fields.Many2one('res.users', string='Usuario', default=lambda self: self.env.user, store=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, required=True)
     registro_visita = fields.Many2one('registro.visitas', string='Visitas Diarias')
+    aqui = fields.Char(string='aqui?')
     
     @api.depends('user_id')
     def _compute_region(self):

@@ -9,7 +9,7 @@
             <field name="fecha"/>
             <field name="hora"/>
             <field name="region"/>
-            <span class="">aqui</span>
+           <field name="aqui"/>
         </tree>
     </field>
 </record>
