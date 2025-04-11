@@ -12,7 +12,7 @@
     </template>
 
     <template id="report_hr_employee_permission" name="Formulario de Permiso">
-        <t t-call="web.external_layout">
+        <t t-call="web.basic_layout">
             <t t-set="o" t-value="docs[0]"/>
             <main>
                 <div style="font-family: Arial; font-size: 12px; margin: 0 1cm; padding: 0;">
