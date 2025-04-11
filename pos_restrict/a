@@ -1,0 +1,67 @@
+upstream fnc.megatk.net {
+    server 127.0.0.1:8069;
+}
+#### Activar esto cuando se use workers unicamente ######
+#upstream openerp-im {
+#    server 127.0.0.1:8072 weight=1 fail_timeout=0;
+#}
+
+server {
+    listen 443 ssl;
+    server_name www.fnc.megatk.net fnc.megatk.net;
+    if ($host = 'www.fnc.megatk.net') {
+      return 301 https://fnc.megatk.net$request_uri;
+    }
+    client_max_body_size 200m;
+    proxy_read_timeout 300000;
+
+    access_log  /var/log/nginx/odoo.access.log;
+    error_log   /var/log/nginx/odoo.error.log;
+
+    ssl_certificate     /etc/letsencrypt/live/fnc.megatk.net/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/fnc.megatk.net/privkey.pem;
+    keepalive_timeout   60;
+
+    ssl_ciphers HIGH:!aNULL!ADH:!MD5;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_dhparam /etc/nginx/ssl/dhp-2048.pem;
+
+    proxy_buffers 16 64k;
+    proxy_buffer_size 128k;
+
+    location / {
+        proxy_pass http://fnc.megatk.net;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+
+        proxy_set_header    Host $host;
+proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Host  $host;
+        proxy_set_header    X-Forwarded-Proto https;
+    }
+
+    location ~* /web/static/ {
+        proxy_cache_valid 200 60m;
+        proxy_buffering on;
+                expires 864000;
+        proxy_pass http://fnc.megatk.net;
+    }
+    #### Activar esto cuando se use workers unicamente ######
+    #    location /longpolling/ {
+    #           proxy_pass http://127.0.0.1:8072;
+    #}
+    gzip_types text/css text/less text/plain text/xml application/xml application/json application/>
+    gzip on;
+gzip_min_length 1000;
+    gzip_proxied    expired no-cache no-store private auth;
+}
+
+server {
+    listen      80;
+    server_name fnc.megatk.net;
+
+    add_header Strict-Transport-Security max-age=2592000;
+    return 301 https://fnc.megatk.net$request_uri;
+}
