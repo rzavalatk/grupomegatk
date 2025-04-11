@@ -14,6 +14,7 @@
     <template id="report_hr_employee_permission" name="Formulario de Permiso">
         <t t-call="web.external_layout">
             <t t-set="o" t-value="docs[0]"/>
+            <main>
             <div class="page" style="font-family: Arial; font-size: 11px; margin: 0; padding: 0;">
                 <!-- Encabezado -->
                 <div style="text-align: center; margin-bottom: 10px;">
@@ -156,6 +157,7 @@
                     </tr>
                 </table>
             </div>
+        </main>
         </t>
     </template>
 
