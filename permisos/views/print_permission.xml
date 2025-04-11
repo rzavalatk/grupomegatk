@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<template id="report_hr_employee_permission" name="Formulario de Permiso">
-    <t t-call="web.html_container">
-        <t t-foreach="docs" t-as="o">
+    <template id="report_hr_employee_permission" name="Formulario de Permiso">
+        <t t-call="web.html_container">
+            <t t-set="o" t-value="docs[0]"/>
             <main style="margin: 0; padding: 0; font-family: Arial; font-size: 12px;">
-                <!-- Encabezado -->
-                <div style="text-align: center; margin-bottom: 20px; margin-top: 0;">
-                    <h1 style="font-size: 16px; margin-bottom: 5px; text-transform: uppercase; margin-top: 0;">AREA DE RECURSOS HUMANOS</h1>
-                    <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
-                    <h3 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">A la Gerencia de Recursos Humanos informo:</h3>
-                </div>
-
+                <!-- Eliminar márgenes del contenedor principal -->
+                <div style="position: absolute; top: 0; left: 0; right: 0;">
+                    <!-- Encabezado sin márgenes -->
+                    <div style="text-align: center; margin: 0; padding: 0;">
+                        <h1 style="font-size: 16px; margin: 0; padding: 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
+                        <h2 style="font-size: 14px; margin: 2px 0; padding: 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
+                        <h3 style="font-size: 14px; margin: 2px 0; padding: 0; text-transform: uppercase;">A la Gerencia de Recursos Humanos informo:</h3>
+                    </div>
+                
                 <!-- Información del empleado -->
                 <table style="width: 100%; margin: 10px 0; border-collapse: collapse;">
                     <tr>
@@ -147,9 +149,9 @@
                         </td>
                     </tr>
                 </table>
+            </div>
             </main>
         </t>
-    </t>
 </template>
 
 <record id="action_report_hr_employee_permission" model="ir.actions.report">
