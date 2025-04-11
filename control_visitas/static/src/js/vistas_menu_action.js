@@ -404,7 +404,7 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
                 var self = this;
     
                 ajax.rpc('/control_visitas_user_reg').then(function (result) {
-                    if(result.user_email != 'lmoran@megatk.com') {
+                    if(result.user_email != 'lmoran@megatk.com' || result.user_email != 'areyes@megatk.com') {
                         if(result.user_reg == "3") {
                             self.$el.find("#filter_region").val("reg_tgu");
                         } else if(result.user_reg == "2") {

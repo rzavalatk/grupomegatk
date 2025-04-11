@@ -57,6 +57,9 @@ class Visitas_Record(models.Model):
             else:
                  visitas = self.env['control.visitas'].sudo().search([('fecha', '>=', self.fecha_reporte),('fecha', '<=', self.fecha_final)])
         
+        for visita in visitas:
+            _logger.warning(f"Visita ID {visita.id} - Región: {visita.region}")
+        
         if not visitas:
             raise UserError("No hay registros de visitas en esa fecha")
         else:
