@@ -33,16 +33,11 @@
                                 Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                 el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                             </td>
-                        </tr>
-                        <tr>
                             <td colspan="2">
                                 quien se desempeña como: <span t-field="o.employe_id.job_id.name"/> 
                                 en el area de <span t-field="o.employe_id.department_id.name"/>
                             </td>
-                        </tr>
-                    </table>
-    
-                    <!-- Fechas de ausencia -->
+                            <!-- Fechas de ausencia -->
                     <div style="margin-bottom: 10px;">
                         <p style="margin: 5px 0;"><strong>No se presentó a laborar en la(s) siguiente(s) fecha(s):</strong></p>
                         <p style="margin: 5px 0;">
@@ -52,6 +47,10 @@
                             </span>
                         </p>
                     </div>
+                        </tr>
+                    </table>
+    
+                    
     
                     <!-- Opciones de cargo - Tabla más compacta -->
                     <div style="margin-bottom: 10px;">
