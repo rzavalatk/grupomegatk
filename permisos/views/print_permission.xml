@@ -20,16 +20,17 @@
                     <div style="text-align: center; margin-bottom: 15px;">
                         <h1 style="font-size: 16px; margin: 5px 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
                         <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
-                        <h3 style="font-size: 13px; margin: 5px 0;">A LA GERENCIA DE RECURSOS HUMANOS INFORMO:</h3>
                     </div>
-    
+                    
+                   
+                       
+                    
                     <!-- Información del empleado -->
                     <table style="width: 100%; margin-bottom: 10px;">
                         <tr>
+                            <h4 style="font-size: 13px; margin: 0px 0;">A LA GERENCIA DE RECURSOS HUMANOS INFORMO:</h4>
                             <td style="width: 50%;">
                                 Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
-                            </td>
-                            <td style="width: 50%;">
                                 el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                             </td>
                         </tr>
