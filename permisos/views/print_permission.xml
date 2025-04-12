@@ -33,10 +33,10 @@
                                 Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                 el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                             
-                                quien se desempeña como: <span t-field="o.employe_id.job_id.name"/> 
+                                quien se desempeña como: <br/> <span t-field="o.employe_id.job_id.name"/> 
                                 en el area de <span t-field="o.employe_id.department_id.name"/>
                                 <div style="margin-bottom: 10px;">
-                                    <p style="margin: 5px 0;"><strong>No se presentó a laborar en la(s) siguiente(s) fecha(s):</strong></p>
+                                    <p style="margin: 5px 0; text-align: center;"><strong>No se presentó a laborar en la(s) siguiente(s) fecha(s):</strong></p>
                                     <p style="margin: 5px 0;">
                                         <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                         <span t-if="o.fecha_fin and o.fecha_fin != o.fecha_inicio"> - 
