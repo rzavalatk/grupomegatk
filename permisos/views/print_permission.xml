@@ -15,7 +15,7 @@
         <t t-call="web.basic_layout">
             <t t-set="o" t-value="docs[0]"/>
             <main>
-                <div style="font-family: Arial; font-size: 12px; margin: 0 1cm; padding: 0;">
+                <div style="font-family: Arial; font-size: 14px; margin: 0 1cm; padding: 0;">
                     <!-- Encabezado simplificado -->
                     <div style="text-align: center; margin-bottom: 15px;">
                         <h1 style="font-size: 16px; margin: 5px 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
@@ -29,7 +29,7 @@
                     <table style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <h4 style="font-size: 13px; margin: 0px 0;">A LA GERENCIA DE RECURSOS HUMANOS INFORMO:</h4>
-                            <td style="width: 50%;">
+                            <td style="width: 50%; margin-top: 5px 0;">
                                 Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                 el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                             
