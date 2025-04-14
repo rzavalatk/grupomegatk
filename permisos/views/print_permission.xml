@@ -30,7 +30,9 @@
                         <tr>
                             <h4 style="font-size: 13px; margin: 0px 0;"><strong> A LA GERENCIA DE RECURSOS HUMANOS INFORMO: </strong></h4>
                             <td style="width: 50%; margin-top: 5px 0;">
-                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy"}'/>
+                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd"}'/> de
+                                <span t-field="o.fecha_inicio" t-field-options='{"format": "MM"}'/> del
+                                <span t-field="o.fecha_inicio" t-field-options='{"format": "yyyy"}'/>
                                         el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                             
                                 <br/> quien se desempeña como:  <span t-field="o.employe_id.job_id.name"/> 
