@@ -129,7 +129,7 @@
         <menuitem id="hr_announcement_sub_menu"
                   name="Comunicados"
                   action="action_hr_announcement"
-                  parent="menu_hrms_dashboard"
+                  parent="hrms_dashboard.menu_hrms_dashboard"
                   groups="hr.group_hr_user,hr.group_hr_manager"
                   sequence="1"/>
 
