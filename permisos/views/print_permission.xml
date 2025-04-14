@@ -94,23 +94,23 @@
                         </tr>
                         <table style="width: 100%; margin-top: 30px;">
                         <tr>
-                            <td style="width: 50%; text-align: right;">
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE JEFE INMEDIATO</p>
                                 <p style="margin: 5px 0;"><span t-field="o.employe_id.parent_id.name"/></p>
                             </td>
-                            <td style="width: 50%; text-align: right; padding-top: 20px;">
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE EMPLEADO</p>
                                 <p style="margin: 5px 0;"><span t-field="o.employe_id.name"/></p>
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 50%; padding-top: 20px;">
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">FIRMA JEFE INMEDIATO</p>
-                                <div style="border-top: 1px solid #000; width: 80%;"></div>
+                                <div style="border-top: 1px solid #000; width: 80%; margin_bottom: 10px;"></div>
                             </td>
-                            <td style="width: 50%; text-align: right; padding-top: 20px;">
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">FIRMA EMPLEADO</p>
-                                <div style="border-top: 1px solid #000; width: 80%; margin-left: auto;"></div>
+                                <div style="border-top: 1px solid #000; width: 80%; margin-left: auto; margin_bottom: 10px;"></div>
                             </td>
                         </tr>
                     </table>
