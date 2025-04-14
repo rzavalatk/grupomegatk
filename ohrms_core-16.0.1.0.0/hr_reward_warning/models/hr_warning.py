@@ -25,7 +25,8 @@ class HrAnnouncementTable(models.Model):
     company_id = fields.Many2one('res.company', string='Compañía',
                                 default=lambda self: self.env.user.company_id, readonly=True, help="Compañía del usuario actual")
     is_announcement = fields.Boolean(string='¿Es un anuncio general?', help="Marcar para definir el anuncio como general")
-    announcement_type = fields.Selection([('employee', 'Por empleado'), ('department', 'Por departamento'), ('job_position', 'Por puesto de trabajo')])
+    announcement_type = fields.Selection([('employee', 'Por empleado'), ('department', 'Por departamento'), ('job_position', 'Por puesto de trabajo')],
+                         string='Tipo de comunicado',)
     employee_ids = fields.Many2many('hr.employee', 'hr_employee_announcements', 'announcement', 'employee',
                                     string='Empleados', help="Empleados que deben ver este anuncio")
     department_ids = fields.Many2many('hr.department', 'hr_department_announcements', 'announcement', 'department',
