@@ -109,8 +109,8 @@
                                 <div style="margin: 10px auto; border-top: 1px solid #000; width: 80%; text-align: center; "></div>
                             </td>
                             <td style="width: 50%; text-align: center; padding-top: 10px;">
-                                <p style="margin: 10px auto;">FIRMA EMPLEADO</p>
-                                <div style="margin: 5px auto; border-top: 1px solid #000; width: 80%; text-slign: center; "></div>
+                                <p style="margin: 5px 0;">FIRMA EMPLEADO</p>
+                                <div style="margin: 10px auto; border-top: 1px solid #000; width: 80%; text-slign: center; "></div>
                             </td>
                         </tr>
                     </table>
