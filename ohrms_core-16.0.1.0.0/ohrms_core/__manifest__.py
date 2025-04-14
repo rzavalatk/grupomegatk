@@ -24,7 +24,6 @@
         'hr_payroll_community',
         'hr_expense',
         'hr_timesheet',
-        'oh_employee_creation_from_user',
         'oh_employee_documents_expiry',
         'hr_multi_company',
         'ohrms_loan_accounting',
