@@ -22,7 +22,6 @@
         'views/salary_structure.xml',
         'views/salary_advance.xml',
     ],
-    'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
     'installable': True,
     'auto_install': False,

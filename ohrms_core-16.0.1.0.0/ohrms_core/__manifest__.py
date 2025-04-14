@@ -35,7 +35,6 @@
     "external_dependencies": {"python": ["pandas"]},
     'data': [
         'views/menu_arrangement_view.xml',
-        'views/hr_config_view.xml',
         'views/menu_item_form_inherit_view.xml',
     ],
     'assets': {
@@ -48,7 +47,6 @@
             'ohrms_core/static/templates/side_bar.xml'
         ],
     },
-    'images': ['static/description/banner.gif'],
     'license': 'AGPL-3',
     'installable': True,
     'auto_install': False,
