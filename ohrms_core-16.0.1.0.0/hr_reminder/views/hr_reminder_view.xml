@@ -65,6 +65,6 @@
     </record>
 
     <menuitem name="Reminders" id="hr_reminder_menu"
-              web_icon="hr_reminder,static/description/reminder_icon.png"
-              action="action_hr_reminder" sequence="8"/>
+              parent="hrms_dashboard.menu_hrms_dashboard"
+              action="action_hr_reminder" sequence="8" groups="base.group_user"/>
 </odoo>

@@ -115,8 +115,8 @@
     </record>
     <menuitem id="employee_transfer_menu_create_transfer"
               name="Transferencias"
+              parent="groups="base.group_user""
               sequence="10"
               action="employee_transfer_action"
-              web_icon="hr_employee_transfer,static/description/transfer_icon.png"
               groups="hr.group_hr_manager"/>
 </odoo>
