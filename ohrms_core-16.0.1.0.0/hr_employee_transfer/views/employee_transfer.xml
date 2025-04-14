@@ -115,7 +115,7 @@
     </record>
     <menuitem id="employee_transfer_menu_create_transfer"
               name="Transferencias"
-              parent="groups="base.group_user""
+              parent="hrms_dashboard.menu_hrms_dashboard"
               sequence="10"
               action="employee_transfer_action"
               groups="hr.group_hr_manager"/>
