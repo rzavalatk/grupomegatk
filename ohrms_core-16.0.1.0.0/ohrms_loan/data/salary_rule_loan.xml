@@ -4,7 +4,7 @@
 	<data noupdate="0">
 
 		<record id="hr_rule_loan" model="hr.salary.rule">
-            <field name="code">LO</field>
+            <!--<field name="code">LO</field>-->
             <field name="name">Loan</field>
             <field name="category_id" ref="hr_payroll_community.DED"/>
             <field name="amount_select">code</field>
