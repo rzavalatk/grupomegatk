@@ -159,6 +159,7 @@ class HrPermisos(models.Model):
 		return res
 	
 	def solicitar(self):
+		self.write({'fecha_solicitud': fields.Datetime.now()})
 		if self.dias != 0 or self.minutos != 0 or self.horas != 0:
 			if not self.name:
 				if not self.sequence_id.id:

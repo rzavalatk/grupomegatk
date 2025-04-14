@@ -82,12 +82,41 @@
     
                     <!-- Secciones restantes con formato similar al PDF de referencia -->
                     <!-- ... (mantener el mismo formato para las otras secciones) ... -->
+                    <div style="margin-bottom: 20px;">
+                        <p style="margin: 5px 0;">EL EMPLEADO REPORTO SU AUSENCIA:</p>
+                        <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
+                                    <span t-if="o.reporto == 'anticipacion'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                                    CON ANTICIPACIÓN
+                                </td>
+                                <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
+                                    <span t-if="o.reporto == 'telefono'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                                    LLAMÓ POR TELÉFONO
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
+                                    <span t-if="o.reporto == 'mensaje'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                                    ENVIÓ MENSAJE
+                                </td>
+                                <td style="border: 1px solid #000; padding: 8px 8px 8px 25px; text-align: left; position: relative;">
+                                    <span t-if="o.reporto == 'otro'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 16px;">✓</span>
+                                    OTRO
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
     
+                    <!-- Envío de llaves -->
+                    <div style="margin-bottom: 20px;">
+                        <p style="margin: 5px 0;">ENVÍO: Llaves de Escritorio, de Archivo: SI / NO</p>
+                    </div>
                     <!-- Firmas alineadas correctamente -->
                     
                         <tr>
                             <td style="width: 50%;">
-                                <p style="margin: 5px 0;">LUGAR Y FECHA <span t-field="o.create_date" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/></p>
+                                <p style="margin: 5px 0;">LUGAR Y FECHA <span t-field="o.fecha_solicitud" t-field-options='{"format": "dd/MM/yyyy "}'/></p>
                                 <p style="margin: 5px 0;"></p>
                             </td>
                             
