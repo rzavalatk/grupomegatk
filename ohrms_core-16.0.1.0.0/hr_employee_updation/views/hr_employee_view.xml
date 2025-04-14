@@ -36,7 +36,7 @@
                     </group>
                     <group name="passport_id" string="Pasaporte">
                         <field name="passport_id"/>
-                        <field name="passport_expiry_date" groups="hr.group_hr_user" attrs="{'invisible': [('passport_id', 'in', [None,False])]}"/>
+                        <!--<field name="passport_expiry_date" groups="hr.group_hr_user" attrs="{'invisible': [('passport_id', 'in', [None,False])]}"/>-->
                         <field name="passport_attachment_id" groups="hr.group_hr_user" widget="many2many_binary" class="oe_inline" attrs="{'invisible': [('passport_id', 'in', [None,False])]}"/>
                     </group>
                 </xpath>

@@ -67,7 +67,7 @@ class HrEmployee(models.Model):
     passport_expiry_date = fields.Date(string='Fecha de expiración de pasaporte'),
     id_attachment_id = fields.Many2many('ir.attachment', 'id_attachment_rel','id_ref', 'attach_ref',string="Adjunto",help='Puede subir un adjunto de la identidad')
     passport_attachment_id = fields.Many2many('ir.attachment','passport_attachment_rel','passport_ref', 'attach_ref1',
-        string="Adjunto", help='Puede siubir un adjunto del pasaporte')
+        string="Adjunto", help='Puede subir un adjunto del pasaporte')
     fam_ids = fields.One2many('hr.employee.family', 'employee_id', string='Familia', help='Información familiar')
 
     @api.depends('contract_id')
