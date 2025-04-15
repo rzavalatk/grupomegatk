@@ -21,20 +21,13 @@
                         <h1 style="font-size: 16px; margin: 5px 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
                         <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
                     </div>
-                    
-                   
-                       
-                    
                     <!-- Información del empleado -->
                     <table style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <h4 style="font-size: 13px; margin: 0px 0;"><strong> A LA GERENCIA DE RECURSOS HUMANOS INFORMO: </strong></h4>
                             <td style="width: 50%; margin-top: 5px 0;">
-                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd"}'/> de
-                                <span t-field="o.fecha_inicio" t-field-options='{"format": "MM"}'/> del
-                                <span t-field="o.fecha_inicio" t-field-options='{"format": "yyyy"}'/>
+                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd"}'/>
                                         el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
-                            
                                 <br/> quien se desempeña como:  <span t-field="o.employe_id.job_id.name"/> 
                                 en el area de <span t-field="o.employe_id.department_id.name"/>
                                 <div style="margin-bottom: 10px;">
@@ -57,26 +50,47 @@
                     <!-- Opciones de cargo - Tabla más compacta -->
                     <div style="margin-bottom: 10px;">
                         <p style="margin: 5px 0; text-align: center;">Por tanto, autorizo para aplicar lo siguiente:</p>
-                        <table style="width: 100%; margin: 5px 0; border-collapse: collapse;">
+                        <table style="width: 100%; margin: 5px 0; border-collapse: collapse; border: 1px solid #000;">
                             <tr>
-                                <td style="border: 1px solid #000; padding: 5px 5px 5px 25px; width: 50%; position: relative;">
-                                    <span t-if="o.cargo == 'vacaciones'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
-                                    CARGAR A VACACIONES
+                                <td style="padding: 8px; text-align: left; vertical-align: middle;">
+                                    <!-- Opción 1 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'vacaciones'" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">CARGAR A VACACIONES</span>
+                                    </div>
+                                    
+                                    <!-- Opción 2 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'deducir'" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">DEDUCIR DEL SUELDO</span>
+                                    </div>
+                                    
+                                    <!-- Opción 3 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'permiso'" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">PERMISO SIN NINGÚN CARGO</span>
+                                    </div>
+                                    
+                                    <!-- Opción 4 -->
+                                    <div style="display: inline-block; vertical-align: middle;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'incapacidad'" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">ADJUNTO INCAPACIDAD</span>
+                                    </div>
                                 </td>
-                                <td style="border: 1px solid #000; padding: 5px 5px 5px 25px; width: 50%; position: relative;">
-                                    <span t-if="o.cargo == 'deducir'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
-                                    DEDUCIR DEL SUELDO
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-top: 1px solid #000;">
+                                    JUSTIFICACIÓN DE LA ACCIÓN: 
                                 </td>
-                                <td style="border: 1px solid #000; padding: 5px 5px 5px 25px; width: 50%; position: relative;">
-                                    <span t-if="o.cargo == 'permiso'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
-                                    PERMISO SIN NINGÚN CARGO
-                                </td>
-                                <td style="border: 1px solid #000; padding: 5px 5px 5px 25px; width: 50%; position: relative;">
-                                    <span t-if="o.cargo == 'incapacidad'" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">✓</span>
-                                    ADJUNTO INCAPACIDAD
-                                </td> 
-                        </tr>
-                        <td style="width: 50%; margin-top: 5px 0;"> JUSTIFICACIÓN DE LA ACCION: </td>
+                            </tr>
                         </table>
                     </div>
     
