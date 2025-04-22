@@ -9,6 +9,7 @@
           
           <xpath expr="//field[@name='requires_allocation']" position="after">
             <field name="vacaciones"/>
+            <field name="deducciones"/>
           </xpath>
 
 

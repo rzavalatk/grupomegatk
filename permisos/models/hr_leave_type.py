@@ -8,3 +8,4 @@ class HrLeave(models.Model):
     _description = "Tipos de permiso"
     
     vacaciones = fields.Boolean('Vacaciones')
+    deducciones = fields.Boolean('Deducción de sueldo')
