@@ -277,6 +277,8 @@ class HrPayslip(models.Model):
                                                                    day_to,
                                                                    calendar=contract.resource_calendar_id)
             
+            _logger.warning(day_leave_intervals)
+            
             """for permiso in permisos:
                 day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))"""
 
