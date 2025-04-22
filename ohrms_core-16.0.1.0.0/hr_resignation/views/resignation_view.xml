@@ -75,7 +75,7 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state', 'in', ('draft', 'confirm','cancel'))]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Employee Resignation Form
+                <p class="oe_view_nocontent_create">Formulario de renuncia
                 </p>
             </field>
         </record>

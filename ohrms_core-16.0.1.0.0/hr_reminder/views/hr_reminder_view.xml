@@ -54,17 +54,17 @@
     </record>
 
     <record id="action_hr_reminder" model="ir.actions.act_window">
-        <field name="name">Reminders</field>
+        <field name="name">Recordatorios</field>
         <field name="res_model">hr.reminder</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-                Click here to configure new periodic reminder.
+                Haga clic aquí para configurar un nuevo recordatorio periódico.
             </p>
         </field>
     </record>
 
-    <menuitem name="Reminders" id="hr_reminder_menu"
+    <menuitem name="Recordatorios" id="hr_reminder_menu"
               parent="hrms_dashboard.menu_hrms_dashboard"
               action="action_hr_reminder" sequence="8" groups="base.group_user"/>
 </odoo>

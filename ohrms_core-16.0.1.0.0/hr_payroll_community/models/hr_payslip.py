@@ -270,8 +270,13 @@ class HrPayslip(models.Model):
                                                     ('request_date_from','>=',self.date_from),
                                                     ('request_date_to','<=',self.date_to),
                                                     ])
-            for permiso in permisos:
-                day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))
+            
+            day_leave_intervals = contract.employee_id.list_leaves(day_from,
+                                                                   day_to,
+                                                                   calendar=contract.resource_calendar_id)
+            
+            """for permiso in permisos:
+                day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))"""
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
