@@ -302,7 +302,7 @@ class HrPayslip(models.Model):
                             'name': holiday.holiday_status_id.name or _(
                                 'Permisos con deducción de sueldo'),
                             'sequence': 5,
-                            'code': holiday.holiday_status_id.code or 'PRM',
+                            'code': 'PRM',
                             'number_of_days': 0.0,
                             'number_of_hours': 0.0,
                             'contract_id': contract.id,
