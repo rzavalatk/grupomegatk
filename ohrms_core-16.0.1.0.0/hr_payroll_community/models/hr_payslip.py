@@ -296,7 +296,7 @@ class HrPayslip(models.Model):
                         if each.id:
                             multi_leaves.append(each.holiday_id)
                 else:
-                    holiday = leave
+                    holiday = self.env['hr.holidays'].search([('id','=',leave[0].holiday_id)],limit=1)
                     current_leave_struct = leaves.setdefault(
                         holiday.holiday_status_id, {
                             'name': holiday.holiday_status_id.name or _(
