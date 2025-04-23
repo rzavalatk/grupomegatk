@@ -32,8 +32,8 @@ class AttendanceRuleInput(models.Model):
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
             if in_date >= date_from and out_date <= date_to:
-                in_time = attendance.check_in.time()
-                out_time = attendance.check_out.time()
+                in_time = check_in_utc6.time()
+                out_time = check_out_utc6.time()
                 _logger.warning("in_time %s out_time %s",in_time,out_time)
                 amount = self.calcular_llegadat(in_time)
                 """for result in res:
