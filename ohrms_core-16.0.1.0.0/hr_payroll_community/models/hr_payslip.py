@@ -388,6 +388,7 @@ class HrPayslip(models.Model):
                 input_data = {
                     'name': input.name,
                     'code': input.code,
+                    'amount': 0.0,
                     'contract_id': contract.id,
                 }
                 res += [input_data]
