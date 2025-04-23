@@ -2,6 +2,10 @@
 from datetime import datetime
 from odoo import models
 import logging
+import pytz
+
+# obtenemos la zona horaria de Honduras
+honduras_tz = pytz.timezone('America/Tegucigalpa')
 
 _logger = logging.getLogger(__name__)
 
@@ -21,8 +25,10 @@ class AttendanceRuleInput(models.Model):
         attendances = self.env['hr.attendance'].search([('employee_id', '=', emp_id.id),('check_in', '>=', date_from),('check_out', '<=', date_to)])
         _logger.warning("attendances %s",attendances)
         for attendance in attendances:
-            in_date = attendance.check_in.date()
-            out_date = attendance.check_out.date()
+            check_in_utc6 = attendance.check_in.astimezone(honduras_tz)
+            check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
+            in_date = check_in_utc6.date()
+            out_date = check_out_utc6.date()
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
             if in_date >= date_from and out_date <= date_to:
