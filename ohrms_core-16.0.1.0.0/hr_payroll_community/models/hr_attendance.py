@@ -21,11 +21,11 @@ class AttendanceRuleInput(models.Model):
         attendances = self.env['hr.attendance'].search([('employee_id', '=', emp_id.id),('check_in', '>=', date_from),('check_out', '<=', date_to)])
         _logger.warning("attendances %s",attendances)
         for attendance in attendances:
-            in_date = datetime.strptime(attendance.check_in, '%Y-%m-%d').date()
-            out_date = datetime.strptime(attendance.check_out, '%Y-%m-%d').date()
+            in_date = attendance.check_in.date()
+            out_date = attendance.check_out.date()
             if in_date >= date_from and date_to <= out_date:
-                in_time = datetime.strptime(attendance.check_in, '%H:%M:%S').time()
-                out_time = datetime.strptime(attendance.check_out, '%H:%M:%S').time()
+                in_time = attendance.check_in.time()
+                out_time = attendance.check_out.time()
                 amount = self.calcular_llegadat(in_time)
                 """for result in res:
                     if state == 'approve' and amount != 0 and result.get('code') == 'SAR':
