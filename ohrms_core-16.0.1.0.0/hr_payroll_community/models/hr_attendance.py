@@ -50,6 +50,14 @@ class AttendanceRuleInput(models.Model):
             check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
             in_date = check_in_utc6.date()
             out_date = check_out_utc6.date()
+            # obtenemos el horario de trabajo del contrato
+            working_hours = contract_id.working_hours
+
+            # obtenemos la información del horario de trabajo
+            start_time = working_hours.start_time
+            end_time = working_hours.end_time
+            days_of_week = working_hours.days_of_week
+            _logger.warning("start_time %s end_time %s days_of_week %s",start_time,end_time,days_of_week)
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
             if in_date >= date_from and out_date <= date_to:
