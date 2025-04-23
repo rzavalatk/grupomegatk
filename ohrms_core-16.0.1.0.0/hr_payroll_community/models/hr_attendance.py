@@ -23,9 +23,11 @@ class AttendanceRuleInput(models.Model):
         for attendance in attendances:
             in_date = attendance.check_in.date()
             out_date = attendance.check_out.date()
+            _logger.warning("in_date %s out_date %s",in_date,out_date)
             if in_date >= date_from and date_to <= out_date:
                 in_time = attendance.check_in.time()
                 out_time = attendance.check_out.time()
+                _logger.warning("in_time %s out_time %s",in_time,out_time)
                 amount = self.calcular_llegadat(in_time)
                 """for result in res:
                     if state == 'approve' and amount != 0 and result.get('code') == 'SAR':
