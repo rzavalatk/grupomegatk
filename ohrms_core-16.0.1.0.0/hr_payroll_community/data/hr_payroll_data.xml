@@ -89,6 +89,7 @@
             <field name="rule_base">1</field>
         </record>
 
+        <!-- 
         <record id="hr_rule_llt" model="hr.salary.rule">
             <field name="name">Deducción por llegada tarde</field>
             <field name="sequence" eval="1"/>
@@ -99,7 +100,7 @@
             <field name="amount_fix">0.00</field>
             <field name="rule_base">1</field>
             <field name="active">1</field>
-        </record>
+        </record>-->
 
         <record id="hr_rule_commision" model="hr.salary.rule">
             <field name="name">Comisiones</field>
