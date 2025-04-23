@@ -51,7 +51,7 @@ class AttendanceRuleInput(models.Model):
             in_date = check_in_utc6.date()
             out_date = check_out_utc6.date()
             # obtenemos el horario de trabajo del contrato
-            working_hours = contract_id.resource_calendar_id
+            working_hours = self.env['reresource.calendar'].search([('id', '=', contract_id.resource_calendar_id.id)])
             _logger.warning("working_hours %s",working_hours)
             """for hours in working_hours:
                 # obtenemos la información del horario de trabajo
