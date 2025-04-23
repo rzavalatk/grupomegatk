@@ -381,7 +381,7 @@ class HrPayslip(models.Model):
         sorted_rule_ids = [id for id, sequence in
                            sorted(rule_ids, key=lambda x: x[1])]
         inputs = self.env['hr.salary.rule'].browse(sorted_rule_ids).mapped(
-            'input_ids')
+            'input_ids') 
 
         for contract in contracts:
             for input in inputs:
