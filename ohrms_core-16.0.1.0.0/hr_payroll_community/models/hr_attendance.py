@@ -59,7 +59,7 @@ class AttendanceRuleInput(models.Model):
                 amount = self.calcular_llegadat(in_time, contract_id.wage)
                 _logger.warning("amount %s",amount)
                 for result in res:
-                    if result.get('code') == 'DED_LLT':
+                    if result.get('code') == 'ATTD':
                         result['amount'] += amount
         _logger.warning("res %s",res)
         
