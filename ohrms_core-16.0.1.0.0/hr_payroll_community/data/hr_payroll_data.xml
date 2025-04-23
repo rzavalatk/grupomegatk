@@ -41,15 +41,7 @@
             <field name="category_base">1</field>
         </record>
 
-
-
-
-<!--        <record id="DEDUCTION" model="hr.salary.rule.category">-->
-<!--            <field name="name">Deduction</field>-->
-<!--            <field name="code">DED</field>-->
-<!--            <field name="parent_id" eval="False"/>-->
-<!--        </record>-->
-
+        <!-- REGLAS SALARIALES -->
         <record id="hr_rule_net" model="hr.salary.rule">
             <field name="name">Salario Neto</field>
             <field name="sequence" eval="1"/>
@@ -111,6 +103,18 @@
 
         <record id="hr_rule_commision" model="hr.salary.rule">
             <field name="name">Comisiones</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">ACRE_com</field>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
+        </record>
+
+        <record id="hr_rule_deduction_leave" model="hr.salary.rule">
+            <field name="name">Deducción por permisos</field>
             <field name="sequence" eval="1"/>
             <field name="code">ACRE_com</field>
             <field name="category_id" ref="hr_payroll_community.ALW"/>

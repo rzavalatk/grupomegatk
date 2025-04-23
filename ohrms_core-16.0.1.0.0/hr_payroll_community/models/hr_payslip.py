@@ -311,14 +311,7 @@ class HrPayslip(models.Model):
                     if work_hours:
                         current_leave_struct[
                             'number_of_days'] += hours / work_hours
-                    
-            #Buscar permisos en hr.leave
-            """
-            logging.warning(permisos)
-            
-            for permiso in permisos:"""
-                
-            
+        
             # compute worked days
             work_data = contract.employee_id.get_work_days_data(day_from,
                                                                 day_to,
@@ -770,16 +763,11 @@ class HrPayslipLine(models.Model):
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                        #sueldo = pay
-                           
                 else:    
-                    
                     if categoria.code == 'DED':
-                        #payslip.sudo().write({'total_payment': payslip.total_payment - values['amount_fix']})
                         pay -= values['amount_fix']
                         sueldo = pay
                     if categoria.code == 'ALW':
-                        #payslip.sudo().write({'total_payment': payslip.total_payment + values['amount_fix']})
                         pay += values['amount_fix']
                         sueldo = pay
                     if values['code'] == 'SLDBT':
@@ -788,9 +776,7 @@ class HrPayslipLine(models.Model):
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                        #sueldo = pay
                         
-                
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
@@ -801,7 +787,6 @@ class HrPayslipLine(models.Model):
                     
         return super(HrPayslipLine, self).create(vals_list)
     
-
     def write(self, values):
         # Lógica para actualizar el sueldo neto en la nómina cuando se edita amount o sueldo
         for line in self:
@@ -820,8 +805,6 @@ class HrPayslipLine(models.Model):
         # Llamar al método write original para guardar los cambios
         result = super(HrPayslipLine, self).write(values)
         return result                
-                
-
 
 class HrPayslipWorkedDays(models.Model):
     _name = 'hr.payslip.worked_days'
