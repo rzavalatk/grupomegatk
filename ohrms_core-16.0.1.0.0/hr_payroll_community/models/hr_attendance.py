@@ -25,7 +25,7 @@ class AttendanceRuleInput(models.Model):
             out_date = attendance.check_out.date()
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
-            if in_date >= date_from and date_to <= out_date:
+            if in_date >= date_from and out_date <= date_to:
                 in_time = attendance.check_in.time()
                 out_time = attendance.check_out.time()
                 _logger.warning("in_time %s out_time %s",in_time,out_time)
