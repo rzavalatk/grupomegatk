@@ -241,17 +241,15 @@ class HrPayslip(models.Model):
             for line in lines:
                 for input in self.input_line_ids:
                     if line[2]['code'] == input.code:
-                        _logger.warning('input.code: %s, %s', input.code, line[2]['code'])
                         line[2]['amount'] = input.amount
-                        for rule in lines:
-                            if rule[2]['code'] == 'SLDNT':
-                                _logger.warning('rule.code: %s', rule[2]['code'])
-                                if self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'DED':
-                                    _logger.warning('DED: %s', rule[2]['amount'])
-                                    rule[2]['amount'] -= input.amount
-                                elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
-                                    _logger.warning('ALW')
-                                    rule[2]['amount'] += input.amount
+                        if self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'DED':
+                            deduccion -= input.amount
+                        elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
+                            acreditacion += input.amount
+            
+            for line in lines:
+                if line[2]['code'] == 'SLDNT':
+                    line[2]['amount'] = line[2]['amount'] + acreditacion - deduccion
                                
             payslip.write({'line_ids': lines, 'number': number})
         return True
