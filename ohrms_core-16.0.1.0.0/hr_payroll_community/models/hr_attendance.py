@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from odoo import models
 import logging
 import pytz
@@ -34,9 +34,11 @@ class AttendanceRuleInput(models.Model):
                 if (day_period == 'morning'): 
                     #calcular deducciones
                     start_time = datetime.strptime(str(str(int(start_time))+":00:00"), '%H:%M:%S').time()
+                    start_time = datetime.combine(datetime.today(), time(start_time), tzinfo=honduras_tz)
+                    
                     _logger.warning("Hora de asistencia %s y hora de horario laboral %s", in_time, start_time)
-                    _logger.warning("1.Limites de hora: %s, %s", start_time + timedelta(minutes=7), start_time + timedelta(minutes=15))
-                    if in_time > start_time + timedelta(minutes=7) and in_time < start_time + datetime.timedelta(minutes=15):
+                    _logger.warning("1.Limites de hora: %s, %s", (start_time + timedelta(minutes=7)).time(), (start_time + datetime.timedelta(minutes=15)).time())
+                    if in_time > (start_time + timedelta(minutes=7)).time() and in_time < (start_time + datetime.timedelta(minutes=15)).time():
                         deduccion = costo_hora/2
                         _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=7), start_time + datetime.timedelta(minutes=15))
                     elif in_time > start_time + datetime.timedelta(minutes=16) and in_time < start_time + datetime.timedelta(minutes=30):
