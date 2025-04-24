@@ -13,19 +13,21 @@ _logger = logging.getLogger(__name__)
 class AttendanceRuleInput(models.Model):
     _inherit = 'hr.payslip'
 
-    def calcular_llegadat(self, in_time, dia_permiso, contract_id, salario):
+    def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario):
         #Calcular costo por dia y hora en base al salario
         costo_dia = salario/30
         costo_hora = costo_dia/8
         deduccion = 0
         
         # obtenemos el horario de trabajo del contrato
-        working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', contract_id.resource_calendar_id.id)])
+        working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', calendario_id)])
         for hours in working_hours:
             # obtenemos la información del horario de trabajo
             start_time = hours.hour_from
             day_period = hours.day_period
             days_of_week = hours.dayofweek
+            
+            _logger.warning("Horario: %s, %s, %s, %s", start_time, day_period, days_of_week, dia_permiso)
             
             if day_period == 'morning' and days_of_week == dia_permiso:
                 #calcular deducciones
@@ -60,7 +62,7 @@ class AttendanceRuleInput(models.Model):
             if in_date >= date_from and out_date <= date_to:
                 in_time = check_in_utc6.time()
                 out_time = check_out_utc6.time()
-                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id, contract_id.wage)
+                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
                 for result in res:
                     if result.get('code') == 'ATTD':
                         result['amount'] += amount
