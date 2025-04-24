@@ -245,9 +245,12 @@ class HrPayslip(models.Model):
                         line[2]['amount'] = input.amount
                         for rule in lines:
                             if rule[2]['code'] == 'SLDNT':
+                                _logger.warning('rule.code: %s', rule[2]['code'])
                                 if self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'DED':
+                                    _logger.warning('DED')
                                     rule[2]['amount'] -= input.amount
                                 elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
+                                    _logger.warning('ALW')
                                     rule[2]['amount'] += input.amount
                                
             payslip.write({'line_ids': lines, 'number': number})
