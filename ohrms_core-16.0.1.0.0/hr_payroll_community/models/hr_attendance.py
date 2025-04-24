@@ -59,8 +59,8 @@ class AttendanceRuleInput(models.Model):
                 start_time = hours.hour_from
                 end_time = hours.day_period
                 days_of_week = hours.dayofweek
-                out_date.weekday()
-                _logger.warning("start_time %s day_period %s days_of_week %s day_permission %s",start_time,end_time,days_of_week)
+                
+                _logger.warning("start_time %s day_period %s days_of_week %s day_permission %s",start_time,end_time,days_of_week,out_date.weekday())
                 
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
