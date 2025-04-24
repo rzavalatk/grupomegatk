@@ -34,7 +34,7 @@ class AttendanceRuleInput(models.Model):
                 if (day_period == 'morning'): 
                     #calcular deducciones
                     start_time = datetime.strptime(str(str(int(start_time))+":00:00"), '%H:%M:%S').time()
-                    start_time = datetime.combine(datetime.today(), time(start_time), tzinfo=honduras_tz)
+                    start_time = datetime.combine(datetime.today(), start_time, tzinfo=honduras_tz)
                     
                     _logger.warning("Hora de asistencia %s y hora de horario laboral %s", in_time, start_time)
                     _logger.warning("1.Limites de hora: %s, %s", (start_time + timedelta(minutes=7)).time(), (start_time + datetime.timedelta(minutes=15)).time())
