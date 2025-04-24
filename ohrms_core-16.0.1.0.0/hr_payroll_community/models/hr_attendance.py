@@ -37,19 +37,18 @@ class AttendanceRuleInput(models.Model):
                     start_time = datetime.combine(datetime.today(), start_time)
                     
                     _logger.warning("Hora de asistencia %s y hora de horario laboral %s", in_time, start_time)
-                    _logger.warning("1.Limites de hora: %s, %s", (start_time + timedelta(minutes=7)).time(), (start_time + timedelta(minutes=15)).time())
-                    if in_time > (start_time + timedelta(minutes=7)).time() and in_time < (start_time + datetime.timedelta(minutes=15)).time():
+                    if in_time > (start_time + timedelta(minutes=7)).time() and in_time < (start_time + timedelta(minutes=15)).time():
                         deduccion = costo_hora/2
-                        _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=7), start_time + datetime.timedelta(minutes=15))
-                    elif in_time > start_time + datetime.timedelta(minutes=16) and in_time < start_time + datetime.timedelta(minutes=30):
+                        _logger.warning("Limites de hora: %s, %s", (start_time + timedelta(minutes=7)).time(), (start_time + timedelta(minutes=15)).time())
+                    elif in_time > (start_time + timedelta(minutes=16)).time() and in_time < (start_time + timedelta(minutes=30)).time():
                         deduccion = costo_hora
-                        _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=16), start_time + datetime.timedelta(minutes=30))
-                    elif in_time > start_time + datetime.timedelta(minutes=31) and in_time < start_time + datetime.timedelta(minutes=60):
+                        _logger.warning("Limites de hora: %s, %s", (start_time + timedelta(minutes=16)).time(), (start_time + timedelta(minutes=30)).time())
+                    elif in_time > (start_time + timedelta(minutes=31)).time() and in_time < (start_time + timedelta(minutes=60)).time():
                         deduccion = costo_hora*2
-                        _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=31), start_time + datetime.timedelta(minutes=60))
-                    elif in_time > start_time + datetime.timedelta(minutes=61) and in_time < start_time + datetime.timedelta(minutes=90):
+                        _logger.warning("Limites de hora: %s, %s", (start_time + timedelta(minutes=31)).time(), (start_time + timedelta(minutes=60)).time())
+                    elif in_time > (start_time + timedelta(minutes=61)).time() and in_time < (start_time + timedelta(minutes=90)).time():
                         deduccion = costo_hora*4
-                        _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=61), start_time + datetime.timedelta(minutes=90))
+                        _logger.warning("Limites de hora: %s, %s", (start_time + timedelta(minutes=61)).time(), (start_time + timedelta(minutes=90)).time())
         
         return deduccion
     
