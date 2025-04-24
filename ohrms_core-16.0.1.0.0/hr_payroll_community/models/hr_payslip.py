@@ -240,7 +240,7 @@ class HrPayslip(models.Model):
             # Actualizar el sueldo neto
             for line in lines:
                 for input in self.input_line_ids:
-                    if line[2].code == input.code:
+                    if line[2]['code'] == input.code:
                         _logger.warning('input.code: %s, %s', input.code, line.code)
                         line.update({'amount': input.amount})
                                
