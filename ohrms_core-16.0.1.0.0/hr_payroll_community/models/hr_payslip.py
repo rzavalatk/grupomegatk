@@ -241,7 +241,7 @@ class HrPayslip(models.Model):
             for line in lines:
                 for input in self.input_line_ids:
                     if line[2]['code'] == input.code:
-                        _logger.warning('input.code: %s, %s', input.code, line.code)
+                        _logger.warning('input.code: %s, %s', input.code, line[2]['code'])
                         line.update({'amount': input.amount})
                                
             payslip.write({'line_ids': lines, 'number': number})
