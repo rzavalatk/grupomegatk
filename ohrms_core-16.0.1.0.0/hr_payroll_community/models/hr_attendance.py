@@ -50,15 +50,18 @@ class AttendanceRuleInput(models.Model):
             check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
             in_date = check_in_utc6.date()
             out_date = check_out_utc6.date()
+            
             # obtenemos el horario de trabajo del contrato
-            working_hours = self.env['resource.calendar.attendance'].search([('id', '=', contract_id.resource_calendar_id.id)])
+            working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', contract_id.resource_calendar_id.id)])
             _logger.warning("working_hours %s",working_hours)
             for hours in working_hours:
                 # obtenemos la información del horario de trabajo
                 start_time = hours.hour_from
                 end_time = hours.day_period
                 days_of_week = hours.dayofweek
-                _logger.warning("start_time %s day_period %s days_of_week %s",start_time,end_time,days_of_week)
+                out_date.weekday()
+                _logger.warning("start_time %s day_period %s days_of_week %s day_permission %s",start_time,end_time,days_of_week)
+                
             _logger.warning("in_date %s out_date %s",in_date,out_date)
             _logger.warning("date_from %s date_to %s",date_from,date_to)
             if in_date >= date_from and out_date <= date_to:
