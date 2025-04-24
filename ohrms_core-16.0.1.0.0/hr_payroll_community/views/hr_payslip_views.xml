@@ -162,6 +162,8 @@
                     <field name="name"/>
                     <field name="credit_note"/>
                     <field name="total_payment" />
+                    <field name="deduction" invisible="1"/>
+                    <field name="accreditation" invisible="1"/>
                 </group>
                 <notebook>
                     <page string="Dias trabajados &amp; Entradas">
