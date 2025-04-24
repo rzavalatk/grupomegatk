@@ -237,14 +237,12 @@ class HrPayslip(models.Model):
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
             
-            _logger.warning("lines %s", lines)
-            _logger.warning("inputs %s", self.input_line_ids)
+            # Actualizar el sueldo neto
             for line in lines:
-                """if line.code == ''"""
-                _logger.warning("line %s", line)
-            
-            for input in self.input_line_ids:
-                _logger.warning("input %s", input)
+                for input in self.input_line_ids:
+                    if line.code == input.code:
+                        _logger.warning('input.code: %s, %s', input.code, line.code)
+                        line.update({'amount': input.amount})
                                
             payslip.write({'line_ids': lines, 'number': number})
         return True
