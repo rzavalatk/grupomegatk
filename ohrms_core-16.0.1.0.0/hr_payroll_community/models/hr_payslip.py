@@ -236,6 +236,10 @@ class HrPayslip(models.Model):
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
+            
+            _logger.warning("lines %s", lines)
+            for line in lines:
+                _logger.warning("line %s", line)
                     
             payslip.write({'line_ids': lines, 'number': number})
         return True
