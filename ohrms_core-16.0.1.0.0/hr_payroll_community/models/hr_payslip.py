@@ -240,6 +240,7 @@ class HrPayslip(models.Model):
             _logger.warning("lines %s", lines)
             _logger.warning("inputs %s", self.input_line_ids)
             for line in lines:
+                """if line.code == ''"""
                 _logger.warning("line %s", line)
             
             for input in self.input_line_ids:
@@ -286,9 +287,6 @@ class HrPayslip(models.Model):
                                                                    calendar=contract.resource_calendar_id)
             _logger.warning("ds---**----sd")
             _logger.warning(day_leave_intervals)
-            
-            """for permiso in permisos:
-                day_leave_intervals.append((permiso.request_date_from, permiso.request_date_to, [permiso]))"""
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:

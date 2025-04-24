@@ -19,7 +19,7 @@
         </record>
 
         <record id="hr_rule_input_attendance" model="hr.rule.input">
-            <field name="code">ATTD</field>
+            <field name="code">DED_LLT</field>
             <field name="name">Llegadas tardes</field>
             <field name="input_id" ref="hr_rule_attendance"/>
         </record>
