@@ -790,10 +790,13 @@ class HrPayslipLine(models.Model):
                         values['amount'] = values['amount_fix']
                         
         for value in vals_list:
+            deduccione = 0
             payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
-                    value['amount_fix'] = sueldo - payslip.deduction + payslip.accreditation
+                    if payslip.deduction < 0:
+                        deduccione = -1 * payslip.deduction
+                    value['amount_fix'] = sueldo - deduccione + payslip.accreditation
                     value['amount'] = value['amount_fix']
                     self.slip_id.write({'total_payment': sueldo - payslip.deduction + payslip.accreditation})
                     break
