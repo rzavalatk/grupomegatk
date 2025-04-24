@@ -249,6 +249,7 @@ class HrPayslip(models.Model):
             
             for line in lines:
                 if line[2]['code'] == 'SLDNT':
+                    _logger.warning("Montos: %s, %s, %s", line[2]['amount'], deduccion, acreditacion)
                     line[2]['amount'] = line[2]['amount'] + acreditacion - deduccion
                                
             payslip.write({'line_ids': lines, 'number': number})
