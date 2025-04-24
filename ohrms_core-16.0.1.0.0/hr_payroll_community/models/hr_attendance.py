@@ -29,7 +29,7 @@ class AttendanceRuleInput(models.Model):
             
             _logger.warning("Horario: %s, %s, %s, %s", start_time, day_period, days_of_week, dia_permiso)
             
-            if day_period == 'morning' and days_of_week == dia_permiso:
+            if (day_period == 'morning') and (days_of_week == dia_permiso):
                 #calcular deducciones
                 _logger.warning("SI entre al if")
                 _logger.warning("1.Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=7), start_time + datetime.timedelta(minutes=15))
