@@ -13,26 +13,34 @@ _logger = logging.getLogger(__name__)
 class AttendanceRuleInput(models.Model):
     _inherit = 'hr.payslip'
 
-    def calcular_llegadat(self, in_time, salario):
+    def calcular_llegadat(self, in_time, dia_permiso, contract_id, salario):
         #Calcular costo por dia y hora en base al salario
         costo_dia = salario/30
         costo_hora = costo_dia/8
         deduccion = 0
-        _logger.warning("costo_dia %s costo_hora %s",costo_dia,costo_hora)
         
-        #calcular deducciones
-        if in_time > datetime.strptime('07:05:00', '%H:%M:%S').time() and in_time < datetime.strptime('07:20:00', '%H:%M:%S').time():
-            deduccion = costo_hora/2
-        elif in_time > datetime.strptime('07:20:00', '%H:%M:%S').time() and in_time < datetime.strptime('07:35:00', '%H:%M:%S').time():
-            deduccion = costo_hora
-        elif in_time > datetime.strptime('07:35:00', '%H:%M:%S').time() and in_time < datetime.strptime('07:50:00', '%H:%M:%S').time():
-            deduccion = costo_hora*2
-        elif in_time > datetime.strptime('07:50:00', '%H:%M:%S').time() and in_time < datetime.strptime('08:00:00', '%H:%M:%S').time():
-            deduccion = costo_hora*3
-        elif in_time > datetime.strptime('08:00:00', '%H:%M:%S').time() and in_time < datetime.strptime('08:30:00', '%H:%M:%S').time():
-            deduccion = costo_hora*4
-        elif in_time > datetime.strptime('08:30:00', '%H:%M:%S').time() and in_time < datetime.strptime('16:00:00', '%H:%M:%S').time():
-            deduccion = costo_dia
+        # obtenemos el horario de trabajo del contrato
+        working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', contract_id.resource_calendar_id.id)])
+        for hours in working_hours:
+            # obtenemos la información del horario de trabajo
+            start_time = hours.hour_from
+            day_period = hours.day_period
+            days_of_week = hours.dayofweek
+            
+            if day_period == 'morning' and days_of_week == dia_permiso:
+                #calcular deducciones
+                if in_time > start_time + datetime.timedelta(minutes=7) and in_time < start_time + datetime.timedelta(minutes=15):
+                    deduccion = costo_hora/2
+                    _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=7), start_time + datetime.timedelta(minutes=15))
+                elif in_time > start_time + datetime.timedelta(minutes=16) and in_time < start_time + datetime.timedelta(minutes=30):
+                    deduccion = costo_hora
+                    _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=16), start_time + datetime.timedelta(minutes=30))
+                elif in_time > start_time + datetime.timedelta(minutes=31) and in_time < start_time + datetime.timedelta(minutes=60):
+                    deduccion = costo_hora*2
+                    _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=31), start_time + datetime.timedelta(minutes=60))
+                elif in_time > start_time + datetime.timedelta(minutes=61) and in_time < start_time + datetime.timedelta(minutes=90):
+                    deduccion = costo_hora*4
+                    _logger.warning("Limites de hora: %s, %s", start_time + datetime.timedelta(minutes=61), start_time + datetime.timedelta(minutes=90))
         
         return deduccion
     
@@ -44,36 +52,16 @@ class AttendanceRuleInput(models.Model):
         contract_id = contract_obj.browse(contract_ids[0].id)
         emp_id = contract_obj.browse(contract_ids[0].id).employee_id
         attendances = self.env['hr.attendance'].search([('employee_id', '=', emp_id.id),('check_in', '>=', date_from),('check_out', '<=', date_to)])
-        _logger.warning("attendances %s",attendances)
         for attendance in attendances:
             check_in_utc6 = attendance.check_in.astimezone(honduras_tz)
             check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
             in_date = check_in_utc6.date()
             out_date = check_out_utc6.date()
-            
-            # obtenemos el horario de trabajo del contrato
-            working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', contract_id.resource_calendar_id.id)])
-            _logger.warning("working_hours %s",working_hours)
-            for hours in working_hours:
-                # obtenemos la información del horario de trabajo
-                start_time = hours.hour_from
-                end_time = hours.day_period
-                days_of_week = hours.dayofweek
-                
-                _logger.warning("start_time %s day_period %s days_of_week %s day_permission %s",start_time,end_time,days_of_week,out_date.weekday())
-                
-            _logger.warning("in_date %s out_date %s",in_date,out_date)
-            _logger.warning("date_from %s date_to %s",date_from,date_to)
             if in_date >= date_from and out_date <= date_to:
                 in_time = check_in_utc6.time()
                 out_time = check_out_utc6.time()
-                _logger.warning("in_time %s out_time %s",in_time,out_time)
-                amount = self.calcular_llegadat(in_time, contract_id.wage)
-                _logger.warning("amount %s",amount)
+                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id, contract_id.wage)
                 for result in res:
-                    _logger.warning("result %s",result)
                     if result.get('code') == 'ATTD':
                         result['amount'] += amount
-        _logger.warning("res %s",res)
-        
         return res
