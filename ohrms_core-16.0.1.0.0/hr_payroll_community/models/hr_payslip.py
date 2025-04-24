@@ -746,10 +746,11 @@ class HrPayslipLine(models.Model):
         acreditaciones=0
         sueldo=0
         
-        payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
+        
         for values in vals_list:
             categoria = self.env['hr.salary.rule.category'].search(
                         [('id', '=', values['category_id'])])
+            payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             pay = payslip.total_payment
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
@@ -789,6 +790,7 @@ class HrPayslipLine(models.Model):
                         values['amount'] = values['amount_fix']
                         
         for value in vals_list:
+            payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
                     value['amount_fix'] = sueldo - payslip.deduction + payslip.accreditation
