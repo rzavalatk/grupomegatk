@@ -51,6 +51,8 @@ class HrPayslip(models.Model):
                                                               days=-1)).date()),
                           states={'draft': [('readonly', False)]})
     total_payment = fields.Float('Total a pagar', readonly=True, compute='_compute_total_payment')
+    deduction = fields.Float('Deducción')
+    accreditation = fields.Float('Acreditación')
     # this is chaos: 4 states are defined, 3 are used ('verify' isn't) and 5 exist ('confirm' seems to have existed)
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -246,13 +248,8 @@ class HrPayslip(models.Model):
                             deduccion -= input.amount
                         elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
                             acreditacion += input.amount
-            
-            for line in lines:
-                if line[2]['code'] == 'SLDNT':
-                    _logger.warning("Montos: %s, %s, %s", line[2]['amount'], deduccion, acreditacion)
-                    line[2]['amount'] = line[2]['amount'] + acreditacion - deduccion
                                
-            payslip.write({'line_ids': lines, 'number': number})
+            payslip.write({'line_ids': lines, 'number': number, 'deduction': deduccion, 'accreditation': acreditacion})
         return True
 
     @api.model
@@ -748,10 +745,11 @@ class HrPayslipLine(models.Model):
         deducciones=0
         acreditaciones=0
         sueldo=0
+        
+        payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
         for values in vals_list:
             categoria = self.env['hr.salary.rule.category'].search(
                         [('id', '=', values['category_id'])])
-            payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             pay = payslip.total_payment
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
@@ -793,9 +791,9 @@ class HrPayslipLine(models.Model):
         for value in vals_list:
             if value['active'] == True:
                 if value['code'] == 'SLDNT':
-                    value['amount_fix'] = sueldo
+                    value['amount_fix'] = sueldo - payslip.deduction + payslip.accreditation
                     value['amount'] = value['amount_fix']
-                    self.slip_id.write({'total_payment': sueldo})
+                    self.slip_id.write({'total_payment': sueldo - payslip.deduction + payslip.accreditation})
                     break
                     
         return super(HrPayslipLine, self).create(vals_list)
