@@ -62,6 +62,6 @@ class AttendanceRuleInput(models.Model):
                 out_time = check_out_utc6.time()
                 amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
                 for result in res:
-                    if result.get('code') == 'ATTD':
+                    if result.get('code') == 'DED_LLT':
                         result['amount'] += amount
         return res
