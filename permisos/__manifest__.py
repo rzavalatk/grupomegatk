@@ -27,6 +27,7 @@
         'security/ir.model.access.csv',
         "wizard/wizard_solicitar_permiso.xml",
         'views/default_views.xml',
+        'views/print_permission.xml',
         'views/permisos_views.xml',
         'views/hr_views.xml',
         'views/email_template.xml',
