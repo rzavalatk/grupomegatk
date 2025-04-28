@@ -12,6 +12,10 @@
             <field name="category_id" ref="module_category_gps_tracking" />
             <field name="name">Administrar Rastreo</field>
         </record>
+        <record id="manager_trip" model="res.groups">
+            <field name="category_id" ref="module_category_gps_tracking" />
+            <field name="name">Administrar Viaje</field>
+        </record>
     
     </data>
 </odoo>
