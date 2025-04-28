@@ -56,13 +56,9 @@ class GpsDeviceLocation(models.Model):
                     t_stamp = datetime.fromtimestamp(float(fix_time)/1000, tz=timezone.utc)
                 elif isinstance(fix_time, str):
                     # Si es string en formato ISO
-                    t_stamp = isoparse(fix_time)
-                    # Asegurar que esté en UTC
-                    if t_stamp.tzinfo is None:
-                        t_stamp = t_stamp.replace(tzinfo=timezone.utc)
-                    else:
-                        t_stamp = t_stamp.astimezone(timezone.utc)
-            
+                    dt = isoparse(fix_time)
+                    t_stamp = dt.replace(tzinfo=None)
+                    
             self.create({
                 'device_id': pos.get('deviceId'),
                 'latitude': pos.get('latitude'),
