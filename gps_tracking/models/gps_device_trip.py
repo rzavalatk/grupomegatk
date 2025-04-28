@@ -38,9 +38,9 @@ class GpsDeviceTrip(models.Model):
             
     def fetch_device_positions(self):
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
-        traccar_url = 'http://<IP_PUBLICA_TRACCAR>:8082/api/positions'
-        username = '<TU_EMAIL_TRACCAR>'
-        password = '<TU_PASSWORD_TRACCAR>'
+        traccar_url = 'http://18.222.109.183:8082:8082/api/positions'
+        username = 'areyes@megatk.com'
+        password = 'admin'
 
         headers = {
             'Accept': 'application/json',
