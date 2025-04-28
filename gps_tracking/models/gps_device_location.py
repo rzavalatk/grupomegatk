@@ -51,6 +51,6 @@ class GpsDeviceLocation(models.Model):
                 'latitude': pos.get('latitude'),
                 'longitude': pos.get('longitude'),
                 'speed': pos.get('speed'),
-                'timestamp': datetime.fromtimestamp(pos.get('fixTime') // 1000, tz=timezone.utc) if pos.get('fixTime') else False,
+                'timestamp': datetime.fromtimestamp(int(float(pos.get('fixTime'))) // 1000, tz=timezone.utc) if pos.get('fixTime') else False,
                 'address': pos.get('address', ''),
             })
