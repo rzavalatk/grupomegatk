@@ -1,5 +1,6 @@
 import datetime
 from odoo import models, fields, api
+from datetime import datetime, timezone
 import requests
 import logging
 
@@ -33,12 +34,23 @@ class GpsDeviceLocation(models.Model):
         for pos in positions:
             _logger.warning(f"Posicion: {pos}")
 
+        # for pos in positions:
+        #     self.create({
+        #         'device_id': pos.get('deviceId'),
+        #         'latitude': pos.get('latitude'),
+        #         'longitude': pos.get('longitude'),
+        #         'speed': pos.get('speed'),
+        #         'timestamp': datetime.fromtimestamp(pos.get('fixTime') // 1000, tz=timezone.utc) else False,
+        #         'address': pos.get('address', ''),
+        #     })
+        # from datetime import datetime, timezone
+
         for pos in positions:
             self.create({
                 'device_id': pos.get('deviceId'),
                 'latitude': pos.get('latitude'),
                 'longitude': pos.get('longitude'),
                 'speed': pos.get('speed'),
-                'timestamp': datetime.utcfromtimestamp(pos.get('fixTime') // 1000) if pos.get('fixTime') else False,
+                'timestamp': datetime.fromtimestamp(pos.get('fixTime') // 1000, tz=timezone.utc) if pos.get('fixTime') else False,
                 'address': pos.get('address', ''),
             })
