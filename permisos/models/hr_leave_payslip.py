@@ -2,8 +2,7 @@
 from datetime import datetime, timedelta, time
 from odoo import api, fields, models, tools, _
 import logging
-import pytz
-from pytz import timezone, utc
+from pytz import pytz, timezone, utc
 
 
 # obtenemos la zona horaria de Honduras
@@ -15,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class LeaveRuleInput(models.Model):
     _inherit = 'hr.payslip'
     
-    """def get_inputs(self, contract_ids, date_from, date_to):
+    def get_inputs(self, contract_ids, date_from, date_to):
         
         res = super(LeaveRuleInput, self).get_inputs(contract_ids, date_from, date_to)
         contract_obj = self.env['hr.contract']
@@ -63,4 +62,3 @@ class LeaveRuleInput(models.Model):
                                 result['amount'] += leave[0].holiday_id.number_of_days_display * costo_dia
                         
         return res
-                """
