@@ -1,1 +1,1 @@
-from . import gps_device_location
+from . import gps_device_location, gps_device_trip  
