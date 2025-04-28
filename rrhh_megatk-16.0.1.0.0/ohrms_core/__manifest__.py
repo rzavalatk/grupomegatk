@@ -29,7 +29,6 @@
         'ohrms_loan_accounting',
         'ohrms_salary_advance',
         'hr_reward_warning',
-        'hrms_dashboard',
         'hr_reminder'
     ],
     "external_dependencies": {"python": ["pandas"]},
