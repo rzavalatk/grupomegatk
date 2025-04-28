@@ -1,6 +1,7 @@
 import datetime
 from odoo import models, fields, api
 from datetime import datetime, timezone
+from dateutil.parser import isoparse
 import requests
 import logging
 
@@ -45,12 +46,28 @@ class GpsDeviceLocation(models.Model):
         #     })
         # from datetime import datetime, timezone
 
+
         for pos in positions:
+            fix_time = pos.get('fixTime')
+            t_stamp = False
+            if fix_time:
+                if isinstance(fix_time, (int, float)):
+                    # Si es numérico (timestamp en milisegundos)
+                    t_stamp = datetime.fromtimestamp(float(fix_time)/1000, tz=timezone.utc)
+                elif isinstance(fix_time, str):
+                    # Si es string en formato ISO
+                    t_stamp = isoparse(fix_time)
+                    # Asegurar que esté en UTC
+                    if t_stamp.tzinfo is None:
+                        t_stamp = t_stamp.replace(tzinfo=timezone.utc)
+                    else:
+                        t_stamp = t_stamp.astimezone(timezone.utc)
+            
             self.create({
                 'device_id': pos.get('deviceId'),
                 'latitude': pos.get('latitude'),
                 'longitude': pos.get('longitude'),
                 'speed': pos.get('speed'),
-                'timestamp': datetime.fromtimestamp(int(float(pos.get('fixTime'))) // 1000, tz=timezone.utc) if pos.get('fixTime') else False,
+                'timestamp': t_stamp,
                 'address': pos.get('address', ''),
             })
