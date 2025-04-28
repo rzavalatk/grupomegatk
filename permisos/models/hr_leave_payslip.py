@@ -19,7 +19,7 @@ class LeaveRuleInput(models.Model):
         """This Compute the other inputs to employee payslip.
                            """
         res = super(LeaveRuleInput, self).get_inputs(contract_ids, date_from, date_to)
-        """contract_obj = self.env['hr.contract']
+        contract_obj = self.env['hr.contract']
         contract_id = contract_obj.browse(contract_ids[0].id)
         emp_id = contract_obj.browse(contract_ids[0].id).employee_id
         
@@ -61,26 +61,7 @@ class LeaveRuleInput(models.Model):
                             if leave[0].holiday_id.number_of_hours_display:
                                 result['amount'] += leave[0].holiday_id.number_of_hours_display * costo_hora
                             else:
-                                result['amount'] += leave[0].holiday_id.number_of_days_display * costo_dia"""
+                                result['amount'] += leave[0].holiday_id.number_of_days_display * costo_dia
                         
         return res
                 
-                
-    
-        
-        
-        
-        attendances = self.env['hr.attendance'].search([('employee_id', '=', emp_id.id),('check_in', '>=', date_from),('check_out', '<=', date_to)])
-        for attendance in attendances:
-            check_in_utc6 = attendance.check_in.astimezone(honduras_tz)
-            check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
-            in_date = check_in_utc6.date()
-            out_date = check_out_utc6.date()
-            if in_date >= date_from and out_date <= date_to:
-                in_time = check_in_utc6.time()
-                out_time = check_out_utc6.time()
-                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
-                for result in res:
-                    if result.get('code') == 'DED_LLT':
-                        result['amount'] += amount
-        return res
