@@ -17,7 +17,7 @@ class GpsDeviceLocation(models.Model):
     address = fields.Char('Dirección')
     
     @api.model
-    def fetch_traccar_positions(self):
+    def fetch_traccar_positions(self, cr=None, uid=None, context=None):
         # Configura tu IP, usuario y contraseña de Traccar
         traccar_url = 'http://18.222.109.183:8082/api/positions'
         auth = ('areyes@megatk.com', 'admin')  # Cambiar por tus credenciales reales
