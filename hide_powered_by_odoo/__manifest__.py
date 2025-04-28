@@ -6,11 +6,7 @@
     'version': '15.0.1.0.0',
     'sequence': 1,
     'summary': """
-        Hide Powered By Odoo login screen, Remove Powered By Odoo Login Page, Web Responsive login, Odoo Web Login Page, 
-        Web backend login, Odoo login, Hide Powered By Odoo login screen, Remove Odoo, Sign-up Odoo, SignUp Form Login, 
-        Hide Powered By Odoo SignIn screen, Remove Powered By Odoo SignUp Page, Web Responsive SignIn, Odoo Web SignIn Page, 
-        Web backend SignIn, Remove Odoo SignUp Page, Odoo SignIn Page, Odoo Authentication Screen, Customize Login Page, 
-        Hide Odoo, Disable Powered By Odoo in Login Page, Disable Odoo Powered By Login, Web Odoo Login Page Odoo Page Login,
+        Hide Powered By Odoo login screen
     """,
     'description': "Hide Powered By Odoo in login screen.",
     'author': 'Innoway',

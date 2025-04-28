@@ -1,6 +1,6 @@
 {
     'name': 'Control de Visitas',
-    'version': '1.0',
+    'version': '1.2',
     'description': 'Modulo para controlar visitas a las diferentes sucursales',
     'summary': 'Modulo para controlar visitas',
     'author': 'Alexander Reyes',
