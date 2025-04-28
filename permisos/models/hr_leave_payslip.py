@@ -28,7 +28,7 @@ class LeaveRuleInput(models.Model):
         day_to = datetime.combine(fields.Date.from_string(date_to),
                                     time.max)
         
-        day_leave_intervals = []
+        """day_leave_intervals = []
 
         # compute leave days
         leaves = {}
@@ -63,7 +63,7 @@ class LeaveRuleInput(models.Model):
                             else:
                                 result['amount'] += leave[0].holiday_id.number_of_days_display * costo_dia
                         
-        return res
+        return res"""
                 
                 
     
