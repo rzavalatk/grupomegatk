@@ -282,19 +282,13 @@ class HrPayslip(models.Model):
                                                     ('request_date_from','>=',self.date_from),
                                                     ('request_date_to','<=',self.date_to),
                                                     ])
-            
-            _logger.warning(permisos)
-            
             day_leave_intervals = contract.employee_id.list_leaves(day_from,
                                                                    day_to,
                                                                    calendar=contract.resource_calendar_id)
-            _logger.warning("ds---**----sd")
-            _logger.warning(day_leave_intervals)
+           
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
-                logging.warning("-*-")
-                logging.warning(leave[0].holiday_id.holiday_status_id)
                 work_hours = calendar.get_work_hours_count(
                     tz.localize(datetime.combine(day, time.min)),
                     tz.localize(datetime.combine(day, time.max)),
@@ -305,6 +299,7 @@ class HrPayslip(models.Model):
                         if each.id:
                             multi_leaves.append(each.holiday_id)
                 else:
+                    _logger.warning('leave: %s', leave[0])
                     holiday = leave[0].holiday_id
                     current_leave_struct = leaves.setdefault(
                         holiday.holiday_status_id, {
