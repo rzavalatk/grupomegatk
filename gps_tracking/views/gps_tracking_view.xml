@@ -31,7 +31,7 @@
     <menuitem id="menu_gps_device_location_root"
               name="GPS"
               sequence="10"
-              web_icon="localizacion,static/description/localizar.png"/>
+              web_icon="gps_tracking,static/description/localizar.png"/>
 
     <menuitem id="menu_gps_device_location"
               name="Ubicaciones GPS"
