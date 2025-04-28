@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_relationship" model="hr.employee.relation">
+            <field name="name">Esposo/Esposa</field>
+    </record>
+
+    <record id="employee_relationship_father" model="hr.employee.relation">
+            <field name="name">Padre</field>
+    </record>
+
+    <record id="employee_relationship_mother" model="hr.employee.relation">
+            <field name="name">Madre</field>
+    </record>
+</odoo>

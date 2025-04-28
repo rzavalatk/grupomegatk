@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!--Adding a salary rule for loan-->
+	<data noupdate="0">
+
+		<record id="hr_rule_attendance" model="hr.salary.rule">
+            <field name="code">DED_LLT</field>
+            <field name="name">Deducción por llegada tarde</field>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
+            <!--<field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.LO and - (inputs.LO.amount)</field>-->
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="sequence" eval="190"/>
+            <field name="rule_base">1</field>
+            <field name="active">1</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_fix">0.00</field>
+        </record>
+
+        <record id="hr_rule_input_attendance" model="hr.rule.input">
+            <field name="code">DED_LLT</field>
+            <field name="name">Llegadas tardes</field>
+            <field name="input_id" ref="hr_rule_attendance"/>
+        </record>
+
+	</data>
+</odoo>
