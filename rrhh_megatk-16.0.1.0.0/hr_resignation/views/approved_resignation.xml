@@ -13,12 +13,12 @@
             </field>
         </record>
 
-        <!--<menuitem id="employee_resignation_approved"
+        <menuitem id="employee_resignation_approved"
                   parent="employee_resignation"
                   name="Renuncia Aprobada"
                   action="view_approved_resignation"
                   groups="hr.group_hr_user"
-                  sequence="4"/>-->
+                  sequence="4"/>
     </data>
 </odoo>
 
