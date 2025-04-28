@@ -10,7 +10,8 @@ _logger = logging.getLogger(__name__)
 class GpsDeviceLocation(models.Model):
     _name = 'gps.device.location'
     _description = 'Ubicación del Dispositivo GPS'
-
+    
+    trip_id = fields.Many2one('gps.device.trip', 'Viaje')
     device_id = fields.Char('ID del Dispositivo')
     latitude = fields.Char('Latitud')
     longitude = fields.Char('Longitud')

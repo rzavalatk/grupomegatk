@@ -1,0 +1,58 @@
+<odoo>
+    <record id="view_gps_device_trip_tree" model="ir.ui.view">
+        <field name="name">gps.device.trip.tree</field>
+        <field name="model">gps.device.trip</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_gps_device_trip_form" model="ir.ui.view">
+        <field name="name">gps.device.trip.form</field>
+        <field name="model">gps.device.trip</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary"/>
+                    <button name="finish_trip" type="object" string="Finalizar Viaje" class="btn-danger" attrs="{'invisible': [('state', '=', 'finished')]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="device_id"/>
+                        <field name="start_time"/>
+                        <field name="end_time"/>
+                        <field name="state"/>
+                    </group>
+                    <notebook>
+                        <page string="Ubicaciones">
+                            <field name="location_ids">
+                                <tree>
+                                    <field name="timestamp"/>
+                                    <field name="latitude"/>
+                                    <field name="longitude"/>
+                                    <field name="speed"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gps_device_trip" model="ir.actions.act_window">
+        <field name="name">Viajes GPS</field>
+        <field name="res_model">gps.device.trip</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_gps_device_trip_root" name="GPS" sequence="10"/>
+    <menuitem id="menu_gps_device_trip" name="Viajes GPS" parent="menu_gps_device_trip_root" action="action_gps_device_trip" sequence="1"/>
+</odoo>

@@ -12,8 +12,10 @@
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'views/gps_tracking_trip_view.xml',
         'views/gps_tracking_view.xml',
         'views/gps_tracking_main_menu.xml',
+        'data/cron.xml',
     ],
     
     'auto_install': False,
