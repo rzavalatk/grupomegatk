@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_gps_tracking,access_gps_tracking,model_gps_tracking,manager_tracking,1,1,1,1
+access_gps_device_location,access_gps_device_location,model_gps_device_location,manager_tracking,1,1,1,1
