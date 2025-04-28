@@ -64,7 +64,7 @@
         </field>
     </record>
 
-    <!--<menuitem name="Recordatorios" id="hr_reminder_menu"
+    <menuitem name="Recordatorios" id="hr_reminder_menu"
               parent="hrms_dashboard.menu_hrms_dashboard"
-              action="action_hr_reminder" sequence="8" groups="base.group_user"/>-->
+              action="action_hr_reminder" sequence="8" groups="base.group_user"/>
 </odoo>
