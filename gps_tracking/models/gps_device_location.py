@@ -3,7 +3,7 @@ from odoo import models, fields, api
 import requests
 import logging
 
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 class GpsDeviceLocation(models.Model):
     _name = 'gps.device.location'
@@ -29,9 +29,9 @@ class GpsDeviceLocation(models.Model):
             raise Exception(f"Error al conectar con Traccar: {e}")
 
         positions = response.json()
-        
+        _logger.info(f"Posiciones: {positions}")
         for pos in positions:
-            logger.info(f"Posicion: {pos}")
+            _logger.info(f"Posicion: {pos}")
 
         # for pos in positions:
         #     self.create({
