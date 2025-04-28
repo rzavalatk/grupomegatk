@@ -12,8 +12,8 @@ class GpsDeviceLocation(models.Model):
     _description = 'Ubicación del Dispositivo GPS'
 
     device_id = fields.Char('ID del Dispositivo')
-    latitude = fields.Float('Latitud')
-    longitude = fields.Float('Longitud')
+    latitude = fields.Char('Latitud')
+    longitude = fields.Char('Longitud')
     speed = fields.Float('Velocidad')
     timestamp = fields.Datetime('Fecha y Hora')
     address = fields.Char('Dirección')

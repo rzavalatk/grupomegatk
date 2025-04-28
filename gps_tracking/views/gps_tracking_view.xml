@@ -27,15 +27,4 @@
         <field name="res_model">gps.device.location</field>
         <field name="view_mode">tree,form</field>
     </record>
-
-    <menuitem id="menu_gps_device_location_root"
-              name="GPS"
-              sequence="10"
-              web_icon="gps_tracking,static/description/localizar.png"/>
-
-    <menuitem id="menu_gps_device_location"
-              name="Ubicaciones GPS"
-              parent="menu_gps_device_location_root"
-              action="action_gps_device_location"
-              sequence="1"/>
 </odoo>
