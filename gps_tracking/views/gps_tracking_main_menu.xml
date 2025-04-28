@@ -7,7 +7,7 @@
 
     <menuitem id="menu_gps_device_trip" 
         name="Viajes GPS" 
-        parent="menu_gps_device_trip_root" 
+        parent="menu_gps_device_root" 
         action="action_gps_device_trip" 
         sequence="1"/>
 
