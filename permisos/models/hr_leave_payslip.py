@@ -55,9 +55,14 @@ class LeaveRuleInput(models.Model):
                     for result in res:
                         costo_dia = contract_id.wage/30
                         costo_hora = contract_id.wage/8
+                        _logger.warning('Numero de dias y horas: %s , %s', leave[0].holiday_id.number_of_days_display, leave[0].holiday_id.number_of_hours_display)
                         
-                        """if result.get('code') == 'DED_LLT':
-                            result['amount'] += amount"""
+                        if result.get('code') == 'DED_PRM':
+                            if leave[0].holiday_id.number_of_hours_display:
+                                result['amount'] += leave[0].holiday_id.number_of_hours_display * costo_hora
+                            else:
+                                result['amount'] += leave[0].holiday_id.number_of_days_display * costo_dia
+                        
         return res
                 
                 

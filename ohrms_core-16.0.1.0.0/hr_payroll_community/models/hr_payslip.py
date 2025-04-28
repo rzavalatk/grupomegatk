@@ -299,7 +299,7 @@ class HrPayslip(models.Model):
                         if each.id:
                             multi_leaves.append(each.holiday_id)
                 else:
-                    _logger.warning('Numero de dias y horas: %s , %s', leave[0].holiday_id.number_of_days_display, leave[0].holiday_id.number_of_hours_display)
+                    
                     holiday = leave[0].holiday_id
                     current_leave_struct = leaves.setdefault(
                         holiday.holiday_status_id, {
