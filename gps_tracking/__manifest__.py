@@ -10,6 +10,8 @@
         'base',
     ],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/gps_tracking_view.xml',
     ],
     
