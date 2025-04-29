@@ -59,6 +59,8 @@ class GpsDeviceTrip(models.Model):
 
                 for pos in positions:
                     traccar_device_id = str(pos.get('deviceId'))
+                    _logger.warning(f"traccar_device_id: {traccar_device_id}")
+                    _logger.warning(f"trip.device_id: {trip.device_id}")
                     if traccar_device_id == trip.device_id:
 
                         # Crear una nueva ubicación
