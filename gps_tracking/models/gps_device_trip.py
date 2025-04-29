@@ -17,7 +17,7 @@ class GpsDeviceTrip(models.Model):
     state = fields.Selection([
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
-    ], default='ongoing', string='Estado')
+    ], default='ongoing')
 
     @api.model
     def start_trip(self, device_id):
@@ -34,7 +34,7 @@ class GpsDeviceTrip(models.Model):
         """Finalizar un viaje"""
         for trip in self:
             trip.end_time = fields.Datetime.now()
-            trip.state = 'finished'
+            trip.state.write('finished')
             
     def fetch_device_positions(self):
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
