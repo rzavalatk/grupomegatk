@@ -58,18 +58,18 @@ class GpsDeviceTrip(models.Model):
                 positions = response.json()
 
                 for pos in positions:
-                    if str(pos.get('deviceId')) != trip.device_id:
-                        continue
+                    traccar_device_id = str(pos.get('deviceId'))
+                    if traccar_device_id == trip.device_id:
 
-                    # Crear una nueva ubicación
-                    self.env['gps.device.location'].create({
-                        'trip_id': trip.id,
-                        'device_id': str(pos.get('deviceId')),
-                        'latitude': pos.get('latitude'),
-                        'longitude': pos.get('longitude'),
-                        'speed': pos.get('speed', 0.0),
-                        'timestamp': fields.Datetime.from_string(pos.get('deviceTime')),
-                        'address': pos.get('address', ''),
-                    })
+                        # Crear una nueva ubicación
+                        self.env['gps.device.location'].create({
+                            'trip_id': trip.id,
+                            'device_id': str(pos.get('deviceId')),
+                            'latitude': pos.get('latitude'),
+                            'longitude': pos.get('longitude'),
+                            'speed': pos.get('speed', 0.0),
+                            'timestamp': fields.Datetime.from_string(pos.get('deviceTime')),
+                            'address': pos.get('address', ''),
+                        })
             else:
                 _logger.error(f"Error al conectar a Traccar: {response.status_code}")
