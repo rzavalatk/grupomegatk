@@ -16,6 +16,7 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     state = fields.Selection([
+        ('new','Nuevo'),
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='ongoing')
@@ -27,15 +28,15 @@ class GpsDeviceTrip(models.Model):
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
             'start_time': fields.Datetime.now(),
-            'state': 'ongoing',
         })
+        self.write({'state': 'ongoing'})
         return trip
 
     def finish_trip(self):
         """Finalizar un viaje"""
         for trip in self:
             trip.end_time = fields.Datetime.now()
-            trip.state.write('finished')
+            self.write('finished')
             
     def fetch_device_positions(self):
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""

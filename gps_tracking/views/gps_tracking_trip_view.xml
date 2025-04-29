@@ -21,6 +21,7 @@
                 <header>
                     <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary"/>
                     <button name="finish_trip" type="object" string="Finalizar Viaje" class="btn-danger" attrs="{'invisible': [('state', '=', 'finished')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new, ongoing, finished"/>
                 </header>
                 <sheet>
                     <group>
