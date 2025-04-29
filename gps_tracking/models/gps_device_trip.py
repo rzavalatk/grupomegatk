@@ -38,7 +38,8 @@ class GpsDeviceTrip(models.Model):
             
     def fetch_device_positions(self):
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
-        traccar_url = 'http://18.222.109.183:8082/api/positions'
+        traccar_url_positions = 'http://18.222.109.183:8082/api/positions'
+        traccar_url_devices = 'http://18.222.109.183:8082/api/devices'
         username = 'areyes@megatk.com'
         password = 'admin'
 
@@ -53,15 +54,21 @@ class GpsDeviceTrip(models.Model):
                 continue
 
             # Llamada al API de Traccar
-            response = requests.get(traccar_url, auth=auth, headers=headers)
-            if response.status_code == 200:
-                positions = response.json()
+            response_pos = requests.get(traccar_url_positions, auth=auth, headers=headers)
+            response_dev = requests.get(traccar_url_devices, auth=auth, headers=headers)
+            if response_pos.status_code == 200 and response_dev.status_code == 200:
+                positions = response_pos.json()
+                devices = response_dev.json()
+                dev_id = ''
+                
+                for dev in devices:
+                    traccar_unique_id = str(dev.get('uniqueId'))
+                    if traccar_unique_id == trip.device_id:
+                        dev_id = str(dev.get('id'))
+                        break
 
                 for pos in positions:
-                    traccar_device_id = str(pos.get('deviceId'))
-                    _logger.warning(f"traccar_device_id: {traccar_device_id}")
-                    _logger.warning(f"trip.device_id: {trip.device_id}")
-                    if traccar_device_id == trip.device_id:
+                    if dev_id == trip.device_id:
 
                         # Crear una nueva ubicación
                         self.env['gps.device.location'].create({
