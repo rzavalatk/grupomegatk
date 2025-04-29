@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import datetime
+from dateutil.parser import isoparse
 import requests
 import logging
 
@@ -73,17 +74,30 @@ class GpsDeviceTrip(models.Model):
 
                 for pos in positions:
                     traccar_device_id = str(pos.get('deviceId'))
-                    if dev_id == traccar_device_id:
-                        
-                        # Crear una nueva ubicación
-                        self.env['gps.device.location'].create({
-                            'trip_id': trip.id,
-                            'device_id': traccar_unique_id,
-                            'latitude': pos.get('latitude'),
-                            'longitude': pos.get('longitude'),
-                            'speed': pos.get('speed', 0.0),
-                            'timestamp': fields.Datetime.from_string(pos.get('deviceTime')),
-                            'address': pos.get('address', ''),
-                        })
+                    
+                    try:
+                        device_time = pos.get('deviceTime')
+                        timestamp = False
+            
+                        if device_time:
+                            # Parsear el formato ISO
+                            dt = isoparse(device_time)
+                            # Convertir a formato Odoo
+                            timestamp = fields.Datetime.to_string(dt)
+                    
+                        if dev_id == traccar_device_id:
+                            
+                            # Crear una nueva ubicación
+                            self.env['gps.device.location'].create({
+                                'trip_id': trip.id,
+                                'device_id': traccar_unique_id,
+                                'latitude': pos.get('latitude'),
+                                'longitude': pos.get('longitude'),
+                                'speed': pos.get('speed', 0.0),
+                                'timestamp': timestamp,
+                                'address': pos.get('address', ''),
+                            })
+                    except Exception as e:
+                        _logger.error(f"Error al crear la ubicación: {e}")
             else:
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
