@@ -63,17 +63,22 @@ class GpsDeviceTrip(models.Model):
                 
                 for dev in devices:
                     traccar_unique_id = str(dev.get('uniqueId'))
+                    _logger.warning(f"Traccar Unique ID: {traccar_unique_id}")
                     if traccar_unique_id == trip.device_id:
+                        _logger.warning(f"Traccar Unique ID: {traccar_unique_id}")
+                        _logger.warning(f"Odoo Device ID: {trip.device_id}")
                         dev_id = str(dev.get('id'))
+                        _logger.warning(f"Traccar Device ID: {dev_id}")
                         break
 
                 for pos in positions:
-                    if dev_id == trip.device_id:
-
+                    traccar_device_id = str(pos.get('deviceId'))
+                    if dev_id == traccar_device_id:
+                        
                         # Crear una nueva ubicación
                         self.env['gps.device.location'].create({
                             'trip_id': trip.id,
-                            'device_id': str(pos.get('deviceId')),
+                            'device_id': traccar_unique_id,
                             'latitude': pos.get('latitude'),
                             'longitude': pos.get('longitude'),
                             'speed': pos.get('speed', 0.0),
@@ -81,4 +86,4 @@ class GpsDeviceTrip(models.Model):
                             'address': pos.get('address', ''),
                         })
             else:
-                _logger.error(f"Error al conectar a Traccar: {response.status_code}")
+                _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
