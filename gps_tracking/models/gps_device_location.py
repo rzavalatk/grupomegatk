@@ -16,7 +16,8 @@ class GpsDeviceLocation(models.Model):
     latitude = fields.Char('Latitud')
     longitude = fields.Char('Longitud')
     speed = fields.Float('Velocidad')
-    timestamp = fields.Datetime('Fecha y Hora')
+    timestamp = fields.Datetime('Fecha')
+    fetched_at = fields.Datetime('Hora de Consulta', default=fields.Datetime.now)
     address = fields.Char('Dirección')
     
     @api.model
@@ -36,18 +37,6 @@ class GpsDeviceLocation(models.Model):
         for pos in positions:
             _logger.warning(f"Posicion: {pos}")
 
-        # for pos in positions:
-        #     self.create({
-        #         'device_id': pos.get('deviceId'),
-        #         'latitude': pos.get('latitude'),
-        #         'longitude': pos.get('longitude'),
-        #         'speed': pos.get('speed'),
-        #         'timestamp': datetime.fromtimestamp(pos.get('fixTime') // 1000, tz=timezone.utc) else False,
-        #         'address': pos.get('address', ''),
-        #     })
-        # from datetime import datetime, timezone
-
-
         for pos in positions:
             fix_time = pos.get('fixTime')
             t_stamp = False
@@ -66,5 +55,6 @@ class GpsDeviceLocation(models.Model):
                 'longitude': pos.get('longitude'),
                 'speed': pos.get('speed'),
                 'timestamp': t_stamp,
+                'fetched_at': fields.Datetime.now(),
                 'address': pos.get('address', ''),
             })
