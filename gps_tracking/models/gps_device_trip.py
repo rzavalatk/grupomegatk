@@ -36,8 +36,9 @@ class GpsDeviceTrip(models.Model):
         """Finalizar un viaje"""
         for trip in self:
             trip.end_time = fields.Datetime.now()
-            self.write('finished')
             
+        self.write({'state': 'finished'})
+        
     def fetch_device_positions(self):
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
         traccar_url_positions = 'http://18.222.109.183:8082/api/positions'
