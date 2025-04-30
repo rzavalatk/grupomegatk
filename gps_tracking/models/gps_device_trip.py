@@ -104,3 +104,5 @@ class GpsDeviceTrip(models.Model):
                         _logger.error(f"Error al crear la ubicación: {e}")
             else:
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
+            
+            return True
