@@ -36,6 +36,7 @@ class GpsDeviceTrip(models.Model):
         """Finalizar un viaje"""
         for trip in self:
             trip.end_time = fields.Datetime.now()
+            _logger.warning(trip.end_time)
             
         self.write({'state': 'finished'})
         
