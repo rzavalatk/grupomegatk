@@ -15,7 +15,7 @@
     'category': 'Human Resources',
     'version': '0.1',
 
-    'depends': ['base','hr'],
+    'depends': ['base','hr', 'hr_holidays'],
 
     'data': [
         "security/groups.xml",
