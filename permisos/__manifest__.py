@@ -30,6 +30,10 @@
         'views/hr_leave_type_view.xml',
         
     ],
-    
+    'assets': {
+        'web.assets_backend': [
+            '/permisos/static/src/xml/templates_timeoff.xml',
+        ],
+    },
 
 }
