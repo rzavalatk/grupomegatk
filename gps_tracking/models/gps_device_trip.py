@@ -16,7 +16,6 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     state = fields.Selection([
-        ('new','Nuevo'),
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='ongoing')

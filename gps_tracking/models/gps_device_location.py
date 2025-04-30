@@ -19,6 +19,7 @@ class GpsDeviceLocation(models.Model):
     fetched_at = fields.Datetime('Hora de Consulta', default=fields.Datetime.now)
     address = fields.Char('Dirección')
     map_url = fields.Char(string="Ver en Google Maps", compute="_compute_map_url", store=False)
+    map_btn = fields.Html(string="Ver en Mapa", compute="_compute_map_btn", store=False)
     
     @api.model
     def fetch_traccar_positions(self, cr=None, uid=None, context=None):
@@ -64,3 +65,17 @@ class GpsDeviceLocation(models.Model):
                 record.map_url = f"https://www.google.com/maps?q={record.latitude},{record.longitude}"
             else:
                 record.map_url = ""
+                
+    def _compute_map_btn(self):
+        for record in self:
+            if record.map_url:
+                record.map_btn = f"""
+                    <a href="{record.map_url}" target="_blank"
+                    style="text-decoration: none;">
+                        <span style="color: #007bff; cursor:pointer;">
+                            Ver en Mapa
+                        </span>
+                    </a>
+                """
+            else:
+                record.map_btn = "-"
