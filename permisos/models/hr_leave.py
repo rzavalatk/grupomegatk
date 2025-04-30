@@ -12,9 +12,9 @@ class HrLeave(models.Model):
     _inherit = "hr.leave"
     _description = "Permisos Generales"
 
-    #hora = fields.Time(string='Hora')
-    datetm_from = fields.Time(string='Hora inicio')
-    datetm_to = fields.Time(string='Hora final')
+    
+    datetm_from = fields.Datetime('datetm_from')
+    datetm_to = fields.Datetime('datetm_to')
     cubierto_employee_id = fields.Many2one(
         'hr.employee', string='Ausencia cubierta', copy=False,)
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
