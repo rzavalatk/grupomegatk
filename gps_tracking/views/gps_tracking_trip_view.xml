@@ -41,7 +41,7 @@
                                     <field name="timestamp" readonly='1'/>
                                     <field name="latitude" readonly='1'/>
                                     <field name="longitude" readonly='1'/>
-                                    <field name="google_maps_url" widget="url" readonly='1'/>
+                                    <field name="maps_url" widget="url" readonly='1'/>
                                 </tree>
                             </field>
                         </page>
