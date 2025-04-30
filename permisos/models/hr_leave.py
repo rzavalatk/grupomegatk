@@ -24,6 +24,10 @@ class HrLeave(models.Model):
     horas = fields.Integer(string='Horas', default=0)
     minutos = fields.Integer(string='Minutos', default=0)
     
+    dias_empleado = fields.Integer(string='Días (Empleado)', related='employee_id.permisos_dias', store=False)
+    horas_empleado = fields.Integer(string='Horas (Empleado)', related='employee_id.permisos_horas', store=False)
+    minutos_empleado = fields.Integer(string='Minutos (Empleado)', related='employee_id.permisos_minutos', store=False)
+    
     entrada = time(7, 0, 0)
     medio_dia = time(12, 0, 0)
     tarde = time(13, 0, 0)

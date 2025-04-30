@@ -12,13 +12,18 @@
           </xpath>
 
           <xpath expr="//field[@name='supported_attachment_ids']" position="after">
+            
             <field name="justificacion"/>
             <field name="cubierto_employee_id" />
+
+            <group string="Vacaciones del Empleado">
+                <field name="dias_empleado" readonly="1"/>
+                <field name="horas_empleado" readonly="1"/>
+                <field name="minutos_empleado" readonly="1"/>
+            </group>
             <field name="dias" invisible="1"/>
             <field name="minutos" invisible="1"/>
             <field name="horas" invisible="1"/>
-
-
           </xpath>
           
           <xpath expr="//field[@name='request_date_from']" position="attributes">
