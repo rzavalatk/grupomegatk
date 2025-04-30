@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="hr_holidays.TimeOffCard" inherit_id="hr_holidays.TimeOffCard">
+    <template id="hr_holidays.TimeOffCard_inh" inherit_id="hr_holidays.TimeOffCard">
         <xpath expr="//div[@class='text-uppercase']" position="replace">
             <div class="text-uppercase">
                 <!-- Mostrar siempre Days, Hours y Minutes -->
