@@ -28,12 +28,13 @@
         'views/email_template.xml',
         'views/hr_leave_view.xml',
         'views/hr_leave_type_view.xml',
+        'views/templates_timeoff.xml',
         
     ],
-    'assets': {
-        'web.assets_backend': [
-            '/permisos/static/src/xml/templates_timeoff.xml',
-        ],
-    },
+    #'assets': {
+     #   'web.assets_backend': [
+     #       '/permisos/static/src/xml/templates_timeoff.xml',
+     #   ],
+    #},
 
 }
