@@ -68,8 +68,6 @@
                 </group>
                 <group string='Motivo'>
                   <field name="justificacion" placeholder='Justificación de Ausencia' attrs='{"readonly": [["state","!=","draft"]]}' nolabel="1"/>
-                  <field name="hora_prueba" widget="time"/>
-
                   
                 </group>
               </group>
@@ -148,8 +146,8 @@
       <!--<field name="function">True</field>
       <field name="priority" eval="5" />-->
       </record>
-    <!--<menuitem name="Permisos" id="hr_employe_permisos" sequence = "5" parent="hr.menu_hr_root" groups="permisos.permiso_admin"/>
+    <!--<menuitem name="Permisos" id="hr_employe_permisos" sequence = "5" parent="hr.menu_hr_root" groups="permisos.permiso_admin"/>-->
     <menuitem name="Permisos" id="hr_employe_permisos" sequence = "5" parent="hr.menu_hr_root"/>
-    <menuitem name="Permisos generales" id="hr_employe_permisos_general" sequence = "1" parent="hr_employe_permisos" action = "action_emplyee_permiso_general"/>-->
+    <menuitem name="Permisos generales" id="hr_employe_permisos_general" sequence = "1" parent="hr_employe_permisos" action = "action_emplyee_permiso_general"/>
   </data> 
 </odoo>
