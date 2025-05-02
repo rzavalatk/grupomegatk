@@ -20,7 +20,7 @@
             <form>
                 <header>
                     <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary" attrs="{'invisible': [('state', '=', 'finished')]}"/>
-                    <button name="action_start_trip" type="object" string="Iniciar Viaje" class="btn-primary" attrs="{'invisible': [('state', '=', 'ongoing')]}" />
+                    <button name="action_start_trip" type="object" string="Iniciar Viaje" class="btn-primary" attrs="{'invisible': [('state', '=', 'ongoing'),('state', '=', 'finished')]}" />
                     <button name="finish_trip" type="object" string="Finalizar Viaje" class="btn-danger" attrs="{'invisible': [('state', '=', 'finished')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="new, ongoing, finished"/>
                 </header>
