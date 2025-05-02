@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="hr_holidays.TimeOffCard_inh" inherit_id="hr_holidays.TimeOffCard">
+    <!--<template id="hr_holidays.TimeOffCard_inh" inherit_id="hr_holidays.TimeOffCard">
         <xpath expr="//div[@class='text-uppercase']" position="replace">
             <div class="text-uppercase">
-                <!-- Mostrar siempre Days, Hours y Minutes -->
+                 Mostrar siempre Days, Hours y Minutes -->
                 <!--<span>days, hours, minutes</span>-->
 
-                <!-- Puedes mostrar los valores directamente si los tienes -->
+                <!-- Puedes mostrar los valores directamente si los tienes 
                  <t t-esc="data.dias_empleado"/> días, <t t-esc="data.horas_empleado"/> horas, <t t-esc="data.minutos_empleado"/> minutos 
 
                 <t t-if="props.requires_allocation" name="duration_type">
@@ -26,5 +26,5 @@
                 </t>
             </div>
         </xpath>
-    </template>
+    </template>-->
 </odoo>
