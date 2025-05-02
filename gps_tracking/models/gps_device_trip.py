@@ -103,4 +103,4 @@ class GpsDeviceTrip(models.Model):
             else:
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
             
-            return True
+        return True
