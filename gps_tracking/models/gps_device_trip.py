@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 from datetime import datetime
 from dateutil.parser import isoparse
 import requests
@@ -19,15 +20,33 @@ class GpsDeviceTrip(models.Model):
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='ongoing')
+    
+    @api.model
+    def create(self, vals):
+        # Verificamos si se quiere crear el viaje directamente como 'ongoing'
+        if vals.get('state') == 'ongoing' and vals.get('device_id'):
+            existing_trip = self.search([
+                ('device_id', '=', vals['device_id']),
+                ('state', '=', 'ongoing')
+            ], limit=1)
+            if existing_trip:
+                raise ValidationError("Ya existe un viaje en curso para este dispositivo.")
+
+        return super(GpsDeviceTrip, self).create(vals)
 
     @api.model
     def start_trip(self, device_id):
         """Iniciar un nuevo viaje"""
+        viaje_encurso = self.search(['device_id','=',device_id],['state','=','ongoing'],limit=1)
+        if viaje_encurso:
+            raise ValidationError(f"Ya hay un viaje en curso para este dispositivo ({viaje_encurso.name})")
+        
         trip = self.create({
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
             'start_time': fields.Datetime.now(),
         })
+        
         self.write({'state': 'ongoing'})
         return trip
 
