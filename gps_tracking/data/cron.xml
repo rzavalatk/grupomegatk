@@ -9,7 +9,7 @@
         <field name="numbercall">-1</field>
         <field name="model_id" ref="gps_tracking.model_gps_device_trip"/>
         <field name="state">code</field>
-        <field name="code">model.fetch_device_positions()</field>
+        <field name="code">model.cron_fetch_positions()</field>
         <field eval="False" name="doall"/>
     </record>
 </odoo>

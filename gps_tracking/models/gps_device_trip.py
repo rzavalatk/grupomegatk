@@ -124,3 +124,8 @@ class GpsDeviceTrip(models.Model):
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
             
         return True
+    
+    def cron_fetch_positions(self):
+        viajes = self.search([('state','=','ongoing')])
+        _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
+        viajes.fetch_device_positions()
