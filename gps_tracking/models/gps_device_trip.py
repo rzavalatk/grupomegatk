@@ -46,6 +46,7 @@ class GpsDeviceTrip(models.Model):
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
             'start_time': fields.Datetime.now(),
+            'state': 'new'
         })
         
         self.write({'state': 'ongoing'})
