@@ -72,12 +72,14 @@ class HrLeave(models.Model):
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
+                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                     _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
                     
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
+                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                     self.env.user.notify_warning(
                         message='La fecha final debe ser mayor o igual a la inicial')
                     
@@ -86,6 +88,7 @@ class HrLeave(models.Model):
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
+                self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                 _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
                 
                 
