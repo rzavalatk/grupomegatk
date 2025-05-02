@@ -19,6 +19,7 @@ class HrLeave(models.Model):
         'hr.employee', string='Ausencia cubierta', copy=False,)
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
+    duracion_prm = fields.Text('Duración', copy=False,)
     justificacion = fields.Text('Motivo', copy=False,)
     dias = fields.Integer(string='Días', default=0)
     horas = fields.Integer(string='Horas', default=0)
@@ -50,8 +51,8 @@ class HrLeave(models.Model):
                         self.dias = permiso['D']
                         self.horas = permiso['H']
                         self.minutos = permiso['M']
-                        self.number_of_days = self.dias
-                        _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
+                        self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
+                        _logger.warning("Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos))
                         
             else:
                 self.dias = 0

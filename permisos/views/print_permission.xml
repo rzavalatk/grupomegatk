@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Plantilla del reporte -->
+    <template id="report_hr_employee_permission_view_new">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+            <t t-set="lang" t-value="doc.partner_id.lang"/>
+            <t t-call="permisos.report_hr_employee_permission" t-lang="lang"/>
+          </t>
+        </t>
+    </template>
+
+    <template id="report_hr_employee_permission" name="Formulario de Permiso">
+        <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
+            <t t-set="o" t-value="docs[0]"/>
+            <main>
+                <div style="font-family: calibri; font-size: 14px; margin: 0 1cm; padding: 0;">
+                    <!-- Encabezado simplificado -->
+                    <div style="text-align: center; margin-bottom: 15px; margin-top: 40px;">
+                        <h1 style="font-size: 16px; margin: 5px 0; text-transform: uppercase;">ÁREA DE RECURSOS HUMANOS</h1>
+                        <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">AUSENCIAS DE PERSONAL</h2>
+                    </div>
+                    <td style="font-size: 13px; margin: 5px 0 20px 0;"><strong> A LA GERENCIA DE RECURSOS HUMANOS INFORMO: </strong></td>
+                    
+                    <!-- Información del empleado -->
+                    <table style="width: 100%; margin-bottom: 10px; padding: 5px 0; ">
+                        
+                        <tr>
+                            
+                            <td style="width: 50%; margin: 5px 0 0 5px ; padding: 5px 0;">
+                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd"}'/>
+                                        el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
+                                <br/> quien se desempeña como:  <span t-field="o.employe_id.job_id.name"/> 
+                                en el area de <span t-field="o.employe_id.department_id.name"/>
+                                <div style="margin-bottom: 10px;">
+                                    <p style="margin: 5px 0; text-align: center;">No se presentó a laborar en la(s) siguiente(s) fecha(s):</p>
+                                    <p style="margin: 5px 0;">
+                                        <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                        <span t-if="o.fecha_fin and o.fecha_fin != o.fecha_inicio"> - 
+                                            <span t-field="o.fecha_fin" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                        </span>
+                                    </p>
+                                </div>
+                            </td>
+                            <!-- Fechas de ausencia -->
+                        </tr>
+                    </table>
+                    <!-- Opciones de cargo - Tabla más compacta -->
+                    <div style="margin-bottom: 10px;">
+                        <p style="margin: 10px 0; text-align: center;">Por tanto, autorizo para aplicar lo siguiente:</p>
+                        <table style="width: 100%; margin: 5px 0; border-collapse: collapse; border: 1px solid #000;">
+                            <tr>
+                                <td style="padding: 8px; text-align: left; vertical-align: middle;">
+                                    <!-- Opción 1 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'vaciones'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">CARGAR A VACACIONES</span>
+                                    </div>
+                                    
+                                    <!-- Opción 2 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'deduccion'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">DEDUCIR DEL SUELDO</span>
+                                    </div>
+                                    
+                                    <!-- Opción 3 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'sincargo'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">PERMISO SIN NINGÚN CARGO</span>
+                                    </div>
+                                    
+                                    <!-- Opción 4 -->
+                                    <div style="display: inline-block; vertical-align: middle;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.cargo == 'incapacidad'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">ADJUNTO INCAPACIDAD</span>
+                                    </div>
+                                    <div style="padding: 8px;">
+                                        <br/> <span style="">JUSTIFICACION DE LA ACCIÓN:</span> <span t-field="o.justificacion"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+
+                    <!-- Opciones de cargo - Tabla más compacta -->
+                    <div style="margin-bottom: 10px;">
+                        <p style="margin: 10px 0; text-align: center;">El empleado reportó su ausencia:</p>
+                        <table style="width: 100%; margin: 5px 0; border-collapse: collapse; border: 1px solid #000;">
+                            <tr>
+                                <td style="padding: 8px; text-align: left; vertical-align: middle;">
+                                    <!-- Opción 1 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.reporto == 'anticipado'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">CON ANTICIPACIÓN</span>
+                                    </div>
+                                    
+                                    <!-- Opción 2 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.reporto == 'llamada'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">POR TELÉFONO</span>
+                                    </div>
+                                    
+                                    <!-- Opción 3 -->
+                                    <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.reporto == 'mensaje'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">ENVIÓ MENSAJE</span>
+                                    </div>
+                                    
+                                    <!-- Opción 4 -->
+                                    <div style="display: inline-block; vertical-align: middle;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
+                                            <span t-if="o.reporto == 'noreporto'" >✓</span>
+                                        </div>
+                                        <span style="vertical-align: middle;">OTRO</span>
+                                    </div>
+                                    <div style="padding: 8px;">
+                                        <br/> <span style="">FECHA:</span> <span t-field="o.fecha_solicitud" t-field-options='{"format": "dd/MM/yyyy "}'/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- Firmas alineadas correctamente -->
+                    
+                        <table style="width: 100%; margin-top: 30px;">
+                        <tr>
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
+                                <p style="margin: 5px 0;">NOMBRE JEFE INMEDIATO</p>
+                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employe_id.parent_id.name"/></p>
+                            </td>
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
+                                <p style="margin: 5px 0;">NOMBRE EMPLEADO</p>
+                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employe_id.name"/></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center; padding-top: 10px; ">
+                                <p style="margin: 5px 0 50px 0">FIRMA JEFE INMEDIATO</p>
+                                <div style="margin: 10px auto; margin-top=20px; border-top: 1px solid #000; width: 80%; text-align: center; "></div>
+                            </td>
+                            <td style="width: 50%; text-align: center; padding-top: 10px;">
+                                <p style="margin: 5px 0 50px 0;">FIRMA EMPLEADO</p>
+                                <div style="margin: 10px auto; margin-top=20px; border-top: 1px solid #000; width: 80%; text-slign: center; "></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </main>
+        </t>
+    </template>
+
+   
+    <record id="paperformat_permiso" model="report.paperformat">
+        <field name="name">Formato Permiso</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>  <!-- Añade esta línea -->
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_spacing">5</field>
+    </record>
+
+    <record id="action_report_hr_employee_permission" model="ir.actions.report">
+        <field name="name">Formulario de Permiso</field>
+        <field name="model">hr.employee.permisos</field>
+        <field name="report_name">permisos.report_hr_employee_permission</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_file">permisos.report_hr_employee_permission</field>
+        <field name="binding_model_id" ref="model_hr_employee_permisos"/>
+        <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
+        <field name="paperformat_id" ref="paperformat_permiso"/>
+        <!-- <field name="groups_id" eval="[(4, ref('permiso_admin')), (4, ref('permiso_jefe')), (4, ref('permiso_user'))]"/> -->
+    </record>
+</odoo>
