@@ -20,7 +20,7 @@ class GpsDeviceTrip(models.Model):
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
-    ], default='ongoing')
+    ], default='new')
     
     @api.model
     def create(self, vals):
