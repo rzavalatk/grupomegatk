@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta, time
-from odoo import api, fields, models, tools, _
+from odoo import fields, models
+from datetime import datetime, time
 from pytz import timezone, utc
 
 import logging
