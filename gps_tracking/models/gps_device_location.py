@@ -1,5 +1,6 @@
 import datetime
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 from datetime import datetime, timezone
 from dateutil.parser import isoparse
 import requests
@@ -59,6 +60,21 @@ class GpsDeviceLocation(models.Model):
                 'address': pos.get('address', ''),
                 'map_url': self.map_url
             })
+            
+
+    @api.model
+    def create(self, vals):
+        device_id = vals.get('device_id')
+        if device_id:
+            ongoing_trip = self.search([
+                ('device_id', '=', device_id),
+                ('state', '=', 'ongoing')
+            ], limit=1)
+            if ongoing_trip:
+                raise ValidationError("Ya existe un viaje en curso para este dispositivo.")
+        return super(GpsDeviceLocation, self).create(vals)
+
+            
     def _compute_map_url(self):
         for record in self:
             if record.latitude and record.longitude:
