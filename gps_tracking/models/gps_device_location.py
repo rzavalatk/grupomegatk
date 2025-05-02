@@ -19,13 +19,13 @@ class GpsDeviceLocation(models.Model):
     fetched_at = fields.Datetime('Hora de Consulta', default=fields.Datetime.now)
     address = fields.Char('Dirección')
     map_url = fields.Char(string="Ver en Google Maps", compute="_compute_map_url", store=False)
-    map_btn = fields.Html(string="Ver en Mapa", compute="_compute_map_btn", store=False)
+    map_btn = fields.Html(string="Ver en Google Maps", compute="_compute_map_btn", store=False)
     
     @api.model
     def fetch_traccar_positions(self, cr=None, uid=None, context=None):
         # Configura tu IP, usuario y contraseña de Traccar
         traccar_url = 'http://18.222.109.183:8082/api/positions'
-        auth = ('areyes@megatk.com', 'admin')  # Cambiar por tus credenciales reales
+        auth = ('areyes@megatk.com', 'admin') 
 
         try:
             response = requests.get(traccar_url, auth=auth, timeout=10)

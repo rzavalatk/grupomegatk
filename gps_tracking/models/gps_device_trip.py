@@ -95,7 +95,6 @@ class GpsDeviceTrip(models.Model):
                                 'device_id': traccar_unique_id,
                                 'latitude': pos.get('latitude'),
                                 'longitude': pos.get('longitude'),
-                                'speed': pos.get('speed', 0.0),
                                 'timestamp': timestamp,
                                 'address': pos.get('address', ''),
                             })
