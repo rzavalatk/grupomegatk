@@ -40,6 +40,7 @@ class GpsDeviceTrip(models.Model):
         self.write({'state': 'finished'})
         
     def fetch_device_positions(self):
+        _logger.warning("entrooo")
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
         traccar_url_positions = 'http://18.222.109.183:8082/api/positions'
         traccar_url_devices = 'http://18.222.109.183:8082/api/devices'
