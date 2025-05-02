@@ -21,13 +21,13 @@ class HrLeave(models.Model):
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
     duracion_prm = fields.Text('Duración', copy=False,)
     justificacion = fields.Text('Motivo', copy=False,)
-    dias = fields.Integer(string='Días', default=0)
+    dias = fields.Integer(string='Días', default=1)
     horas = fields.Integer(string='Horas', default=0)
     minutos = fields.Integer(string='Minutos', default=0)
     
-    dias_empleado = fields.Integer(string='Días (Empleado)', related='employee_id.permisos_dias', store=False)
-    horas_empleado = fields.Integer(string='Horas (Empleado)', related='employee_id.permisos_horas', store=False)
-    minutos_empleado = fields.Integer(string='Minutos (Empleado)', related='employee_id.permisos_minutos', store=False)
+    dias_empleado = fields.Integer(string='Dias de vacaciones disponibles', related='employee_id.permisos_dias', store=False)
+    horas_empleado = fields.Integer(string='Horas de vacaciones disponibles', related='employee_id.permisos_horas', store=False)
+    minutos_empleado = fields.Integer(string='Minutos de vacaciones disponibles', related='employee_id.permisos_minutos', store=False)
     
     entrada = time(7, 0, 0)
     medio_dia = time(12, 0, 0)
