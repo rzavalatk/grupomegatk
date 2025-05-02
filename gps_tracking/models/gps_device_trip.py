@@ -17,6 +17,7 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     state = fields.Selection([
+        ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='ongoing')
@@ -49,6 +50,23 @@ class GpsDeviceTrip(models.Model):
         
         self.write({'state': 'ongoing'})
         return trip
+    
+    def action_start_trip(self):
+        for trip in self:
+            existing = self.search([
+                ('device_id','=',trip.device_id),
+                ('state','=','ongoing'),
+                ('id','!=',trip.id),
+                ], limit=1)
+            
+            if existing:
+                raise ValidationError(f"Ya hay un viaje en curso para este dispositivo")
+            
+            trip.write({
+                'name': f'Viaje {trip.device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
+                'start_time': fields.Datetime.now(),
+                'state': 'ongoing',
+            })
 
     def finish_trip(self):
         """Finalizar un viaje"""
