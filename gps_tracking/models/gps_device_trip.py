@@ -68,6 +68,12 @@ class GpsDeviceTrip(models.Model):
                 'start_time': fields.Datetime.now(),
                 'state': 'ongoing',
             })
+            
+        check_trips()
+        self.fetch_device_positions()
+        cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
+        cron.write({'active': True, 'nextcall': fields.Datetime.now()})
+        
 
     def finish_trip(self):
         """Finalizar un viaje"""
@@ -77,6 +83,12 @@ class GpsDeviceTrip(models.Model):
             
         self.write({'state': 'finished'})
         
+    def check_trips(self):
+        _logger.warning(f"self : {len(self)}")
+        for trip in self:          
+            if trip.state == 'ongoing':
+                pass
+                
     def fetch_device_positions(self):
         _logger.warning("entrooo")
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
@@ -146,5 +158,7 @@ class GpsDeviceTrip(models.Model):
     
     def cron_fetch_positions(self):
         viajes = self.search([('state','=','ongoing')])
+        
+
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
         viajes.fetch_device_positions()
