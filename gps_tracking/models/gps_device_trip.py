@@ -75,7 +75,7 @@ class GpsDeviceTrip(models.Model):
                 'state': 'ongoing',
             })
             
-        check_trips()
+        self.check_trips()
         self.fetch_device_positions()
         cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
         cron.write({'active': True, 'nextcall': fields.Datetime.now()})
