@@ -34,6 +34,12 @@ class GpsDeviceTrip(models.Model):
                 raise ValidationError("Ya existe un viaje en curso para este dispositivo.")
 
         return super(GpsDeviceTrip, self).create(vals)
+    
+    def check_trips(self):
+        _logger.warning(f"self : {len(self)}")
+        for trip in self:          
+            if trip.state == 'ongoing':
+                pass
 
     @api.model
     def start_trip(self, device_id):
@@ -83,11 +89,7 @@ class GpsDeviceTrip(models.Model):
             
         self.write({'state': 'finished'})
         
-    def check_trips(self):
-        _logger.warning(f"self : {len(self)}")
-        for trip in self:          
-            if trip.state == 'ongoing':
-                pass
+
                 
     def fetch_device_positions(self):
         _logger.warning("entrooo")
