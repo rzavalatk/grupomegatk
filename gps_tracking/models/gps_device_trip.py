@@ -37,7 +37,7 @@ class GpsDeviceTrip(models.Model):
     
     def check_trips(self):
         trip = self.search([('state','in',['ongoing','finished','new'])])
-        _logger.warning(trip)
+        _logger.warning(f"Cantidad de viajes: {len(trip)}")
         for trip in self:          
             if trip.state == 'ongoing':
                 pass
