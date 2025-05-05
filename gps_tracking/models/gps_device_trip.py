@@ -188,11 +188,12 @@ class GpsDeviceTrip(models.Model):
         
     def llegada(self):
         hora_llegada = datetime.now().time()
-        self.tiempo_iniciado = True
+        self.tiempo_iniciado.write({'tiempo_iniciado': True})
         _logger.warning(hora_llegada)
     
     def salida(self):
         hora_salida = datetime.now().time()
+        self._calcular_tiempo()
         _logger.warning(hora_salida)
 
     def _calcular_tiempo(self):
