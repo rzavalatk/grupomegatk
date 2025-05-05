@@ -16,8 +16,10 @@ class GpsDeviceTrip(models.Model):
     start_time = fields.Datetime('Hora de Inicio', default=lambda self: fields.Datetime.now())
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
-    qwerty = fields.Char('Pruebas')
-    wasd = fields.Char('Prueba2')
+    hora_llegada = fields.Char('Hora Llegada')
+    hora_salida = fields.Char('Hora Salida')
+    tiempo_usado = fields.Char('Tiempo Usado')
+    tiempo_iniciado = False
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -186,8 +188,14 @@ class GpsDeviceTrip(models.Model):
         
     def llegada(self):
         hora_llegada = datetime.now().time()
+        self.tiempo_iniciado = True
         _logger.warning(hora_llegada)
     
     def salida(self):
         hora_salida = datetime.now().time()
         _logger.warning(hora_salida)
+
+    def _calcular_tiempo(self):
+        for trip in self:
+            if trip.hora_llegada and trip.hora_salida:
+                trip.tiempo_usado = trip.hora_salida - trip.hora_llegada
