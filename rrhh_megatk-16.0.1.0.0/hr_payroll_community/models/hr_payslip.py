@@ -24,7 +24,7 @@ class HrPayslip(models.Model):
     _name = 'hr.payslip'
     _description = 'Pay Slip'
 
-    struct_id = fields.Many2one('hr.payroll.structure', string='Structure',
+    struct_id = fields.Many2one('hr.payroll.structure', string='Estructura',
                                 readonly=True,
                                 states={'draft': [('readonly', False)]},
                                 help='Define las reglas que deben aplicarse a este recibo de nómina, en consecuencia '
@@ -713,16 +713,16 @@ class HrPayslipLine(models.Model):
     _description = 'Payslip Line'
     _order = 'contract_id, sequence'
 
-    slip_id = fields.Many2one('hr.payslip', string='Pay Slip', required=True,
+    slip_id = fields.Many2one('hr.payslip', string='Nomina', required=True,
                               ondelete='cascade', help="Payslip")
-    salary_rule_id = fields.Many2one('hr.salary.rule', string='Rule',
-                                     required=True, help="salary rule")
-    employee_id = fields.Many2one('hr.employee', string='Employee',
-                                  required=True, help="Employee")
+    salary_rule_id = fields.Many2one('hr.salary.rule', string='Regla',
+                                     required=True, help="Regla de salarial")
+    employee_id = fields.Many2one('hr.employee', string='Empleado',
+                                  required=True, help="Empleado")
     # category_id = fields.Many2one(related='salary_rule_id.category_id', string='Category', required=True)
-    contract_id = fields.Many2one('hr.contract', string='Contract',
-                                  required=True, index=True, help="Contract")
-    rate = fields.Float(string='Rate (%)',
+    contract_id = fields.Many2one('hr.contract', string='Contrato',
+                                  required=True, index=True, help="Contrato")
+    rate = fields.Float(string='Taza (%)',
                         digits=dp.get_precision('Payroll Rate'), default=100.0)
     amount = fields.Float(digits=dp.get_precision('Payroll'))
     quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0)
@@ -822,20 +822,19 @@ class HrPayslipWorkedDays(models.Model):
     _description = 'Payslip Worked Days'
     _order = 'payslip_id, sequence'
 
-    name = fields.Char(string='Description', required=True)
-    payslip_id = fields.Many2one('hr.payslip', string='Pay Slip', required=True,
-                                 ondelete='cascade', index=True, help="Payslip")
+    name = fields.Char(string='Descripción', required=True)
+    payslip_id = fields.Many2one('hr.payslip', string='Nomina', required=True,
+                                 ondelete='cascade', index=True, help="Nomina")
     sequence = fields.Integer(required=True, index=True, default=10,
                               help="Sequence")
-    code = fields.Char(required=True,
+    code = fields.Char(required=True, string="Codigo",
                        help="The code that can be used in the salary rules")
-    number_of_days = fields.Float(string='Number of Days',
+    number_of_days = fields.Float(string='Numero de dias',
                                   help="Number of days worked")
-    number_of_hours = fields.Float(string='Number of Hours',
+    number_of_hours = fields.Float(string='Numero de horas',
                                    help="Number of hours worked")
-    contract_id = fields.Many2one('hr.contract', string='Contract',
-                                  required=True,
-                                  help="The contract for which applied this input")
+    contract_id = fields.Many2one('hr.contract', string='Contrato',
+                                  required=True,)
 
 
 class HrPayslipInput(models.Model):
@@ -843,51 +842,45 @@ class HrPayslipInput(models.Model):
     _description = 'Payslip Input'
     _order = 'payslip_id, sequence'
 
-    name = fields.Char(string='Description', required=True)
-    payslip_id = fields.Many2one('hr.payslip', string='Pay Slip', required=True,
-                                 ondelete='cascade', help="Payslip", index=True)
+    name = fields.Char(string='Descripción', required=True)
+    payslip_id = fields.Many2one('hr.payslip', string='Nomina', required=True,
+                                 ondelete='cascade', help="Nomina", index=True)
     sequence = fields.Integer(required=True, index=True, default=10,
                               help="Sequence")
-    code = fields.Char(required=True,
-                       help="The code that can be used in the salary rules")
-    amount = fields.Float(
-        help="It is used in computation. For e.g. A rule for sales having "
-             "1% commission of basic salary for per product can defined in expression "
-             "like result = inputs.SALEURO.amount * contract.wage*0.01.")
-    contract_id = fields.Many2one('hr.contract', string='Contract',
+    code = fields.Char(required=True, string="Codigo",
+                       help="El código que se puede utilizar en las reglas salariales")
+    amount = fields.Float(string="Monto")
+    contract_id = fields.Many2one('hr.contract', string='Contrato',
                                   required=True,
-                                  help="The contract for which applied this input")
+                                  help="El contrato para el cual se aplicó esta entrada")
 
 
 class HrPayslipRun(models.Model):
     _name = 'hr.payslip.run'
     _description = 'Payslip Batches'
 
-    name = fields.Char(required=True, readonly=True,
+    name = fields.Char(required=True, readonly=True, string="Nombre",
                        states={'draft': [('readonly', False)]})
     slip_ids = fields.One2many('hr.payslip', 'payslip_run_id',
-                               string='Payslips', readonly=True,
+                               string='Nominas', readonly=True,
                                states={'draft': [('readonly', False)]})
     state = fields.Selection([
         ('draft', 'Draft'),
         ('close', 'Close'),
-    ], string='Status', index=True, readonly=True, copy=False, default='draft')
-    date_start = fields.Date(string='Date From', required=True, readonly=True,
-                             help="start date",
+    ], string='Estado', index=True, readonly=True, copy=False, default='draft')
+    date_start = fields.Date(string='Fecha desde', required=True, readonly=True,
+                             help="Fecha desde",
                              states={'draft': [('readonly', False)]},
                              default=lambda self: fields.Date.to_string(
                                  date.today().replace(day=1)))
-    date_end = fields.Date(string='Date To', required=True, readonly=True,
-                           help="End date",
+    date_end = fields.Date(string='Fecha hasta', required=True, readonly=True,
+                           help="Fecha hasta",
                            states={'draft': [('readonly', False)]},
                            default=lambda self: fields.Date.to_string(
                                (datetime.now() + relativedelta(months=+1, day=1,
                                                                days=-1)).date()))
-    credit_note = fields.Boolean(string='Credit Note', readonly=True,
-                                 states={'draft': [('readonly', False)]},
-                                 help="If its checked, indicates that all "
-                                      "payslips generated from here are refund "
-                                      "payslips.")
+    credit_note = fields.Boolean(string='Nota de credito', readonly=True,
+                                 states={'draft': [('readonly', False)]},)
     is_validate = fields.Boolean(compute='_compute_is_validate')
 
     def draft_payslip_run(self):
