@@ -16,12 +16,12 @@ class GpsDeviceTrip(models.Model):
     start_time = fields.Datetime('Hora de Inicio', default=lambda self: fields.Datetime.now())
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
+    prueba = fields.Char('Pruebas')
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='new')
-    prueba = fields.Char('Pruebas')
     
     
     @api.model
