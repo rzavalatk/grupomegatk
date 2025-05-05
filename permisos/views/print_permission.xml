@@ -36,7 +36,7 @@
                                                 <span t-field="o.datetm_from" t-field-options='{"format": "dd"}'/>
                                             </t>
                                             <t t-else="">
-                                                <span t-field="o.request_date_from_1" t-field-options='{"format": "dd"}'/>
+                                                <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
                                             </t>
                                         el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
                                 <br/> quien se desempeña como:  <span t-field="o.employe_id.job_id.name"/> 
@@ -55,8 +55,8 @@
                                             </span>
                                         </t>
                                         <t t-else="">
-                                            <span t-field="o.request_date_from_1" t-field-options='{"format": "dd"}'/> 
-                                            <span t-if="o.request_date_to and o.request_date_to != o.request_date_from_1"> - 
+                                            <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/> 
+                                            <span t-if="o.request_date_to and o.request_date_to != o.request_date_from"> - 
                                                 <span t-field="o.request_date_to" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                             </span>
                                         </t>
