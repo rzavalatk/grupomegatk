@@ -39,6 +39,11 @@
                                 <field name="qwerty" string="Prueba" widget="statinfo"/>
                             </button>
                         </div>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="prueba2" type="object" class="oe_stat_button">
+                                <field name="wasd" string="Prueba2" widget="statinfo"/>
+                            </button>
+                        </div>
                     </group>
                     <notebook>
                         <page string="Ubicaciones">

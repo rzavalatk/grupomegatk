@@ -17,6 +17,7 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     qwerty = fields.Char('Pruebas')
+    wasd = fields.Char('Prueba2')
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -183,6 +184,10 @@ class GpsDeviceTrip(models.Model):
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
         viajes.fetch_device_positions()
         
-    def prueba(self):
+    def llegada(self):
         hora_llegada = datetime.now().time()
         _logger.warning(hora_llegada)
+    
+    def salida(self):
+        hora_salida = datetime.now().time()
+        _logger.warning(hora_salida)
