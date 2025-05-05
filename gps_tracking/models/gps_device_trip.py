@@ -22,6 +22,7 @@ class GpsDeviceTrip(models.Model):
         ('finished', 'Finalizado')
     ], default='new')
     
+    
     @api.model
     def create(self, vals):
         # Verificamos si se quiere crear el viaje directamente como 'ongoing'
@@ -180,3 +181,6 @@ class GpsDeviceTrip(models.Model):
 
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
         viajes.fetch_device_positions()
+        
+    def prueba(self):
+        _logger.warning("prueba")
