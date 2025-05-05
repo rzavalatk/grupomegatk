@@ -84,7 +84,7 @@
                                     <!-- Opción 2 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.holiday_status_id.deduccion" >✓</span>
+                                            <span t-if="o.holiday_status_id.deducciones" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">DEDUCIR DEL SUELDO</span>
                                     </div>
