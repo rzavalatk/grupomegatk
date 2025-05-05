@@ -28,6 +28,7 @@
         'views/email_template.xml',
         'views/hr_leave_view.xml',
         'views/hr_leave_type_view.xml',
+        'views/print_permission.xml',
         'views/templates_timeoff.xml',
         
     ],

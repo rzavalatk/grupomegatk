@@ -76,7 +76,7 @@
                                     <!-- Opción 1 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'vaciones'" >✓</span>
+                                            <span t-if="o.holiday_status_id.vacaciones" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">CARGAR A VACACIONES</span>
                                     </div>
@@ -84,7 +84,7 @@
                                     <!-- Opción 2 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'deduccion'" >✓</span>
+                                            <span t-if="o.holiday_status_id.deduccion" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">DEDUCIR DEL SUELDO</span>
                                     </div>
@@ -92,7 +92,7 @@
                                     <!-- Opción 3 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'sincargo'" >✓</span>
+                                            <span t-if="o.holiday_status_id.sin_cargo" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">PERMISO SIN NINGÚN CARGO</span>
                                     </div>
@@ -100,7 +100,7 @@
                                     <!-- Opción 4 -->
                                     <div style="display: inline-block; vertical-align: middle;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'incapacidad'" >✓</span>
+                                            <span t-if="o.holiday_status_id.incapacidad" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">ADJUNTO INCAPACIDAD</span>
                                     </div>
@@ -151,7 +151,7 @@
                                         <span style="vertical-align: middle;">OTRO</span>
                                     </div>
                                     <div style="padding: 8px;">
-                                        <br/> <span style="">FECHA:</span> <span t-field="o.fecha_solicitud" t-field-options='{"format": "dd/MM/yyyy "}'/>
+                                        <br/> <span style="">FECHA:</span> <span t-field="o.create_uid" t-field-options='{"format": "dd/MM/yyyy "}'/>
                                     </div>
                                 </td>
                             </tr>
