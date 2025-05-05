@@ -38,10 +38,23 @@ class GpsDeviceTrip(models.Model):
     def check_trips(self):
         trip = self.search([('state','in',['ongoing','finished','new'])])
         _logger.warning(f"Cantidad de viajes: {len(trip)}")
+        new  = 0
+        ongoing = 0
+        finished = 0
         for trip in self:          
+            if trip.state == 'new':
+                new += 1
             if trip.state == 'ongoing':
-                pass
-
+                ongoing += 1
+            if trip.state == 'finshed':
+                finished += 1
+                
+        if new > 0 or ongoing > 0:
+            return True
+                
+        if finished == len(trip):
+            return False
+                
     @api.model
     def start_trip(self, device_id):
         """Iniciar un nuevo viaje"""
@@ -76,11 +89,14 @@ class GpsDeviceTrip(models.Model):
                 'state': 'ongoing',
             })
             
-
-        self.fetch_device_positions()
-        cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
-        cron.write({'active': True, 'nextcall': fields.Datetime.now()})
-        
+        active = self.check_trips()
+        if active:
+            self.fetch_device_positions()
+            cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
+            cron.write({'active': True, 'nextcall': fields.Datetime.now()})
+        else:
+            cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
+            cron.write({'active': False, 'nextcall': fields.Datetime.now()})
 
     def finish_trip(self):
         """Finalizar un viaje"""
@@ -89,8 +105,6 @@ class GpsDeviceTrip(models.Model):
             _logger.warning(trip.end_time)
             
         self.write({'state': 'finished'})
-        
-
                 
     def fetch_device_positions(self):
         _logger.warning("entrooo")
