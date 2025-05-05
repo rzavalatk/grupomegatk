@@ -35,12 +35,12 @@
                         <field name="start_time" readonly='1' />
                         <field name="end_time" readonly='1' />
                         <div class="btn btn-primary" >
-                            <button name="llegada" type="object" class="oe_stat_button">
+                            <button name="llegada" type="object" class="btn-primary">
                                 <field name="qwerty" string="Prueba" widget="statinfo"/>
                             </button>
                         </div>
                         <div class="btn btn-primary" >
-                            <button name="salida" type="object" class="oe_stat_button">
+                            <button name="salida" type="object" class="btn-primary">
                                 <field name="wasd" string="Prueba2" widget="statinfo"/>
                             </button>
                         </div>
