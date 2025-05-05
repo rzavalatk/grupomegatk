@@ -21,6 +21,7 @@ class GpsDeviceTrip(models.Model):
         ('ongoing', 'En Curso'),
         ('finished', 'Finalizado')
     ], default='new')
+    prueba = fields.Char('Prueba')
     
     
     @api.model

@@ -36,7 +36,7 @@
                         <field name="end_time" readonly='1' />
                         <div class="oe_button_box" name="button_box">
                             <button name="prueba" type="object" class="oe_stat_button">
-                                <field name="field_name" string="Prueba" widget="statinfo"/>
+                                <field name="prueba" string="Prueba" widget="statinfo"/>
                             </button>
                         </div>
                     </group>
