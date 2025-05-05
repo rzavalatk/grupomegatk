@@ -724,8 +724,8 @@ class HrPayslipLine(models.Model):
                                   required=True, index=True, help="Contrato")
     rate = fields.Float(string='Taza (%)',
                         digits=dp.get_precision('Payroll Rate'), default=100.0)
-    amount = fields.Float(digits=dp.get_precision('Payroll'))
-    quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0)
+    amount = fields.Float(digits=dp.get_precision('Payroll'), string="Monto")
+    quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0, string="Cantidad")
     total = fields.Float(compute='_compute_total', string='Total', help="Total",
                          digits=dp.get_precision('Payroll'), store=True)
 
