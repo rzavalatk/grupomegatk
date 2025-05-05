@@ -37,13 +37,13 @@
                         <field name="tiempo_usado" readonly='1' />
                         <field name="tiempo_iniciado" invisible="1"/>
                         <div>
-                            <button name="llegada" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', 'False')]}">
-                                <field name="hora_llegada" string="Prueba" widget="statinfo"/>
+                            <button name="llegada" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', False)]}">
+                                <field name="hora_llegada" string="Inicio" widget="statinfo"/>
                             </button>
                         </div>
                         <div>
-                            <button name="salida" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', 'True')]}">
-                                <field name="hora_salida" string="Prueba2" widget="statinfo"/>
+                            <button name="salida" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', True)]}">
+                                <field name="hora_salida" string="Final" widget="statinfo"/>
                             </button>
                         </div>
                     </group>
