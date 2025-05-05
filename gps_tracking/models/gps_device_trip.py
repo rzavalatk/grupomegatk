@@ -19,7 +19,7 @@ class GpsDeviceTrip(models.Model):
     hora_llegada = fields.Char('Hora Llegada')
     hora_salida = fields.Char('Hora Salida')
     tiempo_usado = fields.Char('Tiempo Usado')
-    tiempo_iniciado = fields.Boolean('Tiempo Iniciado', default=False)
+    tiempo_iniciado = fields.Selection([('true', 'Si'),('false', 'No')], default='false')
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -188,7 +188,7 @@ class GpsDeviceTrip(models.Model):
         
     def llegada(self):
         hora_llegada = datetime.now().time()
-        self.tiempo_iniciado.write({'tiempo_iniciado': True})
+        self.tiempo_iniciado.
         _logger.warning(hora_llegada)
     
     def salida(self):
