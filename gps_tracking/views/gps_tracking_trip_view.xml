@@ -42,7 +42,7 @@
                             </button>
                         </div>
                         <div class="btn btn-primary" >
-                            <button name="salida" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', True)]}">
+                            <button name="salida" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', 'True')]}">
                                 <field name="hora_salida" string="Prueba2" widget="statinfo"/>
                             </button>
                         </div>
