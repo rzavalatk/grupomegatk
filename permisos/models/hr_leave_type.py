@@ -9,3 +9,5 @@ class HrLeave(models.Model):
     
     vacaciones = fields.Boolean('Vacaciones')
     deducciones = fields.Boolean('Deducción de sueldo')
+    sin_cargo = fields.Boolean('Sin cargo')
+    incapacidad = fields.Boolean('Incapacidad')
