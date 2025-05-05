@@ -184,5 +184,5 @@ class GpsDeviceTrip(models.Model):
         viajes.fetch_device_positions()
         
     def prueba(self):
-        hora_llegada = datetime.now()
+        hora_llegada = time.now()
         _logger.warning(hora_llegada)
