@@ -19,7 +19,7 @@ class GpsDeviceTrip(models.Model):
     hora_llegada = fields.Char('Hora Llegada')
     hora_salida = fields.Char('Hora Salida')
     tiempo_usado = fields.Char('Tiempo Usado')
-    tiempo_iniciado = False
+    tiempo_iniciado = fields.Boolean('Tiempo Iniciado', default=False)
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
