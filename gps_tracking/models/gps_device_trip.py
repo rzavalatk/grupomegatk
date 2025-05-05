@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from datetime import datetime
+from datetime import datetime, time
 from dateutil.parser import isoparse
 import requests
 import logging
@@ -184,4 +184,5 @@ class GpsDeviceTrip(models.Model):
         viajes.fetch_device_positions()
         
     def prueba(self):
-        _logger.warning("prueba")
+        hora_llegada = datetime.now()
+        _logger.warning(hora_llegada)
