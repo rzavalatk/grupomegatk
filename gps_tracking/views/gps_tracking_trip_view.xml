@@ -37,7 +37,7 @@
                         <field name="tiempo_usado" readonly='1' />
                         <field name="tiempo_iniciado" invisible="1"/>
                         <div class="btn btn-primary" >
-                            <button name="llegada" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', False)]}">
+                            <button name="llegada" type="object" class="btn-primary" attrs="{'invisible': [('tiempo_iniciado', '=', 'False')]}">
                                 <field name="hora_llegada" string="Prueba" widget="statinfo"/>
                             </button>
                         </div>
