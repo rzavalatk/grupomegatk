@@ -166,7 +166,7 @@
                     <field name="accreditation" invisible="1"/>
                 </group>
                 <notebook>
-                    <page string="Dias trabajados &amp; Entradas">
+                    <page string="Dias trabajados y Permisos">
                         <separator string="Dias trabajados y permisos"/>
                         <field name="worked_days_line_ids">
                             <tree string="Worked Days" editable="bottom">
@@ -188,7 +188,7 @@
                                 </group>
                             </form>
                         </field>
-                        <separator string="Other Inputs"/>
+                        <separator string="Otras entradas"/>
                         <field name="input_line_ids" colspan="4" nolabel="1">
                             <tree string="Input Data" editable="bottom">
                                 <field name="name"/>
@@ -208,9 +208,9 @@
                             </form>
                         </field>
                     </page>
-                    <page string="Salary Computation" >
+                    <page string="Cálculo del salario" >
                         <field name="line_ids" colspan="4" nolabel="1">
-                            <tree string="Salary Structure" editable="bottom" decoration-info="total == 0">
+                            <tree string="Estructura salarial" editable="bottom" decoration-info="total == 0">
                                 <field name="name"/>
                                 <field name="code"/>
                                 <field name="category_id"/>
@@ -221,7 +221,7 @@
                                 <field name="amount"/>
                                 <field name="total"/>
                             </tree>
-                            <form string="Payslip Line">
+                            <form string="Lineas de nomina">
                                 <group col="4">
                                     <field name="name"/>
                                     <field name="code"/>
@@ -236,10 +236,10 @@
                             </form>
                         </field>
                     </page>
-                    <page string="Details By Salary Rule Category">
+                    <page string="Detalles por categoría de regla salarial">
 
                         <field name="details_by_salary_rule_category"  context="{'search_default_category_id':1}" domain="[('appears_on_payslip', '=', True)]">
-                            <tree string="Payslip Lines" decoration-info="total == 0">
+                            <tree string="Lineas de nomina" decoration-info="total == 0">
                                 <field name="category_id"/>
                                 <field name="name"/>
                                 <field name="code"/>
@@ -247,13 +247,13 @@
                             </tree>
                         </field>
                    </page>
-                   <page string="Accounting Information">
+                   <page string="Información bancaria">
                         <group>
                             <group string="Miscellaneous">
                                 <field name="company_id" groups="base.group_multi_company"/>
                                 <field name="payslip_run_id" domain="[('state','=','draft')]"/>
                             </group>
-                            <group name="accounting" string="Accounting">
+                            <group name="accounting" string="contabilidad">
                                 <field name="paid" readonly="1"/>
                             </group>
                         </group>
@@ -271,7 +271,7 @@
         <field name="name">hr.payslip.select</field>
         <field name="model">hr.payslip</field>
         <field name="arch" type="xml">
-            <search string="Search Payslips">
+            <search string="Buscar nominas">
                 <field name="name" string="Payslips" filter_domain="['|',('name','ilike',self),('number','ilike',self)]"/>
                 <field name="date_from"/>
                 <filter string="Draft" name="draft" domain="[('state','=','draft')]" help="Draft Slip"/>
