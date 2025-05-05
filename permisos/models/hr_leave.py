@@ -19,14 +19,15 @@ class HrLeave(models.Model):
         'hr.employee', string='Ausencia cubierta', copy=False,)
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
+    duracion_prm = fields.Text('Duración', copy=False,)
     justificacion = fields.Text('Motivo', copy=False,)
-    dias = fields.Integer(string='Días', default=0)
+    dias = fields.Integer(string='Días', default=1)
     horas = fields.Integer(string='Horas', default=0)
     minutos = fields.Integer(string='Minutos', default=0)
     
-    dias_empleado = fields.Integer(string='Días (Empleado)', related='employee_id.permisos_dias', store=False)
-    horas_empleado = fields.Integer(string='Horas (Empleado)', related='employee_id.permisos_horas', store=False)
-    minutos_empleado = fields.Integer(string='Minutos (Empleado)', related='employee_id.permisos_minutos', store=False)
+    dias_empleado = fields.Integer(string='Dias de vacaciones disponibles', related='employee_id.permisos_dias', store=False)
+    horas_empleado = fields.Integer(string='Horas de vacaciones disponibles', related='employee_id.permisos_horas', store=False)
+    minutos_empleado = fields.Integer(string='Minutos de vacaciones disponibles', related='employee_id.permisos_minutos', store=False)
     
     entrada = time(7, 0, 0)
     medio_dia = time(12, 0, 0)
@@ -50,8 +51,8 @@ class HrLeave(models.Model):
                         self.dias = permiso['D']
                         self.horas = permiso['H']
                         self.minutos = permiso['M']
-                        self.number_of_days = self.dias
-                        _logger.warning("horas personalizadas: " + str(self.dias) + str(self.horas) + str(self.minutos) )
+                        self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
+                        _logger.warning("Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos))
                         
             else:
                 self.dias = 0
@@ -71,12 +72,14 @@ class HrLeave(models.Model):
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
+                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                     _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
                     
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
+                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                     self.env.user.notify_warning(
                         message='La fecha final debe ser mayor o igual a la inicial')
                     
@@ -85,6 +88,7 @@ class HrLeave(models.Model):
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
+                self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                 _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
                 
                 

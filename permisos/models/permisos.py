@@ -37,12 +37,7 @@ class HrPermisos(models.Model):
 	department_id = fields.Integer(string="Departamento")
 	sequence_id = fields.Many2one('ir.sequence', "Prestamo")
 	por_empresa = fields.Boolean('Por Empresa:', default=False)
-	fecha_solicitud = fields.Datetime(string='Fecha de solicitud') #user.ubicacion_vendedor
-
-	
-	"""@api.onchange('employe_id')
-	def _onchange_employe(self):
-		self.department_id = self.employe_id.department_id.id"""
+	hora_prueba = fields.Datetime('Hora')
 
 	@api.onchange('fecha_fin','fecha_inicio')
 	def _onchange_fechafin(self):
@@ -159,7 +154,6 @@ class HrPermisos(models.Model):
 		return res
 	
 	def solicitar(self):
-		self.write({'fecha_solicitud': fields.Datetime.now()})
 		if self.dias != 0 or self.minutos != 0 or self.horas != 0:
 			if not self.name:
 				if not self.sequence_id.id:

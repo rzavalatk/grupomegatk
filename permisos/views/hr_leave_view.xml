@@ -7,6 +7,10 @@
       <field name="inherit_id" ref="hr_holidays.hr_leave_view_form" />
         <field name="arch" type="xml">
           
+          <xpath expr="//field[@name='name']" position="before">
+            <field name="duracion_prm"/>
+          </xpath>
+          
           <xpath expr="//field[@name='name']" position="after">
             <field name="reporto"/>
           </xpath>
@@ -15,18 +19,51 @@
             
             <field name="justificacion"/>
             <field name="cubierto_employee_id" />
-
-            <group string="Vacaciones del Empleado">
-                <field name="dias_empleado" readonly="1"/>
-                <field name="horas_empleado" readonly="1"/>
-                <field name="minutos_empleado" readonly="1"/>
-            </group>
+            
+            <field name="dias_empleado" readonly="1"/>
+            <field name="horas_empleado" readonly="1"/>
+            <field name="minutos_empleado" readonly="1"/>
             <field name="dias" invisible="1"/>
             <field name="minutos" invisible="1"/>
             <field name="horas" invisible="1"/>
           </xpath>
           
-          
+          <xpath expr="//field[@name='request_date_from']" position="attributes">
+           <attribute name="attrs">{'invisible': [('request_unit_hours', '!=', False)]}</attribute> 
+          </xpath>
+
+          <xpath expr="//field[@name='request_hour_from']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+          <xpath expr="//field[@name='request_hour_to']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[4]/label[1]" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[4]/label[2]" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/label[4]" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/label[4]" position="replace"/>
+
+          <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/group[@name='col_left']/div[1]" position="inside">
+            <span class="text-muted" attrs="{'invisible': [('request_unit_half', '=', True), ('request_unit_hours', '!=', True)]}"> De </span>
+            <field name="datetm_from" attrs="{'invisible': [('request_unit_half', '=', True), ('request_unit_hours', '!=', True)], 'required': [('request_unit_hours', '=', True)]}"/>
+            <span class="text-muted" attrs="{'invisible': [('request_unit_half', '=', True), ('request_unit_hours', '!=', True)]}"> A </span>          
+            <field name="datetm_to" attrs="{'invisible': [('request_unit_half', '=', True), ('request_unit_hours', '!=', True)], 'required': [('request_unit_hours', '=', True)]}"/>
+          </xpath>
+
+          <xpath expr="//field[@name='number_of_hours_text']" position="attributes">
+            <attribute name="attrs">{}</attribute>
+            <attribute name="invisible">1</attribute>
+          </xpath>
 
         </field>
     </record>

@@ -288,7 +288,7 @@
         </field>
     </record>
     <record id="action_view_hr_payslip_form" model="ir.actions.act_window">
-        <field name="name">Planillas de empleado</field>
+        <field name="name">Nominas de empleado</field>
         <field name="res_model">hr.payslip</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="search_view_id" ref="view_hr_payslip_filter"/>
@@ -403,7 +403,7 @@
     </record>
 
     <record id="action_hr_payslip_run_tree" model="ir.actions.act_window">
-        <field name="name">Lotes de planilla</field>
+        <field name="name">Planillas</field>
         <field name="res_model">hr.payslip.run</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="search_view_id" ref="hr_payslip_run_filter"/>

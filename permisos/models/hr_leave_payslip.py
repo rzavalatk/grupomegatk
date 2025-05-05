@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta, time
-from odoo import api, fields, models, tools, _
-from pytz import pytz, timezone, utc
+from odoo import fields, models
+from datetime import datetime, time
+from pytz import timezone, utc
 
 import logging
-# obtenemos la zona horaria de Honduras
-honduras_tz = pytz.timezone('America/Tegucigalpa')
 
 _logger = logging.getLogger(__name__)
 

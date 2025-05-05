@@ -29,17 +29,38 @@
                         <tr>
                             
                             <td style="width: 50%; margin: 5px 0 0 5px ; padding: 5px 0;">
-                                Que el día <span t-field="o.fecha_inicio" t-field-options='{"format": "dd"}'/>
-                                        el Sr. (Sra. Srita) <span t-field="o.employe_id.name"/>
-                                <br/> quien se desempeña como:  <span t-field="o.employe_id.job_id.name"/> 
-                                en el area de <span t-field="o.employe_id.department_id.name"/>
+                                Que el día <t t-if="o.request_unit_half">
+                                                <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
+                                            </t>
+                                            <t t-elif="o.request_unit_hours">
+                                                <span t-field="o.datetm_from" t-field-options='{"format": "dd"}'/>
+                                            </t>
+                                            <t t-else="">
+                                                <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
+                                            </t>
+                                        el Sr. (Sra. Srita) <span t-field="o.employee_id.name"/>
+                                <br/> quien se desempeña como:  <span t-field="o.employee_id.job_id.name"/> 
+                                en el area de <span t-field="o.employee_id.department_id.name"/>
                                 <div style="margin-bottom: 10px;">
                                     <p style="margin: 5px 0; text-align: center;">No se presentó a laborar en la(s) siguiente(s) fecha(s):</p>
                                     <p style="margin: 5px 0;">
-                                        <span t-field="o.fecha_inicio" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
-                                        <span t-if="o.fecha_fin and o.fecha_fin != o.fecha_inicio"> - 
-                                            <span t-field="o.fecha_fin" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
-                                        </span>
+                                        <t t-if="o.request_unit_half">
+                                            <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
+                                            <p style="margin: 5px 0; text-align: center;"> en la jornada de de la : <span t-field="o.request_date_from_period"/></p>
+                                        </t>
+                                        <t t-elif="o.request_unit_hours">
+                                            <span t-field="o.datetm_from" t-field-options='{"format": "dd"}'/>
+                                            <span t-if="o.datetm_to and o.datetm_to != o.datetm_from"> - 
+                                                <span t-field="o.datetm_to" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/> 
+                                            <span t-if="o.request_date_to and o.request_date_to != o.request_date_from"> - 
+                                                <span t-field="o.request_date_to" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                            </span>
+                                        </t>
+                                        
                                     </p>
                                 </div>
                             </td>
@@ -55,7 +76,7 @@
                                     <!-- Opción 1 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'vaciones'" >✓</span>
+                                            <span t-if="o.holiday_status_id.vacaciones" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">CARGAR A VACACIONES</span>
                                     </div>
@@ -63,7 +84,7 @@
                                     <!-- Opción 2 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'deduccion'" >✓</span>
+                                            <span t-if="o.holiday_status_id.deducciones" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">DEDUCIR DEL SUELDO</span>
                                     </div>
@@ -71,7 +92,7 @@
                                     <!-- Opción 3 -->
                                     <div style="display: inline-block; vertical-align: middle; margin-right: 15px;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'sincargo'" >✓</span>
+                                            <span t-if="o.holiday_status_id.sin_cargo" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">PERMISO SIN NINGÚN CARGO</span>
                                     </div>
@@ -79,7 +100,7 @@
                                     <!-- Opción 4 -->
                                     <div style="display: inline-block; vertical-align: middle;">
                                         <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; position: relative;">
-                                            <span t-if="o.cargo == 'incapacidad'" >✓</span>
+                                            <span t-if="o.holiday_status_id.incapacidad" >✓</span>
                                         </div>
                                         <span style="vertical-align: middle;">ADJUNTO INCAPACIDAD</span>
                                     </div>
@@ -130,7 +151,7 @@
                                         <span style="vertical-align: middle;">OTRO</span>
                                     </div>
                                     <div style="padding: 8px;">
-                                        <br/> <span style="">FECHA:</span> <span t-field="o.fecha_solicitud" t-field-options='{"format": "dd/MM/yyyy "}'/>
+                                        <br/> <span style="">FECHA:</span> <span t-field="o.create_uid" t-field-options='{"format": "dd/MM/yyyy "}'/>
                                     </div>
                                 </td>
                             </tr>
@@ -142,11 +163,11 @@
                         <tr>
                             <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE JEFE INMEDIATO</p>
-                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employe_id.parent_id.name"/></p>
+                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employee_id.parent_id.name"/></p>
                             </td>
                             <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE EMPLEADO</p>
-                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employe_id.name"/></p>
+                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employee_id.name"/></p>
                             </td>
                         </tr>
                         <tr>
@@ -179,11 +200,11 @@
 
     <record id="action_report_hr_employee_permission" model="ir.actions.report">
         <field name="name">Formulario de Permiso</field>
-        <field name="model">hr.employee.permisos</field>
+        <field name="model">hr.leave</field>
         <field name="report_name">permisos.report_hr_employee_permission</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_file">permisos.report_hr_employee_permission</field>
-        <field name="binding_model_id" ref="model_hr_employee_permisos"/>
+        <field name="binding_model_id" ref="model_hr_leave"/>
         <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
         <field name="paperformat_id" ref="paperformat_permiso"/>
         <!-- <field name="groups_id" eval="[(4, ref('permiso_admin')), (4, ref('permiso_jefe')), (4, ref('permiso_user'))]"/> -->
