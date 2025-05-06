@@ -195,7 +195,7 @@ class GpsDeviceTrip(models.Model):
     def salida(self):
         hora_salida = datetime.now().time()
         self._calcular_tiempo()
-        _logger.warning(f"{hora_salida}")
+        _logger.warning(f"Hora salida: {hora_salida}")
 
     def _calcular_tiempo(self):
         for trip in self:
