@@ -54,6 +54,7 @@ class HrLeave(models.Model):
         required=False,
         readonly=False,
         store=True,
+        overwrite=True,
     )
 
     
