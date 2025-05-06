@@ -189,6 +189,7 @@ class GpsDeviceTrip(models.Model):
     def llegada(self):
         hora_llegada = datetime.now().time()
         self.write({'tiempo_iniciado': 'true'})
+        _logger.warning(self.tiempo_iniciado)
         _logger.warning(hora_llegada)
     
     def salida(self):
@@ -200,4 +201,4 @@ class GpsDeviceTrip(models.Model):
         for trip in self:
             if trip.hora_llegada and trip.hora_salida:
                 trip.tiempo_usado = trip.hora_salida - trip.hora_llegada
-                _logger.warning(f"Tiempo usado: {trip.tiempo_usado}")
+                _logger.warning(f"Tiempo usado:   {trip.tiempo_usado}")
