@@ -200,3 +200,4 @@ class GpsDeviceTrip(models.Model):
         for trip in self:
             if trip.hora_llegada and trip.hora_salida:
                 trip.tiempo_usado = trip.hora_salida - trip.hora_llegada
+                _logger.warning(f"Tiempo usado: {trip.tiempo_usado}")
