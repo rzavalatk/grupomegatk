@@ -15,6 +15,8 @@ odoo.define('gps_tracking.trip_map', function (require) {
                 method: 'get_trip_coordinates',
                 args: [[recordId]],
             }).then(coords => {
+                console.log("coords", coords);
+                
                 this.renderMap(coords);
             });
         },

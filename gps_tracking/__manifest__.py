@@ -19,8 +19,8 @@
     'assets': {
         'web.assets_backend': [
             '/gps_tracking/static/src/js/trip_map.js',
-            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
             'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
+            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
         ],
     },
     'auto_install': False,
