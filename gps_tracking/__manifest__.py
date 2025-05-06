@@ -16,7 +16,13 @@
         'views/gps_tracking_main_menu.xml',
         'data/cron.xml',
     ],
-    
+    'assets': {
+        'web.assets_backend': [
+            '/gps_tracking/static/src/js/trip_map.js',
+            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
+        ],
+    },
     'auto_install': False,
     'application': True,
     'installable': True

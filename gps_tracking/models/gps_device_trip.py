@@ -205,3 +205,10 @@ class GpsDeviceTrip(models.Model):
             if trip.hora_llegada and trip.hora_salida:
                 trip.tiempo_usado = trip.hora_salida - trip.hora_llegada
                 _logger.warning(f"Tiempo usado: {trip.tiempo_usado}")
+                
+    def get_trip_coordinates(self):
+        self.ensure_one()
+        return [{
+            'lat': float(loc.latitude),
+            'lng': float(loc.longitude),
+        } for loc in self.location_ids.sorted('timestamp')]
