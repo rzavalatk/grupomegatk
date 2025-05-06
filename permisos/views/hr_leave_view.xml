@@ -27,9 +27,13 @@
             <field name="minutos" invisible="1"/>
             <field name="horas" invisible="1"/>
           </xpath>
-          
 
-
+          <xpath expr="//field[@name='request_hour_from']" position="replace">
+            <field name="request_hour_from_1" default="7"/>
+          </xpath>
+          <xpath expr="//field[@name='request_hour_to']" position="replace">
+            <field name="request_hour_to_1" default="16"/>
+          </xpath>
 
 
         </field>
