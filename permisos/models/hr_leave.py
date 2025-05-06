@@ -106,12 +106,10 @@ class HrLeave(models.Model):
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
         self.request_hour_from = self.request_hour_from_1
-        _logger.warning("self.request_hour_from: " + self.request_hour_from)
         
     @api.onchange('request_hour_to_1')
     def _onchange_request_hour_to_1(self):
         self.request_hour_to = self.request_hour_to_1
-        _logger.warning("self.request_hour_to: " + self.request_hour_to)
   
 
     @api.onchange('datetm_from', 'datetm_to')
