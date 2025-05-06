@@ -19,7 +19,6 @@ class HrLeave(models.Model):
         'hr.employee', string='Ausencia cubierta', copy=False,)
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
-    duracion_prm = fields.Text('Duración', copy=False,)
     justificacion = fields.Text('Motivo', copy=False,)
     dias = fields.Integer(string='Días', default=1)
     horas = fields.Integer(string='Horas', default=0)
@@ -130,8 +129,7 @@ class HrLeave(models.Model):
                         self.dias = permiso['D']
                         self.horas = permiso['H']
                         self.minutos = permiso['M']
-                        self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                        _logger.warning("Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos))
+                        
                         
             else:
                 self.dias = 0
@@ -151,14 +149,13 @@ class HrLeave(models.Model):
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
-                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                    _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
+                    
                     
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
-                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
+                    
                     self.env.user.notify_warning(
                         message='La fecha final debe ser mayor o igual a la inicial')
                     
@@ -167,8 +164,7 @@ class HrLeave(models.Model):
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
-                self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
+                
                 
                 
                 

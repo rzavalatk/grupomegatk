@@ -7,9 +7,6 @@
       <field name="inherit_id" ref="hr_holidays.hr_leave_view_form" />
         <field name="arch" type="xml">
           
-          <xpath expr="//field[@name='name']" position="before">
-            <field name="duracion_prm"/>
-          </xpath>
           
           <xpath expr="//field[@name='name']" position="after">
             <field name="reporto"/>
@@ -35,6 +32,14 @@
           </xpath>
           <xpath expr="//field[@name='request_hour_to']" position="after">
             <field name="request_hour_to_1" default="16"/>
+          </xpath> 
+          <xpath expr="//field[@name='request_hour_from']" position="attributes">
+            <attribute name="attrs">{"readonly": [["state","=","validate"]], "required": [["request_unit_hours","=",True]]}</attribute>
+            <attribute name="invisible">1</attribute>
+          </xpath>
+          <xpath expr="//field[@name='request_hour_to']" position="attributes">
+            <attribute name="attrs">{"readonly": [["state","=","validate"]], "required": [["request_unit_hours","=",True]]}</attribute>
+            <attribute name="invisible">1</attribute>
           </xpath>
 
 

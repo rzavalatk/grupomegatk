@@ -33,7 +33,7 @@
                                                 <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
                                             </t>
                                             <t t-elif="o.request_unit_hours">
-                                                <span t-field="o.datetm_from" t-field-options='{"format": "dd"}'/>
+                                                <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
                                             </t>
                                             <t t-else="">
                                                 <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
@@ -49,9 +49,9 @@
                                             <p style="margin: 5px 0; text-align: center;"> en la jornada de de la : <span t-field="o.request_date_from_period"/></p>
                                         </t>
                                         <t t-elif="o.request_unit_hours">
-                                            <span t-field="o.datetm_from" t-field-options='{"format": "dd"}'/>
-                                            <span t-if="o.datetm_to and o.datetm_to != o.datetm_from"> - 
-                                                <span t-field="o.datetm_to" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                            <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
+                                            <span t-if="o.request_hour_from_1 and o.request_hour_to_1 != o.request_hour_from_1"> a 
+                                                <span t-field="o.request_hour_to_1" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                             </span>
                                         </t>
                                         <t t-else="">
