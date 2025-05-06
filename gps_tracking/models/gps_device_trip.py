@@ -200,7 +200,7 @@ class GpsDeviceTrip(models.Model):
     def _calcular_tiempo(self):
         _logger.warning("toy aqui")
         for trip in self:
-            _logger.warning(f"viaje: {trip}")
+            _logger.warning(f"viaje: {trip.device_id}")
             _logger.warning(f"Hora llegada: {trip.hora_llegada} - Hora salida: {trip.hora_salida}")
             if trip.hora_llegada and trip.hora_salida:
                 trip.tiempo_usado = trip.hora_salida - trip.hora_llegada
