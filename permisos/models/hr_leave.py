@@ -34,8 +34,8 @@ class HrLeave(models.Model):
     tarde = time(13, 0, 0)
     salida = time(16, 0, 0)
     
-    request_hour_from_2 = fields.Selection(
-        selection=[
+    request_hour_from = fields.Selection(
+        _selection=[
             ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
             ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
             ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
@@ -57,7 +57,7 @@ class HrLeave(models.Model):
     )
 
     
-    request_hour_to_2 = fields.Selection([
+    request_hour_to = fields.Selection([
         ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
         ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
         ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
