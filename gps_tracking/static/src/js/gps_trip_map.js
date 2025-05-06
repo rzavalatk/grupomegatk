@@ -5,10 +5,13 @@ import { Component, onMounted } from "@odoo/owl";
 
 class TripMapComponent extends Component {
     setup() {
+        console.log("Leaflet JS cargado");
         onMounted(() => this.renderMap());
     }
 
     renderMap() {
+        console.log("Leaflet JS cargado");
+        
         const el = this.el.querySelector('.leaflet-trip-map');
         if (!el || typeof L === 'undefined') return;
 
