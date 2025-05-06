@@ -90,7 +90,7 @@
         <field name="name">gps.device.trip.form</field>
         <field name="model">gps.device.trip</field>
         <field name="arch" type="xml">
-            <form js_class="trip_map_view"> 
+            <form> 
                 <header>
                     <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary" attrs="{'invisible': [('state', 'in', ['new','finished'])]}"/>
                     <button name="action_start_trip" type="object" string="Iniciar Viaje" class="btn-primary" attrs="{'invisible': [('state', 'in', ['ongoing', 'finished'])]}" />
