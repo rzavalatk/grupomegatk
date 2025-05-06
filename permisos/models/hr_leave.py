@@ -73,13 +73,11 @@ class HrLeave(models.Model):
         ('18', '6:00 PM')
     ], string='Hour to')
 
-    @api.onchange('request_hour_from')
-    def _onchange_request_hour_from(self):
+    @api.onchange('request_unit_hours')
+    def _onchange_request_unit_hours(self):
         self.request_hour_from = self.request_hour_from_2
-        
-    @api.onchange('request_hour_to')
-    def _onchange_request_hour_to(self):
         self.request_hour_to = self.request_hour_to_2
+  
 
     @api.onchange('datetm_from', 'datetm_to')
     def _onchange_datetm_ft(self):
