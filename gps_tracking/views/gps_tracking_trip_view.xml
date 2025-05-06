@@ -134,7 +134,7 @@
                         <page string="Mapa del Viaje">
                             <div name="map_section" class="oe_title">
                                 <h2>Ruta del Dispositivo</h2>
-                                <div id="trip_map" style="height:400px;"></div>
+                                <div id="leaflet-trip-map" style="height:400px;"></div>
                             </div>
                         </page>
                     </notebook>

@@ -18,7 +18,8 @@
     ],
     'assets': {
         'web.assets_backend': [
-            '/gps_tracking/static/src/js/trip_map.js',
+            '/gps_tracking/static/src/js/gps_trip_map.js',
+            '/gps_tracking/static/src/js/gps_trip_templates.xml',
             'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
             'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
         ],
