@@ -3,7 +3,6 @@
     'version': '1.0',
     'depends': ['web'],
     'data': [
-        'views/assets.xml',
         'views/map_view.xml',
     ],
     'assets': {
