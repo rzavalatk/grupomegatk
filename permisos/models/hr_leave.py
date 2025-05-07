@@ -142,7 +142,7 @@ class HrLeave(models.Model):
         
         if not self.request_unit_half:
             _logger.warning(self.request_unit_hours)
-            if self.request_unit_hours:
+            if self.request_hour_from_1 and self.request_hour_to_1:
                 
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = valor_hora - self.number_of_hours_display
