@@ -137,12 +137,12 @@ class HrLeave(models.Model):
                     message='La fecha final debe ser mayor o igual a la inicial')
                 
 
-    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period')
+    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours')
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
             _logger.warning(self.request_unit_hours)
-            if self.request_hour_from_1 and self.request_hour_to_1:
+            if self.request_unit_hours:
                 
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = valor_hora - self.number_of_hours_display
