@@ -147,7 +147,7 @@ class HrLeave(models.Model):
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = valor_hora - self.number_of_hours_display
                 _logger.warning("datos de horas y dias")
-                _logger.warning(self.number_of_hours_display)
+                _logger.warning("valor hora, minutos, hours : %s, %s, %s", valor_hora, valor_minutos,self.number_of_hours_display)
                 _logger.warning(self.number_of_days_display)
                 self.dias = 0
                 self.horas = valor_hora
