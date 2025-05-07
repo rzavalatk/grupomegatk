@@ -141,6 +141,7 @@ class HrLeave(models.Model):
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
+            _logger.warning(self.request_unit_hours)
             if self.request_unit_hours:
                 
                 valor_hora = int(self.number_of_hours_display)
