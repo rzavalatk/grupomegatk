@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="gps_tracking.LeafletMap">
+        <div class="leaflet-map-container" style="height: 400px; width: 100%;"></div>
+    </t>
+</templates>

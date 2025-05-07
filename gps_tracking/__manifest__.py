@@ -16,14 +16,16 @@
         'views/gps_tracking_main_menu.xml',
         'data/cron.xml',
     ],
-    'assets': {
+      'assets': {
         'web.assets_backend': [
-            '/gps_tracking/static/src/js/gps_trip_map.js',
-            '/gps_tracking/static/src/xml/gps_trip_templates.xml',
-            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
-            'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+            'gps_tracking/static/lib/leaflet/leaflet.css',
+            'gps_tracking/static/lib/leaflet/leaflet.js',
+            'gps_tracking/static/src/js/leaflet_map.js',
         ],
     },
+      'qweb': [
+        'static/src/xml/leaflet_map.xml',
+    ],
     'auto_install': False,
     'application': True,
     'installable': True

@@ -1,38 +1,78 @@
-/** @odoo-module **/
+odoo.define('gps_tracking.LeafletMap', function (require) {
+    "use strict";
 
-import { registry } from "@web/core/registry";
-import { Component, onMounted } from "@odoo/owl";
+    var Widget = require('web.Widget');
+    var rpc = require('web.rpc');
 
-class TripMapComponent extends Component {
-    setup() {
-        console.log("Leaflet JS cargado");
-        onMounted(() => this.renderMap());
-    }
-
-    renderMap() {
-        console.log("Leaflet JS cargado");
+    var LeafletTripMap = Widget.extend({
+        template: 'gps_tracking.LeafletMap',
         
-        const el = this.el.querySelector('.leaflet-trip-map');
-        if (!el || typeof L === 'undefined') return;
+        init: function(parent, tripId) {
+            this._super(parent);
+            this.tripId = tripId;
+        },
+        
+        willStart: function() {
+            return this._loadLocations();
+        },
+        
+        start: function() {
+            this._super.apply(this, arguments);
+            this._initMap();
+        },
+        
+        _loadLocations: function() {
+            var self = this;
+            return rpc.query({
+                model: 'gps.device.location',
+                method: 'search_read',
+                args: [[['trip_id', '=', this.tripId]], ['latitude', 'longitude', 'timestamp']],
+            }).then(function(locations) {
+                self.locations = locations;
+            });
+        },
+        
+        _initMap: function() {
+            if (!this.locations || this.locations.length === 0) {
+                this.$el.html("<div class='alert alert-info'>No hay ubicaciones registradas para este viaje.</div>");
+                return;
+            }
 
-        const map = L.map(el).setView([0, 0], 2);
+            // Convertir coordenadas a números
+            var points = this.locations.map(function(loc) {
+                return [parseFloat(loc.latitude), parseFloat(loc.longitude)];
+            });
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+            // Crear el mapa centrado en el primer punto
+            this.map = L.map(this.$el[0]).setView(points[0], 13);
 
-        // Aquí puedes añadir marcadores desde tu modelo
-        const coordinates = this.props.record.data.coordinates || [];
-        coordinates.forEach(coord => {
-            L.marker([coord.lat, coord.lng]).addTo(map);
-        });
+            // Añadir capa de tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(this.map);
 
-        if (coordinates.length > 0) {
-            map.setView([coordinates[0].lat, coordinates[0].lng], 13);
+            // Crear una línea que conecta todos los puntos
+            var polyline = L.polyline(points, {
+                color: 'blue',
+                weight: 4,
+                opacity: 0.7,
+                smoothFactor: 1
+            }).addTo(this.map);
+
+            // Añadir marcadores para el inicio y fin
+            if (points.length > 0) {
+                L.marker(points[0]).addTo(this.map)
+                    .bindPopup("Inicio del viaje")
+                    .openPopup();
+                
+                L.marker(points[points.length - 1]).addTo(this.map)
+                    .bindPopup("Última posición registrada");
+            }
+
+            // Ajustar el zoom para mostrar toda la ruta
+            this.map.fitBounds(polyline.getBounds());
         }
-    }
-}
+    });
 
-TripMapComponent.template = "gps_tracking.TripMapComponent";
-
-registry.category("view_widgets").add("leaflet_trip_map", TripMapComponent);
+    return LeafletTripMap;
+});

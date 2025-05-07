@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="gps_tracking.TripMapComponent">
-        <div class="leaflet-trip-map" style="height:400px;"></div>
-    </t>
-</templates>
