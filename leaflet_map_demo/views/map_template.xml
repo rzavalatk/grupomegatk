@@ -1,14 +1,19 @@
 
 <odoo>
-    <template id="leaflet_map_template" name="Leaflet Map Page">
-        <t t-call="web.layout">
-            <div class="oe_structure"/>
-            <div class="container mt32 mb32">
-                <h2>Mapa con Leaflet.js</h2>
-                <div id="leaflet_map" style="height: 500px;"></div>
-            </div>
-        </t>
-    </template>
+    <record id="view_tu_modelo_form" model="ir.ui.view">
+        <field name="name">tu.modelo.form</field>
+        <field name="model">tu.modelo</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Mapa con Leaflet</h1>
+                    </div>
+                    <widget name="LeafletMap"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="action_leaflet_map" model="ir.actions.act_url">
         <field name="name">Leaflet Map</field>
