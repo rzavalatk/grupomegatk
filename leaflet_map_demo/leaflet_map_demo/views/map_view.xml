@@ -1,0 +1,15 @@
+<odoo>
+  <template id="leaflet_test_template" name="Leaflet Test">
+    <t t-call="web.layout">
+      <div class="o_content">
+        <h1>Mapa con Leaflet</h1>
+        <div id="leaflet_map" style="height: 400px;"></div>
+      </div>
+    </t>
+  </template>
+
+  <record id="action_leaflet_demo" model="ir.actions.client">
+    <field name="name">Mapa Leaflet</field>
+    <field name="tag">leaflet_demo</field>
+  </record>
+</odoo>
