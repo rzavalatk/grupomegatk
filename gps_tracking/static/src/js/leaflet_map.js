@@ -3,7 +3,7 @@ odoo.define('gps_tracking.LeafletTripMap', function (require) {
 
     var Widget = require('web.Widget');
     var rpc = require('web.rpc');
-    var registry = require('web.field_registry');
+    var FieldRegistry = require('web.field_registry');
 
     var LeafletTripMap = Widget.extend({
         template: 'gps_tracking.LeafletMap',
@@ -75,8 +75,8 @@ odoo.define('gps_tracking.LeafletTripMap', function (require) {
         }
     });
 
-    // Registra el widget para que esté disponible en las vistas
-    registry.add('leaflet_trip_map', LeafletTripMap);
+    // Registra el widget en el registro de campos
+    FieldRegistry.add('leaflet_trip_map', LeafletTripMap);
 
     return LeafletTripMap;
 });
