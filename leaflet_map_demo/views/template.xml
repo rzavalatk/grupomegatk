@@ -1,6 +1,6 @@
 <!-- views/templates.xml -->
 <templates id="template" xml:space="preserve">
-    <t t-name="tu_modulo.leaflet_map_template">
+    <t t-name="leaflet_map_demo.leaflet_map_template">
         <div class="leaflet-map-container" style="height: 400px; width: 100%;"></div>
     </t>
 </templates>
