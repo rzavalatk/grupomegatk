@@ -141,11 +141,14 @@ class HrLeave(models.Model):
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
-            _logger.warning(self.request_unit_hours)
+            
             if self.request_unit_hours:
                 
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = valor_hora - self.number_of_hours_display
+                _logger.warning("datos de horas y dias")
+                _logger.warning(self.number_of_hours_display)
+                _logger.warning(self.number_of_days_display)
                 self.dias = 0
                 self.horas = valor_hora
                 if valor_minutos == 0.25:
