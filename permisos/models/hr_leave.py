@@ -19,7 +19,6 @@ class HrLeave(models.Model):
         'hr.employee', string='Ausencia cubierta', copy=False,)
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
-    duracion_prm = fields.Text('Duración', copy=False,)
     justificacion = fields.Text('Motivo', copy=False,)
     dias = fields.Integer(string='Días', default=1)
     horas = fields.Integer(string='Horas', default=0)
@@ -34,6 +33,85 @@ class HrLeave(models.Model):
     tarde = time(13, 0, 0)
     salida = time(16, 0, 0)
     
+    
+    request_hour_from = fields.Selection([
+            ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
+            ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
+            ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
+            ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
+            ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
+            ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
+            ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
+            ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
+            ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
+            ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
+            ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
+            ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
+            ('18', '6:00 PM')
+        ],
+        string='Hour from',
+    )
+    
+    request_hour_from_1 = fields.Selection([
+            ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
+            ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
+            ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
+            ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
+            ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
+            ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
+            ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
+            ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
+            ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
+            ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
+            ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
+            ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
+            ('18', '6:00 PM')
+        ],
+        string='Hour from',
+    )
+
+    
+    request_hour_to = fields.Selection([
+        ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
+        ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
+        ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
+        ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
+        ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
+        ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
+        ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
+        ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
+        ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
+        ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
+        ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
+        ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
+        ('18', '6:00 PM')
+    
+    ], string='Hour to')
+    
+    request_hour_to_1 = fields.Selection([
+        ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
+        ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
+        ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
+        ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
+        ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
+        ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
+        ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
+        ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
+        ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
+        ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
+        ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
+        ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
+        ('18', '6:00 PM')
+    ], string='Hour to')
+    
+    @api.onchange('request_hour_from_1')
+    def _onchange_request_hour_from_1(self):
+        self.request_hour_from = self.request_hour_from_1
+        
+    @api.onchange('request_hour_to_1')
+    def _onchange_request_hour_to_1(self):
+        self.request_hour_to = self.request_hour_to_1
+  
 
     @api.onchange('datetm_from', 'datetm_to')
     def _onchange_datetm_ft(self):
@@ -50,10 +128,7 @@ class HrLeave(models.Model):
                     if not isinstance(permiso, str):
                         self.dias = permiso['D']
                         self.horas = permiso['H']
-                        self.minutos = permiso['M']
-                        self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                        _logger.warning("Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos))
-                        
+                        self.minutos = permiso['M']         
             else:
                 self.dias = 0
                 self.horas = 0
@@ -62,36 +137,59 @@ class HrLeave(models.Model):
                     message='La fecha final debe ser mayor o igual a la inicial')
                 
 
-    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period')
+    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours')
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
-            if self.request_date_from and self.request_date_to:
+            
+            if self.request_unit_hours:
+                
+                valor_hora = int(self.number_of_hours_display)
+                valor_minutos = self.number_of_hours_display - valor_hora
+                _logger.warning("datos de horas y dias")
+                _logger.warning("valor hora, minutos, hours : %s, %s, %s", valor_hora, valor_minutos,self.number_of_hours_display)
+                _logger.warning(self.number_of_days_display)
+                self.dias = 0
+                self.horas = valor_hora
+                if valor_minutos == 0.25:
+                    self.minutos = 15
+                elif valor_minutos == 0.5:
+                    self.minutos = 30
+                elif valor_minutos == 0.75:
+                    self.minutos = 45
+                else:
+                    self.minutos = 0
+                
+                _logger.warning("Entre al if request unit hours")
+                _logger.warning(self.dias)
+                _logger.warning(self.horas)
+                _logger.warning(self.minutos)
+            elif self.request_date_from and self.request_date_to:
                 if self.request_date_to >= self.request_date_from:
                     #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
-                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                    _logger.warning("dia completo: " + str(self.dias) + str(self.horas) + str(self.minutos))
-                    
+                    _logger.warning("Entre al if date")
+                    _logger.warning(self.dias)
+                    _logger.warning(self.horas)
+                    _logger.warning(self.minutos)
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
-                    self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
                     self.env.user.notify_warning(
-                        message='La fecha final debe ser mayor o igual a la inicial')
-                    
+                        message='La fecha final debe ser mayor o igual a la inicial')        
         else:
             if self.request_unit_half and self.request_date_from:
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
-                self.duracion_prm = "Dias: " + str(self.dias) + " Horas: " + str(self.horas) + " Minutos: " + str(self.minutos)
-                _logger.warning("unit half: " + str(self.dias) + str(self.horas) + str(self.minutos))
                 
-                
+                _logger.warning("Entre al if del unit half")
+                _logger.warning(self.dias)
+                _logger.warning(self.horas)
+                _logger.warning(self.minutos)
                 
     
     def rangeDateft(self, dateInit, dateEnd):
