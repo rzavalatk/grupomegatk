@@ -1,15 +1,16 @@
-odoo.define('gps_tracking.LeafletMap', function (require) {
+odoo.define('gps_tracking.LeafletTripMap', function (require) {
     "use strict";
 
     var Widget = require('web.Widget');
     var rpc = require('web.rpc');
+    var registry = require('web.field_registry');
 
     var LeafletTripMap = Widget.extend({
         template: 'gps_tracking.LeafletMap',
         
-        init: function(parent, tripId) {
+        init: function(parent, options) {
             this._super(parent);
-            this.tripId = tripId;
+            this.tripId = options.trip_id;
         },
         
         willStart: function() {
@@ -18,7 +19,7 @@ odoo.define('gps_tracking.LeafletMap', function (require) {
         
         start: function() {
             this._super.apply(this, arguments);
-            this._initMap();
+            return this._initMap();
         },
         
         _loadLocations: function() {
@@ -73,6 +74,9 @@ odoo.define('gps_tracking.LeafletMap', function (require) {
             this.map.fitBounds(polyline.getBounds());
         }
     });
+
+    // Registra el widget para que esté disponible en las vistas
+    registry.add('leaflet_trip_map', LeafletTripMap);
 
     return LeafletTripMap;
 });
