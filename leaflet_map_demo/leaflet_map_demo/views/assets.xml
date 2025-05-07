@@ -1,9 +1,0 @@
-<odoo>
-  <template id="leaflet_assets" name="Leaflet Assets" inherit_id="web.assets_backend">
-    <xpath expr="." position="inside">
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
-      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-      <script type="text/javascript" src="/leaflet_map_demo/static/src/js/map.js"/>
-    </xpath>
-  </template>
-</odoo>
