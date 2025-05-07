@@ -143,30 +143,36 @@ class HrLeave(models.Model):
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
-            if self.request_date_from and self.request_date_to:
+            if self.request_unit_hours:
+                valor_hora = int(self.number_of_hours_display)
+                valor_minutos = valor_hora - self.number_of_hours_display
+                self.dias = 0
+                self.horas = valor_hora
+                if valor_minutos == 0.25:
+                    self.minutos = 15
+                elif valor_minutos == 0.5:
+                    self.minutos = 30
+                elif valor_minutos == 0.75:
+                    self.minutos = 45
+                else:
+                    self.minutos = 0
+            elif self.request_date_from and self.request_date_to:
                 if self.request_date_to >= self.request_date_from:
                     #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
-                    
-                    
                 else:
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
-                    
                     self.env.user.notify_warning(
-                        message='La fecha final debe ser mayor o igual a la inicial')
-                    
+                        message='La fecha final debe ser mayor o igual a la inicial')        
         else:
             if self.request_unit_half and self.request_date_from:
                 self.dias = 0
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
-                
-                
-                
                 
     
     def rangeDateft(self, dateInit, dateEnd):
