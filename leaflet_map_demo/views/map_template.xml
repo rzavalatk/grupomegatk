@@ -1,0 +1,23 @@
+
+<odoo>
+    <template id="leaflet_map_template" name="Leaflet Map Page">
+        <t t-call="web.layout">
+            <div class="oe_structure"/>
+            <div class="container mt32 mb32">
+                <h2>Mapa con Leaflet.js</h2>
+                <div id="leaflet_map" style="height: 500px;"></div>
+            </div>
+        </t>
+    </template>
+
+    <record id="action_leaflet_map" model="ir.actions.act_url">
+        <field name="name">Leaflet Map</field>
+        <field name="url">/leaflet_map</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem id="leaflet_map_menu_root" name="Leaflet Demo"/>
+    <menuitem id="leaflet_map_menu" name="Ver Mapa"
+              parent="leaflet_map_menu_root"
+              action="action_leaflet_map"/>
+</odoo>

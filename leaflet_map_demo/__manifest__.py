@@ -1,9 +1,10 @@
+
 {
     'name': 'Leaflet Map Demo',
     'version': '1.0',
     'depends': ['web'],
     'data': [
-        'views/map_view.xml',
+        'views/map_template.xml',
     ],
     'assets': {
         'web.assets_backend': [
@@ -13,4 +14,5 @@
         ],
     },
     'installable': True,
+    'application': True,
 }
