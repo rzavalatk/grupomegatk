@@ -68,6 +68,7 @@ class HrLeave(models.Model):
             ('18', '6:00 PM')
         ],
         string='Hour from',
+        default='7',
     )
 
     
@@ -102,7 +103,7 @@ class HrLeave(models.Model):
         ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
         ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
         ('18', '6:00 PM')
-    ], string='Hour to')
+    ], string='Hour to', default='16',)
     
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
