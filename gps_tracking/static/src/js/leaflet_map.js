@@ -77,8 +77,8 @@ odoo.define('gps_tracking.LeafletTripMap', function (require) {
     });
 
     // Registra el widget en el registro de campos
-    // FieldRegistry.add('leaflet_trip_map', LeafletTripMap);
-    registry.category('components').add('leaflet_trip_map', LeafletTripMap);
+    FieldRegistry.add('leaflet_trip_map', LeafletTripMap);
+    // registry.category('components').add('leaflet_trip_map', LeafletTripMap);
 
     return LeafletTripMap;
 });
