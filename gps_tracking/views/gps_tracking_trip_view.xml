@@ -139,7 +139,7 @@
                             <div class="oe_title">
                                 <h2>Ruta del Dispositivo</h2>
                                 <map res_partner="name" default_order="admn_code" routing="true" hide_name="true">
-                                    <field name="devide_id" string="ID"/>
+                                    <field name="device_id" string="ID"/>
                                     <field name="name" string="Nombre"/>
                                 </map>
                             </div>
