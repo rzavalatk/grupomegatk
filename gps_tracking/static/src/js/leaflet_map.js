@@ -4,6 +4,7 @@ odoo.define('gps_tracking.LeafletTripMap', function (require) {
     var Widget = require('web.Widget');
     var rpc = require('web.rpc');
     var FieldRegistry = require('web.field_registry');
+    var {registry} = require('@web/core/registry');
 
     var LeafletTripMap = Widget.extend({
         template: 'gps_tracking.LeafletMap',
