@@ -138,9 +138,10 @@
                         <page string="Mapa del Viaje">
                             <div class="oe_title">
                                 <h2>Ruta del Dispositivo</h2>
-                                <div class="leaflet-map-container">
-                                    <field name="map_html" widget="leaflet_trip_map"/>
-                                </div>
+                                <map res_partner="name" default_order="admn_code" routing="true" hide_name="true">
+                                    <field name="devide_id" string="ID"/>
+                                    <field name="name" string="Nombre"/>
+                                </map>
                             </div>
                         </page>
                     </notebook>
