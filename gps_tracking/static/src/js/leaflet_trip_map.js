@@ -23,6 +23,8 @@ odoo.define('gps_tracking.LeafletTripMap', function (require) {
 
         _loadLocations: function () {
             var self = this;
+            console.log("toy aqui");
+            
             return rpc.query({
                 model: 'gps.device.location',
                 method: 'search_read',
