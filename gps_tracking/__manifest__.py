@@ -19,13 +19,11 @@
       'assets': {
         'web.assets_backend': [
             '/gps_tracking/static/src/js/leaflet_trip_map.js',
+            'static/src/xml/leaflet_map.xml',
             '/gps_tracking/static/lib/leaflet/leaflet.css',
             '/gps_tracking/static/lib/leaflet/leaflet.js',
         ],
     },
-      'qweb': [
-        'static/src/xml/leaflet_map.xml',
-    ],
     'auto_install': False,
     'application': True,
     'installable': True
