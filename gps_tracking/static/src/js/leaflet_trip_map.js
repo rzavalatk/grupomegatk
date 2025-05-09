@@ -95,7 +95,7 @@ odoo.define('leaflet_map.LeafletWidget', function (require) {
     });
 
     // Registrar el widget con un nombre único
-    fieldRegistry.add('leaflet_map_widget', LeafletWidget);
+    fieldRegistry.add("leaflet_map_widget", LeafletWidget);
 
     return {
         LeafletWidget: LeafletWidget,
