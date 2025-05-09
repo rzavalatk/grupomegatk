@@ -86,10 +86,6 @@
         </field>
     </record>
 
-    <template id="LeafletMap" name="Leaflet Map Template">
-        <div class="leaflet-map-container" style="height: 400px; width: 100%;"></div>
-    </template>
-
     <record id="view_gps_device_trip_form" model="ir.ui.view">
         <field name="name">gps.device.trip.form</field>
         <field name="model">gps.device.trip</field>
