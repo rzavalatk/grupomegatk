@@ -143,7 +143,6 @@
 
     <record id="action_gps_device_trip" model="ir.actions.act_window">
         <field name="name">Viajes GPS</field>
-        <field name="tag">gps_tracking_form_controller</field>
         <field name="res_model">gps.device.trip</field>
         <field name="view_mode">tree,form</field>
     </record>

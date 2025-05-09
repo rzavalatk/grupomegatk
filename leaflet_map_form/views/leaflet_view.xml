@@ -1,0 +1,27 @@
+<odoo>
+  <record id="view_leaflet_location_form" model="ir.ui.view">
+    <field name="name">leaflet.location.form</field>
+    <field name="model">leaflet.location</field>
+    <field name="arch" type="xml">
+      <form string="Location">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="latitude"/>
+            <field name="longitude"/>
+          </group>
+          <div id="leaflet_map_container" style="height:400px;" class="oe_clear"/>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_leaflet_location" model="ir.actions.act_window">
+    <field name="name">Leaflet Locations</field>
+    <field name="res_model">leaflet.location</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_leaflet_root" name="Leaflet Demo"/>
+  <menuitem id="menu_leaflet_location" name="Locations" parent="menu_leaflet_root" action="action_leaflet_location"/>
+</odoo>
