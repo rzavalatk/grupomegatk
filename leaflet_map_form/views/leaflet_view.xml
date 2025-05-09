@@ -10,7 +10,7 @@
             <field name="latitude"/>
             <field name="longitude"/>
           </group>
-          <div id="leaflet_map_container" style="height:400px;" class="oe_clear"/>
+          <div id="leaflet_map_container" style="height:400px;" class="oe_clear"></div>
         </sheet>
       </form>
     </field>
