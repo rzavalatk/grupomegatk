@@ -7,3 +7,4 @@ class LeafletLocation(models.Model):
     name = fields.Char(string="Name")
     latitude = fields.Float(string="Latitude", default=19.4326)
     longitude = fields.Float(string="Longitude", default=-99.1332)
+    map_js = fields.Html(string="Map")
