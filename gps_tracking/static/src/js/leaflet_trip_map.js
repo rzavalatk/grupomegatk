@@ -9,6 +9,8 @@ odoo.define('your_module.LeafletMapWidget', function (require) {
         supportedFieldTypes: ['char'],
 
         init: function (parent, name, record, options) {
+            console.log("1");
+            
             this._super.apply(this, arguments);
             this.map = null;
             this.marker = null;
