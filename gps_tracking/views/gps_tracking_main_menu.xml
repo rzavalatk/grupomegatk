@@ -11,6 +11,11 @@
         action="action_gps_device_trip" 
         sequence="1"/>
 
+    <record id="action_gps_map" model="ir.actions.client">
+        <field name="name">Control de Visitas</field>
+        <field name="tag">leaflet_map_widget</field>
+    </record>
+    
     <menuitem id="menu_gps_map"
         name="Mapa"
         parent="menu_gps_device_root"
