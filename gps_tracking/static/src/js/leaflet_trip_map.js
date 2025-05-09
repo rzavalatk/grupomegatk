@@ -1,103 +1,70 @@
-odoo.define('leaflet_map.LeafletWidget', function (require) {
+odoo.define('gps_tracking.LeafletTripMap', function (require) {
     "use strict";
 
-    var AbstractField = require('web.AbstractField');
-    var fieldRegistry = require('web.field_registry');
-    var core = require('web.core');
+    const Widget = require('web.Widget');
+    const rpc = require('web.rpc');
 
-    var _t = core._t;
+    const LeafletTripMap = Widget.extend({
+        template: 'gps_tracking.LeafletMap',
 
-    var LeafletWidget = AbstractField.extend({
-        className: 'o_leaflet_widget',
-        supportedFieldTypes: ['char'],
-        jsLibs: [
-            '/leaflet_map/static/src/js/leaflet.js',
-            '/leaflet_map/static/src/css/leaflet.css'
-        ],
-
-        init: function (parent, name, record, options) {
+        init: function (parent, options) {
             this._super.apply(this, arguments);
-            this.map = null;
-            this.marker = null;
+            this.tripId = options.trip_id;
         },
 
         willStart: function () {
-            // Verificar si Leaflet está cargado
-            if (typeof L === 'undefined') {
-                return Promise.reject("Leaflet library not loaded");
-            }
-            return this._super();
+            return this._loadLocations();
         },
 
-        _render: function () {
-            this.$el.empty().html('<div class="leaflet-container" style="height: 400px; width: 100%;"></div>');
-            
-            if (!this.map) {
-                this.map = L.map(this.$el.find('.leaflet-container')[0]);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    maxZoom: 19,
-                }).addTo(this.map);
-            }
-
-            // Centrar el mapa en las coordenadas guardadas o en una ubicación por defecto
-            var defaultView = [0, 0];
-            var zoomLevel = 2;
-            
-            if (this.value) {
-                try {
-                    var coords = JSON.parse(this.value);
-                    if (coords.lat && coords.lng) {
-                        defaultView = [coords.lat, coords.lng];
-                        zoomLevel = 13;
-                        if (this.marker) {
-                            this.map.removeLayer(this.marker);
-                        }
-                        this.marker = L.marker(defaultView).addTo(this.map);
-                    }
-                } catch (e) {
-                    console.error(_t("Error parsing coordinates"), e);
-                }
-            }
-
-            this.map.setView(defaultView, zoomLevel);
-
-            // Manejar clics en el mapa
-            this.map.on('click', this._onMapClick.bind(this));
-
-            // Forzar redimensionamiento
-            setTimeout(this._invalidateMap.bind(this), 0);
-        },
-
-        _onMapClick: function (e) {
-            if (this.marker) {
-                this.map.removeLayer(this.marker);
-            }
-            this.marker = L.marker(e.latlng).addTo(this.map);
-            this._setValue(JSON.stringify({
-                lat: e.latlng.lat,
-                lng: e.latlng.lng
-            }));
-        },
-
-        _invalidateMap: function () {
-            if (this.map) {
-                this.map.invalidateSize();
-            }
-        },
-
-        destroy: function () {
-            if (this.map) {
-                this.map.remove();
-            }
+        start: function () {
             this._super.apply(this, arguments);
+            return this._initMap();
         },
+
+        _loadLocations: function () {
+            var self = this;
+            console.log("toy aqui");
+            
+            return rpc.query({
+                model: 'gps.device.location',
+                method: 'search_read',
+                args: [[['trip_id', '=', this.tripId]], ['latitude', 'longitude', 'timestamp']],
+            }).then(function (locations) {
+                self.locations = locations;
+            });
+        },
+
+        _initMap: function () {
+            if (!this.locations || this.locations.length === 0) {
+                this.$el.html("<div class='alert alert-info'>No hay ubicaciones registradas para este viaje.</div>");
+                return;
+            }
+
+            var points = this.locations.map(function (loc) {
+                return [parseFloat(loc.latitude), parseFloat(loc.longitude)];
+            });
+
+            this.map = L.map(this.el).setView(points[0], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(this.map);
+
+            var polyline = L.polyline(points, {
+                color: 'blue',
+                weight: 4,
+                opacity: 0.7,
+                smoothFactor: 1
+            }).addTo(this.map);
+
+            if (points.length > 0) {
+                L.marker(points[0]).addTo(this.map).bindPopup("Inicio del viaje").openPopup();
+                L.marker(points[points.length - 1]).addTo(this.map).bindPopup("Última posición registrada");
+            }
+
+            this.map.fitBounds(polyline.getBounds());
+        }
     });
 
-    // Registrar el widget con un nombre único
-    fieldRegistry.add("leaflet_map_widget", LeafletWidget);
-
-    return {
-        LeafletWidget: LeafletWidget,
-    };
+    return LeafletTripMap;
 });

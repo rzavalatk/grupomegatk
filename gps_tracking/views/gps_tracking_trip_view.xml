@@ -135,11 +135,6 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Mapa">
-                            <group>
-                                <field name="map_html" widget="leaflet_map_widget"/>
-                            </group>
-                        </page>
                     </notebook>
                 </sheet>
             </form>
