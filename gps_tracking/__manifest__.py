@@ -18,9 +18,9 @@
     ],
       'assets': {
         'web.assets_backend': [
+            '/gps_tracking/static/src/js/leaflet_trip_map.js',
             '/gps_tracking/static/lib/leaflet/leaflet.css',
             '/gps_tracking/static/lib/leaflet/leaflet.js',
-            '/gps_tracking/static/src/js/leaflet_trip_map.js',
         ],
     },
       'qweb': [
