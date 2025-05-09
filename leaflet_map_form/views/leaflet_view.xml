@@ -9,10 +9,8 @@
             <field name="name"/>
             <field name="latitude"/>
             <field name="longitude"/>
-            <div style="height:400px;" class="oe_clear">
-              <field name="map_js" widget="leaflet_map_container"/>
-            </div>
           </group>
+          <div id="leaflet_map_container" style="height:400px;" class="oe_clear"/>
         </sheet>
       </form>
     </field>
