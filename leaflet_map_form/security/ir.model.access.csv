@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_leaflet.location,access_leaflet.location,model_leaflet.location,map_admin,1,1,1,1
+access_leaflet_location,access_leaflet_location,model_leaflet_location,map_admin,1,1,1,1
