@@ -1,0 +1,14 @@
+<data>
+
+    <record id="module_category_leaflet_map" model="ir.module.category">
+        <field name="name">Leaflet map in form</field>
+        <field name="description">Leaflet map in form</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="map_admin" model="res.groups">
+        <field name="category_id" ref="module_category_leaflet_map" />
+        <field name="name">Map Viewer</field>
+    </record>
+
+</data>
