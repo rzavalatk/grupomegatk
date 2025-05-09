@@ -1,99 +1,86 @@
-odoo.define('your_module.LeafletMapWidget', function (require) {
+odoo.define('leaflet_map.LeafletWidget', function (require) {
     "use strict";
 
     var AbstractField = require('web.AbstractField');
     var fieldRegistry = require('web.field_registry');
+    var core = require('web.core');
 
-    var LeafletMapWidget = AbstractField.extend({
-        className: 'o_leaflet_map',
+    var _t = core._t;
+
+    var LeafletWidget = AbstractField.extend({
+        className: 'o_leaflet_widget',
         supportedFieldTypes: ['char'],
+        jsLibs: [
+            '/leaflet_map/static/src/js/leaflet.js',
+            '/leaflet_map/static/src/css/leaflet.css'
+        ],
 
         init: function (parent, name, record, options) {
-            console.log("1");
-            
             this._super.apply(this, arguments);
             this.map = null;
             this.marker = null;
-            this._isMounted = false;
         },
 
         willStart: function () {
-            // Cargar Leaflet dinámicamente si no está cargado
-            if (!window.L) {
-                return $.getScript("https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
-                    .then(function() {
-                        $('<link>')
-                            .appendTo('head')
-                            .attr({
-                                type: 'text/css',
-                                rel: 'stylesheet',
-                                href: 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css'
-                            });
-                    });
+            // Verificar si Leaflet está cargado
+            if (typeof L === 'undefined') {
+                return Promise.reject("Leaflet library not loaded");
             }
             return this._super();
         },
 
         _render: function () {
-            if (!this._isMounted) {
-                this.$el.html('<div class="leaflet-map-container" style="height: 400px; width: 100%;"></div>');
-                this._isMounted = true;
+            this.$el.empty().html('<div class="leaflet-container" style="height: 400px; width: 100%;"></div>');
+            
+            if (!this.map) {
+                this.map = L.map(this.$el.find('.leaflet-container')[0]);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19,
+                }).addTo(this.map);
             }
 
-            // Esperar a que el DOM esté listo
-            this._super().then(function() {
-                if (this.map) {
-                    this.map.remove();
-                }
-
-                var mapContainer = this.$el.find('.leaflet-map-container')[0];
-                this.map = L.map(mapContainer);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(this.map);
-
-                // Centrar el mapa si hay coordenadas
-                if (this.value) {
-                    try {
-                        var coords = JSON.parse(this.value);
-                        if (coords.lat && coords.lng) {
-                            this.map.setView([coords.lat, coords.lng], 13);
-                            this._addMarker(coords.lat, coords.lng);
-                            return;
+            // Centrar el mapa en las coordenadas guardadas o en una ubicación por defecto
+            var defaultView = [0, 0];
+            var zoomLevel = 2;
+            
+            if (this.value) {
+                try {
+                    var coords = JSON.parse(this.value);
+                    if (coords.lat && coords.lng) {
+                        defaultView = [coords.lat, coords.lng];
+                        zoomLevel = 13;
+                        if (this.marker) {
+                            this.map.removeLayer(this.marker);
                         }
-                    } catch (e) {
-                        console.error("Error parsing coordinates", e);
+                        this.marker = L.marker(defaultView).addTo(this.map);
                     }
+                } catch (e) {
+                    console.error(_t("Error parsing coordinates"), e);
                 }
+            }
 
-                // Vista por defecto
-                this.map.setView([51.505, -0.09], 2);
+            this.map.setView(defaultView, zoomLevel);
 
-                // Manejador de clics
-                this.map.on('click', this._onMapClick.bind(this));
-                
-                // Forzar redimensionamiento
-                setTimeout(this._invalidateSize.bind(this), 0);
-            }.bind(this));
+            // Manejar clics en el mapa
+            this.map.on('click', this._onMapClick.bind(this));
+
+            // Forzar redimensionamiento
+            setTimeout(this._invalidateMap.bind(this), 0);
         },
 
-        _addMarker: function(lat, lng) {
+        _onMapClick: function (e) {
             if (this.marker) {
                 this.map.removeLayer(this.marker);
             }
-            this.marker = L.marker([lat, lng]).addTo(this.map);
-        },
-
-        _onMapClick: function(e) {
-            this._addMarker(e.latlng.lat, e.latlng.lng);
+            this.marker = L.marker(e.latlng).addTo(this.map);
             this._setValue(JSON.stringify({
                 lat: e.latlng.lat,
                 lng: e.latlng.lng
             }));
         },
 
-        _invalidateSize: function() {
+        _invalidateMap: function () {
             if (this.map) {
                 this.map.invalidateSize();
             }
@@ -107,7 +94,10 @@ odoo.define('your_module.LeafletMapWidget', function (require) {
         },
     });
 
-    fieldRegistry.add('leaflet_map', LeafletMapWidget);
+    // Registrar el widget con un nombre único
+    fieldRegistry.add('leaflet_map_widget', LeafletWidget);
 
-    return LeafletMapWidget;
+    return {
+        LeafletWidget: LeafletWidget,
+    };
 });
