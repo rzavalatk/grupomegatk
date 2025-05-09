@@ -402,6 +402,8 @@ odoo.define('control_visitas.visitas_menu_action', function (require) {
 
         start: function () {
             var self = this;
+            console.log("1");
+            
 
             ajax.rpc('/control_visitas_user_reg').then(function (result) {
                 if(result.user_email != 'lmoran@megatk.com' || result.user_email != 'areyes@megatk.com') {
