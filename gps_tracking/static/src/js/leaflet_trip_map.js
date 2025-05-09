@@ -1,70 +1,111 @@
-odoo.define('gps_tracking.LeafletTripMap', function (require) {
+odoo.define('your_module.LeafletMapWidget', function (require) {
     "use strict";
 
-    const Widget = require('web.Widget');
-    const rpc = require('web.rpc');
+    var AbstractField = require('web.AbstractField');
+    var fieldRegistry = require('web.field_registry');
 
-    const LeafletTripMap = Widget.extend({
-        template: 'gps_tracking.LeafletMap',
+    var LeafletMapWidget = AbstractField.extend({
+        className: 'o_leaflet_map',
+        supportedFieldTypes: ['char'],
 
-        init: function (parent, options) {
+        init: function (parent, name, record, options) {
             this._super.apply(this, arguments);
-            this.tripId = options.trip_id;
+            this.map = null;
+            this.marker = null;
+            this._isMounted = false;
         },
 
         willStart: function () {
-            return this._loadLocations();
+            // Cargar Leaflet dinámicamente si no está cargado
+            if (!window.L) {
+                return $.getScript("https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
+                    .then(function() {
+                        $('<link>')
+                            .appendTo('head')
+                            .attr({
+                                type: 'text/css',
+                                rel: 'stylesheet',
+                                href: 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css'
+                            });
+                    });
+            }
+            return this._super();
         },
 
-        start: function () {
+        _render: function () {
+            if (!this._isMounted) {
+                this.$el.html('<div class="leaflet-map-container" style="height: 400px; width: 100%;"></div>');
+                this._isMounted = true;
+            }
+
+            // Esperar a que el DOM esté listo
+            this._super().then(function() {
+                if (this.map) {
+                    this.map.remove();
+                }
+
+                var mapContainer = this.$el.find('.leaflet-map-container')[0];
+                this.map = L.map(mapContainer);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(this.map);
+
+                // Centrar el mapa si hay coordenadas
+                if (this.value) {
+                    try {
+                        var coords = JSON.parse(this.value);
+                        if (coords.lat && coords.lng) {
+                            this.map.setView([coords.lat, coords.lng], 13);
+                            this._addMarker(coords.lat, coords.lng);
+                            return;
+                        }
+                    } catch (e) {
+                        console.error("Error parsing coordinates", e);
+                    }
+                }
+
+                // Vista por defecto
+                this.map.setView([51.505, -0.09], 2);
+
+                // Manejador de clics
+                this.map.on('click', this._onMapClick.bind(this));
+                
+                // Forzar redimensionamiento
+                setTimeout(this._invalidateSize.bind(this), 0);
+            }.bind(this));
+        },
+
+        _addMarker: function(lat, lng) {
+            if (this.marker) {
+                this.map.removeLayer(this.marker);
+            }
+            this.marker = L.marker([lat, lng]).addTo(this.map);
+        },
+
+        _onMapClick: function(e) {
+            this._addMarker(e.latlng.lat, e.latlng.lng);
+            this._setValue(JSON.stringify({
+                lat: e.latlng.lat,
+                lng: e.latlng.lng
+            }));
+        },
+
+        _invalidateSize: function() {
+            if (this.map) {
+                this.map.invalidateSize();
+            }
+        },
+
+        destroy: function () {
+            if (this.map) {
+                this.map.remove();
+            }
             this._super.apply(this, arguments);
-            return this._initMap();
         },
-
-        _loadLocations: function () {
-            var self = this;
-            console.log("toy aqui");
-            
-            return rpc.query({
-                model: 'gps.device.location',
-                method: 'search_read',
-                args: [[['trip_id', '=', this.tripId]], ['latitude', 'longitude', 'timestamp']],
-            }).then(function (locations) {
-                self.locations = locations;
-            });
-        },
-
-        _initMap: function () {
-            if (!this.locations || this.locations.length === 0) {
-                this.$el.html("<div class='alert alert-info'>No hay ubicaciones registradas para este viaje.</div>");
-                return;
-            }
-
-            var points = this.locations.map(function (loc) {
-                return [parseFloat(loc.latitude), parseFloat(loc.longitude)];
-            });
-
-            this.map = L.map(this.el).setView(points[0], 13);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(this.map);
-
-            var polyline = L.polyline(points, {
-                color: 'blue',
-                weight: 4,
-                opacity: 0.7,
-                smoothFactor: 1
-            }).addTo(this.map);
-
-            if (points.length > 0) {
-                L.marker(points[0]).addTo(this.map).bindPopup("Inicio del viaje").openPopup();
-                L.marker(points[points.length - 1]).addTo(this.map).bindPopup("Última posición registrada");
-            }
-
-            this.map.fitBounds(polyline.getBounds());
-        }
     });
 
-    return LeafletTripMap;
+    fieldRegistry.add('leaflet_map', LeafletMapWidget);
+
+    return LeafletMapWidget;
 });
