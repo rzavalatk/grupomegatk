@@ -21,7 +21,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-                L.marker([19.4326, -99.1332]).addTo(map)
+                L.marker([14.0989839, 87.1899595]).addTo(map)
                     .bindPopup('Ubicación inicial')
                     .openPopup();
             }, 0);
