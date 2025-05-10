@@ -4,7 +4,8 @@
         <div class="row">
             <div id="root">
                 <div class="container pt-5">
-                    <h1>Menu</h1>
+                    <h1>Mapa Leaflet.js</h1>
+                    <div id="map" style="height: 400px; width: 100%;"></div>
                 </div>
             </div>
         </div>
