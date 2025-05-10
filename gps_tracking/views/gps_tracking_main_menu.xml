@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="gps_tracking_actio " model="ir.actions.client">
+        <field name="name">Rastreo GPS</field>
+        <field name="tag">gps_tracking_tag</field>
+    </record>
+
     <menuitem id="menu_gps_device_root"
-    name="GPS"
-    sequence="10"
-    web_icon="gps_tracking,static/description/localizar.png"/>
+        name="GPS"
+        sequence="10"
+        web_icon="gps_tracking,static/description/localizar.png"/>
 
     <menuitem id="menu_gps_device_trip" 
         name="Viajes GPS" 
