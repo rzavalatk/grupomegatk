@@ -1,15 +1,17 @@
-/** @odoo-module **/
+odoo.define('gps_tracking.tracking_menu_action', function (require) {
+    "use strict";
 
-import { registry } from "@web/core/registry";
-import { AbstractAction } from "@web/webclient/actions/abstract_action";
-import { loadJS } from "@web/core/assets";
-import { patch } from "@web/core/utils/patch";
+    const AbstractAction = require('web.AbstractAction');
+    const core = require('web.core');
 
-export class TrackingMenuAction extends AbstractAction {
-    setup() {
-        super.setup();
-        console.log("funciona");
-    }
-}
+    const CustomCardMenu = AbstractAction.extend({
+        template: 'TrackingCardMenu',  // <-- Esto es importante
+        start: function () {
+            console.log("funciona");
+            return this._super.apply(this, arguments);
+        },
+    });
 
-registry.category("actions").add("gps_tracking_tag", TrackingMenuAction);
+    core.action_registry.add('gps_tracking_tag', CustomCardMenu);  // Este es el tag que se llama en el XML
+    return CustomCardMenu;
+});
