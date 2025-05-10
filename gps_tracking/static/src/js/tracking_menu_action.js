@@ -15,13 +15,13 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         _initLeafletMap: function () {
             // Espera a que el DOM esté cargado
             setTimeout(() => {
-                const map = L.map('map').setView([14.0989839, 87.1899595], 13); // Ciudad de México
+                const map = L.map('map').setView([14.0989839, -87.1899595], 13); // Ciudad de México
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-                L.marker([14.0989839, 87.1899595]).addTo(map)
+                L.marker([14.0989839, -87.1899595]).addTo(map)
                     .bindPopup('Ubicación inicial')
                     .openPopup();
             }, 0);
