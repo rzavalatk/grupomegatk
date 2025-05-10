@@ -286,6 +286,7 @@ class HrPermisos(models.Model):
 		año3 = 15 * 480
 		añomas = 20 * 480
 		nic = 2.5 * 480
+		number_of_hours = 0
 		dias = 0
 		horas = 0 
 		minutos_resultante = 0
@@ -299,15 +300,32 @@ class HrPermisos(models.Model):
 						if employe_id.fecha_ingreso.day == hoy.day and employe_id.fecha_ingreso.month == hoy.month:
 							if hoy.year - employe_id.fecha_ingreso.year == 1:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año1)
+								number_of_hours = año1
 							elif hoy.year - employe_id.fecha_ingreso.year == 2:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año2)
+								number_of_hours = año2
 							elif hoy.year - employe_id.fecha_ingreso.year == 3:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año3)
+								number_of_hours = año3
 							else:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, añomas)
+								number_of_hours = añomas
+							#AGREGAR VACACIONES A PERFIL DE EMPLEADOS
 							employe_id.sudo().write({'permisos_dias': dias,
 								'permisos_horas': horas,
 								'permisos_minutos': minutos_resultante})
+							#AGREGAR VACACIONES A MODULO DE PERMISOS
+							leave_type_id = self.env['hr.leave.type'].sudo().search([('vacaciones', '=', 'True')], limit=1)
+							number_of_hours = number_of_hours / 60
+							allocation_vals = {
+								'employee_id': employe_id.id,
+								'holiday_status_id': leave_type_id.id,
+								'number_of_days': number_of_hours,
+								'name': "Asignación de vacaciones por ley",
+							}
+							leave_allocation = self.env['hr.leave.allocation'].create(allocation_vals)
+							leave_allocation.action_confirm()
+							leave_allocation.action_approve()
 							template = self.env.ref('permisos.email_template_vaciones_automaticas')
 							email_values = {'email_to': 'dzuniga@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),

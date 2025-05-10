@@ -147,9 +147,6 @@ class HrLeave(models.Model):
                 
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = self.number_of_hours_display - valor_hora
-                _logger.warning("datos de horas y dias")
-                _logger.warning("valor hora, minutos, hours : %s, %s, %s", valor_hora, valor_minutos,self.number_of_hours_display)
-                _logger.warning(self.number_of_days_display)
                 self.dias = 0
                 self.horas = valor_hora
                 if valor_minutos == 0.25:
@@ -160,21 +157,12 @@ class HrLeave(models.Model):
                     self.minutos = 45
                 else:
                     self.minutos = 0
-                
-                _logger.warning("Entre al if request unit hours")
-                _logger.warning(self.dias)
-                _logger.warning(self.horas)
-                _logger.warning(self.minutos)
             elif self.request_date_from and self.request_date_to:
                 if self.request_date_to >= self.request_date_from:
                     #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
-                    _logger.warning("Entre al if date")
-                    _logger.warning(self.dias)
-                    _logger.warning(self.horas)
-                    _logger.warning(self.minutos)
                 else:
                     self.dias = 0
                     self.horas = 0
@@ -187,12 +175,6 @@ class HrLeave(models.Model):
                 self.horas = self.number_of_hours_display
                 self.minutos = 0
                 
-                _logger.warning("Entre al if del unit half")
-                _logger.warning(self.dias)
-                _logger.warning(self.horas)
-                _logger.warning(self.minutos)
-                
-    
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
             dateInit + timedelta(n) for n in range(int((dateEnd - dateInit).days))
@@ -291,15 +273,8 @@ class HrLeave(models.Model):
         _logger.warning("Prueba de vacaciones restantes empl")
         minutos_actuales = (self.employee_id.permisos_dias * 480) + (
             self.employee_id.permisos_horas * 60) + self.employee_id.permisos_minutos
-        _logger.warning(self.employee_id.permisos_dias)
-        _logger.warning(self.employee_id.permisos_horas)
-        _logger.warning(self.employee_id.permisos_minutos)
         minutos_solicitados = (self.dias * 480) + \
             (self.horas * 60) + self.minutos
-        _logger.warning("datos solicitados")
-        _logger.warning(self.dias)
-        _logger.warning(self.horas)
-        _logger.warning(self.minutos)
         minutos_resultante = minutos_actuales - \
             minutos_solicitados if operacion == 'resta' else minutos_actuales + minutos_solicitados
         dias = 0
@@ -323,10 +298,6 @@ class HrLeave(models.Model):
     def action_approve(self):
         _logger.warning(self.holiday_status_id.vacaciones)
         if self.holiday_status_id.vacaciones:
-            _logger.warning("Datos antes de vaciaciones restantes empl")
-            _logger.warning(self.dias)
-            _logger.warning(self.horas)
-            _logger.warning(self.minutos)
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
            
