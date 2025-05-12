@@ -9,6 +9,12 @@
                         <h2 class="">Bienvenido</h2>
                         <p class="">Para iniciar un viaje ingrese el ID del dispositivo</p>
                         <input type="text" class=""/>
+                        <div class="flex-grow-1">
+                            <button class="o_hr_attendance_button_dismiss btn btn-primary btn-lg fs-2 px-5 py-3">
+                                <i class="fa fa-chevron-left me-2"/>
+                                <span class="fs-2">Go back</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
