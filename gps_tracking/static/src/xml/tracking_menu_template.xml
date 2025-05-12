@@ -73,9 +73,19 @@
                     <div>
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
-                            <h2 class="card-title">¡Bienvenido!</h2>
-                            <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
-                            <input type="text" class="card-input"/>
+                            <t t-if="1 == 1">
+                                <h2 class="card-title">¡Bienvenido!</h2>
+                            </t>
+                            <t t-else="">
+                                <h2 class="card-title">En Curso</h2>
+                            </t>
+                            <t t-if="1 == 1">
+                                <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                                <input type="text" class="card-input"/>
+                            </t>
+                            <t t-else="">
+                                <p class="card-text">¿Desea finalizar el viaje? Una vez finalizado no se puede reactivar</p>
+                            </t>
                             <div class="flex-grow-1 conteiner-btn">
                                 <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ 1 == 1 ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
                                     <span class="text-bold align-middle fs-2 me-3 text-white" t-if="!(1 == 1)">Iniciar Viaje</span>
