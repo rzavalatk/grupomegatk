@@ -6,7 +6,7 @@
                 .menu-card {
                     display: flex;
                     flex-direction: column;
-                    align-items: center
+                    align-items: center;
                     background-color: #242733; 
                     height: 350px; 
                     width: 400px; 
