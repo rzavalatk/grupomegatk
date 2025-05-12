@@ -10,9 +10,10 @@
                         <p class="">Para iniciar un viaje ingrese el ID del dispositivo</p>
                         <input type="text" class=""/>
                         <div class="flex-grow-1">
-                            <button class="o_hr_attendance_button_dismiss btn btn-primary btn-lg fs-2 px-5 py-3">
-                                <i class="fa fa-chevron-left me-2"/>
-                                <span class="fs-2">Go back</span>
+                            <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ checked_in ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
+                                <span class="align-middle fs-2 me-3 text-white" t-if="!checked_in">Check IN</span>
+                                <i t-attf-class="fa fa-4x fa-sign-{{ checked_in ? 'out' : 'in' }} align-middle"/>
+                                <span class="align-middle fs-2 ms-3" t-if="checked_in">Check OUT</span>
                             </button>
                         </div>
                     </div>
