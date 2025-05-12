@@ -6,7 +6,9 @@
                 <div class="container pt-5">
                     <h1>Menu</h1>
                     <div class="" style="background-color: #242733; height: 500px; width: 400px; border-radius: 10px;">
-
+                        <h2 class="">Bienvenido</h2>
+                        <p class="">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                        <input type="text" class=""/>
                     </div>
                 </div>
             </div>
