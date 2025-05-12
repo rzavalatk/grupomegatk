@@ -10,13 +10,22 @@
                     border-radius: 10px;
                     padding: 30px;
                 }
+
+                .card-title {
+                    font-size: 20px;
+                    text-align: center;
+                }
+
+                .card-text {
+                    font-size: 14px;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5">
                     <h1>Menu</h1>
                     <div class="menu-card">
-                        <h2 class="">Bienvenido</h2>
-                        <p class="">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                        <h2 class="card-title">Bienvenido</h2>
+                        <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                         <input type="text" class=""/>
                         <div class="flex-grow-1">
                             <button class="align-self-center px-5 py-3 mt-4 mb-2">
