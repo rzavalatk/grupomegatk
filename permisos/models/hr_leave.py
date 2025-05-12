@@ -146,6 +146,7 @@ class HrLeave(models.Model):
             if self.request_unit_hours:
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = self.number_of_hours_display - valor_hora
+                _logger.warning(self.request_date_from.weekday())
                 if self.request_date_from.weekday() == 6:
                     self.dias = 0
                     self.horas = valor_hora * 2
