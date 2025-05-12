@@ -5,7 +5,7 @@
             <style>
                 .menu-card {
                     background-color: #242733; 
-                    height: 500px; 
+                    height: 300px; 
                     width: 400px; 
                     border-radius: 0 0 10px 10px;
                     padding: 30px;
