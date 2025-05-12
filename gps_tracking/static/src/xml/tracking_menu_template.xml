@@ -81,7 +81,7 @@
                             </t>
                             <t t-if="1 == 1">
                                 <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
-                                <input type="text" class="card-input"/>
+                                <input type="text" class="card-input" id="id_device"/>
                             </t>
                             <t t-else="">
                                 <p class="card-text">¿Desea finalizar el viaje? Una vez finalizado no se puede reactivar</p>
