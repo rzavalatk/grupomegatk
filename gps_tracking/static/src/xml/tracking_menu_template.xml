@@ -12,7 +12,7 @@
                 }
 
                 .banner {
-                    background-image: linear-gradient(to right, #004d99, #0080ff);
+                    background-image: linear-gradient(to right, #004080, #0080ff);
                     height: 60px;
                 }
 
@@ -29,17 +29,19 @@
             <div id="root">
                 <div class="container pt-5">
                     <h1>Menu</h1>
-                    <div class="menu-card">
+                    <div>
                         <div class="banner"></div>
-                        <h2 class="card-title">Bienvenido</h2>
-                        <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
-                        <input type="text" class=""/>
-                        <div class="flex-grow-1">
-                            <button class="align-self-center px-5 py-3 mt-4 mb-2">
-                                <span class="align-middle fs-2 me-3 text-white" t-if="!checked_in">Iniciar Viaje</span>
-                                <i t-attf-class="fa fa-4x fa-sign-{{ checked_in ? 'out' : 'in' }} align-middle"/>
-                                <span class="align-middle fs-2 ms-3" t-if="checked_in">Finalizar Viaje</span>
-                            </button>
+                        <div class="menu-card">
+                            <h2 class="card-title">Bienvenido</h2>
+                            <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                            <input type="text" class=""/>
+                            <div class="flex-grow-1">
+                                <button class="align-self-center px-5 py-3 mt-4 mb-2">
+                                    <span class="align-middle fs-2 me-3 text-white" t-if="!checked_in">Iniciar Viaje</span>
+                                    <i t-attf-class="fa fa-4x fa-sign-{{ checked_in ? 'out' : 'in' }} align-middle"/>
+                                    <span class="align-middle fs-2 ms-3" t-if="checked_in">Finalizar Viaje</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
