@@ -4,13 +4,17 @@
         <div class="row">
             <style>
                 .menu-card {
+                    background-color: #242733; 
+                    height: 500px; 
+                    width: 400px; 
+                    border-radius: 10px;
                     padding: 10px;
                 }
             </style>
             <div id="root">
                 <div class="container menu-card pt-5">
                     <h1>Menu</h1>
-                    <div class="" style="background-color: #242733; height: 500px; width: 400px; border-radius: 10px;">
+                    <div class="menu-card">
                         <h2 class="">Bienvenido</h2>
                         <p class="">Para iniciar un viaje ingrese el ID del dispositivo</p>
                         <input type="text" class=""/>
