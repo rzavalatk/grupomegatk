@@ -9,9 +9,18 @@
                     margin: 0 auto;
                 }
 
+                .conteiner-btn {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
                 .flex-column {
                     display: flex;
                     flex-direction: column;
+                }
+
+                .flex-end {
+                    justify-content: flex-end;
                 }
 
                 .text-bold {
@@ -60,14 +69,14 @@
                 }
             </style>
             <div id="root">
-                <div class="container pt-5">
+                <div class="container contenedor pt-5">
                     <div>
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
                             <h2 class="card-title">¡Bienvenido!</h2>
                             <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                             <input type="text" class="card-input"/>
-                            <div class="flex-grow-1 flex-column">
+                            <div class="flex-grow-1 conteiner-btn">
                                 <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ checked_in ? 'warning' : 'success' }} btn-start align-self-center px-5 py-3 mt-4 mb-2">
                                     <span class="text-bold align-middle fs-2 me-3 text-white" t-if="!checked_in">Iniciar Viaje</span>
                                     <i t-attf-class="fa fa-4x fa-sign-{{ checked_in ? 'out' : 'in' }} align-middle"/>
