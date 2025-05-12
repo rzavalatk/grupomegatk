@@ -4,8 +4,11 @@
         <div class="row">
             <style>
                 .menu-card {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center
                     background-color: #242733; 
-                    height: 300px; 
+                    height: 350px; 
                     width: 400px; 
                     border-radius: 0 0 10px 10px;
                     padding: 30px;
@@ -25,6 +28,7 @@
 
                 .card-text {
                     font-size: 18px;
+                    text-align: center;
                 }
 
             </style>
@@ -34,7 +38,7 @@
                     <div>
                         <div class="banner"></div>
                         <div class="menu-card">
-                            <h2 class="card-title">Bienvenido</h2>
+                            <h2 class="card-title">¡Bienvenido!</h2>
                             <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                             <input type="text" class=""/>
                             <div class="flex-grow-1">
