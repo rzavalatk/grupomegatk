@@ -8,11 +8,15 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         template: 'TrackingCardMenu',
 
         events: {
-            "click .btn-success": "_onClickPrueba",
+            "click .btn-success": "_onClickIniciarViaje",
             "click .btn-warning": "_onClickPrueba",
         },
 
-        _onClickPrueba: function () {
+        _onClickIniciarViaje: function () {
+            this._startTrip();
+        },
+
+        _startTrip: function() {
             console.log("hola");
         },
 
