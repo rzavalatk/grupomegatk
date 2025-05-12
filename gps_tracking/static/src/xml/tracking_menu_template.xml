@@ -36,7 +36,7 @@
                 }
 
                 .text-bold {
-                    font-weigth: bold;
+                    font-weight: bold;
                 }
 
             </style>
