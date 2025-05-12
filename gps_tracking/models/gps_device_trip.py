@@ -17,6 +17,7 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     tiempo_usado = fields.Char('Tiempo Usado')
+    map_html = fields.Html(string="Mapa")
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -71,6 +72,7 @@ class GpsDeviceTrip(models.Model):
             'state': 'new'
         })
         
+        self.fetch_device_positions()
         self.write({'state': 'ongoing'})
         return trip
     
@@ -93,7 +95,7 @@ class GpsDeviceTrip(models.Model):
             
         active = self.check_trips()
         if active:
-            self.fetch_device_positions()
+
             cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
             cron.write({'active': True, 'nextcall': fields.Datetime.now()})
         else:
