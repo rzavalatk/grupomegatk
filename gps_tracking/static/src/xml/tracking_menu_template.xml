@@ -12,7 +12,7 @@
                 }
             </style>
             <div id="root">
-                <div class="container menu-card pt-5">
+                <div class="container pt-5">
                     <h1>Menu</h1>
                     <div class="menu-card">
                         <h2 class="">Bienvenido</h2>
