@@ -828,11 +828,11 @@ class HrPayslipWorkedDays(models.Model):
     sequence = fields.Integer(required=True, index=True, default=10,
                               help="Sequence")
     code = fields.Char(required=True, string="Codigo",
-                       help="The code that can be used in the salary rules")
+                       help="El código que se puede utilizar en las reglas salariales")
     number_of_days = fields.Float(string='Numero de dias',
-                                  help="Number of days worked")
+                                  help="Numero de dias trabajados")
     number_of_hours = fields.Float(string='Numero de horas',
-                                   help="Number of hours worked")
+                                   help="Numero de dias trabajados")
     contract_id = fields.Many2one('hr.contract', string='Contrato',
                                   required=True,)
 

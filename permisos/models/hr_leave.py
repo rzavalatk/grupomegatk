@@ -162,7 +162,7 @@ class HrLeave(models.Model):
                 if self.request_date_from.weekday() == 5:
                     self.dias = 0
                     self.horas = valor_hora * 2
-                    self.number_of_hours_display = self.horas
+                    self.number_of_hours_text = self.horas
                     if valor_minutos == 0.25:
                         self.minutos = 15 * 2
                     elif valor_minutos == 0.5:
@@ -180,7 +180,7 @@ class HrLeave(models.Model):
                     
                     if self.request_date_from.weekday() == 5:
                         self.horas = 8
-                        self.number_of_hours_display = self.horas
+                        self.number_of_hours_text = self.horas
                 else:
                     self.dias = 0
                     self.horas = 0

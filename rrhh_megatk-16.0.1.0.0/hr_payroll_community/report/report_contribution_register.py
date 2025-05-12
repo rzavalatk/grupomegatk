@@ -32,7 +32,7 @@ class ContributionRegisterReport(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
 
         if not data.get('form'):
-            raise UserError(_("Form content is missing, this report cannot be printed."))
+            raise UserError(_("Falta el contenido del formulario, este informe no se puede imprimir."))
 
         register_ids = self.env.context.get('active_ids', [])
         contrib_registers = self.env['hr.contribution.register'].browse(register_ids)
