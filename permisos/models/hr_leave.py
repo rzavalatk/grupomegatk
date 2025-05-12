@@ -147,17 +147,7 @@ class HrLeave(models.Model):
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = self.number_of_hours_display - valor_hora
                 _logger.warning(self.request_date_from.weekday())
-                if self.request_date_from.weekday() == 6:
-                    self.dias = 0
-                    self.horas = valor_hora * 2
-                    if valor_minutos == 0.25:
-                        self.minutos = 15 * 2
-                    elif valor_minutos == 0.5:
-                        self.minutos = 30 * 2
-                    elif valor_minutos == 0.75:
-                        self.minutos = 45 * 2
-                    else:
-                        self.minutos = 0
+                
                 self.dias = 0
                 self.horas = valor_hora
                 if valor_minutos == 0.25:
@@ -168,12 +158,27 @@ class HrLeave(models.Model):
                     self.minutos = 45
                 else:
                     self.minutos = 0
+                
+                if self.request_date_from.weekday() == 5:
+                    self.dias = 0
+                    self.horas = valor_hora * 2
+                    if valor_minutos == 0.25:
+                        self.minutos = 15 * 2
+                    elif valor_minutos == 0.5:
+                        self.minutos = 30 * 2
+                    elif valor_minutos == 0.75:
+                        self.minutos = 45 * 2
+                    else:
+                        self.minutos = 0
             elif self.request_date_from and self.request_date_to:
                 if self.request_date_to >= self.request_date_from:
                     #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
+                    
+                    if self.request_date_from.weekday() == 5:
+                        self.horas = 8
                 else:
                     self.dias = 0
                     self.horas = 0
