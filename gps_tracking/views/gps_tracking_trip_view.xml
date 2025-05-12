@@ -106,8 +106,6 @@
                         <field name="device_id"/>
                         <field name="start_time" readonly='1' />
                         <field name="end_time" readonly='1' />
-                        <field name="tiempo_usado" readonly='1' />
-                        <field name="tiempo_iniciado" invisible="1"/>
                         <!-- <div>
                             <button name="llegada" type="object" class="btn-primary">
                                 <field name="hora_llegada" string="Inicio" widget="statinfo"/>
@@ -126,7 +124,6 @@
                                     <field name="timestamp" readonly='1'/>
                                     <field name="latitude" readonly='1'/>
                                     <field name="longitude" readonly='1'/>
-                                    <field name="map_btn" widget="html" readonly='1'/>
                                 </tree>
                             </field>
                         </page>
