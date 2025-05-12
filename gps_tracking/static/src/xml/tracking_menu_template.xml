@@ -11,6 +11,11 @@
                     padding: 30px;
                 }
 
+                .banner {
+                    background-image: linear-gradient(to right, #004d99, #0080ff);
+                    height: 60px;
+                }
+
                 .card-title {
                     font-size: 40px;
                     text-align: center;
@@ -19,11 +24,13 @@
                 .card-text {
                     font-size: 18px;
                 }
+
             </style>
             <div id="root">
                 <div class="container pt-5">
                     <h1>Menu</h1>
                     <div class="menu-card">
+                        <div class="banner"></div>
                         <h2 class="card-title">Bienvenido</h2>
                         <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                         <input type="text" class=""/>
