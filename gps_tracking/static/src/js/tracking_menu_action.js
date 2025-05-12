@@ -17,7 +17,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         _startTrip: function() {
-            var l = $('#id_device').getValue();
+            var self = this;
+            var l = self.$el.find("#id_device").val();
             console.log(l);
         },
 
