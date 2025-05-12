@@ -144,9 +144,19 @@ class HrLeave(models.Model):
         if not self.request_unit_half:
             
             if self.request_unit_hours:
-                
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = self.number_of_hours_display - valor_hora
+                if self.request_date_from.weekday() == 6:
+                    self.dias = 0
+                    self.horas = valor_hora * 2
+                    if valor_minutos == 0.25:
+                        self.minutos = 15 * 2
+                    elif valor_minutos == 0.5:
+                        self.minutos = 30 * 2
+                    elif valor_minutos == 0.75:
+                        self.minutos = 45 * 2
+                    else:
+                        self.minutos = 0
                 self.dias = 0
                 self.horas = valor_hora
                 if valor_minutos == 0.25:
