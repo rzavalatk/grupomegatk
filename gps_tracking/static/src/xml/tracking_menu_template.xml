@@ -4,9 +4,9 @@
         <div class="row">
             <style>
                 <!-- utilidades -->
-                .contenedor {
+                .flex-content-center {
                     display: flex;
-                    margin: 0 auto;
+                    justify-content: center;
                 }
 
                 .conteiner-btn {
@@ -69,7 +69,7 @@
                 }
             </style>
             <div id="root">
-                <div class="container contenedor pt-5">
+                <div class="container flex-content-center pt-5">
                     <div>
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
