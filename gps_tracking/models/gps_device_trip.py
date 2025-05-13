@@ -106,6 +106,7 @@ class GpsDeviceTrip(models.Model):
     #         cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
     #         cron.write({'active': False, 'nextcall': fields.Datetime.now()})
 
+    @api.model
     def finish_trip(self, id_device):
         """Finalizar un viaje"""
         # for trip in self:
