@@ -117,7 +117,6 @@ class GpsDeviceTrip(models.Model):
     def fetch_device_positions(self):
         _logger.warning("entrooo")
         """Buscar nuevas posiciones del dispositivo asociado al viaje"""
-        self.check_trips()
         traccar_url_positions = 'http://18.222.109.183:8082/api/positions'
         traccar_url_devices = 'http://18.222.109.183:8082/api/devices'
         username = 'areyes@megatk.com'
