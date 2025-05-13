@@ -21,11 +21,12 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             var l = self.$el.find("#id_device").val();
             if(l != '') {
                 if (/^\d{6}$/.test(l)) {
+                    self.$el.find("#msg-text").text("");
                     self._rcp({
                         
                     })
                 } else {
-                    alert("El ID del dispositivo no es válido");
+                    self.$el.find("#msg-text").text("El ID del dispositivo no es válido");
                     return;    
                 }
             } else if (l == '') {
