@@ -17,7 +17,7 @@ class GpsDeviceTrip(models.Model):
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     tiempo_usado = fields.Char('Tiempo Usado')
-    map_html = fields.Html(string="Mapa")
+    check_in = fields.Boolean('Check-in', default=False)
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -69,11 +69,12 @@ class GpsDeviceTrip(models.Model):
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
             'start_time': fields.Datetime.now(),
+            'check_in': True,
             'state': 'ongoing'
         })
         
-        self.fetch_device_positions()
         self.write({'state': 'ongoing'})
+        self.fetch_device_positions()
         return trip
     
     # def action_start_trip(self):

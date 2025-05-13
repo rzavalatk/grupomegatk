@@ -31,7 +31,7 @@
                 .menu-card {
                     align-items: center;
                     background-color: #242733; 
-                    height: 350px; 
+                    height: 450px; 
                     width: 400px; 
                     border-radius: 0 0 10px 10px;
                     padding: 30px;
@@ -73,13 +73,13 @@
                     <div>
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
-                            <t t-if="1 == 1">
+                            <t t-if="!check_in">
                                 <h2 class="card-title">¡Bienvenido!</h2>
                             </t>
                             <t t-else="">
                                 <h2 class="card-title">En Curso</h2>
                             </t>
-                            <t t-if="1 == 1">
+                            <t t-if="!check_in">
                                 <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                                 <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="6" maxlength="6" inputmode="numeric" required="true"/>
                             </t>
@@ -87,7 +87,7 @@
                                 <p class="card-text">¿Desea finalizar el viaje? Una vez finalizado no se puede reactivar</p>
                             </t>
                             <div class="flex-grow-1 conteiner-btn">
-                                <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ 1 == 0 ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
+                                <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ che ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
                                     <span class="text-bold align-middle fs-2 me-3 text-white" t-if="!(1 == 0)">Iniciar Viaje</span>
                                     <i t-attf-class="fa fa-4x fa-sign-{{ 1 == 1 ? 'out' : 'in' }} align-middle"/>
                                     <span class="text-bold align-middle fs-2 ms-3" t-if="1 == 0">Finalizar Viaje</span>
