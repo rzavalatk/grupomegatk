@@ -102,6 +102,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         start: function () {
+            const self = this;
             self.id_current_trip = self.$el.find("#id_device").val();
             return AbstractAction.prototype.start.call(this);
         },
