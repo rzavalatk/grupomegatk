@@ -111,9 +111,13 @@ class GpsDeviceTrip(models.Model):
         for trip in self:
             if id_device == trip.device_id:
                 trip.end_time = fields.Datetime.now()
+                trip.write({
+                    'state': 'finished',
+                    'check_in': False
+                })
+                return trip;
             _logger.warning(trip.end_time)
-            
-        self.write({'state': 'finished'})
+
                 
     def fetch_device_positions(self):
         _logger.warning("entrooo")
