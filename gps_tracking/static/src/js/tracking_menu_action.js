@@ -77,6 +77,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
     const CustomCardMenu = AbstractAction.extend({
         template: 'TrackingCardMenu',
 
+        id_current_trip: null,
+
         events: {
             "click .btn-success": "_onClickIniciarViaje",
             "click .btn-warning": "_onClickPrueba",
@@ -107,13 +109,14 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this._startTrip();
         },
 
-        _onClickPrueba: function () {
+        _onClickFinalizarViaje: function () {
             console.log("Botón de prueba clickeado");
             console.log("Viaje actual:", this.current_trip);
         },
 
         _startTrip: function () {
             const self = this;
+            self.id_current_trip = self.$el.find("#id_device").val();
             const deviceId = self.$el.find("#id_device").val();
 
             if (!deviceId) {
@@ -139,6 +142,20 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
             });
         },
+
+        _finishTrip: function () {
+            const self = this;
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'finish_trip', // <-- asegúrate de que este método exista
+                args: [self.id_current_trip],
+            }).then(function (resultado) {
+                console.log("Resultado del fin de viaje:", resultado);
+            }).catch(function (error) {
+                console.error(error);
+                self.$el.find("#msg-text").text("Error al finalizar el viaje");
+            });
+        }
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);

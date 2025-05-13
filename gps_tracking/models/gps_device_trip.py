@@ -106,10 +106,11 @@ class GpsDeviceTrip(models.Model):
     #         cron = self.env.ref('gps_tracking.ir_cron_update_gps_positions')
     #         cron.write({'active': False, 'nextcall': fields.Datetime.now()})
 
-    def finish_trip(self):
+    def finish_trip(self, id_device):
         """Finalizar un viaje"""
         for trip in self:
-            trip.end_time = fields.Datetime.now()
+            if id_device == trip.device_id:
+                trip.end_time = fields.Datetime.now()
             _logger.warning(trip.end_time)
             
         self.write({'state': 'finished'})
