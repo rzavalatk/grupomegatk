@@ -12,11 +12,7 @@
                 .flex-column {
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-end;
-                }
-
-                .flex-end {
-                    justify-content: flex-end;
+                    justify-content: space-between;
                 }
 
                 .text-bold {
@@ -60,6 +56,11 @@
                     text-align: center;
                 }
 
+                .msg-error {
+                    font-size: 14px;
+                    color: #e60000; 
+                }
+
                 .btn-start {
                     background-color: #33cc33;
                 }
@@ -78,7 +79,7 @@
                             <t t-if="!check_in">
                                 <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
                                 <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="6" maxlength="6" inputmode="numeric" required="true"/>
-                                <div class="">
+                                <div class="msg-error">
                                     <span class="">a</span>
                                 </div>
                             </t>
