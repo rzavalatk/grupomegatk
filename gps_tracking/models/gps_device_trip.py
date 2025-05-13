@@ -117,13 +117,16 @@ class GpsDeviceTrip(models.Model):
         #         })
         #         return trip
         #     _logger.warning(trip.end_time)
+        _logger.warning("desde finish trip")
         trip = self.search([('device_id','=',id_device),('state','=','ongoing')],limit=1)
+        _logger.warning(f"desde finish trip {trip}")
         if trip:
             trip.end_time = fields.Datetime.now()
             trip.write({
                 'state': 'finished',
                 'check_in': False
             })
+        _logger.warning(f"desde finish trip {trip}")
             
         return trip
                 
