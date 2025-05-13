@@ -140,6 +140,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: [deviceId],
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
+                self._reloadWidget();
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
@@ -156,11 +157,29 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: ['112233'],
             }).then(function (resultado) {
                 console.log("Resultado del fin de viaje:", resultado);
+                self._reloadWidget();
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al finalizar el viaje");
             });
-        }
+        },
+
+        _reloadWidget: async function () {
+            const self = this;
+            const result = await this._rpc({
+                model: 'gps.device.trip',
+                method: 'search_read',
+                domain: [["state", "=", "ongoing"]],
+                fields: ['check_in','device_id'],
+                limit: 1,
+            });
+        
+            this.current_trip = result.length ? result[0] : null;
+        
+            this.$el.empty();         // Limpia el DOM actual
+            this.renderElement();     // Re-renderiza el contenido desde el template
+        },
+        
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);
