@@ -153,7 +153,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             self._rpc({
                 model: 'gps.device.trip',
                 method: 'finish_trip', // <-- asegúrate de que este método exista
-                args: [deviceId],
+                args: [self.current_trip.device_id],
             }).then(function (resultado) {
                 console.log("Resultado del fin de viaje:", resultado);
                 self._reloadWidget();
