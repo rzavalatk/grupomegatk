@@ -22,7 +22,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             if(l != '') {
                 if (/^\d{6}$/.test(l)) {
                     self.$el.find("#msg-text").text("");
-                    self._rcp({
+                    self._rpc({
                         model: 'gps.device.trip',
                         method: '',
                         args:[l],
