@@ -61,7 +61,10 @@ class GpsDeviceTrip(models.Model):
     @api.model
     def start_trip(self, device_id):
         """Iniciar un nuevo viaje"""
-        viaje_encurso = self.search(['device_id','=',device_id],['state','=','ongoing'],limit=1)
+        viaje_encurso = self.search([
+            ('device_id','=',device_id),
+            ('state','=','ongoing')
+            ],limit=1)
         if viaje_encurso:
             raise ValidationError(f"Ya hay un viaje en curso para este dispositivo ({viaje_encurso.name})")
         
