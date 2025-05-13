@@ -81,7 +81,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         events: {
             "click .btn-success": "_onClickIniciarViaje",
-            "click .btn-warning": "_onClickPrueba",
+            "click .btn-warning": "_onClickFinalizarViaje",
         },
 
         // Método asincrónico corregido
