@@ -12,6 +12,28 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             "click .btn-warning": "_onClickPrueba",
         },
 
+        willStart: async function () {
+            const self = this;
+            const result = await this._rpc({
+                model: 'gps.device.trip',
+                method: 'search_read',
+                domain: [["state", "=", "ongoing"]],
+                fields: ['check_in','device_id'],
+                limit: 1,
+            }).then(function (result) {
+                self.current_trip = result.length ? result[0] : null;
+            })
+            return this._super.apply(this, arguments);
+        },
+
+        start: function () {  
+            return this._super.apply(this, arguments);
+        },
+
+        renderElement: function () {
+          this._super.apply(this, arguments);  
+        },
+        
         _onClickIniciarViaje: function () {
             this._startTrip();
         },
@@ -41,9 +63,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             }
         },
 
-        start: function () {  
-            return this._super.apply(this, arguments);
-        },
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);  // Este es el tag que se llama en el XML
