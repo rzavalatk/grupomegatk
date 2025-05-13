@@ -8,6 +8,9 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from pytz import timezone
 from pytz import utc
+import io
+import base64
+import xlsxwriter
 
 from odoo import api, fields, models, tools, _
 from odoo.addons import decimal_precision as dp
@@ -902,6 +905,77 @@ class HrPayslipRun(models.Model):
                 record.is_validate = True
             else:
                 record.is_validate = False
+                
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        encabezados_rules_code = []
+        encabezados_rules_names = []
+        col_widths_lines_rule = []
+        
+        # Crear hojas de Excel
+        worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
+
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value)
+                row += 1
+
+        for slip_id in self.slip_ids:
+            for rule in slip_id.line_ids:
+                if rule.code not in encabezados_rules_code:
+                    encabezados_rules_code.append(rule.code)
+                    encabezados_rules_names.append(rule.name)
+                    col_widths_lines_rule.append(20)
+                
+        # Encabezados y anchos de columnas
+        encabezados_lines_customer = encabezados_rules_names
+        col_widths_lines_customer = col_widths_lines_rule  # Ajusta estos valores según sea necesario
+
+
+        # Preparar los datos
+        datos_lines_from_customer = [
+            (
+                'record.partner_id.name',
+                'record.last_purchase.name',
+                'record.purchase_comercial.name',
+            )
+        ]
+
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'resumen_planilla.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'resumen_planilla.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
 
 
 class ResourceMixin(models.AbstractModel):
