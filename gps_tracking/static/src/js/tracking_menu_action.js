@@ -112,6 +112,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         _onClickFinalizarViaje: function () {
             console.log("Botón de prueba clickeado");
             console.log("Viaje actual:", this.current_trip);
+            self._finishTrip();
         },
 
         _startTrip: function () {
