@@ -108,16 +108,24 @@ class GpsDeviceTrip(models.Model):
 
     def finish_trip(self, id_device):
         """Finalizar un viaje"""
-        for trip in self:
-            if id_device == trip.device_id:
-                trip.end_time = fields.Datetime.now()
-                trip.write({
-                    'state': 'finished',
-                    'check_in': False
-                })
-                return trip;
-            _logger.warning(trip.end_time)
-
+        # for trip in self:
+        #     if id_device == trip.device_id:
+        #         trip.end_time = fields.Datetime.now()
+        #         trip.write({
+        #             'state': 'finished',
+        #             'check_in': False
+        #         })
+        #         return trip
+        #     _logger.warning(trip.end_time)
+        trip = self.search([('device_id','=',id_device),('state','=','ongoing')],limit=1)
+        if trip:
+            trip.end_time = fields.Datetime.now()
+            trip.write({
+                'state': 'finished',
+                'check_in': False
+            })
+            
+        return trip
                 
     def fetch_device_positions(self):
         _logger.warning("entrooo")
