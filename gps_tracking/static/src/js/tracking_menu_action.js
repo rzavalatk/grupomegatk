@@ -30,7 +30,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                     return;    
                 }
             } else if (l == '') {
-                alert("Ingrese el ID del dispositivo");
+                self.$el.find("#msg-text").text("Ingrese el ID del dispositivo");
                 return;
             }
         },
