@@ -130,7 +130,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
             self._rpc({
                 model: 'gps.device.trip',
-                method: 'iniciar_viaje_desde_ui', // <-- asegúrate de que este método exista
+                method: 'start_trip', // <-- asegúrate de que este método exista
                 args: [deviceId],
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
