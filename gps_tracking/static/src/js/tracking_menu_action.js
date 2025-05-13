@@ -23,7 +23,13 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 if (/^\d{6}$/.test(l)) {
                     self.$el.find("#msg-text").text("");
                     self._rcp({
-                        
+                        model: 'gps.device.trip',
+                        method: '',
+                        args:[l],
+                    }).then(function (resultado) {
+
+                    }).catch(function (error) {
+                        console.error(error);
                     })
                 } else {
                     self.$el.find("#msg-text").text("El ID del dispositivo no es válido");
@@ -35,12 +41,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             }
         },
 
-        start: function () {
-            
+        start: function () {  
             return this._super.apply(this, arguments);
         },
-
-
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);  // Este es el tag que se llama en el XML
