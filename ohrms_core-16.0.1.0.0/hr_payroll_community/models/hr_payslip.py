@@ -946,6 +946,7 @@ class HrPayslipRun(models.Model):
                     col_widths_lines_rule.append(20)
                 reglas.append((rule.name, rule.amount))
             #Obtener nombre del empleado y departamento donde trabaja
+            reglas = sorted(reglas, key=lambda x: x[0])
             datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
         # Encabezados y anchos de columnas
         encabezados_rules_names = sorted(encabezados_rules_names)
@@ -957,6 +958,7 @@ class HrPayslipRun(models.Model):
             (
                 record['Empleado'],
                 record['Departamento'],
+                record['Reglas'][1]
             ) for record in datos_row
         ]
 
