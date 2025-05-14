@@ -910,8 +910,9 @@ class HrPayslipRun(models.Model):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
-        encabezados_rules_code = ['EMPL']
-        encabezados_rules_names = ['Empleados']
+        encabezados_rules_code = []
+        encabezados_rules_names = []
+        datos_row = []
         col_widths_lines_rule = []
         
         # Crear hojas de Excel
@@ -935,28 +936,28 @@ class HrPayslipRun(models.Model):
                 row += 1
 
         for slip_id in self.slip_ids:
-            #Obtener nombre del empleado y departamento donde trabaja
-            
+            reglas = []
+            # Obtener encabezados y anchos de columnas, siempre y cuando no se repitan
+            # Se obtienen igual el monto de las reglas y el nombre
             for rule in slip_id.line_ids:
                 if rule.code not in encabezados_rules_code:
                     encabezados_rules_code.append(rule.code)
                     encabezados_rules_names.append(rule.name)
                     col_widths_lines_rule.append(20)
-                
+                reglas.append((rule.name, rule.amount))
+            #Obtener nombre del empleado y departamento donde trabaja
+            datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
         # Encabezados y anchos de columnas
         encabezados_rules_names = sorted(encabezados_rules_names)
-        encabezados_lines_customer = encabezados_rules_names
-        col_widths_lines_customer = col_widths_lines_rule  # Ajusta estos valores según sea necesario
-
-        
-        
+        encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
+        col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
         # Preparar los datos
+        
         datos_lines_from_customer = [
             (
-                'record.partner_id.name',
-                'record.last_purchase.name',
-                'record.purchase_comercial.name',
-            )
+                record['Empleado'],
+                record['Departamento'],
+            ) for record in datos_row
         ]
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
