@@ -958,7 +958,7 @@ class HrPayslipRun(models.Model):
             (
                 record['Empleado'],
                 record['Departamento'],
-                record['Reglas'][1]
+                record['Reglas'][1][1],
             ) for record in datos_row
         ]
 
