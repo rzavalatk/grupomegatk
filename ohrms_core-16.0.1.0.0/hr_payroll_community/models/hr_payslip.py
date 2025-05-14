@@ -910,8 +910,8 @@ class HrPayslipRun(models.Model):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
-        encabezados_rules_code = []
-        encabezados_rules_names = []
+        encabezados_rules_code = ['EMPL']
+        encabezados_rules_names = ['Empleados']
         col_widths_lines_rule = []
         
         # Crear hojas de Excel
@@ -935,6 +935,8 @@ class HrPayslipRun(models.Model):
                 row += 1
 
         for slip_id in self.slip_ids:
+            #Obtener nombre del empleado y departamento donde trabaja
+            
             for rule in slip_id.line_ids:
                 if rule.code not in encabezados_rules_code:
                     encabezados_rules_code.append(rule.code)
@@ -942,10 +944,12 @@ class HrPayslipRun(models.Model):
                     col_widths_lines_rule.append(20)
                 
         # Encabezados y anchos de columnas
+        encabezados_rules_names = sorted(encabezados_rules_names)
         encabezados_lines_customer = encabezados_rules_names
         col_widths_lines_customer = col_widths_lines_rule  # Ajusta estos valores según sea necesario
 
-
+        
+        
         # Preparar los datos
         datos_lines_from_customer = [
             (
