@@ -953,7 +953,14 @@ class HrPayslipRun(models.Model):
         encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
         col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
         # Preparar los datos
-        
+        data_rules = encabezados_rules_names
+        data = []
+        for datos in datos_row:
+            data.append(datos['Empleado'])
+            data.append(datos['Departamento'])
+            for regla in datos['Reglas']:
+                data.append(regla[1])
+                
         datos_lines_from_customer = [
             (
                 record['Empleado'],
