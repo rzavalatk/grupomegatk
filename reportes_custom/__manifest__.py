@@ -25,6 +25,7 @@
         'reports/factura_custom_print_view.xml',
         'reports/factura_custom_printe_view.xml',
         'reports/factura_pos_custom_print_view.xml',
+        'reports/factura_custom_print_view_klam.xml',
         'reports/cotizacion_custom_print_view.xml',
         'reports/cotizacion_custom_print_view_printex.xml',
         'reports/purchase_order_custom_print_view.xml',
