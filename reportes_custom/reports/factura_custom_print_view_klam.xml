@@ -36,36 +36,14 @@
           
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
-              <div style="font-size:8pt; font-family:'Times New Roman'; line-height: 0.4; text-align: left; min-width: 400px; display: flex; justify-content: space-between;">
-                <div style="flex: 1;">
-                  <p><strong>Klam International Supplies LLC</strong></p>
-                  <p>(305) 4826769</p>
-                  <p>777 NW 72 Avenue Suite 1075</p>
-                  <p>Miami, FL 33126 USA</p>
-                  <p>Email: info@klamusa.com</p>
-                  <p>https://www.klamusa.com</p>
-                </div>
-
-                <div style="flex: 1;">
-                  <p><strong>Remitir Pagos a:</strong></p>
-                  <p>Bank of America</p>
-                  <p>No. de Cta.: 898124662510</p>
-                  <p>063000047 / 063100277 (papel y electrónico)</p>
-                  <p>026009593 (transf. por cable)</p>
-                </div>
-              </div>
-            </t>
-          </div>
-          <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
-            <t t-if="o.state != 'draft'">
-            <table style="text-align: center; width:330px">
+              <table style="text-align: center; width:450spx">
               <tr>
                 <td ></td>
                 <td  ></td>
               </tr>
               <tr>
                   <td >
-                    <div style="font-size:8pt; font-family:'Times New Roman'; line-height: 0.4; text-align: left;">
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: left;">
                       <p><strong>Klam International Supplies LLC</strong></p>
                       <p>(305) 4826769</p>
                       <p>777 NW 72 Avenue Suite 1075</p>
@@ -77,7 +55,40 @@
                 
             
                   <td >
-                    <div style="flex: 1;">
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: right;">
+                      <p><strong>Remitir Pagos a:</strong></p>
+                      <p>Bank of America</p>
+                      <p>No. de Cta.: 898124662510</p>
+                      <p>063000047 / 063100277 (papel y electrónico)</p>
+                      <p>026009593 (transf. por cable)</p>
+                    </div>
+                  </td>
+                </tr>
+            </table>
+            </t>
+          </div>
+          <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
+            <t t-if="o.state != 'draft'">
+            <table style="text-align: center; width:450spx">
+              <tr>
+                <td ></td>
+                <td  ></td>
+              </tr>
+              <tr>
+                  <td >
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: left;">
+                      <p><strong>Klam International Supplies LLC</strong></p>
+                      <p>(305) 4826769</p>
+                      <p>777 NW 72 Avenue Suite 1075</p>
+                      <p>Miami, FL 33126 USA</p>
+                      <p>Email: info@klamusa.com</p>
+                      <p>https://www.klamusa.com</p>
+                    </div>
+                  </td>
+                
+            
+                  <td >
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: right;">
                       <p><strong>Remitir Pagos a:</strong></p>
                       <p>Bank of America</p>
                       <p>No. de Cta.: 898124662510</p>
