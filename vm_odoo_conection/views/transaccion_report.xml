@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista de lista para las transacciones -->
+    <record id="view_transaccion_tree" model="ir.ui.view">
+        <field name="name">transaccion.tree</field>
+        <field name="model">transaccion</field>
+        <field name="arch" type="xml">
+            <tree string="Transacciones">
+                <field name="empleado_id" string="Empleado"/>
+                <field name="fecha_transaccion" string="Fecha de Transacción"/>
+                <field name="producto_consumido" string="Producto Consumido"/>
+                <field name="cantidad_gastada" string="Cantidad Gastada"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir la vista de lista -->
+    <record id="action_transaccion_tree" model="ir.actions.act_window">
+        <field name="name">Transacciones</field>
+        <field name="res_model">transaccion</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_transaccion_tree"/>
+    </record>
+
+    <!-- Menú para acceder a la vista de lista -->
+    <menuitem
+        id="menu_transaccion_tree"
+        name="Reporte de Transacciones"
+        action="action_transaccion_tree"
+        sequence="30"
+        parent="menu_hr_vm"/>
+</odoo>

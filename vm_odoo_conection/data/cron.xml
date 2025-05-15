@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tarea programada para reiniciar el campo 'gastado' el primer día de cada mes -->
+    <record id="cron_reiniciar_credito_disponible" model="ir.cron">
+        <field name="name">Reiniciar campo 'credito disponible' el primer día del mes</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">model.reiniciar_credito_disponible()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="nextcall" eval="(datetime.now() + relativedelta(months=1, day=1)).strftime('%Y-%m-%d 00:00:00')"/>
+    </record>
+</odoo>
