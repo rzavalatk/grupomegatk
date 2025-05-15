@@ -36,7 +36,7 @@
           
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
-              <table style="text-align: center; width:450px; border: none;">
+              <table style="text-align: center; width:400px; border: none;">
               <tr>
                 <td ></td>
                 <td  ></td>
@@ -69,7 +69,7 @@
           </div>
           <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'">
-            <table style="text-align: center; width:450px; border: none;">
+            <table style="text-align: center; width:400px; border: none;">
               <tr>
                 <td ></td>
                 <td  ></td>
