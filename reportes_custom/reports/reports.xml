@@ -12,6 +12,16 @@
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
 		<report
+			id="account_factura_custom_klam"
+			model="account.move"
+			string="Factura KLAM"
+			name="reportes_custom.factura_custom_print_view_klam"
+			file="reportes_custom.factura_custom_print_view_klam"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+
+		<report
 			id="account_factura_custom_printex"
 			model="account.move"
 			string="Factura printex"
