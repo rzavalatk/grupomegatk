@@ -36,14 +36,14 @@
           
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
-              <table style="text-align: center; width:450spx">
+              <table style="text-align: center; width:450px; border: none;">
               <tr>
                 <td ></td>
                 <td  ></td>
               </tr>
               <tr>
                   <td >
-                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: left;">
+                    <div style="font-size:6pt; font-family:'Times New Roman'; text-align: left;">
                       <p><strong>Klam International Supplies LLC</strong></p>
                       <p>(305) 4826769</p>
                       <p>777 NW 72 Avenue Suite 1075</p>
@@ -55,7 +55,7 @@
                 
             
                   <td >
-                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: right;">
+                    <div style="font-size:6pt; font-family:'Times New Roman'; text-align: right;">
                       <p><strong>Remitir Pagos a:</strong></p>
                       <p>Bank of America</p>
                       <p>No. de Cta.: 898124662510</p>
@@ -69,7 +69,7 @@
           </div>
           <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'">
-            <table style="text-align: center; width:450spx">
+            <table style="text-align: center; width:450px; border: none;">
               <tr>
                 <td ></td>
                 <td  ></td>
