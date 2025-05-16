@@ -81,16 +81,16 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
-		<!--<report
-			id="stock_picking_custom"
+		<report
+			id="stock_package_order"
 			model="stock.picking"
 			menu="False"
-			string="Orden de entrega"
-			name="reportes_custom.stock_picking_custom_print_view"
-			file="reportes_custom.stock_picking_custom_print_view"
+			string="Lista de empaque"
+			name="reportes_custom.stock_package_order_custom_print_view"
+			file="reportes_custom.stock_package_order_custom_print_view"
 			report_type="qweb-pdf"
 			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>-->
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
 		<report
 			id="stock_picking_custom"
