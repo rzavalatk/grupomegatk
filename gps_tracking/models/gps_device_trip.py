@@ -17,7 +17,7 @@ class GpsDeviceTrip(models.Model):
     start_date = fields.Date('Fecha de Inicio', compute='_define_date', store=True)
     end_date = fields.Date('Fecha de Fin')
     start_time = fields.Char('Hora de Inicio', compute='_define_time', store=True)
-    end_time = fields.Datetime('Hora de Fin')
+    end_time = fields.Char('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     tiempo_usado = fields.Char('Tiempo Usado')
     check_in = fields.Boolean('Check-in', default=False)
