@@ -154,7 +154,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: [deviceId],
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
-                var horaInicio = resultado.start_time;
+                var horaInicio = `${resultado.start_date} ${resultado.start_time}`;
                 console.log("Hora de inicio:", horaInicio);
                 self.estado_mensaje = {
                     titulo: "Viaje iniciado",

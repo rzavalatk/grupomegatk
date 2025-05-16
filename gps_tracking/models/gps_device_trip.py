@@ -157,7 +157,13 @@ class GpsDeviceTrip(models.Model):
             })
         _logger.warning(f"desde finish trip {trip}")
             
-        return trip
+        return {
+            'device_id': trip.device_id,
+            'end_time': trip.end_time,
+            'end_date': trip.end_date,
+            'check_in': trip.check_in,
+            'state': trip.state,
+        }
                 
     def fetch_device_positions(self):
         _logger.warning("entrooo")
