@@ -77,10 +77,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
     const CustomCardMenu = AbstractAction.extend({
         template: 'TrackingCardMenu',
 
-        id_current_trip: null,
-        hora_msg: null,
         estado_mensaje: null,
-        id_current_trip: null,
+        showMsg: null,
+
 
         events: {
             "click .btn-success": "_onClickIniciarViaje",
@@ -133,7 +132,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         _startTrip: function () {
             const self = this;
-            self.id_current_trip = self.$el.find("#id_device").val();
             const deviceId = self.$el.find("#id_device").val();
 
             if (!deviceId) {
@@ -156,12 +154,14 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 console.log("Resultado del inicio de viaje:", resultado);
                 var horaInicio = `${resultado.start_date} ${resultado.start_time}`;
                 console.log("Hora de inicio:", horaInicio);
+                self.showMsg = true;
                 self.estado_mensaje = {
                     titulo: "Viaje iniciado",
                     texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio
                 };
                 self.renderElement();
                 setTimeout(function () {
+                    self.showMsg = false;
                     self.estado_mensaje = null;
                     self._reloadWidget();
                 }, 5000)
