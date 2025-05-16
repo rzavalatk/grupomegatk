@@ -9,7 +9,7 @@
       </t>
     </template>
 
-    <template id="external_layout_factura_custom">
+    <template id="external_layout_factura_custom_klam">
       <div class="header">
         <div class="row" style="margin-top: 0px;">
           <div class="col-xs-3 mb4">
@@ -175,7 +175,7 @@
     </template>
 
     <template id="factura_odoo_custom_klam">
-  		<t t-call="reportes_custom.external_layout_factura_custom">
+  		<t t-call="reportes_custom.external_layout_factura_custom_klam">
     		<div class="page" style="margin-top: 30px;">
           <!--Is there a discount on at least one line? -->
           <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
