@@ -36,7 +36,7 @@
           
           <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
             <t t-if="o.state != 'draft'"> 
-              <div style="display: grid; grid-template-columns: 1fr 1fr;">
+              <div style="display: flex; flex-direction: column;">
                 <div style="font-size:6pt; font-family:'Times New Roman'; text-align: left; line-height: -0.4;">
                       <p><strong>Klam International Supplies LLC</strong></p>
                       <p>(305) 4826769</p>
