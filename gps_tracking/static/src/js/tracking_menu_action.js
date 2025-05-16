@@ -78,6 +78,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         template: 'TrackingCardMenu',
 
         id_current_trip: null,
+        hora_msg: null,
+        estado_mensaje: null,
+        id_current_trip: null,
 
         events: {
             "click .btn-success": "_onClickIniciarViaje",
@@ -96,8 +99,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 limit: 1,
             });
 
-            self.current_trip = result.length ? result[0] : null;
-
+            // self.current_trip = result.length ? result[0] : null;
+            await self._loadCurrentTrip();
             return AbstractAction.prototype.willStart.call(this);
         },
 
@@ -105,6 +108,17 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             const self = this;
             self.id_current_trip = self.$el.find("#id_device").val();
             return AbstractAction.prototype.start.call(this);
+        },
+
+        _loadCurrentTrip: async function () {
+          const result = await this._rpc({
+              model: 'gps.device.trip',
+              method: 'search_read',
+              domain: [["state", "=", "ongoing"]],
+              fields: ['check_in', 'start_time', 'device_id'],
+              limit: 1,
+          });
+          this.current_trip = result.length ? result[0] : null;  
         },
 
         _onClickIniciarViaje: function () {
@@ -140,7 +154,16 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: [deviceId],
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
-                self._reloadWidget();
+                var horaInicio = resultado.start_time;
+                self.estado_mensaje = {
+                    titulo: "Viaje iniciado",
+                    texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio
+                };
+                self.renderElement();
+                setTimeout(function () {
+                    self.estado_mensaje = null;
+                    self._reloadWidget();
+                }, 5000)
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
@@ -156,11 +179,45 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: [self.current_trip.device_id],
             }).then(function (resultado) {
                 console.log("Resultado del fin de viaje:", resultado);
-                self._reloadWidget();
+                var horaInicio = resultado.start_time;
+                var horaFin = resultado.end_time;
+                var tiempoUsado = self._diffTime(horaInicio, horaFin);
+                self.estado_mensaje = {
+                    titulo: "Viaje finalizado",
+                    texto: `Finalizó en ${tiempoUsado}`
+                };
+                self.renderElement();
+                setTimeout(function () {
+                    self.estado_mensaje = null;
+                    self._reloadWidget();
+                }, 5000)
+                
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al finalizar el viaje");
             });
+        },
+
+        _diffTime: function (horaStr1, horaStr2) {
+            // Extraer horas, minutos y segundos
+            const [h1, m1, s1] = horaStr1.split(":").map(Number);
+            const [h2, m2, s2] = horaStr2.split(":").map(Number);
+
+            // Usar una fecha ficticia común
+            const d1 = new Date(0, 0, 0, h1, m1, s1);
+            const d2 = new Date(0, 0, 0, h2, m2, s2);
+
+            // Calcular la diferencia en milisegundos
+            let diffMs = Math.abs(d1 - d2); // valor absoluto
+
+            // Convertir a horas, minutos y segundos
+            let horas = Math.floor(diffMs / (1000 * 60 * 60));
+            diffMs %= (1000 * 60 * 60);
+            let minutos = Math.floor(diffMs / (1000 * 60));
+            diffMs %= (1000 * 60);
+            let segundos = Math.floor(diffMs / 1000);
+
+            return { horas, minutos, segundos };
         },
 
         _reloadWidget: async function () {
