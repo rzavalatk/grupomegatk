@@ -227,6 +227,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             if(segundos < 10){
                 segundos = "0" + segundos;
             }
+            
             return { horas, minutos, segundos };
         },
 
