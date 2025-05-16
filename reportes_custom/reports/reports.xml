@@ -84,7 +84,6 @@
 		<report
 			id="stock_package_order"
 			model="stock.picking"
-			menu="False"
 			string="Lista de empaque"
 			name="reportes_custom.stock_package_order_custom_print_view"
 			file="reportes_custom.stock_package_order_custom_print_view"
