@@ -218,6 +218,15 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             diffMs %= (1000 * 60);
             let segundos = Math.floor(diffMs / 1000);
 
+            if(horas < 10){
+                horas = "0" + horas;
+            }
+            if(minutos < 10){
+                minutos = "0" + minutos;
+            }
+            if(segundos < 10){
+                segundos = "0" + segundos;
+            }
             return { horas, minutos, segundos };
         },
 
