@@ -99,7 +99,13 @@ class GpsDeviceTrip(models.Model):
         
         self.write({'state': 'ongoing'})
         self.fetch_device_positions()
-        return trip
+        return {
+            'device_id': device_id,
+            'start_time': trip.start_time,
+            'start_date': trip.start_date,
+            'check_in': trip.check_in,
+            'state': trip.state,
+        }
         
     # def action_start_trip(self):
     #     for trip in self:
