@@ -104,6 +104,15 @@
                     </div>
                 </div>
             </div>
+            <div class="estado-mensaje">
+                <t t-if="widget.estado_mensaje">
+                    <div class="alert alert-info" id="estado-mensaje">
+                      <h4><t t-esc="widget.estado_mensaje.titulo"/></h4>
+                      <p><t t-esc="widget.estado_mensaje.texto"/></p>
+                    </div>
+                  </t>
+            </div>
+            
         </div>
     </t>
 </templates>
