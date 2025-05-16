@@ -185,7 +185,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 var tiempoUsado = self._diffTime(horaInicio, horaFin);
                 self.estado_mensaje = {
                     titulo: "Viaje finalizado",
-                    texto: `Finalizó en ${tiempoUsado}`
+                    texto: `Finalizó en ${tiempoUsado.horas}:${tiempoUsado.minutos}:${tiempoUsado.segundos}`
                 };
                 self.renderElement();
                 setTimeout(function () {
