@@ -159,6 +159,7 @@ class GpsDeviceTrip(models.Model):
             
         return {
             'device_id': trip.device_id,
+            'start_time': trip.start_time,
             'end_time': trip.end_time,
             'end_date': trip.end_date,
             'check_in': trip.check_in,
