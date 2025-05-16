@@ -12,6 +12,16 @@
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
 		<report
+			id="account_factura_custom_klam"
+			model="account.move"
+			string="Factura KLAM"
+			name="reportes_custom.factura_custom_print_view_klam"
+			file="reportes_custom.factura_custom_print_view_klam"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+
+		<report
 			id="account_factura_custom_printex"
 			model="account.move"
 			string="Factura printex"
@@ -92,16 +102,17 @@
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
-		<report
-			id="stock_package_custom"
+		<!--<report
+			id="stock_picking_custom_pos"
 			model="stock.picking"
-			string="Lista de empaque"
-			name="reportes_custom.stock_package_order_custom_print_view"
-			file="reportes_custom.stock_package_order_custom_print_view"
+			menu="False"
+			string="Orden de entraga pos"
+			name="reportes_custom.stock_picking_custom_print_view_pos"
+			file="reportes_custom.stock_picking_custom_print_view_pos"
 			report_type="qweb-pdf"
 			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"
-		/>
+			paperformat="formatos_papel_mega.report_paperformat_pos"
+		/>-->
 
 		<report
 			id="stock_picking_custom_pos"

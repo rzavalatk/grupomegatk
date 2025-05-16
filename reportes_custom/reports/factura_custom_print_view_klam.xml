@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    <template id="factura_custom_print_view_klam">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="reportes_custom.factura_odoo_custom_klam" t-lang="o.partner_id.lang"/>
+        </t>
+      </t>
+    </template>
+
+    <template id="external_layout_factura_custom">
+      <div class="header">
+        <div class="row" style="margin-top: 0px;">
+          <div class="col-xs-3 mb4">
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px; position: absolute; top: -110px; padding-top: 0px; padding: 0px;" alt="Logo"/>
+                
+            <div style="position: absolute; top: 149px; color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; width:450px;">
+							BILL TO: 
+						</div>
+            <div style="width: 130px !important; position: absolute; top: 173px;">
+              <div name="invoice_address" class="col-xs-2" style='border: 1px solid rgb(13, 143, 210); min-width: 450px; height: 138px;'>
+                <t t-if="o.mostrar_direccion">
+                  <p><span t-field="o.partner_id.name"/></p>
+                </t>
+                <t t-else="">
+                  <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                </t>
+                <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="o.partner_id.vat"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="float: right; margin-top: 25px;">
+          <span style="margin-left: 18px; font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;" t-if="o.move_type == 'out_invoice' and o.certificado_deposito == False">COMMERCIAL INVOICE</span>
+          
+          <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
+            <t t-if="o.state != 'draft'"> 
+              
+                <div style="font-size:6pt; font-family:'Times New Roman'; text-align: left; line-height: -0.4;">
+                      <p><strong>Klam International Supplies LLC</strong></p>
+                      <p>(305) 4826769</p>
+                      <p>777 NW 72 Avenue Suite 1075</p>
+                      <p>Miami, FL 33126 USA</p>
+                      <p>Email: info@klamusa.com</p>
+                      <p>https://www.klamusa.com</p>
+                    </div>
+
+                    <div style="font-size:6pt; font-family:'Times New Roman'; text-align: left; line-height: -0.4; position: absolute; top: 92px; left: 700px;">
+                      <p><strong>Remitir Pagos a:</strong></p>
+                      <p>Bank of America</p>
+                      <p>No. de Cta.: 898124662510</p>
+                      <p>063000047 / 063100277 (papel y electrónico)</p>
+                      <p>026009593 (transf. por cable)</p>
+                    </div>
+                    
+                 
+            </t>
+          </div>
+          <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
+            <t t-if="o.state != 'draft'">
+            <table style="text-align: center; width:400px; border: none;">
+              <tr>
+                <td ></td>
+                <td  ></td>
+              </tr>
+              <tr>
+                  <td >
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: left;">
+                      <p><strong>Klam International Supplies LLC</strong></p>
+                      <p>(305) 4826769</p>
+                      <p>777 NW 72 Avenue Suite 1075</p>
+                      <p>Miami, FL 33126 USA</p>
+                      <p>Email: info@klamusa.com</p>
+                      <p>https://www.klamusa.com</p>
+                    </div>
+                  </td>
+                
+            
+                  <td >
+                    <div style="font-size:6pt; font-family:'Times New Roman'; line-height: 0.1; text-align: right;">
+                      <p><strong>Remitir Pagos a:</strong></p>
+                      <p>Bank of America</p>
+                      <p>No. de Cta.: 898124662510</p>
+                      <p>063000047 / 063100277 (papel y electrónico)</p>
+                      <p>026009593 (transf. por cable)</p>
+                    </div>
+                  </td>
+                </tr>
+            </table> 
+              
+            </t>
+          </div>
+        </div>
+        <div style="float: right; margin-top: -10px; margin-left: 50px;">
+          <div style="float: right;">
+            <table style="text-align: center; width:330px">
+              <tr>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold;">DATE</td>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold;">INVOICE</td>
+              </tr>
+              <tr>
+                <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <span t-field="o.invoice_date"/>
+                </td>
+            <!--
+                  <td t-if="o.number &lt; '00030000'" style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">000-001-01-<span t-field="o.number"/></td>
+                  <td t-if="o.number &gt; '00030000'" style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.number"/></td>-->
+                  <td style="padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;"><span t-field="o.internal_number"/></td>
+              </tr>
+            </table>
+          </div>  
+          <div style="float: right; margin-top: 5px; margin-left: 50px;">
+            <table style="text-align: center;">
+              <tr>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">TERMS</td>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt; font-weight: bold; min-width:120px;">ORIGIN</td>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">EXPIRES</td>
+                <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:120px;">SELLER</td>
+              </tr>
+              <tr>
+                <td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <span t-field="o.sudo().invoice_payment_term_id"/>
+                </td>
+                <td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <div t-if="o.invoice_origin" >
+                    <span t-field="o.invoice_origin"/>
+                  </div>
+                </td>
+                <td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <div >
+                    <span t-field="o.invoice_date_due"/>
+                  </div>
+                </td>
+                <td style="white-space: nowrap; padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; vertical-align: middle;">
+                  <span t-field="o.user_id"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="article o_report_layout_standard">
+        <t t-raw="0"/>
+      </div>
+      
+      <div class="footer" style='font-size:10pt !important;'>
+        <div style="border-top: 1px solid rgb(13, 143, 210);">
+          <ul style="text-align: center; margin-top:-2px;" class="list-inline mb4">
+            <li t-if="o.company_id.street">Main Office: <span t-field="o.company_id.street"/></li>
+          </ul>
+          
+          <ul style="text-align: center; margin-top:-3px;" class="list-inline mb4">
+            <li>
+              <t t-if="o.company_id.phone">Phone: <span t-field="o.company_id.phone"/></t>
+              <t t-if="o.company_id.email">Mail: <span t-field="o.company_id.email"/></t>
+              <t t-if="o.company_id.website">Web: <span t-field="o.company_id.website"/></t>
+              <t t-if="o.company_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+            </li>
+          </ul>
+          <div style='float:left; margin-top:-3px;'>
+            Original-Customer&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;Copy-Taxpayer Issuer
+          </div>
+          <div style="text-align: right;" class="text-muted">
+            Pag. <span class="page"/> / <span class="topage"/>
+          </div>
+
+          <div name="financial_infos">
+            <span t-field="o.company_id.report_footer"/>
+          </div>
+
+        </div>
+      </div>
+    </template>
+
+    <template id="factura_odoo_custom_klam">
+  		<t t-call="reportes_custom.external_layout_factura_custom">
+    		<div class="page" style="margin-top: 30px;">
+          <!--Is there a discount on at least one line? -->
+          <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+          <table class="table table-sm o_main_table" name="invoice_line_table">
+            <thead>
+              <tr>
+                <th style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">PRODUCT DESCRIPTION</th>
+                <th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">AMOUNT</th>
+                <th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">U.P.</th>
+                <th class="text-center" style="font-family:'Arial'; font-size:7pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;width: 130px;">DISCOUNTS AND REDUCTIONS GRANTED</th>
+                <th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">TAX</th>
+                <th class="text-right" style="font-family:'Arial'; font-size:12pt; color: white; background: rgb(13, 143, 210);border: 1px solid rgb(13, 143, 210);padding: 2px;">AMOUNT</th>
+              </tr>
+            </thead>
+            <t t-set="descuento_total" t-value="0"/>
+            <t t-set="_exento_total" t-value="0"/>
+            <tbody class="invoice_tbody">
+              <tr t-foreach="o.invoice_line_ids" t-as="l">
+                <td style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <span t-field="l.name"/>
+                  <p t-if="l.x_series"><span t-esc="l.x_series"/></p>
+                </td>
+                <td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <span t-field="l.quantity"/>
+                  <span t-field="l.uom_id" groups="product.group_uom"/>
+                </td>
+                <td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <span t-field="l.price_unit"/>
+                </td>
+                <t t-set="descuento_l" t-value="(l.discount * l.price_unit)/100"/>
+                <t t-set="descuento_total" t-value="descuento_total + descuento_l"/>
+                <td class="text-right" style=" padding:1px !important; margin:1px !important;vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <t t-if="display_discount" >
+                    <span t-esc="'%.4f'%(descuento_l)"/>
+                  </t>
+                  <t t-else="" >0.00</t>
+                </td>
+                <td class="text-right" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <span t-esc="', '.join(map(lambda x: (x.name), l.tax_ids))"/>
+                  <t t-if="not l.tax_ids" >
+                    <t t-set="_exento_total" t-value="_exento_total + l.price_subtotal"/>
+                  </t>
+                </td>
+                <td class="text-right" id="subtotal" style="padding:1px !important; margin:1px !important; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
+                  <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                </td>
+                
+              </tr>
+              <tr t-foreach="range(max(4-len(o.invoice_line_ids),0))" t-as="l">
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
+                <td class="hidden-top" style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+                <td style=" padding:1px !important; margin:1px !important;border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);"/>
+              </tr>
+              <tr>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);">&amp;nbsp;</td>
+                <td class="hidden-top" style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+                <td style="padding:1px !important; margin:1px !important; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210); border-bottom: 1px solid rgb(13, 143, 210);"/>
+              </tr>
+            </tbody>
+          </table>
+          <t t-if="not o.state != 'cancel'">
+            <div style='width:100%; text-align: center;transform: rotate(-15deg);transform: rotate(-15deg); -webkit-transform: rotate(-15deg); -moz-transform: rotate(-15deg); -o-transform: rotate(-15deg); position:absolute; top:20px; left:0; font-weight: bold; font-size:42px'>
+              CANCELED
+            </div>
+          </t>
+            <div class="clearfix">
+              
+              <div id="total" class="row" style='float:right !important;'>
+                <div>
+                  <t t-set="null_num" t-value="0.00"/>
+                  <table class="table table-sm" >
+                    <tr>
+                      <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
+                        <strong>Discounts and Rebates Granted</strong>
+                      </td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <span  t-esc="descuento_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
+                        <strong>Exempted amount</strong>
+                      </td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <t t-if="not o.x_registro_exonerado == 'N/A'">
+                          <span t-esc="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                        <t t-else="" >
+                          <span t-esc="null_num" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Exempt Amount</strong></td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <t t-if="o.x_registro_exonerado == 'N/A'">
+                          <span t-esc="_exento_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                        <t t-else="" >
+                          <span t-esc="null_num" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Taxed Amount 7%</strong></td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <t t-if="o.x_registro_exonerado == 'N/A'">
+                          <span t-esc="o.amount_untaxed - _exento_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                        <t t-else="" >
+                          <span t-esc="null_num" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Subtotal</strong></td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>TAX 7%</strong></td>
+                      <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                        <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                      </td>
+                    </tr>
+                    
+                    <tr style="border-bottom: blacl 4px solid;">  
+                      <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;  font-weight: bold;">
+                        <strong>Total</strong>
+                      </td>
+                      <td class="text-right" style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:13pt;">
+                        <t t-if="o.state != 'cancel'">
+                          <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                        <t t-else="">
+                          <t t-set="i" t-value="0.00"/>
+                          <span t-esc="i" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </t>
+                      </td>
+                    </tr>
+                    <!--<t t-set="payments_vals" t-value="o._get_payments_vals()"/>-->
+                    <t t-if="o.payment_state != 'not_paid'">
+                      <t t-foreach="o.invoice_payments_widget['content']" t-as="payment_vals">
+                          <tr style="margin-top: 15px;">
+                              <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt; font-style: italic; ">
+                                  <i class="oe_form_field text-right oe_payment_label">Paid in <t t-esc="payment_vals['date']"/></i>
+                              </td>
+                              <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt; ">
+                                  <span t-esc="payment_vals['amount']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                              </td>
+                          </tr>
+                      </t>
+                      <tr>
+                        <td style=" padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
+                          <strong>Remaining amount</strong>
+                        </td>
+                        <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;">
+                          <span t-esc="o.amount_residual" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                      </tr>
+                    </t>
+                      <t>
+                        <tr class="border-black">
+                            <!-- <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;"><strong>Deuda</strong></td>
+                            <td class="text-right" style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
+                                 <span t-field="o.amount_residual"/>
+                            </td> -->
+                        </tr>
+                    </t>
+                  </table>
+                
+                </div>
+                
+              </div>
+            </div>
+            
+            <br></br>
+            <br></br>
+
+            
+            <p t-if="o.sudo().invoice_payment_term_id">
+                <span t-field="o.sudo().invoice_payment_term_id.note"/>
+            </p>
+            <p t-if="o.fiscal_position_id.note">
+                <span t-field="o.fiscal_position_id.note"/>
+            </p>
+
+             
+
+    		</div>  
+  		</t>
+  	</template>
+	</data>
+</odoo>
