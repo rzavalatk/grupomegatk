@@ -1,7 +1,8 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from datetime import datetime, time
+from datetime import datetime, date, timedelta
 from dateutil.parser import isoparse
+import pytz
 import requests
 import logging
 
@@ -13,7 +14,9 @@ class GpsDeviceTrip(models.Model):
 
     name = fields.Char('Nombre del Viaje', required=True, default=lambda self: 'Nuevo Viaje')
     device_id = fields.Char('ID del Dispositivo', required=True)
-    start_time = fields.Datetime('Hora de Inicio', default=lambda self: fields.Datetime.now())
+    start_date = fields.Date('Fecha de Inicio', compute='_define_date', store=True)
+    end_date = fields.Date('Fecha de Fin')
+    start_time = fields.Char('Hora de Inicio', compute='_define_time', store=True)
     end_time = fields.Datetime('Hora de Fin')
     location_ids = fields.One2many('gps.device.location', 'trip_id', string='Ubicaciones')
     tiempo_usado = fields.Char('Tiempo Usado')
@@ -57,6 +60,23 @@ class GpsDeviceTrip(models.Model):
                 
     #     if finished == len(trip):
     #         return False
+     
+     
+    def _define_time(self):
+        hora_utc = datetime.now(pytz.utc)
+        zona_horaria_usuario = self.env.user.tz or 'UTC'
+        if hasattr(zona_horaria_usuario, 'zone'):
+            zona_horaria = zona_horaria_usuario
+        else:
+            zona_horaria = pytz.timezone(zona_horaria_usuario)
+            hora_local = hora_utc.astimezone(zona_horaria).strftime('%H:%M:%S')
+            _logger.warning(f"Hora local: {zona_horaria_usuario}")
+        hora_inicio = hora_local
+        return hora_inicio
+    
+    def _define_date(self):
+        fecha = date.today()
+        return fecha
                 
     @api.model
     def start_trip(self, device_id):
@@ -71,7 +91,8 @@ class GpsDeviceTrip(models.Model):
         trip = self.create({
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
-            'start_time': fields.Datetime.now(),
+            'start_time': self._define_time(),
+            'start_date': self._define_date(),
             'check_in': True,
             'state': 'ongoing'
         })
@@ -79,7 +100,7 @@ class GpsDeviceTrip(models.Model):
         self.write({'state': 'ongoing'})
         self.fetch_device_positions()
         return trip
-    
+        
     # def action_start_trip(self):
     #     for trip in self:
     #         existing = self.search([
@@ -122,7 +143,8 @@ class GpsDeviceTrip(models.Model):
         trip = self.search([('device_id','=',id_device),('state','=','ongoing')],limit=1)
         _logger.warning(f"desde finish trip {trip}")
         if trip:
-            trip.end_time = fields.Datetime.now()
+            trip.end_time = self._define_time()
+            trip.end_date = self._define_date()
             trip.write({
                 'state': 'finished',
                 'check_in': False
