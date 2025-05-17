@@ -165,6 +165,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 };
                 self.renderElement();
                 this._messageTimeout = setTimeout(() => {
+                    console.log("🔴 Ejecutando mensaje TIMEOUT (esto no debería ocurrir si ya saliste del módulo)");
                     self.showMsg = false;
                     self.estado_mensaje = null;
                     self._reloadWidget();
@@ -194,6 +195,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 };
                 self.renderElement();
                 this._messageTimeout = setTimeout( () => {
+                    console.log("🔴 Ejecutando mensaje TIMEOUT (esto no debería ocurrir si ya saliste del módulo)");
                     self.showMsg = false;
                     self.estado_mensaje = null;
                     self._reloadWidget();
@@ -256,7 +258,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         destroy: function () {
         //Limpia temporizadores si existen
     
-        console.log('Destroy called');
+        console.log("🟢 Timeout cancelado", this._messageTimeout);
         clearTimeout(this._messageTimeout);
         this._messageTimeout = null;
     
