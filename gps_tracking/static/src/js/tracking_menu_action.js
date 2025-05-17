@@ -68,6 +68,208 @@
 //     core.action_registry.add('gps_tracking_tag', CustomCardMenu);  // Este es el tag que se llama en el XML
 //     return CustomCardMenu;
 // });
+// //v2
+// odoo.define('gps_tracking.tracking_menu_action', function (require) {
+//     "use strict";
+
+//     const AbstractAction = require('web.AbstractAction');
+//     const core = require('web.core');
+
+//     const CustomCardMenu = AbstractAction.extend({
+//         template: 'TrackingCardMenu',
+
+//         estado_mensaje: null,
+//         showMsg: null,
+
+
+//         events: {
+//             "click .btn-success": "_onClickIniciarViaje",
+//             "click .btn-warning": "_onClickFinalizarViaje",
+//         },
+
+//         // Método asincrónico corregido
+//         willStart: async function () {
+//             const self = this;
+
+//             const result = await this._rpc({
+//                 model: 'gps.device.trip',
+//                 method: 'search_read',
+//                 domain: [["state", "=", "ongoing"]],
+//                 fields: ['check_in', 'device_id'],
+//                 limit: 1,
+//             });
+
+//             // self.current_trip = result.length ? result[0] : null;
+//             await self._loadCurrentTrip();
+//             return AbstractAction.prototype.willStart.call(this);
+//         },
+
+//         start: function () {
+//             const self = this;
+//             self.id_current_trip = self.$el.find("#id_device").val();
+//             return AbstractAction.prototype.start.call(this);
+//         },
+
+//         _loadCurrentTrip: async function () {
+//           const result = await this._rpc({
+//               model: 'gps.device.trip',
+//               method: 'search_read',
+//               domain: [["state", "=", "ongoing"]],
+//               fields: ['check_in', 'start_time', 'device_id'],
+//               limit: 1,
+//           });
+//           this.current_trip = result.length ? result[0] : null;  
+//         },
+
+//         _onClickIniciarViaje: function () {
+//             this._startTrip();
+//         },
+
+//         _onClickFinalizarViaje: function () {
+//             console.log("Botón de prueba clickeado");
+//             console.log("Viaje actual:", this.current_trip);
+//             this._finishTrip();
+//         },
+
+//         _startTrip: function () {
+//             const self = this;
+//             const deviceId = self.$el.find("#id_device").val();
+
+//             if (!deviceId) {
+//                 self.$el.find("#msg-text").text("Ingrese el ID del dispositivo");
+//                 return;
+//             }
+
+//             if (!/^\d{6}$/.test(deviceId)) {
+//                 self.$el.find("#msg-text").text("El ID del dispositivo no es válido");
+//                 return;
+//             }
+
+//             self.$el.find("#msg-text").text("");
+
+//             self._rpc({
+//                 model: 'gps.device.trip',
+//                 method: 'start_trip', // <-- asegúrate de que este método exista
+//                 args: [deviceId],
+//             }).then(function (resultado) {
+//                 console.log("Resultado del inicio de viaje:", resultado);
+//                 var horaInicio = `${resultado.start_date} ${resultado.start_time}`;
+//                 console.log("Hora de inicio:", horaInicio);
+//                 self.showMsg = true;
+//                 self.estado_mensaje = {
+//                     titulo: "Viaje iniciado",
+//                     texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio
+//                 };
+//                 self.renderElement();
+//                 setTimeout(function () {
+//                     self.showMsg = false;
+//                     self.estado_mensaje = null;
+//                     self._reloadWidget();
+//                 }, 5000)
+//             }).catch(function (error) {
+//                 console.error(error);
+//                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
+//             });
+//         },
+
+//         _finishTrip: function () {
+//             const self = this;
+//             var deviceId = self.$el.find("#id_device").val();
+//             self._rpc({
+//                 model: 'gps.device.trip',
+//                 method: 'finish_trip', // <-- asegúrate de que este método exista
+//                 args: [self.current_trip.device_id],
+//             }).then(function (resultado) {
+//                 console.log("Resultado del fin de viaje:", resultado);
+//                 var horaInicio = resultado.start_time;
+//                 var horaFin = resultado.end_time;
+//                 var tiempoUsado = self._diffTime(horaInicio, horaFin);
+//                 self.showMsg = true;
+//                 self.estado_mensaje = {
+//                     titulo: "Viaje finalizado",
+//                     texto: `Finalizó en ${tiempoUsado.horas}:${tiempoUsado.minutos}:${tiempoUsado.segundos}`
+//                 };
+//                 self.renderElement();
+//                 setTimeout(function () {
+//                     self.showMsg = false;
+//                     self.estado_mensaje = null;
+//                     self._reloadWidget();
+//                 }, 5000)
+                
+//             }).catch(function (error) {
+//                 console.error(error);
+//                 self.$el.find("#msg-text").text("Error al finalizar el viaje");
+//             });
+//         },
+
+//         _diffTime: function (horaStr1, horaStr2) {
+//             // Extraer horas, minutos y segundos
+//             const [h1, m1, s1] = horaStr1.split(":").map(Number);
+//             const [h2, m2, s2] = horaStr2.split(":").map(Number);
+
+//             // Usar una fecha ficticia común
+//             const d1 = new Date(0, 0, 0, h1, m1, s1);
+//             const d2 = new Date(0, 0, 0, h2, m2, s2);
+
+//             // Calcular la diferencia en milisegundos
+//             let diffMs = Math.abs(d1 - d2); // valor absoluto
+
+//             // Convertir a horas, minutos y segundos
+//             let horas = Math.floor(diffMs / (1000 * 60 * 60));
+//             diffMs %= (1000 * 60 * 60);
+//             let minutos = Math.floor(diffMs / (1000 * 60));
+//             diffMs %= (1000 * 60);
+//             let segundos = Math.floor(diffMs / 1000);
+
+//             if(horas < 10){
+//                 horas = "0" + horas;
+//             }
+//             if(minutos < 10){
+//                 minutos = "0" + minutos;
+//             }
+//             if(segundos < 10){
+//                 segundos = "0" + segundos;
+//             }
+            
+//             return { horas, minutos, segundos };
+//         },
+
+//         _reloadWidget: async function () {
+//             const self = this;
+//             const result = await this._rpc({
+//                 model: 'gps.device.trip',
+//                 method: 'search_read',
+//                 domain: [["state", "=", "ongoing"]],
+//                 fields: ['check_in','device_id'],
+//                 limit: 1,
+//             });
+        
+//             this.current_trip = result.length ? result[0] : null;
+        
+//             this.$el.empty();         // Limpia el DOM actual
+//             this.renderElement();     // Re-renderiza el contenido desde el template
+//         },
+
+//         destroy: function () {
+//             // Limpia temporizadores si existen
+//             if (this._messageTimeout) {
+//                 clearTimeout(this._messageTimeout);
+//                 this._messageTimeout = null;
+//             }
+        
+//             // Limpia el contenido del DOM del widget
+//             this.$el.empty();
+        
+//             // Llama al método padre para terminar correctamente
+//             return this._super.apply(this, arguments);
+//         },
+        
+//     });
+
+//     core.action_registry.add('gps_tracking_tag', CustomCardMenu);
+//     return CustomCardMenu;
+// });
+
 odoo.define('gps_tracking.tracking_menu_action', function (require) {
     "use strict";
 
@@ -79,45 +281,32 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         estado_mensaje: null,
         showMsg: null,
-
+        _messageTimeout: null, // <== aquí guardamos el setTimeout
 
         events: {
             "click .btn-success": "_onClickIniciarViaje",
             "click .btn-warning": "_onClickFinalizarViaje",
         },
 
-        // Método asincrónico corregido
         willStart: async function () {
-            const self = this;
+            await this._loadCurrentTrip();
+            return this._super.apply(this, arguments);
+        },
 
+        start: function () {
+            this.id_current_trip = this.$el.find("#id_device").val();
+            return this._super.apply(this, arguments);
+        },
+
+        _loadCurrentTrip: async function () {
             const result = await this._rpc({
                 model: 'gps.device.trip',
                 method: 'search_read',
                 domain: [["state", "=", "ongoing"]],
-                fields: ['check_in', 'device_id'],
+                fields: ['check_in', 'start_time', 'device_id'],
                 limit: 1,
             });
-
-            // self.current_trip = result.length ? result[0] : null;
-            await self._loadCurrentTrip();
-            return AbstractAction.prototype.willStart.call(this);
-        },
-
-        start: function () {
-            const self = this;
-            self.id_current_trip = self.$el.find("#id_device").val();
-            return AbstractAction.prototype.start.call(this);
-        },
-
-        _loadCurrentTrip: async function () {
-          const result = await this._rpc({
-              model: 'gps.device.trip',
-              method: 'search_read',
-              domain: [["state", "=", "ongoing"]],
-              fields: ['check_in', 'start_time', 'device_id'],
-              limit: 1,
-          });
-          this.current_trip = result.length ? result[0] : null;  
+            this.current_trip = result.length ? result[0] : null;
         },
 
         _onClickIniciarViaje: function () {
@@ -125,8 +314,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         _onClickFinalizarViaje: function () {
-            console.log("Botón de prueba clickeado");
-            console.log("Viaje actual:", this.current_trip);
+            console.log("Botón de finalizar viaje clickeado");
             this._finishTrip();
         },
 
@@ -148,23 +336,22 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
             self._rpc({
                 model: 'gps.device.trip',
-                method: 'start_trip', // <-- asegúrate de que este método exista
+                method: 'start_trip',
                 args: [deviceId],
             }).then(function (resultado) {
-                console.log("Resultado del inicio de viaje:", resultado);
-                var horaInicio = `${resultado.start_date} ${resultado.start_time}`;
-                console.log("Hora de inicio:", horaInicio);
+                const horaInicio = `${resultado.start_date} ${resultado.start_time}`;
                 self.showMsg = true;
                 self.estado_mensaje = {
                     titulo: "Viaje iniciado",
-                    texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio
+                    texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio,
                 };
                 self.renderElement();
-                setTimeout(function () {
+
+                self._messageTimeout = setTimeout(function () {
                     self.showMsg = false;
                     self.estado_mensaje = null;
                     self._reloadWidget();
-                }, 5000)
+                }, 5000);
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
@@ -173,28 +360,28 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         _finishTrip: function () {
             const self = this;
-            var deviceId = self.$el.find("#id_device").val();
+
             self._rpc({
                 model: 'gps.device.trip',
-                method: 'finish_trip', // <-- asegúrate de que este método exista
+                method: 'finish_trip',
                 args: [self.current_trip.device_id],
             }).then(function (resultado) {
-                console.log("Resultado del fin de viaje:", resultado);
-                var horaInicio = resultado.start_time;
-                var horaFin = resultado.end_time;
-                var tiempoUsado = self._diffTime(horaInicio, horaFin);
+                const horaInicio = resultado.start_time;
+                const horaFin = resultado.end_time;
+                const tiempoUsado = self._diffTime(horaInicio, horaFin);
+
                 self.showMsg = true;
                 self.estado_mensaje = {
                     titulo: "Viaje finalizado",
-                    texto: `Finalizó en ${tiempoUsado.horas}:${tiempoUsado.minutos}:${tiempoUsado.segundos}`
+                    texto: `Finalizó en ${tiempoUsado.horas}:${tiempoUsado.minutos}:${tiempoUsado.segundos}`,
                 };
                 self.renderElement();
-                setTimeout(function () {
+
+                self._messageTimeout = setTimeout(function () {
                     self.showMsg = false;
                     self.estado_mensaje = null;
                     self._reloadWidget();
-                }, 5000)
-                
+                }, 5000);
             }).catch(function (error) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al finalizar el viaje");
@@ -202,53 +389,50 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         _diffTime: function (horaStr1, horaStr2) {
-            // Extraer horas, minutos y segundos
             const [h1, m1, s1] = horaStr1.split(":").map(Number);
             const [h2, m2, s2] = horaStr2.split(":").map(Number);
 
-            // Usar una fecha ficticia común
             const d1 = new Date(0, 0, 0, h1, m1, s1);
             const d2 = new Date(0, 0, 0, h2, m2, s2);
 
-            // Calcular la diferencia en milisegundos
-            let diffMs = Math.abs(d1 - d2); // valor absoluto
+            let diffMs = Math.abs(d1 - d2);
 
-            // Convertir a horas, minutos y segundos
             let horas = Math.floor(diffMs / (1000 * 60 * 60));
             diffMs %= (1000 * 60 * 60);
             let minutos = Math.floor(diffMs / (1000 * 60));
             diffMs %= (1000 * 60);
             let segundos = Math.floor(diffMs / 1000);
 
-            if(horas < 10){
-                horas = "0" + horas;
-            }
-            if(minutos < 10){
-                minutos = "0" + minutos;
-            }
-            if(segundos < 10){
-                segundos = "0" + segundos;
-            }
-            
+            if (horas < 10) horas = "0" + horas;
+            if (minutos < 10) minutos = "0" + minutos;
+            if (segundos < 10) segundos = "0" + segundos;
+
             return { horas, minutos, segundos };
         },
 
         _reloadWidget: async function () {
-            const self = this;
-            const result = await this._rpc({
-                model: 'gps.device.trip',
-                method: 'search_read',
-                domain: [["state", "=", "ongoing"]],
-                fields: ['check_in','device_id'],
-                limit: 1,
-            });
-        
-            this.current_trip = result.length ? result[0] : null;
-        
-            this.$el.empty();         // Limpia el DOM actual
-            this.renderElement();     // Re-renderiza el contenido desde el template
+            await this._loadCurrentTrip();
+            this.$el.empty();
+            this.renderElement();
         },
-        
+
+        /**
+         * 🔥 Este método asegura que el widget no quede pegado al salir del módulo.
+         */
+        destroy: function () {
+            // Limpia el temporizador si aún no se ejecutó
+            if (this._messageTimeout) {
+                clearTimeout(this._messageTimeout);
+                this._messageTimeout = null;
+            }
+
+            // Limpia el contenido del widget
+            this.$el.empty();
+
+            // Llama al destructor padre
+            return this._super.apply(this, arguments);
+        },
+
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);

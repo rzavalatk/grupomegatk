@@ -80,6 +80,13 @@
                             <t t-if='widget.showMsg'>
                                 <h2 class="card-title" t-esc='widget.estado_mensaje.titulo'></h2>
                                 <p class="card-text" t-esc='widget.estado_mensaje.texto'></p>
+                                <div class="flex-column">
+                                    <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ check_in ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
+                                        <span class="text-bold align-middle fs-2 me-3 text-white" t-if="!check_in">Iniciar Viaje</span>
+                                        <i t-attf-class="fa fa-4x fa-sign-{{ check_in ? 'out' : 'in' }} align-middle"/>
+                                        <span class="text-bold align-middle fs-2 ms-3" t-if="check_in">Finalizar Viaje</span>
+                                    </button>
+                                </div>
                             </t>
                             <t t-else=''>
                                 <t t-if="!check_in">
@@ -109,14 +116,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="estado-mensaje">
-                <t t-if="widget.estado_mensaje">
-                    <div class="alert alert-info" id="estado-mensaje">
-                      <h4><t t-esc="widget.estado_mensaje.titulo"/></h4>
-                      <p><t t-esc="widget.estado_mensaje.texto"/></p>
-                    </div>
-                  </t>
             </div>
         </div>
     </t>
