@@ -124,12 +124,18 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         
 
-        destroy: function () {
-            console.log('se ejecuta?');
-            window.removeEventListener('hashchange', this._onHashChange);
+        // destroy: function () {
+        //     console.log('se ejecuta?');
+        //     window.removeEventListener('hashchange', this._onHashChange);
+        //     this.$el.empty();
+        //     $('#tracking_card_style').remove();
+        //     this._super.apply(this, arguments);
+        // },
+
+        onWillUnmount: function () {
+            console.log("🧼 Limpieza ejecutada desde onWillUnmount");
             this.$el.empty();
             $('#tracking_card_style').remove();
-            this._super.apply(this, arguments);
         },
 
     });
