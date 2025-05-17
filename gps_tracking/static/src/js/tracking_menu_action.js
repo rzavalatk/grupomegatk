@@ -109,6 +109,10 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
 
+        destroy: function () {
+            this._super.apply(this, arguments);
+        },
+
     });
 
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);
