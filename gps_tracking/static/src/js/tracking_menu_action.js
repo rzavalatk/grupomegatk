@@ -255,8 +255,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         destroy: function () {
         //Limpia temporizadores si existen
-        console.log('Destroy called');
         if (this._messageTimeout) {
+            console.log('Destroy called');
             clearTimeout(this._messageTimeout);
             this._messageTimeout = null;
         }
