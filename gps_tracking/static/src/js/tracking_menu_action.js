@@ -28,7 +28,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
             self.current_trip = result.length ? result[0] : null;
 
-            return AbstractAction.prototype.willStart.call(this);
+            // return AbstractAction.prototype.willStart.call(this);
+            return this._super.apply(this, arguments);
         },
 
 
@@ -47,7 +48,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this._onHashChange = this._onHashChange.bind(this);
             window.addEventListener('hashchange', this._onHashChange);
             self.id_current_trip = self.$el.find("#id_device").val();
-            return AbstractAction.prototype.start.call(this);
+            // return AbstractAction.prototype.start.call(this);
+            return this._super.apply(this, arguments);
         },
 
         _onClickIniciarViaje: function () {
