@@ -33,15 +33,15 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
 
-        _onHashChange: function () {
-            const hash = window.location.hash;
-            console.log('1');
+        // _onHashChange: function () {
+        //     const hash = window.location.hash;
+        //     console.log('1');
             
-            if (!hash.includes('gps_tracking_tag')) {
-                console.log("⛔ Saliendo del módulo TrackingCardMenu");
-                this.destroy();  // fuerza la destrucción
-            }
-        },
+        //     if (!hash.includes('gps_tracking_tag')) {
+        //         console.log("⛔ Saliendo del módulo TrackingCardMenu");
+        //         this.destroy();  // fuerza la destrucción
+        //     }
+        // },
 
         start: function () {
             const self = this;
@@ -126,19 +126,19 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         
 
-        // destroy: function () {
-        //     console.log('se ejecuta?');
-        //     window.removeEventListener('hashchange', this._onHashChange);
-        //     this.$el.empty();
-        //     $('#tracking_card_style').remove();
-        //     this._super.apply(this, arguments);
-        // },
-
-        onWillUnmount: function () {
-            console.log("🧼 Limpieza ejecutada desde onWillUnmount");
+        destroy: function () {
+            console.log('se ejecuta?');
+            window.removeEventListener('hashchange', this._onHashChange);
             this.$el.empty();
             $('#tracking_card_style').remove();
+            this._super.apply(this, arguments);
         },
+
+        // onWillUnmount: function () {
+        //     console.log("🧼 Limpieza ejecutada desde onWillUnmount");
+        //     this.$el.empty();
+        //     $('#tracking_card_style').remove();
+        // },
 
     });
 
