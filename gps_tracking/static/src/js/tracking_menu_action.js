@@ -110,6 +110,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         destroy: function () {
+            console.log('se ejecuta?');
+            
             this.$el.empty();
             $('#tracking_card_style').remove();
             this._super.apply(this, arguments);
