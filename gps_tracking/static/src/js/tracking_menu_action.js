@@ -264,7 +264,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         this.$el.empty();
     
         // Llama al método padre para terminar correctamente
-        return AbstractAction.prototype.willStart.call(this);
+        return AbstractAction.prototype.destroy.call(this);
         },
     
     });
@@ -272,5 +272,3 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
     core.action_registry.add('gps_tracking_tag', CustomCardMenu);
     return CustomCardMenu;
 });
-
-
