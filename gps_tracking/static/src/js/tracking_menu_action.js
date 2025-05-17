@@ -264,7 +264,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         this.$el.empty();
     
         // Llama al método padre para terminar correctamente
-        return this._super.apply(this, arguments);
+        return AbstractAction.prototype.willStart.call(this);
         },
     
     });
