@@ -33,6 +33,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         start: function () {
             const self = this;
+            this._onHashChange = this._onHashChange.bind(this);
+            window.addEventListener('hashchange', this._onHashChange);
             self.id_current_trip = self.$el.find("#id_device").val();
             return AbstractAction.prototype.start.call(this);
         },
@@ -111,7 +113,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         destroy: function () {
             console.log('se ejecuta?');
-            
+            window.removeEventListener('hashchange', this._onHashChange);
             this.$el.empty();
             $('#tracking_card_style').remove();
             this._super.apply(this, arguments);
