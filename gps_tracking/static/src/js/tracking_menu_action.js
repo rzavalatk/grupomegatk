@@ -164,12 +164,12 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                     texto: "El viaje ha iniciado correctamente. Fecha y Hora: " + horaInicio
                 };
                 self.renderElement();
-                // this._messageTimeout = setTimeout(() => {
-                //     console.log("🔴 Ejecutando mensaje TIMEOUT (esto no debería ocurrir si ya saliste del módulo)");
-                //     self.showMsg = false;
-                //     self.estado_mensaje = null;
-                //     self._reloadWidget();
-                // }, 5000);
+                this._messageTimeout = setTimeout(() => {
+                    console.log("🔴 Ejecutando mensaje TIMEOUT (esto no debería ocurrir si ya saliste del módulo)");
+                    self.showMsg = false;
+                    self.estado_mensaje = null;
+                    self._reloadWidget();
+                }, 5000);
             }).catch((error) => {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al iniciar el viaje");
@@ -194,6 +194,12 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                     texto: `Finalizó en ${tiempoUsado.horas}:${tiempoUsado.minutos}:${tiempoUsado.segundos}`
                 };
                 self.renderElement();
+                this._messageTimeout = setTimeout( () => {
+                    console.log("🔴 Ejecutando mensaje TIMEOUT (esto no debería ocurrir si ya saliste del módulo)");
+                    self.showMsg = false;
+                    self.estado_mensaje = null;
+                    self._reloadWidget();
+                }, 5000);
             
             }).catch((error) => {
                 console.error(error);
@@ -249,6 +255,23 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
 
+        destroy: function () {
+        //Limpia temporizadores si existen
+    
+        console.log("🟢 Timeout cancelado", this._messageTimeout);
+        clearTimeout(this._messageTimeout);
+        this._messageTimeout = null;
+    
+        // 2. Limpiar todos los manejadores de eventos
+        this.$el.off(); // Elimina todos los listeners jQuery
+        
+        // 3. Limpiar el DOM completamente
+        this.$el.empty();
+        this.$el.remove(); // Elimina el elemento del DOM
+    
+        // Llama al método padre para terminar correctamente
+        return this._super.apply(this, arguments);
+        },
     
     });
 

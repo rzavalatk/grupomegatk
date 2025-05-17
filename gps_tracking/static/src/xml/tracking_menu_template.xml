@@ -77,7 +77,7 @@
                     <div class="full-card">
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
-                            <!-- <t t-if='widget.showMsg'>
+                            <t t-if='widget.showMsg'>
                                 <h2 class="card-title" t-esc='widget.estado_mensaje.titulo'></h2>
                                 <p class="card-text" t-esc='widget.estado_mensaje.texto'></p>
                                 <div class="flex-column">
@@ -88,7 +88,7 @@
                                     </button>
                                 </div>
                             </t>
-                            <t t-else=''> -->
+                            <t t-else=''>
                                 <t t-if="!check_in">
                                     <h2 class="card-title">¡Bienvenido!</h2>
                                 </t>
@@ -112,7 +112,7 @@
                                         <span class="text-bold align-middle fs-2 ms-3" t-if="check_in">Finalizar Viaje</span>
                                     </button>
                                 </div>
-                            <!-- </t> -->
+                            </t>
                         </div>
                     </div>
                 </div>
