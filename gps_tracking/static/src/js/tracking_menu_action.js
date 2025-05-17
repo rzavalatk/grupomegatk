@@ -31,6 +31,15 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             return AbstractAction.prototype.willStart.call(this);
         },
 
+
+        _onHashChange: function () {
+            const hash = window.location.hash;
+            if (!hash.includes('gps_tracking_tag')) {
+                console.log("⛔ Saliendo del módulo TrackingCardMenu");
+                this.destroy();  // fuerza la destrucción
+            }
+        },
+        
         start: function () {
             const self = this;
             this._onHashChange = this._onHashChange.bind(this);
@@ -110,6 +119,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.$el.empty();         // Limpia el DOM actual
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
+
+        
 
         destroy: function () {
             console.log('se ejecuta?');
