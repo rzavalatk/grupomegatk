@@ -255,13 +255,18 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         destroy: function () {
         //Limpia temporizadores si existen
+        console.log('Destroy called');
         if (this._messageTimeout) {
             clearTimeout(this._messageTimeout);
             this._messageTimeout = null;
         }
     
-        // Limpia el contenido del DOM del widget
+        // 2. Limpiar todos los manejadores de eventos
+        this.$el.off(); // Elimina todos los listeners jQuery
+        
+        // 3. Limpiar el DOM completamente
         this.$el.empty();
+        this.$el.remove(); // Elimina el elemento del DOM
     
         // Llama al método padre para terminar correctamente
         return this._super.apply(this, arguments);
