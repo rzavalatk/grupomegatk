@@ -28,8 +28,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
             self.current_trip = result.length ? result[0] : null;
 
-            // return AbstractAction.prototype.willStart.call(this);
-            return this._super.apply(this, arguments);
+            return AbstractAction.prototype.willStart.call(this);
+            
         },
 
 
