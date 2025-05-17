@@ -110,6 +110,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         destroy: function () {
+            console.log("Destruyendo el widget");
             this._super.apply(this, arguments);
         },
 
