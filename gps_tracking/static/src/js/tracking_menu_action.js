@@ -29,25 +29,12 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             self.current_trip = result.length ? result[0] : null;
 
             return AbstractAction.prototype.willStart.call(this);
-            
         },
-
-
-        // _onHashChange: function () {
-        //     const hash = window.location.hash;
-        //     console.log('1');
-            
-        //     if (!hash.includes('gps_tracking_tag')) {
-        //         console.log("⛔ Saliendo del módulo TrackingCardMenu");
-        //         this.destroy();  // fuerza la destrucción
-        //     }
-        // },
 
         start: function () {
             const self = this;
             self.id_current_trip = self.$el.find("#id_device").val();
-            // return AbstractAction.prototype.start.call(this);
-            return this._super.apply(this, arguments);
+            return AbstractAction.prototype.start.call(this);
         },
 
         _onClickIniciarViaje: function () {
@@ -122,20 +109,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
 
-        
-
         destroy: function () {
-            console.log('se ejecuta?');
-            this.$el.empty();
-            $('#tracking_card_style').remove();
             this._super.apply(this, arguments);
         },
-
-        // onWillUnmount: function () {
-        //     console.log("🧼 Limpieza ejecutada desde onWillUnmount");
-        //     this.$el.empty();
-        //     $('#tracking_card_style').remove();
-        // },
 
     });
 
