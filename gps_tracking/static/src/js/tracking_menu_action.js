@@ -34,12 +34,14 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         _onHashChange: function () {
             const hash = window.location.hash;
+            console.log('1');
+            
             if (!hash.includes('gps_tracking_tag')) {
                 console.log("⛔ Saliendo del módulo TrackingCardMenu");
                 this.destroy();  // fuerza la destrucción
             }
         },
-        
+
         start: function () {
             const self = this;
             this._onHashChange = this._onHashChange.bind(this);
