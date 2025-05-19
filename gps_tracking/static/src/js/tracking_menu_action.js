@@ -278,7 +278,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             const currentEmployee = await self._getCurrentEmployee();
             let domain = [["state", "=", "ongoing"]];
             if (currentEmployee) {
-                domain.push(['employee_id', '=', currentEmployee]);
+                domain.push(['id_employee', '=', currentEmployee]);
             }
             const result = await this._rpc({
                 model: 'gps.device.trip',
@@ -358,7 +358,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             const currentEmployee = await self._getCurrentEmployee();
             let domain = [["state", "=", "ongoing"]];
             if (currentEmployee) {
-                domain.push(['employee_id', '=', currentEmployee]);
+                domain.push(['id_employee', '=', currentEmployee]);
             }
             const result = await this._rpc({
                 model: 'gps.device.trip',
