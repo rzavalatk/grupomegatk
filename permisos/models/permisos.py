@@ -325,7 +325,6 @@ class HrPermisos(models.Model):
 							}
 							leave_allocation = self.env['hr.leave.allocation'].create(allocation_vals)
 							leave_allocation.action_confirm()
-							leave_allocation.action_approve()
 							template = self.env.ref('permisos.email_template_vaciones_automaticas')
 							email_values = {'email_to': 'dzuniga@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
