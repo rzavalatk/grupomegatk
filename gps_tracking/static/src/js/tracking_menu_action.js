@@ -120,6 +120,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         destroy: function () {
             if(activeTrackingWidget === this) {
+                console.log("si entro");
+                
                 activeTrackingWidget = null;
             }
             console.log("Destruyendo el widget");
