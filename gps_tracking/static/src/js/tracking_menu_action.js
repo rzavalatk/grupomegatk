@@ -3,6 +3,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
     const AbstractAction = require('web.AbstractAction');
     const core = require('web.core');
+    let activeTrackingWidget = false;
 
     const CustomCardMenu = AbstractAction.extend({
         template: 'TrackingCardMenu',
@@ -109,7 +110,18 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
 
+        init: function (parent, action) {
+            this._super.apply(this, arguments);
+            if(activeTrackingWidget && typeof activeTrackingWidget.destroy === 'function') {
+                activeTrackingWidget.destroy();
+            }
+            activeTrackingWidget = this;
+        },
+
         destroy: function () {
+            if(activeTrackingWidget === this) {
+                activeTrackingWidget = null;
+            }
             console.log("Destruyendo el widget");
             this._super.apply(this, arguments);
         },
