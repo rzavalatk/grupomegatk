@@ -69,8 +69,8 @@
                     background-color: #33cc33;
                 }
             </style>
-            <t t-if="current_trip">
-                <t t-set="check_in" t-value="current_trip.check_in"/>
+            <t t-if="widget.current_trip">
+                <t t-set="check_in" t-value="widget.current_trip.check_in"/>
             </t>
             <div id="root">
                 <div class="container flex-content-center pt-5">
