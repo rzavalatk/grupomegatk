@@ -326,7 +326,7 @@ class HrPermisos(models.Model):
 							# AGREGAR VACACIONES A MODULO DE PERMISOS
 							leave_type_id = self.env['hr.leave.type'].sudo().search(
 								[('vacaciones', '=', 'True')], limit=1)
-							number_of_hours = number_of_hours / 60
+
 							allocation_vals = {
 								'employee_id': employe_id.id,
 								'holiday_status_id': leave_type_id.id,
