@@ -5,6 +5,10 @@ from odoo.exceptions import Warning
 import datetime
 import pytz
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 class HrPermisos(models.Model):
 	_name = 'hr.employee.permisos'
 	_order = "id desc"
@@ -304,21 +308,25 @@ class HrPermisos(models.Model):
 									minutos_actuales, año1)
 								minutos_vac = dias * 480 + horas *60 + minutos_resultante
 								number_of_hours = minutos_vac / 60
+								_logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
 							elif hoy.year - employe_id.fecha_ingreso.year == 2:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(
 									minutos_actuales, año2)
 								minutos_vac = dias * 480 + horas *60 + minutos_resultante
 								number_of_hours = minutos_vac / 60
+								_logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
 							elif hoy.year - employe_id.fecha_ingreso.year == 3:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(
 									minutos_actuales, año3)
 								minutos_vac = dias * 480 + horas *60 + minutos_resultante
 								number_of_hours = minutos_vac / 60
+								_logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
 							else:
 								dias, horas, minutos_resultante = self.vacaciones_restantes1(
 									minutos_actuales, añomas)
 								minutos_vac = dias * 480 + horas *60 + minutos_resultante
 								number_of_hours = minutos_vac / 60
+								_logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
 							# AGREGAR VACACIONES A PERFIL DE EMPLEADOS
 							employe_id.sudo().write({'permisos_dias': dias,
 														'permisos_horas': horas,
