@@ -1,109 +1,130 @@
-/** @odoo-module **/
+odoo.define('gps_tracking.tracking_menu_action', function (require) {
+    "use strict";
 
-import { registry } from "@web/core/registry";
-import { AbstractAction } from "@web/webclient/actions/abstract_action";
-import { useService } from "@web/core/utils/hooks";
+    const AbstractAction = require('web.AbstractAction');
+    const core = require('web.core');
+    let activeTrackingWidget = false;
 
-export class TrackingCardMenu extends AbstractAction {
-    static template = "TrackingCardMenu";
+    const CustomCardMenu = AbstractAction.extend({
+        template: 'TrackingCardMenu',
 
-    setup() {
-        super.setup();
-        this.rpc = useService("rpc");
-        this.action = useService("action");
-        this.current_trip = null;
+        id_current_trip: null,
 
-        this.loadTrip();
+        events: {
+            "click .btn-success": "_onClickIniciarViaje",
+            "click .btn-warning": "_onClickFinalizarViaje",
+        },
 
-        this.onClickIniciarViaje = this.onClickIniciarViaje.bind(this);
-        this.onClickFinalizarViaje = this.onClickFinalizarViaje.bind(this);
-    }
+        // Método asincrónico corregido
+        willStart: async function () {
+            const self = this;
 
-    async loadTrip() {
-        const result = await this.rpc({
-            model: "gps.device.trip",
-            method: "search_read",
-            domain: [["state", "=", "ongoing"]],
-            fields: ["check_in", "device_id"],
-            limit: 1,
-        });
-        this.current_trip = result.length ? result[0] : null;
-        this.render();
-    }
+            const result = await this._rpc({
+                model: 'gps.device.trip',
+                method: 'search_read',
+                domain: [["state", "=", "ongoing"]],
+                fields: ['check_in', 'device_id'],
+                limit: 1,
+            });
 
-    onClickIniciarViaje(ev) {
-        ev.preventDefault();
-        this.startTrip();
-    }
+            self.current_trip = result.length ? result[0] : null;
 
-    onClickFinalizarViaje(ev) {
-        ev.preventDefault();
-        this.finishTrip();
-    }
+            return AbstractAction.prototype.willStart.call(this);
+        },
 
-    async startTrip() {
-        const input = this.el.querySelector("#id_device");
-        const msg = this.el.querySelector("#msg-text");
-        const deviceId = input?.value;
+        start: function () {
+            const self = this;
+            // return AbstractAction.prototype.start.call(this);
+            this._super.apply(this, arguments);
+            this.actionManager && this.actionManager.doAction && this.actionManager.on('will_clear_action', this, this._onWillClearAction); // <&&
+        },
 
-        if (!deviceId) {
-            msg.textContent = "Ingrese el ID del dispositivo";
-            return;
-        }
+        _onClickIniciarViaje: function () {
+            this._startTrip();
+        },
 
-        if (!/^\d{6}$/.test(deviceId)) {
-            msg.textContent = "El ID del dispositivo no es válido";
-            return;
-        }
+        _onClickFinalizarViaje: function () {
+            console.log("Botón de prueba clickeado");
+            console.log("Viaje actual:", this.current_trip);
+            this._finishTrip();
+        },
 
-        msg.textContent = "";
+        _startTrip: function () {
+            const self = this;
+            self.id_current_trip = self.$el.find("#id_device").val();
+            const deviceId = self.$el.find("#id_device").val();
 
-        try {
-            const result = await this.rpc({
-                model: "gps.device.trip",
-                method: "start_trip",
+            if (!deviceId) {
+                self.$el.find("#msg-text").text("Ingrese el ID del dispositivo");
+                return;
+            }
+
+            if (!/^\d{6}$/.test(deviceId)) {
+                self.$el.find("#msg-text").text("El ID del dispositivo no es válido");
+                return;
+            }
+
+            self.$el.find("#msg-text").text("");
+
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'start_trip', // <-- asegúrate de que este método exista
                 args: [deviceId],
+            }).then(function (resultado) {
+                console.log("Resultado del inicio de viaje:", resultado);
+                self._reloadWidget();
+            }).catch(function (error) {
+                console.error(error);
+                self.$el.find("#msg-text").text("Error al iniciar el viaje");
             });
-            console.log("Inicio de viaje:", result);
-            this.loadTrip();
-        } catch (error) {
-            console.error(error);
-            msg.textContent = "Error al iniciar el viaje";
-        }
-    }
+        },
 
-    async finishTrip() {
-        const msg = this.el.querySelector("#msg-text");
-        try {
-            const result = await this.rpc({
-                model: "gps.device.trip",
-                method: "finish_trip",
-                args: [this.current_trip.device_id],
+        _finishTrip: function () {
+            const self = this;
+            var deviceId = self.$el.find("#id_device").val();
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'finish_trip', // <-- asegúrate de que este método exista
+                args: [self.current_trip.device_id],
+            }).then(function (resultado) {
+                console.log("Resultado del fin de viaje:", resultado);
+                self._reloadWidget();
+            }).catch(function (error) {
+                console.error(error);
+                self.$el.find("#msg-text").text("Error al finalizar el viaje");
             });
-            console.log("Final del viaje:", result);
-            this.loadTrip();
-        } catch (error) {
-            console.error(error);
-            msg.textContent = "Error al finalizar el viaje";
-        }
-    }
+        },
 
-    mounted() {
-        // Se asegura que los botones estén enlazados después del render
-        this.el.querySelector(".btn-success")?.addEventListener("click", this.onClickIniciarViaje);
-        this.el.querySelector(".btn-warning")?.addEventListener("click", this.onClickFinalizarViaje);
-    }
+        _reloadWidget: async function () {
+            const self = this;
+            const result = await this._rpc({
+                model: 'gps.device.trip',
+                method: 'search_read',
+                domain: [["state", "=", "ongoing"]],
+                fields: ['check_in','device_id'],
+                limit: 1,
+            });
 
-    willUnmount() {
-        console.log("willUnmount: limpiando listeners del widget");
-        this.el.querySelector(".btn-success")?.removeEventListener("click", this.onClickIniciarViaje);
-        this.el.querySelector(".btn-warning")?.removeEventListener("click", this.onClickFinalizarViaje);
-    }
+            this.current_trip = result.length ? result[0] : null;
 
-    async willUnmountAndDestroy() {
-        console.log("willUnmountAndDestroy: widget destruido");
-    }
-}
+            this.$el.empty();         // Limpia el DOM actual
+            this.renderElement();     // Re-renderiza el contenido desde el template
+        },
 
-// Registrar la acción personalizada en el registry
-registry.category("actions").add("gps_tracking_tag", TrackingCardMenu);
+
+        _onWillClearAction: function () {
+            console.log("Se disparó will_clear_action, destrucción forzada del widget");
+            this.destroy();
+            this.$el.remove(); // Remueve el DOM manualmente si aún queda algo
+        },
+
+        destroy: function () {
+            console.log("Destruyendo el widget");
+            this._super.apply(this, arguments);
+        },
+
+    });
+
+    core.action_registry.add('gps_tracking_tag', CustomCardMenu);
+    return CustomCardMenu;
+});
