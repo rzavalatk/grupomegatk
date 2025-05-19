@@ -98,6 +98,12 @@ class GpsDeviceTrip(models.Model):
             ('id_employee','=',employee_id),
             ('state','=','ongoing')
             ],limit=1)
+        trip2 = self.search([
+            ('device_id','=',id_device),
+            
+            ('state','=','ongoing')
+            ],limit=1)
+        _logger.warning(f"desde finish trip2 {trip2.id_employee}")
         _logger.warning(f"desde finish trip {trip}")
         if trip:
             trip.end_time = self._define_time()
