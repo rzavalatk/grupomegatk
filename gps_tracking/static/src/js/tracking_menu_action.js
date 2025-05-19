@@ -275,10 +275,15 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         willStart: async function () {
             const self = this;
+            const currentEmployee = await self._getCurrentEmployee();
+            let domain = [["state", "=", "ongoing"]];
+            if (currentEmployee) {
+                domain.push(['employee_id', '=', currentEmployee]);
+            }
             const result = await this._rpc({
                 model: 'gps.device.trip',
                 method: 'search_read',
-                domain: [["state", "=", "ongoing"]],
+                domain: domain,
                 fields: ['check_in', 'device_id'],
                 limit: 1,
             });
@@ -302,7 +307,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this._finishTrip();
         },
 
-        _startTrip: function () {
+        _startTrip: async function () {
             const self = this;
             self.id_current_trip = self.$el.find("#id_device").val();
             const deviceId = self.$el.find("#id_device").val();
@@ -323,6 +328,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 model: 'gps.device.trip',
                 method: 'start_trip',
                 args: [deviceId],
+                kwargs: { employee_id: await self._getCurrentEmployeeId() },
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
                 self._reloadWidget();
@@ -349,18 +355,34 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         _reloadWidget: async function () {
             const self = this;
+            const currentEmployee = await self._getCurrentEmployee();
+            let domain = [["state", "=", "ongoing"]];
+            if (currentEmployee) {
+                domain.push(['employee_id', '=', currentEmployee]);
+            }
             const result = await this._rpc({
                 model: 'gps.device.trip',
                 method: 'search_read',
-                domain: [["state", "=", "ongoing"]],
-                fields: ['check_in','device_id'],
+                domain: domain,
+                fields: ['check_in', 'device_id'],
                 limit: 1,
             });
-
+            
             this.current_trip = result.length ? result[0] : null;
 
             this.$el.empty();
             this.renderElement();
+        },
+
+        _getCurrentEmployeeId: async function () {
+            const employee = await this._rpc({
+                model: 'hr.employee',
+                method: 'search_read',
+                domain: [['user_id', '=', this.getSession().uid]],
+                fields: ['id'],
+                limit: 1,
+            });
+            return employee.length ? employee[0].id : false;
         },
 
         _onWillClearAction: function () {
