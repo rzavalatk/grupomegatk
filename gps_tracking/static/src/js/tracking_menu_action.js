@@ -303,15 +303,64 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         _startTrip: function () {
-            // ... (tu código _startTrip)
+            const self = this;
+            self.id_current_trip = self.$el.find("#id_device").val();
+            const deviceId = self.$el.find("#id_device").val();
+
+            if (!deviceId) {
+                self.$el.find("#msg-text").text("Ingrese el ID del dispositivo");
+                return;
+            }
+
+            if (!/^\d{6}$/.test(deviceId)) {
+                self.$el.find("#msg-text").text("El ID del dispositivo no es válido");
+                return;
+            }
+
+            self.$el.find("#msg-text").text("");
+
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'start_trip',
+                args: [deviceId],
+            }).then(function (resultado) {
+                console.log("Resultado del inicio de viaje:", resultado);
+                self._reloadWidget();
+            }).catch(function (error) {
+                console.error(error);
+                self.$el.find("#msg-text").text("Error al iniciar el viaje");
+            });
         },
 
         _finishTrip: function () {
-            // ... (tu código _finishTrip)
+            const self = this;
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'finish_trip',
+                args: [self.current_trip.device_id],
+            }).then(function (resultado) {
+                console.log("Resultado del fin de viaje:", resultado);
+                self._reloadWidget();
+            }).catch(function (error) {
+                console.error(error);
+                self.$el.find("#msg-text").text("Error al finalizar el viaje");
+            });
         },
 
         _reloadWidget: async function () {
-            // ... (tu código _reloadWidget)
+            const self = this;
+            const result = await this._rpc({
+                model: 'gps.device.trip',
+                method: 'search_read',
+                domain: [["state", "=", "ongoing"]],
+                fields: ['check_in','device_id'],
+                limit: 1,
+            });
+
+            this.current_trip = result.length ? result[0] : null;
+
+            this.$el.empty();
+            this.renderElement();
         },
 
         _onWillClearAction: function () {
