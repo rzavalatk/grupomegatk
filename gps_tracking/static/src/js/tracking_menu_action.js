@@ -338,9 +338,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             });
         },
 
-        _finishTrip: function () {
+        _finishTrip: async  function () {
             const self = this;
-            console.log("self.getCurrentEmployee", self._getCurrentEmployee());
+            console.log("self.getCurrentEmployee", await self._getCurrentEmployee());
             
             self._rpc({
                 model: 'gps.device.trip',
