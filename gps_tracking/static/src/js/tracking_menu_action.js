@@ -383,6 +383,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 limit: 1,
             });
             console.log("Empleado actual:", employee[0].id);
+            console.log("Empleado current: ", employee.length ? employee[0].id : false);
             
             return employee.length ? employee[0].id : false;
         },
