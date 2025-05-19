@@ -95,7 +95,7 @@ class GpsDeviceTrip(models.Model):
         """Finalizar un viaje"""
         trip = self.search([
             ('device_id','=',id_device),
-            ('id_employee','=',employee_id),
+            ('id_employee','=',employee_id.id),
             ('state','=','ongoing')
             ],limit=1)
         trip2 = self.search([
