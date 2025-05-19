@@ -288,60 +288,75 @@ class HrPermisos(models.Model):
 		nic = 2.5 * 480
 		number_of_hours = 0
 		dias = 0
-		horas = 0 
+		horas = 0
 		minutos_resultante = 0
 		hoy = fields.Date.context_today(self)
 		employee_ids = self.env["hr.employee"].sudo().search([])
 		for employe_id in employee_ids:
-			minutos_actuales = (employe_id.permisos_dias * 480) + (employe_id.permisos_horas * 60 ) + employe_id.permisos_minutos
+			minutos_actuales = (employe_id.permisos_dias * 480) + \
+				(employe_id.permisos_horas * 60) + employe_id.permisos_minutos
 			if employe_id.country_of_birth:
 				if employe_id.country_of_birth.code == 'HN':
 					if employe_id.fecha_ingreso:
 						if employe_id.fecha_ingreso.day == hoy.day and employe_id.fecha_ingreso.month == hoy.month:
 							if hoy.year - employe_id.fecha_ingreso.year == 1:
-								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año1)
-								number_of_hours = año1
+								dias, horas, minutos_resultante = self.vacaciones_restantes1(
+									minutos_actuales, año1)
+								minutos_vac = dias * 480 + horas *60 + minutos_resultante
+								number_of_hours = minutos_vac / 60
 							elif hoy.year - employe_id.fecha_ingreso.year == 2:
-								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año2)
-								number_of_hours = año2
+								dias, horas, minutos_resultante = self.vacaciones_restantes1(
+									minutos_actuales, año2)
+								minutos_vac = dias * 480 + horas *60 + minutos_resultante
+								number_of_hours = minutos_vac / 60
 							elif hoy.year - employe_id.fecha_ingreso.year == 3:
-								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, año3)
-								number_of_hours = año3
+								dias, horas, minutos_resultante = self.vacaciones_restantes1(
+									minutos_actuales, año3)
+								minutos_vac = dias * 480 + horas *60 + minutos_resultante
+								number_of_hours = minutos_vac / 60
 							else:
-								dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, añomas)
-								number_of_hours = añomas
-							#AGREGAR VACACIONES A PERFIL DE EMPLEADOS
+								dias, horas, minutos_resultante = self.vacaciones_restantes1(
+									minutos_actuales, añomas)
+								minutos_vac = dias * 480 + horas *60 + minutos_resultante
+								number_of_hours = minutos_vac / 60
+							# AGREGAR VACACIONES A PERFIL DE EMPLEADOS
 							employe_id.sudo().write({'permisos_dias': dias,
-								'permisos_horas': horas,
-								'permisos_minutos': minutos_resultante})
-							#AGREGAR VACACIONES A MODULO DE PERMISOS
-							leave_type_id = self.env['hr.leave.type'].sudo().search([('vacaciones', '=', 'True')], limit=1)
+														'permisos_horas': horas,
+														'permisos_minutos': minutos_resultante})
+							# AGREGAR VACACIONES A MODULO DE PERMISOS
+							leave_type_id = self.env['hr.leave.type'].sudo().search(
+								[('vacaciones', '=', 'True')], limit=1)
 							number_of_hours = number_of_hours / 60
 							allocation_vals = {
 								'employee_id': employe_id.id,
 								'holiday_status_id': leave_type_id.id,
-								'number_of_days': number_of_hours,
+								'number_of_hours_display': number_of_hours,
 								'name': "Asignación de vacaciones por ley",
 							}
-							leave_allocation = self.env['hr.leave.allocation'].create(allocation_vals)
+							leave_allocation = self.env['hr.leave.allocation'].create(
+								allocation_vals)
 							leave_allocation.action_confirm()
-							leave_allocation.action_approve()
-							template = self.env.ref('permisos.email_template_vaciones_automaticas')
-							email_values = {'email_to': 'dzuniga@megatk.com',
+							template = self.env.ref(
+								'permisos.email_template_vaciones_automaticas')
+							email_values = {'email_to': 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
-											'body_html': "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas<br/><br/> <b>Años cumplidos</b>: " + str(hoy.year - employe_id.fecha_ingreso.year) + '<br/>'+
-											'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos' }
-							template.send_mail(self.id, email_values=email_values, force_send=True)
+											'body_html': "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas<br/><br/> <b>Años cumplidos</b>: " + str(hoy.year - employe_id.fecha_ingreso.year) + '<br/>' +
+											'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos'}
+							template.send_mail(
+								self.id, email_values=email_values, force_send=True)
 				elif employe_id.country_of_birth.code == 'NI':
 					if employe_id.fecha_ingreso:
 						if employe_id.fecha_ingreso.day == hoy.day:
-							dias, horas, minutos_resultante = self.vacaciones_restantes1(minutos_actuales, nic)
+							dias, horas, minutos_resultante = self.vacaciones_restantes1(
+								minutos_actuales, nic)
 							employe_id.sudo().write({'permisos_dias': dias,
-								'permisos_horas': horas,
-								'permisos_minutos': minutos_resultante})
-							template = self.env.ref('permisos.email_template_vaciones_automaticas')
+														'permisos_horas': horas,
+														'permisos_minutos': minutos_resultante})
+							template = self.env.ref(
+								'permisos.email_template_vaciones_automaticas')
 							email_values = {'email_to': 'dzuniga@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
 											'body_html': 'Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas <br/><br/><b>2.5 dias</b> por mes cumplido <br/>' +
-													'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos' }
-							template.send_mail(self.id, email_values=email_values, force_send=True)
+											'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos'}
+							template.send_mail(
+								self.id, email_values=email_values, force_send=True)

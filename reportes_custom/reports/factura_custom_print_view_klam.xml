@@ -9,7 +9,7 @@
       </t>
     </template>
 
-    <template id="external_layout_factura_custom">
+    <template id="external_layout_factura_custom_klam">
       <div class="header">
         <div class="row" style="margin-top: 0px;">
           <div class="col-xs-3 mb4">
