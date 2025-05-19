@@ -343,7 +343,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             self._rpc({
                 model: 'gps.device.trip',
                 method: 'finish_trip',
-                args: [self.current_trip.device_id],
+                args: [self.current_trip.device_id, self._getCurrentEmployee()],
             }).then(function (resultado) {
                 console.log("Resultado del fin de viaje:", resultado);
                 self._reloadWidget();
