@@ -326,7 +326,7 @@ class HrPermisos(models.Model):
 							leave_allocation = self.env['hr.leave.allocation'].create(allocation_vals)
 							leave_allocation.action_confirm()
 							template = self.env.ref('permisos.email_template_vaciones_automaticas')
-							email_values = {'email_to': 'dzuniga@megatk.com',
+							email_values = {'email_to': 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com',
 											'subject': "Vacaciones aplicadas a " + str(employe_id.name),
 											'body_html': "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas<br/><br/> <b>Años cumplidos</b>: " + str(hoy.year - employe_id.fecha_ingreso.year) + '<br/>'+
 											'<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos' }
