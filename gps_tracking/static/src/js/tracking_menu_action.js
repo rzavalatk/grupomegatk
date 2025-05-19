@@ -328,7 +328,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 model: 'gps.device.trip',
                 method: 'start_trip',
                 args: [deviceId],
-                kwargs: { employee_id: await self._getCurrentEmployeeId() },
+                kwargs: { employee_id: await self._getCurrentEmployee() },
             }).then(function (resultado) {
                 console.log("Resultado del inicio de viaje:", resultado);
                 self._reloadWidget();
