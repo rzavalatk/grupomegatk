@@ -116,16 +116,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
     });
 
-    // core.action_registry.add('gps_tracking_tag', CustomCardMenu);
-    core.action_registry.add('gps_tracking_tag', function (parent, action) {
-        // Destruye la instancia anterior si aún existe
-        if (window._gpsTrackingInstance && typeof window._gpsTrackingInstance.destroy === 'function') {
-            window._gpsTrackingInstance.destroy();
-        }
-    
-        const instance = new CustomCardMenu(parent, action);
-        window._gpsTrackingInstance = instance;
-        return instance;
-    });
+    core.action_registry.add('gps_tracking_tag', CustomCardMenu);
     return CustomCardMenu;
 });
