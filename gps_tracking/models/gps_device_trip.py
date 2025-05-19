@@ -93,9 +93,10 @@ class GpsDeviceTrip(models.Model):
     @api.model
     def finish_trip(self, id_device, employee_id):
         """Finalizar un viaje"""
+        _logger.warning(f"desde finish employee {employee_id}")
         trip = self.search([
             ('device_id','=',id_device),
-            ('id_employee','=',employee_id.id),
+            ('id_employee','=',employee_id),
             ('state','=','ongoing')
             ],limit=1)
         trip2 = self.search([
