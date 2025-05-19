@@ -36,7 +36,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             const self = this;
             // return AbstractAction.prototype.start.call(this);
             this._super.apply(this, arguments);
-            this.actionManager && this.actionManager.doAction && this.actionManager.on('wll_clear_action', this, this._onWllClearAction); // <&&
+            this.actionManager && this.actionManager.doAction && this.actionManager.on('will_clear_action', this, this._onWillClearAction); // <&&
         },
 
         _onClickIniciarViaje: function () {
@@ -111,13 +111,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();     // Re-renderiza el contenido desde el template
         },
 
-        init: function (parent, action) {
-            this._super.apply(this, arguments);
-            if(activeTrackingWidget && typeof activeTrackingWidget.destroy === 'function') {
-                activeTrackingWidget.destroy();
-            }
-            activeTrackingWidget = this;
-        },
 
         _onWillClearAction: function () {
             console.log("Se disparó will_clear_action, destrucción forzada del widget");
@@ -126,11 +119,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         destroy: function () {
-            if(activeTrackingWidget === this) {
-                console.log("si entro");
-                
-                activeTrackingWidget = null;
-            }
             console.log("Destruyendo el widget");
             this._super.apply(this, arguments);
         },
