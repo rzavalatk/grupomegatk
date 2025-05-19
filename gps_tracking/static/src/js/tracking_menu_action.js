@@ -374,7 +374,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             this.renderElement();
         },
 
-        _getCurrentEmployeeId: async function () {
+        _getCurrentEmployee: async function () {
             const employee = await this._rpc({
                 model: 'hr.employee',
                 method: 'search_read',
