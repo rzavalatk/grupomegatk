@@ -34,8 +34,9 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
 
         start: function () {
             const self = this;
-            self.id_current_trip = self.$el.find("#id_device").val();
-            return AbstractAction.prototype.start.call(this);
+            // return AbstractAction.prototype.start.call(this);
+            this._super.apply(this, arguments);
+            this.actionManager && this.actionManager.doAction && this.actionManager.on('wll_clear_action', this, this._onWllClearAction); // <&&
         },
 
         _onClickIniciarViaje: function () {
@@ -116,6 +117,12 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 activeTrackingWidget.destroy();
             }
             activeTrackingWidget = this;
+        },
+
+        _onWillClearAction: function () {
+            console.log("Se disparó will_clear_action, destrucción forzada del widget");
+            this.destroy();
+            this.$el.remove(); // Remueve el DOM manualmente si aún queda algo
         },
 
         destroy: function () {
