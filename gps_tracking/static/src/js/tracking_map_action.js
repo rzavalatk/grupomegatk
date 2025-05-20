@@ -17,28 +17,42 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         },
 
         _initLeafletMap: function () {
-            // Espera a que el DOM esté cargado
             const mapContainer = this.$('#map')[0];
-            if(mapContainer){
+            if (mapContainer) {
+                // Solo inicializamos el mapa si aún no existe (es null o undefined)
                 if (!this.map) {
-                    const map = L.map(mapContainer).setView([14.0989839, -87.1899595], 13); // Ciudad de México
+                    try {
+                        // Intentamos inicializar el mapa
+                        this.map = L.map(mapContainer).setView([14.0989839, -87.1899599], 13);
         
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors'
+                        }).addTo(this.map);
         
-                    L.marker([14.0989839, -87.1899595]).addTo(map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
+                        L.marker([14.0989839, -87.1899599]).addTo(this.map)
+                            .bindPopup('Ubicación inicial')
+                            .openPopup();
                         
-                    this.map.invalidateSize();
+                        // Si la inicialización fue exitosa y this.map ya no es null,
+                        // entonces podemos llamar a invalidateSize().
+                        this.map.invalidateSize();
+                        console.log("Mapa Leaflet inicializado y tamaño invalidado.");
+        
+                    } catch (e) {
+                        // Captura cualquier error durante la inicialización de L.map
+                        console.error("Error al inicializar el mapa Leaflet:", e);
+                        this.map = null; // Asegura que this.map sea null si falla la inicialización
+                    }
                 } else {
-                    this.map.setView([14.0989839, -87.1899595], 13);
+                    // Si el mapa ya existe (this.map no es null), solo actualizamos la vista
+                    // y aseguramos que el tamaño sea correcto.
+                    this.map.setView([14.0989839, -87.1899599], 13);
                     this.map.invalidateSize();
+                    console.log("Mapa Leaflet existente actualizado y tamaño invalidado.");
                 }
             } else {
-                console.error("No se pudo encontrar el contenedor del mapa");
-            }  
+                console.error("No se pudo encontrar el contenedor del mapa (#map).");
+            }
         },
 
         destroy: function () {
