@@ -194,9 +194,10 @@ class GpsDeviceTrip(models.Model):
         
     def get_code(self):
         base = 'VMT'
-        trip_count = self.search_count([])
+        trip_count = 0
+        code = base + str(trip_count + 1)
         
-        _logger.warning(f"trip_count: {trip_count}")
+        _logger.warning(f"trip_count: {code}")
 
     def cron_fetch_positions(self):
         self.get_code()
