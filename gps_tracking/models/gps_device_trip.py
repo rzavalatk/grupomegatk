@@ -202,4 +202,5 @@ class GpsDeviceTrip(models.Model):
         
         _logger.warning(f"trip_count: {trip_count}")
 
+    get_code()
 
