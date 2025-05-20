@@ -3,9 +3,11 @@
     <t t-name="TrackingMap">
         <div class="row">
             <style>
-                .map-container {
+                .menu-container {
                     display: flex;
+                    bsckground-color: #032f68;
                     justify-content: space-evenly;
+                    border-radius: 10px
                 }
             </style>
             <div id="root">
