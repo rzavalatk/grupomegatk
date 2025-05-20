@@ -22,6 +22,7 @@ class GpsDeviceTrip(models.Model):
     tiempo_usado = fields.Char('Tiempo Usado')
     check_in = fields.Boolean('Check-in', default=False)
     id_employee = fields.Many2one('hr.employee', 'Empleado', required=True)
+    code = fields.Char(string='Código de Viaje', required=True, copy=False, readonly=True, default='Nuevo')
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
@@ -70,6 +71,7 @@ class GpsDeviceTrip(models.Model):
             raise ValidationError(f"Ya hay un viaje en curso para este dispositivo ({viaje_encurso.name})")
         
         trip = self.create({
+            'code': self.env['ir.sequence'].next_by_code('trip.id') or '/',
             'name': f'Viaje {device_id} - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             'device_id': device_id,
             'id_employee': employee_id,
@@ -190,14 +192,6 @@ class GpsDeviceTrip(models.Model):
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
             
         return True
-    
-        
-    def get_code(self):
-        base = 'VMT'
-        trip_count = 0
-        code = base + str(trip_count + 1)
-        
-        _logger.warning(f"trip_count: {code}")
 
     def cron_fetch_positions(self):
         self.get_code()

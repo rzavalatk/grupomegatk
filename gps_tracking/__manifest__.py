@@ -15,6 +15,7 @@
         'views/gps_tracking_map_view.xml',
         'views/gps_tracking_trip_view.xml',
         'views/gps_tracking_main_menu.xml',
+        'data/ir_sequence.xml',
         'data/cron.xml',
     ],
       'assets': {
