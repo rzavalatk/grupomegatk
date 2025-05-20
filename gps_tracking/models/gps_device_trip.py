@@ -195,6 +195,11 @@ class GpsDeviceTrip(models.Model):
         viajes = self.search([('state','=','ongoing')])
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
         viajes.fetch_device_positions()
-    
+        
+    def get_code(self):
+        base = 'VMT'
+        trip_count = self.search_count([])
+        
+        _logger.warning(f"trip_count: {trip_count}")
 
 
