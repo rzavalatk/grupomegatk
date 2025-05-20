@@ -5,7 +5,7 @@
             <div id="root">
                 <div class="container pt-5">
                     <h1>Mapa Leaflet.js</h1>
-                    <div id="map" style="height: 300px; width: 300px;"></div>
+                    <div id="map" style="height: 400px; width: 400px;"></div>
                 </div>
             </div>
         </div>
