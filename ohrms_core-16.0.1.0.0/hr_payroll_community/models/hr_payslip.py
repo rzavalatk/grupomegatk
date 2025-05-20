@@ -994,7 +994,7 @@ class HrPayslipRun(models.Model):
             datos_lines_from_customer.extend(grupo)
 
             # Calcular suma por columna
-            totales = ["TOTAL", departamento]
+            totales = ["","TOTAL " + departamento]
             num_cols = len(grupo[0])
             for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
                 totales.append('')
