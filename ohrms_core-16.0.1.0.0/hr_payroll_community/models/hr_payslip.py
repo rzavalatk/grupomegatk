@@ -986,8 +986,9 @@ class HrPayslipRun(models.Model):
         for line in data:
             departamento = line[1]
             _logger.warning("departamento: %s", departamento)
-            if departamento != 'Desarrollo' or departamento != 'Mercadeo':
-                departamento_data[departamento].append(line)
+            if departamento != 'Desarrollo':
+                if departamento != 'Mercadeo':
+                    departamento_data[departamento].append(line)
 
         datos_lines_from_customer = []
 
