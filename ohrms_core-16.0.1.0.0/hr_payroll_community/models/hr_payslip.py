@@ -917,6 +917,12 @@ class HrPayslipRun(models.Model):
         
         # Crear hojas de Excel
         worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
+        
+        formato_total = workbook.add_format({
+            'bold': True,
+            'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
+            'border': 1
+        })
 
         # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
         def escribir_hoja(worksheet, encabezados, datos, col_widths):
@@ -931,9 +937,14 @@ class HrPayslipRun(models.Model):
             # Escribir los datos
             row = 1
             for record in datos:
-                for col, value in enumerate(record):
-                    worksheet.write(row, col, value)
+                if str(record[0]).strip().upper() == "TOTAL":
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value, formato_total)
+                else:
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value)
                 row += 1
+
 
         for slip_id in self.slip_ids:
             reglas = []
@@ -979,9 +990,14 @@ class HrPayslipRun(models.Model):
 
             # Calcular suma por columna
             totales = ["TOTAL", departamento]
-            for i in range(2, len(grupo[0])):  # Desde la 3ra columna (índice 2)
-                suma = sum(row[i] for row in grupo)
-                totales.append(suma)
+            num_cols = len(grupo[0])
+            for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
+                totales.append('')
+            
+            # Sumar solo la última columna
+            suma_final = sum(row[-1] for row in grupo)
+            totales.append(suma_final)
+
             
             datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
 
