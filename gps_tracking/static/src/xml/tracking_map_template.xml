@@ -10,7 +10,7 @@
                     border-radius: 10px;
                 }
 
-                .map {
+                #map {
                     height: 400px;
                     width: 600px;
                 }
@@ -19,7 +19,7 @@
                 <div class="container pt-5 menu-container">
                     <div>
                         <h1>Mapa Leaflet.js</h1>
-                        <div id="map" style="height: 400px; width: 400px;"></div>
+                        <div id="map"></div>
                     </div>
                     <div>
                         <h2 class="">Ingresar codigo de viaje</h2>
