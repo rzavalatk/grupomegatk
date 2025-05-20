@@ -23,6 +23,19 @@
                     font-size: 20px;
                     text-align: center;
                 }
+
+                .grid-panel {
+                    display: grid;
+                    grid-template-rows: repeat(2, 1fr);
+                    background-color: #242733;
+                    border-radius: 10px;
+                }
+
+                .grid-section {
+                    display: grid;
+                    grid-template-rows: repeat(3, 1fr);
+                    padding: 20px;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5 menu-container">
@@ -30,15 +43,15 @@
                         <h1>Mapa Leaflet.js</h1>
                         <div id="map"></div>
                     </div>
-                    <div>
-                        <div>
+                    <div class="grid-panel">
+                        <div class="grid-section">
                             <h2 class="">Ingresar codigo de viaje</h2>
                             <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
                             <div class="">
                                 <button class="">Mostrar ruta</button>
                             </div>
                         </div>
-                        <div>
+                        <div class="grid-section">
                             <label for="" class="">Empleado</label>
                             <p class="">aaa</p>
                             <label for="" class="">ID Dispositivo</label>
