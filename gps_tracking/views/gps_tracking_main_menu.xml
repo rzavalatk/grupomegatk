@@ -19,7 +19,7 @@
         sequence="1"/>
 
     <menuitem id="menu_gps_device_map" 
-        name="Viajes GPS" 
+        name="Ver Mapa" 
         parent="menu_gps_device_root" 
         action="gps_map_action" 
         sequence="2"/>
