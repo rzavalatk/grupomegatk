@@ -20,10 +20,20 @@
                         <div id="map"></div>
                     </div>
                     <div>
-                        <h2 class="">Ingresar codigo de viaje</h2>
-                        <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
-                        <div class="">
-                            <button class="">Mostrar ruta</button>
+                        <div>
+                            <h2 class="">Ingresar codigo de viaje</h2>
+                            <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
+                            <div class="">
+                                <button class="">Mostrar ruta</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="" class="">Empleado</label>
+                            <p class="">aaa</p>
+                            <label for="" class="">ID Dispositivo</label>
+                            <p class="">aaa</p>
+                            <label for="" class="">Empleado</label>
+                            <p class="">aaa</p>
                         </div>
                     </div>
                 </div>
