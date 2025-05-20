@@ -77,6 +77,7 @@
         <field name="model">gps.device.trip</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="code"/>
                 <field name="name"/>
                 <field name="device_id"/>
                 <field name="start_date"/>
