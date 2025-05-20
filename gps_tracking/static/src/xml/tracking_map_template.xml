@@ -14,6 +14,13 @@
                     border-radius: 15px;
                 }
 
+                .banner {
+                    background-image: linear-gradient(to right, #004080, #0080ff);
+                    height: 60px;
+                    width: 400px; 
+                    border-radius: 10px 10px 0 0;
+                }
+
                 .card-input {
                     border: none;
                     border-bottom-style: outset;
@@ -44,6 +51,7 @@
                         <div id="map"></div>
                     </div>
                     <div class="grid-panel">
+                        <div class="banner"></div>
                         <div class="grid-section">
                             <h2 class="">Ingresar codigo de viaje</h2>
                             <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
@@ -52,12 +60,18 @@
                             </div>
                         </div>
                         <div class="grid-section">
-                            <label for="" class="">Empleado</label>
-                            <p class="">aaa</p>
-                            <label for="" class="">ID Dispositivo</label>
-                            <p class="">aaa</p>
-                            <label for="" class="">Empleado</label>
-                            <p class="">aaa</p>
+                            <div class="">
+                                <label for="" class="">Empleado</label>
+                                <p class="">aaa</p>
+                            </div>
+                            <div class="">
+                                <label for="" class="">ID Dispositivo</label>
+                                <p class="">aaa</p>
+                            </div>
+                            <div class="">
+                                <label for="" class="">Empleado</label>
+                                <p class="">aaa</p>
+                            </div>
                         </div>
                     </div>
                 </div>
