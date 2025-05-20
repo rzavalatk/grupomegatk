@@ -15,7 +15,6 @@
     'depends': [
         'base', 'web', 'mail',
         'hr',
-        'hr_payroll_account_community',
         'hr_gamification',
         'hr_employee_updation',
         'hr_recruitment',

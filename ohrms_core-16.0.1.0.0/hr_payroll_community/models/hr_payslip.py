@@ -969,6 +969,8 @@ class HrPayslipRun(models.Model):
 
         for rule in data:
             datos_lines_from_customer.append(tuple(rule))    
+        
+        datos_lines_from_customer = sorted(datos_lines_from_customer, key=lambda x: x[1])
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
         escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
