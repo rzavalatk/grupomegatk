@@ -2,8 +2,14 @@
 <templates>
     <t t-name="TrackingMap">
         <div class="row">
+            <style>
+                .map-container {
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+            </style>
             <div id="root">
-                <div class="container pt-5">
+                <div class="container pt-5 map-container">
                     <div>
                         <h1>Mapa Leaflet.js</h1>
                         <div id="map" style="height: 400px; width: 400px;"></div>
