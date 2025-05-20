@@ -8,8 +8,9 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         template: 'TrackingMap',  // <-- Esto es importante
         start: function () {
             console.log("funciona");
-            this._initLeafletMap();
-            return this._super.apply(this, arguments);
+            return this._super.apply(this, arguments).then(() => {
+                this._initLeafletMap();
+            });
         },
 
         _initLeafletMap: function () {

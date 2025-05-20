@@ -6,4 +6,10 @@
         <field name="tag">gps_map_tag</field>
     </record>
 
+    <menuitem id="menu_gps_device_map" 
+        name="Ver Mapa" 
+        parent="menu_gps_device_root" 
+        action="gps_map_action" 
+        sequence="2"/>
+
 </odoo>
