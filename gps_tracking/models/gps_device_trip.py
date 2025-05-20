@@ -106,7 +106,6 @@ class GpsDeviceTrip(models.Model):
             
             ('state','=','ongoing')
             ],limit=1)
-        _logger.warning(f"desde finish trip2 {trip2.id_employee.id}")
         _logger.warning(f"desde finish trip {trip}")
         if trip:
             trip.end_time = self._define_time()
