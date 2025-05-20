@@ -29,9 +29,12 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         
                     L.marker([14.0989839, -87.1899595]).addTo(map)
                         .bindPopup('Ubicación inicial')
-                        .openPopup();                    
+                        .openPopup();
+                        
+                    this.map.invalidateSize();
                 } else {
                     this.map.setView([14.0989839, -87.1899595], 13);
+                    this.map.invalidateSize();
                 }
             } else {
                 console.error("No se pudo encontrar el contenedor del mapa");
