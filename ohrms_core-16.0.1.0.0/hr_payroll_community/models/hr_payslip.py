@@ -923,6 +923,11 @@ class HrPayslipRun(models.Model):
             'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
             'border': 1
         })
+        
+        formato_encabezado = workbook.add_format({
+            'bold': True,
+            'bg_color': '#00A6CB',
+        })
 
         # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
         def escribir_hoja(worksheet, encabezados, datos, col_widths):
@@ -932,7 +937,7 @@ class HrPayslipRun(models.Model):
             
             # Escribir los encabezados
             for col, encabezado in enumerate(encabezados):
-                worksheet.write(0, col, encabezado)
+                worksheet.write(0, col, encabezado, formato_encabezado)
             
             # Escribir los datos
             row = 1
