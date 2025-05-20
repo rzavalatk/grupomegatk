@@ -22,7 +22,7 @@ class GpsDeviceTrip(models.Model):
     tiempo_usado = fields.Char('Tiempo Usado')
     check_in = fields.Boolean('Check-in', default=False)
     id_employee = fields.Many2one('hr.employee', 'Empleado', required=True)
-    code = fields.Char(string='Código de Viaje', required=True, copy=False, readonly=True, default='Nuevo')
+    code = fields.Char(string='Código de Viaje')
     state = fields.Selection([
         ('new', 'Nuevo'),
         ('ongoing', 'En Curso'),
