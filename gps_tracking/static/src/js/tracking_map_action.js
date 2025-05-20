@@ -5,7 +5,10 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
     const core = require('web.core');
 
     const CustomMapMenu = AbstractAction.extend({
-        template: 'TrackingMap',  // <-- Esto es importante
+        template: 'TrackingMap',
+
+        map: null,
+
         start: function () {
             console.log("funciona");
             return this._super.apply(this, arguments).then(() => {
@@ -15,17 +18,23 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
         _initLeafletMap: function () {
             // Espera a que el DOM esté cargado
-            setTimeout(() => {
-                const map = L.map('map').setView([14.0989839, -87.1899595], 13); // Ciudad de México
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(map);
-
-                L.marker([14.0989839, -87.1899595]).addTo(map)
-                    .bindPopup('Ubicación inicial')
-                    .openPopup();
-            }, 0);
+            const mapContainer = this.$('#map')[0];
+            if(mapContainer){
+                if (!this.map) {
+                    const map = L.map('map').setView([14.0989839, -87.1899595], 13); // Ciudad de México
+        
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(map);
+        
+                    L.marker([14.0989839, -87.1899595]).addTo(map)
+                        .bindPopup('Ubicación inicial')
+                        .openPopup();                    
+                } else {
+                    this.map.setView([14.0989839, -87.1899595], 13);
+                }
+            }  
+        
         },
     });
 
