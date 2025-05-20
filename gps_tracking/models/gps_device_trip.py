@@ -194,7 +194,6 @@ class GpsDeviceTrip(models.Model):
         return True
 
     def cron_fetch_positions(self):
-        self.get_code()
         viajes = self.search([('state','=','ongoing')])
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
         viajes.fetch_device_positions()
