@@ -33,9 +33,18 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 } else {
                     this.map.setView([14.0989839, -87.1899595], 13);
                 }
+            } else {
+                console.error("No se pudo encontrar el contenedor del mapa");
             }  
-        
         },
+
+        destroy: function () {
+            if (this.map) {
+                this.map.remove();
+                this.map = null;
+            }
+            this._super.apply(this, arguments);
+        }
     });
 
     core.action_registry.add('gps_map_tag', CustomMapMenu);  // Este es el tag que se llama en el XML
