@@ -5,7 +5,7 @@
             <style>
                 .menu-container {
                     display: flex;
-                    bsckground-color: #032f68;
+                    background-color: #032f68;
                     justify-content: space-evenly;
                     border-radius: 10px;
                 }
