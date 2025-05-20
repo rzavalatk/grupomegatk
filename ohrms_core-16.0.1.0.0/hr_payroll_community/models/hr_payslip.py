@@ -965,12 +965,25 @@ class HrPayslipRun(models.Model):
                 data_line.append(rest)
             data.append(data_line)
                 
+        # Agrupar por departamento y calcular totales
+        departamento_data = defaultdict(list)
+        for line in data:
+            departamento = line[1]
+            departamento_data[departamento].append(line)
+
         datos_lines_from_customer = []
 
-        for rule in data:
-            datos_lines_from_customer.append(tuple(rule))    
-        
-        datos_lines_from_customer = sorted(datos_lines_from_customer, key=lambda x: x[1])
+        for departamento in sorted(departamento_data.keys()):
+            grupo = departamento_data[departamento]
+            datos_lines_from_customer.extend(grupo)
+
+            # Calcular suma por columna
+            totales = ["TOTAL", departamento]
+            for i in range(2, len(grupo[0])):  # Desde la 3ra columna (índice 2)
+                suma = sum(row[i] for row in grupo)
+                totales.append(suma)
+            
+            datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
         escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
