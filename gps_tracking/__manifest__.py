@@ -22,10 +22,10 @@
         'web.assets_backend': [
             '/gps_tracking/static/lib/leaflet/leaflet.css',
             '/gps_tracking/static/lib/leaflet/leaflet.js',    
-            '/gps_tracking/static/src/xml/tracking_map_template.xml',
-            '/gps_tracking/static/src/xml/tracking_menu_template.xml',
             '/gps_tracking/static/src/js/tracking_map_action.js',
             '/gps_tracking/static/src/js/tracking_menu_action.js',
+            '/gps_tracking/static/src/xml/tracking_map_template.xml',
+            '/gps_tracking/static/src/xml/tracking_menu_template.xml',
         ],
     },
     'auto_install': False,
