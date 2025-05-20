@@ -4,8 +4,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
     const AbstractAction = require('web.AbstractAction');
     const core = require('web.core');
 
-    const CustomCardMenu = AbstractAction.extend({
-        template: 'TrackingCardMenu',  // <-- Esto es importante
+    const CustomMapMenu = AbstractAction.extend({
+        template: 'TrackingMap',  // <-- Esto es importante
         start: function () {
             console.log("funciona");
             this._initLeafletMap();
@@ -28,6 +28,6 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
     });
 
-    core.action_registry.add('gps_tracking_tag', CustomCardMenu);  // Este es el tag que se llama en el XML
-    return CustomCardMenu;
+    core.action_registry.add('gps_map_tag', CustomMapMenu);  // Este es el tag que se llama en el XML
+    return CustomMapMenu;
 });
