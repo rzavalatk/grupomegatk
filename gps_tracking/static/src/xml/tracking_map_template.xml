@@ -13,6 +13,16 @@
                     width: 600px;
                     border-radius: 15px;
                 }
+
+                .card-input {
+                    border: none;
+                    border-bottom-style: outset;
+                    width: 50%;
+                    background-color: #242733;
+                    margin-top: 10px;
+                    font-size: 20px;
+                    text-align: center;
+                }
             </style>
             <div id="root">
                 <div class="container pt-5 menu-container">
