@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
-    <t t-name="TrackingCardMenu">
+    <t t-name="TrackingMap">
         <div class="row">
             <div id="root">
                 <div class="container pt-5">

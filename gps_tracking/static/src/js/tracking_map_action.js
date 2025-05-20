@@ -1,4 +1,4 @@
-odoo.define('gps_tracking.tracking_menu_action', function (require) {
+odoo.define('gps_tracking.tracking_map_action', function (require) {
     "use strict";
 
     const AbstractAction = require('web.AbstractAction');
