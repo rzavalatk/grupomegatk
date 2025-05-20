@@ -7,11 +7,16 @@
                     display: flex;
                     bsckground-color: #032f68;
                     justify-content: space-evenly;
-                    border-radius: 10px
+                    border-radius: 10px;
+                }
+
+                .map {
+                    height: 400px;
+                    width: 600px;
                 }
             </style>
             <div id="root">
-                <div class="container pt-5 map-container">
+                <div class="container pt-5 menu-container">
                     <div>
                         <h1>Mapa Leaflet.js</h1>
                         <div id="map" style="height: 400px; width: 400px;"></div>
