@@ -956,18 +956,19 @@ class HrPayslipRun(models.Model):
         data_rules = encabezados_rules_names
         data = []
         for datos in datos_row:
-            data.append(datos['Empleado'])
-            data.append(datos['Departamento'])
-            for regla in datos['Reglas']:
-                data.append(regla[1])
+            data_line = []
+            data_line.append(datos['Empleado'])
+            data_line.append(datos['Departamento'])
+            valores_dict = dict(datos['Reglas'])
+            resultados = [valores_dict.get(c, 0) for c in encabezados_rules_names]
+            for rest in resultados:
+                data_line.append(rest)
+            data.append(data_line)
                 
-        datos_lines_from_customer = [
-            (
-                record['Empleado'],
-                record['Departamento'],
-                record['Reglas'][1][1],
-            ) for record in datos_row
-        ]
+        datos_lines_from_customer = []
+
+        for rule in data:
+            datos_lines_from_customer.append(tuple(rule))    
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
         escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
