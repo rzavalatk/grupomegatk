@@ -21,6 +21,11 @@
                     border-radius: 10px 10px 0 0;
                 }
 
+                .card-title {
+                     font-size: 30px;
+                     font-weight: bold;
+                }
+
                 .card-input {
                     border: none;
                     border-bottom-style: outset;
