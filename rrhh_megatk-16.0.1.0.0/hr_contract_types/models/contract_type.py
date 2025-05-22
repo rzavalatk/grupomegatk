@@ -99,20 +99,6 @@ class ContractInherit(models.Model):
             if getattr(self, field) and value <= 0:
                 raise UserError(_(message))
             
-    @api.model_create_multi               
-    def create(self, vals):
-        """
-        Esta función crea un registro en el modelo hr.contract basado en los valores
-        dado en el argumento vals.
-        :param vals: un diccionario de valores para crear un registro en el modelo hr.contract
-        :return: El registro recién creado
-        """
-        #VERSION GRATIS DE NOMINA, SOLO PODRA CREAR 10 CONTRATOS
-        contratos = self.env['hr.contract'].search([])
-        if len(contratos) >= 10:
-            raise UserError("NO PUEDE CREAR MAS DE 10 CONTRATOS EN LA VERSION GRATIS, POR FAVOR COMPRUEBE SU PLAN DE NOMINA")
-        else:
-            return super(ContractInherit, self).create(vals)   
 
 class TeleworkDays(models.Model):
     _name = 'telework.days'

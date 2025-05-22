@@ -312,12 +312,12 @@
         <field name="name">hr.payslip.run.search</field>
         <field name="model">hr.payslip.run</field>
         <field name="arch" type="xml">
-            <search string="Search Payslip Batches">
-                <field name="name" string="Payslip Batches"/>
+            <search string="Buscar planillas">
+                <field name="name" string="Planilla"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
-                <filter string="Draft" name="draft" domain="[('state','=','draft')]" help="Draft Payslip Batches"/>
-                <filter name="done_filter" string="Done" domain="[('state','=','close')]" help="Done Payslip Batches"/>
+                <filter string="Borrador" name="draft" domain="[('state','=','draft')]" help="Draft Payslip Batches"/>
+                <filter name="done_filter" string="Hecho" domain="[('state','=','close')]" help="Done Payslip Batches"/>
             </search>
         </field>
     </record>
@@ -326,7 +326,7 @@
         <field name="name">hr.payslip.run.tree</field>
         <field name="model">hr.payslip.run</field>
         <field name="arch" type="xml">
-            <tree string="Payslips Batches">
+            <tree string="Planilla">
                 <field name="name"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
@@ -373,12 +373,12 @@
         <field name="name">hr.payslip.run.form</field>
         <field name="model">hr.payslip.run</field>
         <field name="arch" type="xml">
-            <form string="Payslips Batches">
+            <form string="Planilla">
             <header>
-                <button name="close_payslip_run" type="object" string="Close" states="draft" class="oe_highlight"/>
-                <button name="%(action_hr_payslip_by_employees)d" type="action" states="draft" string="Generate Payslips" class="oe_highlight"/>
-                <button string="Set to Draft" name="draft_payslip_run" type="object" states="close" />
-                <button string="Validate" name="action_validate_payslips" type="object" class="oe_highlight"
+                <button name="close_payslip_run" type="object" string="Cerrar" states="draft" class="oe_highlight"/>
+                <button name="%(action_hr_payslip_by_employees)d" type="action" states="draft" string="Generar nominas" class="oe_highlight"/>
+                <button string="Volver a borrador" name="draft_payslip_run" type="object" states="close" />
+                <button string="Validar" name="action_validate_payslips" type="object" class="oe_highlight"
                     attrs="{'invisible': [('is_validate', '=', False)]}"/>
                 <field name="state" widget="statusbar"/>
             </header>
@@ -388,14 +388,14 @@
                     <field name="name"/>
                 </h1>
                 <group col="4">
-                    <label for="date_start" string="Period"/>
+                    <label for="date_start" string="Periodo"/>
                      <div>
                            <field name="date_start" class="oe_inline"/> - <field name="date_end" class="oe_inline"/>
                      </div>
                     <field name="credit_note"/>
                     <field name="is_validate" invisible="1"/>
                 </group>
-                <separator string="Payslips"/>
+                <separator string="Nominas"/>
                 <field name="slip_ids"/>
             </sheet>
             </form>
