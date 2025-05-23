@@ -32,7 +32,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             const mapContainer = this.$('#map')[0];
             if (mapContainer) {
                 try {
-                    var map = L.map('map').setView([20.0, -100.0], 6);
+                    var map = L.map(mapContainer).setView([20.0, -100.0], 6);
 
                     // Cargar mapa base de OpenStreetMap
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
