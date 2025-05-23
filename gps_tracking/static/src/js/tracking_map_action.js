@@ -50,8 +50,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     // Dibujar la ruta con una polilínea
                     var ruta = L.polyline(puntosRuta, {
                     color: 'black',
-                    weight: 4,
-                    opacity: 0.7,
+                    weight: 5,
+                    opacity: 1,
                     smoothFactor: 1
                     }).addTo(map);
 
