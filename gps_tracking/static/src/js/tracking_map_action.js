@@ -41,10 +41,10 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
                     // Lista de coordenadas de la ruta
                     var puntosRuta = [
-                    [14.099594878975303, -87.18943253224012],
-                    [14.099911084505052, -87.1892314310185],
-                    [14.099931770832434, -87.1887134430254],
-                    [14.099952457161839, -87.18800654174075]
+                        [14.099594878975303, -87.18943253224012],
+                        [14.099911084505052, -87.1892314310185],
+                        [14.099931770832434, -87.1887134430254],
+                        [14.099952457161839, -87.18800654174075]
                     ];
 
                     // Dibujar la ruta con una polilínea
@@ -55,6 +55,10 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     smoothFactor: 1,
                     className: 'my-route-line'
                     }).addTo(this.map);
+
+                    for (var punto in puntosRuta) {
+                        L.marker(punto).addTo(this.map);
+                    }
 
                     // Ajustar el zoom para mostrar toda la ruta
                     this.map.fitBounds(ruta.getBounds());
