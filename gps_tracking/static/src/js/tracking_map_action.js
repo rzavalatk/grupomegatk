@@ -38,9 +38,17 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(this.map);
 
-                    L.marker([14.0989839, -87.1899599]).addTo(this.map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
+                    // create a red polyline from an array of LatLng points
+                    var latlngs = [
+                        [45.51, -122.68],
+                        [37.77, -122.43],
+                        [34.04, -118.2]
+                    ];
+
+                    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+
+                    // zoom the map to the polyline
+                    map.fitBounds(polyline.getBounds());
                     
                     // Llama a invalidateSize() aquí también, por si acaso.
                     // on_attach_callback ya garantiza la visibilidad, pero no está de más.
@@ -55,6 +63,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 console.error("No se pudo encontrar el contenedor del mapa (#map).");
             }
         },
+
+
 
         destroy: function () {
             if (this.map) {
