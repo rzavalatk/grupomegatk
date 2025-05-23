@@ -38,6 +38,16 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(this.map);
 
+                    L.marker([45.51, -122.68]).addTo(this.map)
+                        .bindPopup('Ubicación inicial')
+                        .openPopup();
+                    L.marker([37.77, -122.43]).addTo(this.map)
+                        .bindPopup('Ubicación inicial')
+                        .openPopup();
+                    L.marker([34.04, -118.2]).addTo(this.map)
+                        .bindPopup('Ubicación inicial')
+                        .openPopup();
+
                     // create a red polyline from an array of LatLng points
                     var latlngs = [
                         [45.51, -122.68],
@@ -64,7 +74,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             }
         },
 
-
+        
 
         destroy: function () {
             if (this.map) {
