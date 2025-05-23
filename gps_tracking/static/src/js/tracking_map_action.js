@@ -55,7 +55,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                         [34.04, -118.2]
                     ];
 
-                    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+                    var polyline = L.polyline(latlngs, {color: 'black'}).addTo(map);
 
                     // zoom the map to the polyline
                     map.fitBounds(polyline.getBounds());
