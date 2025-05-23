@@ -52,7 +52,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     color: '#0099ff',
                     weight: 5,
                     opacity: 1,
-                    smoothFactor: 1
+                    smoothFactor: 1,
+                    className: 'my-route-line'
                     }).addTo(this.map);
 
                     // Ajustar el zoom para mostrar toda la ruta

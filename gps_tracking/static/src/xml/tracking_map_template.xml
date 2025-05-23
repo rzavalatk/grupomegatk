@@ -63,6 +63,18 @@
                     font-size: 18px;
                     font-weight: bold;
                 }
+
+                .leaflet-pane.leaflet-overlay-pane svg path.my-route-line {
+                    stroke: #0099ff; /* Tu color deseado */
+                    stroke-width: 5px; /* Tu ancho deseado */
+                    opacity: 1; /* Tu opacidad deseada */
+                    /* Puedes añadir !important si el color sigue siendo sobrescrito,
+                       pero intenta sin él primero:
+                       stroke: #0099ff !important;
+                       stroke-width: 5px !important;
+                       opacity: 1 !important;
+                    */
+                }
             </style>
             <div id="root">
                 <div class="container pt-5 menu-container">
