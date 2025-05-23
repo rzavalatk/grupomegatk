@@ -56,8 +56,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     className: 'my-route-line'
                     }).addTo(this.map);
 
-                    for (var punto in puntosRuta) {
-                        L.marker(punto).addTo(this.map);
+                    for (var i = 0; i < puntosRuta.length; i++) {
+                        L.marker(puntosRuta[i]).addTo(this.map);
                     }
 
                     // Ajustar el zoom para mostrar toda la ruta
