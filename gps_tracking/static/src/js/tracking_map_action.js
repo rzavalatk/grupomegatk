@@ -32,7 +32,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             const mapContainer = this.$('#map')[0];
             if (mapContainer) {
                 try {
-                    this.map = L.map(mapContainer).setView([20.0, -100.0], 6);
+                    this.map = L.map(mapContainer).setView([14.099034869047827, -87.18985301661215], 6);
 
                     // Cargar mapa base de OpenStreetMap
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -41,10 +41,10 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
                     // Lista de coordenadas de la ruta
                     var puntosRuta = [
-                    [20.0, -100.0],
-                    [20.5, -100.3],
-                    [21.0, -100.5],
-                    [21.5, -100.2]
+                    [14.099594878975303, -87.18943253224012],
+                    [14.099911084505052, -87.1892314310185],
+                    [14.099931770832434, -87.1887134430254],
+                    [14.099952457161839, -87.18800654174075]
                     ];
 
                     // Dibujar la ruta con una polilínea
