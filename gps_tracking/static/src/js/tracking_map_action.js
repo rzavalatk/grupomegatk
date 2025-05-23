@@ -32,33 +32,31 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             const mapContainer = this.$('#map')[0];
             if (mapContainer) {
                 try {
-                    this.map = L.map(mapContainer).setView([45.51, -122.68], 13);
+                    var map = L.map('map').setView([20.0, -100.0], 6);
 
+                    // Cargar mapa base de OpenStreetMap
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(this.map);
+                    attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
 
-                    L.marker([45.51, -122.68]).addTo(this.map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
-                    L.marker([37.77, -122.43]).addTo(this.map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
-                    L.marker([34.04, -118.2]).addTo(this.map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
-
-                    // create a red polyline from an array of LatLng points
-                    var latlngs = [
-                        [45.51, -122.68],
-                        [37.77, -122.43],
-                        [34.04, -118.2]
+                    // Lista de coordenadas de la ruta
+                    var puntosRuta = [
+                    [20.0, -100.0],
+                    [20.5, -100.3],
+                    [21.0, -100.5],
+                    [21.5, -100.2]
                     ];
 
-                    var polyline = L.polyline(latlngs, {color: 'black'}).addTo(map);
+                    // Dibujar la ruta con una polilínea
+                    var ruta = L.polyline(puntosRuta, {
+                    color: 'blue',
+                    weight: 4,
+                    opacity: 0.7,
+                    smoothFactor: 1
+                    }).addTo(map);
 
-                    // zoom the map to the polyline
-                    map.fitBounds(polyline.getBounds());
+                    // Ajustar el zoom para mostrar toda la ruta
+                    map.fitBounds(ruta.getBounds());
                     
                     // Llama a invalidateSize() aquí también, por si acaso.
                     // on_attach_callback ya garantiza la visibilidad, pero no está de más.
