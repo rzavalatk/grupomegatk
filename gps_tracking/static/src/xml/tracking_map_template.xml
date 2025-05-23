@@ -53,7 +53,7 @@
                 .card-btn {
                     padding: 5px;
                     border-radius: 5px;
-                    background-color: ;
+                    background-color: #00e600;
                 }
             </style>
             <div id="root">
@@ -67,7 +67,7 @@
                             <h2 class="card-title">Ingresar codigo de viaje</h2>
                             <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
                             <div class="">
-                                <button class="">Mostrar ruta</button>
+                                <button class="card-btn">Mostrar ruta</button>
                             </div>
                         </div>
                         <div class="grid-section">
