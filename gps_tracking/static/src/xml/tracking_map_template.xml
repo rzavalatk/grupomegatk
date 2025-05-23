@@ -54,7 +54,8 @@
                     padding: 10px;
                     font-size: 16px;
                     color: #000;
-                    background-color: #00e600;
+                    background-color: #70db70;
+                    border: none;
                 }
             </style>
             <div id="root">
