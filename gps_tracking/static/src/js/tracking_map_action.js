@@ -32,12 +32,12 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             const mapContainer = this.$('#map')[0];
             if (mapContainer) {
                 try {
-                    var map = L.map(mapContainer).setView([20.0, -100.0], 6);
+                    this.map = L.map(mapContainer).setView([20.0, -100.0], 6);
 
                     // Cargar mapa base de OpenStreetMap
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors'
-                    }).addTo(map);
+                    }).addTo(this.map);
 
                     // Lista de coordenadas de la ruta
                     var puntosRuta = [
@@ -53,10 +53,10 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     weight: 5,
                     opacity: 1,
                     smoothFactor: 1
-                    }).addTo(map);
+                    }).addTo(this.map);
 
                     // Ajustar el zoom para mostrar toda la ruta
-                    map.fitBounds(ruta.getBounds());
+                    this.map.fitBounds(ruta.getBounds());
                     
                     // Llama a invalidateSize() aquí también, por si acaso.
                     // on_attach_callback ya garantiza la visibilidad, pero no está de más.
