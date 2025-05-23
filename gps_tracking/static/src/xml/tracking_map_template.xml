@@ -53,9 +53,15 @@
                 .card-btn {
                     padding: 10px;
                     font-size: 16px;
+                    font-weight: bold;
                     color: #000;
                     background-color: #70db70;
                     border: none;
+                }
+
+                .trip-data {
+                    font-size: 16px;
+                    font-weight: bold;
                 }
             </style>
             <div id="root">
@@ -74,15 +80,15 @@
                         </div>
                         <div class="grid-section">
                             <div class="">
-                                <label for="" class="">Empleado</label>
+                                <label for="" class="trip-data">Empleado:</label>
                                 <p class="">aaa</p>
                             </div>
                             <div class="">
-                                <label for="" class="">ID Dispositivo</label>
+                                <label for="" class="trip-data">ID Dispositivo:</label>
                                 <p class="">aaa</p>
                             </div>
                             <div class="">
-                                <label for="" class="">Empleado</label>
+                                <label for="" class="trip-data">Empleado:</label>
                                 <p class="">aaa</p>
                             </div>
                         </div>
