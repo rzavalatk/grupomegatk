@@ -13,7 +13,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         },
 
         _onClickMostrarRuta: function () {
-            
+            e.preventDefault();
+            console.log("funciona");
         },
 
         start: function () {
@@ -40,13 +41,14 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             const mapContainer = this.$('#map')[0];
             if (mapContainer) {
                 try {
-                    this.map = L.map(mapContainer).setView([14.099034869047827, -87.18985301661215], 6);
+                    this.map = L.map(mapContainer).setView([14.0989839, -87.1899599], 6);
 
                     // Cargar mapa base de OpenStreetMap
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors'
                     }).addTo(this.map);
 
+                    // Agregar marcador
                     L.marker([14.0989839, -87.1899599]).addTo(this.map)
                     .bindPopup('Ubicación inicial')
                     .openPopup();
