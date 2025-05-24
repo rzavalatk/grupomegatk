@@ -194,7 +194,7 @@ class GpsDeviceTrip(models.Model):
     @api.model
     def get_locations(self, id_trip):
         coords = self.env['gps.device.trip'].search([('code','=',id_trip)])
-        _logger.warning(f"Coords: {coords.location_ids}")
+        _logger.warning(f"Coords: [{coords.location_ids.latitude},{coords.location_ids.longitude}]")
         return coords 
 
     def cron_fetch_positions(self):
