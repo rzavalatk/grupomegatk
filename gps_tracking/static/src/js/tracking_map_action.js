@@ -8,6 +8,14 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         template: 'TrackingMap',
         map: null,
 
+        events: {
+            "click .card-btn": "_onClickMostrarRuta", 
+        },
+
+        _onClickMostrarRuta: function () {
+            
+        },
+
         start: function () {
             console.log("funciona");
             // No necesitamos llamar a _initLeafletMap directamente aquí,
@@ -58,6 +66,9 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
                     for (var i = 0; i < puntosRuta.length; i++) {
                         L.marker(puntosRuta[i]).addTo(this.map);
+                        L.marker([14.0989839, -87.1899599]).addTo(this.map)
+                        .bindPopup('Ubicación inicial')
+                        .openPopup();
                     }
 
                     // Ajustar el zoom para mostrar toda la ruta
