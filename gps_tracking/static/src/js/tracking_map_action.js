@@ -131,8 +131,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 className: 'my-route-line'
             }).addTo(this.map);
 
-            for (var i = 0; i < puntosRuta.length; i++) {
-                L.marker(puntosRuta[i]).addTo(this.map);
+            for (var i = 0; i < coords.length; i++) {
+                L.marker(coords[i]).addTo(this.map);
             }
         },
 
