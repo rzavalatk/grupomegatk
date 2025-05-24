@@ -7,6 +7,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
     const CustomMapMenu = AbstractAction.extend({
         template: 'TrackingMap',
         map: null,
+        currentPolyline: null,
 
         events: {
             "click .card-btn": "_onClickMostrarRuta", 
@@ -68,8 +69,62 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             }
         },
 
-        _showRoute: function (trip_id) {
+        _loadCoords: async function (trip_id) {
             console.log(`Mostrar ruta ${trip_id}`);
+
+            var self = this;
+
+            self._rpc({
+                model: 'gps.device.trip',
+                method: 'get_locations',
+                args: [trip_id],
+            }).then(function (result) {
+                console.log(result);
+            }).catch(function (error) {
+                console.error(error);
+            });
+            // try {
+            //     const coordinates = await this._rpc({
+            //         model: 'gps.device.location',
+            //         method: 'get_locations',
+            //         args: [trip_id],
+            //     });
+
+            //     console.log("Coordenadas obtenidas:", coordinates);
+
+            //     if(coordinates && coordinates.length > 0) {
+
+            //         this._clearPolyline();
+            //         // Dibujar la ruta con una polilínea
+            //         this.currentPolyline = L.polyline(coordinates, {
+            //             color: '#0099ff',
+            //             weight: 5,
+            //             opacity: 1,
+            //             smoothFactor: 1,
+            //             className: 'my-route-line'
+            //         }).addTo(this.map);
+            //     }
+                
+            // }
+
+
+            // // Dibujar la ruta con una polilínea
+            
+
+            // for (var i = 0; i < puntosRuta.length; i++) {
+            //     L.marker(puntosRuta[i]).addTo(this.map);
+            //     L.marker([14.0989839, -87.1899599]).addTo(this.map)
+            //     .bindPopup('Ubicación inicial')
+            //     .openPopup();
+            // }
+        },
+
+        _clearPolyline: function () {
+            if (this.currentPolyline) {
+                this.map.removeLayer(this.currentPolyline);
+                this.currentPolyline = null;
+                console.log("Polilínea anterior eliminada del mapa.");
+            }
         },
 
         destroy: function () {
