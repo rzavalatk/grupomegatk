@@ -47,32 +47,9 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     attribution: '© OpenStreetMap contributors'
                     }).addTo(this.map);
 
-                    // Lista de coordenadas de la ruta
-                    var puntosRuta = [
-                        [14.099594878975303, -87.18943253224012],
-                        [14.099911084505052, -87.1892314310185],
-                        [14.099931770832434, -87.1887134430254],
-                        [14.099952457161839, -87.18800654174075]
-                    ];
-
-                    // Dibujar la ruta con una polilínea
-                    var ruta = L.polyline(puntosRuta, {
-                    color: '#0099ff',
-                    weight: 5,
-                    opacity: 1,
-                    smoothFactor: 1,
-                    className: 'my-route-line'
-                    }).addTo(this.map);
-
-                    for (var i = 0; i < puntosRuta.length; i++) {
-                        L.marker(puntosRuta[i]).addTo(this.map);
-                        L.marker([14.0989839, -87.1899599]).addTo(this.map)
-                        .bindPopup('Ubicación inicial')
-                        .openPopup();
-                    }
-
-                    // Ajustar el zoom para mostrar toda la ruta
-                    this.map.fitBounds(ruta.getBounds());
+                    L.marker([14.0989839, -87.1899599]).addTo(this.map)
+                    .bindPopup('Ubicación inicial')
+                    .openPopup();
                     
                     // Llama a invalidateSize() aquí también, por si acaso.
                     // on_attach_callback ya garantiza la visibilidad, pero no está de más.
