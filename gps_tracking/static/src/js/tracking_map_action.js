@@ -79,6 +79,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 method: 'get_locations',
                 args: [trip_id],
             }).then(function (result) {
+                self._showRoute(result);
                 console.log(result);
             }).catch(function (error) {
                 console.error(error);
@@ -117,6 +118,22 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             //     .bindPopup('Ubicación inicial')
             //     .openPopup();
             // }
+        },
+
+        _showRoute: function (coords) {
+            this._clearPolyline();
+            // Dibujar la ruta con una polilínea
+            this.currentPolyline = L.polyline(coordinates, {
+                color: '#0099ff',
+                weight: 5,
+                opacity: 1,
+                smoothFactor: 1,
+                className: 'my-route-line'
+            }).addTo(this.map);
+
+            for (var i = 0; i < puntosRuta.length; i++) {
+                L.marker(puntosRuta[i]).addTo(this.map);
+            }
         },
 
         _clearPolyline: function () {
