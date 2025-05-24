@@ -123,7 +123,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         _showRoute: function (coords) {
             this._clearPolyline();
             // Dibujar la ruta con una polilínea
-            this.currentPolyline = L.polyline(coordinates, {
+            this.currentPolyline = L.polyline(coords, {
                 color: '#0099ff',
                 weight: 5,
                 opacity: 1,
