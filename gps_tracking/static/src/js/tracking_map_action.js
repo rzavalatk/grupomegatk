@@ -12,7 +12,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             "click .card-btn": "_onClickMostrarRuta", 
         },
 
-        _onClickMostrarRuta: function () {
+        _onClickMostrarRuta: function (e) {
             e.preventDefault();
             console.log("funciona");
         },
