@@ -79,13 +79,13 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 method: 'get_locations',
                 args: [trip_id],
             }).then(function (result) {
-                coordenadas = [
+                var coordenadas = [
                     [14.099031645518712, -87.18995265726839],
                     [14.099305673633022, -87.18978053554274],
                     [14.099455286545009, -87.18942005419281],
                     [14.099799813128874, -87.18942231028035],
                     [14.099924132321181, -87.18883347908712],
-                ]
+                ];
                 self._showRoute(coordenadas);
                 console.log(result);
             }).catch(function (error) {
