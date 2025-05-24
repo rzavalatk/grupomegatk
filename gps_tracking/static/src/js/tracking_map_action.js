@@ -15,8 +15,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         _onClickMostrarRuta: function (e) {
             e.preventDefault();
             var id = $('#id_device').val();
-            console.log(id);
-            
+            this._showRoute(id);
         },
 
         start: function () {
@@ -69,7 +68,9 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             }
         },
 
-        
+        _showRoute: function (trip_id) {
+            console.log(`Mostrar ruta ${trip_id}`);
+        },
 
         destroy: function () {
             if (this.map) {
