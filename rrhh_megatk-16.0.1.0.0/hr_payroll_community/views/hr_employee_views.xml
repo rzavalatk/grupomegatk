@@ -13,7 +13,7 @@
                         icon="fa-credit-card"
                         type="action"
                         groups="hr_payroll_community.group_hr_payroll_community_user">
-                        <field name="payslip_count" widget="statinfo" string="Payslips"/>
+                        <field name="payslip_count" widget="statinfo" string="Nominas"/>
                     </button>
                 </xpath>
         </field>

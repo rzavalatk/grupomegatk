@@ -10,7 +10,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <field name="request_unit" position="before">
-                    <field name="code" string="Payroll Code"/>
+                    <field name="code" string="Código de nómina"/>
                 </field>
             </field>
         </record>

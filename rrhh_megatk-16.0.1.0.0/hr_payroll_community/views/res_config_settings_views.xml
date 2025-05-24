@@ -15,7 +15,7 @@
             <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('settings')]" position="inside">
-                    <div class="app_settings_block" data-string="Payroll" string="Payroll"
+                    <div class="app_settings_block" data-string="Planilla" string="Planilla"
                          data-key="hr_payroll_community"
                          groups="hr_payroll_community.group_hr_payroll_community_manager">
                     <field name="module_l10n_fr_hr_payroll" invisible="1"/>
@@ -30,7 +30,7 @@
                                     Reglas de planilla que se aplican a su país
                                 </div>
                                 <div class="mt16" id="localization_text">
-                                    <button name="%(open_payroll_modules)d" icon="fa-arrow-right" type="action" string="Choose a Payroll Localization" class="btn-link"/>
+                                    <button name="%(open_payroll_modules)d" icon="fa-arrow-right" type="action" string="Elija una localización de nómina" class="btn-link"/>
                                 </div>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                 <field name="module_account_accountant" widget="upgrade_boolean"/>
                             </div>
                             <div class="o_setting_right_pane">
-                                <label for="module_account_accountant" string="Payroll Entries"/>
+                                <label for="module_account_accountant" string="Entradas de nómina"/>
                                 <div class="text-muted">
                                     Contabilizar recibos de nómina en contabilidad
                                 </div>
