@@ -191,7 +191,7 @@ class GpsDeviceTrip(models.Model):
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
             
         return True
-    
+    @api.model
     def get_locations(self, id_trip):
         coords = self.env['gps.device.trip'].search([('code','=',id_trip)])
         _logger.warning(f"Coords: {coords.location_ids}")
