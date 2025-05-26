@@ -8,6 +8,9 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from pytz import timezone
 from pytz import utc
+import io
+import base64
+import xlsxwriter
 
 from odoo import api, fields, models, tools, _
 from odoo.addons import decimal_precision as dp
@@ -724,8 +727,8 @@ class HrPayslipLine(models.Model):
                                   required=True, index=True, help="Contrato")
     rate = fields.Float(string='Taza (%)',
                         digits=dp.get_precision('Payroll Rate'), default=100.0)
-    amount = fields.Float(digits=dp.get_precision('Payroll'), string="Monto")
-    quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0, string="Cantidad")
+    amount = fields.Float(digits=dp.get_precision('Payroll'))
+    quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0)
     total = fields.Float(compute='_compute_total', string='Total', help="Total",
                          digits=dp.get_precision('Payroll'), store=True)
 
@@ -828,11 +831,11 @@ class HrPayslipWorkedDays(models.Model):
     sequence = fields.Integer(required=True, index=True, default=10,
                               help="Sequence")
     code = fields.Char(required=True, string="Codigo",
-                       help="El código que se puede utilizar en las reglas salariales")
+                       help="The code that can be used in the salary rules")
     number_of_days = fields.Float(string='Numero de dias',
-                                  help="Numero de dias trabajados")
+                                  help="Number of days worked")
     number_of_hours = fields.Float(string='Numero de horas',
-                                   help="Numero de dias trabajados")
+                                   help="Number of hours worked")
     contract_id = fields.Many2one('hr.contract', string='Contrato',
                                   required=True,)
 
@@ -902,6 +905,255 @@ class HrPayslipRun(models.Model):
                 record.is_validate = True
             else:
                 record.is_validate = False
+                
+    def exportar_excel(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        encabezados_rules_code = []
+        encabezados_rules_names = []
+        datos_row = []
+        col_widths_lines_rule = []
+        
+        # Crear hojas de Excel
+        worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
+        
+        formato_total = workbook.add_format({
+            'bold': True,
+            'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
+            'border': 1
+        })
+        
+        formato_encabezado = workbook.add_format({
+            'bold': True,
+            'bg_color': '#00A6CB',
+        })
+
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado, formato_encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                if str(record[0]).strip().upper() == "TOTAL":
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value, formato_total)
+                else:
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value)
+                row += 1
+
+
+        for slip_id in self.slip_ids:
+            reglas = []
+            # Obtener encabezados y anchos de columnas, siempre y cuando no se repitan
+            # Se obtienen igual el monto de las reglas y el nombre
+            for rule in slip_id.line_ids:
+                if rule.code not in encabezados_rules_code:
+                    encabezados_rules_code.append(rule.code)
+                    encabezados_rules_names.append(rule.name)
+                    col_widths_lines_rule.append(20)
+                reglas.append((rule.name, rule.amount))
+            #Obtener nombre del empleado y departamento donde trabaja
+            reglas = sorted(reglas, key=lambda x: x[0])
+            datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
+        # Encabezados y anchos de columnas
+        encabezados_rules_names = sorted(encabezados_rules_names)
+        encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
+        col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
+        # Preparar los datos
+        data_rules = encabezados_rules_names
+        data = []
+        for datos in datos_row:
+            data_line = []
+            data_line.append(datos['Empleado'])
+            data_line.append(datos['Departamento'])
+            valores_dict = dict(datos['Reglas'])
+            resultados = [valores_dict.get(c, 0) for c in encabezados_rules_names]
+            for rest in resultados:
+                data_line.append(rest)
+            data.append(data_line)
+                
+        # Agrupar por departamento y calcular totales
+        departamento_data = defaultdict(list)
+        for line in data:
+            departamento = line[1]
+            _logger.warning("departamento: %s", departamento)
+            if departamento != 'Desarrollo':
+                if departamento != 'Mercadeo':
+                    departamento_data[departamento].append(line)
+
+        datos_lines_from_customer = []
+
+        for departamento in sorted(departamento_data.keys()):
+            grupo = departamento_data[departamento]
+            datos_lines_from_customer.extend(grupo)
+
+            # Calcular suma por columna
+            totales = ["TOTAL", departamento]
+            num_cols = len(grupo[0])
+            for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
+                totales.append('')
+            
+            # Sumar solo la última columna
+            suma_final = sum(row[-1] for row in grupo)
+            totales.append(suma_final)
+
+            
+            datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
+
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'resumen_planilla.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'resumen_planilla.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+    
+    def exportar_excel_kreativa(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        encabezados_rules_code = []
+        encabezados_rules_names = []
+        datos_row = []
+        col_widths_lines_rule = []
+        
+        # Crear hojas de Excel
+        worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
+        
+        formato_total = workbook.add_format({
+            'bold': True,
+            'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
+            'border': 1
+        })
+        
+        formato_encabezado = workbook.add_format({
+            'bold': True,
+            'bg_color': '#00A6CB',
+        })
+
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+            
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado, formato_encabezado)
+            
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                if str(record[0]).strip().upper() == "TOTAL":
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value, formato_total)
+                else:
+                    for col, value in enumerate(record):
+                        worksheet.write(row, col, value)
+                row += 1
+
+
+        for slip_id in self.slip_ids:
+            reglas = []
+            # Obtener encabezados y anchos de columnas, siempre y cuando no se repitan
+            # Se obtienen igual el monto de las reglas y el nombre
+            for rule in slip_id.line_ids:
+                if rule.code not in encabezados_rules_code:
+                    encabezados_rules_code.append(rule.code)
+                    encabezados_rules_names.append(rule.name)
+                    col_widths_lines_rule.append(20)
+                reglas.append((rule.name, rule.amount))
+            #Obtener nombre del empleado y departamento donde trabaja
+            reglas = sorted(reglas, key=lambda x: x[0])
+            datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
+        # Encabezados y anchos de columnas
+        encabezados_rules_names = sorted(encabezados_rules_names)
+        encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
+        col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
+        # Preparar los datos
+        data_rules = encabezados_rules_names
+        data = []
+        for datos in datos_row:
+            data_line = []
+            data_line.append(datos['Empleado'])
+            data_line.append(datos['Departamento'])
+            valores_dict = dict(datos['Reglas'])
+            resultados = [valores_dict.get(c, 0) for c in encabezados_rules_names]
+            for rest in resultados:
+                data_line.append(rest)
+            data.append(data_line)
+                
+        # Agrupar por departamento y calcular totales
+        departamento_data = defaultdict(list)
+        for line in data:
+            departamento = line[1]
+            _logger.warning("departamento: %s", departamento)
+            if not departamento != 'Desarrollo' or not departamento != 'Mercadeo':
+                departamento_data[departamento].append(line)
+
+        datos_lines_from_customer = []
+
+        for departamento in sorted(departamento_data.keys()):
+            grupo = departamento_data[departamento]
+            datos_lines_from_customer.extend(grupo)
+
+            # Calcular suma por columna
+            totales = ["TOTAL", departamento]
+            num_cols = len(grupo[0])
+            for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
+                totales.append('')
+            
+            # Sumar solo la última columna
+            suma_final = sum(row[-1] for row in grupo)
+            totales.append(suma_final)
+
+            
+            datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
+
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': 'resumen_planilla.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': 'resumen_planilla.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
 
 
 class ResourceMixin(models.AbstractModel):
