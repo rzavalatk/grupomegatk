@@ -189,9 +189,16 @@ class HrLeave(models.Model):
                         message='La fecha final debe ser mayor o igual a la inicial')        
         else:
             if self.request_unit_half and self.request_date_from:
-                self.dias = 0
-                self.horas = self.number_of_hours_display
-                self.minutos = 0
+                if self.request_date_from.weekday() == 5:
+                    self.dias = 0
+                    self.horas = int(self.number_of_hours_display) * 2
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
+                else:
+                    self.dias = 0
+                    self.horas = self.number_of_hours_display
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
                 
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
