@@ -160,6 +160,7 @@ class HrLeave(models.Model):
                     self.minutos = 0
                 
                 if self.request_date_from.weekday() == 5:
+                    _logger.warning("Es fin de semana")
                     self.dias = 0
                     self.horas = valor_hora * 2
                     self.number_of_hours_text = self.horas
