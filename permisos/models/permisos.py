@@ -361,6 +361,7 @@ class HrPermisos(models.Model):
                                 [('vacaciones', '=', 'True')], limit=1)
 
                             allocation_vals = {
+                                'holiday_type': 'employee',
                                 'employee_id': employe_id.id,
                                 'holiday_status_id': leave_type_id.id,
                                 'number_of_hours': number_of_hours,
