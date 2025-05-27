@@ -364,7 +364,7 @@ class HrPermisos(models.Model):
                                 'holiday_type': 'employee',
                                 'employee_id': employe_id.id,
                                 'holiday_status_id': leave_type_id.id,
-                                'number_of_hours': number_of_hours,
+                                'number_of_hours_display': number_of_hours,
                                 'name': "Asignación de vacaciones por ley",
                             }
                             leave_allocation = self.env['hr.leave.allocation'].create(
