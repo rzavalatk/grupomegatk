@@ -333,13 +333,14 @@ class HrLeave(models.Model):
         return super(HrLeave, self).action_validate()
         
     def action_refuse(self):
-        if self.holiday_status_id.vacaciones:
-            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                'suma')
-            self.employee_id.sudo().write({'permisos_dias': dias,
-                                           'permisos_horas': horas,
-                                           'permisos_minutos': minutos_resultante})
-        else:
-            self.env.user.notify_success(message='Permiso denegado')
+        if self.state == 'validate':
+            if self.holiday_status_id.vacaciones:
+                dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                    'suma')
+                self.employee_id.sudo().write({'permisos_dias': dias,
+                                            'permisos_horas': horas,
+                                            'permisos_minutos': minutos_resultante})
+            else:
+                self.env.user.notify_success(message='Permiso denegado')
         return super(HrLeave, self).action_refuse()
         
