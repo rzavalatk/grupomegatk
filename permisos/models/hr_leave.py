@@ -322,22 +322,24 @@ class HrLeave(models.Model):
         return dias, horas, minutos_resultante
 
     def action_validate(self):
-        _logger.warning(self.holiday_status_id.vacaciones)
         if self.holiday_status_id.vacaciones:
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
-           
-            """self.env['hr.employee'].sudo().write({'permisos_dias': dias,
-                                                 'permisos_horas': horas,
-                                                 'permisos_minutos': minutos_resultante})"""
             self.employee_id.sudo().write({'permisos_dias': dias,
                                            'permisos_horas': horas,
                                            'permisos_minutos': minutos_resultante})
         else:
             self.env.user.notify_success(message='Permiso aprobado')
-
         return super(HrLeave, self).action_validate()
-        """template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_aprobado')
-        email_values_jefe = {'email_to': 'erodriguez@megatk.com'}
-        template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
+        
+    def action_refuse(self):
+        if self.holiday_status_id.vacaciones:
+            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                'suma')
+            self.employee_id.sudo().write({'permisos_dias': dias,
+                                           'permisos_horas': horas,
+                                           'permisos_minutos': minutos_resultante})
+        else:
+            self.env.user.notify_success(message='Permiso denegado')
+        return super(HrLeave, self).action_refuse()
         
