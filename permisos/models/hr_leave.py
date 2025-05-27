@@ -138,7 +138,7 @@ class HrLeave(models.Model):
                     message='La fecha final debe ser mayor o igual a la inicial')
                 
 
-    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours')
+    @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours', 'holiday_status_id', 'request_hour_to', 'request_hour_from')
     def _onchange_request_datetm_ft(self):
         
         if not self.request_unit_half:
@@ -160,6 +160,7 @@ class HrLeave(models.Model):
                     self.minutos = 0
                 
                 if self.request_date_from.weekday() == 5:
+                    _logger.warning("Es fin de semana")
                     self.dias = 0
                     self.horas = valor_hora * 2
                     self.number_of_hours_text = self.horas
@@ -189,9 +190,16 @@ class HrLeave(models.Model):
                         message='La fecha final debe ser mayor o igual a la inicial')        
         else:
             if self.request_unit_half and self.request_date_from:
-                self.dias = 0
-                self.horas = self.number_of_hours_display
-                self.minutos = 0
+                if self.request_date_from.weekday() == 5:
+                    self.dias = 0
+                    self.horas = int(self.number_of_hours_display) * 2
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
+                else:
+                    self.dias = 0
+                    self.horas = self.number_of_hours_display
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
                 
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
@@ -313,23 +321,26 @@ class HrLeave(models.Model):
 
         return dias, horas, minutos_resultante
 
-    def action_approve(self):
-        _logger.warning(self.holiday_status_id.vacaciones)
+    def action_validate(self):
         if self.holiday_status_id.vacaciones:
             dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                 'resta')
-           
-            """self.env['hr.employee'].sudo().write({'permisos_dias': dias,
-                                                 'permisos_horas': horas,
-                                                 'permisos_minutos': minutos_resultante})"""
             self.employee_id.sudo().write({'permisos_dias': dias,
                                            'permisos_horas': horas,
                                            'permisos_minutos': minutos_resultante})
         else:
             self.env.user.notify_success(message='Permiso aprobado')
-
-        return super(HrLeave, self).action_approve()
-        """template_jefe = self.env.ref('permisos.email_template_permiso_solicitud_aprobado')
-        email_values_jefe = {'email_to': 'erodriguez@megatk.com'}
-        template_jefe.send_mail(self.id, email_values=email_values_jefe, force_send=True)"""
+        return super(HrLeave, self).action_validate()
+        
+    def action_refuse(self):
+        if self.state == 'validate':
+            if self.holiday_status_id.vacaciones:
+                dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                    'suma')
+                self.employee_id.sudo().write({'permisos_dias': dias,
+                                            'permisos_horas': horas,
+                                            'permisos_minutos': minutos_resultante})
+            else:
+                self.env.user.notify_success(message='Permiso denegado')
+        return super(HrLeave, self).action_refuse()
         

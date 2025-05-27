@@ -330,28 +330,36 @@ class HrPermisos(models.Model):
                         if employe_id.fecha_ingreso.day == hoy.day and employe_id.fecha_ingreso.month == hoy.month:
                             if hoy.year - employe_id.fecha_ingreso.year == 1:
                                 dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                    minutos_actuales, año1)
-                                minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                number_of_hours = minutos_vac / 60
-                                _logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
+                                        minutos_actuales, año1)
+                                if minutos_actuales < 0:
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
+                                    number_of_hours = minutos_vac / 60
+                                else:
+                                    number_of_hours = año1 / 60
                             elif hoy.year - employe_id.fecha_ingreso.year == 2:
-                                dias, horas, minutos_resultante = self.v-(
-                                    minutos_actuales, año2)
-                                minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                number_of_hours = minutos_vac / 60
-                                _logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
+                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
+                                        minutos_actuales, año2)
+                                if minutos_actuales < 0:
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
+                                    number_of_hours = minutos_vac / 60
+                                else:
+                                    number_of_hours = año2 / 60
                             elif hoy.year - employe_id.fecha_ingreso.year == 3:
                                 dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                    minutos_actuales, año3)
-                                minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                number_of_hours = minutos_vac / 60
-                                _logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
+                                        minutos_actuales, año3)
+                                if minutos_actuales < 0:
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
+                                    number_of_hours = minutos_vac / 60
+                                else:
+                                    number_of_hours = año3 / 60
                             else:
                                 dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                    minutos_actuales, añomas)
-                                minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                number_of_hours = minutos_vac / 60
-                                _logger.warning("dias: %s, horas: %s, minutos: %s, minutos_vac: %s, number_of_hours: %s", dias, horas, minutos_resultante, minutos_vac, number_of_hours)
+                                        minutos_actuales, añomas)
+                                if minutos_actuales < 0:
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
+                                    number_of_hours = minutos_vac / 60
+                                else:
+                                    number_of_hours = añomas / 60
                             # AGREGAR VACACIONES A PERFIL DE EMPLEADOS
                             employe_id.sudo().write({'permisos_dias': dias,
                                                         'permisos_horas': horas,
@@ -361,9 +369,10 @@ class HrPermisos(models.Model):
                                 [('vacaciones', '=', 'True')], limit=1)
 
                             allocation_vals = {
+                                'holiday_type': 'employee',
                                 'employee_id': employe_id.id,
                                 'holiday_status_id': leave_type_id.id,
-                                'number_of_days_display': number_of_hours / 8,
+                                'number_of_days': int(number_of_hours) / 8,
                                 'name': "Asignación de vacaciones por ley",
                             }
                             leave_allocation = self.env['hr.leave.allocation'].create(
