@@ -110,12 +110,12 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
                                 self._showRoute(coords);
                                 self._loadInfo(trip_id);
-                                $button.prop('disabled', false).text('Mostrar Ruta');
+                                $('.card-btn').prop('disabled', false).text('Mostrar Ruta');
                                 console.log(result);
                                 
                             }).catch(function (error) {
                                 console.error(error);
-                                this.$el.find("#msg-error").text("Error al cargar el viaje");
+                                $("#msg-error").text("Error al cargar el viaje");
                             });
                         }
                     } else {
