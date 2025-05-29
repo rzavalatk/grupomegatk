@@ -84,13 +84,40 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     model: 'gps.device.trip',
                     method: 'check_code',
                     args: [trip_id],
-                }).then(function (result) {
+                }).then(async function (result) {
                     if(result) {
                         if(!/VMT[0-9]{5}/.test(trip_id)) {
                             $('#msg-error').text("El codigo del viaje no es válido");
                             return;
                         } else {
                             $('#msg-error').text("");
+                            var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
+                            $button.prop('disabled', true).text('Cargando ruta...');
+
+                            await self._rpc({
+                                model: 'gps.device.trip',
+                                method: 'get_locations',
+                                args: [trip_id],
+                            }).then(function (result) {
+                                var coords = [
+                                    [14.099352594899022, -87.18958071464127],
+                                    [14.099565057582224, -87.18941866871448],
+                                    [14.09991576610711, -87.18915009259818],
+                                    [14.099931773537433, -87.1887389760825],
+                                    [14.0999565122913, -87.18825733958069],
+                                    [14.100333414140746, -87.18807878897907],
+                                    [14.100756882274673, -87.18790774050292],
+                                ];
+
+                                self._showRoute(coords);
+                                self._loadInfo(trip_id);
+                                $button.prop('disabled', false).text('Mostrar Ruta');
+                                console.log(result);
+                                
+                            }).catch(function (error) {
+                                console.error(error);
+                                this.$el.find("#msg-error").text("Error al cargar el viaje");
+                            });
                         }
                     } else {
                         $('#msg-error').text("El codigo del viaje no existe");
@@ -98,34 +125,6 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     }
                 })
             }
-
-            var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
-            $button.prop('disabled', true).text('Cargando ruta...');
-
-            await self._rpc({
-                model: 'gps.device.trip',
-                method: 'get_locations',
-                args: [trip_id],
-            }).then(function (result) {
-                var coords = [
-                    [14.099352594899022, -87.18958071464127],
-                    [14.099565057582224, -87.18941866871448],
-                    [14.09991576610711, -87.18915009259818],
-                    [14.099931773537433, -87.1887389760825],
-                    [14.0999565122913, -87.18825733958069],
-                    [14.100333414140746, -87.18807878897907],
-                    [14.100756882274673, -87.18790774050292],
-                ];
-
-                self._showRoute(coords);
-                self._loadInfo(trip_id);
-                $button.prop('disabled', false).text('Mostrar Ruta');
-                console.log(result);
-                
-            }).catch(function (error) {
-                console.error(error);
-                this.$el.find("#msg-error").text("Error al cargar el viaje");
-            });
         },
 
         _showRoute: function (coords) {
