@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="TrackingCardMenu">
+        <div class="row">
+            <style id='tracking_card_style'>
+                <!-- utilidades -->
+                .flex-content-center {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .flex-column {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+
+                .text-bold {
+                    font-weight: bold;
+                }
+
+                <!-- tarjeta -->
+                .menu-card {
+                    align-items: center;
+                    background-color: #242733; 
+                    height: 400px; 
+                    width: 400px; 
+                    border-radius: 0 0 10px 10px;
+                    padding: 30px;
+                }
+
+                .full-card {
+                    margin-top: 25px;
+                }
+
+                .banner {
+                    background-image: linear-gradient(to right, #004080, #0080ff);
+                    height: 60px;
+                    width: 400px; 
+                    border-radius: 10px 10px 0 0;
+                }
+
+                .card-title {
+                    font-size: 40px;
+                    text-align: center;
+                }
+
+                .card-text {
+                    font-size: 18px;
+                    text-align: center;
+                }
+
+                .card-input {
+                    border: none;
+                    border-bottom-style: outset;
+                    width: 50%;
+                    background-color: #242733;
+                    margin-top: 10px;
+                    font-size: 20px;
+                    text-align: center;
+                }
+
+                .msg-error {
+                    font-size: 14px;
+                    color: #e60000; 
+                }
+
+                .btn-start {
+                    background-color: #33cc33;
+                }
+            </style>
+            <t t-if="widget.current_trip">
+                <t t-set="check_in" t-value="widget.current_trip.check_in"/>
+            </t>
+            <div id="root">
+                <div class="container flex-content-center pt-5">
+                    <div class="full-card">
+                        <div class="banner"></div>
+                        <div class="menu-card flex-column">               
+                            <t t-if="!check_in">
+                                <h2 class="card-title">¡Bienvenido!</h2>
+                            </t>
+                            <t t-else="">
+                                <h2 class="card-title">En Curso</h2>
+                            </t>
+                            <t t-if="!check_in">
+                                <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                                <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="6" maxlength="6" inputmode="numeric" required="true"/>
+                                <div class="msg-error">
+                                    <span id="msg-text"></span>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <p class="card-text">¿Desea finalizar el viaje? Una vez finalizado no se puede reactivar</p>
+                            </t>
+                            <div class="flex-column">
+                                <button t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ check_in ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
+                                    <span class="text-bold align-middle fs-2 me-3 text-white" t-if="!check_in">Iniciar Viaje</span>
+                                    <i t-attf-class="fa fa-4x fa-sign-{{ check_in ? 'out' : 'in' }} align-middle"/>
+                                    <span class="text-bold align-middle fs-2 ms-3" t-if="check_in">Finalizar Viaje</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
