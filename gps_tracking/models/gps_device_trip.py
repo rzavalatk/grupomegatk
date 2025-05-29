@@ -267,7 +267,26 @@ class GpsDeviceTrip(models.Model):
         if not trip:
             return False
         return True
+    
+    @api.model    
+    def check_id(self, id_device):
+        traccar_url = 'http://18.222.109.183:8082/api/devices'
+        auth = ('areyes@megatk.com', 'admin') 
+
+        try:
+            response = requests.get(traccar_url, auth=auth, timeout=10)
+            response.raise_for_status()
+        except requests.RequestException as e:
+            raise Exception(f"Error al conectar con Traccar: {e}")
         
+        ids = response.json()
+        
+        for id in ids:
+            if id.get('uniqueId') == id_device:
+                return True
+            else :
+                return False
+    
     def cron_fetch_positions(self):
         viajes = self.search([('state','=','ongoing')])
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
