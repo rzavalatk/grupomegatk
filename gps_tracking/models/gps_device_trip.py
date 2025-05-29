@@ -260,7 +260,8 @@ class GpsDeviceTrip(models.Model):
             'start_date': data.start_date, # Este es un campo Date, no Datetime
             'used_time': formatted_used_time, # <-- ¡Ahora es un string HH:MM:SS!
         }
-        
+    
+    @api.model    
     def check_code(self, trip_code):
         trip = self.env['gps.device.trip'].search([('code','=',trip_code)])
         if not trip:
