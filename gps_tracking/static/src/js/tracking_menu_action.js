@@ -76,7 +76,8 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             //     self.$el.find("#msg-text").text("Error al iniciar el viaje");
             // });
             const deviceId = $("#id_device").val();
-
+            var self = this;
+            
             if (!deviceId) {
                 $('#msg-text').text("Ingrese el ID del dispositvo");
                 return;
