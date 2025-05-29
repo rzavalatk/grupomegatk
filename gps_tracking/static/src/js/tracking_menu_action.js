@@ -77,7 +77,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
             // });
             const deviceId = $("#id_device").val();
             var self = this;
-            
+
             if (!deviceId) {
                 $('#msg-text').text("Ingrese el ID del dispositvo");
                 return;
@@ -99,6 +99,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                                 model: 'gps.device.trip',
                                 method: 'start_trip',
                                 args: [deviceId],
+                                kwargs: { employee_id: await self._getCurrentEmployee() },
                             }).then(function (result) {
                                 console.log("Resultado del inicio de viaje:", result);
                                 self._reloadWidget();
