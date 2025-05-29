@@ -91,9 +91,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                             return;
                         } else {
                             $('#msg-error').text("si");
-                            var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
-                            $button.prop('disabled', true).text('Cargando ruta...');
-
+                            $('.card-btn').prop('disabled', true).text('Cargando ruta...'); // Asumo que el botón tiene la clase card-btn
+                            
                             await self._rpc({
                                 model: 'gps.device.trip',
                                 method: 'get_locations',
