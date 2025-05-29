@@ -110,6 +110,13 @@
                 .leaflet-routing-alternatives {
                     display: none !important;
                 }
+
+                .o_web_client {
+                    direction: ltr;
+                    position: relative;
+                    background-color: #ff884d;
+                    color-scheme: bright;
+                }
             </style>
             <div id="root">
                 <div class="pt-5 menu-container">
