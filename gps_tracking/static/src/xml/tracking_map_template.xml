@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="TrackingMap">
+        <div class="row">
+            <style>
+                .menu-container {
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+
+                #map {
+                    height: 550px;
+                    width: 850px;
+                    border-radius: 15px;
+                }
+                
+                .grid-panel {
+                    display: grid;
+                    grid-template-rows: 13% 43% 44%;
+                    background-color: #242733;
+                    border-radius: 10px;
+                }
+
+                .grid-section-1 {
+                    display: grid;
+                    grid-template-rows: repeat(3, 1fr);
+                    align-items: center;
+                    justify-items: center;
+                    padding: 20px;
+                    gap: 12px;
+                }
+
+                .grid-section-2 {
+                    display: grid;
+                    grid-template-rows: repeat(2, 1fr);
+                    grid-template-columns: repeat(2, 1fr);
+                    align-items: center;
+                    padding: 20px;
+                    gap: 12px;
+                }
+
+                .banner {
+                    background-image: linear-gradient(to right, #004080, #0080ff);
+                    height: 60px;
+                    width: 400px; 
+                    border-radius: 10px 10px 0 0;
+                }
+
+                .card-title {
+                     font-size: 30px;
+                     font-weight: bold;
+                }
+
+                .card-input {
+                    border: none;
+                    border-bottom-style: outset;
+                    width: 50%;
+                    background-color: #242733;
+                    margin-top: 10px;
+                    font-size: 20px;
+                    text-align: center;
+                }
+
+                .card-btn {
+                    padding: 10px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #000;
+                    background-color: #70db70;
+                    border: none;
+                }
+
+                .trip-data {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                #trip-employee, #trip-date, #trip-device, #trip-time {
+                    font-size: 16px;
+                    font-weight: 400;    
+                }
+
+                .leaflet-pane.leaflet-overlay-pane svg path.my-route-line {
+                    stroke: #0099ff; /* Tu color deseado */
+                    stroke-width: 5px; /* Tu ancho deseado */
+                    opacity: 1; /* Tu opacidad deseada */
+                    /* Puedes añadir !important si el color sigue siendo sobrescrito,
+                       pero intenta sin él primero:
+                       stroke: #0099ff !important;
+                       stroke-width: 5px !important;
+                       opacity: 1 !important;
+                    */
+                }
+
+                .leaflet-routing-container.leaflet-routing-alt {
+                    display: none !important;
+                }
+                
+                /* Si la regla anterior no funciona, prueba con una más genérica para LRM */
+                .leaflet-routing-container {
+                    display: none !important;
+                }
+                
+                /* Opcional: Si solo quieres ocultar el texto pero mantener el contenedor si hay otros elementos */
+                .leaflet-routing-alternatives {
+                    display: none !important;
+                }
+            </style>
+            <div id="root">
+                <div class="pt-5 menu-container">
+                    <div>
+                        <div id="map"></div>
+                    </div>
+                    <div class="grid-panel">
+                        <div class="banner"></div>
+                        <div class="grid-section-1">
+                            <h2 class="card-title">Ingresar codigo de viaje</h2>
+                            <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
+                            <div class="">
+                                <button class="card-btn">Mostrar ruta</button>
+                            </div>
+                        </div>
+                        <div class="grid-section-2">
+                            <div class="">
+                                <label for="" class="trip-data">Empleado:</label>
+                                <p class="" id="trip-employee"></p>
+                            </div>
+                            <div class="">
+                                <label for="" class="trip-data">ID Dispositivo:</label>
+                                <p class="" id="trip-device"></p>
+                            </div>
+                            <div class="">
+                                <label for="" class="trip-data">Fecha:</label>
+                                <p class="" id="trip-date"></p>
+                            </div>
+                            <div class="">
+                                <label for="" class="trip-data">Tiempo Usado:</label>
+                                <p class="" id="trip-time"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+    </t>
+</templates>
