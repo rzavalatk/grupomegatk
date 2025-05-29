@@ -83,6 +83,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 return;
             }
 
+            this.$el.find("#msg-error").text("");
+
             var self = this;
             var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
             $button.prop('disabled', true).text('Cargando ruta...');
@@ -109,6 +111,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 
             }).catch(function (error) {
                 console.error(error);
+                this.$el.find("#msg-error").text("Error al cargar el viaje");
             });
         },
 
