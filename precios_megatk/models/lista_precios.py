@@ -44,7 +44,7 @@ class ListaPrecios(models.Model):
     def back_draft(self):
         self.write({'state': 'borrador'})
 
-    @api.model_create_multi
+    #@api.model_create_multi
     def validar_lista(self):
         if self.detalle_ids:
             if self.precio_ids:
