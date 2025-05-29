@@ -75,7 +75,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             var self =  this;
 
             if (!trip_id) {
-                this.$el.find("#msg-error").text("Ingrese el codigo del viaje");
+                $('#msg-error').text("Ingrese el codigo del viaje");
                 return;
             } else {
                 console.log(trip_id);
@@ -87,13 +87,13 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 }).then(function (result) {
                     if(result) {
                         if(!/VMT[0-9]{5}/.test(trip_id)) {
-                            this.$el.find("#msg-error").text("El codigo del viaje no es válido");
+                            $('#msg-error').text("El codigo del viaje no es válido");
                             return;
                         } else {
-                            this.$el.find("#msg-error").text("");
+                            $('#msg-error').text("");
                         }
                     } else {
-                        this.$el.find("#msg-error").text("El codigo del viaje no existe");
+                        $('#msg-error').text("El codigo del viaje no existe");
                         return;
                     }
                 })
