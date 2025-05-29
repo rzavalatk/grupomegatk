@@ -72,20 +72,31 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
 
         _loadCoords: async function (trip_id) {
             console.log(`Mostrar ruta ${trip_id}`);
+            var self =  this;
 
             if (!trip_id) {
                 this.$el.find("#msg-error").text("Ingrese el codigo del viaje");
                 return;
+            } else {
+                await self._rpc({
+                    model: 'gps.device.trip',
+                    method: 'check_code',
+                    args: [trip_id],
+                }).then(function (result) {
+                    if(result) {
+                        if(!/VMT[0-9]{5}/.test(trip_id)) {
+                            this.$el.find("#msg-error").text("El codigo del viaje no es válido");
+                            return;
+                        } else {
+                            this.$el.find("#msg-error").text("");
+                        }
+                    } else {
+                        this.$el.find("#msg-error").text("El codigo del viaje no existe");
+                        return;
+                    }
+                })
             }
 
-            if(!/VMT[0-9]{5}/.test(trip_id)) {
-                this.$el.find("#msg-error").text("El codigo del viaje no es válido");
-                return;
-            }
-
-            this.$el.find("#msg-error").text("");
-
-            var self = this;
             var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
             $button.prop('disabled', true).text('Cargando ruta...');
 

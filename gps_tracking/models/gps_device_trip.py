@@ -261,6 +261,12 @@ class GpsDeviceTrip(models.Model):
             'used_time': formatted_used_time, # <-- ¡Ahora es un string HH:MM:SS!
         }
         
+    def check_code(self, trip_code):
+        trip = self.env['gps.device.trip'].search([('code','=',trip_code)])
+        if not trip:
+            return False
+        return True
+        
     def cron_fetch_positions(self):
         viajes = self.search([('state','=','ongoing')])
         _logger.warning(f"Cron: se encontraron {len(viajes)} viajes en curso para actualizar")
