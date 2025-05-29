@@ -78,6 +78,8 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 this.$el.find("#msg-error").text("Ingrese el codigo del viaje");
                 return;
             } else {
+                console.log(trip_id);
+                
                 await self._rpc({
                     model: 'gps.device.trip',
                     method: 'check_code',
