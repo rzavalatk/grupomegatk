@@ -74,12 +74,12 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
             console.log(`Mostrar ruta ${trip_id}`);
 
             if (!trip_id) {
-                self.$el.find("#msg-error").text("Ingrese el ID del viaje");
+                this.$el.find("#msg-error").text("Ingrese el ID del viaje");
                 return;
             }
 
             if(!/WMT[0-9]{6}/.test(trip_id)) {
-                self.$el.find("#msg-error").text("El ID del viaje no es válido");
+                this.$el.find("#msg-error").text("El ID del viaje no es válido");
                 return;
             }
 
