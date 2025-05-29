@@ -90,7 +90,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                             $('#msg-error').text("El codigo del viaje no es válido");
                             return;
                         } else {
-                            $('#msg-error').text("");
+                            $('#msg-error').text("si");
                             var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
                             $button.prop('disabled', true).text('Cargando ruta...');
 
