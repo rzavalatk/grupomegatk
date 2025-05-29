@@ -61,6 +61,11 @@
                     text-align: center;
                 }
 
+                #msg-error {
+                    font-size: 14px;
+                    color: #e60000; 
+                }
+
                 .card-btn {
                     padding: 10px;
                     font-size: 14px;
@@ -116,6 +121,9 @@
                         <div class="grid-section-1">
                             <h2 class="card-title">Ingresar codigo de viaje</h2>
                             <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
+                            <div>
+                                <span id="msg-error"></span>
+                            </div>
                             <div class="">
                                 <button class="card-btn">Mostrar ruta</button>
                             </div>

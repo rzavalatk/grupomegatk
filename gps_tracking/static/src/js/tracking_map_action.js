@@ -73,6 +73,16 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         _loadCoords: async function (trip_id) {
             console.log(`Mostrar ruta ${trip_id}`);
 
+            if (!trip_id) {
+                self.$el.find("#msg-error").text("Ingrese el ID del viaje");
+                return;
+            }
+
+            if(!/WMT[0-9]{6}/.test(trip_id)) {
+                self.$el.find("#msg-error").text("El ID del viaje no es válido");
+                return;
+            }
+
             var self = this;
             var $button = this.$('.card-btn'); // Asumo que el botón tiene la clase card-btn
             $button.prop('disabled', true).text('Cargando ruta...');
