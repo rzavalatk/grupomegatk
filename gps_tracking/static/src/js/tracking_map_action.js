@@ -82,7 +82,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                 method: 'get_locations',
                 args: [trip_id],
             }).then(function (result) {
-                coords = [
+                var coords = [
                     [14.099352594899022, -87.18958071464127],
                     [14.099565057582224, -87.18941866871448],
                     [14.09991576610711, -87.18915009259818],
