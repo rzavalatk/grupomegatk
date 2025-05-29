@@ -4,6 +4,10 @@
         <div class="row">
             <style id='tracking_card_style'>
                 <!-- utilidades -->
+                body {
+                    color: white;
+                }
+
                 .flex-content-center {
                     display: flex;
                     justify-content: center;
