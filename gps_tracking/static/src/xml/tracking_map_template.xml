@@ -114,7 +114,7 @@
                 .o_web_client {
                     direction: ltr;
                     position: relative;
-                    background-color: #ff884d;
+                    background-color: #ff884d !important;
                     color-scheme: bright;
                 }
             </style>
