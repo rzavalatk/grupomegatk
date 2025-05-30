@@ -105,7 +105,7 @@ class AttendanceRuleInput(models.Model):
                                 if result.get('code') == 'DED_LLT':
                                     result['amount'] += amount
                     elif leave.holiday_id.request_unit_hours:
-                        parte_entera, parte_decimal = math.modf(leave.holiday_id.request_hour_from_1)
+                        parte_entera, parte_decimal = math.modf(float(leave.holiday_id.request_hour_from_1))
                         _logger.warning('hora: %s, minuto: %s', parte_entera, parte_decimal)
                         hora_entrada = check_in_utc6.time()
                         hora_salida = check_out_utc6.time()
