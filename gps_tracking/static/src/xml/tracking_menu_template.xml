@@ -32,6 +32,8 @@
                 .full-card {
                     margin-top: 25px;
                     color: white;
+                    border-radius: 10px
+                    box-shadow: 10px 5px 5px black;
                 }
 
                 .banner {
