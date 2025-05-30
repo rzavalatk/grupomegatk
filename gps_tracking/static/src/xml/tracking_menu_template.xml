@@ -22,7 +22,7 @@
                 <!-- tarjeta -->
                 .menu-card {
                     align-items: center;
-                    background-color: #242733; 
+                    background-color: white; 
                     height: 400px; 
                     width: 400px; 
                     border-radius: 0 0 10px 10px;
