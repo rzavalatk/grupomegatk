@@ -31,7 +31,7 @@
 
                 .full-card {
                     margin-top: 25px;
-                    color: white;
+                    color: #242733;
                     border-radius: 10px;
                     background-color: white;
                     box-shadow: 10px 5px 5px black;
@@ -47,7 +47,7 @@
                 .card-title {
                     font-size: 40px;
                     text-align: center;
-                    color: white;
+                    color: #242733;
                 }
 
                 .card-text {
@@ -59,7 +59,7 @@
                     border: none;
                     border-bottom-style: outset;
                     width: 50%;
-                    background-color: #242733;
+                    background-color: #f2f2f2;
                     margin-top: 10px;
                     font-size: 20px;
                     text-align: center;
