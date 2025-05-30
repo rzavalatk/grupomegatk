@@ -92,11 +92,26 @@ class AttendanceRuleInput(models.Model):
             check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
             in_date = check_in_utc6.date()
             out_date = check_out_utc6.date()
-            if in_date >= date_from and out_date <= date_to:
-                in_time = check_in_utc6.time()
-                out_time = check_out_utc6.time()
-                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
-                for result in res:
-                    if result.get('code') == 'DED_LLT':
-                        result['amount'] += amount
+            
+            for day, hours, leave in day_leave_intervals:
+                if in_date >= date_from and out_date <= date_to:
+                    if leave.holiday_id.request_unit_half:
+                        if leave.holiday_id.request_date_from_period == 'pm': 
+                            in_time = check_in_utc6.time()
+                            out_time = check_out_utc6.time()
+                            amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
+                            for result in res:
+                                if result.get('code') == 'DED_LLT':
+                                    result['amount'] += amount
+                    elif leave.holiday_id.request_unit_hours:
+                        hora_prm = int(leave.holiday_id.request_hour_from_1)
+                        minutos_prm = leave.holiday_id.request_hour_from_1 - hora_prm
+                        _logger.warning('horas: %s, minutos: %s', hora_prm, minutos_prm)
+                        hora_entrada = check_in_utc6.time()
+                        hora_salida = check_out_utc6.time()
+                        amount = self.calcular_llegadat(hora_entrada, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
+                        for result in res:
+                            if result.get('code') == 'DED_LLT':
+                                result['amount'] += amount
+                        
         return res
