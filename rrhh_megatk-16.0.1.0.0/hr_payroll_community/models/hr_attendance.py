@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, time
 from odoo import models, fields
 import logging
 import pytz
+import math
 
 # obtenemos la zona horaria de Honduras
 honduras_tz = pytz.timezone('America/Tegucigalpa')
@@ -104,8 +105,8 @@ class AttendanceRuleInput(models.Model):
                                 if result.get('code') == 'DED_LLT':
                                     result['amount'] += amount
                     elif leave.holiday_id.request_unit_hours:
-                        
-                        _logger.warning('horas: %s, ', leave.holiday_id.request_hour_from_1)
+                        parte_entera, parte_decimal = math.modf(leave.holiday_id.request_hour_from_1)
+                        _logger.warning('hora: %s, minuto: %s', parte_entera, parte_decimal)
                         hora_entrada = check_in_utc6.time()
                         hora_salida = check_out_utc6.time()
                         amount = self.calcular_llegadat(hora_entrada, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
