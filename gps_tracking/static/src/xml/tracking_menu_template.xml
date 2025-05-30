@@ -4,10 +4,6 @@
         <div class="row">
             <style id='tracking_card_style'>
                 <!-- utilidades -->
-                html, body {
-                    color: white;
-                }
-
                 .flex-content-center {
                     display: flex;
                     justify-content: center;
@@ -35,6 +31,7 @@
 
                 .full-card {
                     margin-top: 25px;
+                    color: white;
                 }
 
                 .banner {
