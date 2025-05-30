@@ -33,7 +33,7 @@
                     margin-top: 25px;
                     color: white;
                     border-radius: 10px;
-                    backgrounf-color: white;
+                    background-color: white;
                     box-shadow: 10px 5px 5px black;
                 }
 
