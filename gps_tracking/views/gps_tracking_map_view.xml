@@ -9,7 +9,8 @@
     <menuitem id="menu_gps_device_map" 
         name="Ver Mapa" 
         parent="menu_gps_device_root" 
-        action="gps_map_action" 
+        action="gps_map_action"
+        groups="gps_tracking.group_gps_admin" 
         sequence="2"/>
 
 </odoo>
