@@ -112,7 +112,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 self.showMsg = true;
                 self.msg = {
                     title: "Viaje Finalizado",
-                    message: "El viaje ha sido finalizado con exito a la hora: " + result.end_time + "\nTiempo usado: " + result.tiempo_usado,
+                    message: "El viaje ha sido finalizado con exito a la hora: " + "\nTiempo usado: " ,
                 };
                 self.renderElement();
                 setTimeout(function () {
