@@ -118,19 +118,6 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
         },
 
         _showRoute: function (coords) {
-            // this._clearPolyline();
-            // // Dibujar la ruta con una polilínea
-            // this.currentPolyline = L.polyline(coords, {
-            //     color: '#0099ff',
-            //     weight: 5,
-            //     opacity: 1,
-            //     smoothFactor: 1,
-            //     className: 'my-route-line'
-            // }).addTo(this.map);
-
-            // for (var i = 0; i < coords.length; i++) {
-            //     L.marker(coords[i]).addTo(this.map);
-            // }
             if(coords && coords.length >= 2) {
                 this._clearPolyline();
 
