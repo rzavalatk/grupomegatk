@@ -87,7 +87,7 @@
                         <div class="menu-card flex-column">
                             <t t-if="!check_in">
                                 <t t-if="widget.showMsg">
-                                    <h2 t-esc="widget.msg.title"></h2>
+                                    <h2 class="card-title" t-esc="widget.msg.title"></h2>
                                 </t>
                                 <t t-else="">
                                     <h2 class="card-title">¡Bienvenido!</h2>
@@ -95,9 +95,9 @@
                             </t>
                             <t t-else="">
                                 <t t-if="widget.showMsg">
-                                    <h2 t-esc="widget.msg.title"></h2>
+                                    <h2 class="card-title" t-esc="widget.msg.title"></h2>
                                 </t>
-                                <t>
+                                <t t-else="">
                                     <h2 class="card-title">En Curso</h2>
                                 </t>
                             </t>
