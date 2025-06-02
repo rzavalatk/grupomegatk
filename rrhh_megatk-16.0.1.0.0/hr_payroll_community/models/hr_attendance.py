@@ -94,8 +94,8 @@ class AttendanceRuleInput(models.Model):
                             amount = self.calcular_llegadat(in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
                         elif leave.holiday_id.request_unit_hours:
                             # Permiso por horas
-                            permiso_inicio = datetime.combine(day, time(hour=int(leave.holiday_id.request_hour_from_1)))
-                            permiso_fin = datetime.combine(day, time(hour=int(leave.holiday_id.request_hour_to_1)))
+                            permiso_inicio = datetime.combine(day, time(hour=int(float(leave.holiday_id.request_hour_from_1))))
+                            permiso_fin = datetime.combine(day, time(hour=int(float(leave.holiday_id.request_hour_to_1))))
 
                             entrada_datetime = datetime.combine(day, in_time)
                             # Si entró antes del permiso, no se deduce
