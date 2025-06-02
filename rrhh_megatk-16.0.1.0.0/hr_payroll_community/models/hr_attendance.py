@@ -85,17 +85,17 @@ class AttendanceRuleInput(models.Model):
                     for leave in leave_list:
                         permiso_encontrado = True
                         # Día completo: no calcular deducción
-                        if leave.request_unit_half and leave.request_date_from_period == 'am':
+                        if leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'am':
                             # Permiso por la mañana: no calcular deducción
                             _logger.info("Permiso por la mañana, no se aplica deducción")
                             continue
-                        elif leave.request_unit_half and leave.request_date_from_period == 'pm':
+                        elif leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'pm':
                             # Permiso por la tarde: sí aplica si llegó tarde en la mañana
                             amount = self.calcular_llegadat(in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
-                        elif leave.request_unit_hours:
+                        elif leave.holiday_id.request_unit_hours:
                             # Permiso por horas
-                            permiso_inicio = datetime.combine(day, time(hour=int(leave.request_hour_from_1)))
-                            permiso_fin = datetime.combine(day, time(hour=int(leave.request_hour_to_1)))
+                            permiso_inicio = datetime.combine(day, time(hour=int(leave.holiday_id.request_hour_from_1)))
+                            permiso_fin = datetime.combine(day, time(hour=int(leave.holiday_id.request_hour_to_1)))
 
                             entrada_datetime = datetime.combine(day, in_time)
                             # Si entró antes del permiso, no se deduce
