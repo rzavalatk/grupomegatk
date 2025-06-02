@@ -14,11 +14,14 @@ _logger = logging.getLogger(__name__)
 class AttendanceRuleInput(models.Model):
     _inherit = 'hr.payslip'
 
-    def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario):
+    def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario, leave):
         #Calcular costo por dia y hora en base al salario
         costo_dia = salario/30
         costo_hora = costo_dia/8
         deduccion = 0
+        
+        if leave.holiday_id.request_unit_half:
+                        if leave.holiday_id.request_date_from_period == 'pm': 
         
         # obtenemos el horario de trabajo del contrato
         working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', calendario_id)])
@@ -95,23 +98,12 @@ class AttendanceRuleInput(models.Model):
             out_date = check_out_utc6.date()
             
             for day, hours, leave in day_leave_intervals:
-                if in_date >= date_from and out_date <= date_to:
-                    if leave.holiday_id.request_unit_half:
-                        if leave.holiday_id.request_date_from_period == 'pm': 
-                            in_time = check_in_utc6.time()
-                            out_time = check_out_utc6.time()
-                            amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
-                            for result in res:
-                                if result.get('code') == 'DED_LLT':
-                                    result['amount'] += amount
-                    elif leave.holiday_id.request_unit_hours:
-                        parte_entera, parte_decimal = math.modf(float(leave.holiday_id.request_hour_from_1))
-                        _logger.warning('horas: %s, minutos: %s', parte_entera, parte_decimal)
-                        hora_entrada = check_in_utc6.time()
-                        hora_salida = check_out_utc6.time()
-                        amount = self.calcular_llegadat(hora_entrada, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
-                        for result in res:
-                            if result.get('code') == 'DED_LLT':
-                                result['amount'] += amount 
+                if in_date >= date_from and out_date <= date_to:   
+                    in_time = check_in_utc6.time()
+                    out_time = check_out_utc6.time()
+                    amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage, leave.holiday_id)
+                    for result in res:
+                        if result.get('code') == 'DED_LLT':
+                            result['amount'] += amount
                         
         return res
