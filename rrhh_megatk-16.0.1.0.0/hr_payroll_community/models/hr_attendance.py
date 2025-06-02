@@ -59,10 +59,10 @@ class AttendanceRuleInput(models.Model):
         # Agregar deducciones por permisos con marca 'deducciones'
         for day, hours, leave_list in leaves:
             for leave in leave_list:
-                if leave.holiday_status_id.deducciones:
+                if leave.holiday_id.holiday_status_id.deducciones:
                     for result in res:
                         if result.get('code') == 'DED_PRM':
-                            total = leave.dias * costo_dia + leave.horas * costo_hora + leave.minutos * costo_minuto
+                            total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * costo_hora + leave.holiday_id.minutos * costo_minuto
                             result['amount'] += total
 
         # Obtener asistencias
