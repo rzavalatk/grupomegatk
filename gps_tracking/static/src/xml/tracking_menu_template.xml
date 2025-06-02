@@ -19,6 +19,9 @@
                     font-weight: bold;
                 }
 
+                .root {
+                    padding: 0;
+                }
                 <!-- tarjeta -->
                 .menu-card {
                     align-items: center;
