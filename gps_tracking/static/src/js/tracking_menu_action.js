@@ -109,10 +109,11 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 args: [self.current_trip.device_id, await self._getCurrentEmployee()],
             }).then(function (resultado) {
                 console.log("Resultado del fin de viaje:", resultado);
+                var tiempo_final = self._diffTime(resultado.start_time, resultado.end_time);
                 self.showMsg = true;
                 self.msg = {
                     title: "Viaje Finalizado",
-                    message: "El viaje ha sido finalizado con exito a la hora: " + "\nTiempo usado: " ,
+                    message: `El viaje ha sido finalizado con exito a la hora: ${resultado.end_time} + "\nTiempo usado: ${tiempo_final.horas}:${tiempo_final.minutos}:${tiempo_final.segundos}"`,
                 };
                 self.renderElement();
                 setTimeout(function () {
@@ -124,6 +125,38 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
                 console.error(error);
                 self.$el.find("#msg-text").text("Error al finalizar el viaje");
             });
+        },
+
+        _diffTime: function (horaStr1, horaStr2) {
+            // Extraer horas, minutos y segundos
+            const [h1, m1, s1] = horaStr1.split(":").map(Number);
+            const [h2, m2, s2] = horaStr2.split(":").map(Number);
+    
+            // Usar una fecha ficticia común
+            const d1 = new Date(0, 0, 0, h1, m1, s1);
+            const d2 = new Date(0, 0, 0, h2, m2, s2);
+    
+            // Calcular la diferencia en milisegundos
+            let diffMs = Math.abs(d1 - d2); // valor absoluto
+
+            // Convertir a horas, minutos y segundos
+            let horas = Math.floor(diffMs / (1000 * 60 * 60));
+            diffMs %= (1000 * 60 * 60);
+            let minutos = Math.floor(diffMs / (1000 * 60));
+            diffMs %= (1000 * 60);
+            let segundos = Math.floor(diffMs / 1000);
+
+            if(horas < 10){
+                horas = "0" + horas;
+            }
+            if(minutos < 10){
+                minutos = "0" + minutos;
+            }
+            if(segundos < 10){
+                segundos = "0" + segundos;
+            }
+        
+            return { horas, minutos, segundos };
         },
 
         _reloadWidget: async function () {
