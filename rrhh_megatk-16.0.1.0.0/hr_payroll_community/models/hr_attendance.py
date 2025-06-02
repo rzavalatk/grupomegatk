@@ -1,102 +1,122 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime, timedelta, time
 from odoo import models, fields
-import logging
 import pytz
-
-# obtenemos la zona horaria de Honduras
-honduras_tz = pytz.timezone('America/Tegucigalpa')
+import math
+import logging
 
 _logger = logging.getLogger(__name__)
+honduras_tz = pytz.timezone('America/Tegucigalpa')
 
 
 class AttendanceRuleInput(models.Model):
     _inherit = 'hr.payslip'
 
     def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario):
-        #Calcular costo por dia y hora en base al salario
-        costo_dia = salario/30
-        costo_hora = costo_dia/8
+        costo_dia = salario / 30
+        costo_hora = costo_dia / 8
         deduccion = 0
-        
-        # obtenemos el horario de trabajo del contrato
-        working_hours = self.env['resource.calendar.attendance'].search([('calendar_id', '=', calendario_id)])
+
+        working_hours = self.env['resource.calendar.attendance'].search([
+            ('calendar_id', '=', calendario_id),
+            ('dayofweek', '=', str(dia_permiso)),
+            ('day_period', '=', 'morning')
+        ])
+
         for hours in working_hours:
-            # obtenemos la información del horario de trabajo
-            start_time = hours.hour_from
-            day_period = hours.day_period
-            days_of_week = hours.dayofweek
-            
-            if (str(days_of_week) == str(dia_permiso)):
-                if (day_period == 'morning'): 
-                    #calcular deducciones
-                    start_time = datetime.strptime(str(str(int(start_time))+":00:00"), '%H:%M:%S').time()
-                    start_time = datetime.combine(datetime.today(), start_time)
-                    
-                    if in_time > (start_time + timedelta(minutes=7)).time() and in_time < (start_time + timedelta(minutes=15)).time():
-                        deduccion = costo_hora/2
-                    elif in_time > (start_time + timedelta(minutes=16)).time() and in_time < (start_time + timedelta(minutes=30)).time():
-                        deduccion = costo_hora
-                    elif in_time > (start_time + timedelta(minutes=31)).time() and in_time < (start_time + timedelta(minutes=60)).time():
-                        deduccion = costo_hora*2
-                    elif in_time > (start_time + timedelta(minutes=61)).time() and in_time < (start_time + timedelta(minutes=90)).time():
-                        deduccion = costo_hora*4
-        
+            start_time = datetime.strptime(f"{int(hours.hour_from)}:00:00", '%H:%M:%S').time()
+            start_datetime = datetime.combine(datetime.today(), start_time)
+
+            # Rango de deducción según minutos de retraso
+            diff_minutes = (datetime.combine(datetime.today(), in_time) - start_datetime).total_seconds() / 60
+
+            if 7 < diff_minutes <= 15:
+                deduccion = costo_hora / 2
+            elif 15 < diff_minutes <= 30:
+                deduccion = costo_hora
+            elif 30 < diff_minutes <= 60:
+                deduccion = costo_hora * 2
+            elif 60 < diff_minutes <= 90:
+                deduccion = costo_hora * 4
+
         return deduccion
-            
-    
+
     def get_inputs(self, contract_ids, date_from, date_to):
-        """This Compute the other inputs to employee payslip.
-                           """
-        res = super(AttendanceRuleInput, self).get_inputs(contract_ids, date_from, date_to)
-        
-        
-        
-        contract_obj = self.env['hr.contract']
-        contract_id = contract_obj.browse(contract_ids[0].id)
-        emp_id = contract_obj.browse(contract_ids[0].id).employee_id
-        attendances = self.env['hr.attendance'].search([('employee_id', '=', emp_id.id),('check_in', '>=', date_from),('check_out', '<=', date_to)])
-        
-        day_from = datetime.combine(fields.Date.from_string(date_from),
-                                        time.min)
-        day_to = datetime.combine(fields.Date.from_string(date_to),
-                                    time.max)
-        
-        costo_dia = contract_id.wage/30
-        costo_hora = costo_dia/8
-        costo_minuto = costo_hora/60
-        
-        day_leave_intervals = []
-        
-        day_leave_intervals = contract_id.employee_id.list_leaves(day_from,
-                                                                day_to,
-                                                                calendar=contract_id.resource_calendar_id)
-        
-        multi_leaves = []
-        for day, hours, leave in day_leave_intervals:
-            
-            if len(leave) > 1:
-                for each in leave:
-                    if each.id:
-                        multi_leaves.append(each.holiday_id)
-            else:
-                if leave[0].holiday_id.holiday_status_id.deducciones:
+        res = super().get_inputs(contract_ids, date_from, date_to)
+        contract_id = contract_ids[0]
+        employee = contract_id.employee_id
+
+        costo_dia = contract_id.wage / 30
+        costo_hora = costo_dia / 8
+        costo_minuto = costo_hora / 60
+
+        # Obtener permisos (leaves)
+        leaves = employee.list_leaves(
+            datetime.combine(fields.Date.from_string(date_from), time.min),
+            datetime.combine(fields.Date.from_string(date_to), time.max),
+            calendar=contract_id.resource_calendar_id
+        )
+
+        # Agregar deducciones por permisos con marca 'deducciones'
+        for day, hours, leave_list in leaves:
+            for leave in leave_list:
+                if leave.holiday_id.holiday_status_id.deducciones:
                     for result in res:
                         if result.get('code') == 'DED_PRM':
-                            total = leave[0].holiday_id.dias * costo_dia + leave[0].holiday_id.horas * costo_hora + leave[0].holiday_id.minutos * costo_minuto
+                            total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * costo_hora + leave.holiday_id.minutos * costo_minuto
                             result['amount'] += total
-                            
-        
+
+        # Obtener asistencias
+        attendances = self.env['hr.attendance'].search([
+            ('employee_id', '=', employee.id),
+            ('check_in', '>=', date_from),
+            ('check_out', '<=', date_to)
+        ])
+
         for attendance in attendances:
-            check_in_utc6 = attendance.check_in.astimezone(honduras_tz)
-            check_out_utc6 = attendance.check_out.astimezone(honduras_tz)
-            in_date = check_in_utc6.date()
-            out_date = check_out_utc6.date()
-            if in_date >= date_from and out_date <= date_to:
-                in_time = check_in_utc6.time()
-                out_time = check_out_utc6.time()
-                amount = self.calcular_llegadat(in_time, in_date.weekday(), contract_id.resource_calendar_id.id, contract_id.wage)
+            check_in_local = attendance.check_in.astimezone(honduras_tz)
+            in_date = check_in_local.date()
+            in_time = check_in_local.time()
+            dia_semana = in_date.weekday()
+
+            # Verificamos si ese día tiene permisos
+            permiso_encontrado = False
+            for day, hours, leave_list in leaves:
+                if day == in_date:
+                    for leave in leave_list:
+                        permiso_encontrado = True
+                        # Día completo: no calcular deducción
+                        if leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'am':
+                            # Permiso por la mañana: no calcular deducción
+                            _logger.info("Permiso por la mañana, no se aplica deducción")
+                            continue
+                        elif leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'pm':
+                            # Permiso por la tarde: sí aplica si llegó tarde en la mañana
+                            amount = self.calcular_llegadat(in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
+                        elif leave.holiday_id.request_unit_hours:
+                            # Permiso por horas
+                            permiso_inicio = datetime.combine(day, time(hour=int(float(leave.holiday_id.request_hour_from_1))))
+                            permiso_fin = datetime.combine(day, time(hour=int(float(leave.holiday_id.request_hour_to_1))))
+
+                            entrada_datetime = datetime.combine(day, in_time)
+                            # Si entró antes del permiso, no se deduce
+                            if entrada_datetime < permiso_inicio:
+                                amount = self.calcular_llegadat(in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
+                            else:
+                                _logger.info("Entró durante el permiso por horas, no se aplica deducción")
+                                continue
+                        else:
+                            # Día completo
+                            _logger.info("Permiso por el día completo, no se aplica deducción")
+                            continue
+
+                        for result in res:
+                            if result.get('code') == 'DED_LLT':
+                                result['amount'] += amount
+            if not permiso_encontrado:
+                # No hay permiso → aplicar lógica de llegada tarde
+                amount = self.calcular_llegadat(in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
                 for result in res:
                     if result.get('code') == 'DED_LLT':
                         result['amount'] += amount
+
         return res
