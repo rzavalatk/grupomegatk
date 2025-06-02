@@ -107,8 +107,8 @@
                                 </t>
                                 <t t-else="">
                                     <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
+                                    <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="6" maxlength="6" inputmode="numeric" required="true"/>
                                 </t>
-                                <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="6" maxlength="6" inputmode="numeric" required="true"/>
                                 <div class="msg-error">
                                     <span id="msg-text"></span>
                                 </div>
