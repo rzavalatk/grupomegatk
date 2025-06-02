@@ -78,7 +78,7 @@
                 <t t-set="check_in" t-value="widget.current_trip.check_in"/>
             </t>
             <div id="root">
-                <div class="container flex-content-center pt-5">
+                <div class="flex-content-center pt-5">
                     <div class="full-card">
                         <div class="banner"></div>
                         <div class="menu-card flex-column">
