@@ -103,7 +103,7 @@
                             </t>
                             <t t-if="!check_in">
                                 <t t-if="widget.showMsg">
-                                    <p t-esc="widget.msg.message"></p>
+                                    <p class="card-text" t-esc="widget.msg.message"></p>
                                 </t>
                                 <t t-else="">
                                     <p class="card-text">Para iniciar un viaje ingrese el ID del dispositivo</p>
@@ -115,7 +115,7 @@
                             </t>
                             <t t-else="">
                                 <t t-if="widget.showMsg">
-                                    <p t-esc="widget.msg.message"></p>
+                                    <p class="card-text" t-esc="widget.msg.message"></p>
                                 </t>
                                 <t t-else="">
                                     <p class="card-text">¿Desea finalizar el viaje? Una vez finalizado no se puede reactivar</p>
