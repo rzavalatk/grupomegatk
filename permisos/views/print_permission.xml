@@ -50,6 +50,7 @@
                                         </t>
                                         <t t-elif="o.request_unit_hours">
                                             <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
+                                            <span t-field="o.request_hour_from_1" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                             <span t-if="o.request_hour_from_1 and o.request_hour_to_1 != o.request_hour_from_1"> a 
                                                 <span t-field="o.request_hour_to_1" t-field-options='{"format": "dd/MM/yyyy HH:mm:ss"}'/>
                                             </span>
@@ -151,7 +152,7 @@
                                         <span style="vertical-align: middle;">OTRO</span>
                                     </div>
                                     <div style="padding: 8px;">
-                                        <br/> <span style="">FECHA:</span> <span t-field="o.create_uid" t-field-options='{"format": "dd/MM/yyyy "}'/>
+                                        <br/> <span style="">FECHA:</span> <span t-field="o.request_date_from" t-field-options='{"format": "dd/MM/yyyy "}'/>
                                     </div>
                                 </td>
                             </tr>
