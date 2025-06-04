@@ -1086,14 +1086,7 @@ class HrPayslipRun(models.Model):
                 in_date = check_in_local.date()
                 in_time = check_in_local.time()
                 dia_semana = in_date.weekday()
-                dias_de_semana = {
-                    '0': 'Lunes',
-                    '1': 'Martes',
-                    '2': 'Miercoles',
-                    '3': 'Jueves',
-                    '4': 'Viernes',
-                    '5': 'Sabado',
-                }
+                dias_de_semana = [('0', 'Lunes'), ('1', 'Martes'), ('2', 'Miercoles'), ('3', 'Jueves'), ('4', 'Viernes'), ('5', 'Sabado')]
 
                 # Verificamos si ese día tiene permisos
                 permiso_encontrado = False
@@ -1115,7 +1108,7 @@ class HrPayslipRun(models.Model):
                                     'Empleado': attendance.employee_id.name,
                                     'fecha': in_date,
                                     'Hora': in_time,
-                                    'dia': dias_de_semana[dia_semana][1],
+                                    'dia': dias_de_semana[int(dia_semana)][1],
                                     'deducción': amount
                                 }
                                 data_ded_ast.append(asistencia)
@@ -1136,7 +1129,7 @@ class HrPayslipRun(models.Model):
                                         'Empleado': attendance.employee_id.name,
                                         'fecha': in_date,
                                         'Hora': in_time,
-                                        'dia': dias_de_semana[dia_semana][1],
+                                        'dia': dias_de_semana[int(dia_semana)][1],
                                         'deducción': amount
                                     }
                                     data_ded_ast.append(asistencia)
