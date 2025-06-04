@@ -1054,12 +1054,12 @@ class HrPayslipRun(models.Model):
                 in_time = check_in_local.time()
                 dia_semana = in_date.weekday()
                 dias_de_semana = {
-                    0: 'Lunes',
-                    1: 'Martes',
-                    2: 'Miercoles',
-                    3: 'Jueves',
-                    4: 'Viernes',
-                    5: 'Sabado',
+                    '0': 'Lunes',
+                    '1': 'Martes',
+                    '2': 'Miercoles',
+                    '3': 'Jueves',
+                    '4': 'Viernes',
+                    '5': 'Sabado',
                     }
 
                 # Verificamos si ese día tiene permisos
