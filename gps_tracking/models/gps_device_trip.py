@@ -40,6 +40,10 @@ class GpsDeviceTrip(models.Model):
             ], limit=1)
             if existing_trip:
                 raise ValidationError("Ya existe un viaje en curso para este dispositivo.")
+            
+        for val in vals:
+            if val.get('code', '/') == '/':
+                val['code'] = self.env['ir.sequence'].next_by_code('trip.id') or '/'
 
         return super(GpsDeviceTrip, self).create(vals)
      
