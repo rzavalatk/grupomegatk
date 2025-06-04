@@ -286,8 +286,8 @@ class GpsDeviceTrip(models.Model):
             _logger.warning(f"Unique ID: {id_device}")
             if id.get('uniqueId') == id_device:
                 return True
-            else :
-                return False
+            
+        return False
     
     def cron_fetch_positions(self):
         viajes = self.search([('state','=','ongoing')])
