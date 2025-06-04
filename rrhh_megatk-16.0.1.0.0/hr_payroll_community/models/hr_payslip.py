@@ -907,6 +907,35 @@ class HrPayslipRun(models.Model):
                 record.is_validate = True
             else:
                 record.is_validate = False
+                
+    def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario):
+        costo_dia = salario / 30
+        costo_hora = costo_dia / 8
+        deduccion = 0
+
+        working_hours = self.env['resource.calendar.attendance'].search([
+            ('calendar_id', '=', calendario_id),
+            ('dayofweek', '=', str(dia_permiso)),
+            ('day_period', '=', 'morning')
+        ])
+
+        for hours in working_hours:
+            start_time = datetime.strptime(f"{int(hours.hour_from)}:00:00", '%H:%M:%S').time()
+            start_datetime = datetime.combine(datetime.today(), start_time)
+
+            # Rango de deducción según minutos de retraso
+            diff_minutes = (datetime.combine(datetime.today(), in_time) - start_datetime).total_seconds() / 60
+
+            if 7 < diff_minutes <= 15:
+                deduccion = costo_hora / 2
+            elif 15 < diff_minutes <= 30:
+                deduccion = costo_hora
+            elif 30 < diff_minutes <= 60:
+                deduccion = costo_hora * 2
+            elif 60 < diff_minutes <= 90:
+                deduccion = costo_hora * 4
+
+        return deduccion
     
     def exportar_excel_deducciones(self):
         output = io.BytesIO()
