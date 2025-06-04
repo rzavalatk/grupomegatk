@@ -1004,14 +1004,10 @@ class HrPayslipRun(models.Model):
                     hora_permiso_fin = ''
                     if leave.holiday_id.holiday_status_id.deducciones:
                         total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * costo_hora + leave.holiday_id.minutos * costo_minuto
-                        for hora in self.env['hr.leave'].request_hour_from_1:
-                            if leave.holiday_id.request_hour_from_1 == hora[0]:
-                                hora_permiso_init = hora[1]
-                                break
-                        for hora in self.env['hr.leave'].request_hour_to_1:
-                            if leave.holiday_id.request_hour_to_1 == hora[0]:
-                                hora_permiso_fin = hora[1]
-                                break
+                        
+                        selection_values = self.env['hr.leave'].fields_get('request_hour_from_1')['selection']
+                        hora_permiso_init = [x[1] for x in selection_values if x[0] == leave.holiday_id.request_hour_from_1][0]
+                        hora_permiso_fin = [x[1] for x in selection_values if x[0] == leave.holiday_id.request_hour_to_1][0]
                         permiso = {
                             'Empleado': leave.holiday_id.employee_id.name,
                             'fecha inicio': leave.holiday_id.request_date_from,
