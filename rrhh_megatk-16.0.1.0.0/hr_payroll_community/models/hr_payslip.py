@@ -1151,7 +1151,7 @@ class HrPayslipRun(models.Model):
                         'Empleado': attendance.employee_id.name,
                         'fecha': in_date,
                         'Hora': in_time,
-                        'dia': dia_semana,
+                        'dia': dias_de_semana[int(dia_semana)][1],
                         'deducción': amount
                     }
                     data_ded_ast.append(asistencia)
