@@ -1007,8 +1007,8 @@ class HrPayslipRun(models.Model):
                             'fecha inicio': leave.holiday_id.request_date_from,
                             'fecha final': leave.holiday_id.request_date_to,
                             'jornada' : leave.holiday_id.request_date_from_period if leave.holiday_id.request_unit_half else 'N/A',
-                            'Hora inicio' : leave.holiday_id.request_hour_from_1 if leave.holiday_id.request_unit_hours else 'N/A',
-                            'Hora final' : leave.holiday_id.request_hour_to_1 if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora inicio' : leave.holiday_id.get_selection_values('request_hour_from_1') if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora final' : leave.holiday_id.get_selection_values('request_hour_to_1') if leave.holiday_id.request_unit_hours else 'N/A',
                             'deduccion': leave.holiday_id.holiday_status_id.name,
                             'Monto': total,
                             }
@@ -1027,6 +1027,14 @@ class HrPayslipRun(models.Model):
                 in_date = check_in_local.date()
                 in_time = check_in_local.time()
                 dia_semana = in_date.weekday()
+                dias_de_semana = {
+                    0: 'Lunes',
+                    1: 'Martes',
+                    2: 'Miercoles',
+                    3: 'Jueves',
+                    4: 'Viernes',
+                    5: 'Sabado',
+                    }
 
                 # Verificamos si ese día tiene permisos
                 permiso_encontrado = False
@@ -1046,7 +1054,7 @@ class HrPayslipRun(models.Model):
                                     'Empleado': attendance.employee_id.name,
                                     'fecha': in_date,
                                     'Hora': in_time,
-                                    'dia': dia_semana,
+                                    'dia': dias_de_semana[dia_semana],
                                     'deducción': amount
                                 }
                                 data_ded_ast.append(asistencia)
