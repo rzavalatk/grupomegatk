@@ -282,6 +282,8 @@ class GpsDeviceTrip(models.Model):
         ids = response.json()
         
         for id in ids:
+            _logger.warning(f"Traccar Unique ID: {id.get('uniqueId')}")
+            _logger.warning(f"Unique ID: {id_device}")
             if id.get('uniqueId') == id_device:
                 return True
             else :
