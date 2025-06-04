@@ -1007,8 +1007,8 @@ class HrPayslipRun(models.Model):
                             'fecha inicio': leave.holiday_id.request_date_from,
                             'fecha final': leave.holiday_id.request_date_to,
                             'jornada' : leave.holiday_id.request_date_from_period if leave.holiday_id.request_unit_half else 'N/A',
-                            'Hora inicio' : leave.holiday_id.request_hour_from['leave.holiday_id.request_hour_from_1'] if leave.holiday_id.request_unit_hours else 'N/A',
-                            'Hora final' : leave.holiday_id.request_hour_to['leave.holiday_id.request_hour_to_1'] if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora inicio' : leave.holiday_id.request_hour_from[leave.holiday_id.request_hour_from_1] if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora final' : leave.holiday_id.request_hour_to[leave.holiday_id.request_hour_to_1] if leave.holiday_id.request_unit_hours else 'N/A',
                             'deduccion': leave.holiday_id.holiday_status_id.name,
                             'Monto': total,
                             }
