@@ -888,6 +888,22 @@ class HrPayslipRun(models.Model):
                                  states={'draft': [('readonly', False)]},)
     is_validate = fields.Boolean(compute='_compute_is_validate')
 
+    hours_lv = [
+            ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
+            ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
+            ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
+            ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
+            ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
+            ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
+            ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
+            ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
+            ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
+            ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
+            ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
+            ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
+            ('18', '6:00 PM')
+        ]
+    
     def draft_payslip_run(self):
         return self.write({'state': 'draft'})
 
@@ -1004,10 +1020,14 @@ class HrPayslipRun(models.Model):
                     hora_permiso_fin = ''
                     if leave.holiday_id.holiday_status_id.deducciones:
                         total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * costo_hora + leave.holiday_id.minutos * costo_minuto
-                        
-                        selection_values = self.env['hr.leave'].fields_get('request_hour_from_1')['selection']
-                        hora_permiso_init = [x[1] for x in selection_values if x[0] == leave.holiday_id.request_hour_from_1][0]
-                        hora_permiso_fin = [x[1] for x in selection_values if x[0] == leave.holiday_id.request_hour_to_1][0]
+                        for hora in self.hours_lv:
+                            if leave.holiday_id.request_hour_from_1 == hora[0]:
+                                hora_permiso_init = hora[1]
+                                break
+                        for hora in self.hours_lv:
+                            if leave.holiday_id.request_hour_to_1 == hora[0]:
+                                hora_permiso_fin = hora[1]
+                                break
                         permiso = {
                             'Empleado': leave.holiday_id.employee_id.name,
                             'fecha inicio': leave.holiday_id.request_date_from,
