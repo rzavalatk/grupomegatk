@@ -1000,15 +1000,25 @@ class HrPayslipRun(models.Model):
             # Agregar deducciones por permisos con marca 'deducciones'
             for day, hours, leave_list in leaves:
                 for leave in leave_list:
+                    hora_permiso_init = ''
+                    hora_permiso_fin = ''
                     if leave.holiday_id.holiday_status_id.deducciones:
                         total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * costo_hora + leave.holiday_id.minutos * costo_minuto
+                        for hora in self.env['hr.leave'].request_hour_from_1:
+                            if leave.holiday_id.request_hour_from_1 == hora[0]:
+                                hora_permiso_init = hora[1]
+                                break
+                        for hora in self.env['hr.leave'].request_hour_to_1:
+                            if leave.holiday_id.request_hour_to_1 == hora[0]:
+                                hora_permiso_fin = hora[1]
+                                break
                         permiso = {
                             'Empleado': leave.holiday_id.employee_id.name,
                             'fecha inicio': leave.holiday_id.request_date_from,
                             'fecha final': leave.holiday_id.request_date_to,
                             'jornada' : leave.holiday_id.request_date_from_period if leave.holiday_id.request_unit_half else 'N/A',
-                            'Hora inicio' : leave.holiday_id.request_hour_from[leave.holiday_id.request_hour_from_1] if leave.holiday_id.request_unit_hours else 'N/A',
-                            'Hora final' : leave.holiday_id.request_hour_to[leave.holiday_id.request_hour_to_1] if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora inicio' : hora_permiso_init if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora final' : hora_permiso_fin if leave.holiday_id.request_unit_hours else 'N/A',
                             'deduccion': leave.holiday_id.holiday_status_id.name,
                             'Monto': total,
                             }
