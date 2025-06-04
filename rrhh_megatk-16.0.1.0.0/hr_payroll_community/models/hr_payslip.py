@@ -1110,7 +1110,7 @@ class HrPayslipRun(models.Model):
                 record['Monto']
                 
             )
-            for record in self.report_lines_to
+            for record in data_ded_prm
         ]
         
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
