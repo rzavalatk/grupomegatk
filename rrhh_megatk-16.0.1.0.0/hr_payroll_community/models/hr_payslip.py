@@ -1039,7 +1039,6 @@ class HrPayslipRun(models.Model):
             costo_hora = costo_dia / 8
             costo_minuto = costo_hora / 60
             
-            _logger.warning(f"costo_dia: {costo_dia}, costo_hora: {costo_hora}, costo_minuto: {costo_minuto}")
 
             # Obtener permisos (leaves)
             leaves = employee.list_leaves(
@@ -1056,8 +1055,7 @@ class HrPayslipRun(models.Model):
                     if leave.holiday_id.holiday_status_id.deducciones:
                         total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * \
                             costo_hora + leave.holiday_id.minutos * costo_minuto
-                        _logger.warning(f"leave.holiday_id.dias: {leave.holiday_id.dias}, leave.holiday_id.horas: {leave.holiday_id.horas}, leave.holiday_id.minutos: {leave.holiday_id.minutos}")
-                        _logger.warning(f"total: {total}")
+                        
                         for hora in self.hours_lv:
                             if leave.holiday_id.request_hour_from_1 == hora[0]:
                                 hora_permiso_init = hora[1]
