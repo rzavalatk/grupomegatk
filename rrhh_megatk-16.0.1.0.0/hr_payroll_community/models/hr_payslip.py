@@ -1104,14 +1104,15 @@ class HrPayslipRun(models.Model):
                                 # Permiso por la tarde: sí aplica si llegó tarde en la mañana
                                 amount = self.calcular_llegadat(
                                     in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
-                                asistencia = {
-                                    'Empleado': attendance.employee_id.name,
-                                    'fecha': in_date,
-                                    'Hora': in_time,
-                                    'dia': dias_de_semana[int(dia_semana)][1],
-                                    'deducción': amount
-                                }
-                                data_ded_ast.append(asistencia)
+                                if amount > 0:
+                                    asistencia = {
+                                        'Empleado': attendance.employee_id.name,
+                                        'fecha': in_date,
+                                        'Hora': in_time,
+                                        'dia': dias_de_semana[int(dia_semana)][1],
+                                        'deducción': amount
+                                    }
+                                    data_ded_ast.append(asistencia)
                             elif leave.holiday_id.request_unit_hours:
                                 # Permiso por horas
                                 permiso_inicio = datetime.combine(
@@ -1125,14 +1126,15 @@ class HrPayslipRun(models.Model):
                                 if entrada_datetime < permiso_inicio:
                                     amount = self.calcular_llegadat(
                                         in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
-                                    asistencia = {
-                                        'Empleado': attendance.employee_id.name,
-                                        'fecha': in_date,
-                                        'Hora': in_time,
-                                        'dia': dias_de_semana[int(dia_semana)][1],
-                                        'deducción': amount
-                                    }
-                                    data_ded_ast.append(asistencia)
+                                    if amount > 0:
+                                        asistencia = {
+                                            'Empleado': attendance.employee_id.name,
+                                            'fecha': in_date,
+                                            'Hora': in_time,
+                                            'dia': dias_de_semana[int(dia_semana)][1],
+                                            'deducción': amount
+                                        }
+                                        data_ded_ast.append(asistencia)
                                 else:
                                     _logger.info(
                                         "Entró durante el permiso por horas, no se aplica deducción")
@@ -1147,14 +1149,15 @@ class HrPayslipRun(models.Model):
                     # No hay permiso → aplicar lógica de llegada tarde
                     amount = self.calcular_llegadat(
                         in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
-                    asistencia = {
-                        'Empleado': attendance.employee_id.name,
-                        'fecha': in_date,
-                        'Hora': in_time,
-                        'dia': dias_de_semana[int(dia_semana)][1],
-                        'deducción': amount
-                    }
-                    data_ded_ast.append(asistencia)
+                    if amount > 0:
+                        asistencia = {
+                            'Empleado': attendance.employee_id.name,
+                            'fecha': in_date,
+                            'Hora': in_time,
+                            'dia': dias_de_semana[int(dia_semana)][1],
+                            'deducción': amount
+                        }
+                        data_ded_ast.append(asistencia)
 
         datos_lines_asistencias = [
             (
