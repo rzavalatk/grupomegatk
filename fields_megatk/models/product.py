@@ -38,6 +38,25 @@ class Product(models.Model):
         ,('movil','Ingreso Linea Móvil'),('pos','Ingreso Linea POS'),('seguridad','Ingreso Linea Seguridad'),('soporte','Ingreso Soporte')
         ,('odontologia','Ingreso Odontología'),('manejoenvio','Ingreso Manejo y Envió'),('varios','Ingreso Varios')],string='Ingreso/Linea')
     x_ganancia = fields.Float(string='Ganancia', compute='_compute_amount_vt', store=True)
+    
+    @api.onchange('marca_id')
+    def _onchange_marca_id(self):
+        grupo = self.env['res.groups'].search([('id', '=', 264)], limit=1)
+
+        if grupo and self.env.user in grupo.users:
+            pass
+        else:
+            raise Warning(
+                    _('No tiene permisos para cambiar la marca del producto, contactese con su administrador'))  
+
+    def write(self, values):
+        grupo = self.env['res.groups'].search([('id', '=', 264)], limit=1)
+
+        if grupo and self.env.user in grupo.users:
+            return super(Product, self).write(values)
+        else:
+            raise Warning(
+                    _('No tiene permisos para cambiar la marca del producto, contactese con su administrador'))  
 
 #Formulario al crear una marca
 class ProductMarca(models.Model):

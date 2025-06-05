@@ -13,6 +13,12 @@
         <field name="name">Usuario responsable CRM </field>
     </record>
 
+    <record id="usuarios_permt_marca" model="res.groups">
+        <field name="category_id" ref="stock"/>
+		<field name="name">Usuarios permitidos para cambiar marca de producto</field>
+        <field name="description">Usuarios permitidos para cambiar marca de producto</field> 
+    </record>
+
 </data>
 
 
