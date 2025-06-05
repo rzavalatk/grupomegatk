@@ -46,8 +46,8 @@
             '/odoo_website_helpdesk/static/src/js/ticket_details.js',
             '/odoo_website_helpdesk/static/src/js/portal_groupby_and_search.js',
             '/odoo_website_helpdesk/static/src/js/multiple_product_choose.js',
-            '/odoo_website_helpdesk/static/src/cdn/jquery.sumoselect.min.js',
-            '/odoo_website_helpdesk/static/src/cdn/sumoselect.min.css',
+            #'/odoo_website_helpdesk/static/src/cdn/jquery.sumoselect.min.js',
+            #'/odoo_website_helpdesk/static/src/cdn/sumoselect.min.css',
         ]
     },
     'license': 'LGPL-3',
