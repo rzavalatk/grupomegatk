@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<!--Adding a salary rule for loan-->
-	<data noupdate="1">
+	<data >
 
         <record id="hr_rule_input_leave" model="hr.rule.input">
             <field name="code">DED_PRM</field>
