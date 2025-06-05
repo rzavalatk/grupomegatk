@@ -178,8 +178,6 @@ class HrLeave(models.Model):
                     self.horas = 0
                     self.minutos = 0
                     
-                    if self.request_date_from.weekday() == 5:
-                        self.number_of_hours_text += 8
                 else:
                     self.dias = 0
                     self.horas = 0
