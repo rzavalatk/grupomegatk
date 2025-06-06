@@ -52,6 +52,7 @@
                 .card-title {
                      font-size: 30px;
                      font-weight: bold;
+                     color: #242733;
                 }
 
                 .card-input {
