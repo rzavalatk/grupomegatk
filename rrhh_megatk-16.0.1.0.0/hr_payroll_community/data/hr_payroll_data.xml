@@ -118,7 +118,7 @@
             <field name="name">Deducción por permisos</field>
             <field name="sequence" eval="1"/>
             <field name="code">DED_PRM</field>
-            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
             <field name="condition_select">none</field>
             <field name="amount_select">fix</field>
             <field name="amount_fix">0.00</field>

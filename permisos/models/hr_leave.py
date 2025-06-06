@@ -114,7 +114,7 @@ class HrLeave(models.Model):
         self.request_hour_to = self.request_hour_to_1
   
 
-    @api.onchange('datetm_from', 'datetm_to')
+    """@api.onchange('datetm_from', 'datetm_to')
     def _onchange_datetm_ft(self):
         if self.datetm_from and self.datetm_to:
             user_tz = pytz.timezone(
@@ -135,7 +135,7 @@ class HrLeave(models.Model):
                 self.horas = 0
                 self.minutos = 0
                 self.env.user.notify_warning(
-                    message='La fecha final debe ser mayor o igual a la inicial')
+                    message='La fecha final debe ser mayor o igual a la inicial')"""
                 
 
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours', 'holiday_status_id', 'request_hour_to', 'request_hour_from')
@@ -146,7 +146,6 @@ class HrLeave(models.Model):
             if self.request_unit_hours:
                 valor_hora = int(self.number_of_hours_display)
                 valor_minutos = self.number_of_hours_display - valor_hora
-                _logger.warning(self.request_date_from.weekday())
                 
                 self.dias = 0
                 self.horas = valor_hora
@@ -179,9 +178,6 @@ class HrLeave(models.Model):
                     self.horas = 0
                     self.minutos = 0
                     
-                    if self.request_date_from.weekday() == 5:
-                        self.horas = 8
-                        self.number_of_hours_text = self.horas
                 else:
                     self.dias = 0
                     self.horas = 0
@@ -200,6 +196,7 @@ class HrLeave(models.Model):
                     self.horas = self.number_of_hours_display
                     self.minutos = 0
                     self.number_of_hours_text = self.horas
+        _logger.warning("Dias: %s, Horas: %s, Minutos: %s" % (self.dias, self.horas, self.minutos))
                 
     def rangeDateft(self, dateInit, dateEnd):
         dates = [

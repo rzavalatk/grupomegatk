@@ -21,7 +21,7 @@
         "security/groups.xml",
         'security/ir.model.access.csv',
         "wizard/wizard_solicitar_permiso.xml",
-        #'data/hr_leave_data.xml',
+        #'data/hr_leave_input_data.xml',
         'views/default_views.xml',
         'views/permisos_views.xml',
         'views/hr_views.xml',

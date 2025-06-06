@@ -8,6 +8,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from pytz import timezone
 from pytz import utc
+import pytz
 import io
 import base64
 import xlsxwriter
@@ -18,6 +19,7 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_utils
 
 _logger = logging.getLogger(__name__)
+honduras_tz = pytz.timezone('America/Tegucigalpa')
 
 # This will generate 16th of days
 ROUNDING_FACTOR = 16
@@ -53,7 +55,8 @@ class HrPayslip(models.Model):
                               (datetime.now() + relativedelta(months=+1, day=1,
                                                               days=-1)).date()),
                           states={'draft': [('readonly', False)]})
-    total_payment = fields.Float('Total a pagar', readonly=True, compute='_compute_total_payment')
+    total_payment = fields.Float(
+        'Total a pagar', readonly=True, compute='_compute_total_payment')
     deduction = fields.Float('Deducción')
     accreditation = fields.Float('Acreditación')
     # this is chaos: 4 states are defined, 3 are used ('verify' isn't) and 5 exist ('confirm' seems to have existed)
@@ -107,14 +110,14 @@ class HrPayslip(models.Model):
                                      states={'draft': [('readonly', False)]})
     payslip_count = fields.Integer(compute='_compute_payslip_count',
                                    string="Detalles del cálculo del recibo de nómina")
-    
+
     @api.onchange('contract_id')
     def _onchange_contract_id(self):
         if self.contract_id.salary_type == 'quincenal':
             self.total_payment = self.contract_id.wage / 2
         else:
             self.total_payment = self.contract_id.wage
-            
+
     def action_send_email(self):
         res = self.env.user.has_group(
             'hr_payroll_community.group_hr_payroll_community_manager')
@@ -129,7 +132,7 @@ class HrPayslip(models.Model):
 
             mail_template.send_mail(self.id, force_send=True,
                                     email_values=email_values)
-    
+
     def _compute_total_payment(self):
         if self.contract_id.salary_type == 'quincenal':
             self.total_payment = self.contract_id.wage / 2
@@ -229,7 +232,7 @@ class HrPayslip(models.Model):
             deduccion = 0
             acreditacion = 0
             sueldo = 0
-            
+
             number = payslip.number or self.env['ir.sequence'].next_by_code(
                 'salary.slip')
             # eliminar líneas antiguas de nómina
@@ -241,7 +244,7 @@ class HrPayslip(models.Model):
                                   payslip.date_from, payslip.date_to)
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
-            
+
             # Actualizar el sueldo neto
             for line in lines:
                 for input in self.input_line_ids:
@@ -251,8 +254,9 @@ class HrPayslip(models.Model):
                             deduccion -= input.amount
                         elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
                             acreditacion += input.amount
-                               
-            payslip.write({'line_ids': lines, 'number': number, 'deduction': deduccion, 'accreditation': acreditacion})
+
+            payslip.write({'line_ids': lines, 'number': number,
+                          'deduction': deduccion, 'accreditation': acreditacion})
         return True
 
     @api.model
@@ -269,7 +273,7 @@ class HrPayslip(models.Model):
                                         time.min)
             day_to = datetime.combine(fields.Date.from_string(date_to),
                                       time.max)
-            
+
             day_leave_intervals = []
 
             # compute leave days
@@ -279,16 +283,18 @@ class HrPayslip(models.Model):
             """day_leave_intervals = contract.employee_id.list_leaves(day_from,
                                                                    day_to,
                                                                    calendar=contract.resource_calendar_id)"""
-            permisos = self.env['hr.leave'].search(['&','&','&',
-                                                    ('employee_id','=',self.employee_id.id),
-                                                    ('state','=','validate'),
-                                                    ('request_date_from','>=',self.date_from),
-                                                    ('request_date_to','<=',self.date_to),
+            permisos = self.env['hr.leave'].search(['&', '&', '&',
+                                                    ('employee_id', '=',
+                                                     self.employee_id.id),
+                                                    ('state', '=', 'validate'),
+                                                    ('request_date_from',
+                                                     '>=', self.date_from),
+                                                    ('request_date_to',
+                                                     '<=', self.date_to),
                                                     ])
             day_leave_intervals = contract.employee_id.list_leaves(day_from,
                                                                    day_to,
                                                                    calendar=contract.resource_calendar_id)
-           
 
             multi_leaves = []
             for day, hours, leave in day_leave_intervals:
@@ -302,7 +308,7 @@ class HrPayslip(models.Model):
                         if each.id:
                             multi_leaves.append(each.holiday_id)
                 else:
-                    
+
                     holiday = leave[0].holiday_id
                     current_leave_struct = leaves.setdefault(
                         holiday.holiday_status_id, {
@@ -318,7 +324,7 @@ class HrPayslip(models.Model):
                     if work_hours:
                         current_leave_struct[
                             'number_of_days'] += hours / work_hours
-        
+
             # compute worked days
             work_data = contract.employee_id.get_work_days_data(day_from,
                                                                 day_to,
@@ -388,7 +394,7 @@ class HrPayslip(models.Model):
         sorted_rule_ids = [id for id, sequence in
                            sorted(rule_ids, key=lambda x: x[1])]
         inputs = self.env['hr.salary.rule'].browse(sorted_rule_ids).mapped(
-            'input_ids') 
+            'input_ids')
 
         for contract in contracts:
             for input in inputs:
@@ -740,14 +746,13 @@ class HrPayslipLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        deducciones=0
-        acreditaciones=0
-        sueldo=0
-        
-        
+        deducciones = 0
+        acreditaciones = 0
+        sueldo = 0
+
         for values in vals_list:
             categoria = self.env['hr.salary.rule.category'].search(
-                        [('id', '=', values['category_id'])])
+                [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
             pay = payslip.total_payment
             if 'employee_id' not in values or 'contract_id' not in values:
@@ -758,22 +763,24 @@ class HrPayslipLine(models.Model):
                 if not values['contract_id']:
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
-            #Aqui se hacen los calculos de el calculo de la nomina
+            # Aqui se hacen los calculos de el calculo de la nomina
             if values['active'] == True:
                 if values['amount_select'] == 'percentage':
                     if categoria.code == 'DED':
-                        pay -= (values['amount_percentage'] * payslip.total_payment / 100)
+                        pay -= (values['amount_percentage']
+                                * payslip.total_payment / 100)
                         sueldo = pay
                     if categoria.code == 'ALW':
-                        pay += (values['amount_percentage'] * payslip.total_payment / 100)
-                        sueldo = pay 
+                        pay += (values['amount_percentage']
+                                * payslip.total_payment / 100)
+                        sueldo = pay
                     if values['code'] == 'SLDBT':
                         if payslip.contract_id.salary_type == 'quincenal':
                             values['amount_fix'] = payslip.contract_id.wage / 2
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                else:    
+                else:
                     if categoria.code == 'DED':
                         pay -= values['amount_fix']
                         sueldo = pay
@@ -786,7 +793,7 @@ class HrPayslipLine(models.Model):
                         else:
                             values['amount_fix'] = payslip.contract_id.wage
                         values['amount'] = values['amount_fix']
-                        
+
         for value in vals_list:
             deduccione = 0
             payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
@@ -794,13 +801,15 @@ class HrPayslipLine(models.Model):
                 if value['code'] == 'SLDNT':
                     if payslip.deduction < 0:
                         deduccione = -1 * payslip.deduction
-                    value['amount_fix'] = sueldo - deduccione + payslip.accreditation
+                    value['amount_fix'] = sueldo - \
+                        deduccione + payslip.accreditation
                     value['amount'] = value['amount_fix']
-                    self.slip_id.write({'total_payment': sueldo - payslip.deduction + payslip.accreditation})
+                    self.slip_id.write(
+                        {'total_payment': sueldo - payslip.deduction + payslip.accreditation})
                     break
-                    
+
         return super(HrPayslipLine, self).create(vals_list)
-    
+
     def write(self, values):
         # Lógica para actualizar el sueldo neto en la nómina cuando se edita amount o sueldo
         for line in self:
@@ -818,7 +827,8 @@ class HrPayslipLine(models.Model):
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
         result = super(HrPayslipLine, self).write(values)
-        return result                
+        return result
+
 
 class HrPayslipWorkedDays(models.Model):
     _name = 'hr.payslip.worked_days'
@@ -886,6 +896,34 @@ class HrPayslipRun(models.Model):
                                  states={'draft': [('readonly', False)]},)
     is_validate = fields.Boolean(compute='_compute_is_validate')
 
+    hours_lv = [
+        ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5',
+                                                '6:30 AM'), ('6.75', '6:45 AM'),
+        ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5',
+                                                '7:30 AM'), ('7.75', '7:45 AM'),
+        ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5',
+                                                '8:30 AM'), ('8.75', '8:45 AM'),
+        ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5',
+                                                '9:30 AM'), ('9.75', '9:45 AM'),
+        ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5',
+                                                    '10:30 AM'), ('10.75', '10:45 AM'),
+        ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5',
+                                                    '11:30 AM'), ('11.75', '11:45 AM'),
+        ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5',
+                                                    '12:30 PM'), ('12.75', '12:45 PM'),
+        ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5',
+                                                  '1:30 PM'), ('13.75', '1:45 PM'),
+        ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5',
+                                                  '2:30 PM'), ('14.75', '2:45 PM'),
+        ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5',
+                                                  '3:30 PM'), ('15.75', '3:45 PM'),
+        ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5',
+                                                  '4:30 PM'), ('16.75', '4:45 PM'),
+        ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5',
+                                                  '5:30 PM'), ('17.75', '5:45 PM'),
+        ('18', '6:00 PM')
+    ]
+
     def draft_payslip_run(self):
         return self.write({'state': 'draft'})
 
@@ -905,7 +943,275 @@ class HrPayslipRun(models.Model):
                 record.is_validate = True
             else:
                 record.is_validate = False
-                
+
+    def calcular_llegadat(self, in_time, dia_permiso, calendario_id, salario):
+        costo_dia = salario / 30
+        costo_hora = costo_dia / 8
+        deduccion = 0
+
+        working_hours = self.env['resource.calendar.attendance'].search([
+            ('calendar_id', '=', calendario_id),
+            ('dayofweek', '=', str(dia_permiso)),
+            ('day_period', '=', 'morning')
+        ])
+
+        for hours in working_hours:
+            start_time = datetime.strptime(
+                f"{int(hours.hour_from)}:00:00", '%H:%M:%S').time()
+            start_datetime = datetime.combine(datetime.today(), start_time)
+
+            # Rango de deducción según minutos de retraso
+            diff_minutes = (datetime.combine(datetime.today(),
+                            in_time) - start_datetime).total_seconds() / 60
+
+            if 7 < diff_minutes <= 15:
+                deduccion = costo_hora / 2
+            elif 15 < diff_minutes <= 30:
+                deduccion = costo_hora
+            elif 30 < diff_minutes <= 60:
+                deduccion = costo_hora * 2
+            elif 60 < diff_minutes <= 90:
+                deduccion = costo_hora * 4
+
+        return deduccion
+
+    def exportar_excel_deducciones(self):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        data_ded_prm = []
+        data_ded_ast = []
+
+        # Crear hojas de Excel
+        worksheet_asistencias = workbook.add_worksheet(
+            'Deducciones de asistencias')
+        worksheet_permisos = workbook.add_worksheet('Deducciones de permisos')
+
+        # Definir formatos
+        currency_format = workbook.add_format(
+            {'num_format': 'L#,##0.00', 'align': 'center'})
+        number_format = workbook.add_format(
+            {'num_format': '#,##0', 'align': 'center'})
+        header_format = workbook.add_format({'bold': True, 'align': 'center'})
+        date_format = workbook.add_format(
+            {'num_format': 'dd-mm-yyyy', 'align': 'center'})
+        datetime_format = workbook.add_format(
+            {'num_format': 'hh:mm:ss', 'align': 'center'})
+
+        # Función para escribir encabezados y datos en una hoja y ajustar el tamaño de las columnas
+        def escribir_hoja(worksheet, encabezados, datos, col_widths, formatos):
+            # Ajustar el tamaño de las columnas
+            for col, width in enumerate(col_widths):
+                worksheet.set_column(col, col, width)
+
+            # Escribir los encabezados
+            for col, encabezado in enumerate(encabezados):
+                worksheet.write(0, col, encabezado, header_format)
+
+            # Escribir los datos
+            row = 1
+            for record in datos:
+                for col, value in enumerate(record):
+                    worksheet.write(row, col, value, formatos[col])
+                row += 1
+
+        # Encabezados y anchos de columnas
+        encabezados_asistencias_reports = [
+            'Empleado', 'Fecha de asistencia', 'Hora de asistencia', 'Dia de asistencia', 'Deducción']
+        # Ajusta estos valores según sea necesario
+        col_widths_asistencias_reports = [50, 25, 25, 25, 20]
+        formatos_asistencias_reports = [
+            None, date_format, datetime_format, None, currency_format]  # Formatos para cada columna
+
+        encabezados_reports_permisos = ['Empleado', 'fecha inicio', 'fecha final',
+                                        'jornada', 'Hora inicio', 'Hora final', 'deduccion', 'Monto']
+        # Ajusta estos valores según sea necesario
+        col_widths_reports_permisos = [50, 25, 25, 20, 25, 25, 25, 25]
+        formatos_reports_permisos = [None, date_format, date_format, None, datetime_format,
+                                     datetime_format, None, number_format]  # Formatos para cada columna
+
+        # Preparar los datos
+        for slip_id in self.slip_ids:
+            employee = slip_id.employee_id
+            contract_id = slip_id.contract_id
+            date_from = slip_id.date_from
+            date_to = slip_id.date_to
+            costo_dia = contract_id.wage / 30
+            costo_hora = costo_dia / 8
+            costo_minuto = costo_hora / 60
+            
+
+            # Obtener permisos (leaves)
+            leaves = employee.list_leaves(
+                datetime.combine(fields.Date.from_string(date_from), time.min),
+                datetime.combine(fields.Date.from_string(date_to), time.max),
+                calendar=contract_id.resource_calendar_id
+            )
+
+            # Agregar deducciones por permisos con marca 'deducciones'
+            for day, hours, leave_list in leaves:
+                for leave in leave_list:
+                    hora_permiso_init = ''
+                    hora_permiso_fin = ''
+                    if leave.holiday_id.holiday_status_id.deducciones:
+                        total = leave.holiday_id.dias * costo_dia + leave.holiday_id.horas * \
+                            costo_hora + leave.holiday_id.minutos * costo_minuto
+                        
+                        for hora in self.hours_lv:
+                            if leave.holiday_id.request_hour_from_1 == hora[0]:
+                                hora_permiso_init = hora[1]
+                                break
+                        for hora in self.hours_lv:
+                            if leave.holiday_id.request_hour_to_1 == hora[0]:
+                                hora_permiso_fin = hora[1]
+                                break
+                        permiso = {
+                            'Empleado': leave.holiday_id.employee_id.name,
+                            'fecha inicio': leave.holiday_id.request_date_from,
+                            'fecha final': leave.holiday_id.request_date_to,
+                            'jornada': leave.holiday_id.request_date_from_period if leave.holiday_id.request_unit_half else 'N/A',
+                            'Hora inicio': hora_permiso_init if leave.holiday_id.request_unit_hours else 'N/A',
+                            'Hora final': hora_permiso_fin if leave.holiday_id.request_unit_hours else 'N/A',
+                            'deduccion': leave.holiday_id.holiday_status_id.name,
+                            'Monto': total,
+                        }
+                        data_ded_prm.append(permiso)
+
+            # Obtener asistencias
+            attendances = self.env['hr.attendance'].search([
+                ('employee_id', '=', employee.id),
+                ('check_in', '>=', date_from),
+                ('check_out', '<=', date_to)
+            ])
+
+            for attendance in attendances:
+                check_in_local = attendance.check_in.astimezone(honduras_tz)
+                in_date = check_in_local.date()
+                in_time = check_in_local.time()
+                dia_semana = in_date.weekday()
+                dias_de_semana = [('0', 'Lunes'), ('1', 'Martes'), ('2', 'Miercoles'), ('3', 'Jueves'), ('4', 'Viernes'), ('5', 'Sabado')]
+
+                # Verificamos si ese día tiene permisos
+                permiso_encontrado = False
+                for day, hours, leave_list in leaves:
+                    if day == in_date:
+                        for leave in leave_list:
+                            permiso_encontrado = True
+                            # Día completo: no calcular deducción
+                            if leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'am':
+                                # Permiso por la mañana: no calcular deducción
+                                _logger.info(
+                                    "Permiso por la mañana, no se aplica deducción")
+                                continue
+                            elif leave.holiday_id.request_unit_half and leave.holiday_id.request_date_from_period == 'pm':
+                                # Permiso por la tarde: sí aplica si llegó tarde en la mañana
+                                amount = self.calcular_llegadat(
+                                    in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
+                                if amount > 0:
+                                    asistencia = {
+                                        'Empleado': attendance.employee_id.name,
+                                        'fecha': in_date,
+                                        'Hora': in_time,
+                                        'dia': dias_de_semana[int(dia_semana)][1],
+                                        'deducción': amount
+                                    }
+                                    data_ded_ast.append(asistencia)
+                            elif leave.holiday_id.request_unit_hours:
+                                # Permiso por horas
+                                permiso_inicio = datetime.combine(
+                                    day, time(hour=int(float(leave.holiday_id.request_hour_from_1))))
+                                permiso_fin = datetime.combine(
+                                    day, time(hour=int(float(leave.holiday_id.request_hour_to_1))))
+
+                                entrada_datetime = datetime.combine(
+                                    day, in_time)
+                                # Si entró antes del permiso, no se deduce
+                                if entrada_datetime < permiso_inicio:
+                                    amount = self.calcular_llegadat(
+                                        in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
+                                    if amount > 0:
+                                        asistencia = {
+                                            'Empleado': attendance.employee_id.name,
+                                            'fecha': in_date,
+                                            'Hora': in_time,
+                                            'dia': dias_de_semana[int(dia_semana)][1],
+                                            'deducción': amount
+                                        }
+                                        data_ded_ast.append(asistencia)
+                                else:
+                                    _logger.info(
+                                        "Entró durante el permiso por horas, no se aplica deducción")
+                                    continue
+                            else:
+                                # Día completo
+                                _logger.info(
+                                    "Permiso por el día completo, no se aplica deducción")
+                                continue
+
+                if not permiso_encontrado:
+                    # No hay permiso → aplicar lógica de llegada tarde
+                    amount = self.calcular_llegadat(
+                        in_time, dia_semana, contract_id.resource_calendar_id.id, contract_id.wage)
+                    if amount > 0:
+                        asistencia = {
+                            'Empleado': attendance.employee_id.name,
+                            'fecha': in_date,
+                            'Hora': in_time,
+                            'dia': dias_de_semana[int(dia_semana)][1],
+                            'deducción': amount
+                        }
+                        data_ded_ast.append(asistencia)
+
+        datos_lines_asistencias = [
+            (
+                record['Empleado'],
+                record['fecha'],
+                record['Hora'],
+                record['dia'],
+                record['deducción'],
+            )
+            for record in data_ded_ast
+        ]
+
+        datos_lines_permisos = [
+            (
+                record['Empleado'],
+                record['fecha inicio'],
+                record['fecha final'],
+                record['jornada'],
+                record['Hora inicio'],
+                record['Hora final'],
+                record['deduccion'],
+                record['Monto']
+
+            )
+            for record in data_ded_prm
+        ]
+
+        # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
+        escribir_hoja(worksheet_asistencias, encabezados_asistencias_reports,
+                      datos_lines_asistencias, col_widths_asistencias_reports, formatos_asistencias_reports)
+        escribir_hoja(worksheet_permisos, encabezados_reports_permisos,
+                      datos_lines_permisos, col_widths_reports_permisos, formatos_reports_permisos)
+
+        workbook.close()
+        output.seek(0)
+
+        # Crear el adjunto
+        attachment = self.env['ir.attachment'].create({
+            'name': f'reporte_de_deducciones_de_planilla_del_{self.date_start}_{self.date_end}.xlsx',
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'store_fname': f'reporte_de_deducciones_de_planilla_del_{self.date_start}_{self.date_end}.xlsx',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        # Devolver la acción para descargar el archivo
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+
     def exportar_excel(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
@@ -914,16 +1220,18 @@ class HrPayslipRun(models.Model):
         encabezados_rules_names = []
         datos_row = []
         col_widths_lines_rule = []
-        
+
         # Crear hojas de Excel
-        worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
-        
+        worksheet_lines_from_customer = workbook.add_worksheet(
+            'Resumen de planilla')
+
         formato_total = workbook.add_format({
             'bold': True,
-            'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
+            # Gris claro (puedes usar '#FFFF00' para amarillo)
+            'bg_color': '#D9D9D9',
             'border': 1
         })
-        
+
         formato_encabezado = workbook.add_format({
             'bold': True,
             'bg_color': '#00A6CB',
@@ -934,11 +1242,11 @@ class HrPayslipRun(models.Model):
             # Ajustar el tamaño de las columnas
             for col, width in enumerate(col_widths):
                 worksheet.set_column(col, col, width)
-            
+
             # Escribir los encabezados
             for col, encabezado in enumerate(encabezados):
                 worksheet.write(0, col, encabezado, formato_encabezado)
-            
+
             # Escribir los datos
             row = 1
             for record in datos:
@@ -950,7 +1258,6 @@ class HrPayslipRun(models.Model):
                         worksheet.write(row, col, value)
                 row += 1
 
-
         for slip_id in self.slip_ids:
             reglas = []
             # Obtener encabezados y anchos de columnas, siempre y cuando no se repitan
@@ -961,13 +1268,16 @@ class HrPayslipRun(models.Model):
                     encabezados_rules_names.append(rule.name)
                     col_widths_lines_rule.append(20)
                 reglas.append((rule.name, rule.amount))
-            #Obtener nombre del empleado y departamento donde trabaja
+            # Obtener nombre del empleado y departamento donde trabaja
             reglas = sorted(reglas, key=lambda x: x[0])
-            datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
+            datos_row.append({"Empleado": slip_id.employee_id.name,
+                             "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
         # Encabezados y anchos de columnas
         encabezados_rules_names = sorted(encabezados_rules_names)
-        encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
-        col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
+        encabezados_lines_customer = ["Empleado",
+                                      "Departamento"] + encabezados_rules_names
+        # Ajusta estos valores según sea necesari
+        col_widths_lines_customer = [40, 30, ] + col_widths_lines_rule
         # Preparar los datos
         data_rules = encabezados_rules_names
         data = []
@@ -976,11 +1286,12 @@ class HrPayslipRun(models.Model):
             data_line.append(datos['Empleado'])
             data_line.append(datos['Departamento'])
             valores_dict = dict(datos['Reglas'])
-            resultados = [valores_dict.get(c, 0) for c in encabezados_rules_names]
+            resultados = [valores_dict.get(c, 0)
+                          for c in encabezados_rules_names]
             for rest in resultados:
                 data_line.append(rest)
             data.append(data_line)
-                
+
         # Agrupar por departamento y calcular totales
         departamento_data = defaultdict(list)
         for line in data:
@@ -1001,16 +1312,17 @@ class HrPayslipRun(models.Model):
             num_cols = len(grupo[0])
             for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
                 totales.append('')
-            
+
             # Sumar solo la última columna
             suma_final = sum(row[-1] for row in grupo)
             totales.append(suma_final)
 
-            
-            datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
+            datos_lines_from_customer.append(
+                tuple(totales))  # Insertar fila de total
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
-        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer,
+                      datos_lines_from_customer, col_widths_lines_customer)
 
         workbook.close()
         output.seek(0)
@@ -1030,7 +1342,7 @@ class HrPayslipRun(models.Model):
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
         }
-    
+
     def exportar_excel_kreativa(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
@@ -1039,16 +1351,18 @@ class HrPayslipRun(models.Model):
         encabezados_rules_names = []
         datos_row = []
         col_widths_lines_rule = []
-        
+
         # Crear hojas de Excel
-        worksheet_lines_from_customer = workbook.add_worksheet('Resumen de planilla')
-        
+        worksheet_lines_from_customer = workbook.add_worksheet(
+            'Resumen de planilla')
+
         formato_total = workbook.add_format({
             'bold': True,
-            'bg_color': '#D9D9D9',  # Gris claro (puedes usar '#FFFF00' para amarillo)
+            # Gris claro (puedes usar '#FFFF00' para amarillo)
+            'bg_color': '#D9D9D9',
             'border': 1
         })
-        
+
         formato_encabezado = workbook.add_format({
             'bold': True,
             'bg_color': '#00A6CB',
@@ -1059,11 +1373,11 @@ class HrPayslipRun(models.Model):
             # Ajustar el tamaño de las columnas
             for col, width in enumerate(col_widths):
                 worksheet.set_column(col, col, width)
-            
+
             # Escribir los encabezados
             for col, encabezado in enumerate(encabezados):
                 worksheet.write(0, col, encabezado, formato_encabezado)
-            
+
             # Escribir los datos
             row = 1
             for record in datos:
@@ -1075,7 +1389,6 @@ class HrPayslipRun(models.Model):
                         worksheet.write(row, col, value)
                 row += 1
 
-
         for slip_id in self.slip_ids:
             reglas = []
             # Obtener encabezados y anchos de columnas, siempre y cuando no se repitan
@@ -1086,13 +1399,16 @@ class HrPayslipRun(models.Model):
                     encabezados_rules_names.append(rule.name)
                     col_widths_lines_rule.append(20)
                 reglas.append((rule.name, rule.amount))
-            #Obtener nombre del empleado y departamento donde trabaja
+            # Obtener nombre del empleado y departamento donde trabaja
             reglas = sorted(reglas, key=lambda x: x[0])
-            datos_row.append({"Empleado": slip_id.employee_id.name, "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
+            datos_row.append({"Empleado": slip_id.employee_id.name,
+                             "Departamento": slip_id.employee_id.department_id.name, "Reglas": reglas})
         # Encabezados y anchos de columnas
         encabezados_rules_names = sorted(encabezados_rules_names)
-        encabezados_lines_customer = ["Empleado", "Departamento"] + encabezados_rules_names
-        col_widths_lines_customer = [40,30,] + col_widths_lines_rule  # Ajusta estos valores según sea necesari
+        encabezados_lines_customer = ["Empleado",
+                                      "Departamento"] + encabezados_rules_names
+        # Ajusta estos valores según sea necesari
+        col_widths_lines_customer = [40, 30, ] + col_widths_lines_rule
         # Preparar los datos
         data_rules = encabezados_rules_names
         data = []
@@ -1101,11 +1417,12 @@ class HrPayslipRun(models.Model):
             data_line.append(datos['Empleado'])
             data_line.append(datos['Departamento'])
             valores_dict = dict(datos['Reglas'])
-            resultados = [valores_dict.get(c, 0) for c in encabezados_rules_names]
+            resultados = [valores_dict.get(c, 0)
+                          for c in encabezados_rules_names]
             for rest in resultados:
                 data_line.append(rest)
             data.append(data_line)
-                
+
         # Agrupar por departamento y calcular totales
         departamento_data = defaultdict(list)
         for line in data:
@@ -1125,16 +1442,17 @@ class HrPayslipRun(models.Model):
             num_cols = len(grupo[0])
             for i in range(2, num_cols - 1):  # Dejar columnas intermedias en blanco
                 totales.append('')
-            
+
             # Sumar solo la última columna
             suma_final = sum(row[-1] for row in grupo)
             totales.append(suma_final)
 
-            
-            datos_lines_from_customer.append(tuple(totales))  # Insertar fila de total
+            datos_lines_from_customer.append(
+                tuple(totales))  # Insertar fila de total
 
         # Escribir datos en las hojas correspondientes y ajustar el tamaño de las columnas
-        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer, datos_lines_from_customer, col_widths_lines_customer)
+        escribir_hoja(worksheet_lines_from_customer, encabezados_lines_customer,
+                      datos_lines_from_customer, col_widths_lines_customer)
 
         workbook.close()
         output.seek(0)

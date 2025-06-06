@@ -378,6 +378,8 @@
                 <button name="close_payslip_run" type="object" string="Cerrar" states="draft" class="oe_highlight"/>
                 <button string="Generar Excel" name="exportar_excel" states='close' type="object" class="btn-primary"/>
                 <button string="Generar Excel Kreativa" name="exportar_excel_kreativa" states='close' type="object" class="btn-primary"/>
+                <button string="exportar deducciones" name="exportar_excel_deducciones" states='draft,close' type="object" class="btn-primary"/>
+                
                 <button name="%(action_hr_payslip_by_employees)d" type="action" states="draft" string="Generar nominas" class="oe_highlight"/>
                 <button string="Volver a borrador" name="draft_payslip_run" type="object" states="close" />
                 <button string="Validar" name="action_validate_payslips" type="object" class="oe_highlight"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!--Adding a salary rule for loan-->
+	<data >
+
+        <record id="hr_rule_input_leave" model="hr.rule.input">
+            <field name="code">DED_PRM</field>
+            <field name="name">Deducción por permisos</field>
+            <field name="input_id" ref="hr_rule_deduction_leave"/>
+        </record>
+
+	</data>
+</odoo>

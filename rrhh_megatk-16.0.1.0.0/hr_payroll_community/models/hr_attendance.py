@@ -4,6 +4,10 @@ import pytz
 import math
 import logging
 
+import base64
+import io
+from odoo.tools.misc import xlsxwriter
+
 _logger = logging.getLogger(__name__)
 honduras_tz = pytz.timezone('America/Tegucigalpa')
 
@@ -120,3 +124,5 @@ class AttendanceRuleInput(models.Model):
                         result['amount'] += amount
 
         return res
+    
+    
