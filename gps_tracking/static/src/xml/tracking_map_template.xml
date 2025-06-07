@@ -8,6 +8,14 @@
                     justify-content: space-evenly;
                 }
 
+                @media(max-width:720px) {
+                    .menu-container {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-evenly;
+                    }
+                }
+
                 #map {
                     height: 550px;
                     width: 850px;
