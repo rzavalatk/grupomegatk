@@ -34,7 +34,7 @@
 
                     #map {
                         height: 300px;
-                        width: 100%;
+                        width: 80%;
                         <!-- border-radius: 15px;
                         box-shadow: 0px 0px 10px black; -->
                     }
@@ -62,6 +62,8 @@
                     border-radius: 10px;
                     background-color: white;
                     box-shadow: 0px 0px 10px black;
+                    max-width: 100%;
+                    overflow: auto;
                 }
 
                 .grid-section-1 {
