@@ -17,9 +17,10 @@
                     
                     .menu-container {
                         display: grid;
-                        grid-template-rows: 25% 75%;
+                        grid-template-rows: 40% 60%;
                         row-gap: 10px;
                         width: 100%;
+                        height: 800px;
                     }
                 }
                 <!-- @media(max-width:720px) {
