@@ -43,7 +43,7 @@
                 @media(max-width: 768px) {
                     .full-card {
                         border-radius: 0;
-                        
+                        width: 90%;
                     }
                 }
 
