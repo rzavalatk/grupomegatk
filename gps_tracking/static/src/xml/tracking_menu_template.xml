@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
     <t t-name="TrackingCardMenu">
-        <div class="row">
+        <div class="">
             <style id='tracking_card_style'>
                 <!-- utilidades -->
                 .flex-content-center {
@@ -40,11 +40,25 @@
                     box-shadow: 0px 0px 10px black;
                 }
 
+                @media(max-width: 768px) {
+                    .full-card {
+                        border-radius: 0;
+                        
+                    }
+                }
+
                 .banner {
                     background-image: linear-gradient(to right, #004080, #0080ff);
                     height: 60px;
                     width: 400px; 
                     border-radius: 10px 10px 0 0;
+                }
+
+                @media(max-width: 768px) {
+                    .banner {
+                        border-radius: 0;
+                        width: 100%;
+                    }
                 }
 
                 .card-title {
