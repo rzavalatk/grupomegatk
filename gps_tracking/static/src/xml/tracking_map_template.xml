@@ -184,7 +184,7 @@
             </style>
             <div id="root">
                 <div class="pt-5 menu-container">
-                    <div class="grid">
+                    <div class="">
                         <div id="map"></div>
                     </div>
                     <div class="grid-panel">
