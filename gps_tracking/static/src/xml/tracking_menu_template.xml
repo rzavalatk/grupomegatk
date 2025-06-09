@@ -41,6 +41,10 @@
                 }
 
                 @media(max-width: 768px) {
+                    .menu-card {
+                        border-radius: 0;
+                    }
+
                     .full-card {
                         border-radius: 0;
                         width: 90%;
