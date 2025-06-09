@@ -70,8 +70,8 @@
                     overflow: auto;
                 }
 
-                .grid {
-                    display: grid;
+                .grid-map {
+                    grid-row: 2 / 3;
                 }
 
                 @media(max-width: 768px) {
@@ -187,7 +187,7 @@
             </style>
             <div id="root">
                 <div class="pt-5 menu-container">
-                    <div class="">
+                    <div class="grid-map">
                         <div id="map"></div>
                     </div>
                     <div class="grid-panel">
