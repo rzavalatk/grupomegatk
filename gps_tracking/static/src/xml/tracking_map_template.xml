@@ -6,9 +6,9 @@
                 .menu-container {
                     display: flex;
                     justify-content: space-evenly;
-
                 }
-                @media(max-width:720px) {
+
+                @media(max-width: 768px) {
                     html, body {
                         height: 100%;
                         overflow-x: hidden;
@@ -16,11 +16,13 @@
                     }
                     
                     .menu-container {
-                        display: flex;
-                        flex-direction: column-reverse;
-                        justify-content: space-evenly;
+                        display: grid;
+                        grid-template-rows: 25% 75%;
+                        row-gap: 10px;
+                        width: 100%;
                     }
-
+                }
+                <!-- @media(max-width:720px) {
                     .grid-panel {
                         display: grid;
                         grid-template-rows: 13% 43% 44%;
@@ -32,27 +34,27 @@
                         height: auto;
                     }
 
-                    #map {
-                        height: 300px;
-                        width: 80%;
-                        <!-- border-radius: 15px;
-                        box-shadow: 0px 0px 10px black; -->
-                    }
-
                     .banner {
                         background-image: linear-gradient(to right, #004080, #0080ff);
                         height: 60px;
                         width: 100%; 
                         max-width: 100%; 
-                        <!-- border-radius: 10px 10px 0 0; -->
+                        border-radius: 10px 10px 0 0;
                     }
-                }
+                } -->
 
                 #map {
                     height: 550px;
                     width: 850px;
                     border-radius: 15px;
                     box-shadow: 0px 0px 10px black;
+                }
+
+                @media(max-width: 768px) {
+                    #map {
+                        height: auto;
+                        width: 100%;
+                    }
                 }
                 
                 .grid-panel {
@@ -64,6 +66,15 @@
                     box-shadow: 0px 0px 10px black;
                     max-width: 100%;
                     overflow: auto;
+                }
+
+                @media(max-width: 768px) {
+                    .grid-panel {
+                        border-radius: 0;
+                        box-shadow: 0;
+                        width: 100%;
+                        height: auto;
+                    }
                 }
 
                 .grid-section-1 {
@@ -89,6 +100,15 @@
                     height: 60px;
                     width: 400px; 
                     border-radius: 10px 10px 0 0;
+                }
+
+                @media(max-width: 768px) {
+                    .banner{
+                        height: 60px;
+                        width: 100%; 
+                        max-width: 100%; 
+                        border-radius: 0;
+                    }
                 }
 
                 .card-title {
