@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from odoo import fields, models, api
 from odoo.exceptions import UserError
-from datetime import date
+from datetime import date, datetime
 import logging
 
 import base64
@@ -106,7 +106,7 @@ class Visitas_Record(models.Model):
             (
               record.name,
               record.fecha,
-              record.hora,
+              datetime.strptime(record.hora, "%H:%M:%S"),
               record.region,
               record.user_id.name
             )
