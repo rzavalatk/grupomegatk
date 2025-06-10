@@ -105,7 +105,7 @@ class Visitas_Record(models.Model):
         datos = [
             (
               record.name,
-              str(record.fecha),
+              record.fecha,
               record.hora,
               record.region,
               record.user_id.name
