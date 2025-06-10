@@ -446,7 +446,7 @@ class CierreDiario(models.Model):
                     })
                     ids.append(obj.id)"""
             for i in ids:
-                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com"
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
                 cc_mega = "yalvarado@megatk.com"
                 cc_meditek = "nfuentes@meditekhn.com"
                 cierre = self.sudo().browse(i)
