@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from odoo import fields, models, api
 from odoo.exceptions import UserError
-from datetime import date
+from datetime import date, datetime
 import logging
 
 import base64
@@ -77,6 +77,8 @@ class Visitas_Record(models.Model):
         currency_format = workbook.add_format({'num_format': 'L#,##0.00', 'align': 'center'})
         number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
         header_format = workbook.add_format({'bold': True, 'align': 'center'})
+        date_format = workbook.add_format({'num_format': 'dd/mm/yyyy', 'align': 'center'})
+        datetime_format = workbook.add_format({'num_format': 'hh:mm:ss AM/PM'})
         
         #Funcion para escribir encabezados y datos en una hoja y ajustar el tamano de las columnas
         def escribir_hoja(worksheet,encabezados, datos, col_widths, formatos):
@@ -98,13 +100,13 @@ class Visitas_Record(models.Model):
         #Encabezados y anchos de columnas
         encabezados_report_visita = ['Nombre', 'Fecha', 'Hora', 'Región', 'Usuario']
         col_widths_report_visita = [25, 20, 20, 20, 20]  # Ajusta estos valores según sea necesario
-        formatos_report_visitas = [None, None, None, None, None]  # Formatos para cada columna
+        formatos_report_visitas = [None, date_format, datetime_format, None, None]  # Formatos para cada columna
         
         datos = [
             (
               record.name,
-              str(record.fecha),
-              record.hora,
+              record.fecha,
+              datetime.strptime(record.hora, "%H:%M:%S"),
               record.region,
               record.user_id.name
             )
