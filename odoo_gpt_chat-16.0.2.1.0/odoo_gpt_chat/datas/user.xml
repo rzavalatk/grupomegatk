@@ -1,0 +1,18 @@
+<odoo>
+    <data noupdate="1">
+        
+        <record id="whisperchat_partner_bits" model="res.partner">
+            <field name="name">WhisperChat</field>
+        </record>
+
+        <record id="whisperchat_user_bits" model="res.users">
+            <field name="login">WhisperChat</field>
+            <!-- <field name="password">Whisperchat</field> -->
+            <field name="partner_id" ref="odoo_gpt_chat.whisperchat_partner_bits"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[Command.link(ref('base.group_public')),Command.link(ref('odoo_gpt_chat.group_bot_user'))]"/>
+        </record>
+    
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whisperchat_users_form" model="ir.ui.view">
+        <field name="name">res.users.whisperchat.form.inherit</field>
+        <field name="model">res.users</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="groups_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[last()]" position="after">
+                <page string="Bot User Access" attrs="{'invisible':  [('groups_id', 'not in', [%(odoo_gpt_chat.group_bot_user)d])]}">
+                    <field name="access_right_ids" context="{'is_whisperchat_access': True}">
+                        <tree string="Access Rights" editable="top">
+                            <field name="name"/>
+                            <field name="model_id"/>
+                            <field name="group_id" column_invisible="1"/>
+                            <field name="perm_read"/>
+                            <field name="perm_write"/>
+                            <field name="perm_create"/>
+                            <field name="perm_unlink"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="whis_crm_lead_inherit_form_view_bits" model="ir.ui.view">
+        <field name="name">whis.crm.lead.inherit.form.view.bits</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="session_token" invisible="1"/>
+                <button name="action_fetch_whis_chat" type="object" class="oe_highlight" string="Fetch chat" attrs="{'invisible': [('session_token', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
