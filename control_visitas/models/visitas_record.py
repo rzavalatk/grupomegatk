@@ -78,7 +78,7 @@ class Visitas_Record(models.Model):
         number_format = workbook.add_format({'num_format': '#,##0', 'align': 'center'})
         header_format = workbook.add_format({'bold': True, 'align': 'center'})
         date_format = workbook.add_format({'num_format': 'dd/mm/yyyy', 'align': 'center'})
-        datetime_format = workbook.add_format({'num_format': 'hh:mm:ss'})
+        datetime_format = workbook.add_format({'num_format': 'hh:mm:ss AM/PM'})
         
         #Funcion para escribir encabezados y datos en una hoja y ajustar el tamano de las columnas
         def escribir_hoja(worksheet,encabezados, datos, col_widths, formatos):
