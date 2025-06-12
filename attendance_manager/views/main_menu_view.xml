@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_attendance" name="Asistencias" sequence="10" web_icon="attendance_manager,static/description/ausencia.png"/>
+        <menuitem id="menu_attendance_sub" name="Asistencias" parent="menu_attendance" sequence="20"/>
+        
+    </data>
+</odoo>
