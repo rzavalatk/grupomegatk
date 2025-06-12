@@ -20,7 +20,6 @@
         'views/asistencias_view.xml',
         'views/attendance_users_view.xml',
         'views/attendance_daily_view.xml',
-        'views/conexion_view.xml',
         
     ],
     'qweb_template_dict': {
