@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_partner_card_form" model="ir.ui.view">
+            <field name="name">res.partner.card.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='accounting']" position="inside">
+                    <group>
+                        <group string="Cards" name="cards">
+                            <field name="card_partner_ids">
+                                <tree>
+                                    <field name="payment_id"/>
+                                    <field name="card_number"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="payment_id"/>
+                                        </group>
+                                        <group>
+                                        </group>
+                                        <group>
+                                            <field name="card_holder"/>
+                                            <field name="card_expire"/>
+                                        </group>
+                                        <group>
+                                            <field name="card_number"/>
+                                            <field name="card_cvv"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

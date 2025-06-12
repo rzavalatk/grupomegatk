@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="payment_acquirer_pixel" model="payment.acquirer">
+            <field name="name">PixelPay</field>
+            <field name="image_128" type="base64" file="addons/payment_pixelpay/static/description/icon.png"/>
+            <field name="provider">pixel</field>
+            <field name="inline_form_view_id" ref="inline_form"/>
+            <field name="company_id" ref="base.main_company" />
+            <field name="display_as">Tarjeta de Crédito o Débito</field>
+            <field name="description" type="html">
+                <p>
+                    PixelPay is a payment gateway that provides everything you need for frictionless online commerce.
+                    Accept payments to your store from all over the world.
+                </p>
+            </field>
+            <field name="payment_icon_ids"
+               eval="[(6, 0, [
+                   ref('payment.payment_icon_cc_maestro'),
+                   ref('payment.payment_icon_cc_mastercard'),
+                   ref('payment.payment_icon_cc_discover'),
+                   ref('payment.payment_icon_cc_diners_club_intl'),
+                   ref('payment.payment_icon_cc_american_express'),
+                   ref('payment.payment_icon_cc_visa'),
+               ])]"/>
+            <field name="support_tokenization">True</field>
+<!--            <field name="allow_tokenization">True</field>-->
+        </record>
+
+        <record id="payment_method_pixel" model="account.payment.method">
+            <field name="name">Pixelpay</field>
+            <field name="code">pixel</field>
+            <field name="payment_type">inbound</field>
+        </record>
+
+    </data>
+</odoo>

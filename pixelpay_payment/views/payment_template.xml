@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="custom_payment_checkout" name="Custom Payment Checkout" inherit_id="payment.checkout">
+        <xpath expr="//input[@name='o_payment_save_as_token']" position="replace">
+            <input name="o_payment_save_as_token" type="checkbox" id="o_payment_save_as_token"/>
+            Save my payment details
+        </xpath>
+    </template>
+
+</odoo>

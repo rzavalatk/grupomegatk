@@ -1,0 +1,412 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* payment_pixelpay
+#
+# Translators:
+# Fabio Tamburini <fatm400@gmail.com>, 2022
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-23 12:53+0000\n"
+"PO-Revision-Date: 2022-11-23 12:53+0000\n"
+"Last-Translator: \n"
+"Language-Team: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "ABA Routing Number"
+msgstr "Número de ruta ABA"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Access to save card data"
+msgstr "Acceder para guardar los datos de la tarjeta"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Account Number"
+msgstr "Número de cuenta"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "Activate tokenization"
+msgstr "Activar tokenización"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_acquirer__pixel_payment_method_type
+msgid "Allow Payments From"
+msgstr "Permitir pagos desde"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "Allow Saving Payment Methods"
+msgstr "Permitir guardar métodos de pago"
+
+#. module: payment_pixelpay
+#. openerp-web
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#, python-format
+msgid "An error occurred when displayed this payment form."
+msgstr "Ocurrió un error al mostrar este formulario de pago."
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "Are you sure you have selected a country in the module settings?"
+msgstr "¿Estás seguro de haber seleccionado un país en la configuración del módulo?"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Bank Account Type"
+msgstr "Tipo de cuenta bancaria"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Bank Name"
+msgstr "Nombre del banco"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Business Checking"
+msgstr "Cuenta corriente comercial"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.pixel_s2s_form
+msgid "CVC"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "CVV"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Card Number"
+msgstr "Número de tarjeta"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.pixel_s2s_form
+msgid "Card number"
+msgstr "Número de tarjeta"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "CardHolder"
+msgstr "Nombre del Tarjetahabiente"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.pixel_s2s_form
+msgid "Cardholder name"
+msgstr "Nombre del Tarjetahabiente"
+
+#. module: payment_pixelpay
+#. openerp-web
+#: code:addons/payment_pixelpay/static/src/xml/pixelpay_templates.xml:0
+#: code:addons/payment_pixelpay/static/src/xml/pixelpay_templates.xml:0
+#, python-format
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: payment_pixelpay
+#: model:ir.model,name:payment_pixelpay.model_res_country_state
+msgid "Country state"
+msgstr "Provincia"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields.selection,name:payment_pixelpay.selection__payment_acquirer__pixel_payment_method_type__credit_card
+msgid "Credit Card"
+msgstr "Tarjeta de crédito"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_payment_acquirer__pixel_payment_method_type
+msgid "Determines with what payment method the customer can pay."
+msgstr "Determina con qué método de pago puede pagar el cliente."
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_acquirer__pixel_endpoint
+msgid "Endpoint"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_payment_acquirer__pixel_secret_key
+msgid "Enter the value of the secret key converted to an MD5 hash."
+msgstr "Ingrese el valor de la clave secreta convertida a un hash MD5."
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_payment_acquirer__pixel_key
+msgid "Enter your company's API key."
+msgstr "Introduzca la clave API de su empresa."
+
+#. module: payment_pixelpay
+#. openerp-web
+#: code:addons/payment_pixelpay/static/src/xml/pixelpay_templates.xml:0
+#, python-format
+msgid "Error"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Expiration Date"
+msgstr "Fecha de Vencimiento"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.pixel_s2s_form
+msgid "Expires (MM / YY)"
+msgstr "Vencimiento (MM / YY)"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/models/payment_acquirer.py:0
+#, python-format
+msgid "Get Provinces Successful!"
+msgstr "¡Se obtuvo exitosamente las  provincias!"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_res_country_state__code_3166_2
+msgid "ISO 3166-2 code for the state"
+msgstr "Código ISO 3166-2 para el estado"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "If not defined, the acquirer name will be used."
+msgstr "Si no se define, se utilizará el nombre del adquirente."
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_acquirer__pixel_key
+msgid "Key ID"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "MM"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Name On Account"
+msgstr "Nombre en la cuenta
+"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_token__network
+msgid "Network"
+msgstr "Red"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/models/payment_transaction.py:0
+#, python-format
+msgid "No transaction found matching reference %s."
+msgstr "No se encontró ninguna transacción que coincida con la referencia %s."
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "Nombre"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:ir.model,name:payment_pixelpay.model_payment_acquirer
+msgid "Payment Acquirer"
+msgstr "Método de pago"
+
+#. module: payment_pixelpay
+#: model:ir.model,name:payment_pixelpay.model_account_payment_method
+msgid "Payment Methods"
+msgstr "Métodos de pago"
+
+#. module: payment_pixelpay
+#: model:ir.model,name:payment_pixelpay.model_payment_token
+msgid "Payment Token"
+msgstr "Token de pago"
+
+#. module: payment_pixelpay
+#: model:ir.model,name:payment_pixelpay.model_payment_transaction
+msgid "Payment Transaction"
+msgstr "Transacción de pago"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Personal Checking"
+msgstr "Cuenta corriente personal"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "Personal Savings"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:ir.model.fields.selection,name:payment_pixelpay.selection__payment_acquirer__provider__pixel
+#: model:payment.acquirer,name:payment_pixelpay.payment_acquirer_pixel
+msgid "PixelPay"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:account.payment.method,name:payment_pixelpay.payment_method_pixel
+msgid "Pixelpay"
+msgstr "PixelPay"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_acquirer__provider
+msgid "Provider"
+msgstr "Proveedor"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/models/payment_transaction.py:0
+#, python-format
+msgid "Received data with status code \"%(status)s\" and error code \"%(error)s\""
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.pixel_s2s_form
+msgid "Save Token"
+msgstr "Guardar Token"
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.custom_payment_checkout
+msgid "Save my payment details"
+msgstr "Guardar mis datos de pago"
+
+#. module: payment_pixelpay
+#: model_terms:payment.acquirer,auth_msg:payment_pixelpay.payment_acquirer_pixel
+msgid "Se ha autorizado su pago."
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:payment.acquirer,cancel_msg:payment_pixelpay.payment_acquirer_pixel
+msgid "Se ha cancelado su pago."
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:payment.acquirer,pending_msg:payment_pixelpay.payment_acquirer_pixel
+msgid ""
+"Se ha procesado su pago con éxito pero está en espera de su aprobación."
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_payment_acquirer__pixel_secret_key
+msgid "Secret Key"
+msgstr "Llave secreta"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/models/payment_acquirer.py:0
+#, python-format
+msgid "Select a country in the module settings!"
+msgstr "¡Seleccione un país en la configuración del módulo!"
+
+#. module: payment_pixelpay
+#. openerp-web
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#, python-format
+msgid "Server Error"
+msgstr "Error del Servidor"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,field_description:payment_pixelpay.field_res_country_state__code_3166_2
+msgid "State Code ISO 3166-2"
+msgstr "Código de Estado ISO 3166-2"
+
+#. module: payment_pixelpay
+#: model_terms:payment.acquirer,done_msg:payment_pixelpay.payment_acquirer_pixel
+msgid "Su pago se ha procesado con éxito. ¡Gracias!"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:payment.acquirer,display_as:payment_pixelpay.payment_acquirer_pixel
+msgid "Tarjeta de Crédito o Débito"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_payment_acquirer__provider
+msgid "The Payment Service Provider to use with this acquirer"
+msgstr ""
+"El proveedor de servicios de pago que se utilizará con este método de pago"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The billing address does not appear to be correct. Set an address in the "
+"billing address"
+msgstr ""
+"La dirección de facturación no parece ser correcta. Establecer una dirección en la "
+"dirección de facturación"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The city does not appear to be correct. Set an city in the billing address"
+msgstr ""
+"La ciudad no parece ser correcta. Establecer una ciudad en la dirección de facturación"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The country code does not seem to be correct. Set the country in the billing"
+" address"
+msgstr ""
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The email does not appear to be correct. Set an email in the billing address"
+msgstr ""
+"El correo electrónico no parece ser correcto. Establecer un correo electrónico en la dirección de facturación"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The email does not appear to be correct. Set an email in the billing address"
+msgstr ""
+"El correo electrónico no parece ser correcto. Establecer un correo electrónico en la dirección de facturación"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The phone does not appear to be correct. Set an phone in the billing address"
+msgstr ""
+"El teléfono no parece ser correcto. Establecer un teléfono en la dirección de facturación"
+
+#. module: payment_pixelpay
+#: code:addons/payment_pixelpay/controllers/main.py:0
+#, python-format
+msgid ""
+"The username does not appear to be correct. Set username in the billing "
+"address"
+msgstr ""
+"El nombre de usuario no parece ser correcto. Establecer nombre de usuario en la "
+"dirección de facturación"
+
+#. module: payment_pixelpay
+#. openerp-web
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#: code:addons/payment_pixelpay/static/src/js/payment_form.js:0
+#, python-format
+msgid "We are not able to process your payment."
+msgstr "No podemos procesar su pago."
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.inline_form
+msgid "YY"
+msgstr ""
+
+#. module: payment_pixelpay
+#: model_terms:ir.ui.view,arch_db:payment_pixelpay.acquirer_form_pixel
+msgid "get provinces"
+msgstr "obtener provincias"
+
+#. module: payment_pixelpay
+#: model:ir.model.fields,help:payment_pixelpay.field_payment_acquirer__pixel_endpoint
+msgid "htttp://example.com"
+msgstr ""

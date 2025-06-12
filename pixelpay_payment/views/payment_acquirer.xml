@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="acquirer_form_pixel" model="ir.ui.view">
+            <field name="name">Pixelpay Acquirer Form.</field>
+            <field name="model">payment.acquirer</field>
+            <field name="inherit_id" ref="payment.payment_acquirer_form"/>
+            <field name="arch" type="xml">
+
+                <field name="name" placeholder="Nombre" modifiers="{&quot;required&quot;: true}"/>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button string="get provinces"
+                             type="object"
+                             name="get_country_provinces"
+                             class="oe_highlight"
+                             confirm="Are you sure you have selected a country in the module settings?"
+                             attrs="{'invisible': [('provider', '!=', 'pixel')]}"
+                        />
+                    </header>
+                </xpath>
+
+                <xpath expr='//field[@name="name"]' position='replace'>
+                    <field name="name" placeholder="Nombre" modifiers="{'required': true}" attrs="{'readonly': [('provider', '=', 'pixel')]}"/>
+                </xpath>
+
+                <xpath expr='//group[@name="acquirer"]' position='inside'>
+                    <group attrs="{'invisible': [('provider', '!=', 'pixel')]}">
+                        <field name="pixel_endpoint" attrs="{'required':[('provider', '=', 'pixel'), ('state', '=', 'enable')]}"/>
+                        <field name="pixel_key" attrs="{'required':[('provider', '=', 'pixel'), ('state', '=', 'enable')]}"/>
+                        <field name="pixel_secret_key" attrs="{'required':[('provider', '=', 'pixel'), ('state', '=', 'enable')]}" password="True"/>
+                    </group>
+                </xpath>
+                <xpath expr='//field[@name="display_as"]' position='replace'>
+                    <field name="display_as" placeholder="If not defined, the acquirer name will be used."
+                    attrs="{'readonly': [('provider', '=', 'pixel')]}"/>
+                </xpath>
+                <field name="display_as" position="before">
+                    <field name="pixel_payment_method_type"
+                           attrs="{'invisible': [('provider', '!=', 'pixel')], 'required':[('provider', '=', 'pixel'), ('state', '!=', 'disabled')]}"/>
+                </field>
+
+<!--                <xpath expr='//field[@name="allow_tokenization"]' position='replace'>-->
+<!--                    <t t-if="provider', '==', 'pixel'">-->
+<!--                        <field name="allow_tokenization" string="Activar Tokenización" attrs="{'invisible': ['|', ('support_tokenization', '=', False), ('show_allow_tokenization', '=', False)]}"/>-->
+<!--                    </t>-->
+<!--                    <t t-else="">-->
+<!--                        <field name="allow_tokenization" attrs="{'invisible': ['|', ('support_tokenization', '=', False), ('show_allow_tokenization', '=', False)]}"/>-->
+<!--                    </t>-->
+<!--                </xpath>-->
+<!--                -->
+                <xpath expr='//field[@name="allow_tokenization"]' position='attributes'>
+                    <attribute name="nolabel">1</attribute>
+                </xpath>
+                <xpath expr='//field[@name="allow_tokenization"]' position='before'>
+                    <div >
+                    <label for="allow_tokenization" string="Activate tokenization" attrs="{'invisible':[('provider', '!=', 'pixel')]}"/>
+                    <label for="allow_tokenization" string="Allow Saving Payment Methods" attrs="{'invisible':[('provider', '=', 'pixel')]}"/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//page[@name='messages']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
