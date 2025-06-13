@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_conexion_disp_form" model="ir.ui.view">
+        <field name="name">conexion.disp.form</field>
+        <field name="model">conexion.anviz</field>
+        <field name="arch" type="xml">
+            <form string="Conexión con dispositivos">
+                
+                <header>
+                        <button name="obtener_token" string="Obtener token" type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="nombre" />
+                        <field name="dir_ip" />
+                        <field name="region" />
+                        <field name="user" />
+                        <field name="password" />
+                        <field name="token" />
+                                               
+                    </group>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--        attendance devices Tree View -->
+    <record id="attendance_devices_view_tree" model="ir.ui.view">
+        <field name="name">conexion.devices.view.tree</field>
+        <field name="model">conexion.anviz</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Usuarios">
+                <field name="nombre"/>
+                <field name="region"/>
+                <field name="dir_ip" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="attendance_devices_action" model="ir.actions.act_window">
+        <field name="name">Dispositivos para marcaciones</field>
+        <field name="res_model">conexion.anviz</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem
+            id="attendance_devices_menu"
+            name="Dispositivos de marcaciòn"
+            action="attendance_devices_action"
+            parent="hr_attendance.menu_hr_attendance_view_disp"
+            sequence="20"/> 
+
+
+</odoo>

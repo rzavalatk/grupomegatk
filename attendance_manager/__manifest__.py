@@ -17,9 +17,11 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/main_menu_view.xml',
+        'views/dispositivos_view.xml',
         'views/asistencias_view.xml',
         'views/attendance_users_view.xml',
         'views/attendance_daily_view.xml',
+        
         
     ],
     'qweb_template_dict': {
