@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 class AcquirerPixel(models.Model):
-    _inherit = "payment.acquirer"
+    _inherit = "payment.provider"
 
     provider = fields.Selection(selection_add=[("pixel", "PixelPay")], ondelete={'pixel': 'set default'})
     pixel_endpoint = fields.Char('Endpoint', groups='base.group_user', help="htttp://example.com")
