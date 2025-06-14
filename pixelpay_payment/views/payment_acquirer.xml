@@ -4,7 +4,7 @@
         
         <record id="acquirer_form_pixel" model="ir.ui.view">
             <field name="name">Pixelpay Acquirer Form.</field>
-            <field name="model">payment.acquirer</field>
+            <field name="model">payment.provider</field>
             <field name="inherit_id" ref="payment.payment_acquirer_form"/>
             <field name="arch" type="xml">
 

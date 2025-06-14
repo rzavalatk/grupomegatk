@@ -22,7 +22,7 @@ class AuthorizeController(http.Controller):
                  public client key
         :rtype: dict
         """
-        acquirer_sudo = request.env['payment.acquirer'].sudo().browse(acquirer_id).exists()
+        acquirer_sudo = request.env['payment.provider'].sudo().browse(acquirer_id).exists()
         return {
             'state': acquirer_sudo.state,
             'payment_method_type': acquirer_sudo.pixel_payment_method_type,
