@@ -30,13 +30,14 @@ class ConexionAnviz(models.Model):
         if not self.password:
             raise Warning("No se ha ingresado el password")
         
-        url = f"{self.dir_ip}/goform/chklogin"
+        url = f"http://{self.dir_ip}/goform/chklogin"
         
         params = {
             'userid': self.user,
             'password': self.password
         }
-
+        _loggin.warning(url)
+        _loggin.warning(params)
         try:
             response = requests.get(url, params=params, timeout=5)
             response.raise_for_status()
