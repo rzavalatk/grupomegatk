@@ -51,7 +51,7 @@
             id="attendance_devices_menu"
             name="Dispositivos de marcaciòn"
             action="attendance_devices_action"
-            parent="hr_attendance.menu_hr_attendance_view_disp"
+            parent="attendance_manager.menu_hr_attendance_view_disp"
             sequence="20"/> 
 
 
