@@ -97,12 +97,12 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem
+        <!--<menuitem
             id="attendance_record_menu"
             name="Asistencias"
             action="attendance_record_action"
             parent="menu_attendance_sub"
-            sequence="10"/>
+            sequence="10"/>-->
     
     </data>
     
