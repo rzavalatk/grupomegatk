@@ -23,6 +23,6 @@
             id="attendance_users_menu"
             name="Usuarios"
             action="attendance_users_action"
-            parent="hr_attendance.menu_hr_attendance_view_disp"
+            parent="attendance_manager.menu_hr_attendance_view_disp"
             sequence="20"/>
 </odoo>
