@@ -24,7 +24,7 @@
                     <field name="name" placeholder="Nombre" modifiers="{'required': true}" attrs="{'readonly': [('code', '=', 'pixel')]}"/>
                 </xpath>
 
-                <xpath expr='//group[@name=&quot;acquirer&quot;]' position='inside'>
+                <xpath expr='//group[@name="credentials"]' position='inside'>
                     <group attrs="{'invisible': [('code', '!=', 'pixel')]}">
                         <field name="pixel_endpoint" attrs="{'required':[('code', '=', 'pixel'), ('state', '=', 'enabled')]}"/>
                         <field name="pixel_key" attrs="{'required':[('code', '=', 'pixel'), ('state', '=', 'enabled')]}"/>
