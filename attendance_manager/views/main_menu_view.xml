@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_hr_attendance_view_disp" name="Dispositivos" parent="menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_user"/>
+        <menuitem id="menu_hr_attendance_view_disp" name="Dispositivos" parent="hr_attendance.menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_user"/>
         
     </data>
 </odoo>
