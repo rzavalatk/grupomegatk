@@ -30,7 +30,7 @@ class ConexionAnviz(models.Model):
         if not self.password:
             raise Warning("No se ha ingresado el password")
         
-        url = f"http://{self.dir_ip}/goform/chklogin"
+        url = f"{self.dir_ip}/goform/chklogin"
         
         params = {
             'userid': self.user,
