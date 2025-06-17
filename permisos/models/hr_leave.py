@@ -105,6 +105,12 @@ class HrLeave(models.Model):
         ('18', '6:00 PM')
     ], string='Hour to', default='16',)
     
+    #campos heredados
+    holiday_status_id = fields.Many2one(
+        "hr.leave.type", compute='_compute_from_employee_id', store=True, string="Time Off Type", required=True, readonly=False,
+        states={'cancel': [('readonly', True)], 'refuse': [('readonly', True)], 'validate1': [('readonly', True)], 'validate': [('readonly', True)]},
+        domain="[('company_id', '=?', employee_company_id), '|', ('has_valid_allocation', '=', True)]", tracking=True)
+    
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
         self.request_hour_from = self.request_hour_from_1
