@@ -15,3 +15,4 @@ access_helpdesk_categories_manager,access.helpdesk.categories.manager,model_help
 merge_tickets_manager,merge.tickets.manager,model_merge_tickets,odoo_website_helpdesk.helpdesk_manager,1,1,1,1
 support_tickets_manager,support.tickets.manager,model_support_tickets,odoo_website_helpdesk.helpdesk_manager,1,1,1,1
 access_help_ticket_stage_user,access.ticket.stage.user,model_ticket_stage,base.group_user,1,1,1,1
+access_ir_attachment_for_my_group,access for ir.attachment for my group,model_ir_attachment,base.group_user,1,1,1,1
