@@ -200,7 +200,7 @@ odoo.define('gps_tracking.tracking_menu_action', function (require) {
         },
 
         on_detach_callback: function () {
-            console.log("Se llamó on_detach_callback - Destruyendo widget");
+            console.log("Se llamó on_detach_callback - Destruyendo widgetç");
             this._destroyWidget();
         },
 
