@@ -18,7 +18,6 @@
         name="Iniciar/Finalizar viaje" 
         parent="menu_gps_device_root" 
         action="gps_tracking_action"
-        groups="gps_tracking.group_gps_user" 
         sequence="1"/>
 
     <menuitem id="menu_gps_device_trip" 
