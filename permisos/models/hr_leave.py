@@ -369,15 +369,17 @@ class HrLeave(models.Model):
         return dias, horas, minutos_resultante
 
     def action_validate(self):
-        if self.holiday_status_id.vacaciones:
-            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                'resta')
-            self.employee_id.sudo().write({'permisos_dias': dias,
-                                           'permisos_horas': horas,
-                                           'permisos_minutos': minutos_resultante})
-        else:
-            self.env.user.notify_success(message='Permiso aprobado')
-        return super(HrLeave, self).action_validate()
+        for leave in self:
+            if leave.holiday_status_id.vacaciones:
+                dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                    'resta')
+                for empliyee in leave.employee_ids:
+                    self.employee_id.sudo().write({'permisos_dias': dias,
+                                                'permisos_horas': horas,
+                                                'permisos_minutos': minutos_resultante})
+            else:
+                self.env.user.notify_success(message='Permiso aprobado')
+            return super(HrLeave, self).action_validate()
         
     def action_refuse(self):
         if self.state == 'validate':
