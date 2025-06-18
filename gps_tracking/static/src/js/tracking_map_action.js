@@ -98,8 +98,19 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                                 method: 'get_locations',
                                 args: [trip_id],
                             }).then(function (result) {
+                                coords = [
+                                    [14.09951451320761, -87.18943822450085],
+                                    [14.0997549384625, -87.18942435633966],
+                                    [14.099918023980653, -87.1890291137456],
+                                    [14.099978550535049, -87.18834437328661],
+                                    [14.100067659044235, -87.18840678001199],
+                                    [14.100039077073378, -87.18909672103142],
+                                    [14.100020582855032, -87.18955437035085],
+                                    [14.100086153258752, -87.18999295100598],
+
+                                ]
                                 
-                                self._showRoute(result);
+                                self._showRoute(coords);
                                 self._loadInfo(trip_id);
                                 $('.card-btn').prop('disabled', false).text('Mostrar Ruta');
                                 console.log(result);
