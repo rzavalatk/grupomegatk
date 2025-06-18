@@ -13,7 +13,6 @@
         groups=""
         web_icon="gps_tracking,static/description/localizar.png"/>
 
-    
     <menuitem id="menu_gps" 
         name="Iniciar/Finalizar viaje" 
         parent="menu_gps_device_root" 
