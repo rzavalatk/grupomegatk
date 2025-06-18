@@ -13,11 +13,11 @@
         groups=""
         web_icon="gps_tracking,static/description/localizar.png"/>
 
-    <menuitem id="menu_gps" 
+    <!-- <menuitem id="menu_gps" 
         name="Iniciar/Finalizar viaje" 
         parent="menu_gps_device_root" 
         action="gps_tracking_action"
-        sequence="1"/>
+        sequence="1"/> -->
 
     <menuitem id="menu_gps_device_trip" 
         name="Viajes GPS" 
