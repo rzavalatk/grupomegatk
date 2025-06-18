@@ -342,10 +342,11 @@ class HrLeave(models.Model):
         
         return res
 
-    def vacaciones_restantes_empl(self, operacion):
+    def vacaciones_restantes_empl(self, operacion, employee_id):
         _logger.warning("Prueba de vacaciones restantes empl")
-        minutos_actuales = (self.employee_id.permisos_dias * 480) + (
-            self.employee_id.permisos_horas * 60) + self.employee_id.permisos_minutos
+        
+        minutos_actuales = (employee_id.permisos_dias * 480) + (
+            employee_id.permisos_horas * 60) + employee_id.permisos_minutos
         minutos_solicitados = (self.dias * 480) + \
             (self.horas * 60) + self.minutos
         minutos_resultante = minutos_actuales - \
@@ -371,9 +372,10 @@ class HrLeave(models.Model):
     def action_validate(self):
         for leave in self:
             if leave.holiday_status_id.vacaciones:
-                dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                    'resta')
+                
                 for employee_id in leave.employee_ids:
+                    dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                    'resta', employee_id)
                     employee_id.sudo().write({'permisos_dias': dias,
                                                 'permisos_horas': horas,
                                                 'permisos_minutos': minutos_resultante})
