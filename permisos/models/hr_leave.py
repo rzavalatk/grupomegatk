@@ -4,6 +4,9 @@ from datetime import datetime, time, date, timedelta
 import pytz
 import logging
 
+from odoo.exceptions import ValidationError
+from odoo.tools.float_utils import float_compare
+
 
 _logger = logging.getLogger(__name__)
 
@@ -110,6 +113,47 @@ class HrLeave(models.Model):
         "hr.leave.type", compute='_compute_from_employee_id', store=True, string="Time Off Type", required=True, readonly=False,
         states={'cancel': [('readonly', True)], 'refuse': [('readonly', True)], 'validate1': [('readonly', True)], 'validate': [('readonly', True)]},
         domain="[('company_id', '=?', employee_company_id)]", tracking=True)
+    
+    @api.constrains('state', 'number_of_days', 'holiday_status_id')
+    def _check_holidays(self):
+        for holiday in self:
+            # 🛑 Si el tipo de permiso permite saldo negativo, omitir validación
+            if holiday.holiday_status_id.allow_negative_balance:
+                continue
+
+            mapped_days = self.holiday_status_id.get_employees_days(
+                (holiday.employee_id | holiday.sudo().employee_ids).ids,
+                holiday.date_from.date()
+            )
+
+            if (
+                holiday.holiday_type != 'employee'
+                or (not holiday.employee_id and not holiday.sudo().employee_ids)
+                or holiday.holiday_status_id.requires_allocation == 'no'
+            ):
+                continue
+
+            if holiday.employee_id:
+                leave_days = mapped_days[holiday.employee_id.id][holiday.holiday_status_id.id]
+                if float_compare(leave_days['remaining_leaves'], 0, precision_digits=2) == -1 \
+                        or float_compare(leave_days['virtual_remaining_leaves'], 0, precision_digits=2) == -1:
+                    raise ValidationError(_(
+                        'No hay suficientes días disponibles para este tipo de permiso.\n'
+                        'Por favor revise también los permisos pendientes de validación.'
+                    ))
+            else:
+                unallocated_employees = []
+                for employee in holiday.sudo().employee_ids:
+                    leave_days = mapped_days[employee.id][holiday.holiday_status_id.id]
+                    if float_compare(leave_days['remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1 \
+                            or float_compare(leave_days['virtual_remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1:
+                        unallocated_employees.append(employee.name)
+                if unallocated_employees:
+                    raise ValidationError(_(
+                        'No hay suficientes días disponibles para este tipo de permiso.\n'
+                        'Por favor revise también los permisos pendientes de validación.\n'
+                        'Los empleados sin días asignados son:\n%s'
+                    ) % (', '.join(unallocated_employees)))
     
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
