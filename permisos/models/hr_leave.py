@@ -373,8 +373,8 @@ class HrLeave(models.Model):
             if leave.holiday_status_id.vacaciones:
                 dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                     'resta')
-                for empliyee in leave.employee_ids:
-                    self.employee_id.sudo().write({'permisos_dias': dias,
+                for employee_id in leave.employee_ids:
+                    employee_id.sudo().write({'permisos_dias': dias,
                                                 'permisos_horas': horas,
                                                 'permisos_minutos': minutos_resultante})
             else:
