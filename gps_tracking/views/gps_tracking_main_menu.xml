@@ -13,11 +13,19 @@
         groups=""
         web_icon="gps_tracking,static/description/localizar.png"/>
 
+    
+    <menuitem id="menu_gps_device_trip" 
+        name="Iniciar/Finalizar viaje" 
+        parent="menu_gps_device_root" 
+        action="gps_tracking_action"
+        groups="gps_tracking.group_gps_user" 
+        sequence="1"/>
+
     <menuitem id="menu_gps_device_trip" 
         name="Viajes GPS" 
         parent="menu_gps_device_root" 
         action="action_gps_device_trip"
         groups="gps_tracking.group_gps_admin" 
-        sequence="1"/>
+        sequence="2"/>
 
 </odoo>
