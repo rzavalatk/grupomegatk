@@ -39,7 +39,7 @@ class Account_Move(models.Model):
     @api.onchange('invoice_user_id')
     def _onchange_vendedor(self):
         _logger.warning("Entre al onchnage")
-        if self.invoice_user_id == 59:
+        if self.invoice_user_id.id == 59:
             _logger.warning(self.invoice_user_id)
             self.team_id = self.env['crm.team'].search([('id', '=', 47)], limit=1)
             _logger.warning(self.team_id)
