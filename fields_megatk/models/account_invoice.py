@@ -36,6 +36,13 @@ class Account_Move(models.Model):
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
     
+    @api.onchange('invoice_user_id')
+    def _onchange_vendedor(self):
+        if self.invoice_user_id == 59:
+            self.team_id = self.env['crm.team'].search([('id', '=', 47)], limit=1)
+        else:
+            pass
+    
     @api.model_create_multi
     def create(self, vals_list):
         """Condicion que busca si la factura es al credito, si es asi busca el cliente si tiene numero y dirección, en caso de que no lo tenga no crea nada."""
