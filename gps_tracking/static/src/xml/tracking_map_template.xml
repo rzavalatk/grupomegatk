@@ -156,7 +156,8 @@
                 #trip-employee, #trip-date, #trip-device, #trip-time {
                     font-size: 16px;
                     font-weight: 400;
-                    padding: 10px;    
+                    padding: 10px;
+                    margin-bottom: 0;    
                 }
 
                 .leaflet-pane.leaflet-overlay-pane svg path.my-route-line {
