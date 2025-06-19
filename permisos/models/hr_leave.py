@@ -292,12 +292,13 @@ class HrLeave(models.Model):
         
         return res
 
-    def vacaciones_restantes_empl(self, operacion):
+       def vacaciones_restantes_empl(self, operacion, employee_id, leave):
         _logger.warning("Prueba de vacaciones restantes empl")
-        minutos_actuales = (self.employee_id.permisos_dias * 480) + (
-            self.employee_id.permisos_horas * 60) + self.employee_id.permisos_minutos
-        minutos_solicitados = (self.dias * 480) + \
-            (self.horas * 60) + self.minutos
+        
+        minutos_actuales = (employee_id.permisos_dias * 480) + (
+            employee_id.permisos_horas * 60) + employee_id.permisos_minutos
+        minutos_solicitados = (leave.dias * 480) + \
+            (leave.horas * 60) + leave.minutos
         minutos_resultante = minutos_actuales - \
             minutos_solicitados if operacion == 'resta' else minutos_actuales + minutos_solicitados
         dias = 0
@@ -319,25 +320,30 @@ class HrLeave(models.Model):
         return dias, horas, minutos_resultante
 
     def action_validate(self):
-        if self.holiday_status_id.vacaciones:
-            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                'resta')
-            self.employee_id.sudo().write({'permisos_dias': dias,
-                                           'permisos_horas': horas,
-                                           'permisos_minutos': minutos_resultante})
-        else:
-            self.env.user.notify_success(message='Permiso aprobado')
-        return super(HrLeave, self).action_validate()
+        for leave in self:
+            if leave.holiday_status_id.vacaciones:
+                
+                for employee_id in leave.employee_ids:
+                    dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                    'resta', employee_id, leave)
+                    employee_id.sudo().write({'permisos_dias': dias,
+                                                'permisos_horas': horas,
+                                                'permisos_minutos': minutos_resultante})
+            else:
+                self.env.user.notify_success(message='Permiso aprobado')
+            return super(HrLeave, self).action_validate()
         
     def action_refuse(self):
-        if self.state == 'validate':
-            if self.holiday_status_id.vacaciones:
-                dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                    'suma')
-                self.employee_id.sudo().write({'permisos_dias': dias,
-                                            'permisos_horas': horas,
-                                            'permisos_minutos': minutos_resultante})
-            else:
-                self.env.user.notify_success(message='Permiso denegado')
+        for leave in self:
+            if leave.state == 'validate':
+                if leave.holiday_status_id.vacaciones:
+                    
+                    for employee_id in leave.employee_ids:
+                        dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                        'resta', employee_id, leave)
+                        employee_id.sudo().write({'permisos_dias': dias,
+                                                    'permisos_horas': horas,
+                                                    'permisos_minutos': minutos_resultante})
+                else:
+                    self.env.user.notify_success(message='Permiso denegado')
         return super(HrLeave, self).action_refuse()
-        
