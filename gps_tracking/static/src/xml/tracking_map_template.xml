@@ -153,16 +153,10 @@
                     padding: 10px;
                 }
 
-                .trip-employee,
-                .trip-date,
-                .trip-time,
-                .trip-device {
-                    padding: 10px
-                }
-
                 #trip-employee, #trip-date, #trip-device, #trip-time {
                     font-size: 16px;
-                    font-weight: 400;    
+                    font-weight: 400;
+                    padding: 10px;    
                 }
 
                 .leaflet-pane.leaflet-overlay-pane svg path.my-route-line {
@@ -211,19 +205,19 @@
                         <div class="grid-section-2">
                             <div>
                                 <label class="trip-data">Empleado:</label>
-                                <p  id="trip-employee"></p>
+                                <p id="trip-employee"></p>
                             </div>
                             <div >
                                 <label class="trip-data">ID Dispositivo:</label>
-                                <p  id="trip-device"></p>
+                                <p id="trip-device"></p>
                             </div>
                             <div >
                                 <label class="trip-data">Fecha:</label>
-                                <p  id="trip-date"></p>
+                                <p id="trip-date"></p>
                             </div>
                             <div >
                                 <label class="trip-data">Tiempo Usado:</label>
-                                <p  id="trip-time"></p>
+                                <p id="trip-time"></p>
                             </div>
                         </div>
                     </div>
