@@ -96,7 +96,6 @@
                     display: grid;
                     grid-template-rows: repeat(2, 1fr);
                     grid-template-columns: repeat(2, 1fr);
-                    align-items: center;
                     padding: 20px;
                     gap: 12px;
                 }
