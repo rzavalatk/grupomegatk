@@ -292,7 +292,7 @@ class HrLeave(models.Model):
         
         return res
 
-       def vacaciones_restantes_empl(self, operacion, employee_id, leave):
+    def vacaciones_restantes_empl(self, operacion, employee_id, leave):
         _logger.warning("Prueba de vacaciones restantes empl")
         
         minutos_actuales = (employee_id.permisos_dias * 480) + (
