@@ -17,7 +17,7 @@
         name="Viajes GPS" 
         parent="menu_gps_device_root" 
         action="action_gps_device_trip"
-        groups="gps_tracking.group_gps_admin" 
+        groups="gps_tracking.group_gps_user" 
         sequence="1"/>
 
 </odoo>
