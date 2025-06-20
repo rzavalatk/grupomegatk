@@ -22,7 +22,7 @@
         <field name="arch" type="xml">
             <form> 
                 <header>
-                    <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary" attrs="{'invisible': [('state', 'in', ['new','finished'])]}"/>
+                    <!-- <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary" attrs="{'invisible': [('state', 'in', ['new','finished'])]}"/> -->
                     <field name="state" widget="statusbar" statusbar_visible="new, ongoing, finished"/>
                 </header>
                 <sheet>
