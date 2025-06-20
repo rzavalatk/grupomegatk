@@ -24,7 +24,7 @@
         name="Iniciar/Finalizar viaje"
         parent="menu_gps_device_root"
         action="gps_tracking_action"
-        group="gps_tracking.group_gps_user"
+        groups="gps_tracking.group_gps_user"
         sequence="3" 
     />
 
