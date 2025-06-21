@@ -61,16 +61,16 @@ class Account_Move(models.Model):
         
     @api.model
     def create(self, vals_list):
-        """Validar datos del cliente si la factura es a crédito."""
+        """Valida que los contactos tengan datos completos si la factura es a crédito."""
 
-        # Asegurar que `vals_list` sea una lista de dicts
+        # 🛡️ Siempre convierte a lista
         if not isinstance(vals_list, list):
             vals_list = [vals_list]
 
         for vals in vals_list:
-            # Solo procesar si es un dict
+            # 🔒 Asegura que 'vals' sea un diccionario antes de usar .get()
             if not isinstance(vals, dict):
-                continue  # Evita errores por objetos no esperados
+                continue
 
             term_id = vals.get('invoice_payment_term_id')
             if term_id:
@@ -81,7 +81,7 @@ class Account_Move(models.Model):
                         if not (partner.mobile or partner.phone):
                             raise UserError(_("ERROR: El contacto no tiene número de teléfono o móvil."))
                         if not (partner.street and partner.city):
-                            raise UserError(_("ERROR: El contacto no tiene calle o ciudad."))
+                            raise UserError(_("ERROR: El contacto no tiene dirección (calle y ciudad)."))
         return super().create(vals_list)
         
     @api.depends('amount_residual', 'move_type', 'state', 'company_id')
