@@ -58,31 +58,32 @@ class Account_Move(models.Model):
     #                     else:
     #                         raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
     #     return super().create(vals_list)
+        
     @api.model
     def create(self, vals_list):
-        """Condición que valida facturas a crédito: exige dirección y teléfono en el cliente."""
-        if not isinstance(vals_list, list):
-            vals_list = [vals_list]  # ✅ Convierte un dict en lista con un solo elemento
+        """Validar datos del cliente si la factura es a crédito."""
 
-        company_id = self.env.user.company_id.id
+        # Asegurar que `vals_list` sea una lista de dicts
+        if not isinstance(vals_list, list):
+            vals_list = [vals_list]
+
         for vals in vals_list:
+            # Solo procesar si es un dict
+            if not isinstance(vals, dict):
+                continue  # Evita errores por objetos no esperados
+
             term_id = vals.get('invoice_payment_term_id')
             if term_id:
                 term = self.env['account.payment.term'].browse(term_id)
-                _logger.warning(term.line_ids)
-                _logger.warning(term.line_ids.mapped('days'))
                 if term.line_ids and any(line.days > 0 for line in term.line_ids):
                     partner = self.env['res.partner'].browse(vals.get('partner_id'))
                     if partner:
-                        if partner.mobile or partner.phone:
-                            if partner.street and partner.city:
-                                continue  # ✅ Pasa, se valida
-                            else:
-                                raise UserError(_("ERROR: El contacto no tiene calle o ciudad. Agrega dirección antes de crear facturas al crédito."))
-                        else:
-                            raise UserError(_("ERROR: El contacto no tiene teléfono o móvil. Agrega uno antes de crear facturas al crédito."))
+                        if not (partner.mobile or partner.phone):
+                            raise UserError(_("ERROR: El contacto no tiene número de teléfono o móvil."))
+                        if not (partner.street and partner.city):
+                            raise UserError(_("ERROR: El contacto no tiene calle o ciudad."))
         return super().create(vals_list)
-
+        
     @api.depends('amount_residual', 'move_type', 'state', 'company_id')
     def _compute_payment_state(self):
         stored_ids = tuple(self.ids)
