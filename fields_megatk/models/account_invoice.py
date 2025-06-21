@@ -36,9 +36,33 @@ class Account_Move(models.Model):
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
     
-    @api.model_create_multi
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     """Condicion que busca si la factura es al credito, si es asi busca el cliente si tiene numero y dirección, en caso de que no lo tenga no crea nada."""
+
+    #     company_id = self.env.user.company_id.id
+    #     for vals in vals_list:
+    #         term_id = vals.get('invoice_payment_term_id')
+    #         if term_id:
+    #             term = self.env['account.payment.term'].browse(term_id)
+    #             _logger.warning(term.line_ids)
+    #             _logger.warning(term.line_ids.days)
+    #             if term.line_ids and any(line.days > 0 for line in term.line_ids):
+    #                 partner = self.env['res.partner'].browse(vals.get('partner_id'))
+    #                 if partner:
+    #                     if partner.mobile or partner.phone:
+    #                         if partner.street and partner.city:
+    #                             return super().create(vals_list)
+    #                         else:
+    #                             raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
+    #                     else:
+    #                         raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
+    #     return super().create(vals_list)
+    @api.model
     def create(self, vals_list):
-        """Condicion que busca si la factura es al credito, si es asi busca el cliente si tiene numero y dirección, en caso de que no lo tenga no crea nada."""
+        """Condición que valida facturas a crédito: exige dirección y teléfono en el cliente."""
+        if not isinstance(vals_list, list):
+            vals_list = [vals_list]  # ✅ Convierte un dict en lista con un solo elemento
 
         company_id = self.env.user.company_id.id
         for vals in vals_list:
@@ -46,19 +70,19 @@ class Account_Move(models.Model):
             if term_id:
                 term = self.env['account.payment.term'].browse(term_id)
                 _logger.warning(term.line_ids)
-                _logger.warning(term.line_ids.days)
+                _logger.warning(term.line_ids.mapped('days'))
                 if term.line_ids and any(line.days > 0 for line in term.line_ids):
                     partner = self.env['res.partner'].browse(vals.get('partner_id'))
                     if partner:
                         if partner.mobile or partner.phone:
                             if partner.street and partner.city:
-                                return super().create(vals_list)
+                                continue  # ✅ Pasa, se valida
                             else:
-                                raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
+                                raise UserError(_("ERROR: El contacto no tiene calle o ciudad. Agrega dirección antes de crear facturas al crédito."))
                         else:
-                            raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
+                            raise UserError(_("ERROR: El contacto no tiene teléfono o móvil. Agrega uno antes de crear facturas al crédito."))
         return super().create(vals_list)
-        
+
     @api.depends('amount_residual', 'move_type', 'state', 'company_id')
     def _compute_payment_state(self):
         stored_ids = tuple(self.ids)
