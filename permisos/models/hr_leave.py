@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from datetime import datetime, time, date, timedelta
 import pytz
 import logging
+
+from odoo.exceptions import ValidationError
+from odoo.tools.float_utils import float_compare
 
 
 _logger = logging.getLogger(__name__)
@@ -32,7 +36,6 @@ class HrLeave(models.Model):
     medio_dia = time(12, 0, 0)
     tarde = time(13, 0, 0)
     salida = time(16, 0, 0)
-    
     
     request_hour_from = fields.Selection([
             ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
@@ -105,6 +108,53 @@ class HrLeave(models.Model):
         ('18', '6:00 PM')
     ], string='Hour to', default='16',)
     
+    #campos heredados
+    holiday_status_id = fields.Many2one(
+        "hr.leave.type", compute='_compute_from_employee_id', store=True, string="Time Off Type", required=True, readonly=False,
+        states={'cancel': [('readonly', True)], 'refuse': [('readonly', True)], 'validate1': [('readonly', True)], 'validate': [('readonly', True)]},
+        domain="[('company_id', '=?', employee_company_id)]", tracking=True)
+    
+    @api.constrains('state', 'number_of_days', 'holiday_status_id')
+    def _check_holidays(self):
+        for holiday in self:
+            # 🛑 Si el tipo de permiso permite saldo negativo, omitir validación
+            if holiday.holiday_status_id.allow_negative_balance:
+                continue
+
+            mapped_days = self.holiday_status_id.get_employees_days(
+                (holiday.employee_id | holiday.sudo().employee_ids).ids,
+                holiday.date_from.date()
+            )
+
+            if (
+                holiday.holiday_type != 'employee'
+                or (not holiday.employee_id and not holiday.sudo().employee_ids)
+                or holiday.holiday_status_id.requires_allocation == 'no'
+            ):
+                continue
+
+            if holiday.employee_id:
+                leave_days = mapped_days[holiday.employee_id.id][holiday.holiday_status_id.id]
+                if float_compare(leave_days['remaining_leaves'], 0, precision_digits=2) == -1 \
+                        or float_compare(leave_days['virtual_remaining_leaves'], 0, precision_digits=2) == -1:
+                    raise ValidationError(_(
+                        'No hay suficientes días disponibles para este tipo de permiso.\n'
+                        'Por favor revise también los permisos pendientes de validación.'
+                    ))
+            else:
+                unallocated_employees = []
+                for employee in holiday.sudo().employee_ids:
+                    leave_days = mapped_days[employee.id][holiday.holiday_status_id.id]
+                    if float_compare(leave_days['remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1 \
+                            or float_compare(leave_days['virtual_remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1:
+                        unallocated_employees.append(employee.name)
+                if unallocated_employees:
+                    raise ValidationError(_(
+                        'No hay suficientes días disponibles para este tipo de permiso.\n'
+                        'Por favor revise también los permisos pendientes de validación.\n'
+                        'Los empleados sin días asignados son:\n%s'
+                    ) % (', '.join(unallocated_employees)))
+    
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
         self.request_hour_from = self.request_hour_from_1
@@ -112,32 +162,7 @@ class HrLeave(models.Model):
     @api.onchange('request_hour_to_1')
     def _onchange_request_hour_to_1(self):
         self.request_hour_to = self.request_hour_to_1
-  
-
-    """@api.onchange('datetm_from', 'datetm_to')
-    def _onchange_datetm_ft(self):
-        if self.datetm_from and self.datetm_to:
-            user_tz = pytz.timezone(
-                self.env.context.get('tz') or self.env.user.tz)
-            fecha_inicial = pytz.utc.localize(
-                self.datetm_from).astimezone(user_tz)
-            fecha_fin = pytz.utc.localize(self.datetm_to).astimezone(user_tz)
-
-            if fecha_fin >= fecha_inicial:
-                if self.request_unit_hours: 
-                    permiso = self.calcularPermiso(fecha_inicial, fecha_fin)
-                    if not isinstance(permiso, str):
-                        self.dias = permiso['D']
-                        self.horas = permiso['H']
-                        self.minutos = permiso['M']         
-            else:
-                self.dias = 0
-                self.horas = 0
-                self.minutos = 0
-                self.env.user.notify_warning(
-                    message='La fecha final debe ser mayor o igual a la inicial')"""
                 
-
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours', 'holiday_status_id', 'request_hour_to', 'request_hour_from')
     def _onchange_request_datetm_ft(self):
         
@@ -177,7 +202,6 @@ class HrLeave(models.Model):
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
-                    
                 else:
                     self.dias = 0
                     self.horas = 0
@@ -347,3 +371,9 @@ class HrLeave(models.Model):
                 else:
                     self.env.user.notify_success(message='Permiso denegado')
         return super(HrLeave, self).action_refuse()
+    
+    """def create(self, vals):
+        vals['']
+        vals['number_of_days_display'] = 
+        return super(HrLeave, self).create(vals)"""
+    

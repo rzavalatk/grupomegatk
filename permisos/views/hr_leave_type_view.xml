@@ -12,6 +12,7 @@
             <field name="deducciones"/>
             <field name="sin_cargo"/>
             <field name="incapacidad"/>
+            <field name="allow_negative_balance" />
           </xpath>
 
 
