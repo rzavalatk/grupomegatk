@@ -20,7 +20,7 @@
 #################################################################################
 
 {
-    "name": "POS Clear Cart",
+    "name": "POS Clear Car",
     "author": "Botspot Infoware Pvt. Ltd.",
     "category": "Point of Sale",
     "summary": """Clear the cart using a single button click in POS screen.""",
