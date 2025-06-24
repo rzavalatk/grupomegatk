@@ -31,7 +31,7 @@
     'company': 'Cybrosys Techno Solutions',
     'maintainer': 'Cybrosys Techno Solutions',
     'website': "https://www.cybrosys.com",
-    'depends': ['pos_restaurant','web'],
+    'depends': ['pos_restaurant','website'],
     'data': [
         'report/pos_restaurant_web_menu_reports.xml',
         'report/pos_restaurant_web_menu_report_templates.xml',
