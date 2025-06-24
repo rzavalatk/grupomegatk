@@ -25,9 +25,9 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    allowed_pos = fields.Many2many('pos.config', string='Allowed Pos',
-                                   help='Allowed Pos for this user')
-    show_users = fields.Boolean(string="Show users of pos", default=True, help='Show users in dashboard ( for pos administrators only)')
+    allowed_pos = fields.Many2many('pos.config', string='TPV Permitido',
+                                   help='TPV permitido para este usuario')
+    show_users = fields.Boolean(string="Mostrar usuarios de TPV", default=True, help='Mostrar usuarios en el panel (solo para administradores de TPV)')
 
     @api.model
     def create(self, vals):
