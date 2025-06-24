@@ -27,5 +27,5 @@ class ResUsers(models.Model):
     """ THe class ResUsers is used to inherit res.users """
     _inherit = "res.users"
 
-    pos_conf_id = fields.Many2one('pos.config', string="POS Configuration",
-                                  help='select POS for the user')
+    pos_conf_id = fields.Many2one('pos.config', string="Configuracion del TPV",
+                                  help='selecciona un TPV para el usuario')
