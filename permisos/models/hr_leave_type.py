@@ -12,6 +12,11 @@ class HrLeave(models.Model):
     sin_cargo = fields.Boolean('Sin cargo')
     incapacidad = fields.Boolean('Incapacidad')
     
+    allow_negative_balance = fields.Boolean(
+        string="Permitir saldo negativo",
+        help="Permite que los empleados soliciten permisos incluso si no tienen días disponibles asignados."
+    )
+    
     @api.onchange('vacaciones')
     def _onchange_vacaciones(self):
         self.deducciones = False
