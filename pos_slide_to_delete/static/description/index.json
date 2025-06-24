@@ -1,0 +1,85 @@
+{
+    "hook": "Swipe to Delete Items in Odoo POS Cart",
+    "pitch": "Make POS operations faster with intuitive swipe-to-delete.\nNo complex setup,\nNo learning curve,\nJust smoother checkout flow.",
+    "supported_versions": [
+      "17",
+      "18"
+    ],
+    "feature_matrix": [
+      {
+        "name": "Mobile-friendly swipe gestures for line deletion",
+        "versions": [
+          "17",
+          "18"
+        ]
+      },
+      {
+        "name": "Works on both touch and non-touch devices",
+        "versions": [
+          "17",
+          "18"
+        ]
+      },
+      {
+        "name": "Intuitive left-to-right swipe interaction",
+        "versions": [
+          "17",
+          "18"
+        ]
+      },
+      {
+        "name": "Visual feedback during swipe action",
+        "versions": [
+          "17",
+          "18"
+        ]
+      }
+    ],
+    "benefits": [
+      {
+        "title": "Faster Checkout",
+        "description": "Speed up the checkout process by making line removal quick and intuitive"
+      },
+      {
+        "title": "Better UX",
+        "description": "More natural interaction that feels at home on touch devices"
+      },
+      {
+        "title": "Error Prevention",
+        "description": "Swipe gesture prevents accidental deletions compared to small delete buttons"
+      }
+    ],
+    "overview": [
+      {
+        "title": "Quick Delete Actions",
+        "description": "Remove items from cart with a simple swipe gesture - perfect for busy environments",
+        "image": "main.png"
+      },
+      {
+        "title": "Works Everywhere",
+        "description": "Compatible with all devices running Odoo POS - from desktop to mobile"
+      }
+    ],
+    "troubleshooting": [
+      {
+        "issue": "Swipe Not Working",
+        "cause": "Touch event configuration",
+        "solution": "Ensure browser touch events are enabled and no interfering scripts"
+      },
+      {
+        "issue": "Visual Glitches",
+        "cause": "CSS conflicts",
+        "solution": "Check for custom POS CSS overrides that might affect animations"
+      }
+    ],
+    "setup": [
+      {
+        "title": "Install Module",
+        "description": "Install through Odoo Apps or upload zip file"
+      },
+      {
+        "title": "No Configuration Needed",
+        "description": "Feature works automatically after installation"
+      }
+    ]
+  }

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_slide_to_delete_pos_slide_to_delete,pos_slide_to_delete.pos_slide_to_delete,model_pos_slide_to_delete_pos_slide_to_delete,base.group_user,1,1,1,1
