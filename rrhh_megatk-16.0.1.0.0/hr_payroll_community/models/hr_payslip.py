@@ -353,7 +353,7 @@ class HrPayslip(models.Model):
                     data = {
                         'name': item.name,
                         'sequence': 20,
-                        'code': item.code or 'LEAVES',
+                        'code': 'LEAVES',
                         'number_of_hours': c_leaves[item]['hours'],
                         'number_of_days': c_leaves[item][
                             'hours'] / work_hours,

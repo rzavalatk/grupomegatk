@@ -37,5 +37,6 @@ class HrPayslipEmployees(models.TransientModel):
                     'company_id': employee.company_id.id,
                 }
             payslips += self.env['hr.payslip'].create(res)
-            payslips.compute_sheet()
+            for payslip in payslips:
+                payslip.compute_sheet()
         return {'type': 'ir.actions.act_window_close'}
