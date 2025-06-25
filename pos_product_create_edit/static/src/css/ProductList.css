@@ -22,12 +22,13 @@ select.form-control{
     font-family: "Lato";
     font-size: 20px;
     color: #444;
-    padding: 10px;
+    padding: 5px;
     border-radius: 3px;
     border: none;
     box-shadow: 0px 0px 0px 1px gainsboro inset;
     box-sizing: border-box;
-    width: 85%;
+    width: 80%;
+    margin-bottom: 15px;
 }
 i.fa.fa-plus.create_btn{
     margin-right:5px;
