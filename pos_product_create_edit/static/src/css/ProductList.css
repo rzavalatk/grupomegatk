@@ -28,7 +28,6 @@ select.form-control{
     box-shadow: 0px 0px 0px 1px gainsboro inset;
     box-sizing: border-box;
     width: 80%;
-    margin-bottom: 15px;
 }
 i.fa.fa-plus.create_btn{
     margin-right:5px;
