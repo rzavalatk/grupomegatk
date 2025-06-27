@@ -26,42 +26,33 @@ class ConexionAnviz(models.Model):
     
 #http://192.168.10.34/goform/searchrecord?token=eyJhbGciOiJTSEExIiwidHlwIjoiSldUIn0=.eyJleHAiOiI5MDI4Nzg2NyIsImlhdCI6IjIwMjUtMDYtMTIgMTE6MDc6MDMiLCJpc3MiOiJFUDMwMFBSTy0wNzMwMjAwMDIzMzkwMDI3IiwianRpIjoiMiIsIm5iZiI6IjIwMjUtMDYtMTIgMTE6MDc6MDMiLCJwd24iOiIxMTUyOTIxNTA0NjA2ODQ2OTc1IiwidWlkIjoiYWRtaW4ifQ==.CM/rycAZQONciAE0/D+9fpGLyOY=&limit=2&from=2025-06-10&to=2025-06-10
     def obtener_token(self):
-        #Se obtendra el token desde una peticion http a la api de anviz
-        #http://<IP>/goform/chklogin?userid=...&password=...
-
-        if not self.dir_ip:
-            raise Warning("No se ha ingresado la direccion IP")
-        if not self.user:
-            raise Warning("No se ha ingresado el usuario")
-        if not self.password:
-            raise Warning("No se ha ingresado el password")
-        
-        url = f"http://{self.dir_ip}/anviz/login"
-        
-        params = {
-            'userid': self.user,
-            'password': self.password
-        }
-        _loggin.warning(url)
-        _loggin.warning(params)
         try:
+            url = f"http://{self.dir_ip}/anviz/login"
+            params = {"userid": self.user, "password": self.password}
             response = requests.get(url, params=params, timeout=5)
             response.raise_for_status()
-            json_limpio = self.limpiar_json_anviz(response.text)
-            _loggin.warning(json_limpio)
+
+            raw = response.text
+            _loggin.warning("Response.text: %s", raw)
+
+            json_limpio = self.limpiar_json_anviz(raw)
+            _loggin.warning("JSON limpio: %s", json_limpio)
+
             data = json.loads(json_limpio)
-            _loggin.warning("----")
-            _loggin.warning(data)
-            
-            _loggin.warning("Tipo de json_limpio: %s", type(json_limpio))
+
+            # Si todavía es string, hacer segunda capa de decodificación
+            if isinstance(data, str):
+                _loggin.warning("Primera capa JSON todavía es str, aplicando segunda capa")
+                data = json.loads(data)
+
+            _loggin.warning("DATA FINAL: %s", data)
             _loggin.warning("Tipo de data: %s", type(data))
 
-            if data["code"] == "success":
-                _loggin.warning(data)
-                self.token = data["token"]
+            if isinstance(data, dict) and data.get("code") == "success":
+                self.token = data.get("token")
                 return data
             else:
-                raise Warning(f"Login fallido: {data.get('msg')}")
+                raise Warning(f"Login fallido: {data.get('msg', 'Respuesta inesperada')}")
+
         except Exception as e:
             raise Warning(f"Error al conectarse con Anviz: {str(e)}")
-    
