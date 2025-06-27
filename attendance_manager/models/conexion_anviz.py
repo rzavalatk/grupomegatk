@@ -50,7 +50,8 @@ class ConexionAnviz(models.Model):
             json_limpio = self.limpiar_json_anviz(response.text)
             _loggin.warning(json_limpio)
             data = json.loads(json_limpio)
-            
+            _loggin.warning("----")
+            _loggin.warning(data)
             
             self.token = data
             if data.get("code") == "success":
