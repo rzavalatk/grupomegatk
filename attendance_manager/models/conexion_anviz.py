@@ -44,8 +44,8 @@ class ConexionAnviz(models.Model):
             data = response.json()
             data = json.loads(data)
             _loggin.warning(data)
-            """self.token = data
-            if data.get("code") == "success":
+            self.token = data
+            """if data.get("code") == "success":
                 _loggin.warning(data)
                 self.token = data
                 return data
