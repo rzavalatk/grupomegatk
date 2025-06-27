@@ -50,6 +50,7 @@ class ConexionAnviz(models.Model):
             json_limpio = self.limpiar_json_anviz(response.text)
             _loggin.warning(json_limpio)
             data = json.loads(json_limpio)
+            data = data.json()
             _loggin.warning("----")
             _loggin.warning(data)
             
