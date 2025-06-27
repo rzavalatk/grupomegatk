@@ -54,9 +54,9 @@ class ConexionAnviz(models.Model):
             _loggin.warning(data)
             
             self.token = data
-            if data.get("code") == "success":
+            if data["code"] == "success":
                 _loggin.warning(data)
-                self.token = data.get("token")
+                self.token = data["token"]
                 return data
             else:
                 raise Warning(f"Login fallido: {data.get('msg')}")
