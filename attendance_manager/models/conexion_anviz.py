@@ -42,7 +42,7 @@ class ConexionAnviz(models.Model):
             response = requests.get(url, params=params, timeout=5)
             response.raise_for_status()
             data = response.json()
-            data = json.loads(data)
+            data = json.loads(str('"'+data+'"')) #data = json.loads(data)
             _loggin.warning(data)
             self.token = data
             """if data.get("code") == "success":
