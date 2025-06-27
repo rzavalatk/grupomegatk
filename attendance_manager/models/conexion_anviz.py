@@ -47,7 +47,7 @@ class ConexionAnviz(models.Model):
         try:
             response = requests.get(url, params=params, timeout=5)
             response.raise_for_status()
-            data = json.loads(response)
+            data = json.loads(response.text)
             
             _loggin.warning(data)
             self.token = data
