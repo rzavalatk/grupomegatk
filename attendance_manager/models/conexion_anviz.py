@@ -53,7 +53,9 @@ class ConexionAnviz(models.Model):
             _loggin.warning("----")
             _loggin.warning(data)
             
-            self.token = data
+            _loggin.warning("Tipo de json_limpio: %s", type(json_limpio))
+            _loggin.warning("Tipo de data: %s", type(data))
+
             if data["code"] == "success":
                 _loggin.warning(data)
                 self.token = data["token"]
