@@ -51,12 +51,12 @@ class ConexionAnviz(models.Model):
             
             _loggin.warning(data)
             self.token = data
-            """if data.get("code") == "success":
+            if data.get("code") == "success":
                 _loggin.warning(data)
-                self.token = data
+                self.token = data.get("token")
                 return data
             else:
-                raise Warning(f"Login fallido: {data.get('msg')}")"""
+                raise Warning(f"Login fallido: {data.get('msg')}")
         except Exception as e:
             raise Warning(f"Error al conectarse con Anviz: {str(e)}")
     
