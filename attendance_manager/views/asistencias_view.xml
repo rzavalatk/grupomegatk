@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="attendance_record_view_tree" model="ir.ui.view">
+            <field name="name">attendance.record.view.tree</field>
+            <field name="model">attendance.record</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name" />  
+                    <field name="fecha_reporte" />
+                    <field name="company_id" />
+                </tree>
+            </field>
+        </record>
+
+       <record id="attendance_record_view_form" model="ir.ui.view">
+            <field name="name">attendance.record.view.form</field>
+            <field name="model">attendance.record</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    
+                    <header>
+                        <button string="Evaluar" name="evaluar" type="object" class="oe_highlight"/>
+                    </header>
+                    
+                    <sheet>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" style="width: 50%%;"/>
+                            </h1>
+                        </div>
+                        <group> 
+                            <field name="fecha_reporte" />
+
+                        </group>
+                        <group >
+                            <field name="company_id" />
+                        </group>
+                        <notebook>
+                            <page name="entradas" string="Entradas">
+                                <field name="attendance_daily_entries">
+                                    <tree >
+                                        <field name="id_marcaciones" />
+                                        <field name="employee_id" />
+                                        <field name="fecha" />
+                                        <field name="check_in" />
+                                        <field name="check_type" />
+                                    </tree>
+                                </field>
+                                
+                            </page>
+                            <page name="salidas" string="Salidas">
+                                <field name="attendance_daily_exits">
+                                    <tree >
+                                        <field name="id_marcaciones" />
+                                        <field name="employee_id" />
+                                        <field name="fecha" />
+                                        <field name="check_in" />
+                                        <field name="check_type" />
+                                    </tree>
+                                </field>
+                                
+                            </page>
+                            <!--<page name="permisos" string="Permisos">
+                                <field name="attendance_permisos"></field>
+                                
+                            </page>
+                            
+                            <page name="administracion" string="Administración">
+                                <field name="attendance_administracion">
+                                    <tree editable='button'>
+                                        <field name="employee_id" />
+                                        <field name="hora_entrada" />
+                                        <field name="porcentaje_deduccion" />
+                                        <field name="deduccion_llegada_tarde" />
+                                        <field name="permiso" />
+                                        <field name="permiso_cargado" />
+                                        <field name="deduccion_permiso" />
+                                        <field name="total_deducciones" />
+                                    </tree>
+                                </field>
+                                
+                            </page>-->
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        
+
+        <record id="attendance_record_action" model="ir.actions.act_window">
+            <field name="name">Asistencias</field>
+            <field name="res_model">attendance.record</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--<menuitem
+            id="attendance_record_menu"
+            name="Asistencias"
+            action="attendance_record_action"
+            parent="menu_attendance_sub"
+            sequence="10"/>-->
+    
+    </data>
+    
+    
+
+</odoo>
