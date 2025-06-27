@@ -19,7 +19,7 @@ class ConexionAnviz(models.Model):
     password = fields.Char("Password")
     token = fields.Char("Token de usuario")
     
-    def limpiar_json_anviz(raw_data):
+    def limpiar_json_anviz(self, raw_data):
         # Eliminar coma extra antes de cerrar un objeto `}, }`
         limpio = re.sub(r'],\s*}', ']}', raw_data)
         return limpio
