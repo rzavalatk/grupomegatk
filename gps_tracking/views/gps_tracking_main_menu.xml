@@ -7,7 +7,7 @@
     </record>
 
     <menuitem id="menu_gps_device_root"
-        name="GP"
+        name="GPS"
         sequence="10"
         action="gps_tracking_action"
         groups=""
