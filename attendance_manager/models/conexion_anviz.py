@@ -15,6 +15,7 @@ class ConexionAnviz(models.Model):
     nombre = fields.Char("Nombre del dispositivo / regiòn")
     dir_ip = fields.Char("Direccion IP del dispositivo")
     region = fields.Char("Region")
+    codigo = fields.Char("Codigo")
     user = fields.Char("Usuario")
     password = fields.Char("Password")
     token = fields.Char("Token de usuario")

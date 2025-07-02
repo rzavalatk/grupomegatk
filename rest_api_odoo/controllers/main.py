@@ -8,6 +8,10 @@ from datetime import date
 
 _logger = logging.getLogger(__name__)
 
+#PETICION GET http://URL/send_request?model=res.partner&Id=10.
+#PETICION POST http://URL/send_request?model=res.partner
+    #data = { "fields" :["name", "phone"] , "values": {"name": "abc", "phone":"55962441552" } }.
+#PETICION DELETE http://URL/send_request?model=res.partner&Id=10
 
 class RestApi(http.Controller):
     """Este es un controlador que se utiliza para generar respuestas basadas en las solicitudes api"""

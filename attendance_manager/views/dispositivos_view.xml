@@ -13,6 +13,7 @@
                 <sheet>
                     <group>
                         <field name="nombre" />
+                        <field name="codigo" readonly="1" />
                         <field name="dir_ip" />
                         <field name="region" />
                         <field name="user" />
