@@ -14,11 +14,8 @@
                     <group>
                         <field name="nombre" />
                         <field name="codigo" readonly="1" />
-                        <field name="dir_ip" />
-                        <field name="region" />
-                        <field name="user" />
-                        <field name="password" />
-                        <field name="token" />
+                        <field name="dir_ip" readonly="1"/>
+                        <field name="token" readonly="1"/>
                                                
                     </group>
                     
