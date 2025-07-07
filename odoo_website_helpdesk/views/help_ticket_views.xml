@@ -98,7 +98,7 @@
                                    placeholder="Provide the reason in detail"/>
                         </page>
                         <page string="Adjuntos">
-                            <field name="attachment_ids">
+                            <field name="attachment_ids" widget="many2many_binary">
                                 <tree string="Adjuntos" no_open="1">
                                     <field name="name"/>
                                     <field name="res_model"/>
