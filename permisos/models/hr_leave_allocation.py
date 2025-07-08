@@ -19,7 +19,7 @@ class HrLeaveAllocation(models.Model):
         _logger.warning("minutos actuales %s", minutos_actuales)
         _logger.warning("minutos solicitados %s", allocation.number_of_days_display * 60)
         _logger.warning("number_of_days_display %s", allocation.number_of_days_display)
-        minutos_solicitados = allocation.number_of_days_display * 60
+        minutos_solicitados = allocation.number_of_days_display * 480
         minutos_resultante = minutos_actuales - \
             minutos_solicitados if operacion == 'resta' else minutos_actuales + minutos_solicitados
         _logger.warning("minutos restantes %s", minutos_resultante)
