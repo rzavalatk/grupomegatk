@@ -198,9 +198,12 @@ class Account_Move(models.Model):
                 
     def action_post(self):
         res = super(Account_Move, self).action_post()
-        
-        self.generate_tickets()
-        return res
+        if not self.env.user.has_group('mi_modulo.grupo_validador_facturas'):
+            raise UserError("No tienes permisos para validar esta factura.")
+            
+        else :
+            self.generate_tickets()
+            return res
     
     def enviar_email_qr(self):
         mail_template = self.env.ref('fields_megatk.mail_template_invoice_post')
