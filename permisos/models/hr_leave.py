@@ -364,7 +364,7 @@ class HrLeave(models.Model):
                     
                     for employee_id in leave.employee_ids:
                         dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                        'resta', employee_id, leave)
+                        'suma', employee_id, leave)
                         employee_id.sudo().write({'permisos_dias': dias,
                                                     'permisos_horas': horas,
                                                     'permisos_minutos': minutos_resultante})
