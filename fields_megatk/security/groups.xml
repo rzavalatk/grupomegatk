@@ -7,7 +7,7 @@
             <field name="sequence">4</field>
 	</record>
 	
-    <record model="ir.module.category" id="module_category_invoice">
+    <record model="ir.module.category" id="module_category_factura_credito">
         <field name="name">Gestión Facturas Credito</field>
         <field name="description">Gestión Facturas Credito</field>
         <field name="sequence">4</field>
@@ -18,8 +18,8 @@
         <field name="name">Usuario responsable CRM </field>
     </record>
 
-    <record id="invoice_credit_manager" model="res.groups">
-        <field name="category_id" ref="module_category_invoice"/>
+    <record id="factura_credito_manager" model="res.groups">
+        <field name="category_id" ref="module_category_factura_credito"/>
         <field name="name">Ususario Facturas Credito</field>
     </record>
 </data>
