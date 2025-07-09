@@ -35,7 +35,7 @@
         "views/res_parnert_industry_view.xml",
         "views/hr_employee_equipo_madrugador.xml",
        #"views/crm_lead_views.xml",
- 		#'security/groups.xml',
+ 		'security/groups.xml',
         #'security/ir.model.access.csv',
  		#"views/nota_debito_view.xml",
  		#"views/account_nota_debito.xml",
