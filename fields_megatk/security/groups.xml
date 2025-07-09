@@ -20,7 +20,7 @@
 
     <record id="factura_credito_manager" model="res.groups">
         <field name="category_id" ref="module_category_factura_credito"/>
-        <field name="name">Ususario Facturas Credito</field>
+        <field name="name">Usuario Facturas Credito</field>
     </record>
 </data>
 </odoo>
