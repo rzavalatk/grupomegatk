@@ -198,6 +198,7 @@ class Account_Move(models.Model):
                 
     def action_post(self):
         res = super(Account_Move, self).action_post()
+        _logger.warning("Entra al action post" + str(self.move_type))
         if self.move_type in ['out_refund', 'in_refund']:
             if not self.env.user.has_group('mi_modulo.grupo_validador_facturas'):
                 raise UserError("No tienes permisos para validar esta factura.")
