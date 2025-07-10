@@ -7,8 +7,8 @@ from odoo.exceptions import Warning
 class TermPament(models.Model):
     _inherit = "account.payment.term"
     
-    public = fields.Boolean("Publico",default=False)
-    credit = fields.Boolean("¿Es Crédito?",default=False)
+    public = fields.Boolean("Publico", default=False)
+    credit = fields.Boolean("¿Es Crédito?", default=False)
     
 class Facturas(models.Model):
     _inherit = "account.move"
