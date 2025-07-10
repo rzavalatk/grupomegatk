@@ -40,8 +40,8 @@ class Saleorder(models.Model):
     def action_confirm(self):
         res = super(Saleorder, self).action_confirm()
         
-        if self.invoice_payment_term_id.id:
-            quote_term =self.env['account.payment.term'].search([('id', '=', self.invoice_payment_term_id.id)])
+        if self.payment_term_id.id:
+            quote_term =self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
             if quote_term.credit:
                 if self.move_type in ['out_invoice', 'in_invoice']:
                     if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
