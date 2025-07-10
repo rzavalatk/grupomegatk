@@ -28,6 +28,11 @@ class LiquidacionTarjetas(models.Model):
         for gs in self:
             for line in gs.detalle_gastos_ids:
                 gs.total_gastos += line.monto"""
+    
+    @api.onchange('detalle_gastos_ids')
+    def _onchange_detalle_gastos_ids(self):
+        if self.detalle_gastos_ids:
+            self.total_gastos = sum([linea.monto for linea in self.detalle_gastos_ids])
 
     company_id = fields.Many2one("res.company", "Empresa", required=True, default=lambda self: self.env.user.company_id)
     name = fields.Char("Motivo", required=True, track_visibility='onchange')
@@ -126,6 +131,6 @@ class LineaGastos(models.Model):
     partner_id = fields.Many2one('res.partner', 'Empresa o Persona', domain="[('company_id', '=', parent.company_id)]")
     monto = fields.Float("Monto a liquidar")
     
-    @api.onchange('monto')
+    """@api.onchange('monto')
     def _onchange_monto(self):
-        self.obj_parent.total_gastos = sum([linea.monto for linea in self.obj_parent.detalle_gastos_ids])
+        self.obj_parent.total_gastos = sum([linea.monto for linea in self.obj_parent.detalle_gastos_ids])"""
