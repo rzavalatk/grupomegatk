@@ -177,9 +177,16 @@ class Account_Move(models.Model):
             for line in move.line_ids:
                 line.date_maturity = move.date_due
                 
+
     def action_post(self):
         res = super(Account_Move, self).action_post()
-        
+        credit_term =self.env['account.payment.term'].search([('id', '=', self.invoice_payment_term_id.id)])
+        if credit_term.credit:
+            _logger.warning("Entra al action post " + str(self.move_type))
+            if self.move_type in ['out_invoice', 'in_invoice']:
+                if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
+                    raise UserError("No tienes permisos para validar esta factura.")
+    
         self.generate_tickets()
         return res
     
