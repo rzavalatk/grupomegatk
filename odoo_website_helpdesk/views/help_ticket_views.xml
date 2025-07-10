@@ -97,6 +97,10 @@
                             <field name="description"
                                    placeholder="Provide the reason in detail"/>
                         </page>
+                        <page string="Solución del problema">
+                            <field name="solution"
+                                   placeholder="Escribir la solución del problema"/>
+                        </page>
                         <page string="Adjuntos">
                             <field name="attachment_ids" widget="many2many_binary">
                                 <tree string="Adjuntos" no_open="1">

@@ -119,14 +119,9 @@ class HelpTicket(models.Model):
        """
         self.team_head = self.team_id.team_lead_id.id
 
-    @api.onchange('stage_id')
+    """@api.onchange('stage_id')
     def mail_snd(self):
-        """Enviar un correo electrónico cuando se cambie la etapa del ticket.
-
-        Este método de cambio se activa cuando la etapa del ticket se
-        cambió. Actualiza la fecha de la última actualización, la fecha de inicio y la fecha de finalización.
-        campos en consecuencia. Si una plantilla está asociada con la etapa del ticket,
-        envía un correo electrónico utilizando esa plantilla."""
+        
         rec_id = self._origin.id
         data = self.env['help.ticket'].search([('id', '=', rec_id)])
         data.last_update_date = fields.Datetime.now()
@@ -136,7 +131,8 @@ class HelpTicket(models.Model):
             data.end_date = fields.Datetime.now()
         if self.stage_id.template_id:
             mail_template = self.stage_id.template_id
-            mail_template.send_mail(self._origin.id, force_send=True)
+            mail_template.send_mail(self._origin.id, force_send=True)"""
+            
 
     def assign_to_teamleader(self):
         """Asigne el ticket al líder del equipo y envíe una notificación.
@@ -246,6 +242,26 @@ class HelpTicket(models.Model):
             vals_list['name'] = self.env['ir.sequence'].next_by_code(
                 'help.ticket') or _('New')
         return super().create(vals_list)
+    
+    def write(self, vals):
+        """
+        Sobrescribe el método write para manejar el cambio de etapa.
+        """
+        res = super(HelpTicket, self).write(vals)
+
+        # 'stage_id' en vals significa que el campo de etapa fue modificado en esta transacción.
+        if 'stage_id' in vals:
+            for ticket in self:
+                ticket.last_update_date = fields.Datetime.now()
+                if ticket.stage_id.starting_stage:
+                    ticket.start_date = fields.Datetime.now()
+                if ticket.stage_id.closing_stage or ticket.stage_id.cancel_stage:
+                    ticket.end_date = fields.Datetime.now()
+
+                if ticket.stage_id.template_id:
+                    ticket.stage_id.template_id.send_mail(ticket.id, force_send=True)
+        
+        return res
 
     def action_create_ticket_crm(self):
         # Crear el ticket de CRM usando self.env
@@ -379,6 +395,7 @@ class HelpTicket(models.Model):
             'domain': [('id', 'in', help_ticket_records.ids)],
             'context': self.env.context,
         }
+
 
     def action_send_reply(self):
         """ Redactar y enviar una respuesta al cliente.
