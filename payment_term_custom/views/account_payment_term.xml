@@ -11,6 +11,9 @@
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="public" />
                 </xpath>
+                <xpath expr="//field[@name='public']" position="after">
+                    <field name="credit" />
+                </xpath>
             </field>
         </record>
 
