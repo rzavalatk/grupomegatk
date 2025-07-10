@@ -259,7 +259,7 @@ class HelpTicket(models.Model):
                     ticket.end_date = fields.Datetime.now()
 
                 if ticket.stage_id.template_id:
-                    ticket.stage_id.template_id.send_mail(ticket.id, force_send=False)
+                    ticket.stage_id.template_id.send_mail(ticket.id, force_send=True)
         
         return res
 
