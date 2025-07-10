@@ -23,11 +23,16 @@ class LiquidacionTarjetas(models.Model):
                 self.currency_rate = 1
                 self.es_moneda_base = True
 
-    @api.depends('detalle_gastos_ids.monto')
+    """@api.depends('detalle_gastos_ids.monto')
     def get_totalgastos(self):
         for gs in self:
             for line in gs.detalle_gastos_ids:
-                gs.total_gastos += line.monto
+                gs.total_gastos += line.monto"""
+    
+    @api.onchange('detalle_gastos_ids')
+    def _onchange_detalle_gastos_ids(self):
+        if self.detalle_gastos_ids:
+            self.total_gastos = sum([linea.monto for linea in self.detalle_gastos_ids])
 
     company_id = fields.Many2one("res.company", "Empresa", required=True, default=lambda self: self.env.user.company_id)
     name = fields.Char("Motivo", required=True, track_visibility='onchange')
@@ -41,7 +46,7 @@ class LiquidacionTarjetas(models.Model):
     #relacion de unos a muchos
     detalle_gastos_ids = fields.One2many("gastos.tarjeta.lineas.megatk", "obj_parent", "Detalle de gastos")
     comentarios = fields.Text("Comentarios")
-    total_gastos = fields.Float("Total gastos", store=True, track_visibility='onchange', compute=get_totalgastos)
+    total_gastos = fields.Float("Total gastos", store=True, track_visibility='onchange')
     journal_id = fields.Many2one("account.journal", "Tarjeta", required=True, domain=[('type','=','bank')])
     debito_id = fields.Many2one('banks.debit', 'Apunte Contable', readonly=True)
     
