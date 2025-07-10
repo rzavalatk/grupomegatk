@@ -39,8 +39,13 @@ class Saleorder(models.Model):
 
     def action_confirm(self):
         res = super(Saleorder, self).action_confirm()
-        if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
-            raise UserError(_("No tienes permiso para confirmar cotizaciones."))
+        
+        if self.payment_term_id.id:
+            quote_term =self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
+            if quote_term.credit:
+                if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
+                    raise UserError(_("No tienes permiso para confirmar cotizaciones."))
+        
         return res
     
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
