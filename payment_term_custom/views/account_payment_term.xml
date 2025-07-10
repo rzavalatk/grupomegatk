@@ -11,6 +11,14 @@
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="public" />
                 </xpath>
+
+            </field>
+        </record>
+        <record id="account_payment_term_new_field_credit" model="ir.ui.view">
+            <field name="name">account.payment.term.new.field.credit</field>
+            <field name="model">account.payment.term</field>
+            <field name="inherit_id" ref="account.view_payment_term_form"/>
+            <field name="arch" type="xml">
                 <xpath expr="//field[@name='public']" position="after">
                     <field name="credit" />
                 </xpath>
