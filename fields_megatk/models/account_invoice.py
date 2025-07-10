@@ -201,11 +201,10 @@ class Account_Move(models.Model):
         credit_term =self.env['account.payment.term'].search([('id', '=', self.invoice_payment_term_id.id)])
         if credit_term.credit:
             _logger.warning("Entra al action post " + str(self.move_type))
-            if self.move_type in ['out_refund', 'in_refund']:
-                if not self.env.user.has_group('fields_megatk.factura_credito_manager') and self.env[4]:
+            if self.move_type in ['out_invoice', 'in_invoice']:
+                if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
                     raise UserError("No tienes permisos para validar esta factura.")
-        else :
-            raise UserError("Funciona.")
+    
         self.generate_tickets()
         return res
     
