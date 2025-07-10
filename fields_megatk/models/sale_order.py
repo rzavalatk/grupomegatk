@@ -36,6 +36,12 @@ class Saleorder(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
+    
+    def action_confirm(self):
+        res = super(Saleorder, self).action_confirm()
+        if not self.env.user.has_group('tu_modulo.group_nombre_del_grupo_confirmador'):
+            raise UserError(_("No tienes permiso para confirmar cotizaciones."))
+        return res
 
 #CAMPOS EN SECCION INFERIOR EN PAGE LINEAS DEL PEDIDO
 class SaleorderLine(models.Model):
