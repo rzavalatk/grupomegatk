@@ -43,9 +43,8 @@ class Saleorder(models.Model):
         if self.payment_term_id.id:
             quote_term =self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
             if quote_term.credit:
-                if self.move_type in ['out_invoice', 'in_invoice']:
-                    if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
-                        raise UserError(_("No tienes permiso para confirmar cotizaciones."))
+                if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
+                    raise UserError(_("No tienes permiso para confirmar cotizaciones."))
         
         return res
 
