@@ -39,7 +39,7 @@ class Saleorder(models.Model):
     
     def action_confirm(self):
         res = super(Saleorder, self).action_confirm()
-        if not self.env.user.has_group('tu_modulo.group_nombre_del_grupo_confirmador'):
+        if not self.env.user.has_group('fields_megatk.factura_credito_manager'):
             raise UserError(_("No tienes permiso para confirmar cotizaciones."))
         return res
 
