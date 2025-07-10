@@ -21,7 +21,7 @@
         'hr_attendance',
         'hr_holidays',
         'hr_payroll_community',
-        'hr_expense',
+        #'hr_expense',
         'hr_timesheet',
         'oh_employee_documents_expiry',
         'hr_multi_company',
