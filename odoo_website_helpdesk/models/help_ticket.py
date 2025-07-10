@@ -137,6 +137,7 @@ class HelpTicket(models.Model):
         if self.stage_id.template_id:
             mail_template = self.stage_id.template_id
             mail_template.send_mail(self._origin.id, force_send=True)
+            pass
 
     def assign_to_teamleader(self):
         """Asigne el ticket al líder del equipo y envíe una notificación.
@@ -379,6 +380,7 @@ class HelpTicket(models.Model):
             'domain': [('id', 'in', help_ticket_records.ids)],
             'context': self.env.context,
         }
+
 
     def action_send_reply(self):
         """ Redactar y enviar una respuesta al cliente.
