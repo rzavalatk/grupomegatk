@@ -86,10 +86,20 @@
                 Estimado(a)
                 <t t-out="object.customer_id.name"/>
                 <br/>
-                Su problema está resuelto.
-                Su Ticket
-                <t t-out="object.name"/>
-                Esta hecho.
+                <p>Te informamos que el ticket de soporte técnico <strong><t t-out="object.name"/></strong> ha sido <strong>completado con éxito</strong>.</p>
+                
+                <p><strong>Resumen de la atención:</strong><br/>
+                    - Fecha de solicitud: <t t-out="object.create_date"/><br/>
+                    - Descripción: <t t-out="object.description"/>.<br/>
+                    - Solución aplicada: <t t-out="object.solution"/></p>
+                
+                <p>Si consideras que el problema <strong>no ha sido resuelto completamente</strong>, por favor, no dudes en responder a este correo o reabrir el ticket desde nuestra plataforma.</p>
+
+                        <p>Agradecemos tu confianza en nuestro equipo de soporte.<br/>
+                        Quedamos a tu disposición para cualquier otra consulta.</p>
+
+                        <p>Saludos cordiales,<br/>
+                        Soporte Técnico – <t t-out="object.env.company.name"/></p>
                 <br/>
                 <br/>
                 Gracias.
