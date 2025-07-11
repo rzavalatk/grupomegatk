@@ -22,59 +22,37 @@
                                             <div>
                                                 <div>
                                                     <div>
-                                                        <input class="starRating "
-                                                               id="rating11"
-                                                               type="radio"
-                                                               name="rating"
-                                                               value="1"
-                                                               checked="checked">
-                                                            <label for="rating11">
-                                                                <span>
-                                                                    1
-                                                                </span>
-                                                            </label>
-                                                        </input>
+                                                        <input class="starRating"
+                                                            id="rating11"
+                                                            type="radio"
+                                                            name="rating"
+                                                            value="1"
+                                                            checked="checked"/>
+                                                        <label for="rating11"><span>1</span></label>
                                                     </div>
                                                     <input id="rating12"
-                                                           type="radio"
-                                                           name="rating"
-                                                           value="2">
-                                                        <label for="rating12">
-                                                            <span>
-                                                                2
-                                                            </span>
-                                                        </label>
-                                                    </input>
-                                                </div>
+                                                        type="radio"
+                                                        name="rating"
+                                                        value="2"/>
+                                                    <label for="rating12"><span>2</span></label>
+                                                </div>       
                                                 <input id="rating13"
-                                                       type="radio"
-                                                       name="rating"
-                                                       value="3">
-                                                    <label for="rating13">
-                                                        <span>
-                                                            3
-                                                        </span>
-                                                    </label>
-                                                </input>
+                                                    type="radio"
+                                                    name="rating"
+                                                    value="3"/>
+                                                <label for="rating13"><span>3</span></label>
                                             </div>
                                             <input id="rating14"
-                                                   type="radio"
-                                                   name="rating"
-                                                   value="4">
-                                                <label for="rating14">
-                                                    <span>
-                                                        4
-                                                    </span>
-                                                </label>
-                                            </input>
+                                                type="radio"
+                                                name="rating"
+                                                value="4"/>
+                                            <label for="rating14"><span>4</span></label>
                                         </div>
                                         <input id="rating15"
-                                               type="radio"
-                                               name="rating"
-                                               value="5">
-                                            <label for="rating15">
-                                            </label>
-                                        </input>
+                                            type="radio"
+                                            name="rating"
+                                            value="5"/>
+                                        <label for="rating15"><span>5</span></label>
                                     </div>
                                 </div>
                                 <div class="o_portal_chatter_composer_body mb32">
