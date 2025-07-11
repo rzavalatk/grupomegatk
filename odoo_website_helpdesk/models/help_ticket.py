@@ -42,6 +42,7 @@ class HelpTicket(models.Model):
     customer_name = fields.Char(string='Nombre del cliente',)
     subject = fields.Text(string='Asunto', required=True, help='Asunto del Ticket')
     description = fields.Text(string='Descripción', required=True, help='Descripción del Ticket')
+    solution = fields.Text(string='Solución', help='Solución del Ticket')
     email = fields.Char(string='Correo electronico', help='Correo del cliente.')
     phone = fields.Char(string='Telefono', help='Telefono del cliente.')
     company_id = fields.Many2one('res.company', string='Compañia')
