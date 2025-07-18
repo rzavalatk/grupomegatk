@@ -291,6 +291,9 @@ class Account_Move(models.Model):
         self.n_tickets_acum = len(tickets)
         _logger.warning(tickets)   
         
+    def copy(self, default=None):
+        raise UserError(_("No se permite duplicar facturas."))   
+        
     
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
