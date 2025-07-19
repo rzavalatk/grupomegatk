@@ -313,6 +313,7 @@ class Account_Move(models.Model):
         self.ensure_one()
         allowed_company_name = "INVERSIONES LENKA"  # Cambia esto por el nombre de tu compañía
         if self.move_type != 'in_invoice':
+            _logger.warning("No se permite duplicar facturas de clientes.")
             raise UserError(_("Solo se permite duplicar facturas de proveedores."))
         else:
             if self.company_id.name != allowed_company_name:
