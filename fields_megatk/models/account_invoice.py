@@ -312,8 +312,11 @@ class Account_Move(models.Model):
     def copy(self, default=None):
         self.ensure_one()
         allowed_company_name = "INVERSIONES LENKA"  # Cambia esto por el nombre de tu compañía
-        if self.company_id.name != allowed_company_name:
-            raise UserError(_("No se permite duplicar facturas para esta compañía."))
+        if self.move_type != 'in_invoice':
+            raise UserError(_("Solo se permite duplicar facturas de proveedores."))
+        else:
+            if self.company_id.name != allowed_company_name:
+                raise UserError(_("No se permite duplicar facturas para esta compañía."))
         return super(Account_Move, self).copy(default)
     
 class AccountMoveLine(models.Model):
