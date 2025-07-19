@@ -291,12 +291,14 @@ class Account_Move(models.Model):
         self.n_tickets_acum = len(tickets)
         _logger.warning(tickets)   
         
-    # def copy(self, default=None):
-    #     self.ensure_one()
-    #     allowed_company_name = "INVERSIONES LENKA"
-    #     if self.company_id.name != allowed_company_name:
-    #         raise UserError(_("No se permite duplicar facturas para esta compañía."))
-    #     return super(Account_Move, self).copy(default)  
+    def copy(self, default=None):
+        self.ensure_one()
+        allowed_company_name = "INVERSIONES LENKA"  # Cambia esto por el nombre de tu compañía
+        if self.move_type != 'in_invoice':
+            if self.company_id.name != allowed_company_name:
+                raise UserError(_("No se permite duplicar facturas para esta compañía."))
+
+        return super(Account_Move, self).copy(default)
         
     
 class AccountMoveLine(models.Model):
