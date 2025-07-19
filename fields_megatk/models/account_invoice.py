@@ -310,9 +310,11 @@ class Account_Move(models.Model):
         _logger.warning(tickets)
         
     def copy(self, default=None):
-        _logger.warning(f"Compañia actual: {self.company_id.name}") 
-        raise UserError(_("No se permite duplicar facturas."))   
-        
+        self.ensure_one()
+        allowed_company_name = "INVERSIONES LENKA"  # Cambia esto por el nombre de tu compañía
+        if self.company_id.name != allowed_company_name:
+            raise UserError(_("No se permite duplicar facturas para esta compañía."))
+        return super(Account_Move, self).copy(default)
     
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
