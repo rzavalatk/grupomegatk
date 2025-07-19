@@ -41,7 +41,7 @@ class Visitas_Record(models.Model):
         ], default='borrador')
     
     def agrupar_registros(self):
-            
+        _logger.warning(f"Compañia actual: {self.company_id.id}")   
         if self.fecha_final and self.fecha_reporte:
             if self.fecha_final < self.fecha_reporte:
                 self.write({'state': 'borrador'})
