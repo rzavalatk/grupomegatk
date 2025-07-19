@@ -325,9 +325,7 @@ class Account_Move(models.Model):
         if self.move_type != 'in_invoice':
             if self.company_id.name != allowed_company_name:
                 raise UserError(_("No se permite duplicar facturas para esta compañía."))
-        else:
-            raise UserError(_("No se permite duplicar facturas de clientes."))
-        
+
         return super(Account_Move, self).copy(default)
     
     
