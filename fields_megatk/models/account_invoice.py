@@ -310,6 +310,7 @@ class Account_Move(models.Model):
         _logger.warning(tickets)
         
     def copy(self, default=None):
+        _logger.warning(f"Compañia actual: {self.company_id.name}") 
         raise UserError(_("No se permite duplicar facturas."))   
         
     
