@@ -316,9 +316,9 @@ class HrPermisos(models.Model):
         añomas = 20 * 480
         nic = 2.5 * 480
         number_of_hours = 0
-        self.dias = 0
-        self.horas = 0
-        self.minutos = 0
+        dias = 0
+        horas = 0
+        minutos_resultante = 0
         hoy = fields.Date.context_today(self)
         employee_ids = self.env["hr.employee"].sudo().search([])
         for employe_id in employee_ids:
@@ -329,46 +329,43 @@ class HrPermisos(models.Model):
                     if employe_id.fecha_ingreso:
                         if employe_id.fecha_ingreso.day == hoy.day and employe_id.fecha_ingreso.month == hoy.month:
                             if hoy.year - employe_id.fecha_ingreso.year == 1:
-                                self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
+                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
                                         minutos_actuales, año1)
                                 if minutos_actuales < 0:
-                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año1 / 60
                             elif hoy.year - employe_id.fecha_ingreso.year == 2:
-                                self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
+                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
                                         minutos_actuales, año2)
                                 if minutos_actuales < 0:
-                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año2 / 60
                             elif hoy.year - employe_id.fecha_ingreso.year == 3:
-                                self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
+                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
                                         minutos_actuales, año3)
                                 if minutos_actuales < 0:
-                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año3 / 60
                             else:
-                                self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
+                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
                                         minutos_actuales, añomas)
                                 if minutos_actuales < 0:
-                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
+                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = añomas / 60
                             _logger.info("Pruebaaaaaaa----------")
                             _logger.info(number_of_hours)
-                            _logger.info(self.dias)
-                            _logger.info(self.horas)
-                            _logger.info(self.minutos)
-                            # AGREGAR VACACIONES A PERFIL DE EMPLEADOS
-                            employe_id.sudo().write({'permisos_dias': self.dias,
-                                                        'permisos_horas': self.horas,
-                                                        'permisos_minutos': self.minutos})
+                            _logger.info(dias)
+                            _logger.info(horas)
+                            _logger.info(minutos_resultante)
+                            
                             # AGREGAR VACACIONES A MODULO DE PERMISOS
                             leave_type_id = self.env['hr.leave.type'].sudo().search(
                                 [('vacaciones', '=', 'True')], limit=1)
