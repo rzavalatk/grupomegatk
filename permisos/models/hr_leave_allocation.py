@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class HrLeaveAllocation(models.Model):
     _inherit = 'hr.leave.allocation'
     
-    #asig_auto = fields.Boolean('Asignación automática')
+    asig_auto = fields.Boolean('Asignación automática')
     
     def vacaciones_restantes_empl(self, operacion, employee_id, allocation):
         _logger.warning("Prueba de vacaciones restantes empl")
@@ -38,7 +38,7 @@ class HrLeaveAllocation(models.Model):
             minutos_resultante = minutos_resultante - (horas * 60)
 
         return dias, horas, minutos_resultante
-    """def action_confirm(self): 
+    def action_confirm(self): 
         for allocation in self:
             if not allocation.asig_auto:
                 if allocation.holiday_status_id.vacaciones:    
@@ -59,7 +59,7 @@ class HrLeaveAllocation(models.Model):
                 else:
                     self.env.user.notify_success(message='Asignación aprobada')
             return super(HrLeaveAllocation, self).action_confirm()
-    """
+    
     def action_refuse(self):
         for allocation in self:
             if allocation.holiday_status_id.vacaciones:    
