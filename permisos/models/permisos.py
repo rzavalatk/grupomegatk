@@ -332,7 +332,7 @@ class HrPermisos(models.Model):
                                 self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
                                         minutos_actuales, año1)
                                 if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + self.minutos
+                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año1 / 60
@@ -340,7 +340,7 @@ class HrPermisos(models.Model):
                                 self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
                                         minutos_actuales, año2)
                                 if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + self.minutos
+                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año2 / 60
@@ -348,7 +348,7 @@ class HrPermisos(models.Model):
                                 self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
                                         minutos_actuales, año3)
                                 if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + self.minutos
+                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = año3 / 60
@@ -356,7 +356,7 @@ class HrPermisos(models.Model):
                                 self.dias, self.horas, self.minutos = self.vacaciones_restantes1(
                                         minutos_actuales, añomas)
                                 if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + self.minutos
+                                    minutos_vac = self.dias * 480 + self.horas *60 + self.minutos
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = añomas / 60
