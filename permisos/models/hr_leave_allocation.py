@@ -11,6 +11,8 @@ _logger = logging.getLogger(__name__)
 class HrLeaveAllocation(models.Model):
     _inherit = 'hr.leave.allocation'
     
+    asig_auto = fields.Boolean('Asignación automática')
+    
     def vacaciones_restantes_empl(self, operacion, employee_id, allocation):
         _logger.warning("Prueba de vacaciones restantes empl")
         
@@ -38,23 +40,24 @@ class HrLeaveAllocation(models.Model):
         return dias, horas, minutos_resultante
     def action_confirm(self): 
         for allocation in self:
-            if allocation.holiday_status_id.vacaciones:    
-                if allocation.employee_ids:
-                    for employee_id in allocation.employee_ids:
+            if not allocation.asig_auto:
+                if allocation.holiday_status_id.vacaciones:    
+                    if allocation.employee_ids:
+                        for employee_id in allocation.employee_ids:
+                            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                            'suma', employee_id, allocation)
+                            employee_id.sudo().write({'permisos_dias': dias,
+                                                        'permisos_horas': horas,
+                                                        'permisos_minutos': minutos_resultante})
+                    elif allocation.employee_id:
+                        employee_id = allocation.employee_id
                         dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
                         'suma', employee_id, allocation)
                         employee_id.sudo().write({'permisos_dias': dias,
                                                     'permisos_horas': horas,
                                                     'permisos_minutos': minutos_resultante})
-                elif allocation.employee_id:
-                    employee_id = allocation.employee_id
-                    dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                    'suma', employee_id, allocation)
-                    employee_id.sudo().write({'permisos_dias': dias,
-                                                'permisos_horas': horas,
-                                                'permisos_minutos': minutos_resultante})
-            else:
-                self.env.user.notify_success(message='Asignación aprobada')
+                else:
+                    self.env.user.notify_success(message='Asignación aprobada')
             return super(HrLeaveAllocation, self).action_confirm()
     
     def action_refuse(self):

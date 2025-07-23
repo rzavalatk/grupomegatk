@@ -374,6 +374,7 @@ class HrPermisos(models.Model):
                                 'holiday_status_id': leave_type_id.id,
                                 'number_of_days': int(number_of_hours) / 8,
                                 'name': "Asignación de vacaciones por ley",
+                                'asig_auto': True
                             }
                             leave_allocation = self.env['hr.leave.allocation'].create(
                                 allocation_vals)

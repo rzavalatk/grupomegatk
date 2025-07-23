@@ -19,5 +19,19 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="hr_leave_allocation_view_inh">
+      <field name="name">hr.leave.allocation.inh.view</field>
+      <field name="model">hr.leave.allocation</field>
+      <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form_manager" />
+        <field name="arch" type="xml">
+          
+          <xpath expr="//field[@name='number_of_days_display']" position="after">
+            <field name="asig_auto" invisible="1"/>
+          </xpath>
+
+
+        </field>
+    </record>
+
   </data> 
 </odoo>
