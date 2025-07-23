@@ -360,11 +360,11 @@ class HrPermisos(models.Model):
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = añomas / 60
-                            _logger.info("Pruebaaaaaaa----------")
-                            _logger.info(number_of_hours)
-                            _logger.info(dias)
-                            _logger.info(horas)
-                            _logger.info(minutos_resultante)
+                            
+                            # AGREGAR VACACIONES A PERFIL DE EMPLEADOS
+                            employe_id.sudo().write({'permisos_dias': dias,
+                                                        'permisos_horas': horas,
+                                                        'permisos_minutos': minutos_resultante})
                             
                             # AGREGAR VACACIONES A MODULO DE PERMISOS
                             leave_type_id = self.env['hr.leave.type'].sudo().search(
@@ -376,6 +376,7 @@ class HrPermisos(models.Model):
                                 'holiday_status_id': leave_type_id.id,
                                 'number_of_days': int(number_of_hours) / 8,
                                 'name': "Asignación de vacaciones por ley",
+                                'asig_auto': True
                             }
                             leave_allocation = self.env['hr.leave.allocation'].create(
                                 allocation_vals)
