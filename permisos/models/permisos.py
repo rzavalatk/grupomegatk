@@ -360,6 +360,9 @@ class HrPermisos(models.Model):
                                     number_of_hours = minutos_vac / 60
                                 else:
                                     number_of_hours = añomas / 60
+                            _logger.info("Pruebaaaaaaa----------")
+                            _logger.info(number_of_hours)
+                            _logger.info(dias, horas, minutos_resultante)
                             # AGREGAR VACACIONES A PERFIL DE EMPLEADOS
                             employe_id.sudo().write({'permisos_dias': dias,
                                                         'permisos_horas': horas,
