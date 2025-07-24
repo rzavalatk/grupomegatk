@@ -202,6 +202,11 @@ class HrLeave(models.Model):
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
+                elif self.request_date_from.weekday() == 5:
+                    self.dias = self.number_of_days_display
+                    self.horas = int(self.number_of_hours_display) * 2
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
                 else:
                     self.dias = 0
                     self.horas = 0
