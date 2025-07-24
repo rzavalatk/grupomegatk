@@ -197,7 +197,12 @@ class HrLeave(models.Model):
                     else:
                         self.minutos = 0
             elif self.request_date_from and self.request_date_to:
-                if self.request_date_to >= self.request_date_from:
+                if self.request_date_from.weekday() == 5:
+                    self.dias = self.number_of_days_display
+                    self.horas = int(self.number_of_hours_display) * 2
+                    self.minutos = 0
+                    self.number_of_hours_text = self.horas
+                elif self.request_date_to >= self.request_date_from:
                     #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
