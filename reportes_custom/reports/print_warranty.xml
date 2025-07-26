@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Plantilla del reporte -->
+    <template id="print_warranty_view_new">
+        <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-set="lang" t-value="doc.partner_id.lang"/>
+            <t t-call="reportes_custom.product_warranty_print" t-lang="lang"/>
+        </t>
+        </t>
+    </template>
+
+    <template id="product_warranty_print" name="Garantia">
+        <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
+            <t t-set="o" t-value="docs[0]"/>
+            <main>
+                <div style="font-family: calibri; font-size: 14px; margin: 0 1cm; padding: 0;">
+                    <!-- Encabezado simplificado -->
+                    <div style="text-align: center; margin-bottom: 15px; margin-top: 40px;">
+                        <h1 style="font-size: 16px; margin: 5px 0; text-transform: uppercase;">MEGATK</h1>
+                        <h2 style="font-size: 14px; margin: 5px 0; text-transform: uppercase;">GARANTÍA</h2>
+                    </div>
+                    <td style="font-size: 13px; margin: 5px 0 20px 0;"><strong> Productos</strong></td>
+                 </div>   
+                  
+            </main>
+        </t>
+    </template>
+
+    <record id="paperformat_warranty" model="report.paperformat">
+        <field name="name">Formato Garantía</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field> 
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_spacing">5</field>
+    </record>
+
+    <record id="action_product_warranty_print" model="ir.actions.report">
+        <field name="name">Formulario de Permiso</field>
+        <field name="model">hr.leave</field>
+        <field name="report_name">reportes_custom.product_warranty_print</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_file">reportes_custom.product_warranty_print</field>
+        <field name="binding_model_id" ref="model_models"/>
+        <field name="print_report_name">'formulario_permiso_%s' % (object.name or '')</field>
+        <field name="paperformat_id" ref="paperformat_permiso"/>
+    
+    </record>
+
+</odoo>
