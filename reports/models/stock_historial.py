@@ -90,6 +90,8 @@ class StockReportHistory(models.Model):
                 ('product_id.detailed_type', 'not in', ['consu', 'service']),
                 ('product_id.list_price', '>', 0),
             ])
+            
+            _logger.info("move_lines: %s", len(move_lines))
             # Paso 3: Acumular cantidades por producto y ubicación
             for ml in move_lines:
                 if not ml.product_id.active:
@@ -112,6 +114,9 @@ class StockReportHistory(models.Model):
                 for location_id, qty in locations.items():
                     if qty != 0:
                         products_idsg = [[product_id, location_id, qty]]
+                        
+            
+            _logger.warning("item: %s", products_idsg[0])
                         
         if field_name == 'report_lines_from':
 
