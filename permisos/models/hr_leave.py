@@ -198,8 +198,6 @@ class HrLeave(models.Model):
                         self.minutos = 0
             elif self.request_date_from and self.request_date_to:
                 if self.request_date_from.weekday() == 5:
-                    _logger.warning(".....")
-                    _logger.warning(int(self.number_of_hours_display) * 2)
                     self.dias = self.number_of_days_display
                     self.horas = int(self.number_of_hours_display) * 2
                     self.minutos = 0
