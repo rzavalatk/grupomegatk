@@ -115,7 +115,7 @@ class StockReportHistory(models.Model):
                         products_idsg = [[product_id, location_id, qty]]
                         
             
-            _logger.warning("item: %s", len(products_idsg))
+            _logger.warning("item: %s", len(product_location_quantities))
                         
         if field_name == 'report_lines_from':
 
