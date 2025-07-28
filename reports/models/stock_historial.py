@@ -47,9 +47,9 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        #time.sleep(4)
+        time.sleep(4)
         self._generate_report_lines(self.date_to, 'report_lines_to')
-        #time.sleep(4)
+        time.sleep(4)
         self._calculate_differences()
         
         self.write({'state': 'aprobado'})
