@@ -73,43 +73,53 @@ class StockReportHistory(models.Model):
                         if producto.list_price > 0:
                             if producto.stock_quant_ids:
                                 for quant in producto.stock_quant_ids:
-                                    inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
+                                    if self.company_id.id == 8:
+                                        if quant.location_id.id in [155,161]:
+                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
+                                    elif self.company_id.id == 9:
+                                        if quant.location_id.id in [181,169,175]:
+                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
                             self.product_list.append(producto)
                             
             products_idsg = [[item["producto"], item["Ubicacion"], item["cantidad"]] for item in inventario]
         else:
-            
-            # Paso 1: Preparar el acumulador por producto y ubicación
             product_location_quantities = defaultdict(lambda: defaultdict(float))
             
-            
-            # Paso 2: Obtener todos los movimientos hasta la fecha
             move_lines = self.env['stock.move.line'].search([
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
-                ('product_id.detailed_type', 'not in', ['consu', 'service']),
-                ('product_id.list_price', '>', 0),
             ])
             
-            # Paso 3: Acumular cantidades por producto y ubicación
             for ml in move_lines:
                 if not ml.product_id.active:
                     continue
-
+                
                 product = ml.product_id
-                self.product_list.append(product)
-                if ml.location_id.id in [155,161]:
-                    # Resta desde la ubicación origen si es interna
-                    if ml.location_id.usage == 'internal':
-                        product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+                
+                if product.detailed_type not in ['consu', 'service']:
+                    if product.list_price > 0:
+                        if product not in self.product_list:
+                            self.product_list.append(product)
 
-                    # Suma hacia la ubicación destino si es interna
-                    if ml.location_dest_id.usage == 'internal':
-                        product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
-                    
-            # Paso 4: Transformar a formato para escribir en líneas
-            #AQUI ESTA ASABDI A UNO DE LOS PRODUCTOS
-            lines = []
+                        if self.company_id.id == 8:
+                            if quant.location_id.id in [155,161]:
+                                # Resta desde la ubicación origen si es interna
+                                if ml.location_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+
+                                # Suma hacia la ubicación destino si es interna
+                                if ml.location_dest_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                        elif self.company_id.id == 9:
+                            if quant.location_id.id in [181,169,175]:
+                                # Resta desde la ubicación origen si es interna
+                                if ml.location_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+
+                                # Suma hacia la ubicación destino si es interna
+                                if ml.location_dest_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                                    
             vueltas = 0
             for product_id, locations in product_location_quantities.items():
                 if vueltas < 15:
@@ -119,9 +129,11 @@ class StockReportHistory(models.Model):
                         _logger.warning("ubicacion: %s, cantidad: %s", location_id, qty)
                     if qty >= 0:
                         products_idsg = [[product_id, location_id, qty]]
+                        if vueltas < 15:
+                            _logger.warning("item products idsg: %s", products_idsg)
                 vueltas += 1
             
-            _logger.warning("item: %s", len(product_location_quantities))
+            _logger.warning("item: %s", len(products_idsg))
                         
         if field_name == 'report_lines_from':
 
