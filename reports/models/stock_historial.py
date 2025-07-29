@@ -98,14 +98,14 @@ class StockReportHistory(models.Model):
 
                 product = ml.product_id
                 self.product_list.append(product)
+                if ml.location_id.id in [155,161]:
+                    # Resta desde la ubicación origen si es interna
+                    if ml.location_id.usage == 'internal':
+                        product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
 
-                # Resta desde la ubicación origen si es interna
-                if ml.location_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
-
-                # Suma hacia la ubicación destino si es interna
-                if ml.location_dest_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                    # Suma hacia la ubicación destino si es interna
+                    if ml.location_dest_id.usage == 'internal':
+                        product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                     
             # Paso 4: Transformar a formato para escribir en líneas
             #AQUI ESTA ASABDI A UNO DE LOS PRODUCTOS
@@ -117,7 +117,7 @@ class StockReportHistory(models.Model):
                 for location_id, qty in locations.items():
                     if vueltas < 15:
                         _logger.warning("ubicacion: %s, cantidad: %s", location_id, qty)
-                    if qty != 0:
+                    if qty >= 0:
                         products_idsg = [[product_id, location_id, qty]]
                 vueltas += 1
             
