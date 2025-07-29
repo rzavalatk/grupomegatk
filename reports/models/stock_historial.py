@@ -124,10 +124,10 @@ class StockReportHistory(models.Model):
                 for location_id, qty in locations.items():
                     if qty >= 0:
                         if self.company_id.id == 8:
-                            if location_id.id in [155,161]:
+                            if location_id in [155,161]:
                                 products_idsg.append([product_id, location_id, qty])
                         elif self.company_id.id == 9:
-                            if location_id.id in [181,169,175]:
+                            if location_id in [181,169,175]:
                                 products_idsg.append([product_id, location_id, qty])
                         
                         
