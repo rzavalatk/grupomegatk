@@ -120,20 +120,10 @@ class StockReportHistory(models.Model):
                                 if ml.location_dest_id.usage == 'internal':
                                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                                     
-            vueltas = 0
             for product_id, locations in product_location_quantities.items():
-                if vueltas < 15:
-                    _logger.warning("items: %s, ubicaciones: %s", product_id, locations)
                 for location_id, qty in locations.items():
-                    if vueltas < 15:
-                        _logger.warning("ubicacion: %s, cantidad: %s", location_id, qty)
                     if qty >= 0:
-                        products_idsg = [[product_id, location_id, qty]]
-                        if vueltas < 15:
-                            _logger.warning("item products idsg: %s", products_idsg)
-                vueltas += 1
-            
-            _logger.warning("item: %s", len(products_idsg))
+                        products_idsg.append([product_id, location_id, qty])
                         
         if field_name == 'report_lines_from':
 
