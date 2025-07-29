@@ -102,7 +102,7 @@ class StockReportHistory(models.Model):
                             self.product_list.append(product)
 
                         if self.company_id.id == 8:
-                            if ml.location_id.id in [155,161]:
+                            if ml.location_id.id in [155,161] or ml.location_dest_id.id in [155,161]:
                                 # Resta desde la ubicación origen si es interna
                                 if ml.location_id.usage == 'internal':
                                     product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
@@ -111,7 +111,7 @@ class StockReportHistory(models.Model):
                                 if ml.location_dest_id.usage == 'internal':
                                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                         elif self.company_id.id == 9:
-                            if ml.location_id.id in [181,169,175]:
+                            if ml.location_id.id in [181,169,175] or ml.location_dest_id.id in [181,169,175]:
                                 # Resta desde la ubicación origen si es interna
                                 if ml.location_id.usage == 'internal':
                                     product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
@@ -123,7 +123,13 @@ class StockReportHistory(models.Model):
             for product_id, locations in product_location_quantities.items():
                 for location_id, qty in locations.items():
                     if qty >= 0:
-                        products_idsg.append([product_id, location_id, qty])
+                        if self.company_id.id == 8:
+                            if quant.location_id.id in [155,161]:
+                                products_idsg.append([product_id, location_id, qty])
+                        elif self.company_id.id == 9:
+                            if quant.location_id.id in [181,169,175]:
+                                products_idsg.append([product_id, location_id, qty])
+                        
                         
         if field_name == 'report_lines_from':
 
