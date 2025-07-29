@@ -108,12 +108,18 @@ class StockReportHistory(models.Model):
                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                     
             # Paso 4: Transformar a formato para escribir en líneas
+            #AQUI ESTA ASABDI A UNO DE LOS PRODUCTOS
             lines = []
+            vueltas = 0
             for product_id, locations in product_location_quantities.items():
+                if vueltas < 15:
+                    _logger.warning("items: %s, ubicaciones: %s", product_id, locations)
                 for location_id, qty in locations.items():
+                    if vueltas < 15:
+                        _logger.warning("ubicacion: %s, cantidad: %s", location_id, qty)
                     if qty != 0:
                         products_idsg = [[product_id, location_id, qty]]
-                        
+                vueltas += 1
             
             _logger.warning("item: %s", len(product_location_quantities))
                         
