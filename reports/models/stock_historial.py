@@ -21,8 +21,6 @@ class StockReportHistory(models.Model):
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-   
-
     name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
@@ -53,7 +51,6 @@ class StockReportHistory(models.Model):
         self._calculate_differences()
         
         self.write({'state': 'aprobado'})
-
 
     def _generate_report_lines(self, date_report, field_name):
 
