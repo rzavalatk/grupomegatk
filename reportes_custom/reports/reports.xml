@@ -50,6 +50,16 @@
 			report_type="qweb-pdf"
 			attachment_use="True" 
 			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		
+		<report
+			id="sale_order_cotizacion_KLAM"
+			model="sale.order"
+			string="Cotización KLAM"
+			name="reportes_custom.cotizacion_custom_print_view_KLAM"
+			file="reportes_custom.cotizacion_custom_print_view_KLAM"
+			report_type="qweb-pdf"
+			attachment_use="True" 
+			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
 
 		<report
 			id="sale_order_cotizacion_custom_proforma"
