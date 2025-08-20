@@ -342,11 +342,12 @@ class HrPayslip(models.Model):
             uniq_leaves = [*set(multi_leaves)]
             c_leaves = {}
             for rec in uniq_leaves:
+                #Quitar la palabra hours/horas de la duración para que solo agarre el número
                 c_leaves.setdefault(rec.holiday_status_id,
                                     {'hours': float(
                                         rec.duration_display.replace(
                                             "hours",
-                                            "")), })
+                                            "").replace("horas","")), })
             flag = 1
             for item in c_leaves:
                 if not leaves:
