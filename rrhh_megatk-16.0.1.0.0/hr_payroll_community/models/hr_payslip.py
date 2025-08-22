@@ -759,7 +759,8 @@ class HrPayslipLine(models.Model):
             categoria = self.env['hr.salary.rule.category'].search(
                 [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
-            rule = self.env['hr.salary.rule'].browse(values.get('salary_rule_id'))
+            rule = self.env['hr.salary.rule'].search(
+                [('id', '=', values['salary_rule_id'])])
             pay = payslip.total_payment
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
@@ -801,7 +802,7 @@ class HrPayslipLine(models.Model):
 
         for value in vals_list:
             deduccione = 0
-            rule = self.env['hr.salary.rule'].browse(values.get('salary_rule_id'))
+            rule = self.env['hr.salary.rule'].browse(value.get('salary_rule_id'))
             payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
             if rule.active == True:
                 if rule.code == 'SLDNT':
