@@ -769,7 +769,7 @@ class HrPayslipLine(models.Model):
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
             # Aqui se hacen los calculos de el calculo de la nomina
-            if values['amount_select'] == 'percentage':
+            if values['salary_rule_id'].amount_select == 'percentage':
                 if categoria.code == 'DED':
                     pay -= (values['amount_percentage']
                             * payslip.total_payment / 100)
