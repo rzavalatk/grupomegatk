@@ -769,35 +769,34 @@ class HrPayslipLine(models.Model):
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
             # Aqui se hacen los calculos de el calculo de la nomina
-            if values['active'] == True:
-                if values['amount_select'] == 'percentage':
-                    if categoria.code == 'DED':
-                        pay -= (values['amount_percentage']
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += (values['amount_percentage']
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if values['code'] == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            values['amount_fix'] = payslip.contract_id.wage / 2
-                        else:
-                            values['amount_fix'] = payslip.contract_id.wage
-                        values['amount'] = values['amount_fix']
-                else:
-                    if categoria.code == 'DED':
-                        pay -= values['amount_fix']
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += values['amount_fix']
-                        sueldo = pay
-                    if values['code'] == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            values['amount_fix'] = payslip.contract_id.wage / 2
-                        else:
-                            values['amount_fix'] = payslip.contract_id.wage
-                        values['amount'] = values['amount_fix']
+            if values['amount_select'] == 'percentage':
+                if categoria.code == 'DED':
+                    pay -= (values['amount_percentage']
+                            * payslip.total_payment / 100)
+                    sueldo = pay
+                if categoria.code == 'ALW':
+                    pay += (values['amount_percentage']
+                            * payslip.total_payment / 100)
+                    sueldo = pay
+                if values['code'] == 'SLDBT':
+                    if payslip.contract_id.salary_type == 'quincenal':
+                        values['amount_fix'] = payslip.contract_id.wage / 2
+                    else:
+                        values['amount_fix'] = payslip.contract_id.wage
+                    values['amount'] = values['amount_fix']
+            else:
+                if categoria.code == 'DED':
+                    pay -= values['amount_fix']
+                    sueldo = pay
+                if categoria.code == 'ALW':
+                    pay += values['amount_fix']
+                    sueldo = pay
+                if values['code'] == 'SLDBT':
+                    if payslip.contract_id.salary_type == 'quincenal':
+                        values['amount_fix'] = payslip.contract_id.wage / 2
+                    else:
+                        values['amount_fix'] = payslip.contract_id.wage
+                    values['amount'] = values['amount_fix']
 
         for value in vals_list:
             deduccione = 0
