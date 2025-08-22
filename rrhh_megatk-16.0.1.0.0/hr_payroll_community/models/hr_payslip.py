@@ -797,7 +797,7 @@ class HrPayslipLine(models.Model):
                         rule.amount_fix = payslip.contract_id.wage / 2
                     else:
                         rule.amount_fix = payslip.contract_id.wage
-                    rule.amount = rule.amount_fix
+                    value['amount'] = rule.amount_fix
 
         for value in vals_list:
             deduccione = 0
@@ -809,7 +809,7 @@ class HrPayslipLine(models.Model):
                         deduccione = -1 * payslip.deduction
                     rule.amount_fix = sueldo - \
                         deduccione + payslip.accreditation
-                    rule.amount = rule.amount_fix
+                    value['amount'] = rule.amount_fix
                     self.slip_id.write(
                         {'total_payment': sueldo - payslip.deduction + payslip.accreditation})
                     break
