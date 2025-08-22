@@ -772,43 +772,44 @@ class HrPayslipLine(models.Model):
             # Aqui se hacen los calculos de el calculo de la nomina
             if rule.amount_select == 'percentage':
                 if categoria.code == 'DED':
-                    pay -= (values['amount_percentage']
+                    pay -= (rule.amount_percentage
                             * payslip.total_payment / 100)
                     sueldo = pay
                 if categoria.code == 'ALW':
-                    pay += (values['amount_percentage']
+                    pay += (rule.amount_percentage
                             * payslip.total_payment / 100)
                     sueldo = pay
-                if values['code'] == 'SLDBT':
+                if rule.code == 'SLDBT':
                     if payslip.contract_id.salary_type == 'quincenal':
-                        values['amount_fix'] = payslip.contract_id.wage / 2
+                        rule.amount_fix = payslip.contract_id.wage / 2
                     else:
-                        values['amount_fix'] = payslip.contract_id.wage
-                    values['amount'] = values['amount_fix']
+                        rule.amount_fix = payslip.contract_id.wage
+                    rule.amount = rule.amount_fix
             else:
                 if categoria.code == 'DED':
-                    pay -= values['amount_fix']
+                    pay -= rule.amount_fix
                     sueldo = pay
                 if categoria.code == 'ALW':
-                    pay += values['amount_fix']
+                    pay += rule.amount_fix
                     sueldo = pay
-                if values['code'] == 'SLDBT':
+                if rule.code == 'SLDBT':
                     if payslip.contract_id.salary_type == 'quincenal':
-                        values['amount_fix'] = payslip.contract_id.wage / 2
+                        rule.amount_fix = payslip.contract_id.wage / 2
                     else:
-                        values['amount_fix'] = payslip.contract_id.wage
-                    values['amount'] = values['amount_fix']
+                        rule.amount_fix = payslip.contract_id.wage
+                    rule.amount = rule.amount_fix
 
         for value in vals_list:
             deduccione = 0
+            rule = self.env['hr.salary.rule'].browse(values.get('salary_rule_id'))
             payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
-            if value['active'] == True:
-                if value['code'] == 'SLDNT':
+            if rule.active == True:
+                if rule.code == 'SLDNT':
                     if payslip.deduction < 0:
                         deduccione = -1 * payslip.deduction
-                    value['amount_fix'] = sueldo - \
+                    rule.amount_fix = sueldo - \
                         deduccione + payslip.accreditation
-                    value['amount'] = value['amount_fix']
+                    rule.amount = rule.amount_fix
                     self.slip_id.write(
                         {'total_payment': sueldo - payslip.deduction + payslip.accreditation})
                     break
