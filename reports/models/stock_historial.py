@@ -3,7 +3,7 @@ from itertools import groupby
 from odoo import models, fields, api
 from datetime import datetime, date
 import time
-
+from collections import defaultdict
 import base64
 import io
 from odoo.tools.misc import xlsxwriter
@@ -21,8 +21,6 @@ class StockReportHistory(models.Model):
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-   
-
     name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
@@ -47,54 +45,89 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         self._generate_report_lines(self.date_from, 'report_lines_from')
-        #time.sleep(4)
+        time.sleep(4)
         self._generate_report_lines(self.date_to, 'report_lines_to')
-        #time.sleep(4)
+        time.sleep(4)
         self._calculate_differences()
         
         self.write({'state': 'aprobado'})
 
-
     def _generate_report_lines(self, date_report, field_name):
 
         StockQuant = self.env['stock.valuation.layer']
-
-        quants = StockQuant.search(['&',
+        #POSIBE DEJE DE FUNCIONAR
+        """quants = StockQuant.search(['&',
                                     ('create_date', '<=', date_report),
-                                    ('company_id', '=', self.company_id.id)])
+                                    ('company_id', '=', self.company_id.id)])"""
         productos = self.env['product.product'].search([('company_id', '=', self.company_id.id)])
-        inventario = {}
+        inventario = []
+        products_idsg = []
         
         if date.today() == date_report.date():
             for producto in productos:
                 if producto.active:
                     if producto.detailed_type not in ['consu','service']:
                         if producto.list_price > 0:
+                            if producto.stock_quant_ids:
+                                for quant in producto.stock_quant_ids:
+                                    if self.company_id.id == 8:
+                                        if quant.location_id.id in [155,161]:
+                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
+                                    elif self.company_id.id == 9:
+                                        if quant.location_id.id in [181,169,175]:
+                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
                             self.product_list.append(producto)
-                            inventario[producto.id] = producto.qty_available
                             
-            products_idsg = [[product_id, quantity] for product_id, quantity in inventario.items()]
+            products_idsg = [[item["producto"], item["Ubicacion"], item["cantidad"]] for item in inventario]
         else:
-            #Diccionario para acumular las cantidades por producto
-            product_quantities = {}
-            products_idsg = []
-            #Recorre todos los movimientos y acumula las cantidades en el diccionario
-            for quant in quants:
-                if quant.product_id.active:
-                    if quant.product_id.detailed_type not in ['consu','service']:
-                        if quant.product_id.list_price > 0:
-                            product_id = quant.product_id.id
-                            quantity = quant.quantity
-
-                            if product_id in product_quantities:
-                                product_quantities[product_id] += quantity
-                            else:
-                                product_quantities[product_id] = quantity
-                                self.product_list.append(quant.product_id)
-
-            # Transforma el diccionario en la lista self.products_idsg
-            products_idsg = [[product_id, quantity] for product_id, quantity in product_quantities.items()]
+            product_location_quantities = defaultdict(lambda: defaultdict(float))
             
+            move_lines = self.env['stock.move.line'].search([
+                ('date', '<=', date_report),
+                ('company_id', '=', self.company_id.id),
+            ])
+            
+            for ml in move_lines:
+                if not ml.product_id.active:
+                    continue
+                
+                product = ml.product_id
+                
+                if product.detailed_type not in ['consu', 'service']:
+                    if product.list_price > 0:
+                        if product not in self.product_list:
+                            self.product_list.append(product)
+
+                        if self.company_id.id == 8:
+                            if ml.location_id.id in [155,161] or ml.location_dest_id.id in [155,161]:
+                                # Resta desde la ubicación origen si es interna
+                                if ml.location_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+
+                                # Suma hacia la ubicación destino si es interna
+                                if ml.location_dest_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                        elif self.company_id.id == 9:
+                            if ml.location_id.id in [181,169,175] or ml.location_dest_id.id in [181,169,175]:
+                                # Resta desde la ubicación origen si es interna
+                                if ml.location_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+
+                                # Suma hacia la ubicación destino si es interna
+                                if ml.location_dest_id.usage == 'internal':
+                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                                    
+            for product_id, locations in product_location_quantities.items():
+                for location_id, qty in locations.items():
+                    if qty >= 0:
+                        if self.company_id.id == 8:
+                            if location_id in [155,161]:
+                                products_idsg.append([product_id, location_id, qty])
+                        elif self.company_id.id == 9:
+                            if location_id in [181,169,175]:
+                                products_idsg.append([product_id, location_id, qty])
+                        
+                        
         if field_name == 'report_lines_from':
 
             for lines_product in products_idsg:
@@ -105,7 +138,8 @@ class StockReportHistory(models.Model):
                 for line_product in products_idsg:
                     lines.append((0, 0, {
                         'product_id': line_product[0],
-                        'quantity': line_product[1],
+                        'location_id': line_product[1],
+                        'quantity': line_product[2],
                     }))
 
                 self.write({field_name: lines})
@@ -121,7 +155,8 @@ class StockReportHistory(models.Model):
                 for line_product in products_idsg_ordenado:
                     lines.append((0, 0, {
                         'product_id': line_product[0],
-                        'quantity': line_product[1],
+                        'location_id': line_product[1],
+                        'quantity': line_product[2],
                     }))
 
                 self.write({field_name: lines})
@@ -197,9 +232,9 @@ class StockReportHistory(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_reports = ['Producto', 'Cantidad al dia']
-        col_widths_lines_reports = [45, 20]  # Ajusta estos valores según sea necesario
-        formatos_lines_reports = [None, number_format]  # Formatos para cada columna
+        encabezados_lines_reports = ['Producto', 'Almacen', 'Cantidad al dia']
+        col_widths_lines_reports = [45,30, 20]  # Ajusta estos valores según sea necesario
+        formatos_lines_reports = [None, None, number_format]  # Formatos para cada columna
         
         encabezados_reports_differences = ['Codigo de barras', 'Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
         col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
@@ -209,6 +244,7 @@ class StockReportHistory(models.Model):
         datos_lines_from_report = [
             (
                 record.product_id.name,
+                record.location_id.name,
                 record.quantity,
             )
             for record in self.report_lines_from
@@ -217,6 +253,7 @@ class StockReportHistory(models.Model):
         datos_lines_to_report = [
             (
                 record.product_id.name,
+                record.location_id.name,
                 record.quantity,
             )
             for record in self.report_lines_to
@@ -294,9 +331,7 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
-    
-    
-    #location_id = fields.Many2one('stock.location', string="Location", required=True)
+    location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
 
 
@@ -314,6 +349,7 @@ class StockReportDifference(models.Model):
         string="Movimiento", required=True)
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
+    location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
     
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")

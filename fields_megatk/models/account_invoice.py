@@ -43,7 +43,6 @@ class Account_Move(models.Model):
         default="pdf",
     )
     
-    
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
     ciudad = fields.Many2one('departamentos.ciudad', string='Ciudad', domain="[('departamento.id', '=', departamentos.id)]")
     """
