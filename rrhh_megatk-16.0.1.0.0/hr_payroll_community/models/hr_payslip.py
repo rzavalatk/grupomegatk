@@ -739,6 +739,12 @@ class HrPayslipLine(models.Model):
     total = fields.Float(compute='_compute_total', string='Total', help="Total",
                          digits=dp.get_precision('Payroll'), store=True)
 
+    @api.onchange('salary_rule_id')
+    def _onchange_salary_rule_id(self):
+        self.code = self.salary_rule_id.code
+        self.name = self.salary_rule_id.name
+        self.category_id = self.salary_rule_id.category_id
+
     @api.depends('quantity', 'amount', 'rate')
     def _compute_total(self):
 
