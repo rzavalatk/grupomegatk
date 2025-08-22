@@ -7,7 +7,16 @@
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
 
-                
+                <notebook position="inside">
+                    <page string="Firma del cliente">
+                        <group>
+                            <label for="digital_signature" string="Firma" class="oe_edit_only"/>
+                            <h2>
+                                <field name="digital_signature" widget="signature"/>
+                            </h2>
+                        </group>
+                    </page>
+			    </notebook>
 
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="mostrar_direccion"/>

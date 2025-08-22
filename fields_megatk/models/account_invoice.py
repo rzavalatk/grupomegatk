@@ -30,6 +30,18 @@ class Account_Move(models.Model):
     n_tickets_acum = fields.Integer('Tickets')
     mostrar_direccion = fields.Boolean(string='¿Mostrar Dirección de contacto?', default=False)
     certificado_deposito = fields.Boolean(string='¿Certificado de Deposito?', default=False)
+
+    digital_signature = fields.Binary(string="Signature")
+    digital_signature_name = fields.Char(string="Signature Name")
+    digital_signature_type = fields.Selection(
+        selection=[
+            ("pdf", "PDF"),
+            ("png", "PNG"),
+            ("jpg", "JPG"),
+        ],
+        string="Signature Type",
+        default="pdf",
+    )
     
     
     """departamentos = fields.Many2one('departamentos.departamentos', string='Departamentos')
