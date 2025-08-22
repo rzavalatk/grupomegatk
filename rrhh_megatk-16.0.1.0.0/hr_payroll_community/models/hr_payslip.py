@@ -753,8 +753,6 @@ class HrPayslipLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        deducciones = 0
-        acreditaciones = 0
         sueldo = 0
 
         for values in vals_list:
