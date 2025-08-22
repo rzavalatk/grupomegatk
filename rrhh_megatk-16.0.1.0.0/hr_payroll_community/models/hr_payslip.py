@@ -797,7 +797,7 @@ class HrPayslipLine(models.Model):
                         rule.amount_fix = payslip.contract_id.wage / 2
                     else:
                         rule.amount_fix = payslip.contract_id.wage
-                    value['amount'] = rule.amount_fix
+                    values['amount'] = rule.amount_fix
 
         for value in vals_list:
             deduccione = 0
