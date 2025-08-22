@@ -759,6 +759,7 @@ class HrPayslipLine(models.Model):
             categoria = self.env['hr.salary.rule.category'].search(
                 [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
+            rule = self.env['hr.salary.rule'].browse(values.get('salary_rule_id'))
             pay = payslip.total_payment
             if 'employee_id' not in values or 'contract_id' not in values:
                 values['employee_id'] = values.get(
@@ -769,7 +770,7 @@ class HrPayslipLine(models.Model):
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
             # Aqui se hacen los calculos de el calculo de la nomina
-            if values['salary_rule_id'].amount_select == 'percentage':
+            if rule.amount_select == 'percentage':
                 if categoria.code == 'DED':
                     pay -= (values['amount_percentage']
                             * payslip.total_payment / 100)
