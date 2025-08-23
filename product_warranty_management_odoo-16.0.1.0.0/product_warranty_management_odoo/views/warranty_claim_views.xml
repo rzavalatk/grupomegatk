@@ -20,9 +20,9 @@
         <field name="arch" type="xml">
             <form string="Warranty Claim">
                  <header>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,rejected"/>
-                     <button name="change_status_approved" string="Approve" type="object" class="oe_highlight" states="draft,rejected"/>
-                     <button name="change_status_rejected" string="Reject" type="object" class="oe_highlight" states="draft,approved"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,aprobado,rechazado"/>
+                     <button name="change_status_approved" string="Aprobado" type="object" class="oe_highlight" states="draft,rejected"/>
+                     <button name="change_status_rejected" string="Rechazado" type="object" class="oe_highlight" states="draft,approved"/>
                 </header>
                 <sheet>
                 <group>

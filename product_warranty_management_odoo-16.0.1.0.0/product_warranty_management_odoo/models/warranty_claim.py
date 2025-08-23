@@ -29,18 +29,18 @@ class WarrantyClaim(models.Model):
     _description = 'Warranty Claim'
 
     customer_id = fields.Many2one('res.partner',
-                                  string='Customer Name',
-                                  help="Customer selection",
+                                  string='Nombre del cliente',
+                                  help="seleccionar el cliente",
                                   required=True)
     sale_order_id = fields.Many2one('sale.order',
-                                    help="To select the sale order",
-                                    string='Sale Order')
+                                    help="seleccionar la orden de venta",
+                                    string='orden de venta')
     product_id = fields.Many2one('product.product',
-                                 string='Product',
-                                 help="To select the product",
+                                 string='Producto',
+                                 help="Seleccionar el producto",
                                  required=True)
-    partner_id = fields.Many2one('res.users', string='User',
-                                 help="To select the partner",
+    partner_id = fields.Many2one('res.users', string='Usuario',
+                                 help="Seleccionar el usuario",
                                  default=lambda self: self.env.user)
     state = fields.Selection(
         [('draft', 'Draft'), ('approved', 'Approved'),

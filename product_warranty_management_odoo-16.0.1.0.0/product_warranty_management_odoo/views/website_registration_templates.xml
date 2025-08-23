@@ -9,7 +9,7 @@
                          style="background-color: lightblue; padding: 20px; border-radius: 10px;">
                         <h2 class="head"
                             style="color: black; font-size: 26px; font-weight: bold;">
-                            Warranty Claim Request
+                            Solicitud de reclamación de garantía
                         </h2>
                     </div>
                     <div class="col-md-12 mt-5 mb-5 mb-md-0" t-ref="body">
@@ -20,15 +20,13 @@
                                 <div>
                                     <div class="o_row">
                                         <label class="o_form_label"
-                                               for="customer_id">Name Of
-                                            Customer: *
+                                               for="customer_id">Nombre del cliente: *
                                         </label>
                                         <div class="o_form_input">
                                             <select id="customer_id"
                                                     name="customer_id"
                                                     required="true">
-                                                <option value="">Select
-                                                    Customer
+                                                <option value="">Seleccionar cliente
                                                 </option>
                                                 <t t-foreach='customers'
                                                    t-as="customer">
@@ -42,16 +40,14 @@
                                     <!-- Sale Order Selection -->
                                     <div class="o_row">
                                         <label class="o_form_label"
-                                               for="sale_order_id">Select Sale
-                                            Order: *
+                                               for="sale_order_id">Seleccionar orden de venta: *
                                         </label>
                                         <div class="o_form_input">
                                             <select id="sale_order_id"
                                                     name="sale_order_id"
                                                     required="true"
                                                     disabled="1">
-                                                <option value="">Select Sale
-                                                    Order
+                                                <option value="">seleccionar orden
                                                 </option>
                                                 <t t-foreach='sale_orders'
                                                    t-as="sale_order">
@@ -65,16 +61,14 @@
                                     <!-- Product Selection -->
                                     <div class="o_row">
                                         <label class="o_form_label"
-                                               for="products_id">Select
-                                            Product: *
+                                               for="products_id">Seleccionar producto: *
                                         </label>
                                         <div class="o_form_input">
                                             <select id="products_id"
                                                     name="products_id"
                                                     required="true"
                                                     disabled="1">
-                                                <option value="">Select
-                                                    Product
+                                                <option value="">Seleccionar producto
                                                 </option>
                                                 <t t-foreach='products'
                                                    t-as="product">
@@ -89,7 +83,7 @@
                                     <div class="o_row">
                                         <label class="o_form_label"
                                                for="additional_field">
-                                            Description:
+                                            Descripcción:
                                         </label>
                                         <div class="o_form_input">
                                             <input type="text"
@@ -101,7 +95,7 @@
                                     <br/>
                                     <button type="submit"
                                             class="btn btn-primary btn-lg s_website_form_send">
-                                        Submit
+                                        Enviar
                                     </button>
                                     <br/>
                                     <br/>

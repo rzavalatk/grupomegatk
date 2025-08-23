@@ -5,7 +5,7 @@
               customize_show="True" inherit_id="portal.portal_my_home">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry">
-                <t t-set="title">My Claims</t>
+                <t t-set="title">Mi reclamo</t>
                 <t t-set="url"
                    t-value="'/my/claims'"/>
                 <t t-set="placeholder_count" t-value="'claim_count'"/>
@@ -22,10 +22,10 @@
             <t t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
-                        <th class="text-muted">Customer</th>
-                        <th class="text-muted">Sale Order</th>
-                        <th class="text-muted">Product</th>
-                        <th class="text-muted">Status</th>
+                        <th class="text-muted">Cliente</th>
+                        <th class="text-muted">Orden de venta</th>
+                        <th class="text-muted">Producto</th>
+                        <th class="text-muted">Estado</th>
                     </tr>
                 </thead>
                 <t t-foreach="claim_data" t-as="value">
