@@ -386,6 +386,7 @@
                 <button string="Volver a borrador" name="draft_payslip_run" type="object" states="close" />
                 <button string="Validar" name="action_validate_payslips" type="object" class="oe_highlight"
                     attrs="{'invisible': [('is_validate', '=', False)]}"/>
+                <button string="Enviar nominas" name="enviar_nominas" type="object" states="close" class="oe_highlight"/>
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>

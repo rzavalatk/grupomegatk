@@ -908,6 +908,11 @@ class HrPayslipRun(models.Model):
 
     def draft_payslip_run(self):
         return self.write({'state': 'draft'})
+    
+    def enviar_nominas(self):
+        for slip in self.slip_ids:
+            slip.action_send_email()
+        return True
 
     def close_payslip_run(self):
         return self.write({'state': 'close'})
