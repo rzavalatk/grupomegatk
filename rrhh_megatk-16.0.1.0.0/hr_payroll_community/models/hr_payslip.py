@@ -760,87 +760,29 @@ class HrPayslipLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        sueldo = 0
-        total_amount_DED = 0
-        total_amount_ALW = 0
+        # Llamamos primero a super para que todas las líneas (incluida SLDNT) se creen
+        records = super(HrPayslipLine, self).create(vals_list)
 
-        for values in vals_list:
-            categoria = self.env['hr.salary.rule.category'].search(
-                [('id', '=', values['category_id'])])
-            payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
-            rule = self.env['hr.salary.rule'].search(
-                [('id', '=', values['salary_rule_id'])])
-            pay = payslip.total_payment
-            if 'employee_id' not in values or 'contract_id' not in values:
-                values['employee_id'] = values.get(
-                    'employee_id') or payslip.employee_id.id
-                values['contract_id'] = values.get(
-                    'contract_id') or payslip.contract_id and payslip.contract_id.id
-                if not values['contract_id']:
-                    raise UserError(
-                        _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
-            
-            if values.get('rule_cargada'):
-                # Aqui se hacen los calculos de el calculo de la nomina
-                if rule.amount_select == 'percentage':
-                    if categoria.code == 'DED':
-                        pay -= (rule.amount_percentage
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += (rule.amount_percentage
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if rule.code == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            rule.amount_fix = payslip.contract_id.wage / 2
-                        else:
-                            rule.amount_fix = payslip.contract_id.wage
-                        values['amount'] = rule.amount_fix
-                else:
-                    if categoria.code == 'DED':
-                        pay -= rule.amount_fix
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += rule.amount_fix
-                        sueldo = pay
-                    if rule.code == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            rule.amount_fix = payslip.contract_id.wage / 2
-                        else:
-                            rule.amount_fix = payslip.contract_id.wage
-                        values['amount'] = rule.amount_fix
-            else:
-                if categoria.code == 'DED':
-                    total_amount_DED = values['amount']
-                if categoria.code == 'ALW':
-                    total_amount_ALW = values['amount']
-                
-                
-        for value in vals_list:
-            deduccione = 0
-            rule = self.env['hr.salary.rule'].browse(value.get('salary_rule_id'))
-            payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
-            if rule.active == True:
-                if value.get('rule_cargada') == False and rule.code != 'SLDNT': 
-                    salario_neto = self.env['hr.payslip.line'].search(
-                        [('slip_id', '=', payslip.id), ('code', '=', 'SLDNT')])
-                    if salario_neto:
-                        if total_amount_ALW > 0:
-                            salario_neto.amount += total_amount_ALW
-                        if total_amount_DED > 0:
-                            salario_neto.amount -= total_amount_DED
+        for rec in records:
+            payslip = rec.slip_id
+            rule = rec.salary_rule_id
+
+            # Solo actuamos si es línea manual y no es SLDNT
+            if rec.rule_cargada is False and rule.code != 'SLDNT':
+                salario_neto = payslip.line_ids.filtered(lambda l: l.code == 'SLDNT')
+                if salario_neto:
+                    if rec.category_id.code == 'DED':
+                        salario_neto.amount -= rec.amount
+                    elif rec.category_id.code == 'ALW':
+                        salario_neto.amount += rec.amount
                     salario_neto.write({'amount': salario_neto.amount})
-                elif rule.code == 'SLDNT':
-                    if payslip.deduction < 0:
-                        deduccione = -1 * payslip.deduction
-                    rule.amount_fix = sueldo - deduccione + payslip.accreditation
-                    value['amount'] = rule.amount_fix
-                    self.slip_id.write(
-                        {'total_payment': sueldo - deduccione + payslip.accreditation})
-                    break
+                    payslip.write({'total_payment': salario_neto.amount})
 
-        return super(HrPayslipLine, self).create(vals_list)
+            # Si la línea es la de SLDNT, la dejas como está
+            # porque ya viene calculada en tus cargadas (rule_cargada=True)
+
+        return records
+
 
     def write(self, values):
         # Lógica para actualizar el sueldo neto en la nómina cuando se edita amount o sueldo
