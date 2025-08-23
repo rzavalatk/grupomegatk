@@ -17,6 +17,7 @@
                 <field name="total"/>
                 <field name="amount_select" invisible="1"/>
                 <field name="register_id" invisible="1"/>
+                <field name="rule_cargada" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -162,6 +163,7 @@
                     <field name="name"/>
                     <field name="credit_note"/>
                     <field name="total_payment" />
+                    <field name="calculate_rules" invisible="1"/>
                     <field name="deduction" invisible="1"/>
                     <field name="accreditation" invisible="1"/>
                 </group>
@@ -384,6 +386,7 @@
                 <button string="Volver a borrador" name="draft_payslip_run" type="object" states="close" />
                 <button string="Validar" name="action_validate_payslips" type="object" class="oe_highlight"
                     attrs="{'invisible': [('is_validate', '=', False)]}"/>
+                <button string="Enviar nominas" name="enviar_nominas" type="object" states="close" class="oe_highlight"/>
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>

@@ -110,6 +110,9 @@ class HrPayslip(models.Model):
                                      states={'draft': [('readonly', False)]})
     payslip_count = fields.Integer(compute='_compute_payslip_count',
                                    string="Detalles del cálculo del recibo de nómina")
+    
+    calculate_rules = fields.Boolean(string='Calcular reglas', default=True,
+                                     help="Si está marcado, ya se calcularon las reglas de nómina al guardar el recibo de nómina.")
 
     @api.onchange('contract_id')
     def _onchange_contract_id(self):
@@ -254,9 +257,11 @@ class HrPayslip(models.Model):
                             deduccion -= input.amount
                         elif self.env['hr.salary.rule.category'].search([('id', '=', line[2]['category_id'])]).code == 'ALW':
                             acreditacion += input.amount
+                line[2]['rule_cargada'] = True
 
             payslip.write({'line_ids': lines, 'number': number,
                           'deduction': deduccion, 'accreditation': acreditacion})
+            self.calculate_rules = True
         return True
 
     @api.model
@@ -738,6 +743,8 @@ class HrPayslipLine(models.Model):
     quantity = fields.Float(digits=dp.get_precision('Payroll'), default=1.0)
     total = fields.Float(compute='_compute_total', string='Total', help="Total",
                          digits=dp.get_precision('Payroll'), store=True)
+    rule_cargada = fields.Boolean(string='Regla cargada', default=False,
+                                  help="Indica si la regla salarial se ha cargado en la línea de nómina.")
 
     @api.onchange('salary_rule_id')
     def _onchange_salary_rule_id(self):
@@ -751,69 +758,54 @@ class HrPayslipLine(models.Model):
         for line in self:
             line.total = float(line.quantity) * line.amount * line.rate / 100
 
+    
     @api.model_create_multi
     def create(self, vals_list):
-        sueldo = 0
-
         for values in vals_list:
-            categoria = self.env['hr.salary.rule.category'].search(
-                [('id', '=', values['category_id'])])
             payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
-            pay = payslip.total_payment
-            if 'employee_id' not in values or 'contract_id' not in values:
-                values['employee_id'] = values.get(
-                    'employee_id') or payslip.employee_id.id
-                values['contract_id'] = values.get(
-                    'contract_id') or payslip.contract_id and payslip.contract_id.id
-                if not values['contract_id']:
-                    raise UserError(
-                        _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
-            # Aqui se hacen los calculos de el calculo de la nomina
-            if values['active'] == True:
-                if values['amount_select'] == 'percentage':
-                    if categoria.code == 'DED':
-                        pay -= (values['amount_percentage']
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += (values['amount_percentage']
-                                * payslip.total_payment / 100)
-                        sueldo = pay
-                    if values['code'] == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            values['amount_fix'] = payslip.contract_id.wage / 2
-                        else:
-                            values['amount_fix'] = payslip.contract_id.wage
-                        values['amount'] = values['amount_fix']
+            if 'employee_id' not in values:
+                values['employee_id'] = payslip.employee_id.id
+            if 'contract_id' not in values:
+                values['contract_id'] = payslip.contract_id.id
+            if not values['contract_id']:
+                raise UserError(_('Debe establecer un contrato para crear una línea de recibo de planilla.'))
+            
+            if values['code'] == 'SLDNT':
+                if payslip.contract_id.salary_type == 'quincenal':
+                    values['amount_fix'] = payslip.contract_id.wage / 2
                 else:
-                    if categoria.code == 'DED':
-                        pay -= values['amount_fix']
-                        sueldo = pay
-                    if categoria.code == 'ALW':
-                        pay += values['amount_fix']
-                        sueldo = pay
-                    if values['code'] == 'SLDBT':
-                        if payslip.contract_id.salary_type == 'quincenal':
-                            values['amount_fix'] = payslip.contract_id.wage / 2
-                        else:
-                            values['amount_fix'] = payslip.contract_id.wage
-                        values['amount'] = values['amount_fix']
+                    values['amount_fix'] = payslip.contract_id.wage
+                values['amount'] = values['amount_fix']
 
-        for value in vals_list:
-            deduccione = 0
-            payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
-            if value['active'] == True:
-                if value['code'] == 'SLDNT':
-                    if payslip.deduction < 0:
-                        deduccione = -1 * payslip.deduction
-                    value['amount_fix'] = sueldo - \
-                        deduccione + payslip.accreditation
-                    value['amount'] = value['amount_fix']
-                    self.slip_id.write(
-                        {'total_payment': sueldo - payslip.deduction + payslip.accreditation})
-                    break
+            if values['code'] == 'SLDBT':
+                if payslip.contract_id.salary_type == 'quincenal':
+                    values['amount_fix'] = payslip.contract_id.wage / 2
+                else:
+                    values['amount_fix'] = payslip.contract_id.wage
+                values['amount'] = values['amount_fix']
+            
+            
 
-        return super(HrPayslipLine, self).create(vals_list)
+        # Ahora sí, todas las líneas tienen employee_id y contract_id
+        records = super(HrPayslipLine, self).create(vals_list)
+       
+
+        # Ajustamos neto después de que todas se crearon
+        for rec in records:
+            payslip = rec.slip_id
+            if rec.salary_rule_id.code != 'SLDNT' and rec.salary_rule_id.code != 'SLDBT':
+                salario_neto = payslip.line_ids.filtered(lambda l: l.code == 'SLDNT')
+                if salario_neto:
+                    if rec.category_id.code == 'DED':
+                        salario_neto.amount -= rec.amount
+                    elif rec.category_id.code == 'ALW':
+                        salario_neto.amount += rec.amount
+                    salario_neto.write({'amount': salario_neto.amount})
+                    payslip.write({'total_payment': salario_neto.amount})
+
+        return records
+
+
 
     def write(self, values):
         # Lógica para actualizar el sueldo neto en la nómina cuando se edita amount o sueldo
@@ -825,9 +817,11 @@ class HrPayslipLine(models.Model):
                 if rule.code == 'SLDNT':
                     if 'amount' in values:
                         if categoria.code == 'DED':
+                            rule.amount += line.amount
                             rule.amount -= (values['amount'])
                             payslip.write({'total_payment': rule.amount})
                         elif categoria.code == 'ALW':
+                            rule.amount -= line.amount
                             rule.amount += (values['amount'])
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
@@ -931,6 +925,11 @@ class HrPayslipRun(models.Model):
 
     def draft_payslip_run(self):
         return self.write({'state': 'draft'})
+    
+    def enviar_nominas(self):
+        for slip in self.slip_ids:
+            slip.action_send_email()
+        return True
 
     def close_payslip_run(self):
         return self.write({'state': 'close'})
