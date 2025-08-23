@@ -86,7 +86,7 @@ class StockReportHistory(models.Model):
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
             ])
-            
+            #movelines = StockMoveLine.search([('date', '<=', date_report), ('company_id', '=', self.company_id.id)])
             for ml in move_lines:
                 if not ml.product_id.active:
                     continue

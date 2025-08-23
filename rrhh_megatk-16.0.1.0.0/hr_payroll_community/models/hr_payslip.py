@@ -333,7 +333,7 @@ class HrPayslip(models.Model):
                 'name': _("Días de trabajo normales pagados al 100%"),
                 'sequence': 1,
                 'code': 'WORK100',
-                'number_of_days': work_data['days'],
+                'number_of_days': work_data['days'] + 2,  # +2 por domingos
                 'number_of_hours': work_data['hours'],
                 'contract_id': contract.id,
             }
