@@ -827,9 +827,11 @@ class HrPayslipLine(models.Model):
                 if rule.code == 'SLDNT':
                     if 'amount' in values:
                         if categoria.code == 'DED':
+                            rule.amount += line.amount
                             rule.amount -= (values['amount'])
                             payslip.write({'total_payment': rule.amount})
                         elif categoria.code == 'ALW':
+                            rule.amount -= line.amount
                             rule.amount += (values['amount'])
                             payslip.write({'total_payment': rule.amount})
         # Llamar al método write original para guardar los cambios
