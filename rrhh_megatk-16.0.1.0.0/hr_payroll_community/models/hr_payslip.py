@@ -110,6 +110,9 @@ class HrPayslip(models.Model):
                                      states={'draft': [('readonly', False)]})
     payslip_count = fields.Integer(compute='_compute_payslip_count',
                                    string="Detalles del cálculo del recibo de nómina")
+    
+    calculate_rules = fields.Boolean(string='Calcular reglas', default=True,
+                                     help="Si está marcado, ya se calcularon las reglas de nómina al guardar el recibo de nómina.")
 
     @api.onchange('contract_id')
     def _onchange_contract_id(self):
@@ -257,6 +260,7 @@ class HrPayslip(models.Model):
 
             payslip.write({'line_ids': lines, 'number': number,
                           'deduction': deduccion, 'accreditation': acreditacion})
+            self.calculate_rules = True
         return True
 
     @api.model
@@ -770,6 +774,19 @@ class HrPayslipLine(models.Model):
                 if not values['contract_id']:
                     raise UserError(
                         _('Debe establecer un contrato para crear una línea de recibo de planilla.'))
+            
+            if payslip.calculate_rules == True:
+                for lines in payslip.line_ids:
+                    if lines.code == 'SLDNT':
+                        if 'amount' in values:
+                            if categoria.code == 'DED':
+                                rule.amount -= (values['amount'])
+                                payslip.write({'total_payment': rule.amount})
+                            elif categoria.code == 'ALW':
+                                rule.amount += (values['amount'])
+                                payslip.write({'total_payment': rule.amount})
+                return super(HrPayslipLine, self).create(vals_list)
+
             # Aqui se hacen los calculos de el calculo de la nomina
             if rule.amount_select == 'percentage':
                 if categoria.code == 'DED':
