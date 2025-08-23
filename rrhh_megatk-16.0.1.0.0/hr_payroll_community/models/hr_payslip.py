@@ -770,6 +770,13 @@ class HrPayslipLine(models.Model):
             if not values['contract_id']:
                 raise UserError(_('Debe establecer un contrato para crear una línea de recibo de planilla.'))
             
+            if values['code'] == 'SLDNT':
+                if payslip.contract_id.salary_type == 'quincenal':
+                    values['amount_fix'] = payslip.contract_id.wage / 2
+                else:
+                    values['amount_fix'] = payslip.contract_id.wage
+                values['amount'] = values['amount_fix']
+
             if values['code'] == 'SLDBT':
                 if payslip.contract_id.salary_type == 'quincenal':
                     values['amount_fix'] = payslip.contract_id.wage / 2
@@ -777,11 +784,7 @@ class HrPayslipLine(models.Model):
                     values['amount_fix'] = payslip.contract_id.wage
                 values['amount'] = values['amount_fix']
             
-            if values['code'] == 'SLDNT':
-                if payslip.contract_id.salary_type == 'quincenal':
-                    values['amount_fix'] = payslip.contract_id.wage / 2
-                else:
-                    values['amount_fix'] = payslip.contract_id.wage
+            
 
         # Ahora sí, todas las líneas tienen employee_id y contract_id
         records = super(HrPayslipLine, self).create(vals_list)
