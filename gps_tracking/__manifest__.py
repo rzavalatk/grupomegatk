@@ -2,7 +2,7 @@
     'name': 'Rastreo GPS',
     'version': '1.0',
     'description': 'Modulo para rastreo GPS',
-    'summary': 'Modulo para rastreo GPS',
+    'summary': 'Modulo para rastreo GP',
     'author': 'Alexander Reyes',
     'license': 'LGPL-3',
     'category': 'uncategorized',
