@@ -790,7 +790,7 @@ class HrPayslipLine(models.Model):
         # Ajustamos neto después de que todas se crearon
         for rec in records:
             payslip = rec.slip_id
-            if not rec.rule_cargada and rec.salary_rule_id.code != 'SLDNT':
+            if rec.salary_rule_id.code != 'SLDNT' and rec.salary_rule_id.code != 'SLDBT':
                 salario_neto = payslip.line_ids.filtered(lambda l: l.code == 'SLDNT')
                 if salario_neto:
                     if rec.category_id.code == 'DED':
@@ -799,6 +799,15 @@ class HrPayslipLine(models.Model):
                         salario_neto.amount += rec.amount
                     salario_neto.write({'amount': salario_neto.amount})
                     payslip.write({'total_payment': salario_neto.amount})
+            """elif rec.rule_cargada and rec.salary_rule_id.code != 'SLDNT':
+                salario_neto = payslip.line_ids.filtered(lambda l: l.code == 'SLDNT')
+                if salario_neto:
+                    if rec.category_id.code == 'DED':
+                        salario_neto.amount -= rec.amount
+                    elif rec.category_id.code == 'ALW':
+                        salario_neto.amount += rec.amount
+                    salario_neto.write({'amount': salario_neto.amount})
+                    payslip.write({'total_payment': salario_neto.amount})"""
 
         return records
 
