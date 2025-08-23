@@ -758,17 +758,25 @@ class HrPayslipLine(models.Model):
         for line in self:
             line.total = float(line.quantity) * line.amount * line.rate / 100
 
+    
     @api.model_create_multi
     def create(self, vals_list):
-        # Llamamos primero a super para que todas las líneas (incluida SLDNT) se creen
+        for values in vals_list:
+            payslip = self.env['hr.payslip'].browse(values.get('slip_id'))
+            if 'employee_id' not in values:
+                values['employee_id'] = payslip.employee_id.id
+            if 'contract_id' not in values:
+                values['contract_id'] = payslip.contract_id.id
+            if not values['contract_id']:
+                raise UserError(_('Debe establecer un contrato para crear una línea de recibo de planilla.'))
+
+        # Ahora sí, todas las líneas tienen employee_id y contract_id
         records = super(HrPayslipLine, self).create(vals_list)
 
+        # Ajustamos neto después de que todas se crearon
         for rec in records:
             payslip = rec.slip_id
-            rule = rec.salary_rule_id
-
-            # Solo actuamos si es línea manual y no es SLDNT
-            if rec.rule_cargada is False and rule.code != 'SLDNT':
+            if not rec.rule_cargada and rec.salary_rule_id.code != 'SLDNT':
                 salario_neto = payslip.line_ids.filtered(lambda l: l.code == 'SLDNT')
                 if salario_neto:
                     if rec.category_id.code == 'DED':
@@ -778,10 +786,8 @@ class HrPayslipLine(models.Model):
                     salario_neto.write({'amount': salario_neto.amount})
                     payslip.write({'total_payment': salario_neto.amount})
 
-            # Si la línea es la de SLDNT, la dejas como está
-            # porque ya viene calculada en tus cargadas (rule_cargada=True)
-
         return records
+
 
 
     def write(self, values):
