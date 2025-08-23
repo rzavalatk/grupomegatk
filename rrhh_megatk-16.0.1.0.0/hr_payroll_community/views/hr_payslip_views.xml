@@ -162,6 +162,7 @@
                     <field name="name"/>
                     <field name="credit_note"/>
                     <field name="total_payment" />
+                    <field name="calculate_rules" invisible="1"/>
                     <field name="deduction" invisible="1"/>
                     <field name="accreditation" invisible="1"/>
                 </group>
