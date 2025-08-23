@@ -822,7 +822,7 @@ class HrPayslipLine(models.Model):
             rule = self.env['hr.salary.rule'].browse(value.get('salary_rule_id'))
             payslip = self.env['hr.payslip'].browse(value.get('slip_id'))
             if rule.active == True:
-                if rule.rule_cargada == False and rule.code != 'SLDNT': 
+                if value.get('rule_cargada') == False and rule.code != 'SLDNT': 
                     salario_neto = self.env['hr.payslip.line'].search(
                         [('slip_id', '=', payslip.id), ('code', '=', 'SLDNT')])
                     if salario_neto:
