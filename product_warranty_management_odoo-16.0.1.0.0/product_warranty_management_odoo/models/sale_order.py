@@ -28,9 +28,9 @@ class SaleOrder(models.Model):
     functionalities"""
     _inherit = 'sale.order'
 
-    is_warranty_check = fields.Boolean(string='Warranty Check',
-                                       help='Check this box if the item has'
-                                            ' warranty.')
+    is_warranty_check = fields.Boolean(string='Verificación de garantía',
+                                       help='Marque esta casilla si el artículo tiene'
+                                            ' garantía.')
 
     def action_confirm(self):
         """Call the super method to perform the default confirmation
@@ -65,7 +65,7 @@ class SaleOrder(models.Model):
             product.write({'warranty_expiry': warranty_expiry_date})
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Warranty Details',
+            'name': 'Detalles de Garantía',
             'view_mode': 'tree,form',
             'res_model': 'product.template',
             'views': [(self.env.ref('product_warranty_management_odoo.'

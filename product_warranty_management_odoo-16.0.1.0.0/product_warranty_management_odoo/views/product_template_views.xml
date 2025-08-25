@@ -38,8 +38,8 @@
                 <sheet>
                 <group>
                 <field name="name" string="Producto:"/>
-                <field name="warranty_duration"/>
-                <field name="warranty_expiry"/>
+                <field name="Duración de garantía"/>
+                <field name="Vencimiento de garantía"/>
                 </group>
                 </sheet>
             </form>

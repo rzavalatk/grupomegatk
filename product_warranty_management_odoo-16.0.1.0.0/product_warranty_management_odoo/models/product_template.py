@@ -26,10 +26,10 @@ class ProductTemplate(models.Model):
     """Inherited product template to add fields"""
     _inherit = 'product.template'
 
-    is_warranty_available = fields.Boolean(string="Warranty Available",
-                                           help="Boolean field to check"
-                                                "the warranty availability")
-    warranty_duration = fields.Integer(string="Warranty Duration (months)",
-                                       help="Warranty duration")
-    warranty_expiry = fields.Date(string="Warranty Expiry Date",
-                                  help="Warranty expiry date")
+    is_warranty_available = fields.Boolean(string="Garantia Disponible",
+                                           help="Campo booleano para verificar"
+                                                "la disponibilidad de la garantia")
+    warranty_duration = fields.Integer(string="Duracion de la garantia (meses)",
+                                       help="Duracion de garantia")
+    warranty_expiry = fields.Date(string="Fecha de expiración de garantia",
+                                  help="Fecha de expiración de garantia")

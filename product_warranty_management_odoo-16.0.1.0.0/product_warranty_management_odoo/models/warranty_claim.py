@@ -43,11 +43,11 @@ class WarrantyClaim(models.Model):
                                  help="Seleccionar el usuario",
                                  default=lambda self: self.env.user)
     state = fields.Selection(
-        [('draft', 'Draft'), ('approved', 'Approved'),
-         ('rejected', 'Rejected')], default='draft', String="Status",
-        help="To select the state")
+        [('draft', 'Borrador'), ('approved', 'Aprobado'),
+         ('rejected', 'Rechazado')], default='draft', String="Status",
+        help="Seleccionar el estado del reclamo")
     product_expiry_date = fields.Date(
-        string='Product Expiry Date', help="To get the product expiry date",
+        string='Fecha de caducidad de garantia', help="Obtener la fecha de vencimiento de la garantia",
         related='product_id.product_tmpl_id.warranty_expiry',
         store=True, readonly=True)
 

@@ -4,8 +4,8 @@
     the name "Warranty".-->
     <data noupdate="1">
         <record id="menu_warranty" model="website.menu">
-            <field name="name">Warranty</field>
-            <field name="url">/warranty</field>
+            <field name="name">Garantía</field>
+            <field name="url">/garantia</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">50</field>
         </record>
