@@ -8,7 +8,7 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='sales']" position="after">
-            <page string="Warranty">
+            <page string="Garantía">
                 <group>
                     <group>
                         <field name="is_warranty_available" widget="bool_badge"/>
@@ -46,7 +46,7 @@
         </field>
     </record>
         <record id="product_template_action" model="ir.actions.act_window">
-        <field name="name">Warranty Details</field>
+        <field name="name">Detalles de garantia</field>
         <field name="res_model">product.template</field>
         <field name="view_mode">tree,form</field>
          <field name="view_ids" eval="[(5, 0, 0),
