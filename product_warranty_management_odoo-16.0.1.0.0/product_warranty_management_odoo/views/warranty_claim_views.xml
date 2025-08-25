@@ -40,7 +40,7 @@
         <field name="name">warranty.claim.view.tree</field>
         <field name="model">warranty.claim</field>
         <field name="arch" type="xml">
-            <tree string="Warranty Claims">
+            <tree string="Reclamaciones de garantías">
                 <field name="customer_id"/>
                 <field name="sale_order_id"/>
                 <field name="product_id"/>
