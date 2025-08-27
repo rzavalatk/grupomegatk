@@ -28,7 +28,7 @@
                     </field>
                 </page>
             </xpath>
-            <xpath expr="//field[@name='job_title']" position="replace">
+            <!--<xpath expr="//field[@name='job_title']" position="replace">
                 <field name="job_position" placeholder="Job Position"/>
             </xpath>
             <xpath expr="//field[@name='job_id']" position="replace">
@@ -60,7 +60,7 @@
                    position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <!--<xpath expr="//div[@id='o_employee_right']" position="attributes">
+            <xpath expr="//div[@id='o_employee_right']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>-->
         </field>
