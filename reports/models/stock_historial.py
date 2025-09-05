@@ -128,21 +128,31 @@ class StockReportHistory(models.Model):
             cantidad_final = qty_to.quantity if qty_to else 0
             diferencia = cantidad_final - cantidad_inicial
 
-            # Solo muestra productos donde hubo movimiento o existen en ambas fechas
-            if cantidad_inicial != cantidad_final or cantidad_inicial > 0 or cantidad_final > 0:
+            # Solo muestra productos donde no hubo movimiento o no tienen movieminto entre las fechas
+            if cantidad_inicial == cantidad_final and cantidad_inicial > 0 and cantidad_final > 0:
                 product = self.env['product.product'].browse(product_id)
-                differences.append((0, 0, {
-                    'product_id': product_id,
-                    'location_id': location_id,
-                    'quantity_from': cantidad_inicial,
-                    'quantity_to': cantidad_final,
-                    'quantity_difference': diferencia,
-                    'barcode': product.barcode or '',
-                    'lst_price': product.lst_price * cantidad_final,
-                    'standard_price': product.standard_price * cantidad_final,
-                    'linea': product.x_ingresotk,
-                    'marca': product.marca_id.name if product.marca_id else '',
-                }))
+                movimiento = self.env['stock.move.line'].search_count([
+                    ('product_id', '=', product_id),
+                    ('date', '>=', self.date_from),
+                    ('date', '<=', self.date_to),
+                    ('company_id', '=', self.company_id.id),
+                    ('location_id', 'in', [loc.id for loc in product.stock_quant_ids.mapped('location_id')]),
+                    ('location_dest_id', 'in', [loc.id for loc in product.stock_quant_ids.mapped('location_id')]),
+                ])
+                
+                if movimiento == 0:
+                    differences.append((0, 0, {
+                        'product_id': product_id,
+                        'location_id': location_id,
+                        'quantity_from': cantidad_inicial,
+                        'quantity_to': cantidad_final,
+                        'quantity_difference': diferencia,
+                        'barcode': product.barcode or '',
+                        'lst_price': product.lst_price * cantidad_final,
+                        'standard_price': product.standard_price * cantidad_final,
+                        'linea': product.x_ingresotk,
+                        'marca': product.marca_id.name if product.marca_id else '',
+                    }))
         self.report_differences = differences
     
     
