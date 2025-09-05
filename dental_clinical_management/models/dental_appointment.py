@@ -1,86 +1,63 @@
-# -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
 from odoo import api, fields, models, _
 
-
 class DentalAppointment(models.Model):
-    """Patient dental appointment details"""
+    """Detalles de la cita dental del paciente"""
     _name = 'dental.appointment'
-    _description = "Dental Appointment for patients"
+    _description = "Cita dental para pacientes"
     _inherit = "mail.thread"
     _rec_name = 'sequence_no'
 
-    sequence_no = fields.Char(string='Sequence No', readonly=True,
+    sequence_no = fields.Char(string='No. de Secuencia', readonly=True,
                               default=lambda self: _('New'),
                               copy=False,
-                              help="Sequence number of appointment")
-    token_no = fields.Integer(string='Token No', copy=False,
+                              help="Número de secuencia de la cita")
+    token_no = fields.Integer(string='No. de Turno', copy=False,
                               readonly=True,
-                              help="Token number of the appointments")
+                              help="Número de turno de las citas")
     patient_id = fields.Many2one('res.partner',
-                                 string="Patient Name",
+                                 string="Nombre del Paciente",
                                  domain="[('is_patient', '=', True)]",
                                  copy=False,
                                  required=True,
-                                 help="Add the patient")
-    patient_phone = fields.Char(related="patient_id.phone", string="Phone",
-                                help="Phone number of the patient")
-    patient_age = fields.Integer(related="patient_id.patient_age", string="Age",
-                                 help="Age of the patient")
+                                 help="Agregar el paciente")
+    patient_phone = fields.Char(related="patient_id.phone", string="Teléfono",
+                                help="Número de teléfono del paciente")
+    patient_age = fields.Integer(related="patient_id.patient_age", string="Edad",
+                                 help="Edad del paciente")
     specialist_id = fields.Many2one('dental.specialist',
-                                    string="Doctors Department",
-                                    help='Choose the doctors department')
+                                    string="Departamento Médico",
+                                    help='Elegir el departamento médico')
     doctor_ids = fields.Many2many('hr.employee',
                                   compute='_compute_doctor_ids',
-                                  string="Doctors Data", help="Doctors Data",
+                                  string="Datos de los Doctores", help="Datos de los doctores",
                                   )
     doctor_id = fields.Many2one('hr.employee', string="Doctor",
                                 required=True,
                                 domain="[('id', 'in', doctor_ids)]",
-                                help="Name the of the doctor")
+                                help="Nombre del doctor")
     time_shift_ids = fields.Many2many('dental.time.shift',
-                                      string="Time Shift",
-                                      help="Choose the time shift",
+                                      string="Turno",
+                                      help="Elegir el turno",
                                       compute='_compute_time_shifts')
     shift_id = fields.Many2one('dental.time.shift',
-                               string="Booking Time",
+                               string="Hora de Reserva",
                                domain="[('id','in',time_shift_ids)]",
-                               help="Choose the time shift")
-    date = fields.Date(string="Date", required=True,
+                               help="Elegir el turno")
+    date = fields.Date(string="Fecha", required=True,
                        default=fields.date.today(),
-                       help="Date when to take appointment for doctor")
-    reason = fields.Text(string="Please describe the reason",
-                         help="Just explain about the reason to take doctor "
-                              "appointment")
-    state = fields.Selection([('draft', 'Draft'),
-                              ('new', 'New Appointment'),
-                              ('done', 'Prescribed'),
-                              ('cancel', 'Cancel')],
+                       help="Fecha para tomar la cita con el doctor")
+    reason = fields.Text(string="Describa el motivo",
+                         help="Explique el motivo para tomar la cita médica")
+    state = fields.Selection([('draft', 'Borrador'),
+                              ('new', 'Nueva Cita'),
+                              ('done', 'Prescrito'),
+                              ('cancel', 'Cancelado')],
                              default="draft",
-                             string="State", help="state of the appointment")
+                             string="Estado", help="Estado de la cita")
 
     @api.model
     def create(self, vals):
-        """Function declared for creating sequence Number for Appointments"""
+        """Función declarada para crear el número de secuencia para las citas"""
         if vals.get('sequence_no', _('New')) == _('New'):
             vals['sequence_no'] = self.env['ir.sequence'].next_by_code(
                 'dental.appointment') or _('New')
@@ -95,19 +72,19 @@ class DentalAppointment(models.Model):
         return res
 
     def action_create_appointment(self):
-        """Change the state of the appointment while click create button"""
+        """Cambiar el estado de la cita al hacer clic en el botón crear"""
         self.state = 'new'
 
     @api.depends('doctor_id')
     def _compute_time_shifts(self):
-        """To get the doctors time shift"""
+        """Obtener el turno del doctor"""
         for record in self:
             record.time_shift_ids = self.env['dental.time.shift'].search(
                 [('id', 'in', record.doctor_id.time_shift_ids.ids)]).ids
 
     @api.depends('specialist_id')
     def _compute_doctor_ids(self):
-        """Searching for doctors based on there specialization"""
+        """Buscar doctores según su especialización"""
         for record in self:
             if record.specialist_id:
                 record.doctor_ids = self.env['hr.employee'].search(
@@ -116,16 +93,16 @@ class DentalAppointment(models.Model):
                 record.doctor_ids = self.env['hr.employee'].search([]).ids
 
     def action_cancel(self):
-        """Change the state of the appointment while click cancel button"""
+        """Cambiar el estado de la cita al hacer clic en el botón cancelar"""
         self.state = 'cancel'
 
     def action_prescription(self):
-        """Created the action for view the prescriptions
-        of 'done' state appointments"""
+        """Acción creada para ver las prescripciones
+        de las citas en estado 'Prescrito'"""
         return {
             'type': 'ir.actions.act_window',
             'target': 'inline',
-            'name': 'Prescription',
+            'name': 'Prescripción',
             'view_mode': 'form',
             'res_model': 'dental.prescription',
             'res_id': self.env['dental.prescription'].search([

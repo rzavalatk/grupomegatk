@@ -1,80 +1,57 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import email_normalize
 
 
 class ResPartner(models.Model):
-    """To create Patients in the clinic, use res.partner model and customize it"""
+    """Para crear pacientes en la clínica, se utiliza el modelo res.partner y se personaliza"""
     _inherit = 'res.partner'
 
-    company_type = fields.Selection(selection_add=[('person', 'Patient'),
-                                                   ('company', 'Medicine '
-                                                               'Distibutor')],
-                                    help="Patient type")
-    dob = fields.Date(string="Date of Birth",
-                      help="DOB of the patient")
+    company_type = fields.Selection(selection_add=[('person', 'Paciente'),
+                                                   ('company', 'Distribuidor de Medicamentos')],
+                                    help="Tipo de paciente")
+    dob = fields.Date(string="Fecha de nacimiento",
+                      help="Fecha de nacimiento del paciente")
     patient_age = fields.Integer(compute='_compute_patient_age',
                                  store=True,
-                                 string="Age",
-                                 help="Age of the patient")
-    sex = fields.Selection([('male', 'Male'), ('female', 'Female')],
-                           string="Sex",
-                           help="Sex of the patient")
+                                 string="Edad",
+                                 help="Edad del paciente")
+    sex = fields.Selection([('male', 'Masculino'), ('female', 'Femenino')],
+                           string="Sexo",
+                           help="Sexo del paciente")
     insurance_company_id = fields.Many2one('insurance.company',
-                                           string="Insurance Company",
-                                           help="Mention the insurance company")
-    start_date = fields.Date(string="Member Since",
-                             help="Patient insurance start date")
-    expiration_date = fields.Date(string="Expiration Date",
-                                  help="Patient insurance expiration date")
-    insureds_name = fields.Char(string="Insured's Name",
-                                help="Name of the insured's")
-    identification_number = fields.Char(string="Identification Number",
-                                        help="Identification Number of "
-                                             "insured's")
-    is_patient = fields.Boolean(string="Is Patient",
-                                help="To set it's a patient")
+                                           string="Compañía de seguros",
+                                           help="Mencione la compañía de seguros")
+    start_date = fields.Date(string="Miembro desde",
+                             help="Fecha de inicio del seguro del paciente")
+    expiration_date = fields.Date(string="Fecha de expiración",
+                                  help="Fecha de expiración del seguro del paciente")
+    insureds_name = fields.Char(string="Nombre del asegurado",
+                                help="Nombre del asegurado")
+    identification_number = fields.Char(string="Número de identificación",
+                                        help="Número de identificación del asegurado")
+    is_patient = fields.Boolean(string="Es paciente",
+                                help="Para indicar que es un paciente")
     medical_questionnaire_ids = fields.One2many('medical.questionnaire',
                                                 'patient_id',
                                                 readonly=False,
-                                                help="connect model medical "
-                                                     "questionnaire in "
-                                                     "patients")
+                                                help="Conectar el modelo cuestionario médico en pacientes")
     report_ids = fields.One2many('xray.report', 'patient_id',
-                                 string='X-Ray',
-                                 help="To add the xray reports of the patient")
+                                 string='Rayos X',
+                                 help="Agregar los reportes de rayos X del paciente")
 
     @api.model
     def create(self, vals):
-        """Overrides the create method to handle additional logic for DentalPatients.
-        When a new DentalPatient is created, It then proceeds to create a portal
-        wizard for the patient to grant them access to the portal.
+        """Sobrescribe el método create para manejar lógica adicional para DentalPatients.
+        Cuando se crea un nuevo paciente, se procede a crear un asistente de portal
+        para otorgarle acceso al portal.
 
-        If the `company_type` is not `person`, it assumes the record is for a
-        Medicine Distributor or another entity. In this case, it creates a user
-        from a template with predefined groups and permissions, and normalizes
-        the email address for consistency."""
+        Si el `company_type` no es `person`, se asume que el registro es para un
+        distribuidor de medicamentos u otra entidad. En este caso, se crea un usuario
+        desde una plantilla con grupos y permisos predefinidos, y se normaliza el correo
+        electrónico para consistencia."""
 
         if 'company_type' in vals and vals['company_type'] == 'person':
             vals['is_patient'] = True
@@ -112,16 +89,15 @@ class ResPartner(models.Model):
                 self.env['hr.employee'].search(
                     [('work_email', '=', res.email)]).user_id = user.id
             except:
-                raise UserError(_("Email already used for another dentist"))
+                raise UserError(_("El correo electrónico ya está en uso por otro dentista"))
         return res
 
     @api.depends('dob')
     def _compute_patient_age(self):
-        """Computes the age of the patient based on their date of birth (dob)
-        and updates the `patient_age` field. The age is calculated by
-        subtracting the year of the patient's dob from the current year.
-        If the current date is before the patient's birthday in the current
-        year, one year is subtracted from the age."""
+        """Calcula la edad del paciente según su fecha de nacimiento (dob)
+        y actualiza el campo `patient_age`. La edad se calcula restando el año
+        de nacimiento del paciente al año actual. Si la fecha actual es antes
+        del cumpleaños del paciente en el año actual, se resta un año a la edad."""
         for record in self:
             record.patient_age = (fields.date.today().year - record.dob.year -
                                   ((fields.date.today().month,
