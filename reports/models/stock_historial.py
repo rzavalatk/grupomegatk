@@ -17,184 +17,114 @@ class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
     
-    @api.onchange('date_from','date_to','company_id')
+    @api.onchange('date_from', 'date_to', 'company_id')
     def _onchange_date_from(self):
-        self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
+        self.name = "No vendido del " + str(self.date_from) + " al " + str(self.date_to)
     
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id, required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    name = fields.Char(
+        string="Nombre de reporte", required=True,
+        readonly=True, states={'borrador': [('readonly', False)]},
+    )
+    date_from = fields.Datetime(
+        string="Fecha inicio", required=True,
+        readonly=True, states={'borrador': [('readonly', False)]},
+    )
+    date_to = fields.Datetime(
+        string="Fecha final", required=True,
+        readonly=True, states={'borrador': [('readonly', False)]},
+    )
+    company_id = fields.Many2one(
+        'res.company', string='Compañia',
+        default=lambda self: self.env.company.id,
+        required=True, readonly=True, states={'borrador': [('readonly', False)]},
+    )
 
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
-        ], default='borrador')
+    ], default='borrador')
     
-
     report_lines_from = fields.One2many(
-        'stock.report.line', 'report_id_from', string="Report Lines From", readonly=True)
+        'stock.report.line', 'report_id_from',
+        string="Report Lines From", readonly=True
+    )
     report_lines_to = fields.One2many(
-        'stock.report.line', 'report_id_to', string="Report Lines To", readonly=True)
+        'stock.report.line', 'report_id_to',
+        string="Report Lines To", readonly=True
+    )
     report_differences = fields.One2many(
-        'stock.report.difference', 'report_id', string="Report Differences", readonly=True)
+        'stock.report.difference', 'report_id',
+        string="Report Differences", readonly=True
+    )
     
-    product_list = []
-    product_list_1 = []
-
     def generate_reports(self):
-        self._generate_report_lines(self.date_from, 'report_lines_from')
-        time.sleep(4)
-        self._generate_report_lines(self.date_to, 'report_lines_to')
-        time.sleep(4)
-        self._calculate_differences()
-        
+        # Genera reportes en ambas fechas y calcula diferencias
+        products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
+        products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        self._calculate_differences(products_from, products_to)
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
+        """Genera líneas de reporte usando la lógica oficial de Odoo con to_date"""
+        productos = self.env['product.product'].with_context(
+            to_date=date_report
+        ).search([
+            ('company_id', '=', self.company_id.id),
+            ('active', '=', True),
+            ('detailed_type', '=', 'product')
+        ])
 
-        StockQuant = self.env['stock.valuation.layer']
-        #POSIBE DEJE DE FUNCIONAR
-        """quants = StockQuant.search(['&',
-                                    ('create_date', '<=', date_report),
-                                    ('company_id', '=', self.company_id.id)])"""
-        productos = self.env['product.product'].search([('company_id', '=', self.company_id.id)])
-        inventario = []
-        products_idsg = []
-        
-        if date.today() == date_report.date():
-            for producto in productos:
-                if producto.active:
-                    if producto.detailed_type not in ['consu','service']:
-                        if producto.list_price > 0:
-                            if producto.stock_quant_ids:
-                                for quant in producto.stock_quant_ids:
-                                    if self.company_id.id == 8:
-                                        if quant.location_id.id in [155,161]:
-                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
-                                    elif self.company_id.id == 9:
-                                        if quant.location_id.id in [181,169,175]:
-                                            inventario.append({"producto": producto.id, "Ubicacion": quant.location_id.id, "cantidad": quant.quantity})
-                            self.product_list.append(producto)
-                            
-            products_idsg = [[item["producto"], item["Ubicacion"], item["cantidad"]] for item in inventario]
-        else:
-            product_location_quantities = defaultdict(lambda: defaultdict(float))
-            
-            move_lines = self.env['stock.move.line'].search([
-                ('date', '<=', date_report),
-                ('company_id', '=', self.company_id.id),
-            ])
-            #movelines = StockMoveLine.search([('date', '<=', date_report), ('company_id', '=', self.company_id.id)])
-            for ml in move_lines:
-                if not ml.product_id.active:
-                    continue
-                
-                product = ml.product_id
-                
-                if product.detailed_type not in ['consu', 'service']:
-                    if product.list_price > 0:
-                        if product not in self.product_list:
-                            self.product_list.append(product)
+        valid_locations = {
+            8: [155, 161],
+            9: [181, 169, 175],
+        }.get(self.company_id.id, [])
 
-                        if self.company_id.id == 8:
-                            if ml.location_id.id in [155,161] or ml.location_dest_id.id in [155,161]:
-                                # Resta desde la ubicación origen si es interna
-                                if ml.location_id.usage == 'internal':
-                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+        lines = []
+        product_location_set = set()
 
-                                # Suma hacia la ubicación destino si es interna
-                                if ml.location_dest_id.usage == 'internal':
-                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
-                        elif self.company_id.id == 9:
-                            if ml.location_id.id in [181,169,175] or ml.location_dest_id.id in [181,169,175]:
-                                # Resta desde la ubicación origen si es interna
-                                if ml.location_id.usage == 'internal':
-                                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+        for producto in productos:
+            for quant in producto.stock_quant_ids.filtered(lambda q: q.location_id.id in valid_locations):
+                lines.append((0, 0, {
+                    'product_id': producto.id,
+                    'location_id': quant.location_id.id,
+                    'quantity': quant.quantity,  # respeta to_date
+                }))
+                product_location_set.add((producto.id, quant.location_id.id))
 
-                                # Suma hacia la ubicación destino si es interna
-                                if ml.location_dest_id.usage == 'internal':
-                                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
-                                    
-            for product_id, locations in product_location_quantities.items():
-                for location_id, qty in locations.items():
-                    if qty >= 0:
-                        if self.company_id.id == 8:
-                            if location_id in [155,161]:
-                                products_idsg.append([product_id, location_id, qty])
-                        elif self.company_id.id == 9:
-                            if location_id in [181,169,175]:
-                                products_idsg.append([product_id, location_id, qty])
-                        
-                        
-        if field_name == 'report_lines_from':
+        # Guardar en One2many correspondiente (from/to)
+        self.write({field_name: lines})
+        return product_location_set
 
-            for lines_product in products_idsg:
-                self.product_list_1.append([lines_product[0], lines_product[1]])
-            
-            if len(products_idsg) >= 1:
-                lines = []
-                for line_product in products_idsg:
-                    lines.append((0, 0, {
-                        'product_id': line_product[0],
-                        'location_id': line_product[1],
-                        'quantity': line_product[2],
-                    }))
-
-                self.write({field_name: lines})
-        
-        if field_name == 'report_lines_to':
-            orden_referencia = [item[0] for item in self.product_list_1]
-            products_idsg_ordenado = sorted(
-                products_idsg,
-                key=lambda x: orden_referencia.index(x[0]) if x[0] in orden_referencia else len(orden_referencia)
-            )
-            if len(products_idsg_ordenado) >= 1:
-                lines = []
-                for line_product in products_idsg_ordenado:
-                    lines.append((0, 0, {
-                        'product_id': line_product[0],
-                        'location_id': line_product[1],
-                        'quantity': line_product[2],
-                    }))
-
-                self.write({field_name: lines})
-    def _calculate_differences(self):
+    def _calculate_differences(self, products_from, products_to):
         self.ensure_one()
-        lines_from = {line.product_id.id: line for line in self.report_lines_from}
-        #time.sleep(4)
-        lines_to = {line.product_id.id: line for line in self.report_lines_to}
+        all_product_locations = products_from.union(products_to)
+
+        lines_from = {(l.product_id.id, l.location_id.id): l for l in self.report_lines_from}
+        lines_to = {(l.product_id.id, l.location_id.id): l for l in self.report_lines_to}
         differences = []
-        ids = []
-        for product_id in set(lines_from.keys()).union(lines_to.keys()):
-            if product_id in lines_from:
-                qty_from = lines_from[product_id].quantity  # Access quantity directly
-            else:
-                qty_from = 0
-            if product_id in lines_to:
-                qty_to = lines_to[product_id].quantity  # Access quantity directly
-            else:
-                qty_to = 0
-            
-            if qty_from != 0:
-                if qty_to != 0:
-                    if (qty_from - qty_to) == 0:
-                        for product in self.product_list:
-                            if product_id == product.id:
-                                if product_id not in ids:
-                                    differences.append((0, 0, {
-                                        'product_id': product_id,
-                                        'quantity_from': qty_from,
-                                        'quantity_to': qty_to,
-                                        'quantity_difference': qty_to - qty_from,
-                                        'barcode': product.barcode if product.barcode else '',
-                                        'lst_price': product.lst_price * qty_to,
-                                        'standard_price': product.standard_price * qty_to,
-                                        'linea': product.x_ingresotk,
-                                        'marca': product.marca_id.name,
-                                    }))
-                                    ids.append(product_id)
+
+        for product_id, location_id in all_product_locations:
+            qty_from = lines_from.get((product_id, location_id), False)
+            qty_to = lines_to.get((product_id, location_id), False)
+            cantidad_inicial = qty_from.quantity if qty_from else 0
+            cantidad_final = qty_to.quantity if qty_to else 0
+            diferencia = cantidad_final - cantidad_inicial
+
+            if cantidad_inicial != cantidad_final or cantidad_inicial > 0 or cantidad_final > 0:
+                product = self.env['product.product'].browse(product_id)
+                differences.append((0, 0, {
+                    'product_id': product_id,
+                    'location_id': location_id,
+                    'quantity_from': cantidad_inicial,
+                    'quantity_to': cantidad_final,
+                    'quantity_difference': diferencia,
+                    'barcode': product.barcode or '',
+                    'lst_price': product.lst_price * cantidad_final,
+                    'standard_price': product.standard_price * cantidad_final,
+                    'linea': product.x_ingresotk,
+                    'marca': product.marca_id.name if product.marca_id else '',
+                }))
         self.report_differences = differences
     
     
@@ -317,9 +247,6 @@ class StockReportHistory(models.Model):
             'name': self.name
             }
 
-
-
-
 class StockReportLine(models.Model):
     _name = 'stock.report.line'
     _description = 'Stock Report Line'
@@ -328,29 +255,24 @@ class StockReportLine(models.Model):
         'stock.report.history', string="Reporte Inicial", ondelete='cascade')
     report_id_to = fields.Many2one(
         'stock.report.history', string="Reporte Final", ondelete='cascade')
-    product_id = fields.Many2one(
-        'product.product', string="Producto", required=True)
+    product_id = fields.Many2one('product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
     location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
-    #date_create = fields.Datetime(string="Create Date", required=True)
 
 
 class StockReportDifference(models.Model):
     _name = 'stock.report.difference'
     _description = 'Stock Report Difference'
 
-    report_id = fields.Many2one(
-        'stock.report.history', string="Reporte", ondelete='cascade')
-    product_id = fields.Many2one(
-        'product.product', string="Producto", required=True)
+    report_id = fields.Many2one('stock.report.history', string="Reporte", ondelete='cascade')
+    product_id = fields.Many2one('product.product', string="Producto", required=True)
     quantity_from = fields.Float(string="Cantidad Inicial", required=True)
     quantity_to = fields.Float(string="Cantidad Final", required=True)
-    quantity_difference = fields.Float(
-        string="Movimiento", required=True)
+    quantity_difference = fields.Float(string="Movimiento", required=True)
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
     location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
-    
+
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")
     marca = fields.Char(string="Marca")
