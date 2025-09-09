@@ -383,4 +383,12 @@ class HrLeave(models.Model):
         vals['']
         vals['number_of_days_display'] = 
         return super(HrLeave, self).create(vals)"""
+    
+    @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
+    def _compute_number_of_hours_display(self):
+        super()._compute_number_of_hours_display()
+        for leave in self:
+            if leave.request_date_from and leave.request_date_from.weekday() == 5:
+                # Si es sábado, duplicar las horas
+                leave.number_of_hours_display = leave.number_of_hours_display * 2
 
