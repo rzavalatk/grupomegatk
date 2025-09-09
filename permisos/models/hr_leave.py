@@ -24,6 +24,7 @@ class HrLeave(models.Model):
     reporto = fields.Selection([('anticipado', 'Anticipado'), ('llamada', 'Llamada'), ('mensaje', 'Mensaje'), (
         'noreporto', 'No reporto')], default='anticipado', copy=False, required=True, track_visibility='onchange')
     justificacion = fields.Text('Motivo', copy=False,)
+    formulario_entregado = fields.Boolean(string='Formulario entregado', default=False, copy=False,)
     dias = fields.Integer(string='Días', default=1)
     horas = fields.Integer(string='Horas', default=0)
     minutos = fields.Integer(string='Minutos', default=0)
@@ -198,12 +199,13 @@ class HrLeave(models.Model):
                         self.minutos = 0
             elif self.request_date_from and self.request_date_to:
                 if self.request_date_from.weekday() == 5:
+                    # Si es sábado, duplicar las horas y minutos aunque no sea por horas personalizadas
                     self.dias = self.number_of_days_display
                     self.horas = int(self.number_of_hours_display) * 2
-                    self.minutos = 0
+                    minutos = (self.number_of_hours_display - int(self.number_of_hours_display)) * 60
+                    self.minutos = int(minutos) * 2 if minutos else 0
                     self.number_of_hours_text = self.horas
                 elif self.request_date_to >= self.request_date_from:
-                    #self.sudo().write({'dias': self.number_of_days_display})
                     self.dias = self.number_of_days_display
                     self.horas = 0
                     self.minutos = 0
@@ -381,4 +383,4 @@ class HrLeave(models.Model):
         vals['']
         vals['number_of_days_display'] = 
         return super(HrLeave, self).create(vals)"""
-    
+

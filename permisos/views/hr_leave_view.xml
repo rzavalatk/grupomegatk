@@ -15,6 +15,7 @@
           <xpath expr="//field[@name='supported_attachment_ids']" position="after">
             
             <field name="justificacion"/>
+            <field name="formulario_entregado"/>
             <field name="cubierto_employee_id" />
             
             <field name="dias_empleado" readonly="1"/>

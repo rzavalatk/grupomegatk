@@ -158,7 +158,7 @@ class Account_Move(models.Model):
             invoice.payment_state = new_pmt_state
 
             # --- Agregar lógica adicional cuando el estado sea 'paid' ---
-            if new_pmt_state == 'paid':
+            """if new_pmt_state == 'paid':
                 for move in self:
                     if move.payment_reference:  # Si el campo payment_reference tiene un valor
                         _logger.warning("Entra al if de payment_reference " + move.payment_reference)
@@ -174,7 +174,7 @@ class Account_Move(models.Model):
                                     _logger.warning("Condición cumplida, cambiando el comercial.")
                                     # Cambia el comercial al ID 78 usando write
                                     move.write({'invoice_user_id': 60})
-                                    break  # Sal del bucle después de aplicar el cambi
+                                    break  # Sal del bucle después de aplicar el cambi"""
                                 
     #mostrar boton en factura de borrados
     def go_draft(self):
@@ -331,7 +331,7 @@ class AccountMoveLine(models.Model):
         for vals in vals_list:
             # ✅ Ignorar cuentas que no sean 8672 o 8670
             if vals.get('account_id') not in [8672, 8670]:
-                _logger.warning(f"Ignorado account_id: {vals.get('account_id')}")
+                
                 continue
             move = self.env['account.move'].browse(vals['move_id'])
             if move.move_type == 'entry':
