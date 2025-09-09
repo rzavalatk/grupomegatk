@@ -60,15 +60,37 @@
     </record>
    
     <!-- Reglas de registro -->
-    <record id="permisos_employee_rule" model="ir.rule">
-      <field name="name">Permisos</field>
-      <field name="model_id" ref="model_hr_employee"/>
-      <field name = "groups" eval = "[(4, ref ('permiso_jefe')),(4, ref ('permiso_user'))]" /> 
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="False"/>
-      <field name="perm_create" eval="False"/>
-      <field name="perm_unlink" eval="False"/>
-      <field name="domain_force">['|',('user_id', '=', user.id),('parent_id.user_id', '=', user.id)]</field>
+    <record id="permisos_employee_rule_user" model="ir.rule">
+        <field name="name">Permisos: Solo mis registros</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('permiso_user'))]" />
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="permisos_employee_rule_jefe" model="ir.rule">
+        <field name="name">Permisos: Jefe ve su equipo</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('permiso_jefe'))]" />
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="domain_force">['|',('user_id', '=', user.id),('parent_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="permisos_employee_rule_admin" model="ir.rule">
+        <field name="name">Permisos: Admin ve todo</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('permiso_admin'))]" />
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
     </record>
 
     <!-- TODO remove me in master -->
