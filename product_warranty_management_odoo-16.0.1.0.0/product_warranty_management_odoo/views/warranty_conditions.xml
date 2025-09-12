@@ -4,15 +4,29 @@
         <field name="name">warranty.condition.tree</field>
         <field name="model">warranty.conditions</field>
         <field name="arch" type="xml">
-            <tree string="Condiciones de garantía">
+            <tree string="Condiciones de Garantía">
                 <field name="name"/>
                 <field name="description"/>
             </tree>
         </field>
     </record>
+
+    <record id="warranty_conditions_action" model="ir.actions.act_window">
+        <field name="name">Condiciones de Garantía</field>
+        <field name="res_model">warranty.conditions</field>
+        <field name="view_mode">tree</field> 
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tus propias condiciones de garantía.
+            </p>
+        </field>
+    </record>
+    
     <menuitem
-        id="warranty_conditions"
-        name="Condiciones de carantía"
-        parent= "menu_product_in_config_stock"
+        id="warranty_conditions_menu"
+        name="Condiciones de Garantía"
+        parent="menu_product_in_config_stock"
+        action="warranty_conditions_action"
         sequence="10"/>
+
 </odoo>
