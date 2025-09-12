@@ -42,6 +42,7 @@
         'views/website_registration_templates.xml',
         'views/warranty_claim_views.xml',
         'views/portal_templates.xml',
+        'viewa/warranty_condtions.xml',
     ],
     'assets': {
         'web.assets_frontend': [

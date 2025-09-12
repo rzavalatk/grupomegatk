@@ -14,6 +14,8 @@
                         <field name="is_warranty_available" widget="bool_badge"/>
                         <field name="warranty_duration"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+                        <field name="warranty_condition_compliance"
+                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
                     </group>
                 </group>
             </page>

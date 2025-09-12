@@ -16,7 +16,7 @@
     <template id="portal_warranty_claims" name="claims">
         <t t-call="portal.portal_layout">
             <t t-call="portal.portal_searchbar">
-                <t t-set="page_name">claim_count</t>
+                <t t-set="page_name">conteo de reclamos</t>
                 <t t-set="title"/>
             </t>
             <t t-call="portal.portal_table">
@@ -55,8 +55,7 @@
             <t t-set="variable" t-value="1"/>
             <t t-if="variable == 1">
                 <li>
-                    <a t-attf-href="/my/claims?{{ keep_query() }}">/ Warranty
-                        Claims
+                    <a t-attf-href="/my/claims?{{ keep_query() }}">/ Reclamos de garantía
                     </a>
                 </li>
             </t>
