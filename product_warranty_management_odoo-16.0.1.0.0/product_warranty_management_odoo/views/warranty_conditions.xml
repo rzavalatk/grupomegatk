@@ -27,6 +27,6 @@
         name="Condiciones de Garantía"
         parent="stock.menu_product_in_config_stock"
         action="warranty_conditions_action"
-        sequence="10"/>
+        sequence="65"/>
 
 </odoo>
