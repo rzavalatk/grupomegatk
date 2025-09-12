@@ -33,5 +33,8 @@ class ProductTemplate(models.Model):
                                        help="Duracion de garantia")
     warranty_expiry = fields.Date(string="Fecha de expiración de garantia",
                                   help="Fecha de expiración de garantia")
-    warranty_condition_compliance = fields.selection(string="Cumplimiento de condiciones",
-                                                   help="Cumplimiento de condiciones")
+    warranty_condition_compliance = fields.Many2one(
+        'warranty.conditions', 
+        string="Condiciones de Garantía",
+        help="Selecciona las condiciones de garantía aplicables a este producto."
+    )
