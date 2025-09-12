@@ -25,7 +25,7 @@
     <menuitem
         id="warranty_conditions_menu"
         name="Condiciones de Garantía"
-        parent="menu_product_in_config_stock"
+        parent="stock.menu_product_in_config_stock"
         action="warranty_conditions_action"
         sequence="10"/>
 
