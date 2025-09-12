@@ -2,7 +2,7 @@
 <odoo>
     <record id="warranty_conditions_tree_view" model="ir.ui.view">
         <field name="name">warranty.condition.tree</field>
-        <field name="res_model">warranty.conditions</field>
+        <field name="model">warranty.conditions</field>
         <field name="arch" type="xml">
             <tree string="Condiciones de garantía">
                 <field name="name"/>
