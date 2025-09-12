@@ -5,4 +5,4 @@ class WarrantyCondition(models.Model):
     _description = 'Condiciones de garantía'
 
     name = fields.Char(string='Name', required=True)
-    description = fields.html(string='Description', required=True)
+    description = fields.Char(string='Description', required=True)
