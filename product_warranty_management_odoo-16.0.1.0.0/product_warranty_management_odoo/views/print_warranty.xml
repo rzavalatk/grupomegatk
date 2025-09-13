@@ -1,0 +1,52 @@
+<odoo>
+    <template id="report_product_warranty_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Certificado de Garantía</h2>
+                        </div>
+                        
+                        <div class="mt32 mb32">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>Producto:</strong>
+                                    <span t-field="doc.name"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Duración de la Garantía:</strong>
+                                    <span t-field="doc.warranty_duration"/> meses
+                                </div>
+                                <div class="col-6">
+                                    <strong>Fecha de Expiración:</strong>
+                                    <span t-field="doc.warranty_expiry"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt32 mb32">
+                            <h3>Condiciones de la Garantía</h3>
+                            <div t-field="doc.warranty_condition_compliance.description"/>
+                        </div>
+                        
+                        <div class="mt64">
+                            <p class="text-center">
+                                Este certificado de garantía es válido solo con el comprobante de compra original.
+                            </p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="action_report_product_warranty" model="ir.actions.report">
+        <field name="name">Imprimir Garantía</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">warranty_conditions.report_product_warranty_template</field>
+        <field name="report_file">warranty_conditions.report_product_warranty_template</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

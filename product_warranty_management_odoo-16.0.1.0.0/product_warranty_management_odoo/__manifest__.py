@@ -43,6 +43,7 @@
         'views/warranty_claim_views.xml',
         'views/portal_templates.xml',
         'views/warranty_conditions.xml',
+        'views/print_warranty.xml',
     ],
     'assets': {
         'web.assets_frontend': [
