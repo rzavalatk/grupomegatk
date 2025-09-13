@@ -42,6 +42,7 @@
                 <field name="name" string="Producto:"/>
                 <field name="warranty_duration"/>
                 <field name="warranty_expiry"/>
+                <field name="warranty_condition_compliance"/>
                 </group>
                 </sheet>
             </form>
