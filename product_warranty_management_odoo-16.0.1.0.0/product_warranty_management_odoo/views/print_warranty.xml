@@ -17,8 +17,7 @@
                                 <div class="col-6">
                                     <strong>Duración de la Garantía:</strong>
                                     <span t-field="doc.warranty_duration"/> meses
-                                </div>
-                                <div class="col-6">
+                                    <br>
                                     <strong>Fecha de Expiración:</strong>
                                     <span t-field="doc.warranty_expiry"/>
                                 </div>
