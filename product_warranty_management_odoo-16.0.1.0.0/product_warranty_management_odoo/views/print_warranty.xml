@@ -18,12 +18,13 @@
                                     <strong>Duración de la Garantía:</strong>
                                     <span t-field="doc.warranty_duration"/> meses
                                 </div>
-                                <br/>
+                                
+                            </div>
+                            <br/>
                                 <div class="col-6">
                                     <strong>Fecha de Expiración:</strong>
                                     <span t-field="doc.warranty_expiry"/>
                                 </div>
-                            </div>
                         </div>
 
                         <div class="mt32 mb32">
