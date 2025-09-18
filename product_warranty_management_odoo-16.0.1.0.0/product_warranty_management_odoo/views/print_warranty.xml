@@ -47,7 +47,7 @@
         <field name="name">Formato Permiso</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>  
-        <field name="margin_top">10</field>
+        <field name="margin_top">25</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">6</field>
         <field name="margin_right">6</field>
