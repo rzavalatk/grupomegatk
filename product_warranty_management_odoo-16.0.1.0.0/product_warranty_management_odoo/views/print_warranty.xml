@@ -1,8 +1,15 @@
 <odoo>
-    <template id="report_product_warranty_template">
+    <template id="report_warranty_print_view_new">
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="web.external_layout">
+          <t t-foreach="docs" t-as="doc">
+            <t t-set="lang" t-value="doc.partner_id.lang"/>
+            <t t-call="product_warranty_management_odoo.report_product_warranty_template" t-lang="lang"/>
+          </t>
+        </t>
+    </template>
+    <template id="report_product_warranty_template">
+        <t t-call="web.basic_layout">
+            <t t-set="o" t-value="docs[0]"/>
                     <div class="page">
                         <div class="text-center">
                             <h2>Certificado de Garantía</h2>
@@ -47,7 +54,7 @@
         <field name="name">Formato Permiso</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>  
-        <field name="margin_top">50</field>
+        <field name="margin_top">10</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">6</field>
         <field name="margin_right">6</field>
