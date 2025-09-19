@@ -11,41 +11,40 @@
         <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
             <t t-set="o" t-value="docs[0]"/>
                 <main>
-                    <div class="page">
-                        <div class="text-center">
-                            <h2>Certificado de Garantía</h2>
-                        </div>
-                        
-                        <div class="mt32 mb32">
-                            <div class="row">
-                                <div class="col-6">
-                                    <strong>Producto:</strong>
-                                    <span t-field="doc.name"/>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Duración de la Garantía:</strong>
-                                    <span t-field="doc.warranty_duration"/> meses
-                                </div>
-                                
+                <div class="page">
+                    <div class="text-center">
+                        <h2>Certificado de Garantía</h2>
+                    </div>
+                    
+                    <div class="mt32 mb32">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Producto:</strong>
+                                <span t-field="o.name"/>  <!-- Cambiado a 'o' -->
                             </div>
-                            <br/>
-                                <div class="col-6">
-                                    <strong>Fecha de Expiración:</strong>
-                                    <span t-field="doc.warranty_expiry"/>
-                                </div>
+                            <div class="col-6">
+                                <strong>Duración de la Garantía:</strong>
+                                <span t-field="o.warranty_duration"/> meses  <!-- Cambiado a 'o' -->
+                            </div>
                         </div>
-
-                        <div class="mt32 mb32">
-                            <h3>Condiciones de la Garantía</h3>
-                            <div t-field="doc.warranty_condition_compliance.description"/>
-                        </div>
-                        
-                        <div class="mt64">
-                            <p class="text-center">
-                                Este certificado de garantía es válido solo con el comprobante de compra original.
-                            </p>
+                        <br/>
+                        <div class="col-6">
+                            <strong>Fecha de Expiración:</strong>
+                            <span t-field="o.warranty_expiry"/>  <!-- Cambiado a 'o' -->
                         </div>
                     </div>
+
+                    <div class="mt32 mb32">
+                        <h3>Condiciones de la Garantía</h3>
+                        <div t-field="o.warranty_condition_compliance.description"/>  <!-- Cambiado a 'o' -->
+                    </div>
+                    
+                    <div class="mt64">
+                        <p class="text-center">
+                            Este certificado de garantía es válido solo con el comprobante de compra original.
+                        </p>
+                    </div>
+                </div>
             </main>
         </t>
     </template>
