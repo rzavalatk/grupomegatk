@@ -12,6 +12,13 @@
             <t t-set="o" t-value="docs[0]"/>
                 <main>
                 <div class="page">
+                <div class="mb-4">
+                    <t t-if="company.logo">
+                        <img t-att-src="'data:image/png;base64,' + company.logo" 
+                             style="max-height: 60px; max-width: 150px;" 
+                             alt="Logo"/>
+                    </t>
+                </div>
                     <div class="text-center">
                         <h2>Certificado de Garantía</h2>
                     </div>
