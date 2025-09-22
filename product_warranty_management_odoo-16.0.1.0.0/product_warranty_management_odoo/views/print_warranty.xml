@@ -10,6 +10,7 @@
     <template id="report_product_warranty_template">
         <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
             <t t-set="o" t-value="docs[0]"/>
+            <t t-set="company" t-value="o.company_id"/>
                 <main>
                 <div class="page">
                 <div class="mb-4">
@@ -27,23 +28,23 @@
                         <div class="row">
                             <div class="col-6">
                                 <strong>Producto:</strong>
-                                <span t-field="o.name"/>  <!-- Cambiado a 'o' -->
+                                <span t-field="o.name"/> 
                             </div>
                             <div class="col-6">
                                 <strong>Duración de la Garantía:</strong>
-                                <span t-field="o.warranty_duration"/> meses  <!-- Cambiado a 'o' -->
+                                <span t-field="o.warranty_duration"/> meses 
                             </div>
                         </div>
                         <br/>
                         <div class="col-6">
                             <strong>Fecha de Expiración:</strong>
-                            <span t-field="o.warranty_expiry"/>  <!-- Cambiado a 'o' -->
+                            <span t-field="o.warranty_expiry"/> 
                         </div>
                     </div>
 
                     <div class="mt32 mb32">
                         <h3>Condiciones de la Garantía</h3>
-                        <div t-field="o.warranty_condition_compliance.description"/>  <!-- Cambiado a 'o' -->
+                        <div t-field="o.warranty_condition_compliance.description"/>  
                     </div>
                     
                     <div class="mt64">
