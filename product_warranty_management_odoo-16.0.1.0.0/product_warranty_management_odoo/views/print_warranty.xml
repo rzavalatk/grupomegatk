@@ -14,7 +14,7 @@
                 <main>
                 <div class="page">
                 <div class="mb-4">
-                    <t t-if="company.logo and company.logo != None and company.logo != b''">
+                    <t t-if="company.logo and isinstance(company.logo, bytes)">
                         <img t-att-src="'data:image/png;base64,' + (company.logo | base64)"
                              style="max-height: 60px; max-width: 150px;" 
                              alt="Logo"/>
