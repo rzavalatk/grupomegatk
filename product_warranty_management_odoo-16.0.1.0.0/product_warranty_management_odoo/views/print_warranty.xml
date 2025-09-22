@@ -14,7 +14,7 @@
                 <main>
                 <div class="page">
                 <div class="mb-4">
-                    <t t-if="company.logo">
+                    <t t-if="company.logo and company.logo != b''">
                         <img t-att-src="'data:image/png;base64,' + (company.logo | base64)"
                              style="max-height: 60px; max-width: 150px;" 
                              alt="Logo"/>
