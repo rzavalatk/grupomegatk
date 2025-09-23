@@ -1,5 +1,5 @@
 <odoo>
-<template id="report_product_warranty_view_new">
+    <template id="report_product_warranty_view_new">
         <t t-call="web.html_container">
           <t t-foreach="docs" t-as="doc">
             <t t-set="lang" t-value="doc.partner_id.lang"/>
@@ -7,23 +7,25 @@
           </t>
         </t>
     </template>
+    
     <template id="report_product_warranty_template">
-        <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
+        <t t-call="web.basic_layout">
             <t t-set="o" t-value="docs[0]"/>
             <t t-set="company" t-value="o.company_id"/>
                 <main>
                 <div class="page">
                 <div class="mb-4">
                     <t t-if="company.logo">
-                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 300px;"/>
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 100px;"/>
                     </t>
                 </div>
                 
                     <div class="text-center">
-                        <h2>Certificado de Garantía</h2>
+                        <h2>GARANTÍA LIMITADA DE PRODUCTO</h2>
+                        <h3><span t-field="o.name"/></h3>
                     </div>
                     
-                    <div class="mt32 mb32">
+                    <div class="mt-4 mb-4">
                         <div class="row">
                             <div class="col-6">
                                 <strong>Producto:</strong>
@@ -34,22 +36,100 @@
                                 <span t-field="o.warranty_duration"/> meses 
                             </div>
                         </div>
-                        <br/>
-                        <div class="col-6">
-                            <strong>Fecha de Expiración:</strong>
-                            <span t-field="o.warranty_expiry"/> 
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <strong>Fecha de Expiración:</strong>
+                                <span t-field="o.warranty_expiry"/> 
+                            </div>
+                            <div class="col-6">
+                                <strong>Número de Serie:</strong>
+                                <span t-field="o.default_code" t-esc="o.default_code or 'Conservar etiqueta del producto'"/> 
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mt32 mb32">
-                        <h3>Condiciones de la Garantía</h3>
-                        <div t-field="o.warranty_condition_compliance.description"/>  
-                    </div>
-                    
-                    <div class="mt64">
-                        <p class="text-center">
-                            Este certificado de garantía es válido solo con el comprobante de compra original.
+                    <div class="mt-4">
+                        <h4>1. ALCANCE DE LA GARANTÍA</h4>
+                        <p>
+                            <span t-field="company.name"/>, garantiza que <span t-field="o.name"/> 
+                            estará libre de defectos de materiales y/o fabricación durante el período de garantía especificado.
                         </p>
+                    </div>
+
+                    <div class="mt-3">
+                        <h4>2. QUÉ CUBRE ESTA GARANTÍA</h4>
+                        <p>
+                            Esta garantía cubre <span t-field= "o.warranty_coverage"/>, a discreción de 
+                            <span t-field="company.name"/>, si se determina que presenta un defecto cubierto 
+                            durante el período de garantía. Las piezas reparadas o sustituidas estarán cubiertas 
+                            por el resto del período de garantía original.
+                        </p>
+                    </div>
+
+                    <div class="mt-3">
+                        <h4>3. QUÉ NO CUBRE ESTA GARANTÍA</h4>
+                        <p>Esta garantía no cubre los daños o problemas resultantes de:</p>
+                        <ul>
+                            <p><span t-field="o.not_warranty_cover"/></p>
+                        </ul>
+                    </div>
+
+                    <div class="mt-3">
+                        <h4>4. PROCEDIMIENTO PARA HACER EFECTIVA LA GARANTÍA</h4>
+                        <p>Para solicitar el servicio de garantía:</p>
+                        <ol>
+                            <li>Póngase en contacto con nuestro Servicio de Atención al Cliente</li>
+                            <li>Presente el comprobante de compra original (ticket o factura)</li>
+                            <li>Conserve el número de serie del producto</li>
+                            <li>Embele el producto de forma segura para su envío al servicio técnico</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3">
+                        <h4>5. GARANTÍAS LEGALES</h4>
+                        <p>
+                            Esta garantía no afecta a los derechos legales que le asisten como consumidor 
+                            de conformidad con la legislación aplicable. Esta garantía es adicional y sin 
+                            perjuicio de la Garantía Legal de Conformidad establecida por ley.
+                        </p>
+                    </div>
+
+                    <div class="mt-4 p-3" style="border: 1px solid #ccc; background-color: #f9f9f9;">
+                        <p class="text-center mb-1">
+                            <strong>DATOS DE CONTACTO</strong>
+                        </p>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <strong>Teléfono:</strong><br/>
+                                <span t-field="company.phone"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Email:</strong><br/>
+                                <span t-field="company.email"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Sitio Web:</strong><br/>
+                                <span t-field="company.website"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="text-center" style="font-style: italic;">
+                            <strong>Importante:</strong> Este certificado de garantía es válido solo con el comprobante de compra original.
+                            Conserve ambos documentos durante todo el período de garantía.
+                        </p>
+                    </div>
+
+                    <div class="mt-4" style="border-top: 1px solid #000; padding-top: 10px;">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Fecha de Compra:</strong> _________________________
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Vendedor:</strong> _________________________
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -62,9 +142,10 @@
         <field name="orientation">Portrait</field>  
         <field name="margin_top">10</field>
         <field name="margin_bottom">10</field>
-        <field name="margin_left">6</field>
-        <field name="margin_right">6</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
         <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
     </record>
 
     <record id="action_report_product_warranty" model="ir.actions.report">

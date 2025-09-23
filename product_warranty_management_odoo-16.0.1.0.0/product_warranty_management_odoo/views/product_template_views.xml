@@ -14,7 +14,9 @@
                         <field name="is_warranty_available" widget="bool_badge"/>
                         <field name="warranty_duration"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
-                        <field name="warranty_condition_compliance"
+                        <field name="warranty_coverage"
+                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+                        <field name="not_cover_warranty"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
                     </group>
                 </group>
@@ -42,7 +44,8 @@
                 <field name="name" string="Producto:"/>
                 <field name="warranty_duration"/>
                 <field name="warranty_expiry"/>
-                <field name="warranty_condition_compliance"/>
+                <field name="warranty_coverage"/>
+                <field name="not_cover_warranty"/>
                 </group>
                 </sheet>
             </form>
