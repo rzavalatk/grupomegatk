@@ -70,7 +70,7 @@
                         <h4>3. QUÉ NO CUBRE ESTA GARANTÍA</h4>
                         <p>Esta garantía no cubre los daños o problemas resultantes de:</p>
                         <ul>
-                            <p><span t-field="o.not_warranty_cover"/></p>
+                            <p><span t-field="o.not_cover_warranty"/></p>
                         </ul>
                     </div>
 
