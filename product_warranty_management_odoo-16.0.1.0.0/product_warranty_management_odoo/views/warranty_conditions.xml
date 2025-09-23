@@ -6,7 +6,8 @@
         <field name="arch" type="xml">
             <tree string="Condiciones de Garantía">
                 <field name="name"/>
-                <field name="description"/>
+                <field name="warranty_coverage"/>
+                <field name="not_cover_warranty"/>
             </tree>
         </field>
     </record>
@@ -19,7 +20,8 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="description"/>
+                        <field name="warranty_coverage"/>
+                        <field name="not_cover_warranty"/>
                     </group>
                 </sheet>
             </form>
