@@ -14,7 +14,7 @@
             <t t-set="company" t-value="o.company_id"/>
                 <main>
                 <div class="page">
-                <div class="mb-4">
+                <div class="mb-2">
                     <t t-if="company.logo">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 200px;"/>
                     </t>
@@ -23,7 +23,7 @@
                     <div class="text-center">
                         <h2>GARANTÍA LIMITADA DE PRODUCTO</h2>
                     </div>
-                    <div class="col-6">
+                    <div class="mt-4">
                                 <strong>Producto:</strong>
                                 <span t-field="o.name"/> 
                                 <br/>
