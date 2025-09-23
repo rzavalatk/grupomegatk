@@ -6,4 +6,4 @@ class WarrantyCondition(models.Model):
 
     name = fields.Char(string='Nombre', required=True)
     warranty_coverage = fields.Char(string='Cubre', required=True)
-    not_cover_warranty = fields.Char(string='No Cubre', required=True)
+    not_cover_warranty = fields.Html(string='No Cubre', required=True)
