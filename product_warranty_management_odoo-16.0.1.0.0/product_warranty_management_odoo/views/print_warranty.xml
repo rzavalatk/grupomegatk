@@ -16,7 +16,7 @@
                 <div class="page">
                 <div class="mb-4">
                     <t t-if="company.logo">
-                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 100px;"/>
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 200px;"/>
                     </t>
                 </div>
                 
@@ -140,7 +140,7 @@
         <field name="name">Formato Garantía</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>  
-        <field name="margin_top">10</field>
+        <field name="margin_top">5</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">10</field>
         <field name="margin_right">10</field>
