@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-6">
                                 <strong style="font-size:14px;">Número de Serie:</strong>
-                                <span style="font-size:13px;" t-field="o.default_code" t-esc="o.default_code or 'Conservar etiqueta del producto'"/> 
+                                <span style="font-size:13px;" t-field="o.default_code" /> 
                             </div>
                         </div>
                     </div>
