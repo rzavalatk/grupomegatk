@@ -12,7 +12,6 @@
         <t t-call="web.basic_layout">
             <t t-set="o" t-value="docs[0]"/>
             <t t-set="company" t-value="o.company_id"/>
-            <!-- Obtener información de la orden de venta -->
             <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
             <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
                 <main>
@@ -24,7 +23,7 @@
                 </div>
                 
                     <div class="text-center">
-                        <h2 style="font-size: 20px; margin-bottom: 20px;">GARANTÍA LIMITADA DE PRODUCTO</h2>
+                        <h2 style="font-size: 20px; margin-bottom: 20px; font-weight: bold;">GARANTÍA LIMITADA DE PRODUCTO</h2>
                     </div>
                     
                     <div class="mt-3">
@@ -98,8 +97,6 @@
                             </p>
                         </div>
                     </div>
-
-                    <!-- Footer que se mantiene junto y solo salta si no cabe -->
                     <div class="footer-section" style="page-break-inside: avoid; break-inside: avoid; margin-top: 20px; padding-top: 20px;">
                         <div class="contact-box" style="border: 1px solid #ccc; background-color: #f9f9f9; padding: 15px; margin-bottom: 15px;">
                             <p class="text-center mb-2" style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
@@ -144,7 +141,6 @@
                                     </t>
                                 </div>
                             </div>
-                            <!-- Información adicional de la venta -->
                             <t t-if="last_sale">
                                 <div class="row mt-2">
                                     <div class="col-6">
