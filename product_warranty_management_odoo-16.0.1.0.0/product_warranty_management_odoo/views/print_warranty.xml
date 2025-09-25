@@ -88,7 +88,7 @@
                             perjuicio de la Garantía Legal de Conformidad establecida por ley.
                         </p>
                     </div>
-                    <div class="footer" style="page-break-inside: avoid; break-inside: avoid;">
+                    <div class="footer" style="page-break-before: always; break-before: page;">
                         <div class="mt-4 p-3" style="border: 1px solid #ccc; background-color: #f9f9f9;">
                             <p class="text-center mb-1">
                                 <strong>DATOS DE CONTACTO</strong>
