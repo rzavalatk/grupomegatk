@@ -101,15 +101,15 @@
                             <div class="row text-center">
                                 <div class="col-4">
                                     <strong>Teléfono:</strong><br/>
-                                    <span style="font-size : 13px;" t-field="company.phone" style="font-size: 11px;"/>
+                                    <span style="font-size : 13px;" t-field="company.phone" />
                                 </div>
                                 <div class="col-4">
                                     <strong>Email:</strong><br/>
-                                    <span style="font-size : 13px;" t-field="company.email" style="font-size: 11px;"/>
+                                    <span style="font-size : 13px;" t-field="company.email"/>
                                 </div>
                                 <div class="col-4">
                                     <strong>Sitio Web:</strong><br/>
-                                    <span style="font-size : 13px;" t-field="company.website" style="font-size: 11px;"/>
+                                    <span style="font-size : 13px;" t-field="company.website" />
                                 </div>
                             </div>
                         </div>
