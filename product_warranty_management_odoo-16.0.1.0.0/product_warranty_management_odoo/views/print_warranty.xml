@@ -88,41 +88,42 @@
                             perjuicio de la Garantía Legal de Conformidad establecida por ley.
                         </p>
                     </div>
-
-                    <div class="mt-4 p-3" style="border: 1px solid #ccc; background-color: #f9f9f9;">
-                        <p class="text-center mb-1">
-                            <strong>DATOS DE CONTACTO</strong>
-                        </p>
-                        <div class="row text-center">
-                            <div class="col-4">
-                                <strong>Teléfono:</strong><br/>
-                                <span t-field="company.phone"/>
-                            </div>
-                            <div class="col-4">
-                                <strong>Email:</strong><br/>
-                                <span t-field="company.email"/>
-                            </div>
-                            <div class="col-4">
-                                <strong>Sitio Web:</strong><br/>
-                                <span t-field="company.website"/>
+                    <div class="footer" style="page-break-inside: avoid; break-inside: avoid;">
+                        <div class="mt-4 p-3" style="border: 1px solid #ccc; background-color: #f9f9f9;">
+                            <p class="text-center mb-1">
+                                <strong>DATOS DE CONTACTO</strong>
+                            </p>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong>Teléfono:</strong><br/>
+                                    <span t-field="company.phone"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Email:</strong><br/>
+                                    <span t-field="company.email"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Sitio Web:</strong><br/>
+                                    <span t-field="company.website"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mt-4">
-                        <p class="text-center" style="font-style: italic;">
-                            <strong>Importante:</strong> Este certificado de garantía es válido solo con el comprobante de compra original.
-                            Conserve ambos documentos durante todo el período de garantía.
-                        </p>
-                    </div>
+                        <div class="mt-4">
+                            <p class="text-center" style="font-style: italic;">
+                                <strong>Importante:</strong> Este certificado de garantía es válido solo con el comprobante de compra original.
+                                Conserve ambos documentos durante todo el período de garantía.
+                            </p>
+                        </div>
 
-                    <div class="mt-4" style="border-top: 1px solid #000; padding-top: 10px;">
-                        <div class="row">
-                            <div class="col-6">
-                                <strong>Fecha de Compra:</strong> _________________________
-                            </div>
-                            <div class="col-6 text-right">
-                                <strong>Vendedor:</strong> _________________________
+                        <div class="mt-4" style="border-top: 1px solid #000; padding-top: 10px;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>Fecha de Compra:</strong> _________________________
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>Vendedor:</strong> _________________________
+                                </div>
                             </div>
                         </div>
                     </div>
