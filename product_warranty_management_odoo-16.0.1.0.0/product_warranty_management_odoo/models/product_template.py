@@ -43,3 +43,16 @@ class ProductTemplate(models.Model):
         string="La garantía no cubre",
         help="Selecciona las condiciones que no están cubiertas por la garantía para este producto."
     )
+    def get_sale_orders(self):
+        """Obtiene las órdenes de venta relacionadas con este producto"""
+        self.ensure_one()
+        
+        # Buscar líneas de orden de venta que contengan este producto
+        sale_order_lines = self.env['sale.order.line'].search([
+            ('product_id.product_tmpl_id', '=', self.id),
+            ('state', 'in', ['sale', 'done'])
+        ], order='create_date desc')
+        
+        # Obtener las órdenes de venta únicas
+        sale_orders = sale_order_lines.mapped('order_id')
+        return sale_orders

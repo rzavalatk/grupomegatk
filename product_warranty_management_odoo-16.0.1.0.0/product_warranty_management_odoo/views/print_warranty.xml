@@ -12,6 +12,9 @@
         <t t-call="web.basic_layout">
             <t t-set="o" t-value="docs[0]"/>
             <t t-set="company" t-value="o.company_id"/>
+            <!-- Obtener información de la orden de venta -->
+            <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
+            <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
                 <main>
                 <div class="page">
                 <div class="mb-2">
@@ -96,6 +99,7 @@
                         </div>
                     </div>
 
+                    <!-- Footer que se mantiene junto y solo salta si no cabe -->
                     <div class="footer-section" style="page-break-inside: avoid; break-inside: avoid; margin-top: 20px; padding-top: 20px;">
                         <div class="contact-box" style="border: 1px solid #ccc; background-color: #f9f9f9; padding: 15px; margin-bottom: 15px;">
                             <p class="text-center mb-2" style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
@@ -132,9 +136,37 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <strong style="font-size: 13px;">Vendedor:</strong> 
-                                    <span style="font-size: 13px;" t-field="o.salesman_id" t-options="{'widget': 'contact'}" />
+                                    <t t-if="last_sale and last_sale.user_id">
+                                        <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="font-size: 13px;">No especificado</span>
+                                    </t>
                                 </div>
                             </div>
+                            <!-- Información adicional de la venta -->
+                            <t t-if="last_sale">
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <strong style="font-size: 13px;">Fecha de Venta:</strong> 
+                                        <t t-if="last_sale.date_order">
+                                            <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="font-size: 13px;">No especificada</span>
+                                        </t>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <strong style="font-size: 13px;">Orden de Venta:</strong> 
+                                        <t t-if="last_sale.name">
+                                            <span style="font-size: 13px;" t-esc="last_sale.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="font-size: 13px;">No especificada</span>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
                         </div>
                     </div>
                 </div>
