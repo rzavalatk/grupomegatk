@@ -59,7 +59,7 @@
                             <p style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
                                 Esta garantía cubre lo siguiente a discreción de  <span t-field="company.name"/>:
                                 <div style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
-                               <br/> <span  t-field="o.warranty_coverage.warranty_coverage" />
+                               <span  t-field="o.warranty_coverage.warranty_coverage" />
                                 si se determina que presenta un defecto cubierto 
                                 durante el período de garantía. Las piezas reparadas o sustituidas estarán cubiertas 
                                 por el resto del período de garantía original.
@@ -96,7 +96,6 @@
                         </div>
                     </div>
 
-                    <!-- Footer que se mantiene junto y solo salta si no cabe -->
                     <div class="footer-section" style="page-break-inside: avoid; break-inside: avoid; margin-top: 20px; padding-top: 20px;">
                         <div class="contact-box" style="border: 1px solid #ccc; background-color: #f9f9f9; padding: 15px; margin-bottom: 15px;">
                             <p class="text-center mb-2" style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
@@ -128,10 +127,12 @@
                         <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
                             <div class="row">
                                 <div class="col-6">
-                                    <strong style="font-size: 13px;">Fecha de Compra:</strong> _________________________
+                                    <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
+                                    <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <strong style="font-size: 13px;">Vendedor:</strong> _________________________
+                                    <strong style="font-size: 13px;">Vendedor:</strong> 
+                                    <span style="font-size: 13px;" t-field="o.salesman_id" t-options="{'widget': 'contact'}" />
                                 </div>
                             </div>
                         </div>
