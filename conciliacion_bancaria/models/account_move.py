@@ -15,10 +15,13 @@ class AccountMove(models.Model):
     es_conciliado = fields.Boolean("Conciliado")
     conciliacion_id = fields.Many2one("conicliacion.bancaria", "Conciliación")
 
-    #@api.model_create_multi
     def unlink(self):
-        if self.es_conciliado:
-            raise Warning(_('Desconciliar la concilacion: %s') % (self.conciliacion_id.name))
-        else:
-            return super(AccountMove, self).unlink()
     
+        for move in self:
+            
+            if move.es_conciliado:
+                
+                raise Warning(_('Desconciliar la conciliación: %s para poder eliminar el movimiento.') % (move.conciliacion_id.name))
+        
+        
+        return super(AccountMove, self).unlink()
