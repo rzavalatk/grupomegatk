@@ -201,9 +201,8 @@ class HrLeave(models.Model):
                 if self.request_date_from.weekday() == 5:
                     # Si es sábado, duplicar las horas y minutos aunque no sea por horas personalizadas
                     self.dias = self.number_of_days_display
-                    self.horas = int(self.number_of_hours_display) * 2
-                    minutos = (self.number_of_hours_display - int(self.number_of_hours_display)) * 60
-                    self.minutos = int(minutos) * 2 if minutos else 0
+                    self.horas = int(self.number_of_hours_display)
+                    self.minutos = 0
                     self.number_of_hours_text = self.horas
                 elif self.request_date_to >= self.request_date_from:
                     self.dias = self.number_of_days_display
