@@ -125,7 +125,7 @@
                             </p>
                         </div>
 
-                        <t t-set="from_sale_order" t-value="ctx.get('active_model') == 'sale.order'"/>
+                        <t t-set="from_sale_order" t-value="context.get('active_model') == 'sale.order'"/>
                         <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
         <t t-if="from_sale_order">
             <div class="row">
