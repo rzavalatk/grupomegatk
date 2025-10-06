@@ -11,7 +11,7 @@
     <template id="report_product_warranty_template">
         <t t-call="web.basic_layout">
             <!-- Determinar el modelo activo -->
-            <t t-set="from_sale_order" t-value="ctx.get('active_model') == 'sale.order'"/>
+            <t t-set="from_sale_order" t-value="active_model == 'sale.order'"/>
             <t t-if="from_sale_order">
                 <t t-set="sale" t-value="docs[0]"/>
                 <t t-set="product" t-value="sale.order_line and sale.order_line[0].product_id or False"/>
