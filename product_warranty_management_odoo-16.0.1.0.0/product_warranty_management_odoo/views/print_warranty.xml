@@ -125,41 +125,44 @@
                             </p>
                         </div>
 
+                        <t t-set="from_sale_order" t-value="ctx.get('active_model') == 'sale.order'"/>
                         <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
-    <div class="row">
-        <div class="col-6">
-            <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
-            <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
-        </div>
-        <div class="col-6 text-end">
-            <t t-if="last_sale and last_sale.user_id">
-                <strong style="font-size: 13px;">Vendedor:</strong> 
-                <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
+        <t t-if="from_sale_order">
+            <div class="row">
+                <div class="col-6">
+                    <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
+                    <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                </div>
+                <div class="col-6 text-end">
+                    <t t-if="last_sale and last_sale.user_id">
+                        <strong style="font-size: 13px;">Vendedor:</strong> 
+                        <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
+                    </t>
+                </div>
+            </div>
+            <t t-if="last_sale">
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong style="font-size: 13px;">Fecha de Venta:</strong> 
+                        <t t-if="last_sale.date_order">
+                            <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
+                        </t>
+                        <t t-else="">
+                            <span style="font-size: 13px;">No especificada</span>
+                        </t>
+                    </div>
+                    <div class="col-6 text-end">
+                        <strong style="font-size: 13px;">Orden de Venta:</strong> 
+                        <t t-if="last_sale.name">
+                            <span style="font-size: 13px;" t-esc="last_sale.name"/>
+                        </t>
+                        <t t-else="">
+                            <span style="font-size: 13px;">No especificada</span>
+                        </t>
+                    </div>
+                </div>
             </t>
-        </div>
-    </div>
-    <t t-if="last_sale">
-        <div class="row mt-2">
-            <div class="col-6">
-                <strong style="font-size: 13px;">Fecha de Venta:</strong> 
-                <t t-if="last_sale.date_order">
-                    <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
-                </t>
-                <t t-else="">
-                    <span style="font-size: 13px;">No especificada</span>
-                </t>
-            </div>
-            <div class="col-6 text-end">
-                <strong style="font-size: 13px;">Orden de Venta:</strong> 
-                <t t-if="last_sale.name">
-                    <span style="font-size: 13px;" t-esc="last_sale.name"/>
-                </t>
-                <t t-else="">
-                    <span style="font-size: 13px;">No especificada</span>
-                </t>
-            </div>
-        </div>
-    </t>
+        </t>
 </div>
                     </div>
                 </div>
