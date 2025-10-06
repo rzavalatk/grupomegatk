@@ -28,21 +28,21 @@
                     
                     <div class="mt-3">
                         <strong style="font-size:14px;">Producto:</strong>
-                        <span t-field="o.name"/> 
+                        <span t-field="product.name"/> 
                         <br/>
                         <strong style="font-size:14px;">Duración de la Garantía:</strong>
-                        <span style="font-size:13px;" t-field="o.warranty_duration"/> meses 
+                        <span style="font-size:13px;" t-field="product.warranty_duration"/> meses 
                     </div>
                     
                     <div class="mt-2">
                         <div class="row">
                             <div class="col-6">
                                 <strong style="font-size:14px;">Fecha de Expiración:</strong>
-                                <span style="font-size:13px;" t-field="o.warranty_expiry"/> 
+                                <span style="font-size:13px;" t-field="product.warranty_expiry"/> 
                             </div>
                             <div class="col-6">
                                 <strong style="font-size:14px;">Número de Serie:</strong>
-                                <span style="font-size:13px;" t-field="o.default_code" /> 
+                                <span style="font-size:13px;" t-field="product.default_code" /> 
                             </div>
                         </div>
                     </div>
@@ -126,6 +126,17 @@
                         </div>
 
                         <t t-set="from_sale_order" t-value="ctx.get('active_model') == 'sale.order'"/>
+<t t-if="from_sale_order">
+    <t t-set="sale" t-value="docs[0]"/>
+    <t t-set="product" t-value="sale.order_line and sale.order_line[0].product_id or False"/>
+    <t t-set="company" t-value="sale.company_id"/>
+    <t t-set="last_sale" t-value="sale"/>
+</t>
+<t t-else="">
+    <t t-set="product" t-value="docs[0]"/>
+    <t t-set="company" t-value="product.company_id"/>
+    <t t-set="last_sale" t-value="product.get_sale_orders() and product.get_sale_orders()[0] or False"/>
+</t>
 <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
     <t t-if="from_sale_order">
         <div class="row">
