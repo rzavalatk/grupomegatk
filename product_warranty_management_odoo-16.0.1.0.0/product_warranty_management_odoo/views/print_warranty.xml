@@ -73,7 +73,7 @@
                             <p style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
                                 Esta garantía cubre lo siguiente a discreción de  <span t-field="company.name"/>:
                                 <div style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
-                               <span  t-field="o.warranty_coverage.warranty_coverage" />
+                               <span  t-field="product.warranty_coverage.warranty_coverage" />
                                 si se determina que presenta un defecto cubierto 
                                 durante el período de garantía. Las piezas reparadas o sustituidas estarán cubiertas 
                                 por el resto del período de garantía original.
@@ -85,7 +85,7 @@
                             <h4 style="font-size: 14px; margin-bottom: 8px;">3. QUÉ NO CUBRE ESTA GARANTÍA</h4>
                             <p style="font-size: 13px; line-height: 1.3; margin-bottom: 8px;">Esta garantía no cubre los daños o problemas resultantes de:</p>
                             <div style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
-                                <span t-field="o.not_cover_warranty.not_cover_warranty"/>
+                                <span t-field="product.not_cover_warranty.not_cover_warranty"/>
                             </div>
                         </div>
 
