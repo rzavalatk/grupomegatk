@@ -115,6 +115,12 @@ class HrLeave(models.Model):
         states={'cancel': [('readonly', True)], 'refuse': [('readonly', True)], 'validate1': [('readonly', True)], 'validate': [('readonly', True)]},
         domain="[('company_id', '=?', employee_company_id)]", tracking=True)
     
+    number_of_days_display = fields.Float(
+    string='Días calculados',
+    compute='_compute_number_of_days_display',
+    store=True
+    )
+    
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
         for holiday in self:
@@ -391,4 +397,15 @@ class HrLeave(models.Model):
             if leave.request_date_from and leave.request_date_from.weekday() == 5:
                 # Si es sábado, duplicar las horas
                 leave.number_of_hours_display = leave.number_of_hours_display * 2
-
+    @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
+    def _compute_number_of_days_display(self):
+        for leave in self:
+            if leave.request_unit_half:
+                leave.number_of_days_display = 0.5
+            elif leave.request_unit_hours:
+                leave.number_of_days_display = leave.number_of_hours_display / 8.0 if leave.number_of_hours_display else 0
+            elif leave.request_date_from and leave.request_date_to:
+                delta = (leave.request_date_to - leave.request_date_from).days + 1
+                leave.number_of_days_display = float(delta)
+            else:
+                leave.number_of_days_display = 0
