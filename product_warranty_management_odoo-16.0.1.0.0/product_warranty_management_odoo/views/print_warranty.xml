@@ -14,10 +14,11 @@
             
             <t t-if="from_sale_order">
                 <t t-set="sale" t-value="docs[0]"/>
-                <t t-set="product" t-value="sale.order_line and sale.order_line[0].product_id.exists()"/>
+                <t t-set="product" t-value="sale.order_line and sale.order_line[0].product_id"/>
                 <t t-set="company" t-value="sale.company_id"/>
                 <t t-set="last_sale" t-value="sale"/>
             </t>
+            
             <t t-else="">
                 <t t-set="product" t-value="docs[0].exists()"/>
                 <t t-if="product">
