@@ -14,7 +14,6 @@
             <t t-set="company" t-value="o.company_id"/>
             <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
             <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
-            <t t-set="from_sale_order" t-value="ctx.get('active_model') == 'sale.order'"/>
                 <main>
                 <div class="page">
                 <div class="mb-2">
@@ -133,13 +132,13 @@
             <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
         </div>
         <div class="col-6 text-end">
-            <t t-if="from_sale_order and last_sale and last_sale.user_id">
+            <t t-if="last_sale and last_sale.user_id">
                 <strong style="font-size: 13px;">Vendedor:</strong> 
                 <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
             </t>
         </div>
     </div>
-    <t t-if="from_sale_order and last_sale">
+    <t t-if="last_sale">
         <div class="row mt-2">
             <div class="col-6">
                 <strong style="font-size: 13px;">Fecha de Venta:</strong> 
