@@ -20,9 +20,15 @@
             </t>
             <t t-else="">
                 <t t-set="product" t-value="docs[0]"/>
-                <t t-set="company" t-value="product.company_id"/>
-                <t t-set="sale_orders" t-value="product.get_sale_orders()"/>
-                <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or False"/>
+                <t t-if="product">
+                    <t t-set="company" t-value="product.company_id"/>
+                    <t t-set="sale_orders" t-value="product.get_sale_orders()"/>
+                    <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or False"/>
+                </t>
+                <t t-else="">
+                    <!-- Opcional: mensaje de producto no encontrado -->
+                    <span style="color: red;">El producto no existe o ha sido eliminado.</span>
+                </t>
             </t>
             <main>
                 <div class="page">
