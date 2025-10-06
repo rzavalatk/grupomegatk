@@ -135,7 +135,8 @@
 <t t-else="">
     <t t-set="product" t-value="docs[0]"/>
     <t t-set="company" t-value="product.company_id"/>
-    <t t-set="last_sale" t-value="product.get_sale_orders() and product.get_sale_orders()[0] or False"/>
+    <t t-set="sale_orders" t-value="product.get_sale_orders()"/>
+    <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or False"/>
 </t>
 <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
     <t t-if="from_sale_order">
