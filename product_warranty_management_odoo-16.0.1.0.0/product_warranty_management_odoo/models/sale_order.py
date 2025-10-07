@@ -61,17 +61,21 @@ class SaleOrder(models.Model):
                     months=product.warranty_duration)
                 product.write({'warranty_expiry': warranty_expiry_date})
         
-        # Abrir la vista de productos con la posibilidad de imprimir desde allí
+        # Usar vistas estándar de product.template en lugar de personalizadas
         return {
             'type': 'ir.actions.act_window',
             'name': 'Detalles de Garantía',
             'view_mode': 'tree,form',
             'res_model': 'product.template',
-            'views': [(self.env.ref('product_warranty_management_odoo.'
-                                    'product_template_view_tree').id, 'tree'),
-                    (self.env.ref('product_warranty_management_odoo.'
-                                    'product_template_view_form').id, 'form')],
+            'views': [
+                (False, 'tree'),
+                (False, 'form')
+            ],
             'domain': domain,
-            'context': {'create': False, 'current_sale_order_id': self.id},  # Pasar la orden actual
+            'context': {
+                'create': False, 
+                'current_sale_order_id': self.id,
+                'search_default_is_warranty_available': 1  # Filtrar por garantía disponible
+            },
             'target': 'current',
         }
