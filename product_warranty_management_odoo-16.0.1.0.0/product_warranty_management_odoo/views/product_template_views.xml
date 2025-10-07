@@ -62,11 +62,11 @@
                         string="Imprimir Garantía para Orden Actual"
                         class="btn-primary"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
-                <button name="(ir.actions.report,product_warranty_management_odoo.action_report_product_warranty)"
-                        type="action"
-                        string="Imprimir Garantía General"
-                        class="btn-secondary"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+                <button name="%(product_warranty_management_odoo.action_report_product_warranty)d" 
+        type="action" 
+        string="Imprimir Garantía General" 
+        class="btn-secondary" 
+        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
             </div>
         </form>
     </field>
