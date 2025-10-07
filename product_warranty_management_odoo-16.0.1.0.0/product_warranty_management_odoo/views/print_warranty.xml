@@ -135,7 +135,7 @@
                             </div>
                             
                         </div>
-                        <div class="client-signature-section" style="margin-top: 30px; padding-top: 20px;">
+                        <div class="client-signature-section" style="margin-top: 15px; padding-top: 10px;">
                             <div style="border-top: 1px solid #000; width: 300px; margin: 0 auto 10px auto;"></div>
                             <p class="text-center" style="font-size: 13px; margin-bottom: 5px;">
                                 <strong>Firma del Cliente</strong>
