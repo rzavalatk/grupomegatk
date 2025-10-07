@@ -56,12 +56,12 @@ class SaleOrder(models.Model):
         products_with_warranty = self.env['product.template'].search(domain)
         
         for product in products_with_warranty:
-            # Calculate the warranty expiry date based on the sale order date
             if self.date_order and product.warranty_duration:
                 warranty_expiry_date = self.date_order + relativedelta(
                     months=product.warranty_duration)
                 product.write({'warranty_expiry': warranty_expiry_date})
         
+        # Abrir la vista de productos con la posibilidad de imprimir desde allí
         return {
             'type': 'ir.actions.act_window',
             'name': 'Detalles de Garantía',
@@ -72,5 +72,6 @@ class SaleOrder(models.Model):
                     (self.env.ref('product_warranty_management_odoo.'
                                     'product_template_view_form').id, 'form')],
             'domain': domain,
-            'context': {'create': False}  # Evitar crear nuevos productos desde esta vista
+            'context': {'create': False, 'current_sale_order_id': self.id},  # Pasar la orden actual
+            'target': 'current',
         }

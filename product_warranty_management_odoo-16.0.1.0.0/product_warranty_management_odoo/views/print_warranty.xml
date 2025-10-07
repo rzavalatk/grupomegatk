@@ -12,26 +12,19 @@
         </template>
         
         <template id="report_product_warranty_template">
-            <t t-call="web.basic_layout">
-                <!-- Importar datetime -->
-                <t t-set="datetime" t-value="modules.datetime"/>
-                
-                <!-- CAMBIO IMPORTANTE: usa doc en lugar de docs[0] -->
-                <t t-set="o" t-value="doc"/>
-                <t t-set="company" t-value="o.company_id"/>
-                <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
-                <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
-                
-                <!-- Debug temporal (puedes eliminar después) -->
-                <div style="display: none;">
-                    <t t-esc="'Product ID:' + str(o.id)"/>
-                    <t t-esc="'Sale Orders Found:' + str(len(sale_orders))"/>
-                    <t t-if="last_sale">
-                        <t t-esc="'Last Sale:' + last_sale.name"/>
-                        <t t-esc="'Sale Date:' + str(last_sale.date_order)"/>
-                        <t t-esc="'Seller:' + str(last_sale.user_id.name)"/>
-                    </t>
-                </div>
+            <template id="report_product_warranty_template">
+    <t t-call="web.basic_layout">
+        <!-- Obtener la orden de venta del contexto si está disponible -->
+        <t t-set="specific_sale_order" t-value="doc._context.get('sale_order_id')"/>
+        <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
+        
+        <!-- USAR la orden específica si está en contexto, sino la última -->
+        <t t-set="sale_order_to_use" t-value="specific_sale_order or (sale_orders and sale_orders[0]) or {}"/>
+        
+        <div style="display: none;">
+            <t t-esc="'Specific Order from Context:' + str(specific_sale_order)"/>
+            <t t-esc="'Order to Use:' + str(sale_order_to_use.name if sale_order_to_use else 'None')"/>
+        </div>
                 
                 <main>
                     <div class="page">
@@ -153,20 +146,20 @@
                                     </div>
                                     <div class="col-6 text-end">
                                         <strong style="font-size: 13px;">Vendedor:</strong> 
-                                        <t t-if="last_sale and last_sale.user_id">
-                                            <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
+                                        <t t-if="sale_order_to_use and sale_order_to_use.user_id">
+                                            <span style="font-size: 13px;" t-esc="sale_order_to_use.user_id.name"/>
                                         </t>
                                         <t t-else="">
                                             <span style="font-size: 13px;">No especificado</span>
                                         </t>
                                     </div>
                                 </div>
-                                <t t-if="last_sale">
+                                <t t-if="sale_order_to_use">
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <strong style="font-size: 13px;">Fecha de Venta:</strong> 
-                                            <t t-if="last_sale.date_order">
-                                                <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
+                                            <t t-if="sale_order_to_use.date_order">
+                                                <span style="font-size: 13px;" t-esc="sale_order_to_use.date_order.strftime('%d/%m/%Y')"/>
                                             </t>
                                             <t t-else="">
                                                 <span style="font-size: 13px;">No especificada</span>
@@ -174,8 +167,8 @@
                                         </div>
                                         <div class="col-6 text-end">
                                             <strong style="font-size: 13px;">Orden de Venta:</strong> 
-                                            <t t-if="last_sale.name">
-                                                <span style="font-size: 13px;" t-esc="last_sale.name"/>
+                                            <t t-if="sale_order_to_use.name">
+                                                <span style="font-size: 13px;" t-esc="sale_order_to_use.name"/>
                                             </t>
                                             <t t-else="">
                                                 <span style="font-size: 13px;">No especificada</span>
