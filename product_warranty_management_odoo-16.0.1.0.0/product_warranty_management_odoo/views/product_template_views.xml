@@ -24,6 +24,30 @@
             </xpath>
         </field>
     </record>
+    <record id="product_template_view_form" model="ir.ui.view">
+    <field name="name">product.template.view.form</field>
+    <field name="model">product.template</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name" string="Producto:"/>
+                    <field name="warranty_duration"/>
+                    <field name="warranty_expiry"/>
+                    <field name="warranty_coverage"/>
+                    <field name="not_cover_warranty"/>
+                </group>
+            </sheet>
+            <div class="oe_chatter">
+                <button name="print_warranty_for_current_order" 
+                        type="object"
+                        string="Imprimir Garantía para Orden Actual"
+                        class="btn-primary"
+                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+            </div>
+        </form>
+    </field>
+</record>
      <record id="product_template_view_tree" model="ir.ui.view">
         <field name="name">product.template.view.tree.inherit.product.warranty.management.odoo</field>
         <field name="model">product.template</field>
