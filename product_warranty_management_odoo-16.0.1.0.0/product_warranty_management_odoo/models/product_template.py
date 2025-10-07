@@ -60,15 +60,18 @@ class ProductTemplate(models.Model):
         sale_orders = sale_orders.sorted(key=lambda r: r.date_order or r.create_date, reverse=True)
         
         return sale_orders
+
     def print_warranty_for_current_order(self):
         """Imprimir garantía para la orden de venta actual del contexto"""
         self.ensure_one()
         sale_order_id = self._context.get('current_sale_order_id')
         
         if sale_order_id:
+            # Buscar la orden específica
+            sale_order = self.env['sale.order'].browse(sale_order_id)
             # Pasar la orden específica al contexto del reporte
             return self.env.ref('product_warranty_management_odoo.action_report_product_warranty').report_action(
-                self, config=False, data={'sale_order_id': sale_order_id}
+                self, data={'sale_order_id': sale_order_id}
             )
         else:
             # Fallback al comportamiento original
