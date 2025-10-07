@@ -12,7 +12,6 @@
         </template>
         
         <template id="report_product_warranty_template">
-            <template id="report_product_warranty_template">
     <t t-call="web.basic_layout">
         <!-- Obtener la orden de venta del contexto si está disponible -->
         <t t-set="specific_sale_order" t-value="doc._context.get('sale_order_id')"/>
