@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
         <template id="report_product_warranty_view_new">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
@@ -218,5 +217,4 @@
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="paperformat_warranty"/>
         </record>
-    </data>
 </odoo>
