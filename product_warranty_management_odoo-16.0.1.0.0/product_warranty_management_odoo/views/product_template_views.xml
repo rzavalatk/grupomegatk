@@ -19,14 +19,14 @@
                         <field name="not_cover_warranty"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
                     </group>
-                </group>
-                <div class="oe_chatter">
+                    <div class="oe_chatter">
                 <button name="print_warranty_for_current_order" 
                         type="object"
                         string="Imprimir Garantía para Orden Actual"
                         class="btn-primary"
                         attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
             </div>
+                </group>
             </page>
             </xpath>
         </field>
