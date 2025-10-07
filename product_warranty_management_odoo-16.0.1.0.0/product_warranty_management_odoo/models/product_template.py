@@ -53,6 +53,10 @@ class ProductTemplate(models.Model):
             ('state', 'in', ['sale', 'done'])
         ], order='create_date desc')
         
-        # Obtener las órdenes de venta únicas
+        # Obtener las órdenes de venta únicas y ordenar por fecha más reciente
         sale_orders = sale_order_lines.mapped('order_id')
+        
+        # Ordenar por fecha de orden (más reciente primero)
+        sale_orders = sale_orders.sorted(key=lambda r: r.date_order or r.create_date, reverse=True)
+        
         return sale_orders

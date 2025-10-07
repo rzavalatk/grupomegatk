@@ -1,19 +1,21 @@
-<odoo>
-    <template id="report_product_warranty_view_new">
-        <t t-call="web.html_container">
-          <t t-foreach="docs" t-as="doc">
-            <t t-set="lang" t-value="doc.partner_id.lang"/>
-            <t t-call="product_warranty_management_odoo.report_product_warranty_template" t-lang="lang"/>
-          </t>
-        </t>
-    </template>
-    
-    <template id="report_product_warranty_template">
-        <t t-call="web.basic_layout">
-            <t t-set="o" t-value="docs[0]"/>
-            <t t-set="company" t-value="o.company_id"/>
-            <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
-            <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
+<template id="report_product_warranty_template">
+    <t t-call="web.basic_layout">
+        <!-- CAMBIO IMPORTANTE: usa doc en lugar de docs[0] -->
+        <t t-set="o" t-value="doc"/>
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
+        <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
+        
+        <!-- Debug temporal (puedes eliminar después) -->
+        <div style="display: none;">
+            <t t-esc="'Product ID:' + str(o.id)"/>
+            <t t-esc="'Sale Orders Found:' + str(len(sale_orders))"/>
+            <t t-if="last_sale">
+                <t t-esc="'Last Sale:' + last_sale.name"/>
+                <t t-esc="'Sale Date:' + str(last_sale.date_order)"/>
+                <t t-esc="'Seller:' + str(last_sale.user_id.name)"/>
+            </t>
+        </div>
                 <main>
                 <div class="page">
                 <div class="mb-2">
@@ -124,60 +126,50 @@
                                 Conserve ambos documentos durante todo el período de garantía.
                             </p>
                         </div>
-
-                        <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
-                            <div class="row">
-                                <div class="col-6">
-                                    <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
-                                    <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <strong style="font-size: 13px;">Vendedor:</strong> 
-                                    <t t-if="last_sale and last_sale.user_id">
-                                        <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
-                                    </t>
-                                    <t t-else="">
-                                        <span style="font-size: 13px;">No especificado</span>
-                                    </t>
-                                </div>
-                            </div>
-                            <t t-if="last_sale">
-                                <div class="row mt-2">
-                                    <div class="col-6">
-                                        <strong style="font-size: 13px;">Fecha de Venta:</strong> 
-                                        <t t-if="last_sale.date_order">
-                                            <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
-                                        </t>
-                                        <t t-else="">
-                                            <span style="font-size: 13px;">No especificada</span>
-                                        </t>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <strong style="font-size: 13px;">Orden de Venta:</strong> 
-                                        <t t-if="last_sale.name">
-                                            <span style="font-size: 13px;" t-esc="last_sale.name"/>
-                                        </t>
-                                        <t t-else="">
-                                            <span style="font-size: 13px;">No especificada</span>
-                                        </t>
-                                    </div>
-                                </div>
+                     <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
+                            <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                        </div>
+                        <div class="col-6 text-end">
+                            <strong style="font-size: 13px;">Vendedor:</strong> 
+                            <t t-if="last_sale and last_sale.user_id">
+                                <span style="font-size: 13px;" t-esc="last_sale.user_id.name"/>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size: 13px;">No especificado</span>
                             </t>
                         </div>
-                        <div class="client-signature-section" style="margin-top: 30px; padding-top: 20px;">
-                            <div style="border-top: 1px solid #000; width: 300px; margin: 0 auto 10px auto;"></div>
-                            <p class="text-center" style="font-size: 13px; margin-bottom: 5px;">
-                                <strong>Firma del Cliente</strong>
-                            </p>
-                            <p class="text-center" style="font-size: 12px; color: #888;">
-                                Nombre y firma del cliente al recibir el producto y la garantía
-                            </p>
-                        </div>
                     </div>
+                    <t t-if="last_sale">
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <strong style="font-size: 13px;">Fecha de Venta:</strong> 
+                                <t t-if="last_sale.date_order">
+                                    <span style="font-size: 13px;" t-esc="last_sale.date_order.strftime('%d/%m/%Y')"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="font-size: 13px;">No especificada</span>
+                                </t>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong style="font-size: 13px;">Orden de Venta:</strong> 
+                                <t t-if="last_sale.name">
+                                    <span style="font-size: 13px;" t-esc="last_sale.name"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="font-size: 13px;">No especificada</span>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
                 </div>
-            </main>
-        </t>
-    </template>
+            </div>
+        </main>
+    </t>
+</template>
+                        
 
     <record id="paperformat_warranty" model="report.paperformat">
         <field name="name">Formato Garantía</field>
