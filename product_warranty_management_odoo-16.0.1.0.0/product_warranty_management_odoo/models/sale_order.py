@@ -33,49 +33,44 @@ class SaleOrder(models.Model):
                                             ' garantía.')
 
     def action_confirm(self):
-        result = super(SaleOrder, self).action_confirm()
-        
-        # Verificar si alguna línea tiene productos con garantía
-        has_warranty_products = any(
-            line.product_id.is_warranty_available 
-            for line in self.order_line
-            if line.product_id
-        )
-        
-        self.is_warranty_check = has_warranty_products
-        
-        return result
+        """Call the super method to perform the default confirmation
+        behavior"""
+        super(SaleOrder, self).action_confirm()
+        # Loop through the order lines and check warranty for each product
+        for order in self:
+            for line in order.order_line:
+                product = line.product_id
+                if product.is_warranty_available:
+                    self.is_warranty_check = True
+                else:
+                    self.is_warranty_check = False
+        if (self.order_line.
+                filtered(lambda x: x.product_id.is_warranty_available)):
+            self.is_warranty_check = True
+        else:
+            self.is_warranty_check = False
 
     def action_open_smart_tab(self):
         """ To open warranty smart tab"""
         domain = [
-            ('id', 'in', self.order_line.mapped('product_id.product_tmpl_id.id')),
+            ('id', 'in',
+             self.order_line.mapped('product_id.product_tmpl_id.id')),
             ('is_warranty_available', '=', True),
         ]
-        
         products_with_warranty = self.env['product.template'].search(domain)
-        
         for product in products_with_warranty:
-            if self.date_order and product.warranty_duration:
-                warranty_expiry_date = self.date_order + relativedelta(
-                    months=product.warranty_duration)
-                product.write({'warranty_expiry': warranty_expiry_date})
-        
-        # Usar vistas estándar de product.template en lugar de personalizadas
+            # Calculate the warranty expiry date based on the sale order date
+            warranty_expiry_date = self.date_order + relativedelta(
+                months=product.warranty_duration)
+            product.write({'warranty_expiry': warranty_expiry_date})
         return {
             'type': 'ir.actions.act_window',
             'name': 'Detalles de Garantía',
             'view_mode': 'tree,form',
             'res_model': 'product.template',
-            'views': [
-                (False, 'tree'),
-                (False, 'form')
-            ],
-            'domain': domain,
-            'context': {
-                'create': False, 
-                'current_sale_order_id': self.id,
-                'search_default_is_warranty_available': 1  # Filtrar por garantía disponible
-            },
-            'target': 'current',
+            'views': [(self.env.ref('product_warranty_management_odoo.'
+                                    'product_template_view_tree').id, 'tree'),
+                      (self.env.ref('product_warranty_management_odoo.'
+                                    'product_template_view_form').id, 'form')],
+            'domain': domain
         }
