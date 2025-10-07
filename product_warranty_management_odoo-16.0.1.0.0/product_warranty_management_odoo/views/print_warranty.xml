@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data noupdate="1">
+        
         <template id="report_product_warranty_view_new">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
@@ -8,9 +10,12 @@
                 </t>
             </t>
         </template>
-        <t t-set="datetime" t-value="modules.datetime"/>
+        
         <template id="report_product_warranty_template">
             <t t-call="web.basic_layout">
+                <!-- Importar datetime -->
+                <t t-set="datetime" t-value="modules.datetime"/>
+                
                 <!-- CAMBIO IMPORTANTE: usa doc en lugar de docs[0] -->
                 <t t-set="o" t-value="doc"/>
                 <t t-set="company" t-value="o.company_id"/>
@@ -217,4 +222,6 @@
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="paperformat_warranty"/>
         </record>
+
+    </data>
 </odoo>
