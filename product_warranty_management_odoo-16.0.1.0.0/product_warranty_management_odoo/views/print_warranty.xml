@@ -15,7 +15,7 @@
     <t t-call="web.basic_layout">
         <!-- Obtener la orden de venta del contexto si está disponible -->
         <t t-set="specific_sale_order" t-value="doc._context.get('sale_order_id')"/>
-        <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
+        <t t-set="sale_orders" t-value="o.get_sale_orders"/>
         
         <!-- USAR la orden específica si está en contexto, sino la última -->
         <t t-set="sale_order_to_use" t-value="specific_sale_order or (sale_orders and sale_orders[0]) or {}"/>
