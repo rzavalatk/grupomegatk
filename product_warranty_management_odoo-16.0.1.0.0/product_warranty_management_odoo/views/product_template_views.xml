@@ -46,8 +46,5 @@
         <field name="name">Detalles de garantia</field>
         <field name="res_model">product.template</field>
         <field name="view_mode">tree,form</field>
-         <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('product_template_view_tree')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('product_template_view_form')})]"/>
     </record>
 </odoo>
