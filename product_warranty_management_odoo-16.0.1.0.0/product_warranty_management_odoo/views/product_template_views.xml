@@ -50,7 +50,6 @@
             <sheet>
                 <group>
                     <field name="name" string="Producto:"/>
-                    <field name="is_warranty_available" invisible="1"/> <!-- AGREGAR ESTE CAMPO OCULTO -->
                     <field name="warranty_duration"/>
                     <field name="warranty_expiry"/>
                     <field name="warranty_coverage"/>
@@ -61,13 +60,11 @@
                 <button name="print_warranty_for_current_order" 
                         type="object"
                         string="Imprimir Garantía para Orden Actual"
-                        class="btn-primary"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
-                <button name="action_report_product_warranty" 
+                        class="btn-primary"/>
+                <button name="(ir.actions.report,product_warranty_management_odoo.action_report_product_warranty)"
                         type="action"
                         string="Imprimir Garantía General"
-                        class="btn-secondary"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+                        class="btn-secondary"/>
             </div>
         </form>
     </field>
