@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="warranty_conditions_tree_view" model="ir.ui.view">
+        <field name="name">warranty.condition.tree</field>
+        <field name="model">warranty.conditions</field>
+        <field name="arch" type="xml">
+            <tree string="Condiciones de Garantía">
+                <field name="name"/>
+                <field name="warranty_coverage"/>
+                <field name="not_cover_warranty"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="warranty_conditions_form_view" model="ir.ui.view">
+        <field name="name">warranty.condition.form</field>
+        <field name="model">warranty.conditions</field>
+        <field name="arch" type="xml">
+            <form string="Condiciones de Garantía">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="warranty_coverage"/>
+                        <field name="not_cover_warranty"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="warranty_conditions_action" model="ir.actions.act_window">
+        <field name="name">Condiciones de Garantía</field>
+        <field name="res_model">warranty.conditions</field>
+        <field name="view_mode">tree,form</field> 
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tus propias condiciones de garantía.
+            </p>
+        </field>
+    </record>
+    
+    <menuitem
+        id="warranty_conditions_menu"
+        name="Condiciones de Garantía"
+        parent="stock.menu_product_in_config_stock"
+        action="warranty_conditions_action"
+        sequence="65"/>
+
+</odoo>
