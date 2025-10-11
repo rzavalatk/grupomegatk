@@ -1,0 +1,175 @@
+<odoo>
+    <template id="report_product_warranty_view_new">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+            <t t-set="lang" t-value="doc.partner_id.lang"/>
+            <t t-call="product_warranty_management_odoo.report_product_warranty_template" t-lang="lang"/>
+          </t>
+        </t>
+    </template>
+    
+    <template id="report_product_warranty_template">
+        <t t-call="web.basic_layout">
+            <t t-set="o" t-value="docs[0]"/>
+            <t t-set="company" t-value="o.company_id"/>
+            <t t-set="sale_orders" t-value="o.get_sale_orders()"/>
+            <t t-set="last_sale" t-value="sale_orders and sale_orders[0] or {}"/>
+                <main>
+                <div class="page">
+                <div class="mb-2">
+                    <t t-if="company.logo">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 200px;"/>
+                    </t>
+                </div>
+                
+                    <div class="text-center">
+                        <h2 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">GARANTÍA LIMITADA DE PRODUCTO</h2>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <strong style="font-size:14px;">Producto:</strong>
+                        <span t-field="o.name"/> 
+                        <br/>
+                        <strong style="font-size:14px;">Duración de la Garantía:</strong>
+                        <span style="font-size:13px;" t-field="o.warranty_duration"/> meses 
+                    </div>
+                    
+                    <div class="mt-2">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong style="font-size:14px;">Fecha de Expiración:</strong>
+                                <span style="font-size:13px;" t-field="o.warranty_expiry"/> 
+                            </div>
+                            <div class="col-6">
+                                <strong style="font-size:14px;">Número de Serie:</strong>
+                                <span style="font-size:13px;" t-field="o.default_code" /> 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="mt-3">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">1. ALCANCE DE LA GARANTÍA</h4>
+                            <p style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
+                                <span t-field="company.name"/>, garantiza que el equipo <span>: </span><span t-field="o.name" />  <span>, </span>
+                                 estará libre de defectos de materiales y/o fabricación durante el período de garantía especificado.
+                            </p>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">2. QUÉ CUBRE ESTA GARANTÍA</h4>
+                            <p style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
+                                Esta garantía cubre lo siguiente a discreción de  <span t-field="company.name"/>:
+                                <div style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
+                               <span  t-field="o.warranty_coverage.warranty_coverage" />
+                                si se determina que presenta un defecto cubierto 
+                                durante el período de garantía. Las piezas reparadas o sustituidas estarán cubiertas 
+                                por el resto del período de garantía original.
+                                </div>
+                            </p>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">3. QUÉ NO CUBRE ESTA GARANTÍA</h4>
+                            <p style="font-size: 13px; line-height: 1.3; margin-bottom: 8px;">Esta garantía no cubre los daños o problemas resultantes de:</p>
+                            <div style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
+                                <span t-field="o.not_cover_warranty.not_cover_warranty"/>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">4. PROCEDIMIENTO PARA HACER EFECTIVA LA GARANTÍA</h4>
+                            <p style="font-size: 13px; line-height: 1.3; margin-bottom: 8px;">Para solicitar el servicio de garantía:</p>
+                            <ol style="font-size: 13px; line-height: 1.3; margin-bottom: 15px; padding-left: 10px;">
+                                <li>Póngase en contacto con nuestro Servicio de Atención al Cliente</li>
+                                <li>Presente el comprobante de compra original (ticket o factura)</li>
+                                <li>Conserve el número de serie del producto</li>
+                                <li>Embale el producto de forma segura para su envío al servicio técnico</li>
+                            </ol>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">5. GARANTÍAS LEGALES</h4>
+                            <p style="font-size: 13px; line-height: 1.3; margin-bottom: 15px;">
+                                Esta garantía no afecta a los derechos legales que le asisten como consumidor 
+                                de conformidad con la legislación aplicable. Esta garantía es adicional y sin 
+                                perjuicio de la Garantía Legal de Conformidad establecida por ley.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="footer-section" style="page-break-inside: avoid; break-inside: avoid; margin-top: 10px; padding-top: 10px;">
+                        <div class="contact-box" style="border: 1px solid #ccc; background-color: #f9f9f9; padding: 15px; margin-bottom: 10px;">
+                            <p class="text-center mb-2" style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
+                                DATOS DE CONTACTO
+                            </p>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong style="font-size: 13px;">Teléfono:</strong><br/>
+                                    <span style="font-size: 13px;" t-field="company.phone" />
+                                </div>
+                                <div class="col-4">
+                                    <strong style="font-size: 13px;">Email:</strong><br/>
+                                    <span style="font-size: 13px;" t-field="company.email"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="font-size: 13px;">Sitio Web:</strong><br/>
+                                    <span style="font-size: 13px;" t-field="company.website" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="important-note" style="margin-bottom: 5px;">
+                            <p class="text-center" style="font-style: italic; font-size: 13px; line-height: 1.3;">
+                                <strong>Importante:</strong> Este certificado de garantía es válido solo con el comprobante de compra original.
+                                Conserve ambos documentos durante todo el período de garantía.
+                            </p>
+                        </div>
+
+                        <div class="signature-section" style="border-top: 1px solid #000; padding-top: 15px;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong style="font-size: 13px;">Fecha de Impresión:</strong> 
+                                    <span style="font-size: 13px;" t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="client-signature-section" style="margin-top: 15px; padding-top: 10px;">
+                            <div style="border-top: 1px solid #000; width: 300px; margin: 0 auto 10px auto;"></div>
+                            <p class="text-center" style="font-size: 13px; margin-bottom: 5px;">
+                                <strong>Firma del Cliente</strong>
+                            </p>
+                            <p class="text-center" style="font-size: 12px; color: #888;">
+                                Firma del cliente al recibir el producto y la garantía
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <record id="paperformat_warranty" model="report.paperformat">
+        <field name="name">Formato Garantía</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>  
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">1</field>
+        <field name="margin_left">15</field>
+        <field name="margin_right">15</field>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_product_warranty" model="ir.actions.report">
+        <field name="name">Imprimir Garantía</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">product_warranty_management_odoo.report_product_warranty_template</field>
+        <field name="report_file">product_warranty_management_odoo.report_product_warranty_template</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_warranty"/>
+    </record>
+</odoo>
