@@ -170,41 +170,48 @@ class HrLeave(models.Model):
         if not self.request_unit_half:
             
             if self.request_unit_hours:
-                valor_hora = int(self.number_of_hours_display)
-                valor_minutos = self.number_of_hours_display - valor_hora
+                # Para permisos por horas personalizadas
+                horas_display = self.number_of_hours_display
+                valor_hora = int(horas_display)
+                valor_minutos_decimal = horas_display - valor_hora
                 
-                self.dias = 0
-                self.horas = valor_hora
-                if valor_minutos == 0.25:
-                    self.minutos = 15
-                elif valor_minutos == 0.5:
-                    self.minutos = 30
-                elif valor_minutos == 0.75:
-                    self.minutos = 45
+                # Convertir minutos decimales a enteros
+                minutos_enteros = 0
+                if valor_minutos_decimal == 0.25:
+                    minutos_enteros = 15
+                elif valor_minutos_decimal == 0.5:
+                    minutos_enteros = 30
+                elif valor_minutos_decimal == 0.75:
+                    minutos_enteros = 45
+                
+                if self.is_saturday(self.request_date_from):
+                    # Sábado: convertir horas display a horas físicas y luego a equivalentes
+                    _logger.warning("Es sábado - calculando horas equivalentes")
+                    
+                    # Las horas display ya vienen duplicadas, obtener las físicas
+                    horas_fisicas = valor_hora / 2
+                    minutos_fisicos = minutos_enteros / 2
+                    
+                    # Convertir a horas equivalentes usando la función auxiliar
+                    horas_equiv, minutos_equiv = self.calculate_saturday_equivalent_hours(
+                        horas_fisicas, minutos_fisicos)
+                    
+                    self.dias = 0
+                    self.horas = horas_equiv
+                    self.minutos = minutos_equiv
                 else:
-                    self.minutos = 0
-                
-                if self.request_date_from.weekday() == 5:
-                    _logger.warning("Es fin de semana")
+                    # Día normal
                     self.dias = 0
                     self.horas = valor_hora
-                    self.number_of_hours_text = self.horas
-                    if valor_minutos == 0.25:
-                        self.minutos = 15 * 2
-                    elif valor_minutos == 0.5:
-                        self.minutos = 30 * 2
-                    elif valor_minutos == 0.75:
-                        self.minutos = 45 * 2
-                    else:
-                        self.minutos = 0
+                    self.minutos = minutos_enteros
+                    
             elif self.request_date_from and self.request_date_to:
-                if self.request_date_from.weekday() == 5:
-                    # Si es sábado, duplicar las horas y minutos aunque no sea por horas personalizadas
-                    self.dias = self.number_of_days_display
-                    self.horas = int(self.number_of_hours_display) * 2
-                    minutos = (self.number_of_hours_display - int(self.number_of_hours_display)) * 60
-                    self.minutos = int(minutos) * 2 if minutos else 0
-                    self.number_of_hours_text = self.horas
+                # Para permisos por días completos
+                if self.is_saturday(self.request_date_from) and self.request_date_from == self.request_date_to:
+                    # Sábado completo = 4 horas físicas = 8 horas equivalentes
+                    self.dias = 0
+                    self.horas = 8  # Día completo de sábado equivale a 8 horas
+                    self.minutos = 0
                 elif self.request_date_to >= self.request_date_from:
                     self.dias = self.number_of_days_display
                     self.horas = 0
@@ -213,22 +220,72 @@ class HrLeave(models.Model):
                     self.dias = 0
                     self.horas = 0
                     self.minutos = 0
-                    self.env.user.notify_warning(
-                        message='La fecha final debe ser mayor o igual a la inicial')        
+                    if hasattr(self.env.user, 'notify_warning'):
+                        self.env.user.notify_warning(
+                            message='La fecha final debe ser mayor o igual a la inicial')        
         else:
+            # Para medio día
             if self.request_unit_half and self.request_date_from:
-                if self.request_date_from.weekday() == 5:
+                if self.is_saturday(self.request_date_from):
+                    # Medio día sábado = 2 horas físicas = 4 horas equivalentes
                     self.dias = 0
-                    self.horas = int(self.number_of_hours_display) * 2
+                    self.horas = 4
                     self.minutos = 0
-                    self.number_of_hours_text = self.horas
                 else:
+                    # Medio día normal = 4 horas
                     self.dias = 0
-                    self.horas = self.number_of_hours_display
+                    self.horas = int(self.number_of_hours_display)
                     self.minutos = 0
-                    self.number_of_hours_text = self.horas
-        _logger.warning("Dias: %s, Horas: %s, Minutos: %s" % (self.dias, self.horas, self.minutos))
+                    
+        _logger.warning("RESULTADO FINAL - Días: %s, Horas: %s, Minutos: %s (Fecha: %s, Es sábado: %s)" % 
+                       (self.dias, self.horas, self.minutos, 
+                        self.request_date_from, 
+                        self.is_saturday(self.request_date_from)))
                 
+    def is_saturday(self, fecha):
+        """Verifica si una fecha es sábado"""
+        return fecha and fecha.weekday() == 5
+    
+    def calculate_saturday_equivalent_hours(self, horas_fisicas, minutos_fisicos=0):
+        """
+        Convierte horas físicas de sábado a horas equivalentes
+        Sábado: 4 horas físicas = 8 horas equivalentes (factor x2)
+        """
+        total_minutos_fisicos = (horas_fisicas * 60) + minutos_fisicos
+        total_minutos_equivalentes = total_minutos_fisicos * 2  # Factor x2 para sábado
+        
+        horas_equivalentes = total_minutos_equivalentes // 60
+        minutos_equivalentes = total_minutos_equivalentes % 60
+        
+        return int(horas_equivalentes), int(minutos_equivalentes)
+    
+    @api.model
+    def validate_leave_calculation(self, dias, horas, minutos):
+        """
+        Valida que el cálculo de permiso sea correcto
+        Retorna True si es válido, False si hay errores
+        """
+        # Verificar que no haya mezcla de positivos y negativos (inconsistente)
+        signos = [1 if x >= 0 else -1 for x in [dias, horas, minutos] if x != 0]
+        if len(set(signos)) > 1:
+            _logger.error("Mezcla de valores positivos y negativos detectada - Días: %s, Horas: %s, Minutos: %s" % (dias, horas, minutos))
+            return False
+        
+        # Verificar que los minutos estén en rango válido
+        if abs(minutos) >= 60:
+            _logger.warning("Minutos fuera de rango detectados: %s" % minutos)
+            return False
+        
+        # Verificar que las horas estén en rango válido (si no hay días)
+        if abs(horas) >= 8 and dias == 0:
+            _logger.info("Se detectaron 8+ horas que podrían convertirse a días")
+            
+        # Log para valores negativos (saldo deudor)
+        if dias < 0 or horas < 0 or minutos < 0:
+            _logger.info("Saldo deudor detectado - Días: %s, Horas: %s, Minutos: %s" % (dias, horas, minutos))
+            
+        return True
+    
     def rangeDateft(self, dateInit, dateEnd):
         dates = [
             dateInit + timedelta(n) for n in range(int((dateEnd - dateInit).days))
@@ -324,59 +381,127 @@ class HrLeave(models.Model):
         return res
 
     def vacaciones_restantes_empl(self, operacion, employee_id, leave):
-        _logger.warning("Prueba de vacaciones restantes empl")
+        _logger.warning("Calculando vacaciones restantes - Operación: %s" % operacion)
+        _logger.warning("Empleado actual - Días: %s, Horas: %s, Minutos: %s" % 
+                       (employee_id.permisos_dias, employee_id.permisos_horas, employee_id.permisos_minutos))
+        _logger.warning("Permiso solicitado - Días: %s, Horas: %s, Minutos: %s" % 
+                       (leave.dias, leave.horas, leave.minutos))
         
+        # Convertir todo a minutos para hacer el cálculo
+        # 1 día = 8 horas = 480 minutos
         minutos_actuales = (employee_id.permisos_dias * 480) + (
             employee_id.permisos_horas * 60) + employee_id.permisos_minutos
         minutos_solicitados = (leave.dias * 480) + \
             (leave.horas * 60) + leave.minutos
-        minutos_resultante = minutos_actuales - \
-            minutos_solicitados if operacion == 'resta' else minutos_actuales + minutos_solicitados
+            
+        _logger.warning("Minutos actuales: %s, Minutos solicitados: %s" % 
+                       (minutos_actuales, minutos_solicitados))
+        
+        # Realizar la operación
+        if operacion == 'resta':
+            minutos_resultante = minutos_actuales - minutos_solicitados
+        else:  # suma
+            minutos_resultante = minutos_actuales + minutos_solicitados
+            
+        _logger.warning("Minutos resultante: %s" % minutos_resultante)
+        
+        # Convertir de vuelta a días, horas y minutos
         dias = 0
         horas = 0
-        if minutos_resultante % 480 == 0:
-            dias = minutos_resultante / 480
-            minutos_resultante = 0
-        else:
-            dias = int(minutos_resultante / 480)
-            minutos_resultante = minutos_resultante - (dias * 480)
         
-        if minutos_resultante % 60 == 0:
-            horas = minutos_resultante / 60
-            minutos_resultante = 0
+        if minutos_resultante >= 0:
+            # CASO POSITIVO: Lógica original
+            # Calcular días completos (480 minutos = 1 día)
+            if minutos_resultante >= 480:
+                dias = int(minutos_resultante / 480)
+                minutos_resultante = minutos_resultante - (dias * 480)
+            
+            # Calcular horas completas (60 minutos = 1 hora)
+            if minutos_resultante >= 60:
+                horas = int(minutos_resultante / 60)
+                minutos_resultante = minutos_resultante - (horas * 60)
+            
+            # Los minutos restantes
+            minutos_restantes = int(minutos_resultante)
+            
         else:
-            horas = int(minutos_resultante / 60)
-            minutos_resultante = minutos_resultante - (horas * 60)
+            # CASO NEGATIVO: Lógica para valores negativos
+            _logger.warning("Procesando saldo negativo: %s minutos" % minutos_resultante)
+            
+            # Trabajar con el valor absoluto para hacer los cálculos
+            minutos_absolutos = abs(minutos_resultante)
+            
+            # Calcular días completos negativos (480 minutos = 1 día)
+            if minutos_absolutos >= 480:
+                dias = -int(minutos_absolutos / 480)  # Negativo
+                minutos_absolutos = minutos_absolutos - (abs(dias) * 480)
+            
+            # Calcular horas completas negativas (60 minutos = 1 hora)
+            if minutos_absolutos >= 60:
+                horas = -int(minutos_absolutos / 60)  # Negativo
+                minutos_absolutos = minutos_absolutos - (abs(horas) * 60)
+            
+            # Los minutos restantes (negativos si quedan)
+            if minutos_absolutos > 0:
+                minutos_restantes = -int(minutos_absolutos)  # Negativo
+            else:
+                minutos_restantes = 0
+            
+            _logger.warning("Saldo negativo convertido - Días: %s, Horas: %s, Minutos: %s" % 
+                           (dias, horas, minutos_restantes))
+        
+        _logger.warning("Resultado final - Días: %s, Horas: %s, Minutos: %s" % 
+                       (dias, horas, minutos_restantes))
 
-        return dias, horas, minutos_resultante
+        # Validar el resultado antes de retornar
+        if not self.validate_leave_calculation(dias, horas, minutos_restantes):
+            _logger.error("Error en la validación del cálculo de vacaciones")
+
+        return dias, horas, minutos_restantes
 
     def action_validate(self):
         for leave in self:
             if leave.holiday_status_id.vacaciones:
+                # Determinar qué empleados procesar
+                employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
                 
-                for employee_id in leave.employee_ids:
-                    dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                    'resta', employee_id, leave)
-                    employee_id.sudo().write({'permisos_dias': dias,
-                                                'permisos_horas': horas,
-                                                'permisos_minutos': minutos_resultante})
+                for employee_id in employees_to_process:
+                    if employee_id:  # Verificar que el empleado existe
+                        dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                            'resta', employee_id, leave)
+                        employee_id.sudo().write({'permisos_dias': dias,
+                                                    'permisos_horas': horas,
+                                                    'permisos_minutos': minutos_resultante})
+                        _logger.warning("Permiso validado - Empleado: %s, Nuevos saldos - Días: %s, Horas: %s, Minutos: %s" % 
+                                       (employee_id.name, dias, horas, minutos_resultante))
+                        
+                self.env.user.notify_success(message='Permiso de vacaciones aprobado y descontado del saldo')
             else:
                 self.env.user.notify_success(message='Permiso aprobado')
-            return super(HrLeave, self).action_validate()
+                
+        return super(HrLeave, self).action_validate()
         
     def action_refuse(self):
         for leave in self:
             if leave.state == 'validate':
                 if leave.holiday_status_id.vacaciones:
+                    # Determinar qué empleados procesar
+                    employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
                     
-                    for employee_id in leave.employee_ids:
-                        dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                        'suma', employee_id, leave)
-                        employee_id.sudo().write({'permisos_dias': dias,
-                                                    'permisos_horas': horas,
-                                                    'permisos_minutos': minutos_resultante})
+                    for employee_id in employees_to_process:
+                        if employee_id:  # Verificar que el empleado existe
+                            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
+                                'suma', employee_id, leave)
+                            employee_id.sudo().write({'permisos_dias': dias,
+                                                        'permisos_horas': horas,
+                                                        'permisos_minutos': minutos_resultante})
+                            _logger.warning("Permiso rechazado - Empleado: %s, Saldos restaurados - Días: %s, Horas: %s, Minutos: %s" % 
+                                           (employee_id.name, dias, horas, minutos_resultante))
+                            
+                    self.env.user.notify_success(message='Permiso de vacaciones denegado y saldo restaurado')
                 else:
                     self.env.user.notify_success(message='Permiso denegado')
+                    
         return super(HrLeave, self).action_refuse()
     
     """def create(self, vals):
@@ -389,6 +514,7 @@ class HrLeave(models.Model):
         super()._compute_number_of_hours_display()
         for leave in self:
             if leave.request_date_from and leave.request_date_from.weekday() == 5:
-                # Si es sábado, duplicar las horas
+                # Si es sábado, mostrar las horas equivalentes (duplicar para mostrar el valor correcto)
+                # Esto es solo para display, el cálculo real se hace en _onchange_request_datetm_ft
                 leave.number_of_hours_display = leave.number_of_hours_display * 2
 
