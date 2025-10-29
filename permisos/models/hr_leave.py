@@ -265,16 +265,24 @@ class HrLeave(models.Model):
         Valida que el cálculo de permiso sea correcto
         Retorna True si es válido, False si hay errores
         """
-        if dias < 0 or horas < 0 or minutos < 0:
-            _logger.error("Valores negativos detectados - Días: %s, Horas: %s, Minutos: %s" % (dias, horas, minutos))
+        # Verificar que no haya mezcla de positivos y negativos (inconsistente)
+        signos = [1 if x >= 0 else -1 for x in [dias, horas, minutos] if x != 0]
+        if len(set(signos)) > 1:
+            _logger.error("Mezcla de valores positivos y negativos detectada - Días: %s, Horas: %s, Minutos: %s" % (dias, horas, minutos))
             return False
         
-        if minutos >= 60:
-            _logger.warning("Minutos >= 60 detectados, se requiere ajuste: %s" % minutos)
+        # Verificar que los minutos estén en rango válido
+        if abs(minutos) >= 60:
+            _logger.warning("Minutos fuera de rango detectados: %s" % minutos)
             return False
-            
-        if horas >= 8 and dias == 0:
+        
+        # Verificar que las horas estén en rango válido (si no hay días)
+        if abs(horas) >= 8 and dias == 0:
             _logger.info("Se detectaron 8+ horas que podrían convertirse a días")
+            
+        # Log para valores negativos (saldo deudor)
+        if dias < 0 or horas < 0 or minutos < 0:
+            _logger.info("Saldo deudor detectado - Días: %s, Horas: %s, Minutos: %s" % (dias, horas, minutos))
             
         return True
     
@@ -401,21 +409,53 @@ class HrLeave(models.Model):
         dias = 0
         horas = 0
         
-        # Calcular días completos (480 minutos = 1 día)
-        if minutos_resultante >= 480:
-            dias = int(minutos_resultante / 480)
-            minutos_resultante = minutos_resultante - (dias * 480)
-        
-        # Calcular horas completas (60 minutos = 1 hora)
-        if minutos_resultante >= 60:
-            horas = int(minutos_resultante / 60)
-            minutos_resultante = minutos_resultante - (horas * 60)
-        
-        # Los minutos restantes
-        minutos_restantes = int(minutos_resultante)
+        if minutos_resultante >= 0:
+            # CASO POSITIVO: Lógica original
+            # Calcular días completos (480 minutos = 1 día)
+            if minutos_resultante >= 480:
+                dias = int(minutos_resultante / 480)
+                minutos_resultante = minutos_resultante - (dias * 480)
+            
+            # Calcular horas completas (60 minutos = 1 hora)
+            if minutos_resultante >= 60:
+                horas = int(minutos_resultante / 60)
+                minutos_resultante = minutos_resultante - (horas * 60)
+            
+            # Los minutos restantes
+            minutos_restantes = int(minutos_resultante)
+            
+        else:
+            # CASO NEGATIVO: Lógica para valores negativos
+            _logger.warning("Procesando saldo negativo: %s minutos" % minutos_resultante)
+            
+            # Trabajar con el valor absoluto para hacer los cálculos
+            minutos_absolutos = abs(minutos_resultante)
+            
+            # Calcular días completos negativos (480 minutos = 1 día)
+            if minutos_absolutos >= 480:
+                dias = -int(minutos_absolutos / 480)  # Negativo
+                minutos_absolutos = minutos_absolutos - (abs(dias) * 480)
+            
+            # Calcular horas completas negativas (60 minutos = 1 hora)
+            if minutos_absolutos >= 60:
+                horas = -int(minutos_absolutos / 60)  # Negativo
+                minutos_absolutos = minutos_absolutos - (abs(horas) * 60)
+            
+            # Los minutos restantes (negativos si quedan)
+            if minutos_absolutos > 0:
+                minutos_restantes = -int(minutos_absolutos)  # Negativo
+            else:
+                minutos_restantes = 0
+            
+            _logger.warning("Saldo negativo convertido - Días: %s, Horas: %s, Minutos: %s" % 
+                           (dias, horas, minutos_restantes))
         
         _logger.warning("Resultado final - Días: %s, Horas: %s, Minutos: %s" % 
                        (dias, horas, minutos_restantes))
+
+        # Validar el resultado antes de retornar
+        if not self.validate_leave_calculation(dias, horas, minutos_restantes):
+            _logger.error("Error en la validación del cálculo de vacaciones")
 
         return dias, horas, minutos_restantes
 
