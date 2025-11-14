@@ -16,7 +16,7 @@ class Authorization(models.Model):
     active = fields.Boolean("Activo", default=True)
     fiscal_sequence_regime_ids = fields.One2many('sar.fiscal.sequence.regime', 'authorization_code_id')
 
-    #@api.model
+    @api.model
     def create(self, vals):
         res = super(Authorization, self).create(vals)
         if vals.get("start_date") > vals.get("expiration_date"):
@@ -98,10 +98,10 @@ class Fiscal_sequence(models.Model):
         except :
             return False
 
-    #@api.model
+    @api.model
     def create(self, vals):
         res = super(Fiscal_sequence, self).create(vals)
-        if not vals[0]['journal_id']:
+        if not vals.get('journal_id'):
             raise Warning(_('Set a journal and a sequence'))
         return res
 
