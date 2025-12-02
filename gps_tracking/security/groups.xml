@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--     
+        <record id="module_category_gps_tracking" model="ir.module.category">
+            <field name="name">Rastreo GPS</field>
+            <field name="description">rastreo gps</field>
+            <field name="sequence">5</field>
+        </record>
+    
+        <record id="manager_tracking" model="res.groups">
+            <field name="category_id" ref="module_category_gps_tracking" />
+            <field name="name">Administrar Rastreo</field>
+        </record>
+        <record id="manager_trip" model="res.groups">
+            <field name="category_id" ref="module_category_gps_tracking" />
+            <field name="name">Administrar Viaje</field>
+        </record> -->
+        <record id="module_category_gps_tracking" model="ir.module.category">
+            <field name="name">Rastreo GPS</field>
+            <field name="description">rastreo gps</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="group_gps_user" model="res.groups">
+            <field name="name">Usuario GPS</field>
+            <field name="category_id" ref="module_category_gps_tracking"/>
+          </record>
+      
+          <record id="group_gps_admin" model="res.groups">
+            <field name="name">Administrador GPS</field>
+            <field name="category_id" ref="module_category_gps_tracking"/>
+            <field name="implied_ids" eval="[(4, ref('group_gps_user'))]"/>
+          </record>
+    
+    </data>
+</odoo>

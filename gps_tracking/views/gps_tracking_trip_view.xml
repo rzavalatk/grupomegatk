@@ -1,0 +1,61 @@
+<odoo>
+    <record id="view_gps_device_trip_tree" model="ir.ui.view">
+        <field name="name">gps.device.trip.tree</field>
+        <field name="model">gps.device.trip</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="start_date"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="state"/>
+                <field name="id_employee" readonly='1' />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_gps_device_trip_form" model="ir.ui.view">
+        <field name="name">gps.device.trip.form</field>
+        <field name="model">gps.device.trip</field>
+        <field name="arch" type="xml">
+            <form> 
+                <header>
+                    <!-- <button name="fetch_device_positions" type="object" string="Actualizar Ubicaciones" class="btn-primary" attrs="{'invisible': [('state', 'in', ['new','finished'])]}"/> -->
+                    <field name="state" widget="statusbar" statusbar_visible="new, ongoing, finished"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="">
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="device_id" readonly='1'/>
+                        <field name="start_time" readonly='1' />
+                        <field name="end_time" readonly='1' />
+                    </group>
+                    <notebook>
+                        <page string="Ubicaciones">
+                            <field name="location_ids">
+                                <tree editable="false" create="false" delete="false">
+                                    <field name="timestamp" readonly='1'/>
+                                    <field name="latitude" readonly='1'/>
+                                    <field name="longitude" readonly='1'/>
+                                    <field name="map_btn" widget="html" readonly='1'/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gps_device_trip" model="ir.actions.act_window">
+        <field name="name">Viajes GPS</field>
+        <field name="res_model">gps.device.trip</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
