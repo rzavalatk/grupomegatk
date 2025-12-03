@@ -86,7 +86,7 @@ odoo.define('gps_tracking.tracking_map_action', function (require) {
                     args: [trip_id],
                 }).then(async function (result) {
                     if(result) {
-                        if(!/VMT[0-9]{5}/.test(trip_id)) {
+                        if(!/VMT[0-9]{4}/.test(trip_id)) {
                             $('#msg-error').text("El codigo del viaje no es válido");
                             return;
                         } else {
