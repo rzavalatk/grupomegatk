@@ -4,8 +4,8 @@
         <field name="name">Actualizar GPS cada 15 segundos</field>
         <field eval="True" name="active"/>
         <field name="user_id" ref="base.user_root"/>
-        <field name="interval_number">15</field>
-        <field name="interval_type">seconds</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minute</field>
         <field name="numbercall">-1</field>
         <field name="model_id" ref="gps_tracking.model_gps_device_trip"/>
         <field name="state">code</field>
