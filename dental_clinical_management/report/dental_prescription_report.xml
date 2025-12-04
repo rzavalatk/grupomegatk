@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Acción de reporte de Receta Dental Pdf -->
+    <!-- Report Action of Dental Prescription Pdf -->
     <record id="report_pdf_dental_prescription" model="ir.actions.report">
-        <field name="name">Reporte de Receta Pdf</field>
+        <field name="name">Prescription Pdf</field>
         <field name="model">dental.prescription</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">
@@ -11,11 +11,11 @@
         <field name="report_file">
             dental_clinical_management.report_prescription
         </field>
-        <field name="print_report_name">'Reporte_de_Receta - %s' %
+        <field name="print_report_name">'Prescription Report - %s' %
             (object.sequence_no)
         </field>
         <field name="binding_model_id"
                ref="dental_clinical_management.model_dental_prescription"/>
-        <field name="binding_type">reporte</field>
+        <field name="binding_type">report</field>
     </record>
 </odoo>
