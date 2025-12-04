@@ -165,6 +165,15 @@ class GpsDeviceTrip(models.Model):
                         _logger.warning(f"Traccar Device ID: {dev_id}")
                         break
 
+                # Obtener la última ubicación registrada para este viaje
+                last_location = self.env['gps.device.location'].search([
+                    ('trip_id', '=', trip.id)
+                ], order='timestamp desc', limit=1)
+                
+                last_timestamp = last_location.timestamp if last_location else False
+                _logger.info(f"Última ubicación registrada: {last_timestamp}")
+                
+                new_positions_count = 0
                 for pos in positions:
                     traccar_device_id = str(pos.get('deviceId'))
                     
@@ -179,8 +188,23 @@ class GpsDeviceTrip(models.Model):
                             timestamp = fields.Datetime.to_string(dt)
                     
                         if dev_id == traccar_device_id:
+                            # Verificar si la posición es nueva (posterior a la última registrada)
+                            if last_timestamp and timestamp:
+                                if fields.Datetime.from_string(timestamp) <= last_timestamp:
+                                    _logger.debug(f"Posición ya registrada o antigua, omitiendo: {timestamp}")
+                                    continue
                             
-                            # Crear una nueva ubicación
+                            # Verificar si ya existe esta ubicación exacta (por timestamp y trip_id)
+                            existing_location = self.env['gps.device.location'].search([
+                                ('trip_id', '=', trip.id),
+                                ('timestamp', '=', timestamp)
+                            ], limit=1)
+                            
+                            if existing_location:
+                                _logger.debug(f"Ubicación duplicada encontrada, omitiendo: {timestamp}")
+                                continue
+                            
+                            # Crear una nueva ubicación solo si es nueva
                             self.env['gps.device.location'].create({
                                 'trip_id': trip.id,
                                 'device_id': traccar_unique_id,
@@ -189,8 +213,12 @@ class GpsDeviceTrip(models.Model):
                                 'timestamp': timestamp,
                                 'address': pos.get('address', ''),
                             })
+                            new_positions_count += 1
+                            _logger.info(f"Nueva ubicación creada: {timestamp} - Lat: {pos.get('latitude')}, Lon: {pos.get('longitude')}")
                     except Exception as e:
                         _logger.error(f"Error al crear la ubicación: {e}")
+                        
+                _logger.info(f"Viaje {trip.name}: Se agregaron {new_positions_count} nuevas posiciones")
             else:
                 _logger.error(f"Error al conectar a Traccar: Positions {response_pos.status_code} - Devices {response_dev.status_code}")
             

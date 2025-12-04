@@ -10,12 +10,13 @@ _logger = logging.getLogger(__name__)
 class GpsDeviceLocation(models.Model):
     _name = 'gps.device.location'
     _description = 'Ubicación del Dispositivo GPS'
+    _order = 'timestamp desc'
     
-    trip_id = fields.Many2one('gps.device.trip', 'Viaje')
-    device_id = fields.Char('ID del Dispositivo')
+    trip_id = fields.Many2one('gps.device.trip', 'Viaje', index=True)
+    device_id = fields.Char('ID del Dispositivo', index=True)
     latitude = fields.Char('Latitud')
     longitude = fields.Char('Longitud')
-    timestamp = fields.Datetime('Fecha')
+    timestamp = fields.Datetime('Fecha', index=True)
     fetched_at = fields.Datetime('Hora de Consulta', default=fields.Datetime.now)
     address = fields.Char('Dirección')
     map_url = fields.Char(string="Ver en Google Maps", compute="_compute_map_url", store=False)
