@@ -19,7 +19,6 @@ class GpsDeviceLocation(models.Model):
     timestamp = fields.Datetime('Fecha', index=True)
     fetched_at = fields.Datetime('Hora de Consulta', default=fields.Datetime.now)
     address = fields.Char('Dirección')
-    speed = fields.Float('Velocidad (km/h)', help='Velocidad del dispositivo')
     valid = fields.Boolean('Posición Válida', default=True, help='Indica si la posición GPS es válida')
     map_url = fields.Char(string="Ver en Google Maps", compute="_compute_map_url", store=False)
     map_btn = fields.Html(string="Ver en Google Maps", compute="_compute_map_btn", store=False)
