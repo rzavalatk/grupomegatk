@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Created the category Dental Clinic to set the Groups -->
+        <!-- Crear la categoria para los grupos de clinica dental -->
         <record id="module_category_dental_clinic" model="ir.module.category">
-            <field name="name">Dental Clinic</field>
+            <field name="name">Clinica dental</field>
             <field name="sequence">18</field>
         </record>
-        <!-- Created the Groups as Own Documents Only and this groups will be only access their own datas -->
+        <!-- se crea el grupo solo como documentos propios y estos grupos solo accederán a sus propios datos -->
         <record id="group_dental_doctor" model="res.groups">
-            <field name="name">User: Own Documents Only</field>
+            <field name="name">Usuario: Solo documentos propios</field>
             <field name="category_id" ref="module_category_dental_clinic"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-            <field name="comment">the user will have access to his own data in
-                the
-                dental clinic application.
+            <field name="comment">el usuario tendrá acceso a sus propios datos en
+                la
+                aplicación de clínica dental.
             </field>
         </record>
-        <!-- Created the Groups as OManager and this groups can we view all the datas -->
+        <!-- se crea el grupo como Manager y estos grupos pueden ver todos los datos -->
         <record id="group_dental_manager" model="res.groups">
             <field name="name">Manager</field>
-            <field name="comment">the user will have an access to all the dental
-                clinic configuration.
+            <field name="comment">el usuario tendrá acceso a toda la configuración de la clínica dental.
             </field>
             <field name="category_id" ref="module_category_dental_clinic"/>
             <field name="implied_ids" eval="[(4, ref('group_dental_doctor'))]"/>

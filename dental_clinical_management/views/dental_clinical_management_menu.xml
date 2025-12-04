@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--Menu Action view for Dental Appointments-->
+    <!--Acción de menú para Citas Dentales-->
     <record id="dental_appointment_menu_action" model="ir.actions.act_window">
-        <field name="name">Doctors Appointment</field>
+        <field name="name">Citas de Doctores</field>
         <field name="res_model">dental.appointment</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'search_default_today': True}</field>
     </record>
-    <!--Menu Action view for Dental Doctors-->
+    <!--Acción de menú para Doctores Dentales-->
     <record id="dental_doctor_menu_action" model="ir.actions.act_window">
-        <field name="name">Doctors</field>
+        <field name="name">Doctores</field>
         <field name="res_model">hr.employee</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <!--Menu Action view for Dental Patients-->
+    <!--Acción de menú para Pacientes Dentales-->
     <record id="dental_patients_menu_action" model="ir.actions.act_window">
-        <field name="name">Patients</field>
+        <field name="name">Pacientes</field>
         <field name="res_model">res.partner</field>
         <field name="domain">[('is_patient','=',True)]</field>
         <field name="context">{'default_company_type':'person'}</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <!--Menu Action view for Dental Prescription-->
+    <!--Acción de menú para Prescripción Dental-->
     <record id="dental_prescription_menu_action" model="ir.actions.act_window">
-        <field name="name">Dental Prescription</field>
+        <field name="name">Prescripción Dental</field>
         <field name="res_model">dental.prescription</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'search_default_today': True}</field>
     </record>
-    <!--Menu Action view for Dental Specialist-->
+    <!--Acción de menú para Especialista Dental-->
     <record id="dental_specialist_menu_action" model="ir.actions.act_window">
-        <field name="name">Specialized</field>
+        <field name="name">Especializado</field>
         <field name="res_model">dental.specialist</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for Treatment Category-->
+    <!--Acción de menú para Categoría de Tratamiento-->
     <record id="treatment_category_menu_action" model="ir.actions.act_window">
-        <field name="name">Treatment Category</field>
+        <field name="name">Categoría de Tratamiento</field>
         <field name="res_model">treatment.category</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for Dental Treatment-->
+    <!--Acción de menú para Tratamiento Dental-->
     <record id="dental_treatment_menu_action" model="ir.actions.act_window">
-        <field name="name">Dental Treatment</field>
+        <field name="name">Tratamiento Dental</field>
         <field name="res_model">dental.treatment</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for Dental Medicines-->
+    <!--Acción de menú para Medicinas Dentales-->
     <record id="medicines_menu_action" model="ir.actions.act_window">
-        <field name="name">Medicines</field>
+        <field name="name">Medicinas</field>
         <field name="res_model">product.template</field>
         <field name="domain">[('is_medicine','=',True)]</field>
         <field name="context">{'default_is_medicine':True,
@@ -56,85 +56,85 @@
         </field>
         <field name="view_mode">tree,form</field>
     </record>
-    <!--Menu Action view for Medical Frequency-->
+    <!--Acción de menú para Frecuencia de Medicina-->
     <record id="medicine_frequency_menu_action" model="ir.actions.act_window">
-        <field name="name">Medicine Frequency</field>
+        <field name="name">Frecuencia de Medicina</field>
         <field name="res_model">medicine.frequency</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for Insurance Company-->
+    <!--Acción de menú para Compañía de Seguros-->
     <record id="insurance_company_menu_action" model="ir.actions.act_window">
-        <field name="name">Insurance Company</field>
+        <field name="name">Compañía de Seguros</field>
         <field name="res_model">insurance.company</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for Dental Time Shifts-->
+    <!--Acción de menú para Turnos Dentales-->
     <record id="dental_time_shift_menu_action" model="ir.actions.act_window">
-        <field name="name">Dental Time Shift</field>
+        <field name="name">Turno Dental</field>
         <field name="res_model">dental.time.shift</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <!--Menu Action view for Medical Questions-->
+    <!--Acción de menú para Preguntas Médicas-->
     <record id="medical_questions_menu_action" model="ir.actions.act_window">
-        <field name="name">Medical Questions</field>
+        <field name="name">Preguntas Médicas</field>
         <field name="res_model">medical.questions</field>
         <field name="view_mode">tree</field>
     </record>
-    <!--Menu Action view for X-Ray Reports-->
+    <!--Acción de menú para Reportes de Rayos X-->
     <record id="report_menu_action" model="ir.actions.act_window">
-        <field name="name">report</field>
+        <field name="name">reporte</field>
         <field name="res_model">xray.report</field>
         <field name="view_mode">form</field>
     </record>
-    <!-- Added Menus-->
+    <!-- Menús Agregados-->
     <menuitem id="dentist_menu_root"
               web_icon="dental_clinical_management,static/description/icon.png"
-              name="Dental Clinic"/>
-    <menuitem id="dentist_menu_root" name="Dental Clinic"
+              name="Clínica Dental"/>
+    <menuitem id="dentist_menu_root" name="Clínica Dental"
               action="dental_appointment_menu_action"/>
-    <menuitem id="appointments_main_menu" name="Appointments"
+    <menuitem id="appointments_main_menu" name="Citas"
               parent="dentist_menu_root" sequence="1"
               action="dental_appointment_menu_action"/>
-    <menuitem id="prescriptions_main_menu" name="Prescriptions"
+    <menuitem id="prescriptions_main_menu" name="Prescripciones"
               parent="dentist_menu_root" sequence="2"
               action="dental_prescription_menu_action"/>
-    <menuitem id="patients_main_menu" name="Patients" parent="dentist_menu_root"
+    <menuitem id="patients_main_menu" name="Pacientes" parent="dentist_menu_root"
               sequence="3" action="dental_patients_menu_action"/>
-    <menuitem id="dentist_main_menu" name="Dentist" parent="dentist_menu_root"
+    <menuitem id="dentist_main_menu" name="Dentista" parent="dentist_menu_root"
               sequence="4" action="dental_doctor_menu_action"/>
-    <menuitem id="config_main_menu" name="Configuration"
+    <menuitem id="config_main_menu" name="Configuración"
               parent="dentist_menu_root" sequence="5"/>
-    <menuitem id="physicians_main_menu" name="Physicians"
+    <menuitem id="physicians_main_menu" name="Médicos"
               parent="config_main_menu" sequence="1"/>
-    <menuitem id="department_main_menu" name="Department"
+    <menuitem id="department_main_menu" name="Departamento"
               parent="physicians_main_menu" sequence="1"
               action="hr.hr_department_tree_action"/>
-    <menuitem id="specialist_main_menu" name="Specialized"
+    <menuitem id="specialist_main_menu" name="Especializado"
               parent="physicians_main_menu" sequence="2"
               action="dental_specialist_menu_action"/>
-    <menuitem id="dental_time_shift" name="Time Shift"
+    <menuitem id="dental_time_shift" name="Turno"
               parent="physicians_main_menu" sequence="3"
               action="dental_time_shift_menu_action"/>
-    <menuitem id="medical_procedures_main_menu" name="Medical Procedures"
+    <menuitem id="medical_procedures_main_menu" name="Procedimientos Médicos"
               parent="config_main_menu" sequence="2"/>
-    <menuitem id="treatment_categories_main_menu" name="Treatment Categories"
+    <menuitem id="treatment_categories_main_menu" name="Categorías de Tratamiento"
               parent="medical_procedures_main_menu" sequence="1"
               action="treatment_category_menu_action"/>
-    <menuitem id="treatment_main_menu" name="Treatment"
+    <menuitem id="treatment_main_menu" name="Tratamiento"
               parent="medical_procedures_main_menu" sequence="2"
               action="dental_treatment_menu_action"/>
-    <menuitem id="medicines_main_menu" name="Medicines"
+    <menuitem id="medicines_main_menu" name="Medicinas"
               parent="medical_procedures_main_menu" sequence="3"
               action="medicines_menu_action"/>
-    <menuitem id="medicine_frequency_main_menu" name="Medicament Frequency"
+    <menuitem id="medicine_frequency_main_menu" name="Frecuencia de Medicamento"
               parent="medical_procedures_main_menu" sequence="4"
               action="medicine_frequency_menu_action"/>
-    <menuitem id="medical_questions_main_menu" name="Medical Questions"
+    <menuitem id="medical_questions_main_menu" name="Preguntas Médicas"
               parent="medical_procedures_main_menu" sequence="5"
               action="medical_questions_menu_action"/>
-    <menuitem id="insurance_main_menu" name="Insurance"
+    <menuitem id="insurance_main_menu" name="Seguros"
               parent="config_main_menu" sequence="3"/>
-    <menuitem id="insuarnce_company_main_menu" name="Insurance Company"
+    <menuitem id="insuarnce_company_main_menu" name="Compañía de Seguros"
               parent="insurance_main_menu" sequence="1"
               action="insurance_company_menu_action"/>
 </odoo>

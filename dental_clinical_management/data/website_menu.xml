@@ -10,7 +10,7 @@
     <!-- Doctors Menu in website -->
     <record id="doctors_menu" model="website.menu">
         <field name="name">Doctors</field>
-        <field name="url">/all_doctors</field>
+        <field name="url">/todos_los_doctores</field>
         <field name="parent_id" ref="website.main_menu"/>
         <field name="sequence" type="int">12</field>
     </record>

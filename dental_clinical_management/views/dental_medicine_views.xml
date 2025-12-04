@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!-- Inherit the product page and added the Is Medicine Boolean -->
+    <!-- Heredar la página de producto y agregar el Booleano Es Medicina -->
     <record id="product_template_only_form_view" model="ir.ui.view">
         <field name="name">
             product.template.view.form.inherit.dental.clinical.management
@@ -20,7 +20,7 @@
             </xpath>
         </field>
     </record>
-    <!-- Tree view  -->
+    <!-- Vista de árbol  -->
     <record id="product_template_tree_view" model="ir.ui.view">
         <field name="name">
             product.template.view.tree.inherit.dental.clinical.management

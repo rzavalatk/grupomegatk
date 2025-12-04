@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <!-- Appointment card report template -->
+    <!-- Plantilla de reporte de tarjeta de cita -->
     <template id="dental_clinical_management_appointment_card">
         <t t-call="web.html_container">
             <section>
                 <div style="width: 500px; height: 260px; border: 2px black solid; border-radius: 5px;">
                     <div class="container" style="width: 500px; height: 50px; background-color:red">
                         <h1 style="margin: 10px; color:white;">
-                            Appointment Card
+                            Tarjeta de Cita
                         </h1>
                     </div>
                     <div class="page" style="padding: 10px;">
                         <h1>
-                            <b>Token: <t t-esc="token"/></b>
+                            <b>Ficha: <t t-esc="token"/></b>
                         </h1>
                         <p>
                             <b>Doctor: <t t-esc="doctor"/></b><br/>
-                            <b>Specialised: <t t-esc="specialised"/></b><br/>
-                            <b>Time: <t t-esc="appointment_time"/></b><br/>
-                            <b>Date: <t t-esc="date"/></b>
+                            <b>Especialidad: <t t-esc="specialised"/></b><br/>
+                            <b>Hora: <t t-esc="appointment_time"/></b><br/>
+                            <b>Fecha: <t t-esc="date"/></b>
                         </p>
                         <div style="position:absolute; left:320px; top:100px;">
                                     <img t-attf-src="{{ request.httprequest.url_root }}dental_clinical_management/static/src/img/appointment.jpeg"
@@ -30,9 +30,9 @@
         </t>
     </template>
 
-    <!-- Action report appointment card -->
+    <!-- Acción de reporte de tarjeta de cita -->
     <record id="action_appointment_card" model="ir.actions.report">
-        <field name="name">Appointment Card</field>
+        <field name="name">Tarjeta de Cita</field>
         <field name="model">dental.appointment</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">dental_clinical_management.dental_clinical_management_appointment_card</field>

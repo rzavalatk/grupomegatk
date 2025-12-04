@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--  Tree View-->
+    <!--  Vista de Árbol-->
     <record id="medical_questions_view_tree" model="ir.ui.view">
             <field name="name">medical.questions.view.tree</field>
             <field name="model">medical.questions</field>
             <field name="arch" type="xml">
-                <tree string="Medical Questions" editable="bottom">
+                <tree string="Preguntas Médicas" editable="bottom">
                     <field name="question" required="True"/>
                 </tree>
             </field>

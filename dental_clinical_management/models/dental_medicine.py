@@ -9,9 +9,9 @@ class ProductTemplate(models.Model):
 
     is_medicine = fields.Boolean('¿Es medicina?',
                                  help="¿Es un medicamento?")
-    generic_name = fields.Char(string="Nombre genérico",
+    generic_name = fields.Char(string="Nombre",
                                required=True,
-                               help="nombre genérico del medicamento")
+                               help="nombre del medicamento")
     dosage_strength = fields.Integer(string="Fuerza de dosificación",
                                      required=True,
                                      help="Dosis del medicamento")

@@ -18,12 +18,12 @@ publicWidget.registry.DentalClinic = publicWidget.Widget.extend({
         var self = this
         var specialised_id = this.$el.find('#specialised_id').val();
         console.log(ajax)
-        await ajax.jsonRpc("/specialised_doctors",'call' ,{
+        await ajax.jsonRpc("/doctores_especializados",'call' ,{
             specialised_id: specialised_id
         }).then(function (records) {
             console.log(records)
             self.$el.find('#doctor_id').empty();
-            self.$el.find('#doctor_id').prepend('<option value="">Select Doctor</option>');
+            self.$el.find('#doctor_id').prepend('<option value="">Seleccionar doctor</option>');
             records.forEach(function (record) {
                 self.$('#doctor_id').append(
                     `<option value="${record.id}">${record.name}</option>`
@@ -34,11 +34,11 @@ publicWidget.registry.DentalClinic = publicWidget.Widget.extend({
     _onDoctorChange: async function () {
         var self = this
         var doctor_id = this.$el.find('#doctor_id').val();
-        await ajax.jsonRpc("/doctors_shifts", 'call',{
+        await ajax.jsonRpc("/horarios_doctores", 'call',{
             doctor_id: doctor_id
         }).then(function (records) {
             self.$el.find('#time_shift').empty();
-            self.$el.find('#time_shift').prepend('<option value="">Select Appointment Time</option>');
+            self.$el.find('#time_shift').prepend('<option value="">Seleccionar hora de cita</option>');
             records.forEach(function (record) {
                 self.$('#time_shift').append(
                     `<option value="${record.id}">${record.name}</option>`

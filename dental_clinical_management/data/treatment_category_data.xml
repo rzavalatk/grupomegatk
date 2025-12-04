@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Data for treatment category -->
+        <!-- Datos para la categoría de tratamiento -->
         <record model="treatment.category" id="preventive_dentistry">
-            <field name="name">Preventive Dentistry</field>
+            <field name="name">Odontología Preventiva</field>
         </record>
         <record model="treatment.category" id="restorative_dentistry">
-            <field name="name">Restorative Dentistry</field>
+            <field name="name">Odontología Restaurativa</field>
         </record>
         <record model="treatment.category" id="cosmetic_dentistry">
-            <field name="name">Cosmetic Dentistry</field>
+            <field name="name">Odontología Cosmética</field>
         </record>
     </data>
 </odoo>

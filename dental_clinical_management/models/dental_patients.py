@@ -11,7 +11,7 @@ class ResPartner(models.Model):
 
     company_type = fields.Selection(selection_add=[('person', 'Paciente'),
                                                    ('company', 'Distribuidor de Medicamentos')],
-                                    help="Tipo de paciente")
+                                    help="Tipo de contacto: persona o empresa")
     dob = fields.Date(string="Fecha de nacimiento",
                       help="Fecha de nacimiento del paciente")
     patient_age = fields.Integer(compute='_compute_patient_age',

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record id="view_department_tree" model="ir.ui.view">
-        <!--   Add a new page for res partner and add fields-->
+        <!--   Agregar una nueva página para res partner y agregar campos-->
         <field name="name">
             hr.department.view.tree.inherit.dental.clinical.management
         </field>

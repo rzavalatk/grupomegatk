@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- form template-->
-    <template id="website_dental_template" name="Dental Appointment">
+    <!-- plantilla de formulario-->
+    <template id="website_dental_template" name="Cita Dental">
         <t t-call="website.layout">
             <div class="container">
                 <br/>
                 <div class="row">
                     <div class="col">
-                        <h3 align="center">PATIENT APPOINTMENT FORM</h3>
+                        <h3 align="center">FORMULARIO DE CITA DE PACIENTE</h3>
                     </div>
                 </div>
                 <br/>
                 <form class="form" id="appointment_form" method="post"
-                      action="/create/appointment">
+                      action="/create/citaMedica">
                     <input type="hidden" name="csrf_token"
                            t-att-value="request.csrf_token()"/>
                     <div class="row mb-3">
                         <label for="patient" class="col-sm-2 col-form-label">
-                            Patient
+                            Paciente
                         </label>
                         <div class="col-sm-10">
                             <select id="patient_id" name="patient"
@@ -35,7 +35,7 @@
                     </div>
                     <div class="row mb-3">
                         <label for="phone" class="col-sm-2 col-form-label">
-                            Phone
+                            Teléfono
                         </label>
                         <div class="col-sm-10">
                             <input type="phone" name="phone" id="phone"
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="age" class="col-sm-2 col-form-label">Age
+                        <label for="age" class="col-sm-2 col-form-label">Edad
                         </label>
                         <div class="col-sm-10">
                             <input type="number" name="age" id="age"
@@ -54,12 +54,12 @@
                     </div>
                     <div class="row mb-3">
                         <label for="specialised_id"
-                               class="col-sm-2 col-form-label">Specialised
+                               class="col-sm-2 col-form-label">Especialidad
                         </label>
                         <div class="col-sm-10">
                             <select id="specialised_id" name="specialization"
                                     class="form-control" required="1">
-                                <option value="">Select Specialised</option>
+                                <option value="">Seleccione Especialidad</option>
                                 <t t-foreach="specialised_id"
                                    t-as="specialised">
                                     <option t-att-value="specialised.id">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="row mb-3">
                         <label for="time_shift" class="col-sm-2 col-form-label">
-                            Booking Time
+                            Hora de Reserva
                         </label>
                         <div class="col-sm-10">
                             <select id="time_shift" name="time_shift"
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="date" class="col-sm-2 col-form-label">Date
+                        <label for="date" class="col-sm-2 col-form-label">Fecha
                         </label>
                         <div class="col-sm-10">
                             <input type="date" name="date"
@@ -99,61 +99,60 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit
+                        <button type="submit" class="btn btn-primary">Enviar
                         </button>
                     </div>
                 </form>
             </div>
         </t>
     </template>
-    <!-- Already scheduled template   -->
-    <template id="website_dental_scheduled_template" name="Scheduled">
+    <!-- Plantilla de cita ya programada   -->
+    <template id="website_dental_scheduled_template" name="Programada">
         <t t-call="website.layout">
             <div class="container" style="margin: 150px; margin-left: 250px;">
                 <div class="alert alert-success" role="alert" style="width: 389px;">
-                    <h4 class="alert-heading">Appointment Scheduled</h4>
-                    <p>Your Appointment has already been scheduled !!</p>
+                    <h4 class="alert-heading">Cita Programada</h4>
+                    <p>¡Su cita ya ha sido programada!</p>
                     <a t-attf-href="/dental_doctor">
-                        <button type="button" class="btn btn-dark">Back</button>
+                        <button type="button" class="btn btn-dark">Regresar</button>
                     </a>
                 </div>
             </div>
         </t>
     </template>
-    <!-- Successfully registered template-->
-    <template id="website_rental_success_template" name="Success">
+    <!-- Plantilla de registro exitoso-->
+    <template id="website_rental_success_template" name="Éxito">
         <t t-call="website.layout">
             <div class="container" style="margin: 150px; margin-left: 250px;">
                 <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">Appointment Successful</h4>
-                    <p>Aww yeah, you successfully registered for the Doctor
-                        Appointment.
+                    <h4 class="alert-heading">Cita Exitosa</h4>
+                    <p>¡Excelente! Se ha registrado exitosamente para la cita con el doctor.
                     </p>
                     <hr/>
-                    <p class="mb-0">Your appointment token number is
+                    <p class="mb-0">Su número de ficha de cita es
                         <t t-esc="token['token']"/>
                     </p>
                     <br/>
                     <a class="btn btn-secondary"
-                       t-attf-href="/dental_clinic/appointment_card/{{ token['sequence_no'] }}">
+                       t-attf-href="/clinica_dental/datos_cita/{{ token['sequence_no'] }}">
                         <i class="fa fa-cloud-download"/>
-                        Download Appointment Card
+                        Descargar Tarjeta de Cita
                     </a>
                     <a t-attf-href="/dental_doctor">
-                        <button type="button" class="btn btn-dark">Back</button>
+                        <button type="button" class="btn btn-dark">Regresar</button>
                     </a>
                 </div>
             </div>
         </t>
     </template>
-    <!-- List of all doctors template-->
-    <template id="website_all_doctors" name="dental_doctors">
+    <!-- Plantilla de lista de todos los doctores-->
+    <template id="website_all_doctors" name="doctores_dentales">
         <t t-call="website.layout">
             <div class="container">
                 <br/>
                 <div class="row">
                     <div class="col">
-                        <h3 align="center">LIST OF DOCTORS</h3>
+                        <h3 align="center">LISTA DE DOCTORES</h3>
                     </div>
                 </div>
                 <br/>
@@ -161,9 +160,9 @@
                     <thead align="center">
                         <tr>
                             <th>Doctor</th>
-                            <th>Department</th>
-                            <th>Specialised</th>
-                            <th>Available Time Slot</th>
+                            <th>Departamento</th>
+                            <th>Especialidad</th>
+                            <th>Horario Disponible</th>
                         </tr>
                     </thead>
                     <tbody>

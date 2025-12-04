@@ -1,49 +1,29 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
-#
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
 from odoo import http
 from odoo.http import request
 from odoo.addons.portal.controllers import portal
 
 
 class PatientPortal(portal.CustomerPortal):
-    """Provide portal access for patients to view their treatment
-    details, prescriptions, and invoices."""
+    """Proporciona acceso al portal para que los pacientes vean sus detalles
+    de tratamiento, recetas y facturas."""
     def _prepare_home_portal_values(self, counters):
-        """Extends the base method to include the count of dental prescriptions
-        in the returned dictionary if requested.
+        """Extiende el método base para incluir el conteo de recetas dentales
+        en el diccionario devuelto si se solicita.
         Args:
-            counters (list): A list of strings indicating which counts to
-            include in the response."""
+            counters (list): Una lista de cadenas que indica qué conteos
+            incluir en la respuesta."""
         values = super()._prepare_home_portal_values(counters)
         if 'prescriptions_count' in counters:
             prescriptions_count = request.env['dental.prescription'].sudo().search_count([])
             values['prescriptions_count'] = prescriptions_count
         return values
 
-    @http.route(['/my/prescriptions'], type='http', auth="user", website=True)
+    @http.route(['/mis/recetas'], type='http', auth="user", website=True)
     def portal_my_prescriptions(self, **kwargs):
-        """Renders the prescriptions page for the logged-in user based on their role.
-        Managers see all prescriptions, doctors see their own, and patients see
-        their own prescriptions."""
+        """Renderiza la página de recetas para el usuario autenticado según su rol.
+        Los gerentes ven todas las recetas, los doctores ven las suyas, y los pacientes ven
+        sus propias recetas."""
         if request.env.ref('dental_clinical_management.group_dental_manager') in request.env.user.groups_id:
             domain = []
         elif request.env.ref('dental_clinical_management.group_dental_doctor') in request.env.user.groups_id:
@@ -54,12 +34,12 @@ class PatientPortal(portal.CustomerPortal):
         return request.render("dental_clinical_management.portal_my_prescriptions",
                               {'prescriptions': prescriptions, 'page_name': 'prescriptions'})
 
-    @http.route(['/view/prescriptions/<int:id>'],
+    @http.route(['/ver/receta/<int:id>'],
                 type='http', auth="public", website=True)
     def view_prescriptions(self, id):
-        """View prescriptions based on the provided ID.
-        :param id: The ID of the prescription to view.
-        :return: Rendered template with prescription details."""
+        """Ver recetas basándose en el ID proporcionado.
+        :param id: El ID de la receta a visualizar.
+        :return: Plantilla renderizada con los detalles de la receta."""
         prescription = request.env['dental.prescription'].browse(id)
         return request.render('dental_clinical_management.prescription_portal_template',
                               {'prescription_details': prescription, 'page_name': 'prescription'})

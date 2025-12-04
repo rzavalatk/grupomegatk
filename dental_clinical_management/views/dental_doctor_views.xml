@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!-- Removing unwanted fields and adding new fields -->
+    <!-- Eliminando campos innecesarios y agregando nuevos campos -->
     <record id="view_employee_form" model="ir.ui.view">
         <field name="name">
             hr.employee.view.form.inherit.dental.clinical.management
@@ -15,9 +15,9 @@
                 <field name="dob"/>
                 <field name="doctor_age"/>
             </xpath>
-            <!-- Added new page time shift -->
+            <!-- Página nueva agregada turno -->
             <xpath expr="//page[@name='personal_information']" position="after">
-                <page string="Shift">
+                <page string="Turno">
                     <field name="time_shift_ids" widget="one2many">
                         <tree editable="bottom">
                             <field name="name"/>

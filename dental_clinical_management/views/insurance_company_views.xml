@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--  Tree View-->
+    <!--  Vista de Árbol-->
     <record id="insurance_company_view_tree" model="ir.ui.view">
             <field name="name">insurance.company.view.tree</field>
             <field name="model">insurance.company</field>
             <field name="arch" type="xml">
-                <tree string="Insurance Company" editable="bottom">
+                <tree string="Compañía de Seguros" editable="bottom">
                     <field name="name"  required="True"/>
                     <field name="email"  required="True"/>
                     <field name="phone"/>

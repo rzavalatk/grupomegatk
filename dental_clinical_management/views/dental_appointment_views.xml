@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!--    Search, Filter, Group-->
+    <!--    Búsqueda, Filtro, Grupo-->
     <record id="dental_appointment_search" model="ir.ui.view">
         <field name="name">dental.appointment.search</field>
         <field name="model">dental.appointment</field>
         <field name="arch" type="xml">
-            <!-- Search -->
+            <!-- Búsqueda -->
             <search>
                 <field name="patient_id"/>
                 <field name="doctor_id"/>
-                <!-- Filter -->
-                <filter string="Today" name="today"
+                <!-- Filtro -->
+                <filter string="Hoy" name="today"
                         domain="[('date', '=', context_today())]"/>
-                <filter string="Yesterday" name="yesterday"
+                <filter string="Ayer" name="yesterday"
                         domain="[('date', '=',  ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')))]"/>
-                <!-- Group By -->
-                <group expand="0" string="group by">
+                <!-- Agrupar Por -->
+                <group expand="0" string="agrupar por">
                     <filter name="doctor_id"
                             context="{'group_by':'doctor_id','residual_visible':True}"/>
                     <filter name="specialist_id"
@@ -24,26 +24,26 @@
                             context="{'group_by':'patient_id','residual_visible':True}"/>
                     <filter name="shift_id"
                             context="{'group_by':'shift_id','residual_visible':True}"/>
-                    <filter name="done" string="Done"
+                    <filter name="done" string="Completado"
                             domain="[('state', 'in', ['done'])]"/>
                 </group>
             </search>
         </field>
     </record>
-    <!-- Dental Appointment page to take appointments for patients -->
+    <!-- Página de Citas Dentales para tomar citas de pacientes -->
     <record id="dental_appointment_view_form" model="ir.ui.view">
         <field name="name">dental.appointment.view.form</field>
         <field name="model">dental.appointment</field>
         <field name="arch" type="xml">
-            <form string="Appointments">
+            <form string="Citas">
                 <header>
                     <button name="action_cancel" id="action_cancel"
-                            string="Cancel" class="btn-primary"
+                            string="Cancelar" class="btn-primary"
                             type="object"
                             attrs="{'invisible':[('state', '!=', 'new')]}"/>
                     <button name="action_create_appointment"
                             id="action_create_appointment"
-                            string="Create Appointment" class="btn-primary"
+                            string="Crear Cita" class="btn-primary"
                             type="object"
                             attrs="{'invisible':[('state', '!=', 'draft')]}"/>
                     <field name="state" widget="statusbar"
@@ -51,15 +51,15 @@
                            on_change="1" field_id="state_0"/>
                 </header>
                 <sheet>
-                    <!-- Smart button-->
+                    <!-- Botón inteligente-->
                     <div class="oe_button_box" name="button_box">
                         <button name="action_prescription"
                                 class="oe_stat_button"
                                 icon="fa-bars" type="object"
-                                help="prescription view of appointment"
+                                help="vista de prescripción de la cita"
                                 attrs="{'invisible':[('state', '!=', 'done')]}">
                             <div class="o_form_field o_stat_info">
-                                <span class="o_stat_text">Prescription</span>
+                                <span class="o_stat_text">Prescripción</span>
                             </div>
                         </button>
                     </div>
@@ -95,12 +95,12 @@
         </field>
     </record>
 
-    <!-- Tree View -->
+    <!-- Vista de Árbol -->
     <record id="dental_appointment_view_tree" model="ir.ui.view">
         <field name="name">dental.appointment.view.tree</field>
         <field name="model">dental.appointment</field>
         <field name="arch" type="xml">
-            <tree string="Appointments">
+            <tree string="Citas">
                 <field name="sequence_no"/>
                 <field name="token_no"/>
                 <field name="patient_id"/>

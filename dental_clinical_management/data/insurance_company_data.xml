@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Insurance company data -->
+        <!-- Datos de la compañía de seguros -->
         <record model="insurance.company" id="insurance_company_star_health">
-            <field name="name">Star Health and Allied Insurance</field>
+            <field name="name">Seguros aliados</field>
         </record>
         <record model="insurance.company" id="insurance_company_max_bupa">
-            <field name="name">Max Bupa Health Insurance</field>
-        </record>
-        <record model="insurance.company" id="insurance_company_unitedhealth">
-            <field name="name">UnitedHealth Group</field>
+            <field name="name">Seguros de Salud</field>
         </record>
     </data>
 </odoo>

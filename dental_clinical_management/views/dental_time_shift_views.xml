@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--  Tree View-->
+    <!--  Vista de Árbol-->
     <record id="dental_time_shift_view_tree" model="ir.ui.view">
         <field name="name">dental.time.shift.view.tree</field>
         <field name="model">dental.time.shift</field>
         <field name="arch" type="xml">
-            <tree string="Dental Time Shift">
+            <tree string="Turno Dental">
                 <field name="name"/>
                 <field name="shift_type"/>
                 <field name="start_time" widget="float_time"/>
@@ -13,12 +13,12 @@
             </tree>
         </field>
     </record>
-    <!--  Form View-->
+    <!--  Vista de Formulario-->
     <record id="dental_time_shift_view_form" model="ir.ui.view">
         <field name="name">dental.time.shift.view.form</field>
         <field name="model">dental.time.shift</field>
         <field name="arch" type="xml">
-            <form string="Dental Time Shift">
+            <form string="Turno Dental">
                 <sheet>
                     <h1>
                         <div class="d-flex">

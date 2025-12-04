@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--    Search, Filter, Group-->
+    <!--    Búsqueda, Filtro, Grupo-->
     <record id="dental_prescription_search" model="ir.ui.view">
         <field name="name">dental.prescription.search</field>
         <field name="model">dental.prescription</field>
         <field name="arch" type="xml">
-            <!-- Search -->
+            <!-- Búsqueda -->
             <search>
                 <field name="patient_id"/>
                 <field name="prescribed_doctor_id"/>
-                <!-- Filter -->
-                <filter string="Today's Prescription" name="today"
+                <!-- Filtro -->
+                <filter string="Prescripción de Hoy" name="today"
                         domain="[('prescription_date', '=', context_today())]"/>
-                <filter string="Yesterday's Prescription" name="yesterday"
+                <filter string="Prescripción de Ayer" name="yesterday"
                         domain="[('prescription_date', '=',  ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')))]"/>
-                <!-- Group By -->
-                <group expand="0" string="group by">
-                    <filter name="invoiced" string="Invoiced"
+                <!-- Agrupar Por -->
+                <group expand="0" string="agrupar por">
+                    <filter name="invoiced" string="Facturado"
                             domain="[('state', 'in', ['invoiced'])]"/>
-                    <filter name="prescribe" string="Prescribe"
+                    <filter name="prescribe" string="Prescrito"
                             domain="[('state', 'in', ['done'])]"/>
                     <filter name="treatment_id"
                             context="{'group_by':'treatment_id','residual_visible':True}"/>
@@ -26,32 +26,32 @@
             </search>
         </field>
     </record>
-    <!--  Form View-->
+    <!--  Vista de Formulario-->
     <record id="dental_prescription_view_form" model="ir.ui.view">
             <field name="name">dental.prescription.view.form</field>
             <field name="model">dental.prescription</field>
             <field name="arch" type="xml">
-                <form string="Prescription">
+                <form string="Prescripción">
                     <header>
                         <button name="action_prescribed" id="action_prescribed"
-                                string="Prescribe" class="btn-primary"
+                                string="Prescribir" class="btn-primary"
                                 type="object" attrs="{'invisible': [('state', '!=', 'new')]}"/>
                         <field name="state" widget="statusbar"
                                statusbar_visible="new,done"
                                on_change="1" field_id="state_0"/>
                         <button name="create_invoice" id="create_invoice"
-                                type="object" string="Create Invoice"
+                                type="object" string="Crear Factura"
                                 class="btn-primary" attrs="{'invisible':[('state', '!=', 'done')]}"/>
                     </header>
                     <sheet>
-                        <!-- Smart button-->
+                        <!-- Botón inteligente-->
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_invoice" type="object"
-                                    string="Invoice" class="oe_stat_button"
+                                    string="Factura" class="oe_stat_button"
                                     icon="fa-pencil-square-o"
                                     attrs="{'invisible':[('state', '!=', 'invoiced')]}">
                                 <div class="o_form_field o_stat_info">
-                                    <span class="o_stat_text">Invoice</span>
+                                    <span class="o_stat_text">Factura</span>
                                 </div>
                             </button>
                         </div>
@@ -76,7 +76,7 @@
                             </group>
                         </group>
                         <field name="medicine_ids">
-                            <tree string="Prescribed Medicines" editable="bottom">
+                            <tree string="Medicinas Prescritas" editable="bottom">
                                 <field name="medicament_id"/>
                                 <field name="generic_name"/>
                                 <field name="dosage_strength"/>
@@ -102,12 +102,12 @@
                 </form>
             </field>
     </record>
-    <!--  Tree View-->
+    <!--  Vista de Árbol-->
     <record id="dental_prescription_view_tree" model="ir.ui.view">
             <field name="name">dental.prescription.view.tree</field>
             <field name="model">dental.prescription</field>
             <field name="arch" type="xml">
-                <tree string="Dental Prescription">
+                <tree string="Prescripción Dental">
                     <field name="sequence_no"/>
                     <field name="patient_id"/>
                     <field name="prescribed_doctor_id"/>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--  Tree View-->
+    <!--  Vista de Árbol-->
     <record id="dental_treatment_view_tree" model="ir.ui.view">
             <field name="name">dental.treatment.view.tree</field>
             <field name="model">dental.treatment</field>
             <field name="arch" type="xml">
-                <tree string="Dental Treatment" editable="bottom">
+                <tree string="Tratamiento Dental" editable="bottom">
                     <field name="name" required="True"/>
                     <field name="treatment_categ_id" required="True"/>
                     <field name="cost"/>

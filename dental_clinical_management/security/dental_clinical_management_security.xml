@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Set the record rule for visible only the corresponding doctor appointments -->
+        <!-- Establece la regla de registro para que sean visibles solo las citas del doctor correspondiente -->
         <record id="own_dental_appointments" model="ir.rule">
-            <field name="name">Own Appointments</field>
+            <field name="name">Citas propias</field>
             <field name="model_id" ref="model_dental_appointment"/>
             <field name="domain_force">[('doctor_id.user_id', '=', user.id)]
             </field>
@@ -12,15 +12,16 @@
         </record>
         <!-- To see all the appointments for the manager -->
         <record id="see_all_dental_appointments" model="ir.rule">
-            <field name="name">All Appointments</field>
+            <field name="name">Todas las citas</field>
             <field ref="model_dental_appointment" name="model_id"/>
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups"
                    eval="[Command.link(ref('dental_clinical_management.group_dental_manager'))]"/>
         </record>
-        <!-- Set the record rule for visible only the corresponding doctor prescriptions -->
+        <!-- Establece la regla de registro para que sean visibles solo las recetas del doctor correspondiente -->
+        
         <record id="own_dental_prescription" model="ir.rule">
-            <field name="name">Own Prescriptions</field>
+            <field name="name">Recetas propias</field>
             <field name="model_id" ref="model_dental_prescription"/>
             <field name="domain_force">[('prescribed_doctor_id.user_id', '=',
                 user.id)]
@@ -28,9 +29,10 @@
             <field name="groups"
                    eval="[Command.link(ref('dental_clinical_management.group_dental_doctor'))]"/>
         </record>
-        <!-- To see all the prescriptions for the manager -->
+        
+        <!-- Para ver todas las recetas / para el manager -->
         <record id="see_all_dental_prescriptions" model="ir.rule">
-            <field name="name">All Prescriptions</field>
+            <field name="name">Todas las recetas</field>
             <field ref="model_dental_prescription" name="model_id"/>
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups"

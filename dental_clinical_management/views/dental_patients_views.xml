@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!-- Form view -->
+    <!-- Vista de formulario -->
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.view.form.inherit.dental.clinical.management</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <!-- Added custom fields -->
+            <!-- Campos personalizados agregados -->
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="dob"/>
                 <field name="patient_age"/>
@@ -15,11 +15,11 @@
             <xpath expr="//field[@name='function']" position="replace">
                 <field name="sex" widget="radio"/>
             </xpath>
-            <!-- Added new page Medical Qestionare on patient -->
+            <!-- Página nueva agregada Cuestionario Médico en paciente -->
             <xpath expr="//page[@name='internal_notes']" position="before">
-                <page name="medical_questionare" string="Medical Questionare">
+                <page name="medical_questionare" string="Cuestionario Médico">
                     <field name="medical_questionnaire_ids" widget="one2many">
-                        <tree string= "Medical Questionare" editable="bottom">
+                        <tree string= "Cuestionario Médico" editable="bottom">
                             <field name="question_id"/>
                             <field name="yes_no" widget="radio" readonly="False"/>
                             <field name="reason"/>
@@ -27,9 +27,9 @@
                     </field>
                 </page>
             </xpath>
-            <!-- Added new page X-Ray reports on patient -->
+            <!-- Página nueva agregada Reportes de Rayos X en paciente -->
             <xpath expr="//page[@name='internal_notes']" position="before">
-                <page name="xray_reports" string="X-Ray Reports">
+                <page name="xray_reports" string="Reportes de Rayos X">
                     <field name="report_ids" mode="kanban" class="w-100">
                         <kanban>
                             <field name="report_file"/>
@@ -58,9 +58,9 @@
                     </field>
                 </page>
             </xpath>
-            <!-- Added page Insurance Details on patient -->
+            <!-- Página agregada Detalles de Seguro en paciente -->
             <xpath expr="//page[@name='internal_notes']" position="before">
-                <page name="insurance_details" string="Insurance Details">
+                <page name="insurance_details" string="Detalles de Seguro">
                     <group>
                         <group>
                             <field name="insurance_company_id"/>
@@ -74,40 +74,40 @@
                     </group>
                 </page>
             </xpath>
-            <!-- Invisible the smart button Sales on patient -->
+            <!-- Invisible el botón inteligente Ventas en paciente -->
             <xpath expr="//button[@name='action_view_sale_order']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the smart button Purchase on patient -->
+            <!-- Invisible el botón inteligente Compras en paciente -->
             <xpath expr="//button[@name='%(purchase.act_res_partner_2_purchase_order)d']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the smart button Vendor Bill on patient -->
+            <!-- Invisible el botón inteligente Factura de Proveedor en paciente -->
             <xpath expr="//button[@name='%(purchase.act_res_partner_2_supplier_invoices)d']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the smart button On-Time Rate on patient -->
+            <!-- Invisible el botón inteligente Tasa de Puntualidad en paciente -->
             <xpath expr="//button[@icon='fa-truck']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the page Sales Purchases on patient -->
+            <!-- Invisible la página Ventas Compras en paciente -->
             <xpath expr="//page[@name='sales_purchases']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the page Accounting on patient -->
+            <!-- Invisible la página Contabilidad en paciente -->
             <xpath expr="//page[@name='accounting']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'person')]}</attribute>
             </xpath>
-            <!-- Invisible the page Medical Questionnaire on Medical Distributor -->
+            <!-- Invisible la página Cuestionario Médico en Distribuidor Médico -->
             <xpath expr="//page[@name='medical_questionare']"
                    position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'company')]}</attribute>
             </xpath>
-            <!-- Invisible the page X-Ray Report on Medical Distributor -->
+            <!-- Invisible la página Reporte de Rayos X en Distribuidor Médico -->
             <xpath expr="//page[@name='xray_reports']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'company')]}</attribute>
             </xpath>
-            <!-- Invisible the page Insurance Details on Medical Distributor -->
+            <!-- Invisible la página Detalles de Seguro en Distribuidor Médico -->
             <xpath expr="//page[@name='insurance_details']" position="attributes">
                 <attribute name="attrs">{'invisible': [('company_type', '=', 'company')]}</attribute>
             </xpath>

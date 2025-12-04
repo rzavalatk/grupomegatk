@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Data for dental time shift -->
+        <!-- Datos para el cambio de horario dental -->
         <record model="dental.time.shift" id="shift_morning">
             <field name="shift_type">morning</field>
             <field name="start_time">06</field>

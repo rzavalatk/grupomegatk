@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Dental department data -->
+        <!-- Datos del departamento dental  -->
         <record model="hr.department" id="clinical_department">
-            <field name="name">Clinical Department</field>
+            <field name="name">Departamento Clínico</field>
         </record>
         <record model="hr.department" id="telehealth_department">
-            <field name="name">Telehealth Department</field>
+            <field name="name">Departamento de Telemedicina</field>
         </record>
         <record model="hr.department" id="quality_assurance">
-            <field name="name">Quality Assurance</field>
+            <field name="name">Aseguramiento de Calidad</field>
         </record>
     </data>
 </odoo>

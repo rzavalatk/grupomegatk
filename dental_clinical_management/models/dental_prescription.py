@@ -164,7 +164,7 @@ class DentalPrescriptionLines(models.Model):
                                     help="Nombre del medicamento")
     generic_name = fields.Char(string="Nombre Genérico",
                                related="medicament_id.generic_name",
-                               help="Nombre genérico del medicamento")
+                               help="Nombre del medicamento")
     dosage_strength = fields.Integer(string="Concentración",
                                      related="medicament_id.dosage_strength",
                                      help="Concentración del medicamento")

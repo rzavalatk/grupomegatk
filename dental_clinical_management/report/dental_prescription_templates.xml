@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Pdf template of Prescription Report-->
+    <!-- Plantilla PDF del Reporte de Prescripción-->
     <template id="report_prescription">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
@@ -8,38 +8,38 @@
                     <div class="page">
                         <div class="oe_structure"/>
                         <div class="text-center">
-                            <h2>DENTAL PRESCRIPTION REPORT</h2>
+                            <h2>REPORTE DE PRESCRIPCIÓN DENTAL</h2>
                         </div>
                         <br/>
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
                                     <td>
-                                        Patient Name :
+                                        Nombre del Paciente :
                                         <span t-field="o.patient_id"/>
                                     </td>
                                     <td>
-                                        Doctor Name :
+                                        Nombre del Doctor :
                                         <span t-field="o.prescribed_doctor_id"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        Appointment ID :
+                                        ID de Cita :
                                         <span t-field="o.appointment_id"/>
                                     </td>
                                     <td>
-                                        Treatment :
+                                        Tratamiento :
                                         <span t-field="o.treatment_id"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        Token NO :
+                                        Ficha NO :
                                         <span t-field="o.token_no"/>
                                     </td>
                                     <td>
-                                        Date :
+                                        Fecha :
                                         <span t-field="o.prescription_date"/>
                                     </td>
                                 </tr>
@@ -48,25 +48,25 @@
                         <table class="table table-bordered mt32">
                             <thead>
                                 <tr>
-                                    <th>Sl.No</th>
+                                    <th>No.</th>
                                     <t t-set="counter" t-value="0"/>
                                     <th class="text-center">
-                                        <span>Medicament</span>
+                                        <span>Medicamento</span>
                                     </th>
                                     <th class="text-center">
-                                        <span>Generic Name</span>
+                                        <span>Nombre Genérico</span>
                                     </th>
                                     <th class="text-center">
-                                        <span>Dosage Strength</span>
+                                        <span>Dosis</span>
                                     </th>
                                     <th class="text-center">
-                                        <span>Medicament Form</span>
+                                        <span>Forma del Medicamento</span>
                                     </th>
                                     <th class="text-center">
-                                        <span>Quantity</span>
+                                        <span>Cantidad</span>
                                     </th>
                                     <th class="text-center">
-                                        <span>Frequency</span>
+                                        <span>Frecuencia</span>
                                     </th>
                                 </tr>
                             </thead>
