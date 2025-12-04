@@ -204,7 +204,22 @@ class GpsDeviceTrip(models.Model):
                                 _logger.debug(f"Ubicación duplicada encontrada, omitiendo: {timestamp}")
                                 continue
                             
-                            # Crear una nueva ubicación solo si es nueva
+                            # Obtener datos de calidad GPS
+                            accuracy = pos.get('accuracy', 0)  # Precisión en metros
+                            speed = pos.get('speed', 0)  # Velocidad
+                            valid = pos.get('valid', True)  # Posición válida
+                            
+                            # Filtrar posiciones de baja calidad para mejor routing
+                            # Solo registrar si la precisión es menor a 50 metros y la posición es válida
+                            if not valid:
+                                _logger.debug(f"Posición GPS inválida, omitiendo: {timestamp}")
+                                continue
+                                
+                            if accuracy and accuracy > 50:
+                                _logger.debug(f"Baja precisión GPS ({accuracy}m), omitiendo: {timestamp}")
+                                continue
+                            
+                            # Crear una nueva ubicación solo si es nueva y de buena calidad
                             self.env['gps.device.location'].create({
                                 'trip_id': trip.id,
                                 'device_id': traccar_unique_id,
@@ -212,9 +227,12 @@ class GpsDeviceTrip(models.Model):
                                 'longitude': pos.get('longitude'),
                                 'timestamp': timestamp,
                                 'address': pos.get('address', ''),
+                                'accuracy': accuracy,
+                                'speed': speed,
+                                'valid': valid,
                             })
                             new_positions_count += 1
-                            _logger.info(f"Nueva ubicación creada: {timestamp} - Lat: {pos.get('latitude')}, Lon: {pos.get('longitude')}")
+                            _logger.info(f"Nueva ubicación creada: {timestamp} - Lat: {pos.get('latitude')}, Lon: {pos.get('longitude')}, Precisión: {accuracy}m, Velocidad: {speed}km/h")
                     except Exception as e:
                         _logger.error(f"Error al crear la ubicación: {e}")
                         
