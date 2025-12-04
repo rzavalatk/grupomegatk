@@ -33,7 +33,10 @@
                 }
 
                 .full-card {
-                    margin-top: 25px;
+                    position: absolute;
+                    top: 50%;
+                    right:20px;
+                    transform: translateY(-50%);
                     color: #242733;
                     border-radius: 10px;
                     background-color: white;
