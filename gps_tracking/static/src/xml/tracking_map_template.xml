@@ -35,13 +35,14 @@
                 }
                 
                 .grid-panel {
-                    display: grid;
-                    grid-template-rows: auto 1fr auto;
+                    display: flex;
+                    flex-direction: column;
                     color: #242733;
                     background-color: white;
                     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
                     width: 400px;
-                    height: 100vh;
+                    height: auto;
+                    max-height: 100vh;
                     overflow-y: auto;
                 }
 
@@ -63,12 +64,12 @@
                 }
 
                 .grid-section-1 {
-                    display: grid;
-                    grid-template-rows: repeat(3, 1fr);
+                    display: flex;
+                    flex-direction: column;
                     align-items: center;
-                    justify-items: center;
-                    padding: 20px;
-                    gap: 12px;
+                    justify-content: center;
+                    padding: 30px 20px;
+                    gap: 15px;
                 }
 
                 .grid-section-2 {
@@ -76,7 +77,8 @@
                     grid-template-rows: repeat(2, 1fr);
                     grid-template-columns: repeat(2, 1fr);
                     padding: 20px;
-                    gap: 12px;
+                    gap: 15px;
+                    margin-bottom: 20px;
                 }
 
                 .banner {
@@ -103,26 +105,36 @@
 
                 .card-input {
                     border: none;
-                    border-bottom-style: outset;
-                    width: 50%;
+                    border-bottom: 2px solid #004080;
+                    width: 80%;
                     background-color: #f2f2f2;
                     margin-top: 10px;
-                    font-size: 20px;
+                    padding: 10px;
+                    font-size: 18px;
                     text-align: center;
+                    border-radius: 4px 4px 0 0;
                 }
 
                 #msg-error {
                     font-size: 14px;
-                    color: #e60000; 
+                    color: #e60000;
+                    min-height: 20px;
                 }
 
                 .card-btn {
-                    padding: 10px;
-                    font-size: 14px;
+                    padding: 12px 30px;
+                    font-size: 16px;
                     font-weight: bold;
-                    color: #000;
-                    background-color: #70db70;
+                    color: white;
+                    background-color: #004080;
                     border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+
+                .card-btn:hover {
+                    background-color: #0080ff;
                 }
 
                 .trip-data {
