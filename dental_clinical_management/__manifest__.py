@@ -26,7 +26,6 @@
         'data/insurance_company_data.xml',
         'data/medicine_frequency_data.xml',
         'data/dental_time_shift_data.xml',
-        'data/website_menu.xml',
         'views/dental_time_shift_views.xml',
         'views/dental_department_views.xml',
         'views/dental_doctor_views.xml',
