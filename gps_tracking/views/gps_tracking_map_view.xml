@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="gps_map_action" model="ir.actions.client">
+        <field name="name">Mapa GPS</field>
+        <field name="tag">gps_map_tag</field>
+    </record>
+
+    <menuitem id="menu_gps_device_map" 
+        name="Ver Mapa" 
+        parent="menu_gps_device_root" 
+        action="gps_map_action"
+        groups="gps_tracking.group_gps_admin" 
+        sequence="2"/>
+
+</odoo>

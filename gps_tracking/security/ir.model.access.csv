@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gps_device_location,access_gps_device_location,model_gps_device_location,group_gps_user,1,1,0,0
+access_gps_device_trip,access_gps_device_trip,model_gps_device_trip,group_gps_user,1,1,1,0
