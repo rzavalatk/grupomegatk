@@ -36,7 +36,7 @@
         <field ref="model_help_ticket" name="model_id"/>
         <field name="groups"
                eval="[(4, ref('odoo_website_helpdesk.helpdesk_team_leader'))]"/>
-        <field name="domain_force">['&amp;', ('team_head.id', '=', user.id), ('stage_id.group_ids.users', 'in', user.id)]</field>
+        <field name="domain_force">[('stage_id.group_ids.users', 'in', user.id)]</field>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="True"/>
         <field name="perm_create" eval="True"/>

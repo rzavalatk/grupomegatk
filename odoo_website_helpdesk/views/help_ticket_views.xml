@@ -10,7 +10,7 @@
         <record id="help_ticket_my_ticket_action" model="ir.actions.act_window">
             <field name="name">My Helpdesk</field>
             <field name="res_model">help.ticket</field>
-            <field name="domain">[('assigned_user','=',uid), ('team_head','=', uid)]</field>
+            <field name="domain">[('assigned_user','=',uid)]</field>
             <field name="view_mode">kanban,tree,form,calendar,activity,pivot,graph</field>
         </record>
 <!--    Ticket report action-->
