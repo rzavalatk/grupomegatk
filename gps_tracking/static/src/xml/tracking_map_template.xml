@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="TrackingMap">
+        <div>
+            <style>
+                html, body {
+                    margin: 0;
+                    padding: 0;
+                    height: 100vh;
+                    overflow: hidden;
+                }
+
+                .menu-container {
+                    position: relative;
+                    height: 100vh;
+                    width: 100%;
+                }
+
+                @media(max-width: 768px) {
+                    .menu-container {
+                        flex-direction: column;
+                    }
+                }
+
+                #map {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100vh;
+                    width: 100%;
+                    z-index: 1;
+                }
+
+                @media(max-width: 768px) {
+                    #map {
+                        height: 60vh;
+                    }
+                }
+                
+                .grid-panel {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    color: #242733;
+                    background-color: white;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                    width: 380px;
+                    height: auto;
+                    max-height: calc(100vh - 40px);
+                    overflow-y: auto;
+                    border-radius: 12px;
+                    z-index: 1000;
+                }
+
+                .grid-map {
+                    position: relative;
+                    height: 100vh;
+                    width: 100%;
+                }
+
+                @media(max-width: 768px) {
+                    .grid-panel {
+                        width: 100%;
+                        height: 40vh;
+                        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .grid-map {
+                        height: 60vh;
+                    }
+                }
+
+                .grid-section-1 {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 30px 20px;
+                    gap: 15px;
+                }
+
+                .grid-section-2 {
+                    display: grid;
+                    grid-template-rows: repeat(2, 1fr);
+                    grid-template-columns: repeat(2, 1fr);
+                    padding: 20px;
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .banner {
+                    background-image: linear-gradient(to right, #004080, #0080ff);
+                    height: 80px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 12px 12px 0 0;
+                }
+
+                @media(max-width: 768px) {
+                    .banner{
+                        height: 60px;
+                    }
+                }
+
+                .card-title {
+                     font-size: 30px;
+                     font-weight: bold;
+                     color: #242733;
+                     text-align: center
+                }
+
+                .card-input {
+                    border: none;
+                    border-bottom: 2px solid #004080;
+                    width: 80%;
+                    background-color: #f2f2f2;
+                    margin-top: 10px;
+                    padding: 10px;
+                    font-size: 18px;
+                    text-align: center;
+                    border-radius: 4px 4px 0 0;
+                }
+
+                #msg-error {
+                    font-size: 14px;
+                    color: #e60000;
+                    min-height: 20px;
+                }
+
+                .card-btn {
+                    padding: 12px 30px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: white;
+                    background-color: #004080;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+
+                .card-btn:hover {
+                    background-color: #0080ff;
+                }
+
+                .trip-data {
+                    font-size: 18px;
+                    font-weight: bold;
+                    padding: 10px;
+                }
+
+                #trip-employee, #trip-date, #trip-device, #trip-time {
+                    font-size: 16px;
+                    font-weight: 400;
+                    padding: 10px;
+                    margin-bottom: 0;    
+                }
+
+                .leaflet-pane.leaflet-overlay-pane svg path.my-route-line {
+                    stroke: #0099ff; /* Tu color deseado */
+                    stroke-width: 5px; /* Tu ancho deseado */
+                    opacity: 1; /* Tu opacidad deseada */
+                    /* Puedes añadir !important si el color sigue siendo sobrescrito,
+                       pero intenta sin él primero:
+                       stroke: #0099ff !important;
+                       stroke-width: 5px !important;
+                       opacity: 1 !important;
+                    */
+                }
+
+                .leaflet-routing-container.leaflet-routing-alt {
+                    display: none !important;
+                }
+                
+                /* Si la regla anterior no funciona, prueba con una más genérica para LRM */
+                .leaflet-routing-container {
+                    display: none !important;
+                }
+                
+                /* Opcional: Si solo quieres ocultar el texto pero mantener el contenedor si hay otros elementos */
+                .leaflet-routing-alternatives {
+                    display: none !important;
+                }
+            </style>
+            <div id="root">
+                <div class="menu-container">
+                    <div class="grid-map">
+                        <div id="map"></div>
+                    </div>
+                    <div class="grid-panel">
+                        <div class="banner"></div>
+                        <div class="grid-section-1">
+                            <h2 class="card-title">Ingresar codigo de viaje</h2>
+                            <input type="text" class="card-input" id="id_device" pattern='\d{6}' minlength="8" maxlength="8" required="true"/>
+                            <div>
+                                <span id="msg-error"></span>
+                            </div>
+                            <div class="">
+                                <button class="card-btn">Mostrar ruta</button>
+                            </div>
+                        </div>
+                        <div class="grid-section-2">
+                            <div>
+                                <label class="trip-data">Empleado:</label>
+                                <p id="trip-employee"></p>
+                            </div>
+                            <div >
+                                <label class="trip-data">ID Dispositivo:</label>
+                                <p id="trip-device"></p>
+                            </div>
+                            <div >
+                                <label class="trip-data">Fecha:</label>
+                                <p id="trip-date"></p>
+                            </div>
+                            <div >
+                                <label class="trip-data">Tiempo Usado:</label>
+                                <p id="trip-time"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+    </t>
+</templates>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_update_gps_positions" model="ir.cron">
+        <field name="name">Actualizar GPS cada 15 segundos</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="gps_tracking.model_gps_device_trip"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_fetch_positions()</field>
+        <field eval="False" name="doall"/>
+    </record>
+</odoo>
