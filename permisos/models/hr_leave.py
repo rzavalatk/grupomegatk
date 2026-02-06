@@ -144,7 +144,7 @@ class HrLeave(models.Model):
                 leave_days = mapped_days[holiday.employee_id.id][holiday.holiday_status_id.id]
                 if float_compare(leave_days['remaining_leaves'], 0, precision_digits=2) == -1 \
                         or float_compare(leave_days['virtual_remaining_leaves'], 0, precision_digits=2) == -1:
-                    raise ValidationError(_(
+                    raise ValidationError((
                         'No hay suficientes días disponibles para este tipo de permiso.\n'
                         'Por favor revise también los permisos pendientes de validación.'
                     ))
@@ -156,7 +156,7 @@ class HrLeave(models.Model):
                             or float_compare(leave_days['virtual_remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1:
                         unallocated_employees.append(employee.name)
                 if unallocated_employees:
-                    raise ValidationError(_(
+                    raise ValidationError((
                         'No hay suficientes días disponibles para este tipo de permiso.\n'
                         'Por favor revise también los permisos pendientes de validación.\n'
                         'Los empleados sin días asignados son:\n%s'
