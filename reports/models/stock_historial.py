@@ -196,7 +196,7 @@ class StockReportHistory(models.Model):
         
         encabezados_reports_differences = ['Codigo de barras', 'Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
         col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
-        formatos_reports_differences = [None,None, number_format, number_format, number_format, currency_format, currency_format, None, None]  # Formatos para cada columna
+        formatos_reports_differences = [None,None, number_format, number_format, number_format, number_format, number_format, None, None]  # Formatos para cada columna
         
         # Preparar los datos 
         datos_lines_from_report = [
