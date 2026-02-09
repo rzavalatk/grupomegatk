@@ -88,7 +88,8 @@ class Afiliados(models.Model):
 	def _credit_debit_get(self):
 		credit = 0
 		debit = 0
-		tables, where_clause, where_params = self.env['account.move.line'].with_context(state='posted', company_id=self.env.user.company_id.id)._query_get()
+		company_id = self.company_id.id or self.env.company.id
+		tables, where_clause, where_params = self.env['account.move.line'].with_context(state='posted', company_id=company_id)._query_get()
 		where_params = [tuple(self.res_partner_prov_id.mapped('id'))] + where_params
 		if where_clause:
 			where_clause = 'AND ' + where_clause

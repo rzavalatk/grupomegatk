@@ -42,7 +42,9 @@ class BanksPayment(models.Model):
 			pay.write({'name': n})
 
 	def get_char_seq(self, journal_id, doc_type):
-		jr = self.env["account.journal"].search([('id', '=', journal_id)])
+		jr = self.env["account.journal"].sudo().browse(journal_id)
+		if not jr:
+			return False
 		for seq in jr.secuencia_ids:
 			if seq.move_type == doc_type:
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)

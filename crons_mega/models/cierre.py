@@ -494,13 +494,14 @@ class CierreDiarioLine(models.Model):
                 total = 0
             record.total = round(total, 2)
 
-    @api.depends('credito', 'journal_id.name')
+    @api.depends('credito', 'journal_id')
     def _name_(self):
         for record in self:
             if record.credito:
                 record.name = "Al credito"
             else:
-                record.name = record.journal_id.name
+                journal = record.journal_id.sudo() if record.journal_id else False
+                record.name = journal.name if journal else False
 
     name = fields.Char("Nombre", compute=_name_)
     cierre_id = fields.Many2one("account.cierre")

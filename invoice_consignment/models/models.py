@@ -110,7 +110,7 @@ class LineasFacturas(models.Model):
         self.name = self.product_id.display_name
         if context.get('de_consignacion'):
             data = self.env['res.config.settings'].sudo().get_data_consignacion()
-            journal = self.env['account.journal'].browse(data['journal_id'])
+            journal = self.env['account.journal'].sudo().browse(data['journal_id'])
             self.account_id = journal.default_debit_account_id.id
             self.invoice_line_tax_ids = None
             self.precio_id = None

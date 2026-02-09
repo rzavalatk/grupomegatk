@@ -60,7 +60,9 @@ class Debit(models.Model):
 				self.es_moneda_base = True
 
 	def get_char_seq(self, journal_id, doc_type):
-		jr = self.env["account.journal"].search([('id', '=', journal_id)])
+		jr = self.env["account.journal"].sudo().browse(journal_id)
+		if not jr:
+			return False
 		for seq in jr.secuencia_ids:
 			if seq.move_type == "Débitos":
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)
@@ -68,7 +70,8 @@ class Debit(models.Model):
 	def get_msg_number(self):
 		if self.journal_id and self.state == 'draft' and self.number == False:
 			flag = False
-			for seq in self.journal_id.secuencia_ids:
+			journal = self.journal_id.sudo()
+			for seq in journal.secuencia_ids:
 				if seq.move_type == self.doc_type:
 					if not self.number_calc:
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
@@ -84,7 +87,8 @@ class Debit(models.Model):
 	def update_seq(self):
 		deb_obj = self.env["banks.debit"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
 		n = ""
-		for seq in self.journal_id.secuencia_ids:
+		journal = self.journal_id.sudo()
+		for seq in journal.secuencia_ids:
 			if seq.move_type == self.doc_type:
 				n = seq.prefix + '%%0%sd' % seq.padding % (seq.number_next_actual + 1)
 		for db in deb_obj:

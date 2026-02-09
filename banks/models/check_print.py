@@ -50,7 +50,7 @@ class reporte(models.AbstractModel):
 		return datetime.strftime(fecha ,'%Y-%m-%d %H:%M:%S')
 
 	def _check_format(self,journal_id):
-		jour_pool = self.env['account.journal']
+		jour_pool = self.env['account.journal'].sudo()
 		check_book_pool = self.pool.get('banks.checkbook')
 		check_book_obj = check_book_pool.browse(self.cr,self.uid,check_book_pool.search(self.cr,self.uid,[]))
 		journal_obj = jour_pool.browse(self.cr,self.uid,journal_id)
