@@ -7,7 +7,7 @@
 						<div class="page" style="padding-top:43px !important;">
 							<div class="container" style="border-width: thin;border-style: dashed;">
 								<div class="col-12" style="border-bottom:1px solid;">
-									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<t t-set="totalsession" t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
 									<h1 style="padding-top: 20px !important;"><span t-esc="doc.name"></span> <small style="color:grey;"><span class="float-right" t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></small></h1>
 									<h4><small style="color:grey;"> Total Session : <strong t-field="doc.nbr_channel"/></small> |
 										<small style="color:grey;"> Happy Customer : <strong t-if="doc.rating_percentage_satisfaction > 0" t-field="doc.rating_percentage_satisfaction"/>  <strong t-else=" ">0</strong> % </small> | 
@@ -18,14 +18,14 @@
 									<h3 style="padding-top: 12px !important;"> The Team </h3>
 								</div>
 								<t t-foreach="doc.user_ids" t-as="user">
-									<t t-set='connect' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
-									<t t-set='connect_rating_5' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+									<t t-set='connect' t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set='connect_rating_5' t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
-									<t t-set='connect_rating_10' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+									<t t-set='connect_rating_10' t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
-									<t t-set='connect_rating_1' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+									<t t-set='connect_rating_1' t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
-									<t t-set='connect_rating_0' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+									<t t-set='connect_rating_0' t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
 														 
 									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
@@ -96,7 +96,7 @@
 							<t t-set="user" t-value="request.env.user"/>
 							<div class="container" style="border-width: thin;border-style: dashed;">
 								<div class="col-12" style="border-bottom:1px solid;">
-									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<t t-set="totalsession" t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
 									<h1 style="padding-top: 20px !important;"><span t-field="doc.name"></span> <small style="color:grey;"><span class="float-right" t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></small> </h1>
 									<h4>Total Session : <small><strong t-field="doc.nbr_channel"/></small> | 
 										My Session : <small><strong t-esc="len(totalsession)"/></small> |
@@ -105,14 +105,14 @@
 									<h3> <t t-esc="user.name"/> <small> Report Period - <t t-esc="form['from_date']"/> To <t t-esc="form['to_date']"/> </small></h3>
 								</div>
 								<t t-foreach="monthlist" t-as="month">
-									<t t-set="connect" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
-									<t t-set="connect_rating_5" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set="connect_rating_5" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
-									<t t-set="connect_rating_10" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_10" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
-									<t t-set="connect_rating_1" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_1" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
-									<t t-set="connect_rating_0" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_0" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
 														 
 									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
@@ -194,18 +194,18 @@
 							<t t-set="users" t-value="request.env['res.users'].sudo().search([('id','in',form['user_ids']),('id','in',doc.user_ids.ids)])"/>
 							<t t-foreach="users" t-as="user">
 								<div class="col-12">
-									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<t t-set="totalsession" t-value="request.env['discuss.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
 									<h4> <t t-esc="user.name"/> | <small> My Session : <strong t-esc="len(totalsession)"/></small> </h4>
 								</div>
 								<t t-foreach="monthlist" t-as="month">
-									<t t-set="connect" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
-									<t t-set="connect_rating_5" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set="connect_rating_5" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
-									<t t-set="connect_rating_10" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_10" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
-									<t t-set="connect_rating_1" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_1" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
-									<t t-set="connect_rating_0" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+									<t t-set="connect_rating_0" t-value="request.env['discuss.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
 														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
 									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
 									<t t-if="len(connect_rating_5) > 0" t-set="connect_rating_5" t-value="(len(connect_rating_5) * 100 ) / len(connect)"/>

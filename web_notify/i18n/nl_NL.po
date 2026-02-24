@@ -20,20 +20,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:44
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Danger"
 msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:60
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Default"
 msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:54
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Information"
 msgstr "Informatie"
 
@@ -63,14 +63,20 @@ msgid "Notify Warning Channel Name"
 msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:75
-#, python-format
+#. odoo-javascript
+#: code:addons/web_notify/static/src/js/services/notification_services.esm.js:0
+msgid "Open"
+msgstr ""
+
+#. module: web_notify
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Sending a notification to another user is forbidden."
 msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:38
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Success"
 msgstr ""
 
@@ -106,11 +112,14 @@ msgstr ""
 
 #. module: web_notify
 #: model:ir.model,name:web_notify.model_res_users
-msgid "Users"
-msgstr "Gebruikers"
+msgid "User"
+msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:50
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Warning"
 msgstr "Waarschuwing"
+
+#~ msgid "Users"
+#~ msgstr "Gebruikers"

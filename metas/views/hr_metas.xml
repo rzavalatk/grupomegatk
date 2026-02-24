@@ -5,11 +5,11 @@
             <field name="name">hr.metas.tree</field>
             <field name="model">hr.metas</field>
             <field name="arch" type="xml">
-                <tree >
+                <list>
                     <field name="name"/>
                     <field name="tipo_meta"/>
                     <field name="value"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -37,7 +37,7 @@
             <field name="name">Metas a asignar</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.metas</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <menuitem name="Metas para asignar" id="hr_metas_menu" sequence = "4" parent="fields_megatk.hr_employe_equipos" action = "action_hr_metas"/>

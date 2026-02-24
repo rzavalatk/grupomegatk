@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
 
 {
     'name': "Facturación Electrónica Honduras",
@@ -9,8 +8,8 @@
     'description': """
          Regulación del SAR para regimene de facturación para autoimpresores
     """,
-    'author': 'César Alejandro Rodriguez.',
-    'version': '1.0',
+    'author': 'David Zuniga.',
+    'version': '18.0',
     'license': 'Other proprietary',
     'maintainer': '',
     'contributors': '',

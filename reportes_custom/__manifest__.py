@@ -5,21 +5,24 @@
     'summary': """
         Reportes de impresión (Factura,Cotización,Orden de entrega,etc...)""",
 
-    'author': "Romel Zavala",
+    'author': "Romel Zavala / David Zuniga",
     'website': "https://www.megatk.net",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': "12.0.1.0.0",
+    'version': "18.0.1.0.0",
     "license": "LGPL-3",
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fields_megatk','fields_megatk_stock'],
+    'depends': ['base','fields_megatk','fields_megatk_stock','formatos_papel_mega'],
 
     # always loaded
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'wizard/wizard_sign.xml',
         'reports/baecode_products_stickers.xml',
         'reports/reports.xml',
         'reports/factura_custom_print_view.xml',
@@ -35,9 +38,5 @@
         'reports/stock_picking_custom_print_view_pos.xml',
         'reports/cotizacion_custom_proforma_view.xml',
         'reports/report_certificate_deposit.xml',
-        'wizard/wizard_sign.xml',
-        'views/stock.xml',
-        'security/groups.xml',
-        'security/ir.model.access.csv'
     ],
 }

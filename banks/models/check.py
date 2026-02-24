@@ -3,7 +3,7 @@ from odoo import models, fields, api, _
 import odoo.addons.decimal_precision as dp
 import math
 from datetime import datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class Check(models.Model):
@@ -11,9 +11,8 @@ class Check(models.Model):
 	_rec_name = 'number'
 	_inherit = ['mail.thread']
 	_order = 'date desc, number desc'
-	_description = "description"
+	_description = "Cheques y Transferencias Bancarias"
 
-	#@api.model_create_multi
 	def print_chek(self):
 		if not self.princhek:
 			self.princhek = True
@@ -26,7 +25,6 @@ class Check(models.Model):
 
 	def get_totalt(self):
 		self.amount_total_text = ''
-
 		if self.currency_id:
 			self.amount_total_text = self.to_word(self.total)
 		else:
@@ -240,22 +238,6 @@ class Check(models.Model):
 		indixe = indixe - 8
 		numer = self.number
 		self.numero_chek = numer[indixe:indixe+8]
-
-		
-	"""def get_msg_number(self):
-		if self.journal_id and self.state == 'draft':
-			flag = False
-			if not self.cheque_anulado:
-				for seq in self.journal_id.secuencia_ids:
-					#if seq.move_type == self.doc_type:
-					if seq.move_type:
-						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
-						flag = True
-					if not flag:
-						self.msg = "No existe numeración para este banco, verifique la configuración"
-						self.number_calc = ""
-					else:
-						self.msg = """""
     
 	def get_msg_number(self):
 		if self.journal_id and self.state == 'draft':
@@ -299,8 +281,6 @@ class Check(models.Model):
 			#self.msg = "No se puede calcular el número en estado diferente a borrador o sin un banco asociado"
 			self.number_calc = ""
 			self.msg = ""
-
-
 
 	def get_char_seq(self, journal_id, doc_type):
 		jr = self.env["account.journal"].search([('id', '=', journal_id)])
@@ -359,17 +339,16 @@ class Check(models.Model):
 				}))
 			self.check_lines = lineas
 
-	@api.model
+	@api.model_create_multi
 	def create(self, vals):
 		vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
 		check = super(Check, self).create(vals)
 		return check
 
-	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated' or move.state == 'anulated':
-				raise Warning(_('No puede eliminar registros contabilizados'))
+				raise UserError(_('No puede eliminar registros contabilizados'))
 		return super(Check, self).unlink()
 
 
@@ -387,7 +366,6 @@ class Check(models.Model):
 				debit_line += 0
 		self.difference = self.total - (debit_line - credit_line)
 
-
 	@api.onchange("journal_id")
 	def onchangejournal(self):
 		self.get_msg_number()
@@ -397,11 +375,9 @@ class Check(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	#@api.model_create_multi
 	def set_borrador(self):
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
@@ -409,7 +385,6 @@ class Check(models.Model):
 			#self.update_seq()
 			self.number = self.env["ir.sequence"].search([('id', '=', self.get_sequence())]).next_by_id()
 
-	#@api.model_create_multi
 	def action_anulate_cheque(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
@@ -417,17 +392,16 @@ class Check(models.Model):
 		self.write({'state': 'anulated'})
 		self.cheque_anulado = True
 
-	#@api.model_create_multi
 	def action_validate(self):
 		if not self.cheque_anulado:
 			if not self.number_calc:
-				raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
+				raise UserError(_("El banco no cuenta con configuraciones/parametros para registrar cheques de terceros"))
 		if not self.check_lines:
-			raise Warning(_("No existen detalles de movimientos a registrar"))
+			raise UserError(_("No existen detalles de movimientos a registrar"))
 		if self.total < 0:
-			raise Warning(_("El total debe de ser mayor que cero"))
+			raise UserError(_("El total debe de ser mayor que cero"))
 		if not round(self.difference, 2) == 0:
-			raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
+			raise UserError(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
 		self.write({'state': 'validated'})
 		if not self.cheque_anulado:

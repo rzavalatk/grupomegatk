@@ -1,434 +1,232 @@
-odoo.define('control_visitas.visitas_menu_action', function (require) {
-    "use strict";
-    
-        var AbstractAction = require('web.AbstractAction');
-        var core = require('web.core');
-        var rpc = require('web.rpc');
-        var ajax = require('web.ajax');
-        var CustomDashboard = AbstractAction.extend({
-            template: 'VisitasMenuDashboard',
-    
-            value_filtro: null,
-    
-            filtro_dias: null,
+/** @odoo-module **/
+
+import { registry } from "@web/core/registry";
+import { rpc } from "@web/core/network/rpc";
+import { Component, useState, useRef, onMounted } from "@odoo/owl";
+import { useService } from "@web/core/utils/hooks";
+
+export class VisitasMenuActionComponent extends Component {
+    static template = "VisitasMenuDashboard";
+    static props = ["*"];
+
+    setup() {
+        this.orm = useService("orm");
+        this.root = useRef("root");
+        this.state = useState({
+            value_filtro: "reg_tgu",
+            filtro_dias: "this_day_reg_tgu",
+        });
+
+        onMounted(() => this._initializeDashboard());
+    }
+
+    _getRootEl() {
+        return this.root && this.root.el ? this.root.el : this.el;
+    }
+
+    async _initializeDashboard() {
+        try {
+            const result = await rpc("/control_visitas_user_reg");
+            const isAdmin = result.user_email === 'lmoran@megatk.com' || result.user_email === 'areyes@megatk.com';
             
-            events: {
-                'change #filter_region': '_onChangeFilter',
-                'click .btn-admin': '_onClickDeleteRecord',
-                'click .btn-megatk': '_onClickDeleteRecord',
-                'click .btn-meditek': '_onClickDeleteRecord',
-                'click .btn-lenka': '_onClickDeleteRecord',
-                'click .btn-clinica': '_onClickDeleteRecord',
-                'click .btn-gerencia': '_onClickDeleteRecord',
-                'click .btn-soporte': '_onClickDeleteRecord',
-                'click .btn-otros': '_onClickDeleteRecord',
-            },
+            if (!isAdmin) {
+                if (result.user_reg === "3") {
+                    this.state.value_filtro = "reg_tgu";
+                } else if (result.user_reg === "2") {
+                    this.state.value_filtro = "reg_sps";
+                }
+            }
             
-            _onChangeFilter: function (ev) {
-                ev.preventDefault();
-                console.log("Desde onChangeFilter " + this.value_filtro);
-                this.value_filtro = ev.target.value;
-                console.log("Desde onChangeFilter " + this.value_filtro);
-                this._updateView(this.value_filtro);
-            },
-    
-            _onClickDeleteRecord: function (ev) {
-                ev.preventDefault();
-        
-                console.log("desde deleteRecord " + ev.currentTarget.id);
-                var tienda = ev.currentTarget.id;
-    
-                this._deleteRecord(tienda);
-            },
+            const root = this._getRootEl();
+            if (!root) {
+                return;
+            }
+
+            // Set initial filtro_dias
+            const filterSelect = root.querySelector("#filter_selection");
+            if (filterSelect) {
+                this.state.filtro_dias = filterSelect.value + (this.state.value_filtro === "reg_tgu" ? "_tgu" : "_sps");
+            }
             
-            _deleteRecord: function (tienda) {
-                var self = this;
-                var reg = "";   
-                var zona = "";
-                var clave = "borrar_";
-                if (this.value_filtro == "reg_tgu") {
-                    zona = "TGU";
-                    reg = "_tgu";
-                } else if (this.value_filtro == "reg_sps") {
-                    zona = "SPS";
-                    reg = "_sps";
+            await this._updateView(this.state.value_filtro);
+        } catch (error) {
+            console.error("Error initializing dashboard:", error);
+        }
+    }
+
+    _getResultValue(result, field, reg) {
+        if (!result) {
+            return 0;
+        }
+        const withReg = `${field}${reg}`;
+        if (Object.prototype.hasOwnProperty.call(result, withReg)) {
+            return result[withReg];
+        }
+        if (Object.prototype.hasOwnProperty.call(result, field)) {
+            return result[field];
+        }
+        return 0;
+    }
+
+    _onChangeFilter(ev) {
+        ev.preventDefault();
+        this.state.value_filtro = ev.target.value;
+        this._updateView(this.state.value_filtro);
+    }
+
+    async _onClickDeleteRecord(ev) {
+        ev.preventDefault();
+        const tienda = ev.currentTarget.id;
+        await this._deleteRecord(tienda);
+    }
+
+    async _deleteRecord(tienda) {
+        const reg = this.state.value_filtro === "reg_tgu" ? "_tgu" : "_sps";
+        const zona = this.state.value_filtro === "reg_tgu" ? "TGU" : "SPS";
+
+        const methods = {
+            administracion: { element: "admin_value", field: "admin", method: "borrar_administracion" },
+            tienda_megatk: { element: "megatk_value", field: "megatk", method: "borrar_tienda_megatk" },
+            tienda_meditek: { element: "meditek_value", field: "meditek", method: "borrar_tienda_meditek" },
+            lenka: { element: "lenka_value", field: "lenka", method: "borrar_lenka" },
+            clinica: { element: "clinica_value", field: "clinica", method: "borrar_clinica" },
+            gerencia: { element: "gerencia_value", field: "gerencia", method: "borrar_gerencia" },
+            soporte: { element: "soporte_value", field: "soporte", method: "borrar_soporte" },
+            otros: { element: "otros_value", field: "otros", method: "borrar_otros" },
+        };
+
+        if (methods[tienda]) {
+            try {
+                const result = await this.orm.call('control.visitas', methods[tienda].method, [zona, this.state.filtro_dias]);
+                const root = this._getRootEl();
+                const el = root ? root.querySelector(`#${methods[tienda].element}`) : null;
+                if (el) {
+                    el.textContent = this._getResultValue(result, methods[tienda].field, reg);
                 }
-    
-                const manejarClickDeleteAdmin = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteMegatk = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#megatk_value").text(resultado[`megatk${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteMeditek = (zona, metodo) => {
-    
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#meditek_value").text(resultado[`meditek${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteLenka = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#lenka_value").text(resultado[`lenka${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteClinica = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteGerencia = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#gerencia_value").text(resultado[`gerencia${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteSoporte = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#soporte_value").text(resultado[`soporte${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-                const manejarClickDeleteOtros = (zona, metodo) => {
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: metodo,
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#otros_value").text(resultado[`otros${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-    
-                if(tienda == "administracion") {
-                    clave = clave + tienda; 
-                    manejarClickDeleteAdmin(zona, clave);
-                } else if (tienda == "tienda_megatk") {
-                    clave = clave + tienda;
-                    manejarClickDeleteMegatk(zona, clave);
-                } else if (tienda == "tienda_meditek") {
-                    clave = clave + tienda;
-                    manejarClickDeleteMeditek(zona, clave);
-                } else if (tienda == "lenka") {
-                    clave = clave + tienda;
-                    manejarClickDeleteLenka(zona, clave);
-                } else if (tienda == "clinica") {
-                    clave = clave + tienda;
-                    manejarClickDeleteClinica(zona, clave);
-                } else if (tienda == "gerencia") {
-                    clave = clave + tienda;
-                    manejarClickDeleteGerencia(zona, clave);
-                } else if (tienda == "soporte") {
-                    clave = clave + tienda;
-                    manejarClickDeleteSoporte(zona, clave);
-                } else if (tienda == "otros") {
-                    clave = clave + tienda;
-                    manejarClickDeleteOtros(zona, clave);
-                }
-            },
-    
-            _updateView: function (value_filtro) {
-                var self = this;
-                var reg = "";
-    
-                if(value_filtro == "reg_tgu") {
-                    reg = "_tgu";
-                    self._updateUI(reg);
-                    
-                } else if(value_filtro == "reg_sps") {
-                    reg = "_sps";
-                    self._updateUI(reg);
-                }
-            },
-    
-            _updateUI: function (reg) {
-                var self = this;
-            
-                // Definir funciones con nombre para manejar los eventos click
-                const manejarClickAdminState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    console.log("filtro dias " + self.filtro_dias);
-                    
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_administracion',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        console.log( "value antes " + self.$el.find("#admin_value").text());
-                        console.log("resultado " + resultado[`admin${reg}`]);
-                        self.$el.find("#admin_value").text(resultado[`admin${reg}`]);
-                        console.log("value despues " +  self.$el.find("#admin_value").text());
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickMegatkState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_tienda_megatk',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#megatk_value").text(resultado[`megatk${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickMeditekState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_tienda_meditek',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#meditek_value").text(resultado[`meditek${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickLenkaState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_lenka',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#lenka_value").text(resultado[`lenka${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickClinicaState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_clinica',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#clinica_value").text(resultado[`clinica${reg}`]);
-                        console.log("result clinica " + resultado[`clinica${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickGerenciaState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_gerencia',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#gerencia_value").text(resultado[`gerencia${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickSoporteState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_soporte',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#soporte_value").text(resultado[`soporte${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                const manejarClickOtrosState = () => {
-                    var zona = reg == "_tgu" ? "TGU" : "SPS";
-                    self._rpc({
-                        model: 'control.visitas',
-                        method: 'visita_otros',
-                        args: [zona, self.filtro_dias],
-                    }).then(function (resultado) {
-                        self.$el.find("#otros_value").text(resultado[`otros${reg}`]);
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
-                }
-            
-                // Obtener los datos iniciales
-                ajax.rpc(`/control_visitas${reg}`).then(function (result) {
-    
-                    console.log("Desde updateui " + reg);
-                    
-                    // Eliminar eventos anteriores para evitar duplicación
-                    self.$el.off('click', '#admin_state');
-                    self.$el.off('click', '#megatk_state');
-                    self.$el.off('click', '#meditek_state');
-                    self.$el.off('click', '#lenka_state');
-                    self.$el.off('click', '#clinica_state');
-                    self.$el.off('click', '#gerencia_state');
-                    self.$el.off('click', '#soporte_state');
-                    self.$el.off('click', '#otros_state');
-            
-                    // Actualizar los valores en la interfaz
-                    self.$el.find("#admin_value").text(result.admin);
-                    self.$el.find("#meditek_value").text(result.meditek);
-                    self.$el.find("#lenka_value").text(result.lenka);
-                    self.$el.find("#clinica_value").text(result.clinica);
-                    self.$el.find("#megatk_value").text(result.megatk);
-                    self.$el.find("#gerencia_value").text(result.gerencia);
-                    self.$el.find("#soporte_value").text(result.soporte);
-                    self.$el.find("#otros_value").text(result.otros);
-                    
-                    console.log("Desde updateui " + result.admin);
-                    console.log("Desde updateui " + result.meditek);
-                    console.log("Desde updateui " + result.lenka);
-                    console.log("Desde updateui " + result.clinica);
-                    console.log("Desde updateui " + result.megatk);
-                    console.log("Desde updateui " + result.gerencia);
-                    console.log("Desde updateui " + result.soporte);
-                    console.log("Desde updateui " + result.otros);
-                    
-            
-                    // Registrar los eventos click con las funciones con nombre
-                    self.$el.on('click', '#admin_state', manejarClickAdminState);
-                    self.$el.on('click', '#megatk_state', manejarClickMegatkState);
-                    self.$el.on('click', '#meditek_state', manejarClickMeditekState);
-                    self.$el.on('click', '#lenka_state', manejarClickLenkaState);
-                    self.$el.on('click', '#clinica_state', manejarClickClinicaState);
-                    self.$el.on('click', '#gerencia_state', manejarClickGerenciaState);
-                    self.$el.on('click', '#soporte_state', manejarClickSoporteState);
-                    self.$el.on('click', '#otros_state', manejarClickOtrosState);
-            
-                    // Manejar el cambio en el filtro
-                    self.$el.find("#filter_selection").off('change').on('change', function (e) {
-                        var target = $(e.target);
-                        var value = target.val();
-                        var val_filter = value + reg;
-                        self.filtro_dias = val_filter;
-                        if (val_filter == `this_day${reg}`) {
-                            
-                            ajax.rpc(`/control_visitas_dia${reg}`).then(function (result) {
-                                self.$el.find("#admin_value").text(result.admin);
-                                self.$el.find("#meditek_value").text(result.meditek);
-                                self.$el.find("#lenka_value").text(result.lenka);
-                                self.$el.find("#clinica_value").text(result.clinica);
-                                self.$el.find("#megatk_value").text(result.megatk);
-                                self.$el.find("#gerencia_value").text(result.gerencia);
-                                self.$el.find("#soporte_value").text(result.soporte);
-                                self.$el.find("#otros_value").text(result.otros);   
-                            });
-                        } else if (val_filter == `this_week${reg}`) {
-                            ajax.rpc(`/control_visitas_semana${reg}`).then(function (result) {
-                                self.$el.find("#admin_value").text(result.admin);
-                                self.$el.find("#meditek_value").text(result.meditek);
-                                self.$el.find("#lenka_value").text(result.lenka);
-                                self.$el.find("#clinica_value").text(result.clinica);
-                                self.$el.find("#megatk_value").text(result.megatk);
-                                self.$el.find("#gerencia_value").text(result.gerencia);
-                                self.$el.find("#soporte_value").text(result.soporte);
-                                self.$el.find("#otros_value").text(result.otros);
-                            });
-                        } else if (val_filter == `this_month${reg}`) {
-                            ajax.rpc(`/control_visitas_mes${reg}`).then(function (result) {
-                                self.$el.find("#admin_value").text(result.admin);
-                                self.$el.find("#meditek_value").text(result.meditek);
-                                self.$el.find("#lenka_value").text(result.lenka);
-                                self.$el.find("#clinica_value").text(result.clinica);
-                                self.$el.find("#megatk_value").text(result.megatk);
-                                self.$el.find("#gerencia_value").text(result.gerencia);
-                                self.$el.find("#soporte_value").text(result.soporte);
-                                self.$el.find("#otros_value").text(result.otros);
-                            });
-                        } else if (val_filter == `this_year${reg}`) {
-                            ajax.rpc(`/control_visitas_anio${reg}`).then(function (result) {
-                                self.$el.find("#admin_value").text(result.admin);
-                                self.$el.find("#meditek_value").text(result.meditek);
-                                self.$el.find("#lenka_value").text(result.lenka);
-                                self.$el.find("#clinica_value").text(result.clinica);
-                                self.$el.find("#megatk_value").text(result.megatk);
-                                self.$el.find("#gerencia_value").text(result.gerencia);
-                                self.$el.find("#soporte_value").text(result.soporte);
-                                self.$el.find("#otros_value").text(result.otros);
-                            });
-                        }
-                    });
-                });
-            },
-    
-            start: function () {
-                var self = this;
-    
-                ajax.rpc('/control_visitas_user_reg').then(function (result) {
-                    if(result.user_email != 'lmoran@megatk.com' || result.user_email != 'areyes@megatk.com') {
-                        if(result.user_reg == "3") {
-                            self.$el.find("#filter_region").val("reg_tgu");
-                        } else if(result.user_reg == "2") {
-                            self.$el.find("#filter_region").val("reg_sps");
-                        }
-                        console.log("Desde start rpc elemento " + self.$el.find("#filter_region").val());
-                        
-                        self.value_filtro = self.$el.find("#filter_region").val();
-                        self.filtro_dias = self.$el.find("#filter_selection").val();
-                        console.log("Desde start rpc value " + self.value_filtro + " filtro " + self.filtro_dias);
-                        self._updateView(self.value_filtro);
-                    } else {
-                        self.$el.find("#filter_region").prop('disabled', false);
-                        self.value_filtro = 'reg_tgu';
-                        self._updateView(self.value_filtro);
-                        
+            } catch (error) {
+                console.error(`Error in delete ${tienda}:`, error);
+            }
+        }
+    }
+
+    async _updateView(valueFiltro) {
+        const reg = valueFiltro === "reg_tgu" ? "_tgu" : "_sps";
+        await this._updateUI(reg);
+    }
+
+    async _updateUI(reg) {
+        try {
+            const response = await rpc(`/control_visitas${reg}`);
+            this._updateDashboardValues(response);
+            this._attachEventListeners(reg);
+        } catch (error) {
+            console.error("Error loading dashboard:", error);
+        }
+    }
+
+    _updateDashboardValues(data) {
+        const root = this._getRootEl();
+        if (!root) {
+            return;
+        }
+        const fields = ['admin', 'meditek', 'lenka', 'clinica', 'megatk', 'gerencia', 'soporte', 'otros'];
+        fields.forEach(field => {
+            const el = root.querySelector(`#${field}_value`);
+            if (el) {
+                el.textContent = data[field] || 0;
+            }
+        });
+    }
+
+    _attachEventListeners(reg) {
+        const root = this._getRootEl();
+        if (!root) {
+            return;
+        }
+        const bindOnce = (el, eventName, handler) => {
+            if (!el) {
+                return;
+            }
+            const key = `bound${eventName}`;
+            if (el.dataset[key] === "1") {
+                return;
+            }
+            el.dataset[key] = "1";
+            el.addEventListener(eventName, handler);
+        };
+
+        // Attach filter change listener
+        const filterSelect = root.querySelector("#filter_selection");
+        if (filterSelect) {
+            bindOnce(filterSelect, "change", (e) => this._onFilterChange(e, reg));
+        }
+
+        // Attach button listeners
+        const buttons = [
+            { id: 'admin_state', method: 'visita_administracion', field: 'admin' },
+            { id: 'megatk_state', method: 'visita_tienda_megatk', field: 'megatk' },
+            { id: 'meditek_state', method: 'visita_tienda_meditek', field: 'meditek' },
+            { id: 'lenka_state', method: 'visita_lenka', field: 'lenka' },
+            { id: 'clinica_state', method: 'visita_clinica', field: 'clinica' },
+            { id: 'gerencia_state', method: 'visita_gerencia', field: 'gerencia' },
+            { id: 'soporte_state', method: 'visita_soporte', field: 'soporte' },
+            { id: 'otros_state', method: 'visita_otros', field: 'otros' },
+        ];
+
+        buttons.forEach(btn => {
+            const el = root.querySelector(`#${btn.id}`);
+            bindOnce(el, "click", async () => {
+                const zona = this.state.value_filtro === "reg_tgu" ? "TGU" : "SPS";
+                try {
+                    const result = await this.orm.call('control.visitas', btn.method, [zona, this.state.filtro_dias]);
+                    const valueEl = root.querySelector(`#${btn.field}_value`);
+                    if (valueEl) {
+                        valueEl.textContent = this._getResultValue(result, btn.field, reg);
                     }
-                })
-    
-                return this._super.apply(this, arguments);
-                        
-            },
-        })
-        core.action_registry.add('control_visitas_tag', CustomDashboard);
-        return CustomDashboard;
-    });
-    
+                } catch (error) {
+                    console.error(`Error calling ${btn.method}:`, error);
+                }
+            });
+        });
+
+        const deleteButtons = [
+            "administracion",
+            "tienda_megatk",
+            "tienda_meditek",
+            "lenka",
+            "clinica",
+            "gerencia",
+            "soporte",
+            "otros",
+        ];
+
+        deleteButtons.forEach((id) => {
+            const el = root.querySelector(`#${id}`);
+            bindOnce(el, "click", async (ev) => {
+                ev.preventDefault();
+                await this._deleteRecord(id);
+            });
+        });
+    }
+
+    async _onFilterChange(ev, reg) {
+        const value = ev.target.value;
+        const valFilter = value + reg;
+        this.state.filtro_dias = valFilter;
+
+        let endpoint = `/control_visitas${reg}`;
+        if (value === 'this_day') endpoint = `/control_visitas_dia${reg}`;
+        else if (value === 'this_week') endpoint = `/control_visitas_semana${reg}`;
+        else if (value === 'this_month') endpoint = `/control_visitas_mes${reg}`;
+        else if (value === 'this_year') endpoint = `/control_visitas_anio${reg}`;
+
+        try {
+            const result = await rpc(endpoint);
+            this._updateDashboardValues(result);
+        } catch (error) {
+            console.error("Error loading filtered data:", error);
+        }
+    }
+}
+
+registry.category("actions").add("control_visitas_tag", VisitasMenuActionComponent);

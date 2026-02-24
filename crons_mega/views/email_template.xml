@@ -352,239 +352,7 @@
             </field>
         </record>
 
-        <!--<record id="email_template_account_invoice_expire" model="mail.template">
-            <field name="name">Facturas Vencidas</field>
-            <field name="model_id" ref="model_invoice_expire_line"/>
-            <field name="subject">Facturas Vencidas</field>
-            <field name="email_from">{{user.email_formatted | safe}}</field>
-            <field name="email_to">{{user.email_formatted | safe}}</field>
-            <field name="body_html" type="html">
-                <style>
-                    .cuadro {
-                    border-color: #000;
-                    border-width: 1px;
-                    border-style: solid;
-                    }}
-
-                    .tamaño_del_cuadro {
-                    width: 900px;
-                    height: 300px;
-                    margin: 0px;
-                    padding: 0px;
-                    }}
-
-                    .texto_centro {
-                    text-align: center;
-                    }}
-
-                    .tabla_centrada{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    }}
-
-                    .th_total{
-                        width: 25%;
-                    }}
-
-                    table {
-                    width: 100%;
-                    border: 1px solid #000;
-                    background-color: black;
-                    }}
-
-                    th,
-                    td {
-                    width: 15%;
-                    text-align: left;
-                    vertical-align: top;
-                    border: 1px solid #000;
-                    border-collapse: collapse;
-                    padding: 0.1em;
-                    background-color: white;
-                    }}
-
-                    caption {
-                    padding: 0.3em;
-                    }}
-                </style>
-                <div class="page">
-                    <p>
-                        Estimado compañero por favor revise las facturas vencidas de sus clientes, 
-                        antes de ver afectado el porcentaje de sus comisiones.
-                    </p>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <h1 class="texto_centro">Facturas Vencidas</h1>
-                    <h3 class="texto_centro"></h3>
-                    <div class="tabla_centrada">
-                        <table>
-                            <thead>
-                                <th>Cliente</th>
-                                <th>N. Factura</th>
-                                <th>Fecha</th>
-                                <th>Fecha de vencimiento</th>
-                                <th>Total</th>
-                                <th>Saldo</th>
-                                <th>Aviso</th>
-                            </thead>
-                            <tbody>
-                                % for row in object.facturas_ids:
-                                <tr>
-                                    <th>{{row.partner_id.name}}</th>
-                                    <th>{{row.number}}</th>
-                                    <th>{{row.date_invoice}}</th>
-                                    <th>{{row.invoice_date_due}}</th>
-                                    <th>{{row.amount_total_signed}}</th>
-                                    <th>{{row.residual}}</th>
-                                    <th>{{row.state_expired}}</th>
-                                </tr>
-                                %endfor
-                            </tbody>
-                        </table>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <h3 class="texto_centro">Recuerde que:</h3>
-                    <ol>
-                        <li>En el 1er Aviso faltan 7 días para perder el 50%</li>
-                        <li>En el 2er Aviso falta 1 día para perder el 50%</li>
-                    </ol>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="footer">
-                        <span>**** Mensaje automático de Odoo, no responder. ****</span>
-                    </div>
-                </div>
-            </field>
-        </record>-->
-
-        <!--<record id="email_template_account_invoice_expire_customer" model="mail.template">
-            <field name="name">Facturas Vencidas para Clientes</field>
-            <field name="model_id" ref="model_invoice_expire_line"/>
-            <field name="subject">Facturas Vencidas</field>
-            <field name="email_from">{{user.email_formatted | safe}}</field>
-            <field name="email_to">{{user.email_formatted | safe}}</field>
-            <field name="body_html" type="html">
-                <style>
-                    .cuadro {
-                    border-color: #000;
-                    border-width: 1px;
-                    border-style: solid;
-                    }}
-
-                    .tamaño_del_cuadro {
-                    width: 900px;
-                    height: 300px;
-                    margin: 0px;
-                    padding: 0px;
-                    }}
-
-                    .texto_centro {
-                    text-align: center;
-                    }}
-
-                    .tabla_centrada{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    }}
-
-                    .th_total{
-                        width: 25%;
-                    }}
-
-                    table {
-                    width: 100%;
-                    border: 1px solid #000;
-                    background-color: black;
-                    }}
-
-                    th,
-                    td {
-                    width: 15%;
-                    text-align: left;
-                    vertical-align: top;
-                    border: 1px solid #000;
-                    border-collapse: collapse;
-                    padding: 0.1em;
-                    background-color: white;
-                    }}
-
-                    caption {
-                    padding: 0.3em;
-                    }}
-                </style>
-                <div class="page">
-                    <p>
-                        Estimado(a) {{object.partner_id.name}},
-                    </p>
-                    <br/>
-                    <br/>
-                    <p>
-                        Este es un servicio con el fin de informarle que tiene una(s) Factura(s) vencida(s)
-                    % if object.show_tabla:
-                    % else :
-                        con {{object.time_due}} dias de retraso
-                    % endif
-                    .
-                    </p>
-                    <p>
-                        Proteja su imagen crediticia, favor realice su pago ahora.
-                    </p>
-                    <p>
-                        Más Información: <b>{{object.company_id.phone}}</b>
-                    </p>
-                    % if object.show_tabla:
-                    <div>
-                        <br/>
-                        <br/>
-                        <h1 class="texto_centro">Facturas</h1>
-                        <h3 class="texto_centro"></h3>
-                        <div class="tabla_centrada">
-                            <table>
-                                <thead>
-                                    <th>N. Factura</th>
-                                    <th>Fecha</th>
-                                    <th>Fecha de vencimiento</th>
-                                    <th>Total</th>
-                                    <th>Saldo</th>
-                                    <th>Mensaje</th>
-                                </thead>
-                                <tbody>
-                                    % for row in object.facturas_ids:
-                                    <tr>
-                                        <th>{{row.number}}</th>
-                                        <th>{{row.date_invoice}}</th>
-                                        <th>{{row.invoice_date_due}}</th>
-                                        <th>{{round(row.amount_total_signed,2)}}</th>
-                                        <th>{{round(row.residual,2)}}</th>
-                                        <th>{{object.rangeDate(row.date_invoice,object.invoice_expire_id.date)}} días vencida </th>
-                                    </tr>
-                                    %endfor
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    % else :
-                        <div>
-                        </div>
-                    % endif
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="footer">
-                        <p>Estamos para servirle,</p>
-                        <p><b>{{object.company_id.name}}</b></p>
-                        <span>**** Mensaje automático de Odoo, no responder. ****</span>
-                    </div>
-                </div>
-            </field>
-        </record>-->
+        
 
         <record id="email_template_marca_productos" model="mail.template">
             <field name="name">Reporte Productos</field>
@@ -598,34 +366,34 @@
                     border-color: #000;
                     border-width: 1px;
                     border-style: solid;
-                    }}
+                    }
 
                     .tamaño_del_cuadro {
                     width: 900px;
                     height: 300px;
                     margin: 0px;
                     padding: 0px;
-                    }}
+                    }
 
                     .texto_centro {
                     text-align: center;
-                    }}
+                    }
 
                     .tabla_centrada{
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    }}
+                    }
 
                     .th_total{
                         width: 25%;
-                    }}
+                    }
 
                     table {
                     width: 100%;
                     border: 1px solid #000;
                     background-color: black;
-                    }}
+                    }
 
                     th,
                     td {
@@ -636,11 +404,11 @@
                     border-collapse: collapse;
                     padding: 0.1em;
                     background-color: white;
-                    }}
+                    }
 
                     caption {
                     padding: 0.3em;
-                    }}
+                    }
                 </style>
                 <div class="page">
                     <h1 class="texto_centro">Reporte Detallado por Producto</h1>

@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
-import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class WizardGenerarfacturainteres(models.TransientModel):
@@ -40,7 +39,7 @@ class WizardGenerarfacturainteres(models.TransientModel):
 
 				val_encabezado = {
 					'name': '',
-					'type': 'out_invoice',
+					'move_type': 'out_invoice',
 					'account_id': obj_prestamo.res_partner_id.property_account_receivable_id.id,
 					'partner_id': obj_prestamo.res_partner_id.id,
 					'journal_id': journal_id,
@@ -62,12 +61,11 @@ class WizardGenerarfacturainteres(models.TransientModel):
 					'amount': self.pago,
 					'currency_id': obj_prestamo.currency_id.id,
 					'journal_id': obj_prestamo.recibir_pagos.id,
-					'payment_date': self.fecha_pago,
-					'communication': obj_prestamo.name,
-					'payment_method_id': 1
+					'date': self.fecha_pago,
+					'ref': obj_prestamo.name,
 				}
 				paymet_id = obj_paymet_id.create(val_payment)
-				paymet_id.post()
+				paymet_id.action_post()
 				obj_prestamo.payment_ids = [(4, paymet_id.id, 0)]
 
 			if obj_prestamo.monto_restante > 0 :

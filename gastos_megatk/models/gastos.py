@@ -2,8 +2,7 @@
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
-
+from odoo.exceptions import UserError
 
 class LiquidacionGastos(models.Model):
     _name = "gastos.megatk"
@@ -11,11 +10,9 @@ class LiquidacionGastos(models.Model):
     _order = 'create_date desc'
     _description = "description"
 
-    #@api.model_create_multi
     def action_close_dialog(self):
         super(LiquidacionGastos, self).action_close_dialog()
         
-
     @api.onchange("empleado_solicitud")
     def onchangeempleado(self):
         if self.empleado_solicitud:
@@ -42,11 +39,10 @@ class LiquidacionGastos(models.Model):
                 gs.activar_cuenta_gasto = True
 
 
-    #@api.model_create_multi
     def unlink(self):
         for gastos in self:
             if gastos.state == 'pendiente' or gastos.state == 'aprobado' or gastos.state == 'desembolso' or gastos.state =='liquidado':
-                raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
+                raise UserError(_('No puede eliminar gastos en proceso o liquidados.'))
         return super(LiquidacionGastos, self).unlink()
 
     company_id = fields.Many2one("res.company", "Empresa", required=True, default=lambda self: self.env.user.company_id,)
@@ -88,7 +84,7 @@ class LiquidacionGastos(models.Model):
     def onchangefechafinal(self):
         if self.fecha_inicio:
             if self.fecha_final < self.fecha_inicio:
-                raise Warning(_('La fecha final debe de ser mayor que la fecha inicial') )
+                raise UserError(_('La fecha final debe de ser mayor que la fecha inicial') )
 
     @api.onchange("banco_id")
     def onchangebanco(self):
@@ -103,7 +99,7 @@ class LiquidacionGastos(models.Model):
     #@api.model_create_multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
-            raise Warning(_('No existe detalle de gastos'))
+            raise UserError(_('No existe detalle de gastos'))
         self.write({'state': 'pendiente'})
 
    #@api.model_create_multi    
@@ -130,12 +126,12 @@ class LiquidacionGastos(models.Model):
     #@api.model_create_multi
     def liquidar_gastos(self):
         #if self.total_gastos <= 0:
-            #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
+            #raise UserError(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
 
         if not self.fecha_liquidacion:
-            raise Warning(_('No existe una fecha de liquidación.'))
+            raise UserError(_('No existe una fecha de liquidación.'))
         if not self.journal_id:
-            raise Warning(_('No existe un diario establecido para generar la liquidación.'))
+            raise UserError(_('No existe un diario establecido para generar la liquidación.'))
         for line in self.detalle_gastos_ids:
             line.estado_parent = False
             
@@ -158,7 +154,7 @@ class LiquidacionGastos(models.Model):
         lineas.append((0, 0, vals_credit_anticipo))
         if self.total_diferencia == 0:
             if not self.cuenta_gasto_id:
-                raise Warning(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
+                raise UserError(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
             vals_cuenta_gasto = {
             'debit': self.total_gastos,
             'credit': 0.0,
@@ -172,7 +168,7 @@ class LiquidacionGastos(models.Model):
             lineas.append((0, 0, vals_cuenta_gasto))
         if self.total_diferencia < 0:
             if not self.cuenta_gasto_id:
-                raise Warning(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
+                raise UserError(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
             vals_cuenta_gasto = {
             'debit': self.total_gastos,
             'credit': 0.0,
@@ -186,7 +182,7 @@ class LiquidacionGastos(models.Model):
             lineas.append((0, 0, vals_cuenta_gasto))
             valor_cxc = self.total_diferencia * -1
             if not self.cuenta_cxc_id:
-                raise Warning(_('No existe una cuenta por cobrar establecida para generar la liquidación.'))
+                raise UserError(_('No existe una cuenta por cobrar establecida para generar la liquidación.'))
             vals_cuenta_cxc = {
             'debit': valor_cxc,
             'credit': 0.0,
@@ -199,7 +195,7 @@ class LiquidacionGastos(models.Model):
             lineas.append((0, 0, vals_cuenta_cxc))
         if self.total_diferencia > 0:
             if not self.cuenta_gasto_id:
-                raise Warning(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
+                raise UserError(_('No existe una cuenta de gastos establecida para generar la liquidación.'))
             vals_cuenta_gasto = {
             'debit': self.total_gastos,
             'credit': 0.0,
@@ -213,7 +209,7 @@ class LiquidacionGastos(models.Model):
             lineas.append((0, 0, vals_cuenta_gasto))
             valor_cxc = self.total_diferencia
             if not self.cuenta_caja_id:
-                raise Warning(_('No existe una cuenta de caja o bancos establecida para generar la liquidación.'))
+                raise UserError(_('No existe una cuenta de caja o bancos establecida para generar la liquidación.'))
             vals_cuenta_caja = {
             'debit': 0.0,
             'credit': valor_cxc,
@@ -243,7 +239,7 @@ class LiquidacionGastos(models.Model):
     #@api.model_create_multi
     def desembolsar_gasto(self):
         if not self.banco_id or self.banco_debit_id:
-            raise Warning(_('No se ha asignado cheque o transferencia a esta solicitud de gastos'))
+            raise UserError(_('No se ha asignado cheque o transferencia a esta solicitud de gastos'))
         for line in self.detalle_gastos_ids:
             line.estado_parent = True
         self.write({'state': 'desembolso'})
@@ -251,7 +247,7 @@ class LiquidacionGastos(models.Model):
     #@api.model_create_multi
     def unlink(self):
         if self.state == 'pendiente' or self.state == 'aprobado' or self.state == 'desembolso' or self.state =='liquidado':
-            raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
+            raise UserError(_('No puede eliminar gastos en proceso o liquidados.'))
         return super(LiquidacionGastos, self).unlink()
 
 
@@ -270,6 +266,6 @@ class LineaGastos(models.Model):
     #@api.model_create_multi
     def unlink(self):
         if self.obj_parent.state == 'pendiente' or self.obj_parent.state == 'aprobado' or self.obj_parent.state == 'desembolso' or self.obj_parent.state =='liquidado':
-            raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
+            raise UserError(_('No puede eliminar gastos en proceso o liquidados.'))
         return super(LineaGastos, self).unlink()
 

@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
-import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 class WizardGenerarCuota(models.TransientModel):
 	_name = 'prestamos.cuota.wizard.cheque'
@@ -18,10 +17,10 @@ class WizardGenerarCuota(models.TransientModel):
 		obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])
 
 		if self.monto > (obj_prestamo.saldo +  obj_prestamo.cuota_prestamo):
-			raise Warning(_('El pago no se puede procesar porque la deuda  del prestamo es inferior.'))
+			raise UserError(_('El pago no se puede procesar porque la deuda  del prestamo es inferior.'))
 
 		if obj_prestamo.cuotas_prestamo_id.state != 'proceso':
-			raise Warning(_('El pago no se puede procesar porque el prestamo no es valido.'))
+			raise UserError(_('El pago no se puede procesar porque el prestamo no es valido.'))
 		
 		obj_prestamo.pago = self.monto if self.monto > 0 else 0
 		obj_prestamo.state = 'validado'

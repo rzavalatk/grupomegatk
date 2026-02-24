@@ -15,7 +15,7 @@ class ResConfigSettings(models.TransientModel):
 	recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain="[('type','=','bank'), ('company_id', '=', company_id)]", related='company_id.recibir_pagos',readonly=False,)
 	producto_gasto_id = fields.Many2one('product.product', string='Cuenta de gasto', domain="[('sale_ok', '=', True), ('company_id', '=', company_id)]", related='company_id.producto_gasto_id',readonly=False,)
 	producto_interes_id = fields.Many2one('product.product', string='Cuenta de interes',  domain="[('sale_ok', '=', True), ('company_id', '=', company_id)]", related='company_id.producto_interes_id',readonly=False,)
-	interes_id = fields.Many2one("account.account", "Recibir depósito", domain="[ ('user_type_id.type', '=', 'other'), ('company_id', '=', company_id)]", related='company_id.interes_id',readonly=False,)
+	interes_id = fields.Many2one("account.account", "Recibir depósito", domain="[('company_id', '=', company_id)]", related='company_id.interes_id',readonly=False,)
 
 
 	@api.model

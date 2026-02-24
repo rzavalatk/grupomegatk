@@ -14,13 +14,17 @@
     'website': "azelaya@megatk.com",
     "license": "LGPL-3",
 
-    'category': 'Users',
-    'version': '0.1',
+    'category': 'Website/eCommerce',
+    'version': '18.0',
 
-    'depends': ['base', 'website'],
+    'depends': ['base', 'website', 'website_sale'],
 
     'data': [
         #'views/price.xml',
         'views/views.xml',
     ],
+    
+    'installable': True,
+    'application': False,
+    'auto_install': False,
 }

@@ -25,31 +25,5 @@
             </field>
         </record>
 
-        <!--<template id="peyment_term_sudo_permission_sale" name="peyment.term.sudo.permission.sale" inherit_id="sale.report_saleorder_document">
-            <xpath expr="//t/t/div/p[2]" position="attributes">
-                <attribute name="t-if">doc.sudo().payment_term_id.note</attribute>
-            </xpath>
-            <xpath expr="//t/t/div/p[2]/span" position="attributes">
-                <attribute name="t-field">doc.sudo().payment_term_id.note</attribute>
-            </xpath>
-        </template>-->
-
-        <!--<template id="peyment_term_sudo_permission_invoice" name="peyment.term.sudo.permission.invoice" inherit_id="account.report_invoice_document_with_payments">
-            <xpath expr="//t/t/div/p[3]/span" position="attributes">
-                <attribute name="t-field">o.sudo().payment_term_id.note</attribute>
-            </xpath>
-        </template>
-
-        <template id="peyment_term_sudo_permission_invoice_2" name="peyment.term.sudo.permission.invoice.2" inherit_id="account.report_invoice_document">
-            <xpath expr="//t/t/div/p[3]/span" position="attributes">
-                <attribute name="t-field">o.sudo().payment_term_id.note</attribute>
-            </xpath>
-        </template>
-
-         <template id="peyment_term_sudo_permission_invoice_3" name="peyment.term.sudo.permission.invoice.3" inherit_id="account_facturx.account_invoice_facturx_export">
-            <xpath expr="//CrossIndustryInvoice/SupplyChainTradeTransaction/ApplicableHeaderTradeSettlement/SpecifiedTradePaymentTerms/Description[@t-if='record.payment_term_id']" position="attributes">
-                <attribute name="t-esc">record.sudo().payment_term_id.name</attribute>
-            </xpath>
-        </template> -->
     </data>
 </odoo>

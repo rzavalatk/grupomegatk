@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vista de formulario para el modelo 'connection.api.  -->
+    <!-- Form view for 'connection.api' model.  -->
     <record id="connection_api_view_form" model="ir.ui.view">
         <field name="name">connection.api.view.form</field>
         <field name="model">connection.api</field>
@@ -22,36 +22,33 @@
             </form>
         </field>
     </record>
-    <!-- Vista en árbol del modelo 'connection.api.  -->
-
-    <record id="connection_api_view_tree" model="ir.ui.view">
-        <field name="name">connection.api.view.tree</field>
+    <!-- List view for 'connection.api' model.  -->
+    <record id="connection_api_view_list" model="ir.ui.view">
+        <field name="name">connection.api.view.list</field>
         <field name="model">connection.api</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="model_id" string="Model"/>
                 <field name="is_get"/>
                 <field name="is_post"/>
                 <field name="is_put"/>
                 <field name="is_delete"/>
-            </tree>
+            </list>
         </field>
     </record>
-    <!-- Acción para el modelo "connection.api" con vistas de árbol y formulario.  -->
-
+    <!-- Action  for 'connection.api' model with List and form views.  -->
     <record id="rest_api_root_action" model="ir.actions.act_window">
-        <field name="name">Registros Rest API </field>
+        <field name="name">Rest API Records</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">connection.api</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create!
             </p>
         </field>
     </record>
-    <!-- Elementos del menú REST API.  -->
-
+    <!-- Menu items for the REST API.  -->
     <menuitem id="rest_api_root"
               name="Rest API"
               sequence="10"

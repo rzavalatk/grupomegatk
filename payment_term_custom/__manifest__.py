@@ -14,7 +14,7 @@
     'website': "azelaya@megatk.com",
     "license": "LGPL-3",
     'category': 'Usuarios',
-    'version': '0.1',
+    'version': '18.0',
 
     'depends': ['base','account','sale'],
 

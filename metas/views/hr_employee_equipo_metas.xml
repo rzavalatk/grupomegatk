@@ -7,10 +7,10 @@
       <field name="arch" type="xml">
         <form string = "Form Import">
           <header>
-            <button string="Validar" type='object' name='valid_metas' states="draft" class="oe_highlight"/>
-            <button string="Calificar" type='object' confirm="¿Confirme que los valores finales de las metas?" name='qualified_metas' states="valid" class="oe_highlight"/>
-            <button string="Cancelar metas" type='object' states="valid" confirm="¿Confirme que desea cancelar estas metas?"  name='cancel_metas' class="btn" />
-            <button string="Volver a borrador" type='object' states="cancel" confirm="¿Esta seguro de volver a Borrador, las calificaciones volveran a 0?"  name='back_to_draft' class="btn" />
+            <button string="Validar" type='object' name='valid_metas' invisible="['|',('state','!=','draft')]}" class="oe_highlight"/>
+            <button string="Calificar" type='object' confirm="¿Confirme que los valores finales de las metas?" name='qualified_metas' invisible="['|',('state','!=','valid')]}" class="oe_highlight"/>
+            <button string="Cancelar metas" type='object' invisible="['|',('state','!=','valid')]}" confirm="¿Confirme que desea cancelar estas metas?"  name='cancel_metas' class="btn" />
+            <button string="Volver a borrador" type='object' invisible="['|',('state','!=','cancel')]}" confirm="¿Esta seguro de volver a Borrador, las calificaciones volveran a 0?"  name='back_to_draft' class="btn" />
             <field name="state" widget="statusbar"/>
           </header>
           <sheet>
@@ -22,8 +22,8 @@
                 <field name="date_meta"/>
               </group>
               <group>
-                <field name="extra" attrs="{'readonly': [('state','!=','valid')]}" />
-                <field name="admonition" attrs="{'readonly': [('state','!=','valid')]}" />
+                <field name="extra" readonly="['|',('state','!=','valid')]}" />
+                <field name="admonition" readonly="['|',('state','!=','valid')]}" />
               </group>
             </group>
             <group>
@@ -31,15 +31,15 @@
                 <page string="Metas asignadas">
                   <group>
                     <field name="metas_id" nolabel="1">
-                      <tree editable="bottom" crate="0">
+                      <list editable="bottom" crate="0">
                         <control>
                           <create string="Agregar meta"/>
                         </control>
                         <field name="name" readonly="1" />
                         <field name="value" readonly="1" />
                         <field name="state" invisible="1" />
-                        <field name="asign" attrs="{'readonly': [('state','!=','valid')]}"/>
-                      </tree>
+                        <field name="asign" readonly="['|',('state','!=','valid')]}"/>
+                      </list>
                     </field>
                   </group>
                 </page>
@@ -59,12 +59,12 @@
       <field name="name">hr.employee.metas.tree.view</field>
       <field name="model">hr.employee.metas</field>
       <field name="arch" type="xml">
-        <tree>
+        <list>
           <field name="empleado_id"/>
           <field name="extra"/>
           <field name="admonition"/>
           <field name="total"/>
-        </tree>
+        </list>
       </field>
     </record>
 
@@ -106,11 +106,11 @@
       <field name="name">hr.employee.metas.tree.view</field>
       <field name="model">hr.employee.equipo.metas</field>
       <field name="arch" type="xml">
-        <tree decoration-danger="active==False" decoration-info="active==True">
+        <list decoration-danger="active==False" decoration-info="active==True">
           <field name="name"/>
           <field name="employe_jefe_id"/>
           <field name="active"/>
-        </tree>
+        </list>
       </field>
     </record>
 
@@ -148,17 +148,17 @@
     <field name="inherit_id" ref="hr_employe_metas_mega_form_view" />
     <field name="arch" type="xml">
       <xpath expr="//field[@name='employe_ids']" position="inside">
-        <tree string="Empleados" decoration-bf="message_needaction==True">
+        <list string="Empleados" decoration-bf="message_needaction==True">
           <field name="name" modifiers="{}"/>
-          <field name="work_phone" modifiers="{}" attrs="{}" invisible="1"/>
-          <field name="work_email" modifiers="{}" attrs="{}" invisible="1"/>
+          <field name="work_phone" modifiers="{}" invisible="1"/>
+          <field name="work_email" modifiers="{}"  invisible="1"/>
           <field name="company_id" on_change="1" can_create="true" can_write="true" studio_groups="[{&quot;id&quot;: 5, &quot;name&quot;: &quot;Multicompa\u00f1\u00eda&quot;, &quot;display_name&quot;: &quot;Permisos extra / Multicompa\u00f1\u00eda&quot;}]" modifiers="{}"/>
           <field name="department_id" on_change="1" can_create="true" can_write="true" modifiers="{}"/>
-          <field name="job_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
-          <field name="parent_id" can_create="true" can_write="true" modifiers="{}" attrs="{}" invisible="1"/>
+          <field name="job_id" can_create="true" can_write="true"  invisible="1"/>
+          <field name="parent_id" can_create="true" can_write="true"  invisible="1"/>
           <field name="coach_id" invisible="1" can_create="true" can_write="true" modifiers="{&quot;column_invisible&quot;: true}"/>
           <field name="message_needaction" invisible="1" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
-        </tree>
+        </list>
       </xpath>
     </field>
   </record>
@@ -167,7 +167,7 @@
     <field name="name">Metas por equipo</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hr.employee.equipo.metas</field>
-    <field name="view_mode">kanban,tree,form</field>
+    <field name="view_mode">kanban,list,form</field>
   </record>
 
   <menuitem name="Metas" id="hr_employe_equipo_metas" sequence = "1" parent="fields_megatk.hr_employe_equipos" action = "action_emplyee_equipo_metas"/>

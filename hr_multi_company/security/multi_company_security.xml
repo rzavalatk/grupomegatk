@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!--  Defines security for hr_department  -->
+    <record id="property_rule_department" model="ir.rule">
+        <field name="name">Crear, Modificar y Eliminar Departamento</field>
+        <field name="model_id" ref="hr.model_hr_department"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">
+            ['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+        </field>
+    </record>
+    
+    <!--  Defines security for hr_attendance  -->
+    <record id="hr_payroll_attendance_company" model="ir.rule">
+        <field name="name">Asistencia de mi empresa</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field eval="False" name="global"/>
+        <field name="domain_force">
+            ['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+        </field>
+    </record>
+    <!--  Defines security for hr_expense  -->
+    <record id="hr_expense_company" model="ir.rule">
+        <field name="name">Gastos de mi empresa</field>
+        <field name="model_id" ref="hr_expense.model_hr_expense"/>
+        <field eval="False" name="global"/>
+        <field name="domain_force">
+            ['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+        </field>
+    </record>
+</odoo>

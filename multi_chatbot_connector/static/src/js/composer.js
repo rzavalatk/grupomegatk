@@ -1,32 +1,48 @@
-odoo.define('multi_chatbot_connector.composer', function (require) {
-	"use strict";
-	
-	var Widget = require('web.Widget');
-	var Composer = require('mail.composer.Basic');
-	var dom = require('web.dom');
-	
-	Composer.include({
-		start: function () {
-			var self = this;
-			this._$attachmentButton = this.$('.o_composer_button_add_attachment');
-			this._$attachmentsList = this.$('.o_composer_attachments_list');
-			this.$input = this.$('.o_composer_input textarea');
-			this.$input.focus(function () {
-				self.trigger('input_focused');
+/** @odoo-module **/
+
+import { Component, useRef, onMounted } from "@odoo/owl";
+import { registry } from "@web/core/registry";
+
+export class ChatbotComposerExtension extends Component {
+	static template = "multi_chatbot_connector.ComposerTemplate";
+
+	setup() {
+		this.inputRef = useRef("input");
+		this.attachmentRef = useRef("attachments");
+
+		onMounted(() => {
+			this._setupComposer();
+		});
+	}
+
+	_setupComposer() {
+		const input = this.inputRef.el;
+		if (input) {
+			// Auto-resize del textarea
+			input.addEventListener("input", () => {
+				input.style.height = "auto";
+				input.style.height = input.scrollHeight + "px";
 			});
-			this.$input.val(this.options.defaultBody);
-			dom.autoresize(this.$input, {
-				parent: this,
-				min_height: this.options.inputMinHeight
+
+			// Evento de enfoque
+			input.addEventListener("focus", () => {
+				this.trigger("input_focused");
 			});
-			// Attachments
-			this._renderAttachments();
-			$(window).on(this.fileuploadID, this._onAttachmentLoaded.bind(this));
-			this.on('change:attachment_ids', this, this._renderAttachments);
-			// Mention
-			this._mentionManager.prependTo(this.$('.o_composer'));
-			return this._super();
-		},
-	});
-	
-});
+		}
+	}
+
+	onAttachmentClick() {
+		const attachmentList = this.attachmentRef.el;
+		if (attachmentList) {
+			attachmentList.click();
+		}
+	}
+
+	trigger(event) {
+		// Emitir evento personalizado
+		const customEvent = new CustomEvent(event, { bubbles: true });
+		this.el.dispatchEvent(customEvent);
+	}
+}
+
+registry.category("components").add("ChatbotComposer", ChatbotComposerExtension);

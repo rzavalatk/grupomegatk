@@ -7,7 +7,6 @@ from odoo import models, api, fields
 class Payment(models.Model):
     _inherit = 'account.payment'
     
-    
     regiones = [0,'Nicaragua','San Pedro Sula','Tegucigalpa']
     region = fields.Selection([
         ('Tegucigalpa','TGU'),
@@ -15,8 +14,6 @@ class Payment(models.Model):
         ('Nicaragua','NIC'),
     ],string="Región",required=True,
     default=lambda self : self.regiones[int(self.env.user.ubicacion_vendedor)])
-
-
 
 class ModelCompras(models.Model):
     _inherit = 'purchase.order'
@@ -26,14 +23,12 @@ class ModelCompras(models.Model):
     code_reference = fields.Char("Código de Referencia")
     origin_city = fields.Char("Ciudad de origen")
     
-    
 class Productos(models.Model):
     _inherit = 'product.template'
 
     ala = fields.Char("Ala")
     estante = fields.Char("Estante")
     nivel = fields.Char("Nivel")
-
 
 class ModelImport(models.Model):
     _inherit = 'import.product.mega'

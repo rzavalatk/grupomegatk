@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from datetime import *
 import time
 
@@ -62,13 +62,13 @@ class ConciliacionBancaria(models.Model):
 
     def action_validate(self):
         if not self.conciliacion_line:
-            raise Warning(_('No existen movimiento a conciliar') )
+            raise UserError(_('No existen movimiento a conciliar') )
 
         if not round(self.difference, 2) == 0.0:
-            raise Warning(_('Existe diferencia en la conicliación, debe de revisar todos los movimientos a conciliar') )
+            raise UserError(_('Existe diferencia en la conicliación, debe de revisar todos los movimientos a conciliar') )
 
         if self.validar():
-            raise Warning(_('hay movimientos cancelados, debe de revisar todos los movimientos a conciliar') )
+            raise UserError(_('hay movimientos cancelados, debe de revisar todos los movimientos a conciliar') )
 
         for mov_conciliar in self.conciliacion_line:            
             if mov_conciliar.es_conciliado:
@@ -83,7 +83,6 @@ class ConciliacionBancaria(models.Model):
         for mov_conciliar in self.conciliacion_line:
             if not mov_conciliar.move_id and mov_conciliar.es_conciliado or mov_conciliar.move_id.state=='draft':
                 return True
-
         return False
 
     def quitar_null(self):
@@ -103,7 +102,6 @@ class ConciliacionBancaria(models.Model):
 
     def back_draft(self):
         self.write({'state': 'draft'})
-
 
     def get_movimientos(self):
         obj_move_id = self.env["account.move.line"].search([('date', '<=', self.date), ('account_id', '=', self.account_id.id), 
@@ -143,7 +141,7 @@ class ConciliacionBancaria(models.Model):
 
 class Debitline(models.Model):
     _name = 'conicliacion.bancaria.line'
-    _description = "description"
+    _description = "LIneas de la descripción bancaria"
 
     conciliacion_id = fields.Many2one('conicliacion.bancaria', 'Conciliación')
     move_id = fields.Many2one("account.move", "Movimiento")

@@ -10,7 +10,6 @@ class AccountInvoiceReport(models.Model):
 	_auto = False
 	_rec_name = 'date'
 	
-	@api.model_create_multi
 	@api.depends('currency_id', 'date', 'price_total', 'price_average', 'amount_residual')
 	def _compute_amounts_in_user_currency(self):
 		"""Compute the amounts in the currency of the user
@@ -93,6 +92,7 @@ class AccountInvoiceReport(models.Model):
 		'res.partner': ['country_id'],
 	}
 
+	#Migracion campos marca y costo real
 	def _select(self):
 		select_str = """
 			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id,

@@ -7,13 +7,11 @@
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
             <field name="nextcall" eval="datetime.now(pytz.timezone('America/Guatemala')).strftime('%Y-%m-%d 18:59:59')" />
             <field ref="crons_mega.model_product_report" name="model_id" />
             <field name="state">code</field>
             <field name="code">model.cron_eject()</field>
-            <field eval="False" name="doall"/>
-            <!--<field name="function">True</field>-->
+            <!--<field eval="False" name="doall"/>-->
         </record>
     </data>
 </odoo>

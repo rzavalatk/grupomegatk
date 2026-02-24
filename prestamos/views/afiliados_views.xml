@@ -8,17 +8,17 @@
 				<form string = "Form Import">
 					<header> 
 						<button name="back_draft" type="object" string="Volver a borrador" 
-							class="oe_highlight" states="cancelado"/>
+							class="oe_highlight"/>
 						<button name="%(action_wizard_prestamos_deposito_wizard_filiado)d" type="action" string="Validar" 
-							states="draft" class="oe_highlight"/>
+							class="oe_highlight"/>
 						<button name="%(action_wizard_prestamos_deposito_wizard_filiado)d" type="action" string="Depósito" 
-							class="oe_highlight" states="validado"/>
+							class="oe_highlight"/>
 						<button name="%(action_wizard_prestamos_afiliados_wizard_cheque)d" type="action" string="Retiro" 
-							class="oe_highlight" states="validado"/>
+							class="oe_highlight"/>
 							<button name="%(action_wizard_prestamos_interes_wizard_filiado)d" type="action" string="Interés" 
-							class="oe_highlight" states="validado"/>
+							class="oe_highlight"/>
 						<button name="actualizar" type="object" string="Actualizar" 
-							class="oe_highlight" states="validado"/>
+							class="oe_highlight"/>
 						<field name="state" widget="statusbar" nolabel="1"/>  
 					</header>
 					<sheet>
@@ -27,7 +27,7 @@
                   type="object"
                   class="oe_stat_button"
                   icon="fa-pencil-square-o"
-                  attrs="{'invisible': [('invoice_count_cxp', '=', 0)]}">
+					  modifiers="{'invisible': [('invoice_count_cxp', '=', 0)]}">
                   <field name="invoice_count_cxp" widget="statinfo" string="Facturas cxp"/>
               </button>
             	<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
@@ -47,7 +47,7 @@
 								<group>
 									<group>
 										<field name="name_mostrar" invisible="1"/>
-										<field name="saldo_inicial" attrs="{'readonly': True}" />
+										<field name="saldo_inicial" modifiers="{'readonly': True}" />
 										<field name="saldo_real" />
 										<field name="user_id" />
 									</group>
@@ -59,8 +59,8 @@
 								</group>
 							</page>
 							<page string="Detalle de Movimientos">
-		            <field name="movimientos_line" attrs="{'readonly': [('state','!=','draft')]}" >
-	                <tree editable="top"  >
+				    	<field name="movimientos_line" modifiers="{'readonly': [('state','!=','draft')]}" >
+			                <list editable="top"  >
 										<field name="move_id" />
 										<field name="name" />
 										<field name="date" />
@@ -71,7 +71,7 @@
 										<field name="haber"  sum="Total"/>
 										<field name="importe_moneda" />
 										<field name="impreso" invisible="1"/>
-	                </tree>
+					        	</list>
 		            </field>
 		        	</page>
 							<page string="Cuenta">
@@ -97,9 +97,9 @@
 			<field name="name">prestamos.afiliados.tree.view</field>
 			<field name="model">prestamos.afiliados</field>
 			<field name="arch" type="xml">
-				<tree>
+				<list>
 					<field name="name_mostrar"/>
-				</tree>
+				</list>
 			</field>
 		</record>
 
@@ -137,7 +137,7 @@
 			<field name="name">Depositantes</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">prestamos.afiliados</field>
-			<field name="view_mode">kanban,tree,form,activity</field>
+			<field name="view_mode">kanban,list,form,activity</field>
 		</record>
 
 		<!-- Reglas de registro -->

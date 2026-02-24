@@ -82,7 +82,7 @@ class HelpTicket(models.Model):
     replied_date = fields.Datetime(string='Fecha de respuesta', help='Fecha de respuesta del Ticket')
     last_update_date = fields.Datetime(string='Fecha de última actualización',)
     ticket_type = fields.Many2one('helpdesk.types', string='Tipo de Ticket', help='Tipo de Ticket')
-    team_head = fields.Many2one('res.users', string='Lider del team', compute='_compute_team_head', store=True)
+    team_head = fields.Many2one('res.users', string='Lider del team', compute='_compute_team_head')
     assigned_user = fields.Many2one('res.users', string='Tecnico Asignado',
         domain=lambda self: [('groups_id', 'in', self.env.ref(
             'odoo_website_helpdesk.helpdesk_user').id)],)

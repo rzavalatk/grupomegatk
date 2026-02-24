@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-
+from odoo.exceptions import UserError, ValidationError, AccessError
 
 class Vittbankstransferences(models.Model):
     _name = 'banks.transferences'
@@ -82,11 +82,11 @@ class Vittbankstransferences(models.Model):
         "res.company", "Empresa", default=lambda self: self.env.company, required=True)
     es_moneda_base = fields.Boolean("Es moneda base")
 
-    # @api.model_create_multi
+
     def unlink(self):
         for move in self:
             if move.state == 'validated' or move.state == 'anulated':
-                raise Warning(_('No puede eliminar registros contabilizados'))
+                raise UserError(_('No puede eliminar registros contabilizados'))
         return super(Vittbankstransferences, self).unlink()
 
     @api.onchange("journal_id_out")
@@ -98,24 +98,21 @@ class Vittbankstransferences(models.Model):
             else:
                 self.currency_id = self.company_id.currency_id.id
 
-    # @api.model_create_multi
     def action_anulate_debit(self):
         for move in self.move_id:
             move.write({'state': 'draft'})
             move.unlink()
         self.write({'state': 'anulated'})
 
-    # @api.model_create_multi
     def action_draft(self):
         self.write({'state': 'draft'})
 
-    # @api.model_create_multi
     def action_validate(self):
         if not self.number_calc:
-            raise Warning(
+            raise UserError(
                 _("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
         if self.total < 0:
-            raise Warning(_("El total debe de ser mayor que cero"))
+            raise UserError(_("El total debe de ser mayor que cero"))
 
         self.write({'state': 'validated'})
         if not self.number:

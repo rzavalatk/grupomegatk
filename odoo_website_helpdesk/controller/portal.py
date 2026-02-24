@@ -1,34 +1,63 @@
 # -*- coding: utf-8 -*-
+################################################################################
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Bhagyadev KP (<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
 from odoo import http
 from odoo.addons.portal.controllers import portal
 from odoo.http import request
 
 
 class TicketPortal(portal.CustomerPortal):
-    """ Controlador para gestionar las acciones relacionadas con el portal del cliente relacionadas con tickets de ayuda.
-    """
 
     def _prepare_home_portal_values(self, counters):
-        """Prepara un diccionario de valores que se utilizarán en la vista del portal de inicio
-        y obtiene su recuento."""
+        """
+        Prepare values for the home portal, including ticket count. Args:
+        counters (dict): A dictionary containing counters for various portal
+        information. Returns: dict: A dictionary of values for the home portal.
+        """
         values = super()._prepare_home_portal_values(counters)
         if 'ticket_count' in counters:
-            ticket_count = request.env['help.ticket'].search_count(
+            ticket_count = request.env['ticket.helpdesk'].search_count(
                 self._get_tickets_domain()) if request.env[
-                'help.ticket'].check_access_rights(
+                'ticket.helpdesk'].check_access_rights(
                 'read', raise_exception=False) else 0
             values['ticket_count'] = ticket_count
         return values
 
     def _get_tickets_domain(self):
-        """Check al dominio de tickets de ayuda del usuario."""
+        """
+        Define the domain for searching tickets related to the current customer.
+        Returns:
+            list: A list representing the domain for ticket search.
+        """
         return [('customer_id', '=', request.env.user.partner_id.id)]
 
     @http.route(['/my/tickets'], type='http', auth="user", website=True)
     def portal_my_tickets(self):
-        """Vista de tickets de ayuda."""
+        """
+        Route to display the tickets associated with the current customer.
+        Returns:
+            http.Response: The HTTP response rendering the tickets page.
+        """
         domain = self._get_tickets_domain()
-        tickets = request.env['help.ticket'].search(domain)
+        tickets = request.env['ticket.helpdesk'].sudo().search(domain)
         values = {
             'default_url': "/my/tickets",
             'tickets': tickets,
@@ -39,10 +68,16 @@ class TicketPortal(portal.CustomerPortal):
 
     @http.route(['/my/tickets/<int:id>'], type='http', auth="public",
                 website=True)
-    def portal_tickets_details(self, id):
-        """Muestra una lista de tickets para el usuario actual en el portal de
-        del usuario."""
-        details = request.env['help.ticket'].sudo().search([('id', '=', id)])
+    def portal_tickets_details(self, **kwargs):
+        """
+        Route to display the details of a specific ticket.
+        Args:
+            ticket_id (int): The ID of the ticket to be displayed.
+        Returns:
+            http.Response: The HTTP response rendering the ticket details page.
+        """
+        ticket_id = kwargs.get("id")
+        details = request.env['ticket.helpdesk'].sudo().browse(ticket_id)
         data = {
             'page_name': 'ticket',
             'ticket': True,
@@ -54,60 +89,23 @@ class TicketPortal(portal.CustomerPortal):
     @http.route('/my/tickets/download/<id>', auth='public',
                 type='http',
                 website=True)
-    def ticket_download_portal(self, id):
-        """Descargue la información de la entrada en formato pdf del
-         evento."""
+    def ticket_download_portal(self, **kwargs):
+        """
+        Route to download a PDF version of a specific ticket.
+        Args:
+            ticket (str): The ID of the ticket to be downloaded.
+        Returns:
+            http.Response: The HTTP response with the PDF file for download.
+        """
+        ticket_id = int(kwargs.get('id'))
         data = {
-            'help': request.env['help.ticket'].sudo().browse(int(id))}
+            'help': request.env['ticket.helpdesk'].sudo().browse(ticket_id)}
         report = request.env.ref(
-            'odoo_website_helpdesk.action_report_helpdesk_ticket')
-        pdf, _ = request.env.ref(
-            'odoo_website_helpdesk.action_report_helpdesk_ticket').sudo()._render_qweb_pdf(
-            report, data=data)
+            'odoo_website_helpdesk.report_ticket')
+        pdf, _ = report.sudo()._render_qweb_pdf(
+            report, res_ids=ticket_id, data=data)
         pdf_http_headers = [('Content-Type', 'application/pdf'),
                             ('Content-Length', len(pdf)),
                             ('Content-Disposition',
                              'attachment; filename="Helpdesk Ticket.pdf"')]
         return request.make_response(pdf, headers=pdf_http_headers)
-
-
-class WebsiteDesk(http.Controller):
-    """Control para el manejo del formulario de tickets del helpdesk y su envío."""
-    @http.route(['/helpdesk_ticket'], type='http', auth="public",
-                website=True, sitemap=True)
-    def helpdesk_ticket(self):
-        """Renderizar el formulario de tickets."""
-        types = request.env['helpdesk.types'].sudo().search([])
-        categories = request.env['helpdesk.categories'].sudo().search([])
-        product = request.env['product.template'].sudo().search([])
-        values = {}
-        values.update({
-            'types': types,
-            'categories': categories,
-            'product_website': product
-        })
-        return request.render('odoo_website_helpdesk.ticket_form', values)
-
-    @http.route(['/rating/<int:ticket_id>'], type='http', auth="public",
-                website=True,
-                sitemap=True)
-    def rating(self, ticket_id):
-        """Renderizar el formulario de calificación."""
-        ticket = request.env['help.ticket'].browse(ticket_id)
-        data = {
-            'ticket': ticket.id,
-        }
-        return request.render('odoo_website_helpdesk.rating_form', data)
-
-    @http.route(['/rating/<int:ticket_id>/submit'], type='http',
-                auth="user",
-                website=True, csrf=False,
-                sitemap=True)
-    def rating_backend(self, ticket_id, **post):
-        """Renderizar el señal de calificación."""
-        ticket = request.env['help.ticket'].browse(ticket_id)
-        ticket.write({
-            'customer_rating': post['rating'],
-            'review': post['message'],
-        })
-        return request.render('odoo_website_helpdesk.rating_thanks')

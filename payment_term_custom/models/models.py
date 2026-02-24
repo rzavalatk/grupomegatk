@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api,fields,_
-from odoo.exceptions import Warning
-
 
 class TermPament(models.Model):
     _inherit = "account.payment.term"
@@ -21,17 +19,7 @@ class Facturas(models.Model):
     payment_term_compute = fields.Char("Plazo de pago(computado)",compute=_payment_term_compute)
     
     
-    """@api.model
-    def create(self,vals):
-        try:
-            if self.env.user.company_id.id in [8,9,12]:
-                payment_term = self.env['account.payment.term'].browse(vals['payment_term'])
-                payment_term.name
-            res = super(Facturas,self).create(vals)
-            return res
-        except :
-            raise Warning(_('Acceso Denegado: Esta usuario no tiene permiso para autorizar créditos, contacte a los(as) encargados(as) de Administración o Gerencia para que se autorice su crédito o cambie el "Plazo de pago" a "contado"'))
-"""
+    
 class Sales(models.Model):
     _inherit = "sale.order"
     

@@ -40,8 +40,6 @@ class AccountMove(models.Model):
             invoice_url = "{}/web/login?redirect=/my/invoices/{}".format(base_url, order.id)
             # Genera el código QR con el enlace
             qr_img = generate_qr_code(invoice_url)
-            
-            order.write({
-                'qr_image' : qr_img
-            })
+
+            order.qr_image = qr_img
             print(self.qr_image, "qr_imageqr_image--------------------")

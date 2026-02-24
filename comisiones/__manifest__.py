@@ -10,10 +10,10 @@
         Modulo para calcular las comisiones de los usuarios del sistema
     """,
 
-    'author': "Alejandro Zelaya",
+    'author': "Alejandro Zelaya / David Zuniga",
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
-    'version': '0.1',
+    'version': '18.0',
 
     'depends': ['base','account'],
 
@@ -25,9 +25,9 @@
         'views/assets.xml',
         # 'views/journal.xml',
     ],
-    'qweb_template_dict': {
-        'backend': [
-            'static/js/account_comisiones.js',
+    'assets': {
+        'web.assets_backend': [
+            'comisiones/static/src/js/account_comisiones.js',
         ],
     },
 }

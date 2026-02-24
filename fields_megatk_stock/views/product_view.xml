@@ -7,7 +7,7 @@
 	  		<field name="model">product.product</field>
 	  		<field name="inherit_id" ref="product.product_normal_form_view"/>
 			<field name="arch" type="xml">
-				<xpath expr="//form/sheet/notebook/page[@name='x_importacion']/group[@name='x_datos1']/group[2]/field[@name='x_comisiones']/tree[1]" position="after">
+				<xpath expr="//form/sheet/notebook/page[@name='x_importacion']/group[@name='x_datos1']/group[2]/field[@name='x_comisiones']/list[1]" position="after">
 				    <form>
 				      <sheet string="lista.precios.megatk.line" name="studio_sheet_f2443b">
 				        	<group name="objpa">
@@ -29,16 +29,12 @@
 			</field>
 	   	</record>
 
-
-
-
-
 		<record model="ir.ui.view" id="product_comision_page_megatk_form_inh">
 	  		<field name="name">product.page.comision.campomegatk.form</field>
 	  		<field name="model">product.template</field>
 	  		<field name="inherit_id" ref="product.product_template_only_form_view" />
 			<field name="arch" type="xml">
-				<xpath expr="//form[@name='Product Template']/sheet/notebook/page[@name='x_importacion']/group[@name='x_datos1']/group/field[@name='x_comisiones']/tree" position="after">
+				<xpath expr="//form[@name='Product Template']/sheet/notebook/page[@name='x_importacion']/group[@name='x_datos1']/group/field[@name='x_comisiones']/list" position="after">
 					<form>
 					  	<sheet string="lista.precios.megatk.line" name="studio_sheet_7475c2">
 							<group name="objpa">
@@ -58,9 +54,8 @@
 					</form>
 				</xpath>
 			</field>
+	</data>	
+
 	   	</record>
-
-	   
-
 	</data>	
 </odoo>

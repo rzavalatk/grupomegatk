@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú de Reportes -->
+    <menuitem id="employee_report_menu" name="Reportes" sequence="30"
+              groups="hr.group_hr_manager,hr.group_hr_user"/>
+    <!-- Menú de Gestión de RRHH -->
+    <menuitem id="hr_management_menu" name="Gestión de RRHH" parent="hr.menu_hr_root" sequence="5"
+              groups="hr.group_hr_manager,hr.group_hr_user"/>
+    <!-- Employee Form View Extension -->
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit.hr.employee.updation</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']/group" position="after">
+                <group name="family_info_ids" colspan="4" string="Detalles de Dependientes">
+                    <field name="family_info_ids">
+                        <list editable="bottom">
+                            <field name="member_name" required="1"/>
+                            <field name="relation_id" required="1"/>
+                            <field name="member_contact"/>
+                            <field name="birth_date"/>
+                        </list>
+                    </field>
+                    <!-- Campo legado para compatibilidad con vistas antiguas -->
+                    <field name="fam_ids" invisible="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='hr_settings']//field[@name='employee_type']" position="after">
+                <field name="joining_date"/>
+            </xpath>
+            <field name="identification_id" position="replace"/>
+            <field name="passport_id" position="replace"/>
+            <xpath expr="//page[@name='personal_information']/group/group[1]" position="after">
+                <group name="identification_id" string="ID de Identificación">
+                    <field name="identification_id"/>
+                    <field name="id_expiry_date" groups="hr.group_hr_user"
+                           invisible="identification_id in [None,False]"/>
+                    <field name="identification_attachment_ids" groups="hr.group_hr_user" widget="many2many_binary"
+                           class="oe_inline" invisible="identification_id in [None,False]"/>
+                      <!-- Campo legado para compatibilidad con vistas antiguas -->
+                      <field name="id_attachment_id" groups="hr.group_hr_user" invisible="1"/>
+                </group>
+                <group name="passport_id" string="ID de Pasaporte">
+                    <field name="passport_id"/>
+                    <field name="passport_expiry_date" groups="hr.group_hr_user"
+                           invisible="passport_id in [None,False]"/>
+                    <field name="passport_attachment_ids" groups="hr.group_hr_user" widget="many2many_binary"
+                           class="oe_inline" invisible="passport_id in [None,False]"/>
+                      <!-- Campo legado para compatibilidad con vistas antiguas -->
+                      <field name="passport_attachment_id" groups="hr.group_hr_user" invisible="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Gamification Employee Form View Extension -->
+    <record id="hr_hr_employee_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.gamification.view.form.inherit.hr.employee.updation</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_gamification.hr_hr_employee_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='received_badges']" position="replace">
+                <page string="Insignias Recibidas" invisible="not user_id">
+                    <div name="badges" groups="hr.group_hr_user">
+                        <field name="has_badges" invisible="1"/>
+                        <button string="Otorgar una Insignia" type="action"
+                                name="%(hr_gamification.action_reward_wizard)d"/>
+                        para recompensar a este empleado por una buena acción
+                        <div class="oe_view_nocontent" invisible="has_badges">
+                            <p class="oe_view_nocontent_create">
+                                Haga clic para otorgar a este empleado su primera insignia
+                            </p>
+                            <p class="oe_grey">
+                                Las insignias son recompensas por buen trabajo. Déselas a las personas que cree que lo merecen.
+                            </p>
+                        </div>
+                    </div>
+                    <field name="badge_ids" widget="many2many_kanban"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

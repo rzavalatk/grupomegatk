@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 import logging
 
@@ -23,30 +23,19 @@ class Settings(models.TransientModel):
         "product.marca", "setting_id", string="Marcas")
     
     def get_values_journal_ids(self, company):
-        
-        #_logger.warning("Este es el ID: "+str(company))
-        #_logger.warning("Este es el ID de company_cierre: "+str(self.company_cierre))
-        
         self.company_cierre["company"] = company
         
-        #self.write({'company_cierre': company})
-        
         obj = self.get_values()
-        
         return obj['journal_ids'][0][2]
-        
-
     
     def get_values_account_ids_cron_mega(self,company):
         try:
             self.write({'company_cierre': company})
             obj = self.get_values()
             return obj['account_ids_cron_mega'][0][2]
-        
         except:
             return []
         
-    
     def get_values_teams_sps(self):
         obj = self.get_values()
         res = []
@@ -55,7 +44,6 @@ class Settings(models.TransientModel):
             res.append(int(item))
         return res
         
-    #@api.model_create_multi
     def get_values(self):
         try:
             res = super(Settings, self).get_values()
@@ -67,18 +55,14 @@ class Settings(models.TransientModel):
             lines_account = []
             marcas = []
             marcas_ids = []
-            
-            #_logger.warning("Este es el ID en get_values: "+str(company))
-            
-            
-            
+ 
             try:
                 marca_ids = marca_ids.replace('[','')
                 marca_ids = marca_ids.replace(']','')
                 marca_ids = marca_ids.split(',')
                 for item in marca_ids:
                     marcas_ids.append(int(item))
-                    _logger.warning(item)
+                    _logger.UserError(item)
                 if marcas_ids:
                     marcas = [(6, 0, marcas_ids)]
             except:
@@ -114,13 +98,9 @@ class Settings(models.TransientModel):
             res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
         except Exception as e:
             pass
-            # raise Warning(_(f'Error: {e}'))
-        
-            
-        #self.company_cierre.append(1)
+           
         return res
 
-    #@api.model_create_multi
     def set_values(self):
         IrValues = self.env['ir.config_parameter'].sudo()
         IrValues.set_param('crons_mega.marca_ids'+str(self.env.user.company_id.id), self.marca_ids.ids)

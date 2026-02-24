@@ -11,7 +11,7 @@
 						<field name="x_zonac"/>
 					</xpath>
 
-					<xpath expr="//field[@name='es_empleado']" position="before">
+					<xpath expr="//field[@name='property_payment_term_id']" position="after">
 						<field name="x_customer"/>
 					</xpath>
 

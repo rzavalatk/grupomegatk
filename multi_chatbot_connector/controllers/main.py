@@ -42,7 +42,7 @@ class LivechatMultiController(LivechatController):
     def get_current_chatbot_connector(self,uuid,**kwargs):
         if not uuid:
             return False
-        channel = request.env['mail.channel'].sudo().search([('uuid', '=', uuid)], limit=1)
+        channel = request.env['discuss.channel'].sudo().search([('uuid', '=', uuid)], limit=1)
         if not channel:
             return False
         mail_channel = channel.livechat_channel_id if channel.livechat_channel_id else False
@@ -67,7 +67,7 @@ class LivechatMultiController(LivechatController):
     def support_page(self, channel_id, **kwargs):
         res = super(LivechatMultiController, self).support_page(channel_id=channel_id, **kwargs)
         mail_chat = kwargs.get('help_id', False)
-        mail_chat_id = request.env['mail.channel'].sudo().browse(int(mail_chat))
+        mail_chat_id = request.env['discuss.channel'].sudo().browse(int(mail_chat))
         if mail_chat:
             res.qcontext.update({'mail_chat':int(mail_chat),'chat_status':mail_chat_id.helpdesk_lead_id.status})
         return res
@@ -76,7 +76,7 @@ class LivechatMultiController(LivechatController):
     def get_session(self, channel_id, anonymous_name, mail_chat=None, **kwargs):
         res = super(LivechatMultiController, self).get_session(channel_id=channel_id, anonymous_name=anonymous_name,mail_chat=mail_chat, **kwargs)
         if mail_chat:
-            Channel = request.env['mail.channel']
+            Channel = request.env['discuss.channel']
             channel = Channel.sudo().browse(int(mail_chat))
             if channel and channel.helpdesk_lead_id.status in ['new','working']:
                 res.update({'id':channel.id,
@@ -96,7 +96,7 @@ class LivechatMultiController(LivechatController):
         res = super(LivechatMultiController, self).feedback(uuid=uuid, rate=rate, reason=reason, **kwargs)
         c_user = request._context.get('uid') or request._uid or request.env.user.id
         c_partner = request.env['res.users'].sudo().search([('id','=',c_user)],limit=1)
-        Channel = request.env['mail.channel']
+        Channel = request.env['discuss.channel']
         channel = Channel.sudo().search([('uuid', '=', uuid)], limit=1)
         if channel and channel.helpdesk_lead_id:
             channel.helpdesk_lead_id.sudo().write({'status':'finish','rating':str(rate)})
@@ -106,7 +106,7 @@ class LivechatMultiController(LivechatController):
 
     @http.route('/check/lead/post', type="json", auth='public')
     def CheckLeadPost(self, uuid, location=False, **kwargs):
-        Channel = request.env['mail.channel']
+        Channel = request.env['discuss.channel']
         if uuid and Channel.sudo().search([('uuid', '=', uuid)], limit=1):
             Channel_id =  Channel.sudo().search([('uuid', '=', uuid)], limit=1)
             return Channel_id.helpdesk_lead_id.id if Channel_id.helpdesk_lead_id else False
@@ -136,7 +136,7 @@ class LivechatMultiController(LivechatController):
     
     @http.route('/lead/submit', type="json", auth='public')
     def LeadSubmit(self, uuid, helpdesk_info, **kwargs):
-        Channel = request.env['mail.channel']
+        Channel = request.env['discuss.channel']
         HelpDesk = request.env['online.helpdesk']
         Maillist = request.env['mail.mass_mailing.contact']
         Im_Livechat = request.env['im_livechat.channel']

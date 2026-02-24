@@ -150,8 +150,7 @@
           </div>
         </div>
       </field>
-      <field name="report_template" ref="fields_megatk.crm_orden_ingreso"/>
-      <field name="report_name">'Ingreso de equipo'</field>
+      
     </record>
   </data>
 </odoo>

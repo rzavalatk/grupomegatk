@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, exceptions
-from odoo.exceptions import Warning
 
 class ProductPonderacion(models.Model):
 	_name = 'product.ponderacion'
 	_order = "fecha_recepcion desc"
-	_description = "description"
+	_description = "Ponderación de Costo por Producto"
 
 	product_id = fields.Many2one("product.template", "Producto", required=True)
 	fecha_recepcion = fields.Datetime(string='Ingreso')

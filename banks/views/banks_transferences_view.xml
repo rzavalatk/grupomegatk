@@ -8,44 +8,42 @@
             <field name="arch" type="xml">
                 <form string="Debits">
                     <header>
-                        <button name="action_validate" type="object" string="Validar" states="draft" class="oe_highlight"/>
+                        <button name="action_validate" type="object" string="Validar" modifiers="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
                         <button name="action_anulate_debit" type="object" string="Anular Registro" 
-                        confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+                        confirm="Esta seguro que quiere anular este registro?" modifiers="{'invisible': [('state', '!=', 'validated')]}" class="oe_highlight"/>
                         <button name="action_draft" type="object" string="Cambiar a Borrador" 
-                        states="anulated" class="oe_highlight"/>
+                        modifiers="{'invisible': [('state', '!=', 'anulated')]}" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <h1>
-                            <field name="number_calc" readonly='1' attrs="{'invisible': [('state','!=','draft')]}"/>
-                            <field name="number" readonly='1' attrs="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
+                            <field name="number_calc" readonly='1' modifiers="{'invisible': [('state','!=','draft')]}"/>
+                            <field name="number" readonly='1' modifiers="{'invisible': [('state','!=','validated'), '|', ('state','!=','anulated')]}"/>
                         </h1>
                         <h2><strong><field name="msg"  class="oe_inline" readonly='1'/></strong></h2>
                         <group colspan="4">
                             <group cols="2">
-                                <!--<field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>-->
-                                <field name="company_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
-                                <field name="journal_id_out"  attrs="{'readonly': [('state','!=','draft')]}"
+                                <!--<field name="company_id" groups="base.group_multi_company" widget="selection" modifiers="{'readonly': [('state','!=','draft')]}"/>-->
+                                <field name="company_id" widget="selection" modifiers="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="journal_id_out"  modifiers="{'readonly': [('state','!=','draft')]}"
                                     domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
-                                <field name="total" attrs="{'readonly': [('state','!=','draft')]}"/>
-                                <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="total" modifiers="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="currency_id" modifiers="{'readonly': [('state','!=','draft')]}"/>
                             </group>
                             <group cols="2">
-                                <field name="journal_id_in" widget="selection" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
-                                <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="journal_id_in" widget="selection" modifiers="{'readonly': [('state','!=','draft')]}" domain="[('type', 'in',['bank']),('company_id', '=', company_id)]"/>
+                                <field name="date" modifiers="{'readonly': [('state','!=','draft')]}"/>
                                 <field name="es_moneda_base" invisible="1"/>
-                                <field name="currency_rate" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="currency_rate" modifiers="{'readonly': [('state','!=','draft')]}"/>
 
                                 <field name="move_id"/>
                             </group>
                         </group>
                         <group colspan="4">
-                            <field name="memo" placeholder="Descripción de transferencia bancaria" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="memo" placeholder="Descripción de transferencia bancaria" modifiers="{'readonly': [('state','!=','draft')]}"/>
                         </group>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+                    <chatter reload_on_attachment="True"/>
                 </form>
             </field>
         </record>
@@ -54,7 +52,7 @@
             <field name="name">banks.transferences.tree</field>
             <field name="model">banks.transferences</field>
             <field name="arch" type="xml">
-                <tree string="Transferencia entre bancos" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
+                <list string="Transferencia entre bancos" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
                     <field name="number"/>
                     <field name="journal_id_out"/>
                     <field name="journal_id_in"/>
@@ -62,7 +60,7 @@
                     <field name="date"/>
                     <field name="currency_id"/>
                     <field name="state"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -94,13 +92,13 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
             </record>
 
         <record id="action_banks_trasferences" model="ir.actions.act_window">
             <field name="name">Transferencia entre Bancos</field>
             <field name="res_model">banks.transferences</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Click para registrar nuevas transferencias.

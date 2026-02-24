@@ -5,42 +5,42 @@
             <field name="name">res.config.settings.view.form.inherit.prestamos</field>
             <field name="model">res.config.settings</field>
             <field name="priority" eval="5"/>
-            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//div[@class='row mt16 o_settings_container'][5]" position="inside">
-                    <div class="col-12 col-lg-6 o_setting_box">
-                        <div class="o_setting_left_pane"/>
-                        <div class="o_setting_right_pane">
-                            <label for="journal_ids" />
-                            <div class="text-muted">
-                                    Diarios que se utilizaran en el cierre diario
+                <xpath expr="//div[@id='languages']" position="after">
+                    <div class="app_settings_block" string="Cierre Diario" data-string="Cierre Diario">
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <label for="journal_ids"/>
+                                    <div class="text-muted">Diarios que se utilizarán en el cierre diario</div>
+                                    <div class="text-muted">
+                                        <field name="journal_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-muted">
-                                <field name="journal_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create':True}" />
+
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <label for="account_ids_cron_mega"/>
+                                    <div class="text-muted">Cuentas CXC que se utilizarán en el cierre diario</div>
+                                    <div class="text-muted">
+                                        <field name="account_ids_cron_mega" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-6 o_setting_box">
-                        <div class="o_setting_left_pane"/>
-                        <div class="o_setting_right_pane">
-                            <label for="account_ids_cron_mega" />
-                            <div class="text-muted">
-                                    Cuentas CXC que se utilizaran en el cierre diario
-                            </div>
-                            <div class="text-muted">
-                                <field name="account_ids_cron_mega" widget="many2many_tags" options="{'no_create_edit': True, 'no_create':True}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-6 o_setting_box">
-                        <div class="o_setting_left_pane"/>
-                        <div class="o_setting_right_pane">
-                            <label for="marca_ids" />
-                            <div class="text-muted">
-                                Marcas para reporte semanal
-                            </div>
-                            <div class="text-muted">
-                                <field name="marca_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create':True}" />
+
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <label for="marca_ids"/>
+                                    <div class="text-muted">Marcas para reporte semanal</div>
+                                    <div class="text-muted">
+                                        <field name="marca_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

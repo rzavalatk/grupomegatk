@@ -119,7 +119,7 @@ class ImLivechatMultiChannel(models.Model):
 
     #@api.multi
     def get_mail_channel_by_id(self, mail_channel_id, mail_id):
-        mail_channel = self.env['mail.channel'].sudo().search(
+        mail_channel = self.env['discuss.channel'].sudo().search(
             [('id', '=', mail_channel_id)])
         users = self.sudo().browse(mail_id).get_available_users()
         if len(users) == 0:
@@ -144,7 +144,7 @@ class OnlineHelpdesk(models.Model):
     user_id = fields.Many2one('res.users', 'User')
     issue_category = fields.Many2one(
         'online.help.category', 'Support Category')
-    maill_channel_id = fields.Many2one('mail.channel', 'Channel')
+    maill_channel_id = fields.Many2one('discuss.channel', 'Channel')
     rating = fields.Selection([('0', 'No Feedback'), ('1', 'Fair'), (
         '5', 'Very Good'), ('10', 'Excellent')], "Rating Score", default=0)
     company_id = fields.Many2one('res.company', string='Company')
@@ -162,7 +162,7 @@ class OnlineHelpdesk(models.Model):
     def online_helpdesk_process(self, cron_mode=True):
         CurrentDate = datetime.datetime.now()
         for helpdesk in self.env['online.helpdesk'].sudo().search([('status', '=', 'new')]):
-            if self.env['mail.channel'].sudo().search([('helpdesk_lead_id', '=', helpdesk.id), ('create_date', '<', CurrentDate.strftime(DEFAULT_SERVER_DATE_FORMAT))]):
+            if self.env['discuss.channel'].sudo().search([('helpdesk_lead_id', '=', helpdesk.id), ('create_date', '<', CurrentDate.strftime(DEFAULT_SERVER_DATE_FORMAT))]):
                 helpdesk.status = 'finish'
 
     #@api.multi
@@ -193,16 +193,16 @@ class OnlineHelpdesk(models.Model):
         return {
             'name': _('Mail Channel'),
             'view_type': 'form',
-            'view_mode': 'tree,form',
-            'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
-            'res_model': 'mail.channel',
+            'view_mode': 'list,form',
+            'views': [(tree_view_id, 'list'), (form_view_id, 'form')],
+            'res_model': 'discuss.channel',
             'domain': [('helpdesk_lead_id', 'in', self.ids)],
             'type': 'ir.actions.act_window',
         }
 
     #@api.multi
     def action_talk_to_client(self):
-        mail_channel = self.env['mail.channel'].sudo().search(
+        mail_channel = self.env['discuss.channel'].sudo().search(
             [('helpdesk_lead_id', '=', self.id)], limit=1)
         self.sudo().write({'status': 'working'})
         c_user = self._context.get('uid') or self._uid or self.env.user.id
@@ -218,7 +218,7 @@ class OnlineHelpdesk(models.Model):
 
 
 class MailChannelMulti(models.Model):
-    _inherit = 'mail.channel'
+    _inherit = 'discuss.channel'
 
     helpdesk_lead_id = fields.Many2one('online.helpdesk', 'Online Helpdesk')
 
@@ -258,16 +258,16 @@ class ResConfigSettingsInheritMulti(models.TransientModel):
     #@api.model
     def get_values(self):
         res = super(ResConfigSettingsInheritMulti, self).get_values()
-        ConfigOBJ = self.env['ir.config_parameter'].sudo()
-        is_chain_of_bot = ConfigOBJ.get_param(
-            'multi_chatbot_connector.is_chain_of_bot')
+        config_obj = self.env['ir.config_parameter'].sudo()
+        is_chain_of_bot = config_obj.get_param(
+            'multi_chatbot_connector.is_chain_of_bot', default='False')
         res.update(
-            is_chain_of_bot=is_chain_of_bot,
+            is_chain_of_bot=True if str(is_chain_of_bot) in ['True', '1'] else False,
         )
         return res
 
     #@api.model
     def set_values(self):
-        self.env['ir.config_parameter'].set_param(
-            'multi_chatbot_connector.is_chain_of_bot', self.is_chain_of_bot)
         super(ResConfigSettingsInheritMulti, self).set_values()
+        self.env['ir.config_parameter'].sudo().set_param(
+            'multi_chatbot_connector.is_chain_of_bot', self.is_chain_of_bot)

@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        
+
+        <!-- OWL Template for signature dialog -->
+        <template id="sign_signature_dialog" name="Sign Signature Dialog">
+            <div class="o_sign_signature_draw card mt-3">
+                <div class="card-header">
+                    <a role="button" id="clear_button" class="o_sign_clean float-right btn btn-link" href="#">Borrar firma</a>
+                </div>
+                <div class="o_sign_signature card-body p-0" id="sign_area"/>
+            </div>
+            <div id='alert'>
+                <div class="alert alert-danger" role="alert">
+                    Esperando firma...
+                </div>
+            </div>
+        </template>
+
+        <!-- Form View for the wizard -->
         <record id="sign_documents_sign_wizard" model="ir.ui.view">
             <field name="name">wizard.sign_documents.sign</field>
             <field name="model">sign_documents.sign.wizard</field>
             <field name="arch" type="xml">
                 <form>
-                    <template id="wizard_sign_frontend" inherit_id="website.assets_frontend" name="Wizard assets">
-                        <xpath expr="." position="inside">
-                            <script type="text/javascript" src="/reportes_custom/static/src/js/wizard.js"/>
-                        </xpath>
-                    </template>
-                    <div t-name="sign.signature_dialog">
-                        <div class="o_sign_signature_draw card mt-3">
-                            <div class="card-header">
-                                <a role="button" id="clear_button" class="o_sign_clean float-right btn btn-link" href="#">Borror firma</a>
-                            </div>
-                            <div class="o_sign_signature card-body p-0" id="sign_area"/>
-                        </div>
-                        <div id='alert'>
-                            <div class="alert alert-danger" role="alert">
-                                Esperando firma...
-                            </div>
-                        </div>
-                    </div>
+                    <sheet>
+                        <group>
+                            <field name="signature" widget="signature" string="Firma"/>
+                        </group>
+                    </sheet>
                     <footer>
-                        <button string="Gurardar" name="print_report" type="object" id='write' class="btn-primary"/>
+                        <button string="Guardar" name="print_report" type="object" class="btn-primary"/>
                         <button string="Cancelar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>

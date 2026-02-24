@@ -28,7 +28,6 @@ class ReporteSemanal(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', readonly=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
 
-
 class ReporteSemanal(models.Model):
     _name = "product.report"
     _order = "create_date desc"
@@ -54,7 +53,6 @@ class ReporteSemanal(models.Model):
         for item in self.line_invoices:
              total += item.price_tax
         self.tax_total = round(total, 2)
-    
     
     name = fields.Char(compute=_name_)
     date_from = fields.Date("De")
@@ -137,9 +135,7 @@ class ReporteSemanal(models.Model):
         self.write({
             'state': 'proccess'
         })
-                  
-        
-        
+
     def send_email(self,email,cc):
         template = self.env.ref(
             'crons_mega.email_template_marca_productos')

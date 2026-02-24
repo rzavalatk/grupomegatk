@@ -15,11 +15,9 @@ class ReviewRules(models.Model):
         self.name = self.company_id.name + \
             " - " + self.date.strftime("%d/%m/%Y")
     
-    
     def _send(self):
         self.send = len(self.warehouse_ids.ids) > 0
-    
-    
+     
     name = fields.Char(compute=_name_)
     date = fields.Date("Fecha",default=dt.today().date())
     send = fields.Boolean(compute=_send)
@@ -37,13 +35,11 @@ class ReviewRules(models.Model):
             'state': 'draft'
         })
     
-    
     def cancel_review(self):
         self.write({
             'warehouse_ids': [(6,0,[])],
             'state': 'cancel'
         })
-    
     
     def init_review(self):
         ids = self.warehouse_ids.search_quantity_minimal()
@@ -51,7 +47,6 @@ class ReviewRules(models.Model):
             'warehouse_ids': [(6,0,ids)],
             'state': 'init'
         })
-    
     
     def send_email(self, email, cc=""):
         template = self.env.ref(
@@ -67,7 +62,6 @@ class ReviewRules(models.Model):
         })
         return True
 
-    
     def cron_eject(self):
         if len(self.warehouse_ids.ids) > 0:
             admin = self.env['res.users'].sudo().browse(2)
@@ -94,13 +88,11 @@ class ReviewRules(models.Model):
                         item.send_email(principal_emails,cc)
                         time.sleep(1)
     
-
 class Warehouse(models.Model):
     _inherit = "stock.warehouse.orderpoint"
     
     review_id = fields.Many2one("orderpoint.review.rules")
     
-
     def search_quantity_minimal(self):
         ids = []
         for rule in self.search([]):

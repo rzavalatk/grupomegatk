@@ -51,7 +51,7 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.vpicktree" />
             <field name="arch" type="xml">
-                <xpath expr="/tree" position="attributes">
+                <xpath expr="/list" position="attributes">
                     <attribute name="default_order">scheduled_date desc</attribute>
                 </xpath>
             </field>

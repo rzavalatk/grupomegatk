@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class WizardTemplatebanks(models.TransientModel):
@@ -10,7 +10,6 @@ class WizardTemplatebanks(models.TransientModel):
 
     name = fields.Char("Nombre de plantilla", required=True)
 
-    #@api.model_create_multi
     def set_template(self):
         obj_template = self.env["banks.template"]
         ctx = self._context

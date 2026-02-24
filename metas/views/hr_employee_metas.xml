@@ -8,11 +8,9 @@
           <field name="arch" type="xml">
             <form string = "Form Import">
                 <sheet>
-                  <tree>
-                      <group name="x_datos0" col="3">
-                        <field name="empleado_id"/>
-                      </group>
-                  </tree>
+                  <group name="x_datos0" col="3">
+                    <field name="empleado_id"/>
+                  </group>
                 </sheet>
             </form>
           </field>
@@ -22,9 +20,9 @@
           <field name="name">hr.employee.metas.tree.view</field>
           <field name="model">hr.employee.metas</field>
           <field name="arch" type="xml">
-            <tree >
-                <field name="empleado_id"/>
-            </tree>
+          <list>
+            <field name="empleado_id"/>
+          </list>
           </field>
       </record>
 

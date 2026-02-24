@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-##############################################################################
 {
     'name': 'Gestión de Pago de clientes',
-    'version': '14.0.1.0',
+    'version': '18.0',
     'author': 'César Alejandro Rodriguez',
     'company': 'Honduras Open Spurce',
     'category': 'Accounting',

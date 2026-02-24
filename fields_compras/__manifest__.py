@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Campos compras",
-
     'summary': """
-        
         """,
-
-    'description': """
-        
+    'description': """     
     """,
-
-    'author': "Alejandro Zelaya",
-    'website': "azelaya@megatk.com",
+    'author': "David Zuniga",
+    'website': "dzuniga@megatk.com",
     'category': 'Usuarios',
-    'version': '0.1',
+    'version': '18.0',
     "license": "LGPL-3",
     'depends': ['base','purchase','importacion','account'],
     'data': [

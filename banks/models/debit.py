@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 import logging
 import math
@@ -16,31 +16,6 @@ class Debit(models.Model):
 	_inherit = ['mail.thread']
 	_description = "Management Debits"
 	_order = 'date desc, number desc'
-
-		# move_line=self.env["account.move.line"].search([('company_id','=',self.env.user.company_id.id),('analytic_account_id','=',False),'|','|','|',('account_id.user_type_id.id','=',13),('account_id.user_type_id.id','=',14),('account_id.user_type_id.id','=',16),('account_id.user_type_id.id','=',17)],limit=20000)
-		# cant=0
-		# for move in move_line:
-			
-		# 	if move.company_id == self.env.user.company_id:
-		# 		cant=cant+1
-		# 		amount = (move.credit or 0.0) - (move.debit or 0.0)
-		# 		default_name = move.name or (move.ref or '/' + ' -- ' + (move.partner_id and move.partner_id.name or '/'))
-		# 		vals_line = {
-		# 			'name': default_name,
-		# 			'date': move.date,
-		# 			'account_id': move.account_id.analytic_id.id,
-		# 			'tag_ids': [(6, 0, move.analytic_tag_ids.ids)],
-		# 			'unit_amount': move.quantity,
-		# 			'product_id': move.product_id and move.product_id.id or False,
-		# 			'product_uom_id': move.product_uom_id and move.product_uom_id.id or False,
-		# 			'amount': move.company_currency_id.with_context(date=move.date or fields.Date.context_today(move)).compute(amount, move.analytic_account_id.currency_id) if move.analytic_account_id.currency_id else amount,
-		# 			'general_account_id': move.account_id.id,
-		# 			'ref': move.ref,
-		# 			'move_id': move.id,
-		# 			'user_id': move.invoice_id.user_id.id or move._uid,
-		# 		}
-		# 		self.env['account.analytic.line'].create(vals_line)
-		# 		move.write({'analytic_account_id': move.account_id.analytic_id.id})
 
 	def get_sequence(self):
 		if self.journal_id:
@@ -90,11 +65,10 @@ class Debit(models.Model):
 		for db in deb_obj:
 			db.write({'number': n})
 
-	#@api.model_create_multi
 	def unlink(self):
 		for move in self:
 			if move.state == 'validated':
-				raise Warning(_('No puede eliminar registros contabilizados'))
+				raise UserError(_('No puede eliminar registros contabilizados'))
 		return super(Debit, self).unlink()
 
 	@api.depends('debit_line.amount', 'total')
@@ -184,16 +158,15 @@ class Debit(models.Model):
 			else:
 				self.currency_id = self.company_id.currency_id.id
 
-	#@api.one
 	def action_validate(self):
 		if not self.number_calc:
-			raise Warning(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
+			raise UserError(_("El banco no cuenta con configuraciones/parametros para registrar débitos bancarios"))
 		if not self.debit_line:
-			raise Warning(_("No existen detalles de movimientos a registrar"))
+			raise UserError(_("No existen detalles de movimientos a registrar"))
 		if self.total < 0:
-			raise Warning(_("El total debe de ser mayor que cero"))
+			raise UserError(_("El total debe de ser mayor que cero"))
 		if not round(self.rest_credit, 2) == 0.0:
-			raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
+			raise UserError(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
 		self.write({'state': 'validated'})
 		if not self.number:
@@ -206,8 +179,10 @@ class Debit(models.Model):
 		account_move = self.env['account.move']
 		if self.doc_type == 'debit':
 			values = self.debito()
-			_logger.warning('values: ' + str(values))
 			if self.move_id:
+				# Cambiar a draft si está publicado para poder modificarlo
+				if self.move_id.state == 'posted':
+					self.move_id.write({'state': 'draft'})
 				moveline = self.env['account.move.line']
 				line = moveline.search( [('move_id', '=', self.move_id.id)])
 				line.unlink()
@@ -224,6 +199,9 @@ class Debit(models.Model):
 		else:
 			values = self.credito()
 			if self.move_id:
+				# Cambiar a draft si está publicado para poder modificarlo
+				if self.move_id.state == 'posted':
+					self.move_id.write({'state': 'draft'})
 				moveline = self.env['account.move.line']
 				line = moveline.search( [('move_id', '=', self.move_id.id)])
 				line.unlink()
@@ -247,15 +225,11 @@ class Debit(models.Model):
 			'account_id': self.journal_id.default_account_id.id,
 			'date': self.date,
 		}
-		_logger.warning('self.total y self.currency_rate' + str(self.total) + ',' + str (self.currency_rate))
+		
 		if self.currency_id:
-			_logger.warning('currency_id' + str(self.currency_id))
 			if self.journal_id.default_account_id.currency_id :
-				_logger.warning('journal_id: ' + str(self.journal_id.default_account_id.currency_id))
 				if self.journal_id.default_account_id.currency_id  == self.currency_id:
-					_logger.warning('self.journal_id.default_account_id.currency_id: ' + str(self.journal_id.default_account_id.currency_id))
 					if self.currency_id == self.company_id.currency_id:
-						_logger.warning('Pase 4: ' + str(self.currency_id == self.company_id.currency_id))
 						#SE COMENTO PORQUE EL 0.0 EN LPS GENERABA EN 0.0 EL DEBE Y HABER
       					#vals_haber["amount_currency"] = 0.0
 						pass
@@ -549,18 +523,15 @@ class Debit(models.Model):
 		}
 		return values
 
-	#@api.model_create_multi
 	def action_anulate_debit(self):
 		for move in self.move_id:
 			move.write({'state': 'draft'})
 			move.unlink()
 		self.write({'state': 'anulated'})
 
-	#@api.model_create_multi
 	def action_draft(self):
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
 	def action_anulate(self):
 		self.write({'state': 'anulated'})
 		#self.update_seq()
@@ -570,8 +541,6 @@ class Debit(models.Model):
 class Debitline(models.Model):
 	_name = 'banks.debit.line'
 	_description = "description"
-
-
 
 	@api.onchange("account_id")
 	def onchangecuenta(self):

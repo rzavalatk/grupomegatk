@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api, fields
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from datetime import datetime as dt
 import datetime
 import pytz
@@ -15,11 +15,10 @@ class Lots(models.Model):
     def write(self, vals):
         res = super(Lots, self).write(vals)
         if self.company_id.id != self.product_id.company_id.id:
-            raise Warning(
+            raise UserError(
                 "El cambio que intenta hacer es invalido, El producto no pertenece a la compañia que tiene seleccionada.")
         else:
             return res
-
     
     @api.onchange('product_id')
     def _onchange_product_id(self):
@@ -29,7 +28,7 @@ class Lots(models.Model):
     def _onchange_company_id(self):
         if self.product_id:
             if self.company_id.id != self.env.user.company_id.id:
-                raise Warning(
+                raise UserError(
                     "La compañia que seleccionó no es permitida, cambie de compañia para que sea valido el cambio")
 
     def rangeDate(self, dateInit, dateEnd):

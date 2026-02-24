@@ -11,9 +11,7 @@
                             <field name="marcas"/>
                             <field name="fecha_inicial"/>
                             <field name="fecha_final"/>
-                            
                         </group>
-                        
                     </group>
                         
                 </form>
@@ -24,18 +22,13 @@
             <field name="name">sorteo_marcas.view.tree</field>
             <field name="model">sorteo.marcas</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="marcas"/>
                     <field name="fecha_inicial"/>
                     <field name="fecha_final"/>
-                </tree>
+                </list>
             </field>
         </record>
 
-    
-
-        
-
-       
     </data>
 </odoo>

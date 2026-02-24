@@ -1,4 +1,8 @@
-odoo.define(`excel.xml`, function (require) {
+/** @odoo-module **/
+
+odoo.define("excel.xml", [], function (require) {
+  "use strict";
+
   let Workbook,
     WorkbookStart =
       '<?xml version="1.0"?><ss:Workbook  xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">';

@@ -13,7 +13,7 @@
     'author': "David Zuniga",
     'website': "dalzubri-netlify.app",
     'category': 'Aplicaciones',
-    'version': '0.1',
+    'version': '18.0',
     "license": "LGPL-3",
     'depends': ['base','account'],
     'data': [

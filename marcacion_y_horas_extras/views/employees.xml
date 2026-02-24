@@ -8,11 +8,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='hr_settings']" position="after">
                     <page string="Marcaciones" groups="permisos.permiso_admin">
-                        <field name="marking_ids" widget="section_and_note_many2many" mode="tree,kanban" options="{'no_create': True}">
-                            <tree create="0">
-                                <field name="date"/>
-                                <field name="hour"/>
-                            </tree>
+                        <field name="marking_ids" widget="section_and_note_many2many" mode="list,kanban" options="{'no_create': True}">
+                            
                         </field>
                     </page>
                 </xpath>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista de Lista para el modelo 'hr.resignation' -->
+    <record id="hr_resignation_view_tree" model="ir.ui.view">
+        <field name="name">hr.resignation.view.tree</field>
+        <field name="model">hr.resignation</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <list string="Renuncias de Empleados">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="employee_contract"/>
+                <field name="joined_date" readonly="1"/>
+                <field name="expected_revealing_date"/>
+                <field name="approved_revealing_date"/>
+                <field name="resignation_type"/>
+                <field name="notice_period"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Vista de Formulario para el modelo 'hr.resignation' -->
+    <record id="hr_resignation_view_form" model="ir.ui.view">
+        <field name="name">hr.resignation.view.form</field>
+        <field name="model">hr.resignation</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <form string="Renuncia de Empleado">
+                <header>
+                    <!-- Botón para confirmar la solicitud -->
+                    <button string="Confirmar" type="object"
+                            name="action_confirm_resignation"
+                            invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <!-- Botón para cancelar -->
+                    <button string="Cancelar" type="object"
+                            name="action_cancel_resignation"
+                            invisible="state != 'draft'"/>
+                    <!-- Botón para aprobar (solo RRHH) -->
+                    <button string="Aprobar" type="object"
+                            groups="hr.group_hr_user"
+                            name="action_approve_resignation"
+                            invisible="state != 'confirm'"/>
+                    <!-- Botón para rechazar (solo RRHH) -->
+                    <button string="Rechazar" type="object"
+                            groups="hr.group_hr_user"
+                            name="action_reject_resignation"
+                            invisible="state != 'confirm'"/>
+                    <!-- Botón para volver a borrador (solo gerentes) -->
+                    <button string="Establecer como Borrador" type="object"
+                            groups="hr.group_hr_manager"
+                            name="action_reset_to_draft"
+                            invisible="state != 'approved'"/>
+                    <!-- Barra de estado -->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <!-- Título con referencia -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <!-- Sección de Detalles del Empleado -->
+                        <group string="Detalles del Empleado">
+                            <field name="change_employee" invisible="1"/>
+                            <field name="employee_id"
+                                   readonly="change_employee == False or state == 'approved'"/>
+                            <field name="department_id"/>
+                            <field name="employee_contract"/>
+                        </group>
+                        <!-- Sección de Fechas -->
+                        <group string="Fechas">
+                            <field name="joined_date"/>
+                            <field name="resign_confirm_date"
+                                   readonly="1"
+                                   invisible="resign_confirm_date == False"/>
+                            <field name="expected_revealing_date"
+                                   readonly="state == 'approved'"/>
+                            <field name="approved_revealing_date" readonly="1"
+                                   groups="hr.group_hr_user"/>
+                            <field name="notice_period"/>
+                        </group>
+                        <!-- Sección de Detalles de la Renuncia -->
+                        <group string="Detalles de la Renuncia">
+                            <field name="resignation_type" string="Tipo"
+                                   groups="hr.group_hr_user"
+                                   readonly="state == 'approved'"/>
+                            <field name="reason"
+                                   readonly="state == 'approved'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <!-- Historial de mensajes y actividades -->
+                 <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Acción de Ventana para Renuncias -->
+    <record id="hr_resignation_action" model="ir.actions.act_window">
+        <field name="name">Renuncias de Empleados</field>
+        <field name="res_model">hr.resignation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ('draft',
+            'confirm','cancel'))]
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear la Primera Renuncia
+            </p>
+        </field>
+    </record>
+    
+    <!-- Acción para ver las Renuncias Aprobadas -->
+    <record id="hr_resignation_approved_action" model="ir.actions.act_window">
+        <field name="name">Renuncias Aprobadas</field>
+        <field name="res_model">hr.resignation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'approved')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Renuncias Aprobadas
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menú principal de Renuncias -->
+    <menuitem id="hr_resignation_menu_root" name="Renuncias"
+              groups="base.group_user"
+              web_icon="hr_resignation,static/description/icon.png"
+              sequence="21"/>
+    
+    <!-- Submenú para Solicitudes de Renuncia -->
+    <menuitem id="hr_resignation_menu_request"
+              parent="hr_resignation_menu_root" name="Solicitudes de Renuncia"
+              action="hr_resignation_action" groups="base.group_user"
+              sequence="4"/>
+    
+    <!-- Submenú para Renuncias Aprobadas -->
+    <menuitem id="hr_resignation_menu_approved_request"
+              parent="hr_resignation_menu_root"
+              name="Renuncias Aprobadas"
+              action="hr_resignation_approved_action"
+              groups="hr.group_hr_user"
+              sequence="4"/>
+</odoo>

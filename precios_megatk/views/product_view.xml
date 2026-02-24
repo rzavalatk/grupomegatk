@@ -33,12 +33,12 @@
   		<field name="inherit_id" ref="product.product_normal_form_view"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='x_comisiones']" position="inside">
-			    <tree string="lista.precios.megatk.line" limit="3">
-				    <field name="id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+			    <list string="lista.precios.megatk.line" limit="3">
+				    <field name="id" modifiers="{'readonly': true}" invisible="1" readonly="1"/>
 			    	<field name="obj_padre"/>
 			      	<field name="x_descuento"/>
 			      	<field name="precio_descuento"/>
-			    </tree>
+			    </list>
 			</xpath>
 		</field>
    	</record>
@@ -48,12 +48,12 @@
 		<field name="inherit_id" ref="product.product_template_only_form_view" />
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='x_comisiones']" position="inside">
-			    <tree string="lista.precios.megatk.line" limit="3">
-				    <field name="id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+			    <list string="lista.precios.megatk.line" limit="3">
+				    <field name="id" modifiers="{'readonly': true}" invisible="1" readonly="1"/>
 			    	<field name="obj_padre"/>
 			      	<field name="x_descuento"/>
 			      	<field name="precio_descuento"/>
-			    </tree>
+			    </list>
 			</xpath>
 		</field>
    	</record>

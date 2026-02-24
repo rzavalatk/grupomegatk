@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class SequenceJournal(models.TransientModel):
@@ -49,18 +49,18 @@ class SequenceJournal(models.TransientModel):
         obj_code_authorization = self.env["sar.authorization.code"].browse(ctx['active_id'])
 
         if self.number_next < self.min_value:
-            raise Warning(_("'Next Number to Use' must be greater than 'Minimal Value'."))
+            raise UserError(_("'Next Number to Use' must be greater than 'Minimal Value'."))
         if self.number_next > self.max_value:
-            raise Warning(_("'Next Number to Use' must be less than 'Max Value'."))
+            raise UserError(_("'Next Number to Use' must be less than 'Max Value'."))
 
         if self.vitt_padding <= 0:
-            raise Warning(_("Padding must be greater than zero."))
+            raise UserError(_("Padding must be greater than zero."))
         if self.min_value >= self.max_value:
-            raise Warning(_("Max Value must be greater than Minimal Value."))
+            raise UserError(_("Max Value must be greater than Minimal Value."))
 
         if self.new_sequence:
             if not self.sequence_name:
-                raise Warning(_("Sequence name is empty."))
+                raise UserError(_("Sequence name is empty."))
             else:
                 self.fct_validated_exists()
                 obj_fiscal_id = self.fct_fiscal_sequence_regime()
@@ -69,12 +69,12 @@ class SequenceJournal(models.TransientModel):
                     if obj_sequence_id:
                         obj_journal_id = self.fct_journal_sequence(obj_sequence_id)
                     else:
-                        raise Warning(_("Sequence is not correct."))
+                        raise UserError(_("Sequence is not correct."))
         else:
             if self.sequence_id:
                 for fiscal_line in self.sequence_id.fiscal_sequence_regime_ids:
                     if fiscal_line.authorization_code_id.id == obj_code_authorization.id:
-                        raise Warning(_('This authorization code is already in use '))
+                        raise UserError(_('This authorization code is already in use '))
                 self.fct_validated_exists()
                 obj_fiscal_id = self.fct_fiscal_sequence_regime()
                 if obj_fiscal_id:
@@ -82,9 +82,9 @@ class SequenceJournal(models.TransientModel):
                     if obj_sequence_id:
                         obj_journal_id = self.fct_journal_sequence(obj_sequence_id)
                     else:
-                        raise Warning(_("Sequence is not correct."))
+                        raise UserError(_("Sequence is not correct."))
             else:
-                raise Warning(_("You need select a sequence."))
+                raise UserError(_("You need select a sequence."))
 
     def fct_sequence_write(self, fiscal_sequence_id, sequence_id):
         obj_sequence = self.env["ir.sequence"].browse(sequence_id)
@@ -145,7 +145,7 @@ class SequenceJournal(models.TransientModel):
         sq_obj = self.env["ir.sequence"].search([('vitt_prefix', '=', self.vitt_prefix), ('vitt_padding', '=', self.vitt_padding), ('code', '=', self.doc_type),'|',('company_id', '=', self.company_id.id), ('journal_id', '=', self.journal_id.id)])
         for sq in sq_obj:
             if not self.number_next > sq.max_value or self.number_next < sq.min_value:
-                raise Warning(_("The number exists already, please change the settings."))
+                raise UserError(_("The number exists already, please change the settings."))
 
     def fct_sequence_create(self, fiscal_sequence_id):
         obj_sequence = self.env["ir.sequence"]

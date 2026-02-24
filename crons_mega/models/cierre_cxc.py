@@ -40,7 +40,6 @@ class CXC(models.Model):
         ("cancel", "Cancelado")
     ], string="Estado", default="draft")
     
-    
     def come_back_draft(self):
         self.write({
             'state': 'draft'
@@ -60,7 +59,6 @@ class CXC(models.Model):
             'state': 'cancel'
         })
         
-    
     def init_cierre_cxc(self):
         account_ids_setting = self.env["res.config.settings"].get_values_account_ids_cron_mega(self.company_id)
         account_ids = self.env["account.account"].browse(account_ids_setting)
@@ -87,7 +85,6 @@ class CXC(models.Model):
             'state': 'add_move'
         })
              
-    
     def proccess_cierre(self):
         for move in self.moves_ids:
             for line in self.cierre_cxc_line_ids:
@@ -104,7 +101,6 @@ class CXC(models.Model):
             'state': 'proccess'
         })
         
-    
     def send_email(self,mail,cc):
         template = self.env.ref(
             'crons_mega.email_template_cierre_diario_cxc')
@@ -118,7 +114,6 @@ class CXC(models.Model):
             'state': 'done'
         })
         return True
-    
     
     def cron_eject(self):
         admin = self.env['res.users'].sudo().browse(2)
@@ -150,10 +145,7 @@ class CXC(models.Model):
                     cierre.send_email(
                         "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com", "nfuentes@meditekhn.com")
                 time.sleep(1)
-                    
-             
-    
-    
+                     
     def go_to_view_tree(self):
         return {
             'name': 'Cierre Diario CXC',
@@ -166,7 +158,6 @@ class CXC(models.Model):
             'domain': [('company_id', '=', self.env.user.company_id.id)],
         }
     
-
 class CXCLine(models.Model):
     _name = "account.cierre.cxc.line"
     _description = "description"
@@ -176,7 +167,6 @@ class CXCLine(models.Model):
         for record in self:
             self.name = record.account_id.name
 
-    
     cierre_cxc_id = fields.Many2one("account.cierre.cxc")
     name = fields.Char("Nombre", compute=_name_)
     account_id = fields.Many2one("account.account")
@@ -185,7 +175,6 @@ class CXCLine(models.Model):
     debe = fields.Monetary("Debe")
     haber = fields.Monetary("Haber")
 
-    
 class Movimiento(models.Model):
     _inherit = "account.move.line"
     

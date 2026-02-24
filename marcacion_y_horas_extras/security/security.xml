@@ -4,7 +4,7 @@
         <record id="hr_employee_markings_access" model="ir.model.access">
             <field name="name">hr.employee.markings.access</field>
             <field name="model_id" ref="marcacion_y_horas_extras.model_hr_employee_markings" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />

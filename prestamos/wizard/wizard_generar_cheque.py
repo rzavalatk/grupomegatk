@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
-import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class WizardGenerarCheque(models.TransientModel):
@@ -42,12 +41,12 @@ class WizardGenerarCheque(models.TransientModel):
 
     currency_id = fields.Many2one("res.currency", "Moneda", default=lambda self: self.env.user.company_id.currency_id, domain=[('active', '=', True)])
     es_moneda_base = fields.Boolean("Es moneda base")
-    currency_rate = fields.Float("Tasa de Cambio", digits=(12, 6))
+    currency_rate = fields.Float("Tasa de Cambio")
 
     @api.model_create_multi
     def generate_cheque(self):
         if self.monto <= 0:
-            raise Warning(_('El monto del cheque/transferencia debe de ser mayor que cero.'))
+            raise UserError(_('El monto del cheque/transferencia debe de ser mayor que cero.'))
 
         ctx = self._context
         obj_prestamo = self.env[ctx["active_model"]].browse(ctx['active_id'])

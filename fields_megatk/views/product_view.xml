@@ -10,19 +10,19 @@
 				<xpath expr="//field[@name='standard_price']" position="attributes">
 				    <attribute name="groups">stock.group_stock_manager,base.group_system,purchase.group_purchase_manager</attribute>
 				</xpath>
-		  	<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='general_information']/group[1]" position="after">
-		    	<group name="marca">
-		    	  	<group name="studio_group_iZx2r_left">
-		    	  		<field name="marca_id"  required="1" domain="[('company_id', '=', company_id)]"/>
-		     	   		<field name="x_ingresotk" attrs='{"invisible": [["company_id","not in",8]], "required": [["company_id","in",8]]}'/>
-		     	   		<field name="x_ingresome" attrs='{"invisible": [["company_id","not in",9]], "required": [["company_id","in",9]]}'/>
-		     	   		<field name="x_ingresonic" attrs='{"invisible": [["company_id","not in",12]], "required": [["company_id","in",12]]}'/>
-		    		</group>
-		    	  	<group name="tipo">
-		        		<field name="x_tipo" attrs='{"invisible": [["company_id","not in",8]]}'/>
-		      		</group>
+			  <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='general_information']/group[1]" position="after">
+			    	<group name="marca">
+		    	    	<group name="studio_group_iZx2r_left">
+		    	    		<field name="marca_id"  required="1" domain="[('company_id', '=', company_id)]"/>
+		    	    		<field name="x_ingresotk" modifiers='{"invisible": [["company_id", "not in", [8]]], "required": [["company_id", "in", [8]]]}'/>
+		    	    		<field name="x_ingresome" modifiers='{"invisible": [["company_id", "not in", [9]]], "required": [["company_id", "in", [9]]]}'/>
+		    	    		<field name="x_ingresonic" modifiers='{"invisible": [["company_id", "not in", [12]]], "required": [["company_id", "in", [12]]]}'/>
+		    	    	</group>
+		    	        <group name="tipo">
+		    	        	<field name="x_tipo" modifiers='{"invisible": [["company_id", "not in", [8]]]}'/>
+		    	      	</group>
 		    	</group>
-		  	</xpath>
+		  </xpath>
 			</field>
    	</record>
 
@@ -96,11 +96,11 @@
 		<field name="name">marca.product.mega.tree.view</field>
 		<field name="model">product.marca</field>
 		<field name="arch" type="xml">
-			<tree decoration-danger="active==False" decoration-info="active==True">
+			<list decoration-danger="active==False" decoration-info="active==True">
 				<field name="name"/>
 				<field name="company_id" groups="base.group_multi_company"/>
 				<field name="active"/>
-			</tree>
+			</list>
 		</field>
     </record>
 
@@ -108,7 +108,7 @@
       	<field name="name">Marca</field>
       	<field name="type">ir.actions.act_window</field>
       	<field name="res_model">product.marca</field>
-      	<field name="view_mode">tree,form</field>
+      	<field name="view_mode">list,form</field>
     </record>
 
     <menuitem name="Marca" id="import_product_template_marca_mega" sequence = "2" parent="stock.menu_stock_inventory_control" action = "action_product_template_marca"/>

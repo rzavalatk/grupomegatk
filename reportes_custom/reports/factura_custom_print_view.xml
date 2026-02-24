@@ -41,7 +41,7 @@
                 <p><strong><span t-field="o.company_id.company_registry"/></strong></p>
                 <p style="margin-top: -10px"><strong>RTN:<span t-field="o.company_id.vat"/></strong></p>
                 </div>
-          <div t-if="o.move_type == 'out_invoice'" style="margin-top: 15px;">
+          <div t-if="o.move_type == 'out_invoice'" style="margin-top: 45px; margin-bottom: 30px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p style="margin-top: -10px"><strong>CAI: <span t-field="o.sequence_ids.fiscal_sequence_regime_ids.authorization_code_id.name"/></strong></p>
@@ -51,7 +51,7 @@
               </div> 
             </t>
           </div>
-          <div t-if="o.move_type == 'out_refund'" style="margin-top: 15px;">
+          <div t-if="o.move_type == 'out_refund'" style="margin-top: 45px; margin-bottom: 30px;">
             <t t-if="o.state != 'draft'"> 
               <div style="font-size:12pt; font-family:'Times New Roman'; line-height: 0.7;text-align: center; min-width: 400px;">
                 <p style="margin-top: -10px"><strong>CAI: <span t-field="o.sequence_ids.cai"/></strong></p>
@@ -256,7 +256,7 @@
               <div id="total" class="row" style='float:right !important;'>
                 <div>
                   <t t-set="null_num" t-value="0.00"/>
-                  <table class="table table-sm" >
+                  <table class="table table-sm" style="border: 0px solid white;">
                     <tr>
                       <td style="padding:1px !important; margin:1px !important; font-family:'Arial'; font-size:11pt;  font-weight: bold;">
                         <strong>Descuentos y Rebajas Otorgadas</strong>

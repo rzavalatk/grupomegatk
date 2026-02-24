@@ -14,8 +14,8 @@
   <field name="journal_id" invisible="1"/>
   <field name="new_sequence"/>
   <field name="doc_type" placeholder="Select a transaction type..."/>
-  <field name="sequence_name" attrs="{'invisible': [('new_sequence', '=', False)]}"/>
-<field name="sequence_id" placeholder="Select a Transaction..." attrs="{'invisible': [('new_sequence', '=', True)]}" options="{'no_create': True}"/>
+  <field name="sequence_name" modifiers="{'invisible': [('new_sequence', '=', False)]}"/>
+<field name="sequence_id" placeholder="Select a Transaction..." modifiers="{'invisible': [('new_sequence', '=', True)]}" options="{'no_create': True}"/>
 
 </group>
 <separator string="Settings"/>
@@ -26,8 +26,8 @@
   <field name="number_next"/>
 </group>
   <group cols="2">
-			<field name="min_value" attrs="{'invisible': [('doc_type', 'not in','check')]}"/>
-  <field name="max_value" attrs="{'invisible': [('doc_type', 'not in','check')]}"/>	
+			<field name="min_value" modifiers="{'invisible': [('doc_type', 'not in','check')]}"/>
+  <field name="max_value" modifiers="{'invisible': [('doc_type', 'not in','check')]}"/>	
   </group>
   
 </group>

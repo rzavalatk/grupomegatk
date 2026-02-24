@@ -4,7 +4,7 @@
         <record id="account_comisiones_access" model="ir.model.access">
             <field name="name">account.comisiones.access</field>
             <field name="model_id" ref="comisiones.model_account_comisiones" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_user" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -14,7 +14,7 @@
         <record id="account_comisiones_line_access" model="ir.model.access">
             <field name="name">account.comisiones.line.access</field>
             <field name="model_id" ref="comisiones.model_account_comisiones_line" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_user" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />

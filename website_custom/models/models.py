@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class CustomResConfig(models.TransientModel):
@@ -59,7 +59,7 @@ class Consults(models.Model):
             self.env.cr.execute(self.query)
             return True
         except Exception as inst:
-            raise Warning('Error en la consulta: '+inst.args[0])
+            raise UserError('Error en la consulta: '+inst.args[0])
 
         
     def generate_report(self):

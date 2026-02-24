@@ -2,7 +2,6 @@
 import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
 
 
 class Quotationrfq(models.TransientModel):

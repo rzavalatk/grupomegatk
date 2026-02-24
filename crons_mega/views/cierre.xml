@@ -5,12 +5,12 @@
             <field name="name">account.cierre.view.tree</field>
             <field name="model">account.cierre</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="date" />
                     <field name="region" />
                     <field name="company_id" />
                     <field name="state" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -21,22 +21,22 @@
                 <form>
                     <header>
                         <field name="id" invisible="1" />
-                        <button string="Iniciar Cierre" states="draft" name="iniciar_cierre" type="object" class="oe_highlight"/>
-                        <button string="Procesar Cierre" states="init" name="procesar_cierre" type="object" class="oe_highlight"/>
-                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
-                        <button string="Enviar por Email" states="done" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}"/>
-                        <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
-                        <button string="Cancelar" confirm="¿Esta seguro que desea cancelar este Cierre?" states="init,proccess,done" name="cancel" type="object"/>
+                        <button string="Iniciar Cierre" modifiers="{'invisible':[('state','!=','draft')]}" name="iniciar_cierre" type="object" class="oe_highlight"/>
+                        <button string="Procesar Cierre" modifiers="{'invisible':[('state','!=','init')]}" name="procesar_cierre" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" modifiers="{'invisible':[('state','!=','proccess')]}" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Enviar por Email" modifiers="{'invisible':[('state','!=','done')]}" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}"/>
+                        <button string="Volver a borrador" modifiers="{'invisible':[('state','!=','cancel')]}" name="volver_borrador" type="object"/>
+                        <button string="Cancelar" confirm="¿Esta seguro que desea cancelar este Cierre?" modifiers="{'invisible':[('state','in',['draft','done'])]}" name="cancel" type="object"/>
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="date" attrs="{'readonly':[('state','!=','draft')]}" />
-                                <field name="company_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="date" modifiers="{'readonly':[('state','!=','draft')]}" />
+                                <field name="company_id" modifiers="{'readonly':[('state','!=','draft')]}"/>
                             </group>
                             <group>
-                                <field name="region" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="region" modifiers="{'readonly':[('state','!=','draft')]}"/>
                                 <field name="currency_id" invisible="1" />
                             </group>
                         </group>
@@ -66,7 +66,7 @@
                             </page>
                             <page string="Facturas sin pagar">
                                 <field name="facturas_ids" nolabel="1">
-                                    <tree string="Facturas">
+                                    <list string="Facturas">
                                         <field name="partner_id" string="Cliente" />
                                         <field name="invoice_date" string="Fecha" />
                                         <field name="name" />
@@ -76,7 +76,7 @@
                                         <field name="amount_total_signed" string="Total" sum="Total"/>
                                         <field name="amount_residual" string="Saldo" sum="Total" />
                                         <field name="state" />
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Registros internos">
@@ -104,17 +104,8 @@
             <field name="name">Cierre Diario</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.cierre</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
-
-        <!-- <record id="account_cierre_action" model="ir.actions.server">
-            <field name="name">Cierre Diario</field>
-            <field name="condition">True</field>
-            <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="model_account_cierre" />
-            <field name="state">code</field>
-            <field name="code">action=model.go_to_view_tree()</field>
-        </record> -->
 
         <menuitem id="account_cierre_menu" name="Cierre Diario" action="account_cierre_action_2" parent="account.menu_finance_receivables" sequence="16"/>
     </data>

@@ -7,9 +7,9 @@
     'description': """
         Bancos y conciliación
     """,
-    'author': "César Alejandro Rodriguez Castillo",
+    'author': "David Zuniga - MegaTK",
     'category': 'Banking',
-    'version': '0.1',
+    'version': '18.0',
     "license": "LGPL-3",
     'depends': ['base', 'account', 'banks','formatos_papel_mega'],
     'data': [

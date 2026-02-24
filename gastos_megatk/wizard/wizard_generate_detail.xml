@@ -9,11 +9,11 @@
         <field name="arch" type="xml">
         <form string="Cuotas de Prestamo">
         <header>
-    <button name="set_borrador" type="object" string="Cambiar a Borrador" states="saldo,cancelada" class="oe_highlight"/>
-    <button name="generarsaldos" type="object" string="Revisar Saldos" states="borrador" class="oe_highlight"/>
+    <button name="set_borrador" type="object" string="Cambiar a Borrador"  modifiers="{'invisible': ['saldo','cancelada']}" class="oe_highlight"/>
+    <button name="generarsaldos" type="object" string="Revisar Saldos"  modifiers="{'invisible': ['borrador']}" class="oe_highlight"/>
     <!--<button name="liquidar_prestamo" type="object" string="Liquidar Prestamo (Capital)" states="saldo" class="oe_highlight"/>-->
     <!--<button name="set_cancelar" type="object" string="Cancelar Pago" states="pagada" class="oe_highlight"/>-->
-	<button name="set_pagos" class="oe_highlight" string="Realizar pago" type="object" states="saldo"/>
+	<button name="set_pagos" class="oe_highlight" string="Realizar pago" type="object"  modifiers="{'invisible': ['saldo']}"/>
      <field name="state" widget="statusbar" nolabel="1"/>
          </header>
             <sheet>
@@ -22,20 +22,20 @@
                     <group cols="2">
                         <field name="prestamo_id" required="1" readonly="1"/>
 						<field name="name" readonly="1"/>
-						 <field name="journal_id" attrs="{'readonly': [('state','=','pagada')]}" options="{'no_create': True}"/>
+						 <field name="journal_id" modifiers="{'readonly': [('state','=','pagada')]}" options="{'no_create': True}"/>
 						<field name="has_mora" invisible="1"/>  
-                    	<field name="monto" attrs="{'readonly': [('state','=','pagada')]}"/>
-						<field name="mora_pagar" attrs="{'readonly': [('state','=','pagada')], 'invisible': [('has_mora','=',False)],
+                    	<field name="monto" modifiers="{'readonly': [('state','=','pagada')]}"/>
+						<field name="mora_pagar" modifiers="{'readonly': [('state','=','pagada')], 'invisible': [('has_mora','=',False)],
 														'required': [('has_mora','=',True)]}"/>
                      	<field name="existe_cuota_morosa" invisible="1"/>
                      	<field name="has_revision_saldo" invisible="1"/>  
                     	<field name="currency_id" invisible="1"/> 
-                   <!--  <button name="generarsaldos" class="oe_highlight" string="Revisar Saldo" type="object" attrs="{'invisible': [('state','!=','borrador')]}"/>-->
+                   <!--  <button name="generarsaldos" class="oe_highlight" string="Revisar Saldo" type="object" modifiers="{'invisible': [('state','!=','borrador')]}"/>-->
 
                     </group>
                     <group cols="2">
-                        <field name="date_payment" attrs="{'readonly': [('state','=','pagada')]}"/>
-                        <!--<field name="capital_prestamo" attrs="{'invisible': [('state','!=','saldo')]}"/>-->
+                        <field name="date_payment" modifiers="{'readonly': [('state','=','pagada')]}"/>
+                        <!--<field name="capital_prestamo" modifiers="{'invisible': [('state','!=','saldo')]}"/>-->
                         <!--<field name="saldo_pendiente_prestamo"/>-->
                         <field name="liquidar_capital"  invisible="1"/>
 						<field name="saldo_pago"/>
@@ -54,12 +54,12 @@
                 </group>
             </group>
             <group colspan="4">  
-                <p  attrs="{'invisible': ['|', ('state','in',['borrador', 'cancelada', 'pagada']), ('saldo_pago', '!=', 0)]}"><strong>NO EXISTE SALDOS PENDIENTES REALIZARÁ ABONO(S) A CAPITAL.</strong></p>
+                <p  modifiers="{'invisible': ['|', ('state','in',['borrador', 'cancelada', 'pagada']), ('saldo_pago', '!=', 0)]}"><strong>NO EXISTE SALDOS PENDIENTES REALIZARÁ ABONO(S) A CAPITAL.</strong></p>
             </group>
             <notebook>
                 <page string="Detalle de Saldos">
                     <field name="cuotas_ids">
-                    <tree readonly="1" create="0" delete="0" colors="red:state =='morosa';green:state == 'vigente'; blue:state == 'novigente'" editable="top">
+                    <list readonly="1" create="0" delete="0" colors="red:state =='morosa';green:state == 'vigente'; blue:state == 'novigente'" editable="top">
                         <field name="numero_cuota"/>
                         <field name="fecha_pago" readonly="1"/>
                         <field name="monto_cuota" sum="Total" readonly="1"/>
@@ -69,7 +69,7 @@
 						 <field name="monto_pago" sum="Total" readonly="1"/>
                         <field name="state" readonly="1"/>
                         <field name="currency_id" invisible="1"/> 
-                    </tree>
+                    </list>
                     </field>
                 </page>
                 <page string="Observaciones">

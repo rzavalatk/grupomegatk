@@ -6,28 +6,30 @@
       <field name="inherit_id" ref="website_sale.total" />
       <field name="arch" type="xml">
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_untaxed']//span" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
         <xpath expr="//div[@id='cart_total']//tr[@id='order_total_taxes']//span" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
-        <xpath expr="//div[@id='cart_total']//tr[@id='order_total']//strong[@class='monetary_field']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
-        </xpath>
+        <!--Arreglar en ya las pruebas-->
+        <!--<xpath expr="//div[@id='cart_total']//tr[@id='order_total']//strong[@class='monetary_field']" position="attributes">
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
+        </xpath>-->
       </field>
     </record>
 
 
      <!--View Cart Line -->
-    <record id="custom_cart_page" model="ir.ui.view">
+     <!--Arreglar en ya las pruebas-->
+    <!--<record id="custom_cart_page" model="ir.ui.view">
       <field name="name">page.cart.custom</field>
       <field name="inherit_id" ref="website_sale.cart_lines" />
       <field name="arch" type="xml">
         <xpath expr="//table[@id='cart_products']//td[@name='price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
       </field>
-    </record>
+    </record>-->
 
 
      <!--View Product-->
@@ -36,7 +38,7 @@
       <field name="inherit_id" ref="website_sale.product_price" />
       <field name="arch" type="xml">
         <xpath expr="//div[@itemprop='offers']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
       </field>
     </record>
@@ -47,54 +49,58 @@
       <field name="inherit_id" ref="website_sale.products_item" />
       <field name="arch" type="xml">
         <xpath expr="//div[@itemprop='offers']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
-        <xpath expr="//div[@class='o_wsale_product_btn']" position="attributes">
+        <xpath expr="//div[contains(@class,'o_wsale_product_btn') or @class='o_wsale_product_btn']" position="attributes">
           <attribute name="groups">base.group_user</attribute>
         </xpath>
       </field>
     </record>
     
-    <!--View Product Summary Cart--> 
-    <record id="custom_product_summary_cart" model="ir.ui.view">
+    <!--View Product Summary Cart-->
+    <!--Modificar luego en test-->  
+    <!--<record id="custom_product_summary_cart" model="ir.ui.view">
       <field name="name">custom.product.summary.cart</field>
       <field name="inherit_id" ref="website_sale.cart_summary" />
       <field name="arch" type="xml">
-        <xpath expr="//td[@class='text-center td-price']" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        <xpath expr="//td[contains(@class,'td-price') or @class='text-center td-price']" position="attributes">
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
       </field>
-    </record>
+    </record>-->
 
     
     <!-- View Product Summary Cart 2- -->
+    <!--Modificar luego en test-->  
+    <!--
     <record id="custom_product_summary_cart_2" model="ir.ui.view">
       <field name="name">custom.product.summary.cart.2</field>
       <field name="inherit_id" ref="website_sale_comparison.product_compare" />
       <field name="arch" type="xml">
-        <xpath expr="//div[@class='product_summary']/span" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        <xpath expr="//div[contains(@class,'product_summary')]//span" position="attributes">
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
       </field>
-    </record>
+    </record>-->
     
     <!-- - View wishlist -->
-    <record id="custom_product_wishlist" model="ir.ui.view">
+    <!--Modificar luego en test-->
+    <!--<record id="custom_product_wishlist" model="ir.ui.view">
       <field name="name">custom.product.wishlist</field>
       <field name="inherit_id" ref="website_sale_wishlist.product_wishlist" />
       <field name="arch" type="xml">
-        <xpath expr="//tr[@t-att-data-wish-id='wish.id']/td[3]" position="attributes">
-          <attribute name="groups">base.group_portal, base.group_user</attribute>
+        <xpath expr="//tr[contains(@t-att-data-wish-id,'wish.id')]//td[3]" position="attributes">
+          <attribute name="groups">base.group_portal,base.group_user</attribute>
         </xpath>
       </field>
-    </record>
+    </record>-->
 
     <!-- - View product -->
     <record id="custom_product_add_to_cart_wrap" model="ir.ui.view">
       <field name="name">custom.product.add_to_cart</field>
       <field name="inherit_id" ref="website_sale.product" />
       <field name="arch" type="xml">
-        <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
+        <xpath expr="//div[@id='add_to_cart_wrap' or contains(@id,'add_to_cart')]" position="attributes">
           <attribute name="groups">base.group_user</attribute>
         </xpath>
       </field>

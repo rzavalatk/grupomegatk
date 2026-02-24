@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Modulo con acciones automatizadas",
-
     'summary': """
         Maneja la mayoria de acciones automatizadas de Megatk
         """,
-
     'description': """
         Maneja la mayoria de acciones automatizadas de Megatk
     """,
-
-    'author': "Alejandro Zelaya",
-    'website': "azelaya@megatk.com",
-    'category': 'Usuarios',
-    'version': '0.1',
+    'author': "David Zuniga - MegaTK",
+    'website': "dzuniga@megatk.com",
+    'category': 'Accounting',
+    'version': '18.0',
     "license": "LGPL-3",
     'depends': ['base','account','fields_megatk'],
     'data': [

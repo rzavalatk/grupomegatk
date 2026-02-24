@@ -2,7 +2,7 @@
 import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class WizardGiftCardCobrar(models.TransientModel):
@@ -26,7 +26,7 @@ class WizardGiftCardCobrar(models.TransientModel):
 			obj_giftcard.giftcard_detalle.create(valores)
 			obj_giftcard.saldo = obj_giftcard.saldo - self.monto
 		elif self.monto < 0:
-			raise Warning(_('Monto debe ser mayor que cero.'))
+			raise UserError(_('Monto debe ser mayor que cero.'))
 		elif obj_giftcard.saldo < self.monto:
-			raise Warning(_('Monto debe ser menor o igual al saldo de la tarjeta.'))
+			raise UserError(_('Monto debe ser menor o igual al saldo de la tarjeta.'))
 

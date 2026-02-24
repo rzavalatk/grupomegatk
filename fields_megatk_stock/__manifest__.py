@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Modulo de campos personalizados Stock",
-    "author": "Romel Zavala",
+    "author": "David Zuniga - MegaTK",
     "description": "Campos megatk, no facturar cero ni negativos(Cotización, Facturación)",
     "category": "Sale",
     "license": "LGPL-3",

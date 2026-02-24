@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Vista de Búsqueda de Transferencias de Empleados -->
+    <record id="employee_transfer_view_search" model="ir.ui.view">
+        <field name="name">employee.transfer.view.search</field>
+        <field name="model">employee.transfer</field>
+        <field name="arch" type="xml">
+            <search string="Transferencia de Empleados">
+                <!-- Campo de búsqueda principal -->
+                <field name="name" string="Empleado"
+                       filter_domain="['|','|', ('name','ilike',self), ('name', 'ilike', self), ('employee_id', 'child_of', self)]"/>
+                
+                <!-- Filtros por estado -->
+                <filter name="draft" string="Borrador"
+                        domain="[('state','=','draft')]"/>
+                <filter name="transfer" string="Transferido"
+                        domain="[('state', '=', 'transfer')]"/>
+                <filter name="done" string="Finalizado"
+                        domain="[('state', '=', 'done')]"/>
+                
+                <!-- Agrupaciones -->
+                <group expand="0" string="Agrupar Por">
+                    <filter name="employee" string="Empleado"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="status" string="Estado"
+                            context="{'group_by':'state'}"/>
+                    <filter name="responsible" string="Persona Responsable"
+                            context="{'group_by':'responsible_employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista de Formulario de Transferencia de Empleados -->
+    <record id="employee_transfer_view_form" model="ir.ui.view">
+        <field name="name">employee.transfer.view.form</field>
+        <field name="model">employee.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Transferencia de Empleados">
+                <header>
+                    <!-- Botón para confirmar la transferencia -->
+                    <button name="action_transfer" string="Transferir"
+                            class="oe_highlight" type="object"
+                            invisible="state != 'draft'"
+                            groups="hr.group_hr_manager"/>
+                    
+                    <!-- Botón para recibir al empleado en la sucursal destino -->
+                    <button name="action_receive_employee" string="Recibir"
+                            class="oe_highlight" type="object"
+                            groups="hr.group_hr_manager"
+                            invisible="not transferred or state != 'transfer'"/>
+                    
+                    <!-- Botón para cancelar la transferencia -->
+                    <button name="cancel_transfer" string="Cancelar"
+                            type="object"
+                            invisible="state in ('draft', 'cancel', 'done')"
+                            groups="hr.group_hr_manager"/>
+                    
+                    <!-- Barra de estado -->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,transfer,done"/>
+                </header>
+                <sheet>
+                    <!-- Título del formulario -->
+                    <div class="oe_title oe_left">
+                        <h2>
+                            <field name="name" class="oe_inline"
+                                   placeholder="Nombre"/>
+                        </h2>
+                    </div>
+                    
+                    <!-- Campos principales -->
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="transfer_date" readonly="state != 'draft'"/>
+                            <field name="transferred" invisible="1"/>
+                            <field name="transfer_company_id"
+                                   groups="base.group_multi_company"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   options="{'no_create': True}"/>
+                            <field name="responsible_employee_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Pestaña de notas -->
+                    <notebook colspan="4">
+                        <page string="Notas Internas">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de Lista de Transferencias de Empleados -->
+    <record id="employee_transfer_view_tree" model="ir.ui.view">
+        <field name="name">employee.transfer.view.list</field>
+        <field name="model">employee.transfer</field>
+        <field name="arch" type="xml">
+            <!-- Decoraciones: azul para borrador, gris para finalizados/cancelados -->
+            <list string="Transferencia de Empleados" decoration-info="state == 'draft'"
+                  decoration-muted="state in ('done','cancel')">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="transfer_date"/>
+                <field name="transfer_company_id"
+                       groups="base.group_multi_company"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Acción de Ventana para Transferencias de Empleados -->
+    <record id="employee_transfer_action" model="ir.actions.act_window">
+        <field name="name">Transferencias</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.transfer</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Crear una nueva Transferencia de Empleado.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú Principal de Transferencias -->
+    <menuitem id="employee_transfer_menu_create_transfer"
+              name="Transferencias"
+              sequence="10"
+              action="employee_transfer_action"
+              groups="hr.group_hr_manager"
+              web_icon="hr_employee_transfer,static/description/icon.png"/>
+</odoo>

@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             
             <xpath expr="/form/sheet/div[hasclass('oe_title')]" position="before">
-                <field name="qr_image" attrs="{'invisible': [('state', '=', 'draft')]}" widget="image" class="oe_avatar"/>
+                <field name="qr_image" modifiers="{'invisible': [('state', '=', 'draft')]}" widget="image" class="oe_avatar"/>
             </xpath>
         </field>
     </record>

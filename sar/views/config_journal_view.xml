@@ -8,16 +8,16 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='currency_id']" position="after" string='Allow Multi-Sequence'>
-                <field name="allow_multi_sequence" readonly="True" attrs="{'invisible': [('type','not in',['sale','purchase','general'])]}"/>
+                <field name="allow_multi_sequence" readonly="True" modifiers="{'invisible': [('type','not in',['sale','purchase','general'])]}"/>
             </xpath>
 
             <xpath expr="//page[@name='advanced_settings']" position="after">
-                <page string="Sequences" attrs="{'invisible': [('allow_multi_sequence','!=',True)]}" >
+                <page string="Sequences" modifiers="{'invisible': [('allow_multi_sequence','!=',True)]}" >
                     <group >
                         <separator  string="Sequences"/>        
                         <field name="sequence_ids" options="{'no_create': True}" readonly="True">
 
-                            <tree>
+                            <list>
                                 <field name="name" />
                                 <field name="prefix" />
                                 <field name="min_value" />
@@ -26,7 +26,7 @@
                                 <field name="expiration_date"/>
                                 <field name="code"/>
                                 <field name="user_ids" widget="many2many_tags"/>
-                            </tree>
+                            </list>
                         </field>
 
                     </group>

@@ -6,7 +6,7 @@
     'website': "https://ingenuityinfo.in",
     'company': 'Ingenuity Info',
     'maintainer': 'Ingenuity Info',
-    'version': '16.0.0.0',
+    'version': '18.0',
     'price': 0.0,
     'currency': 'EUR',
     'description': """ By using this module you can Generate QR Code for Invoice. Thae QR code will visible on Invoice form. 
@@ -17,7 +17,6 @@
         'account'
     ],
     'data': [
-        'report/account_invoice_report_template.xml',
         'views/qr_code_invoice_view.xml',
     ],
     'qweb': [

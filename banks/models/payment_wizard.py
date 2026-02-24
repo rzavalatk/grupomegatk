@@ -1,20 +1,19 @@
 # -*- encoding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class PaymentInvoice(models.TransientModel):
 	_name = "banks.invoice.payment.supplier"
-	_description = "description"
+	_description = "Wizard para el pago de facturas de proveedores"
 
-	@api.model
 	def _get_invoice_number(self):
 		ctx = self._context
 		if 'active_id' in ctx:
 			inv = self.env['account.invoice'].browse(ctx['active_id'])
 			return inv.number
 		else:
-			raise Warning(_('!! No se pudo completar la transacción intente nuevamente!!'))
+			raise UserError(_('!! No se pudo completar la transacción intente nuevamente!!'))
 
 	def get_msg_number(self):
 		if self.journal_id and self.doc_type:
@@ -39,7 +38,6 @@ class PaymentInvoice(models.TransientModel):
 		if self.journal_id and self.doc_type:
 			self.get_msg_number()
 	
-	@api.model
 	def _get_amount(self):
 		ctx = self._context
 		if 'active_id' in ctx:
@@ -58,7 +56,6 @@ class PaymentInvoice(models.TransientModel):
 	msg = fields.Char(compute=get_msg_number)
 	ref = fields.Char("Referencia de pago", required=True)
 
-	@api.model
 	def action_pago(self):
 		self.get_msg_number()
 		obj_pago = self.env["banks.payment.invoices.custom"]
@@ -67,7 +64,7 @@ class PaymentInvoice(models.TransientModel):
 		if active_id:
 			inv = self.env['account.move'].browse(active_id)
 			if inv.residual < 0:
-				raise Warning(_('!! Amount must be greater than zero !!'))
+				raise UserError(_('!! Amount must be greater than zero !!'))
 
 			invoice_ids = {
 				'partner_id': inv.partner_id.id,
