@@ -14,7 +14,7 @@
     "license": "LGPL-3",
     'website': "azelaya@megatk.com",
     'category': 'Aplicaciones',
-    'version': '18.0.0',
+    'version': '18.0',
 
     'depends': ['base','crm'],
     'data': [
