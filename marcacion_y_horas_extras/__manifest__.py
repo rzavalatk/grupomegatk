@@ -14,6 +14,7 @@
     'version': '0.1',
     'depends': ['base','hr'],
     'data': [
+        'security/security.xml',
         'wizard/hours_xtra.xml',
         'views/assets.xml',
         'views/employees.xml',
