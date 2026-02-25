@@ -8,11 +8,14 @@
 	  		<field name="model">crm.lead</field>
 	  		<field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
 				<field name="arch" type="xml"> 	
-					<field name="name" position="before">
+					<xpath expr="//kanban" position="inside">
+						<field name="id"/>
+					</xpath>
+					<xpath expr="//t[@t-name='kanban-box']//field[@name='name']" position="before">
 						<div>
 	            <strong class="o_kanban_record_title">Ticket <field name="id"/></strong>
 						</div>
-		      </field>
+					</xpath>
 				</field>
    		</record>
    		<record model="ir.ui.view" id="crm_lista_campo_megatk_view_inh">

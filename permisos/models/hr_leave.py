@@ -32,6 +32,12 @@ class HrLeave(models.Model):
     dias_empleado = fields.Integer(string='Dias de vacaciones disponibles', related='employee_id.permisos_dias', store=False)
     horas_empleado = fields.Integer(string='Horas de vacaciones disponibles', related='employee_id.permisos_horas', store=False)
     minutos_empleado = fields.Integer(string='Minutos de vacaciones disponibles', related='employee_id.permisos_minutos', store=False)
+    employee_ids = fields.Many2many(
+        'hr.employee',
+        compute='_compute_employee_ids_compat',
+        string='Employees',
+        store=False,
+    )
     
     entrada = time(7, 0, 0)
     medio_dia = time(12, 0, 0)
@@ -145,6 +151,11 @@ class HrLeave(models.Model):
     @api.onchange('request_hour_to_1')
     def _onchange_request_hour_to_1(self):
         self.request_hour_to = float(self.request_hour_to_1) if self.request_hour_to_1 else False
+
+    @api.depends('employee_id')
+    def _compute_employee_ids_compat(self):
+        for leave in self:
+            leave.employee_ids = leave.employee_id
                 
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours', 'holiday_status_id', 'request_hour_to', 'request_hour_from')
     def _onchange_request_datetm_ft(self):
