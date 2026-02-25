@@ -441,11 +441,19 @@ class HrLeave(models.Model):
 
         return dias, horas, minutos_restantes
 
+    def _get_leave_employees_to_process(self, leave):
+        """Retorna los empleados del permiso compatible con distintas versiones."""
+        if 'employee_ids' in leave._fields and leave.employee_ids:
+            return leave.employee_ids
+        if leave.employee_id:
+            return leave.employee_id
+        return self.env['hr.employee']
+
     def action_validate(self, check_state=True):
         for leave in self:
             if leave.holiday_status_id.vacaciones:
                 # Determinar qué empleados procesar
-                employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
+                employees_to_process = self._get_leave_employees_to_process(leave)
                 
                 for employee_id in employees_to_process:
                     if employee_id:  # Verificar que el empleado existe
@@ -468,7 +476,7 @@ class HrLeave(models.Model):
             if leave.state == 'validate':
                 if leave.holiday_status_id.vacaciones:
                     # Determinar qué empleados procesar
-                    employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
+                    employees_to_process = self._get_leave_employees_to_process(leave)
                     
                     for employee_id in employees_to_process:
                         if employee_id:  # Verificar que el empleado existe
