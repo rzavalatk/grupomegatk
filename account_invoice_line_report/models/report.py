@@ -96,7 +96,7 @@ class AccountInvoiceReport(models.Model):
 	def _select(self):
 		select_str = """
 			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id,
-				sub.invoice_payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
+				sub.invoice_payment_term_id AS payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
 				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr,  sub.move_type, sub.state,
 				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
 				sub.product_qty, sub.price_total as price_total, sub.price_average as price_average, sub.amount_total / COALESCE(cr.rate, 1) as amount_total,
