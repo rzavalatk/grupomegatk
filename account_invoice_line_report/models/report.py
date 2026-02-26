@@ -24,7 +24,7 @@ class AccountInvoiceReport(models.Model):
 			company = record.company_id
 			record.user_currency_price_total = base_currency_id._convert(record.price_total, user_currency_id, company, date)
 			record.user_currency_price_average = base_currency_id._convert(record.price_average, user_currency_id, company, date)
-			record.user_currency_amount_residual = base_currency_id._convert(record.amount_residual, user_currency_id, company, date)
+			record.user_currency_residual = base_currency_id._convert(record.amount_residual, user_currency_id, company, date)
 
 	number = fields.Char('Factura #', readonly=True)
 	date = fields.Date(readonly=True, string="Fecha")
@@ -57,8 +57,7 @@ class AccountInvoiceReport(models.Model):
 		], readonly=True)
 	state = fields.Selection([
 		('draft', 'Draft'),
-		('open', 'Open'),
-		('paid', 'Paid'),
+		('posted', 'Posted'),
 		('cancel', 'Cancelled')
 		], string='Invoice Status', readonly=True)
 	invoice_date_due = fields.Date(string='Due Date', readonly=True)
@@ -85,8 +84,7 @@ class AccountInvoiceReport(models.Model):
 			'quantity', 'product_uom_id',
 		],
 		'product.product': ['product_tmpl_id'],
-		'product.template': ['categ_id'],
-		'product.template': ['marca_id'],
+		'product.template': ['categ_id', 'marca_id'],
 		'uom.uom': ['category_id', 'factor', 'name', 'uom_type'],
 		'res.currency.rate': ['currency_id', 'name'],
 		'res.partner': ['country_id'],
@@ -120,7 +118,7 @@ class AccountInvoiceReport(models.Model):
 							THEN pt.x_costo_real 
 							
 						END AS costo, 
-					ai.invoice_date_due, ail.move_id AS account_line_id, ail.account_id AS account_id,
+					ai.invoice_date_due, ail.account_id AS account_line_id, ail.account_id AS account_id,
 					NULL::integer AS account_analytic_id,
 					ai.partner_bank_id,
 					SUM ((invoice_type.sign_qty * ail.quantity) / COALESCE(u.factor,1) * COALESCE(u2.factor,1)) AS product_qty,
@@ -131,7 +129,7 @@ class AccountInvoiceReport(models.Model):
 							   THEN SUM(ail.quantity / COALESCE(u.factor,1) * COALESCE(u2.factor,1))
 							   ELSE 1::numeric
 							END AS price_average,
-					ai.amount_residual_signed / (SELECT count(*) FROM account_move_line l where CAST(invoice_origin AS integer) = ai.id) *
+					ai.amount_residual_signed / (SELECT count(*) FROM account_move_line l where l.move_id = ai.id) *
 					count(*) * invoice_type.sign AS amount_residual,
 					ai.commercial_partner_id as commercial_partner_id,
 					coalesce(partner.country_id, partner_ai.country_id) AS country_id
