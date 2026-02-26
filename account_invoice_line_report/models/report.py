@@ -97,10 +97,11 @@ class AccountInvoiceReport(models.Model):
 		select_str = """
 			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id,
 				sub.invoice_payment_term_id AS payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
-				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr,  sub.move_type, sub.state,
+				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr, sub.invoice_origin, sub.move_type, sub.state,
 				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
 				sub.product_qty, sub.price_total as price_total, sub.price_average as price_average, sub.amount_total / COALESCE(cr.rate, 1) as amount_total,
-				COALESCE(cr.rate, 1) as currency_rate, sub.residual as residual, sub.commercial_partner_id as commercial_partner_id
+				COALESCE(cr.rate, 1) as currency_rate, sub.amount_residual as amount_residual, sub.account_id, sub.account_analytic_id,
+				sub.commercial_partner_id as commercial_partner_id
 		"""
 		return select_str
 
@@ -119,7 +120,8 @@ class AccountInvoiceReport(models.Model):
 							THEN pt.x_costo_real 
 							
 						END AS costo, 
-					ai.invoice_date_due, ail.move_id AS account_line_id,
+					ai.invoice_date_due, ail.move_id AS account_line_id, ail.account_id AS account_id,
+					NULL::integer AS account_analytic_id,
 					ai.partner_bank_id,
 					SUM ((invoice_type.sign_qty * ail.quantity) / COALESCE(u.factor,1) * COALESCE(u2.factor,1)) AS product_qty,
 					SUM(ail.price_subtotal* invoice_type.sign) AS price_total,
@@ -130,7 +132,7 @@ class AccountInvoiceReport(models.Model):
 							   ELSE 1::numeric
 							END AS price_average,
 					ai.amount_residual_signed / (SELECT count(*) FROM account_move_line l where CAST(invoice_origin AS integer) = ai.id) *
-					count(*) * invoice_type.sign AS residual,
+					count(*) * invoice_type.sign AS amount_residual,
 					ai.commercial_partner_id as commercial_partner_id,
 					coalesce(partner.country_id, partner_ai.country_id) AS country_id
 		"""
