@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 from datetime import datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError, ValidationError, AccessError
 
 
 class BanksPayment(models.Model):
@@ -16,7 +15,6 @@ class BanksPayment(models.Model):
 			for seq in self.journal_id.secuencia_ids:
 				if seq.move_type == self.doc_type:
 					return seq.id
-
 
 	@api.onchange("currency_id")
 	def onchangecurrency(self):
@@ -102,19 +100,18 @@ class BanksPayment(models.Model):
 				self.currency_id = self.company_id.currency_id.id
 
 
-	@api.model
+	@api.model_create_multi
 	def create(self, vals):
 		vals["name"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
 		check = super(BanksPayment, self).create(vals)
 		return check
 
-	#@api.model_create_multi
 	def get_invoices(self):
 		invoice_ids = self.env["account.invoice"].search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open'), 
 			('currency_id', '=', self.currency_id.id), ('type','=','in_invoice')])
 		facturas = self.env["banks.payment.line.custom"]
 		if not invoice_ids:
-			raise Warning(_('No existen facturas para este cliente'))
+			raise UserError(_('No existen facturas para este cliente'))
 		dict_invoices = {}
 		self.invoice_ids.unlink()
 		for invoice in invoice_ids:
@@ -132,24 +129,23 @@ class BanksPayment(models.Model):
 			}
 			facturas.create(vals)
 
-	#@api.model_create_multi
 	def post_payment(self):
 		if self.amount <= 0:
-			raise Warning(_('El monto debe de ser mayor que cero'))
+			raise UserError(_('El monto debe de ser mayor que cero'))
 		if not self.invoice_ids:
-			raise Warning(_('No existen facturas para registrar pagos'))
+			raise UserError(_('No existen facturas para registrar pagos'))
 		total_line = 0
 		for linea in self.invoice_ids:
 			total_line += linea.monto_pago
 		if not round(total_line, 2) == round(self.amount, 2):
-			raise Warning(_('Existen diferencias, verifique el monto de las facturas'))
+			raise UserError(_('Existen diferencias, verifique el monto de las facturas'))
 		account_move = self.env['account.move']
 		lineas = []
 		to_reconcile_ids = {}
 		to_reconcile_lines = self.env['account.move.line']
 		for factura in self.invoice_ids:
 			if factura.currency_id != self.currency_id:
-				raise Warning(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
+				raise UserError(_('Esta tratando de pagar con monedas diferentes, favor verifique la moneda de pago sean igual que el de las facturas'))
 			if factura.monto_pago > 0:
 				vals_interes = {
 					'debit': factura.monto_pago * self.currency_rate,
@@ -242,4 +238,4 @@ class BanksPayemtline(models.Model):
 	@api.onchange("monto_pago")
 	def validated_amount(self):
 		if self.monto_pago > self.residual:
-			raise Warning(_('El monto ingresado es mayor que el saldo de la factura'))
+			raise UserError(_('El monto ingresado es mayor que el saldo de la factura'))

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Orden de trabajo sale order",
-    "author": "Romel Zavala",
+    "author": "Romel Zavala / David Zuniga odoo 12 - 18 migration",
     "description": "Orden de Trabajo",
     "category": "Uncategorized",
     "license": "LGPL-3",
+    "version": "18.01",
     "depends": ["base",
         "base_import",
         "sale",

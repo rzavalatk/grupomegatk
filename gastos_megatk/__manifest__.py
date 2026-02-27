@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 {
     "name": "Gestión de gastos Grupo Mega",
-    "version": "14",
+    "version": "18.1",
     "category": "accounting",
-    "author": "César Alejandro Rodriguez",
+    "author": "David Zuniga - MegaTK",
     "license": "LGPL-3",
     "depends": [
         "base",

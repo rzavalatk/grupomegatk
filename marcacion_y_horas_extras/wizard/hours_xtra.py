@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from operator import length_hint
 from odoo import api, fields, models
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 import datetime
 import pytz
 
@@ -53,7 +53,7 @@ class WizarCamaronCuatrero(models.TransientModel):
             data_res = self._create_excel(
                 vals[0]["date_init"], vals[0]["tipo_reporte"])
         elif vals[0]["date_init"] > vals[0]["date_end"]:
-            raise Warning('La fecha inicial no puede ser mayor a la final')
+            raise UserError('La fecha inicial no puede ser mayor a la final')
         else:
             date1 = datetime.datetime.strptime(
                 vals[0]["date_init"]+" 00:00:00",'%Y-%m-%d %H:%M:%S')

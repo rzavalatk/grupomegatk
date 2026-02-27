@@ -15,7 +15,7 @@
 
         <xpath expr="//form/sheet/notebook/page[@name='other_info']/group/group[@name='accounting_info_group']/field[@name='company_id']" position="before">
             <field name="fiscal_control" default="True"/>
-            <field name="sequence_ids" placeholder="Select a sequence..."  attrs="{'invisible': [('fiscal_control','=',False)], 
+            <field name="sequence_ids" placeholder="Select a sequence..."  modifiers="{'invisible': [('fiscal_control','=',False)], 
     'required': [('fiscal_control', '=', True)], 'readonly': [('state', 'in', ['done', 'open'])]}" options="{'no_create': True}"/>
         </xpath>
 

@@ -2,7 +2,7 @@
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class LiquidacionTarjetas(models.Model):
@@ -61,7 +61,7 @@ class LiquidacionTarjetas(models.Model):
     #@api.model_create_multi
     def solicitar_aprobacion(self):
         if not self.detalle_gastos_ids:
-            raise Warning(_('No existe detalle de gastos'))
+            raise UserError(_('No existe detalle de gastos'))
         self.write({'state': 'pendiente'})
 
     #@api.model_create_multi
@@ -71,12 +71,12 @@ class LiquidacionTarjetas(models.Model):
     #@api.model_create_multi
     def liquidar_gastos(self):
         #if self.total_gastos <= 0:
-            #raise Warning(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
+            #raise UserError(_('Debe de ingresar los gastos reales, no puede ser cero la suma de los gastos para esta solicitud.'))
 
         if not self.fecha_liquidacion:
             self.fecha_liquidacion = datetime.now().date()
         if not self.journal_id:
-            raise Warning(_('No ha seleccionado una tarjeta para generar la liquidación.'))
+            raise UserError(_('No ha seleccionado una tarjeta para generar la liquidación.'))
 
         obj_debit = self.env["banks.debit"]
         lineas = []
@@ -106,7 +106,7 @@ class LiquidacionTarjetas(models.Model):
         
         id_move = obj_debit.create(val_encabezado)
         id_move.action_validate()
-        self.debito_id = id_move.id
+        self.debito_id = id_move
         self.write({'state': 'liquidado'})
 
     #@api.model_create_multi
@@ -116,7 +116,7 @@ class LiquidacionTarjetas(models.Model):
     #@api.model_create_multi
     def unlink(self):
         if self.state == 'pendiente' or self.state == 'aprobado'  or self.state =='liquidado':
-            raise Warning(_('No puede eliminar gastos en proceso o liquidados.'))
+            raise UserError(_('No puede eliminar gastos en proceso o liquidados.'))
         return super(LiquidacionTarjetas, self).unlink()
 
 class LineaGastos(models.Model):
@@ -126,7 +126,7 @@ class LineaGastos(models.Model):
     obj_parent = fields.Many2one("gastos.tarjeta.megatk", "Gasto")
     name = fields.Char("Descripción")
     comprobante = fields.Char("Factura/Comprobante")
-    account_id = fields.Many2one('account.account', 'Cuenta', domain="[('company_id', '=', parent.company_id)]")
-    analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica", domain="[('company_id', '=', parent.company_id)]")
-    partner_id = fields.Many2one('res.partner', 'Empresa o Persona', domain="[('company_id', '=', parent.company_id)]")
+    account_id = fields.Many2one('account.account', 'Cuenta', domain="[('deprecated', '=', False)]")
+    analytic_id = fields.Many2one("account.analytic.account", string="Cuenta Analitica", domain="['|', ('company_id', '=', False), ('company_id', 'in', allowed_company_ids)]")
+    partner_id = fields.Many2one('res.partner', 'Empresa o Persona')
     monto = fields.Float("Monto a liquidar")

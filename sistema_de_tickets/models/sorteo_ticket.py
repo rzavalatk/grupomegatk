@@ -1,33 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api, fields
-from odoo.exceptions import Warning
 import requests
 
 
 class SorteoTicket(models.Model):
     _name = 'sorteo.ticket'
     _description = 'Tickets para el sorteo'
-
-    """def get_name_tick(self):
-        
-       if self.sorteo:
-            flag = False
-            if not self.cheque_anulado:
-                for seq in self.journal_id.secuencia_ids:
-                    if seq.move_type == self.doc_type:
-                        self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
-                        flag = True
-                        break  # Agregamos un break para salir del bucle cuando encontramos una secuencia válida
-                if not flag:
-                    self.msg = "No existe numeración para este banco, verifique la configuración"
-                    self.number_calc = ""
-                else:
-                    self.msg = ""
-            else:
-                self.msg = "El cheque está anulado"  # Mensaje adicional si el cheque está anulado"""
-       
-    
+           
     name = fields.Char(string='Número de Ticket', copy=False)
     move_id = fields.Many2one('account.move', string='Factura')
     customer_id = fields.Many2one('res.partner', string='Cliente', store=True)

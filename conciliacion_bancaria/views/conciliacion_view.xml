@@ -4,7 +4,7 @@
 <record id="action_movimientos_concilidos" model="ir.actions.act_window">
     <field name="name">Conciliación Bancaria</field>
     <field name="res_model">account.move</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">list,form</field>
     <field name="domain"> [('conciliacion_id', '=', active_id)]</field>
 </record>
 
@@ -12,7 +12,7 @@
     <field name="name">conicliacion.bancaria.line.tree</field>
     <field name="model">conicliacion.bancaria.line</field>
     <field name="arch" type="xml">
-    <tree string="Conciliaciones" create="0" delete="0" >
+    <list string="Conciliaciones" create="0" delete="0" >
        <field name="move_id" />
        <field name="name" />
        <field name="date" />
@@ -23,14 +23,14 @@
        <field name="currency_id" />
        <field name="importe_moneda" />
        <field name="es_conciliado"/>
-    </tree>
+    </list>
     </field>
 </record>
 
 <record id="action_no_conicliacion_bancaria_line" model="ir.actions.act_window">
     <field name="name">No Conciliados</field>
     <field name="res_model">conicliacion.bancaria.line</field>
-    <field name="view_mode">tree</field>
+    <field name="view_mode">list</field>
     <field name="domain"> [('conciliacion_id', '=', active_id), ('es_conciliado', '=', False)]</field>
 </record>
 
@@ -40,15 +40,15 @@
     <field name="arch" type="xml">
     <form string="Debits">
     <header>
-        <button name="back_draft" type="object" string="Volver a borrador" states="anulated" class="oe_highlight"/>
-        <button name="get_movimientos" type="object" string="Obtener Movimientos" states="draft" class="oe_highlight"/>
-        <button name="action_validate" type="object" string="Conciliar Saldos" states="draft" class="oe_highlight"/>
-        <button name="%(action_wizard_generar_movimientos)d" type="action" string="Crear Movimientos" states="draft" class="oe_highlight"/>
+        <button name="back_draft" type="object" string="Volver a borrador" modifiers="{'readonly': [('state','!=','anulated')]}" class="oe_highlight"/>
+        <button name="get_movimientos" type="object" string="Obtener Movimientos" modifiers="{'readonly': [('state','!=','draft')]}" class="oe_highlight"/>
+        <button name="action_validate" type="object" string="Conciliar Saldos"  modifiers="{'readonly': [('state','!=','draft')]}" class="oe_highlight"/>
+        <button name="%(action_wizard_generar_movimientos)d" type="action" string="Crear Movimientos" modifiers="{'readonly': [('state','!=','draft')]}" class="oe_highlight"/>
         <field name="state" widget="statusbar" statusbar_visible="draft,validated" statusbar_colors='{"validated":"blue"}'/>
         <button name="action_anulated" type="object" string="Anular Conciliación" 
-           confirm="Esta seguro que quiere anular este registro?" states="validated" class="oe_highlight"/>
+           confirm="Esta seguro que quiere anular este registro?" modifiers="{'readonly': [('state','!=','validated')]}" class="oe_highlight"/>
         <button name="quitar_null" type="object" string="Eliminar movimientos" 
-           confirm="Esta seguro que quiere eliminar movimientos cancelados?" states="validated" class="oe_highlight"/>
+           confirm="Esta seguro que quiere eliminar movimientos cancelados?" modifiers="{'readonly': [('state','!=','validated')]}" class="oe_highlight"/>
     </header>
     <sheet>
     <div class="oe_button_box" name="button_box">
@@ -64,26 +64,26 @@
         </button>  
     </div>
         <h1>
-            <field name="name"  class="oe_inline" placeholder="Descripción de conciliación" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="name"  class="oe_inline" placeholder="Descripción de conciliación" modifiers="{'readonly': [('state','!=','draft')]}"/>
         </h1>
         <group colspan="4">
         <group cols="2">
-            <field name="account_id" widget="selection" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="mes_name" attrs="{'readonly': [('state','!=','draft')]}"/>
-             <field name="saldo_inicial" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="account_id" widget="selection" modifiers="{'readonly': [('state','!=','draft')]}"/>
+            <field name="date" modifiers="{'readonly': [('state','!=','draft')]}"/>
+            <field name="mes_name" modifiers="{'readonly': [('state','!=','draft')]}"/>
+             <field name="saldo_inicial" modifiers="{'readonly': [('state','!=','draft')]}"/>
         </group>
         <group cols="2">
-              <field name="company_id" attrs="{'readonly': [('state','!=','draft')]}"/>
-            <field name="saldo_final" attrs="{'readonly': [('state','!=','draft')]}"/>
+              <field name="company_id" modifiers="{'readonly': [('state','!=','draft')]}"/>
+            <field name="saldo_final" modifiers="{'readonly': [('state','!=','draft')]}"/>
             <field name="difference" />
-            <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+            <field name="currency_id" modifiers="{'readonly': [('state','!=','draft')]}"/>
         </group>
         </group>
         <notebook>
         <page string="Detalle de Movimientos">
-            <field name="conciliacion_line" attrs="{'readonly': [('state','!=','draft')]}" >
-                <tree editable="top" create="0" delete="0" decoration-muted="es_conciliado == True" decoration-danger="es_conciliado == False" >
+            <field name="conciliacion_line" modifiers="{'readonly': [('state','!=','draft')]}" >
+                <list editable="top" create="0" delete="0" decoration-muted="es_conciliado == True" decoration-danger="es_conciliado == False" >
                    <field name="move_id" readonly="1"/>
                    <field name="name" readonly="1"/>
                    <field name="date" readonly="1"/>
@@ -94,14 +94,12 @@
                    <field name="currency_id" readonly="1"/>
                    <field name="importe_moneda" readonly="1"/>
                    <field name="es_conciliado"/>
-                </tree>
+                </list>
             </field>
         </page>
         </notebook>
     </sheet>
-    <div class="oe_chatter">
-          <field name="message_ids" widget="mail_thread"/>
-    </div>
+        <chatter reload_on_attachment="True"/>
     </form>
     </field>
 </record>
@@ -110,7 +108,7 @@
     <field name="name">conicliacion.bancaria.tree</field>
     <field name="model">conicliacion.bancaria</field>
     <field name="arch" type="xml">
-    <tree string="Conciliaciones" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
+    <list string="Conciliaciones" decoration-muted="state=='anulated'" decoration-info="state=='draft'">
 		<field name="account_id"/>
         <field name="name" />
         <field name="date" />
@@ -119,7 +117,7 @@
         <field name="saldo_final" sum="total"/>
         <field name="currency_id"/>
         <field name="state"/>
-    </tree>
+    </list>
     </field>
 </record>
 
@@ -149,13 +147,13 @@
       <field name="perm_write" eval="True"/>
       <field name="perm_create" eval="True"/>
       <field name="perm_unlink" eval="True"/>
-      <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+      <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
     </record>
 
 <record id="action_conicliacion_bancaria" model="ir.actions.act_window">
     <field name="name">Conciliación Bancaria</field>
     <field name="res_model">conicliacion.bancaria</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">list,form</field>
     <field name="help" type="html">
       <p class="oe_view_nocontent_create">
         Click to record a new conciliación

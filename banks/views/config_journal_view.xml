@@ -12,12 +12,12 @@
 					<page string="Transacciones Bancarias"  >
 								
 							<field name="secuencia_ids" >
-								<tree>
+								<list>
 									<field name="name" />
 									<field name="prefix" />
 									<field name="number_next_actual"/>
 									<field name="move_type"/>
-								</tree>
+								</list>
 							</field>
 						
 					</page>

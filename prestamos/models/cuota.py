@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.addons import decimal_precision as dp
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -22,7 +21,7 @@ class PrestamosCuotas(models.Model):
     description = fields.Text(copy=False)
     # currency_id = fields.Many2one('res.currency', 'Moneda',)
     company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True, default=lambda self: self.env.user.company_id)
-    res_partner_id = fields.Many2one('res.partner', string='Cliente',domain=[('customer','=',True), ],copy=False)
+    res_partner_id = fields.Many2one('res.partner', string='Cliente',copy=False)
     state = fields.Selection( [('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'),('hecho', 'Hecho')], string="Estado", default='draft')
     cuotas_prestamo_id = fields.Many2one('prestamos', 'Prestamo',copy=False)
     tipo = fields.Char(string='Tipo', default=tipo)
@@ -30,14 +29,14 @@ class PrestamosCuotas(models.Model):
     fecha_pagado = fields.Date(string='Fecha de pago',copy=False,)
     cuota_prestamo = fields.Float(string='Cuota',copy=False)
     cuota_capital = fields.Float(string='Capital',copy=False)
-    cuota_interes = fields.Float(string='Interes',copy=False, digits=dp.get_precision('Product Unit of Measure'))
+    cuota_interes = fields.Float(string='Interes',copy=False)
     interes_generado = fields.Float(string='Interes generado',copy=False, default=0,)
     interes_moratorio = fields.Float(string='Interes moratorio',copy=False, default=0,)
     saldo = fields.Float(string='Saldo',readonly=True,copy=False)
     gastos = fields.Float(string='Gastos',copy=False)
-    pago = fields.Float(string='Pago', track_visibility='onchange',copy=False,readonly=True,)
+    pago = fields.Float(string='Pago', tracking=True,copy=False,readonly=True,)
     recibir_pagos = fields.Many2one("account.journal", "Recibir pagos",  domain=[('type','=','bank')],)
-    invoice_id = fields.Many2one("account.move", "Factura", track_visibility='onchange',copy=False,)
+    invoice_id = fields.Many2one("account.move", "Factura", tracking=True,copy=False,)
 
     # @api.onchange('cuotas_prestamo_id')
     # def _onchange_cuotas_prestamo_id(self):
@@ -99,12 +98,11 @@ class PrestamosCuotas(models.Model):
                 'amount': self.cuota_interes + capital,
                 'currency_id': self.cuotas_prestamo_id.currency_id.id,
                 'journal_id': self.cuotas_prestamo_id.recibir_pagos.id,
-                'payment_date': self.fecha_pago,
-                'communication': self.cuotas_prestamo_id.name + ' ' + self.name,
-                'payment_method_id': 1
+                'date': self.fecha_pago,
+                'ref': self.cuotas_prestamo_id.name + ' ' + self.name,
             }
             paymet_id = obj_paymet_id.create(val_payment)
-            paymet_id.post()
+            paymet_id.action_post()
             vals= {
                 'invoice_cxc_ids': [(4, account_invoice_id.id, 0)],
                 'payment_ids': [(4, paymet_id.id, 0)]
@@ -160,7 +158,7 @@ class PrestamosCuotas(models.Model):
 
     def cancelar(self):
         if self.state == 'hecho':
-            raise Warning(_('No se puede eliminar o cancelar una cuota en estado '+ self.state))
+            raise UserError(_('No se puede eliminar o cancelar una cuota en estado '+ self.state))
         else:
             self.pago = ''
             self.write({'state': 'cancelado'})
@@ -171,7 +169,7 @@ class PrestamosCuotas(models.Model):
     def unlink(self):
         for cuota in self:
             if cuota.state != 'draft':
-                raise Warning(_('No se puede eliminar o cancelar una cuota en estado '+ cuota.state))
+                raise UserError(_('No se puede eliminar o cancelar una cuota en estado '+ cuota.state))
         return super(PrestamosCuotas, self).unlink()
 
 

@@ -7,8 +7,6 @@ class StockPicking(models.Model):
 	
 	ponderacion = fields.Boolean("Ponderación calculada")
 
-
-
 class StockMove(models.Model):
 	_inherit = "stock.move"
 	

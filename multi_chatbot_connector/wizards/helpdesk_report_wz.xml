@@ -9,21 +9,21 @@
 					<group>
 						<field name="is_channel" string="All Data"/>
 					</group>
-					<group attrs="{'invisible': [('is_channel', '=', True)]}">
+					<group modifiers="{'invisible': [('is_channel', '=', True)]}">
 						<field name="typee" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
 					</group>
 				</group>
-				<group col="4" string="Date Filter" attrs="{'invisible': [('is_channel', '=', True)]}">
-					<field name="from_date" attrs="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
-					<field name="to_date" attrs="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
-					<field name="by_periods" attrs="{'required': [('is_channel', '=', False)]}"/>
-					<field name="year" attrs="{'invisible': [('by_periods', '=', 'm')]}"/>
+				<group col="4" string="Date Filter" modifiers="{'invisible': [('is_channel', '=', True)]}">
+					<field name="from_date" modifiers="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
+					<field name="to_date" modifiers="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
+					<field name="by_periods" modifiers="{'required': [('is_channel', '=', False)]}"/>
+					<field name="year" modifiers="{'invisible': [('by_periods', '=', 'm')]}"/>
 				</group>
 				<group col="4">
 					<field name="channel_ids" options="{&quot;always_reload&quot;: True,'no_quick_create': True,'no_create': True}" domain="[('user_ids', 'in', uid)]" widget="many2many_tags" required="1"/>
 					<field name="user_ids" 
 							options="{&quot;always_reload&quot;: True,'no_quick_create': True,'no_create': True}"
-							attrs="{'invisible': ['|',('typee', '=', 'is_self'),('is_channel', '=', True)]}" 
+							modifiers="{'invisible': ['|', ('typee', '=', 'is_self'), ('is_channel', '=', True)]}"
 							widget="many2many_tags"/>
 				</group>
 				
@@ -32,11 +32,11 @@
 						string="Print" 
 						type="object" 
 						class="btn-primary"
-						attrs="{'invisible': [('is_channel', '=', False)]}"/>
+						modifiers="{'invisible': [('is_channel', '=', False)]}"/>
 					<button name="print_self_report" 
 						string="Print" 
 						type="object" 
-						class="btn-primary" attrs="{'invisible': [('is_channel', '=', True)]}"/>
+						class="btn-primary" modifiers="{'invisible': [('is_channel', '=', True)]}"/>
 					or
 					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
 				</footer>

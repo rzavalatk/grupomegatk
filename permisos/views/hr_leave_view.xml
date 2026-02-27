@@ -35,11 +35,13 @@
             <field name="request_hour_to_1" default="16"/>
           </xpath> 
           <xpath expr="//field[@name='request_hour_from']" position="attributes">
-            <attribute name="attrs">{"readonly": [["state","=","validate"]], "required": [["request_unit_hours","=",True]]}</attribute>
+            <attribute name="readonly">state == 'validate'</attribute>
+            <attribute name="required">request_unit_hours == True</attribute>
             <attribute name="invisible">1</attribute>
           </xpath>
           <xpath expr="//field[@name='request_hour_to']" position="attributes">
-            <attribute name="attrs">{"readonly": [["state","=","validate"]], "required": [["request_unit_hours","=",True]]}</attribute>
+            <attribute name="readonly">state == 'validate'</attribute>
+            <attribute name="required">request_unit_hours == True</attribute>
             <attribute name="invisible">1</attribute>
           </xpath>
 

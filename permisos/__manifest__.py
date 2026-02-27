@@ -8,12 +8,12 @@
     'description': """
         Solicitud y aprobacion de permisos, Calculo de vaciones""",
 
-    'author': "Romel Zavala",
+    'author': "Romel Zavala / David Zuniga",
     'website': "https://www.megatk.net",
     "license": "LGPL-3",
 
     'category': 'Human Resources',
-    'version': '0.1',
+    'version': '18.0',
 
     'depends': ['base','hr', 'hr_holidays'],
 

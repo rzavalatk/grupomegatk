@@ -1,6 +1,6 @@
 {
     'name': 'Control de Visitas',
-    'version': '1.2',
+    'version': '18.0',
     'description': 'Modulo para controlar visitas a las diferentes sucursales',
     'summary': 'Modulo para controlar visitas',
     'author': 'Alexander Reyes',
@@ -9,6 +9,7 @@
     'depends': [
         'base',
         'mail',
+        'web_legacy_shims',
     ],
     'data': [
         'security/groups.xml',
@@ -25,8 +26,8 @@
     ],
     'assets': {
         'web.assets_backend': [
-            '/control_visitas/static/src/xml/visitas_menu_template.xml',
-            '/control_visitas/static/src/js/vistas_menu_action.js',
+            'control_visitas/static/src/xml/visitas_menu_template.xml',
+            'control_visitas/static/src/js/vistas_menu_action.js',
         ],
     },
     'auto_install': False,

@@ -1,161 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-		<report
-			id="account_factura_custom"
-			model="account.move"
-			string="Factura"
-			name="reportes_custom.factura_custom_print_view"
-			file="reportes_custom.factura_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<!-- Facturas para account.move -->
+		<record id="account_factura_custom" model="ir.actions.report">
+			<field name="name">Factura</field>
+			<field name="model">account.move</field>
+			<field name="report_name">reportes_custom.factura_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="account.model_account_move"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Factura - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="account_factura_custom_klam"
-			model="account.move"
-			string="Factura KLAM"
-			name="reportes_custom.factura_custom_print_view_klam"
-			file="reportes_custom.factura_custom_print_view_klam"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="account_factura_custom_klam" model="ir.actions.report">
+			<field name="name">Factura KLAM</field>
+			<field name="model">account.move</field>
+			<field name="report_name">reportes_custom.factura_custom_print_view_klam</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="account.model_account_move"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Factura_KLAM - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="account_factura_custom_printex"
-			model="account.move"
-			string="Factura printex"
-			name="reportes_custom.factura_custom_printe_view"
-			file="reportes_custom.factura_custom_printe_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="account_factura_custom_printex" model="ir.actions.report">
+			<field name="name">Factura printex</field>
+			<field name="model">account.move</field>
+			<field name="report_name">reportes_custom.factura_custom_printe_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="account.model_account_move"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Factura_Printex - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="account_factura_pos_custom"
-			model="account.move"
-			string="Factura Contado"
-			name="reportes_custom.factura_pos_custom_print_view"
-			file="reportes_custom.factura_pos_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_pos"/>
+		<record id="account_factura_pos_custom" model="ir.actions.report">
+			<field name="name">Factura Contado</field>
+			<field name="model">account.move</field>
+			<field name="report_name">reportes_custom.factura_pos_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="account.model_account_move"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_pos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Factura_Contado - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="sale_order_cotizacion_custom"
-			model="sale.order"
-			string="Cotización"
-			name="reportes_custom.cotizacion_custom_print_view"
-			file="reportes_custom.cotizacion_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
-		
-		<report
-			id="sale_order_cotizacion_KLAM"
-			model="sale.order"
-			string="Cotización KLAM"
-			name="reportes_custom.cotizacion_custom_print_view_KLAM"
-			file="reportes_custom.cotizacion_custom_print_view_KLAM"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="action_report_certificate_deposit" model="ir.actions.report">
+			<field name="name">Certificado de Depósito</field>
+			<field name="model">account.move</field>
+			<field name="report_name">reportes_custom.report_certificate_deposit_template_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="account.model_account_move"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos_horizontal"/>
+			<field name="print_report_name">'Certificado_de_Deposito_' + (object.name or '')</field>
+		</record>
 
-		<report
-			id="sale_order_cotizacion_custom_proforma"
-			model="sale.order"
-			string="Facturas PROFORMA"
-			name="reportes_custom.cotizacion_custom_proforma_view"
-			file="reportes_custom.cotizacion_custom_proforma_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
-		
-		<report
-			id="sale_order_cotizacion_custom_printex"
-			model="sale.order"
-			string="Cotización Printex"
-			name="reportes_custom.cotizacion_custom_print_view_printex"
-			file="reportes_custom.cotizacion_custom_print_view_printex"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<!-- Cotizaciones para sale.order -->
+		<record id="sale_order_cotizacion_custom" model="ir.actions.report">
+			<field name="name">Cotización</field>
+			<field name="model">sale.order</field>
+			<field name="report_name">reportes_custom.cotizacion_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="sale.model_sale_order"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Cotizacion - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="purchase_order_custom"
-			model="purchase.order"
-			string="Orden de compra"
-			name="reportes_custom.purchase_order_custom_print_view"
-			file="reportes_custom.purchase_order_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="sale_order_cotizacion_KLAM" model="ir.actions.report">
+			<field name="name">Cotización KLAM</field>
+			<field name="model">sale.order</field>
+			<field name="report_name">reportes_custom.cotizacion_custom_print_view_KLAM</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="sale.model_sale_order"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Cotizacion_KLAM - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="stock_package_order"
-			model="stock.picking"
-			string="Lista de empaque"
-			name="reportes_custom.stock_package_order_custom_print_view"
-			file="reportes_custom.stock_package_order_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="sale_order_cotizacion_custom_proforma" model="ir.actions.report">
+			<field name="name">Facturas PROFORMA</field>
+			<field name="model">sale.order</field>
+			<field name="report_name">reportes_custom.cotizacion_custom_proforma_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="sale.model_sale_order"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Factura_PROFORMA - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="stock_picking_custom"
-			model="stock.picking"
-			string="Orden de entrega"
-			name="reportes_custom.stock_picking_custom_print_view"
-			file="reportes_custom.stock_picking_custom_print_view"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos"/>
+		<record id="sale_order_cotizacion_custom_printex" model="ir.actions.report">
+			<field name="name">Cotización Printex</field>
+			<field name="model">sale.order</field>
+			<field name="report_name">reportes_custom.cotizacion_custom_print_view_printex</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="sale.model_sale_order"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Cotizacion_Printex - %s' % (object.name)</field>
+		</record>
 
-		<!--<report
-			id="stock_picking_custom_pos"
-			model="stock.picking"
-			menu="False"
-			string="Orden de entraga pos"
-			name="reportes_custom.stock_picking_custom_print_view_pos"
-			file="reportes_custom.stock_picking_custom_print_view_pos"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_pos"
-		/>-->
+		<!-- Orden de compra para purchase.order -->
+		<record id="purchase_order_custom" model="ir.actions.report">
+			<field name="name">Orden de compra</field>
+			<field name="model">purchase.order</field>
+			<field name="report_name">reportes_custom.purchase_order_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="purchase.model_purchase_order"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Orden_de_Compra - %s' % (object.name)</field>
+		</record>
 
-		<report
-			id="stock_picking_custom_pos"
-			model="stock.picking"
-			string="Orden de entraga pos"
-			name="reportes_custom.stock_picking_custom_print_view_pos"
-			file="reportes_custom.stock_picking_custom_print_view_pos"
-			report_type="qweb-pdf"
-			attachment_use="True" 
-			paperformat="formatos_papel_mega.report_paperformat_pos"
-		/>
+		<!-- Reportes para stock.picking -->
+		<record id="stock_package_order" model="ir.actions.report">
+			<field name="name">Lista de empaque</field>
+			<field name="model">stock.picking</field>
+			<field name="report_name">reportes_custom.stock_package_order_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="stock.model_stock_picking"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Lista_de_Empaque - %s' % (object.name)</field>
+		</record>
 
-		<report
-            id="report_product_product_barcode_custom"
-            string="Código de barras del producto - A7 (PDF)"
-            model="product.template"
-            report_type="qweb-pdf"
-            name="reportes_custom.report_productbarcode_sticker"
-            file="reportes_custom.report_productbarcode_sticker"
-            print_report_name="'Products barcode - %s' % (object.name)"
-			paperformat="report_sticker_barcode_2"
-        />
+		<record id="stock_picking_custom" model="ir.actions.report">
+			<field name="name">Orden de entrega</field>
+			<field name="model">stock.picking</field>
+			<field name="report_name">reportes_custom.stock_picking_custom_print_view</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="stock.model_stock_picking"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_ducumentos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Orden_de_Entrega - %s' % (object.name)</field>
+		</record>
 
-		<!-- Registro del reporte -->
-		<report
-			id="action_report_certificate_deposit"
-			model="account.move"
-			string="Certificado de Depósito"
-			report_type="qweb-pdf"
-			name="reportes_custom.report_certificate_deposit_template_view"
-			file="reportes_custom.report_certificate_deposit_template_view"
-			print_report_name="'Certificado_de_Deposito_'"
-			paperformat="formatos_papel_mega.report_paperformat_ducumentos_horizontal"
-		/>
+		<record id="stock_picking_custom_pos" model="ir.actions.report">
+			<field name="name">Orden de entrega pos</field>
+			<field name="model">stock.picking</field>
+			<field name="report_name">reportes_custom.stock_picking_custom_print_view_pos</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="stock.model_stock_picking"/>
+			<field name="binding_type">report</field>
+			<field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_pos"/>
+			<field name="attachment_use">True</field>
+			<field name="print_report_name">'Orden_de_Entrega_POS - %s' % (object.name)</field>
+		</record>
+
+		<!-- Código de barras para product.template -->
+		<record id="report_product_product_barcode_custom" model="ir.actions.report">
+			<field name="name">Código de barras del producto - A7 (PDF)</field>
+			<field name="model">product.template</field>
+			<field name="report_name">reportes_custom.report_productbarcode_sticker</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="binding_model_id" ref="product.model_product_template"/>
+			<field name="binding_type">report</field> 
+			<field name="paperformat_id" ref="report_sticker_barcode_2"/>
+			<field name="print_report_name">'Products barcode - %s' % (object.name)</field>
+		</record>
 
 	</data>
 </odoo>

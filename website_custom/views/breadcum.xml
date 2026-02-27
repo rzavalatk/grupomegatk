@@ -9,7 +9,6 @@
                     <field name="name" />
                     <field name="website_id" />
                     <field name="image" widget="image"/>
-                    <separator/>
                     <templates>
                         <t t-name="kanban-box">
                             <div style="height:150px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click">

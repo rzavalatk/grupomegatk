@@ -9,5 +9,7 @@
         file="fields_megatk.ingreso_print_view"
         report_type="qweb-pdf" 
         paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
+
+    
 	</data>
 </odoo>

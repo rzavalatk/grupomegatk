@@ -5,7 +5,7 @@
             <field name="name">account.comisiones.line.view.tree</field>
             <field name="model">account.comisiones.line</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="user_id" />
                     <field name="invoice_line_id" />
                     <field name="currency_id" invisible="1" />
@@ -15,7 +15,7 @@
                     <field name="antiguedad_pago" />
                     <field name="pocentaje_pago" widget="percentpie" />
                     <field name="comision_pagar" />
-                </tree>
+                </list>
             </field>
         </record>
 

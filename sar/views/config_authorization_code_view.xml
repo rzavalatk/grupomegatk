@@ -48,12 +48,12 @@
 		<field name="name">vitt_code_authorization_tree_view</field>
 		<field name="model">sar.authorization.code</field>   
 		<field name="arch" type="xml">
-			<tree decoration-info="active == False" decoration-muted="active == True">
+			<list decoration-info="active == False" decoration-muted="active == True">
 				<field name="name"/>
 				<field name="code_type"/>
 				<field name="company_id" groups="base.group_multi_company"/>
 				<field name="active"/>
-			</tree>
+			</list>
 		</field>
 	</record>
 
@@ -89,7 +89,7 @@
 					<notebook>
 						<page string="Secuencias Fiscales">
 							<field name="fiscal_sequence_regime_ids" >
-								<tree editable="top">
+								<list editable="top">
 									<field name="authorization_code_id" invisible="1"/>
 									<field name="sequence_id"  domain="[('is_fiscal_sequence', '=', True)]"  readonly="1"/>
 									<field name="_from"/>
@@ -97,7 +97,7 @@
 									<field name="user_ids"  widget="many2many_tags"/>
 									<field name="journal_id" domain="[('type', 'in', ['sale','purchase','general'])]" readonly="1"/> 
 									<field name="actived"/>           
-								</tree>
+								</list>
 
 							</field>
 						</page>
@@ -110,7 +110,7 @@
 	<record model="ir.actions.act_window" id="vitt_fiscal_seq_action_id">
 		<field name="name">Secuencias Fiscales</field>
 		<field name="res_model">sar.authorization.code</field>
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">list,form</field>
 	</record>
 	<menuitem id="tax_configuration" parent="account.menu_finance_configuration" name="Fiscal Regime"  sequence="10" />
 	<menuitem id="fiscal_sequence" parent="tax_configuration" name="Fiscal Numbers"  sequence="11" action="vitt_fiscal_seq_action_id"/>

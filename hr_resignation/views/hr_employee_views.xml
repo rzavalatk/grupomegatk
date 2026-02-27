@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Extiende el formulario de empleado para incluir el campo 'resign_date' -->
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit.hr.resignation</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Agrega el campo de fecha de renuncia después de la fecha de ingreso -->
+            <field name="joining_date" position="after">
+                <field name="resign_date" invisible="active != False"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Extiende la vista de búsqueda de empleados para incluir filtros de renuncias -->
+    <record id="view_employee_filter" model="ir.ui.view">
+        <field name="name">hr.employee.view.search.inherit.hr.resignation</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <field name="job_id" position="after">
+                <!-- Filtro para empleados que renunciaron -->
+                <filter string="Empleados Renunciados" name="resigned"
+                        domain="['&amp;',('resigned', '=', True),('active', '=', False)]"/>
+                <!-- Filtro para empleados despedidos -->
+                <filter string="Empleados Despedidos" name="fired"
+                        domain="['&amp;',('fired', '=', True),('active', '=', False)]"/>
+            </field>
+        </field>
+    </record>
+</odoo>

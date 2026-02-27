@@ -10,21 +10,21 @@
                     <field name="de_consignacion" invisible="1" />
                 </xpath>
                 <xpath expr="//button[@name='button_cancel']" position="before">
-                    <button string="Crear Presupuesto" confirm="¿Seguro que desea crear un presupuesto a partir de esta consignación?" name="create_sale" type="object" attrs="{'invisible': ['|','|',('state','not in',['open','paid']),('de_consignacion','!=',True),('state_sale','=',True)]}" class="oe_highlight"/>
+                    <button string="Crear Presupuesto" confirm="¿Seguro que desea crear un presupuesto a partir de esta consignación?" name="create_sale" type="object" modifiers="{'invisible': ['|','|',('state','not in',['open','paid']),('de_consignacion','!=',True),('state_sale','=',True)]}" class="oe_highlight"/>
                 </xpath>
                 <xpath expr="//field[@name='authorized_transaction_ids']" position="after">
                     <field name="state_sale" invisible="1" />
-                    <field name="consig_sale_id" attrs="{'invisible':[('de_consignacion','=',False)]}" />
+                    <field name="consig_sale_id" modifiers="{'invisible':[('de_consignacion','=',False)]}" />
                 </xpath>
                 <xpath expr="//button[@name='button_draft']" position="attributes">
-                    <attribute name="attrs">{
+                    <attribute name="modifiers">{
                         'invisible': ['|',
                         ('state', '!=', 'open'),
                         ('de_consignacion','=',True)]
                     }</attribute>
                 </xpath>
                 <!--<xpath expr="//button[@name='132']" position="attributes">
-                    <attribute name="attrs">{
+                    <attribute name="modifiers">{
                         'invisible': ['|','|',
                         ('de_consignacion','=',True),
                         ('move_type', '=', 'out_refund'), 
@@ -38,7 +38,7 @@
             <field name="name">Facturas de Consignación</field>
             <field name="res_model">account.move</field>
             <!--#<field name="view_type">form</field>-->
-            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph,activity</field>
             <field name="context">{'type':'out_invoice','journal_type': 'sale','de_consignacion':True}</field>
             <field name="domain">[('de_consignacion', '=', True)]</field>
             <field name="search_view_id" ref="account.view_account_invoice_filter" />

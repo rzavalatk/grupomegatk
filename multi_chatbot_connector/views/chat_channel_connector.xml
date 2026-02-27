@@ -34,11 +34,11 @@
 		<field name="arch" type="xml">
 			<xpath expr="//notebook" position="inside">
 				<page string="Chain of bots">
-					<field name="chain_of_bots" mode="tree">
-						<tree create="1" delete="1">
+					<field name="chain_of_bots" mode="list">
+						<list create="1" delete="1">
 							<field name="sequence"/>
 							<field name="chatbot"/>
-						</tree>
+						</list>
 					</field>
 				</page>
             </xpath>
@@ -57,18 +57,18 @@
                 	<field name="multi_chatbot" style="width: 50%"/>
                 </group>
             </xpath>
-            <xpath expr="//field[@name='default_message']" position="after">
-                <field name="company_id" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}"/>
-                <field name="bot_default_reply" attrs="{'invisible':[('multi_chatbot','=',False)],'required':[('multi_chatbot','!=',False)]}" required="0"/>
-				<field name="mailing_list_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}" widget="selection"/>
-				<field name="issue_category" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}" widget="selection"/>
-				<field name="timer" attrs="{'invisible':[('multi_chatbot','=',False)] , 'required':[('multi_chatbot','!=',False)]}" />
+			<xpath expr="//field[@name='default_message']" position="after">
+				<field name="company_id" modifiers="{'invisible': [('multi_chatbot', '=', False)], 'required': [('multi_chatbot', '!=', False)]}"/>
+				<field name="bot_default_reply" modifiers="{'invisible': [('multi_chatbot', '=', False)], 'required': [('multi_chatbot', '!=', False)]}" required="0"/>
+				<field name="mailing_list_id" options="{'no_quick_create':True,'no_create_edit':True}" modifiers="{'invisible': [('multi_chatbot', '=', False)], 'required': [('multi_chatbot', '!=', False)]}" widget="selection"/>
+				<field name="issue_category" options="{'no_quick_create':True,'no_create_edit':True}" modifiers="{'invisible': [('multi_chatbot', '=', False)], 'required': [('multi_chatbot', '!=', False)]}" widget="selection"/>
+				<field name="timer" modifiers="{'invisible': [('multi_chatbot', '=', False)], 'required': [('multi_chatbot', '!=', False)]}"/>
 			</xpath>
 			<xpath expr="//field[@name='user_ids']/kanban" position="attributes">
 				<attribute name="create">false</attribute>
 			</xpath>
 			<xpath expr="//field[@name='user_ids']" position="before">
-				<button name="action_operators_user" type="object" string="Operators" class="oe_highlight" attrs="{'invisible': [('multi_chatbot', '=',False)]}"/>
+				<button name="action_operators_user" type="object" string="Operators" class="oe_highlight" modifiers="{'invisible': [('multi_chatbot', '=', False)]}"/>
 			</xpath>
 		</field>
 	</record>
@@ -77,9 +77,9 @@
 		<field name="name">help.category.tree</field>
 		<field name="model">online.help.category</field>
 		<field name="arch" type="xml">
-			<tree string="Help Category" editable="bottom">
+			<list string="Help Category" editable="bottom">
 				<field name="name" required="1"/>
-			</tree>
+			</list>
 		</field>
 	</record>
 
@@ -103,7 +103,7 @@
 	<record id="action_online_help_category" model="ir.actions.act_window">
 		<field name="name">Support Category</field>
 		<field name="res_model">online.help.category</field>
-		<field name="view_mode">tree</field>
+		<field name="view_mode">list</field>
 		<field name="view_id" ref="tree_help_category"/>
 	</record>
 	
@@ -116,8 +116,8 @@
 		sequence="16"/>
 	
 	<record id="mail_channel_extends" model="ir.ui.view">
-		<field name="name">mail.channel.form.inherit</field>
-		<field name="model">mail.channel</field>
+		<field name="name">discuss.channel.form.inherit</field>
+		<field name="model">discuss.channel</field>
 		<field name="type">form</field>
 		<field name="inherit_id" ref="im_livechat.mail_channel_view_tree"/>
 		<field name="arch" type="xml">

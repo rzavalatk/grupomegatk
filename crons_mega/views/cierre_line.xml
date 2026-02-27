@@ -5,13 +5,13 @@
             <field name="name">account.cierre.line.view.tree</field>
             <field name="model">account.cierre.line</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="currency_id" invisible="1" />
                     <field name="name" />
                     <field name="facturado" />
                     <field name="cobrado" />
                     <field name="total" />
-                </tree>
+                </list>
             </field>
         </record>
 

@@ -19,13 +19,9 @@
 					<field name="payment_term_id" position="after">
 							<field name="x_valido"/>
 		            </field>
-					<field name="analytic_account_id" position="after">
+					<field name="journal_id" position="after">
 							<field name="x_consignacion"/>
 		            </field>
-				    <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='analytic_distribution']" position="attributes">
-					    <attribute name="attrs">{}</attribute>
-					    <attribute name="invisible">1</attribute>
-					</xpath>
 
 					<field name="tag_ids" position="after">
 						<field name="sorteo_id"/>
@@ -40,13 +36,13 @@
 				<field name="model">sale.order</field>
 				<field name="inherit_id" ref="sale.view_order_form"/>
 				<field name="arch" type="xml">
-					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='discount']" position="after">
+					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/list[1]/field[@name='product_template_id']" position="after">
 				 		<field name="x_user_id"/>
 					</xpath>
-					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/list[1]/field[@name='name']" position="after">
 				 		<field name="x_series"/>
 					</xpath>
-					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='price_total']" position="after">
+					<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/list[1]/field[@name='price_total']" position="after">
 				 		<field name="tax_editable" optional="show" force_save="1"/>
 					</xpath>
 					

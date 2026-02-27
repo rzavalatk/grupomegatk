@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 class Wizardgenerarmovimiento(models.TransientModel):
     _name = "conciliacion.wizard.movimientos"
@@ -88,11 +88,11 @@ class Wizardgenerarmovimiento(models.TransientModel):
     #@api.model_create_multi
     def action_validate(self):
         if not self.wizard_ids:
-            raise Warning(_("No existen detalles de movimientos a registrar"))
+            raise UserError(_("No existen detalles de movimientos a registrar"))
         if self.monto < 0:
-            raise Warning(_("El total debe de ser mayor que cero"))
+            raise UserError(_("El total debe de ser mayor que cero"))
         if not round(self.rest_credit, 2) == 0.0:
-            raise Warning(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
+            raise UserError(_("Existen diferencias entre el detalle y el total de la transacción a realizar"))
 
         self.write({'state': 'validated'})
         self.generate_asiento()

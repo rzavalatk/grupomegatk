@@ -196,7 +196,7 @@ class StockReportHistory(models.Model):
         
         encabezados_reports_differences = ['Codigo de barras', 'Producto', 'Cantidad inicial', 'Cantidad final', 'Movimiento', 'Precio de coste', 'Precio de venta', 'Linea', 'Marca']
         col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
-        formatos_reports_differences = [None,None, number_format, number_format, number_format, number_format, number_format, None, None]  # Formatos para cada columna
+        formatos_reports_differences = [None,None, number_format, number_format, number_format, currency_format, currency_format, None, None]  # Formatos para cada columna
         
         # Preparar los datos 
         datos_lines_from_report = [
@@ -289,7 +289,7 @@ class StockReportLine(models.Model):
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
-    location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
+    location_id = fields.Many2one('stock.location', string="Ubicación")
     #date_create = fields.Datetime(string="Create Date", required=True)
 
 
@@ -307,7 +307,7 @@ class StockReportDifference(models.Model):
         string="Movimiento", required=True)
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
-    location_id = fields.Many2one('stock.location', string="Ubicación", required=True)
+    location_id = fields.Many2one('stock.location', string="Ubicación")
     
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")

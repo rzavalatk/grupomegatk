@@ -10,11 +10,11 @@
         Modulo para crear facturas temporales de consignación
     """,
 
-    'author': "Alejandro Zelaya",
-    'website': "azelaya@megatk.com",
+    'author': "David Zuniga",
+    'website': "dzuniga@megatk.com",
     "license": "LGPL-3",
     'category': 'Usuarios',
-    'version': '0.1',
+    'version': '18.0',
     'depends': ['base','account','sale'],
     'data': [
         'views/account_invoice.xml',

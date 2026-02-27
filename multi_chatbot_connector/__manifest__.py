@@ -20,7 +20,7 @@
 ###############################################################################
 {
     "name" : "Multi Chatbot Connector",
-    "version" : "12.0.0.1",
+    "version" : "18.0.0.1",
     "author" : "Geminate Consultancy Services",
     "website" : "http://www.geminatecs.com",
     "category" : "Website",
@@ -32,25 +32,19 @@
                 'security/ir.model.access.csv',
                 'security/security.xml',
                 'data/ir_cron.xml',
-                'data/mail_template.xml',
                 'views/template.xml',
-                'views/chat_channel_connector.xml',
-                'views/mail_channel.xml',
-                'report/report.xml',
-                'report/channel_template.xml',
-                'wizards/helpdesk_report_wz.xml',
-                'wizards/operators_user.xml',
+                
             ],
     'images':['static/description/multi_chatbot_connector.png'],
-    'qweb_template_dict': {
-        'backend': [
-            '/multi_chatbot_connector/static/src/js/composer.js',
+    'assets': {
+        'web.assets_frontend': [
+            'multi_chatbot_connector/static/src/css/style.css',
+            'multi_chatbot_connector/static/src/css/jquery-confirm.min.css',
+            'multi_chatbot_connector/static/src/js/im_livechat.js',
+            'multi_chatbot_connector/static/src/js/jquery-confirm.min.js',
         ],
-        'frontend': [
-            '/multi_chatbot_connector/static/src/css/style.css',
-            '/multi_chatbot_connector/static/src/css/jquery-confirm.min.css',
-            '/multi_chatbot_connector/static/src/js/im_livechat.js',
-            '/multi_chatbot_connector/static/src/js/jquery-confirm.min.js',
+        'web.assets_backend': [
+            'multi_chatbot_connector/static/src/js/composer.js',
         ],
     },
     'installable': True,

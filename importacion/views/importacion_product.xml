@@ -6,19 +6,19 @@
       <field name="name">product.ponderacion.tree.view</field>
       <field name="model">product.ponderacion</field>   
       <field name="arch" type="xml">
-        <tree edit="0" create="0" delete="0">
+        <list edit="0" create="0" delete="0">
           <field name="ponderacion_id"/>
           <field name="product_id"/>
           <field name="ponderacion"/>
           <field name="costo_real"/>
-        </tree>
+        </list>
       </field>
     </record>
 
     <record model="ir.actions.act_window" id="action_product_ponderacion">
       <field name="name">Product Ponderacion</field>
       <field name="res_model">product.ponderacion</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">list,form</field>
       <field name="domain">[('ponderacion_id','=',active_id)]</field>
     </record>
 
@@ -51,54 +51,51 @@
         <form string = "Form Import">
           <header> 
             <button name="back_draft" type="object" string="Volver a borrador" 
-              state="cancelado" class="oe_highlight"/>
+              class="oe_highlight" modifiers='{"invisible": [["state","!=","cancelado"]]}'/>
             <button name="cancelar_impor" type="object" string="Cancelar" 
-              state="validado" class="oe_highlight" confirm='¿Está seguro de cancelar la ponderación validada?'/>
-            <button name="validar" type="object" string="Validar" state="draft" 
+              class="oe_highlight" modifiers='{"invisible": [["state","!=","validado"]]}' confirm='¿Está seguro de cancelar la ponderación validada?'/>
+            <button name="validar" type="object" string="Validar"
+              modifiers='{"invisible": [["state","!=","draft"]]}'
               class="oe_highlight" confirm='¿Desea validar la ponderación?'/>
             <field name="state" widget="statusbar" nolabel="1"/>  
           </header>
           <sheet>
-            <div class="oe_button_box" name="button_box" states="validado">
-              <button class="oe_stat_button"
+            <div class="oe_button_box" name="button_box" modifiers='{"invisible": [["state","!=","validado"]]}'>
+              <button class="oe_stat_button"  
                 icon="fa-strikethrough"
                 type="action" name="%(action_product_ponderacion)d"
                 string="ponderaciones">
               </button>
             </div>
               <group name="x_datos">
-                <h2> <field name="name" nolabel="1" attrs="{'invisible':
-                 [('state','in',('draft'))], 'readonly': True}"/></h2>
+                <h2> <field name="name" nolabel="1" modifiers='{"invisible":
+                 [["state","in",["draft"]]], "readonly": true}'/></h2>
               </group>
               <group name="x_datos0" col="3">
                 <group name="x_1">
-                  <field name="res_parner_id" options="{'no_create': True}" attrs="{'readonly': 
-                    [('state','!=','draft')]}"/>
+                  <field name="res_parner_id" options="{'no_create': True}" modifiers='{"readonly": 
+                    [["state","!=","draft"]]}'/>
                   <field name="date"/>
-                    <field name="descripcion"
-                    attrs="{'readonly': [('state','!=','draft')]}"/>
+                  <field name="descripcion" modifiers='{"readonly": [["state","!=","draft"]]}'/>
                 </group>
                 <group name="x_2">
                   <field name="incoterms" 
-                    attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="transpor_medio" attrs="
-                    {'readonly': [('state','!=','draft')]}"/>
-                  <field name="puerto" attrs="{'readonly': [('state','!=','draft')]}"/>
+                    modifiers='{"readonly": [["state","!=","draft"]]}'/>
+                  <field name="transpor_medio" modifiers='{"readonly": [["state","!=","draft"]]}'/>
+                  <field name="puerto" modifiers='{"readonly": [["state","!=","draft"]]}'/>
                 </group>
                 <group name="x_3">
                   <field name="res_country" 
-                    attrs="{'readonly': [('state','!=','draft')]}"/>
+                    modifiers='{"readonly": [["state","!=","draft"]]}'/>
                   <field name="res_country_state" domain="
-                    [('country_id','=',res_country)]" attrs="{'readonly': [('state','!=','draft')]}"/>
-                  <field name="company_id" attrs="
-                    {'readonly': [('state','!=','draft')]}" options="{'no_create': True}"/>
+                    [('country_id','=',res_country)]" modifiers='{"readonly": [["state","!=","draft"]]}'/>
+                  <field name="company_id" modifiers='{"readonly": [["state","!=","draft"]]}' options="{'no_create': True}"/>
                   <field name="currency_id" invisible='0' options="{'no_create': True}"
-                   attrs="{'readonly': [('state','!=','draft')]}"/>
+                   modifiers='{"readonly": [["state","!=","draft"]]}'/>
                 </group>
               </group>
               <group>
-                <field name="stock_pick_ids" widget="many2many_tags" attrs="
-                    {'readonly': [('state','!=','draft')]}" domain="[('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done')]" options="{'no_create': True}"/>
+                <field name="stock_pick_ids" widget="many2many_tags" modifiers='{"readonly": [["state","!=","draft"]]}' domain="[('company_id','=',company_id),('ponderacion','=',False),('state', '=', 'done')]" options="{'no_create': True}"/>
               </group>
               <group>
                 <group>
@@ -109,19 +106,19 @@
                 </group>
               </group>
               <field name="import_gsto_id" 
-                attrs="{'readonly': [('state','!=','draft')]}">
-                <tree editable="bottom">
+                modifiers='{"readonly": [["state","!=","draft"]]}'>
+                <list editable="bottom">
                   <field name="gasto_id"/>
                   <field name="name"/>
                   <field name="currency_id"/>
                   <field name="amount"/>
                   <field name="amount_hnl" invisible='1'/>
                   <field name="porcentaje"/>
-                </tree>
+                </list>
               </field>
 
               <field name="import_line_id" >
-                <tree editable="bottom" create="0">
+                <list editable="bottom" create="0">
                   <field name="product_id"/>
                   <field name="name"/>
                   <field name="fecha_done" invisible='1'/>
@@ -131,7 +128,7 @@
                     context="{'default_type_tax_use': 'purchase'}" widget="many2many_tags"/>
                   <field name="price_subtotal"/>
                   <field name="price_total" invisible='1'/>
-                </tree>
+                </list>
               </field>
               <group class="oe_subtotal_footer oe_right">
                 <field name="total" class="oe_subtotal_footer_separator"/>
@@ -146,13 +143,13 @@
       <field name="name">import.product.mega.tree.view</field>
       <field name="model">import.product.mega</field>
       <field name="arch" type="xml">
-        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
+        <list decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
           <field name="name" string='Nombre'/>
           <field name="date" />
           <field name="res_parner_id"/>
           <field name="company_id" string='Compañia'/>
           <field name="state"/>
-        </tree>
+        </list>
       </field>
     </record>
     <!-- Action model view -->
@@ -160,7 +157,7 @@
       <field name="name">Ponderación</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">import.product.mega</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">list,form</field>
     </record>
 <!-- Reglas de registro -->
     <record id="precio_lista_rule" model="ir.rule">
@@ -192,62 +189,5 @@
     <menuitem name="Ponderación" id="import_product_mega_menu_category" sequence = "1"
       parent="import_menu_root" action = "action_import_product_mega"/>
     
-
-    <!-- explicit list view definition -->
-    <!--
-    <record model="ir.ui.view" id="grupomegatk/importacion.list">
-      <field name="name">grupomegatk/importacion list</field>
-      <field name="model">grupomegatk/importacion.grupomegatk/importacion</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
-    -->
-
-    <!-- actions opening views on models -->
-    <!--
-    <record model="ir.actions.act_window" id="grupomegatk/importacion.action_window">
-      <field name="name">grupomegatk/importacion window</field>
-      <field name="res_model">grupomegatk/importacion.grupomegatk/importacion</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-    -->
-
-    <!-- server action to the one above -->
-    <!--
-    <record model="ir.actions.server" id="grupomegatk/importacion.action_server">
-      <field name="name">grupomegatk/importacion server</field>
-      <field name="model_id" ref="model_grupomegatk/importacion_grupomegatk/importacion"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": self._name,
-        }
-      </field>
-    </record>
-    -->
-
-    <!-- Top menu item -->
-    <!--
-    <menuitem name="grupomegatk/importacion" id="grupomegatk/importacion.menu_root"/>
-    -->
-    <!-- menu categories -->
-    <!--
-    <menuitem name="Menu 1" id="grupomegatk/importacion.menu_1" parent="grupomegatk/importacion.menu_root"/>
-    <menuitem name="Menu 2" id="grupomegatk/importacion.menu_2" parent="grupomegatk/importacion.menu_root"/>
-    -->
-    <!-- actions -->
-    <!--
-    <menuitem name="List" id="grupomegatk/importacion.menu_1_list" parent="grupomegatk/importacion.menu_1"
-              action="grupomegatk/importacion.action_window"/>
-    <menuitem name="Server to list" id="grupomegatk/importacion" parent="grupomegatk/importacion.menu_2"
-              action="grupomegatk/importacion.action_server"/>
-    -->
   </data>
 </odoo>

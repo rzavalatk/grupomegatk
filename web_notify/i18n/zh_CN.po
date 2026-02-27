@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* web_notify
+# 	* web_notify
 #
 msgid ""
 msgstr ""
@@ -17,20 +17,20 @@ msgstr ""
 "X-Generator: Weblate 3.8\n"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:44
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Danger"
 msgstr "危险"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:60
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Default"
 msgstr "默认"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:54
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Information"
 msgstr "信息"
 
@@ -60,14 +60,20 @@ msgid "Notify Warning Channel Name"
 msgstr "通知警告频道名称"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:75
-#, python-format
+#. odoo-javascript
+#: code:addons/web_notify/static/src/js/services/notification_services.esm.js:0
+msgid "Open"
+msgstr ""
+
+#. module: web_notify
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Sending a notification to another user is forbidden."
 msgstr "禁止向其他用户发送通知。"
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:38
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Success"
 msgstr "成功"
 
@@ -103,11 +109,14 @@ msgstr "测试网站通知"
 
 #. module: web_notify
 #: model:ir.model,name:web_notify.model_res_users
-msgid "Users"
-msgstr "用户"
+msgid "User"
+msgstr ""
 
 #. module: web_notify
-#: code:addons/web_notify/models/res_users.py:50
-#, python-format
+#. odoo-python
+#: code:addons/web_notify/models/res_users.py:0
 msgid "Warning"
 msgstr "警告"
+
+#~ msgid "Users"
+#~ msgstr "用户"

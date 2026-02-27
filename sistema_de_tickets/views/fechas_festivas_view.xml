@@ -10,11 +10,8 @@
                         <group name="datos-1" string="Datos">
                             <field name="name"/>
                             <field name="fecha"/>
-                            
                         </group>
-                        
-                    </group>
-                        
+                    </group>    
                 </form>
             </field>
         </record>
@@ -23,17 +20,12 @@
             <field name="name">sorteo_fechas.view.tree</field>
             <field name="model">sorteo.fecha_festiva</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="name"/>
                     <field name="fecha"/>
-                </tree>
+                </list>
             </field>
         </record>
 
-    
-
-        
-
-       
     </data>
 </odoo>

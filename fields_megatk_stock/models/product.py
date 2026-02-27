@@ -5,7 +5,8 @@ from odoo.exceptions import UserError
 class Product(models.Model):
     _inherit = "product.template"
 
-    @api.onchange('x_comisiones.obj_padre')
-    def _onchange_xcomision(self):
-        print("/////////////////////////////////////////////////////")
+    # Commented out - invalid onchange decorator syntax
+    # @api.onchange('x_comisiones.obj_padre')
+    # def _onchange_xcomision(self):
+    #     print("/////////////////////////////////////////////////////")
 

@@ -11,7 +11,7 @@
 				<field name="es_empleado"/>
 			</field>
 			<field name="property_account_payable_id" position="after">
-				<field name="account_id" attrs="{'invisible': [('es_empleado','=',False)]}"/>
+				<field name="account_id" modifiers="{'invisible': [('es_empleado','=',False)]}"/>
 			</field>
 		</field>
    	</record>

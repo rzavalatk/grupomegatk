@@ -1,42 +1,39 @@
 # -*- coding: utf-8 -*-
-
+################################################################################
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Bhagyadev KP (<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
 from odoo import models
 
 
 class WebsiteMenu(models.Model):
-    """
-     Heredando el menú del sitio web.
-
-     Esta clase hereda del modelo 'website.menu' y extiende su
-     Funcionalidad para calcular la visibilidad del menú.
-     elemento basado en el valor de 'odoo_website_helpdesk.helpdesk_menu_show'
-     parámetro de configuración.
-
-     Atributos:
-        _inherit (cadena): el nombre del modelo que se hereda.
-    """
+    """Inheriting the website menu"""
     _inherit = "website.menu"
 
     def _compute_visible(self):
-        """
-        Calcule la visibilidad del elemento del menú.
-
-        Este método se utiliza para determinar si el elemento del menú debe ser
-        visible u oculto según el valor del
-        Parámetro de configuración 'odoo_website_helpdesk.helpdesk_menu_show'.
-
-        Devoluciones:
-            Ninguno
-
-        Efectos secundarios:
-            Establece el campo 'is_visible' del registro del elemento del menú en Verdadero o
-            Falso en consecuencia.
-        """
+        """Compute function for to  visible the menu based on the boolean
+        field visibility"""
         super()._compute_visible()
         show_menu_header = self.env['ir.config_parameter'].sudo().get_param(
             'odoo_website_helpdesk.helpdesk_menu_show')
         for menu in self:
-            if menu.name == 'Helpdesk' and show_menu_header is False:
+            if menu.name == 'Helpdesk' and not show_menu_header:
                 menu.is_visible = False
-            if menu.name == 'Helpdesk' and show_menu_header is True:
+            if menu.name == 'Helpdesk' and show_menu_header:
                 menu.is_visible = True

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class Authorization(models.Model):
@@ -16,39 +16,24 @@ class Authorization(models.Model):
     active = fields.Boolean("Activo", default=True)
     fiscal_sequence_regime_ids = fields.One2many('sar.fiscal.sequence.regime', 'authorization_code_id')
 
-    @api.model
-    def create(self, vals):
-        res = super(Authorization, self).create(vals)
-        if vals.get("start_date") > vals.get("expiration_date"):
-            raise Warning(_('Start date is greater than than expiration date'))
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(Authorization, self).create(vals_list)
+        if vals_list.get("start_date") > vals_list.get("expiration_date"):
+            raise UserError(_('Start date is greater than than expiration date'))
         return res
 
-    #@api.multi
-    #def get_action_journal_settings(self):
-        #ctx = {'company_id': self.company_id.id}
-        #return {'name': _("Journal Settings and Fiscal Sequences"),
-                #'view_mode': 'form',
-                #'view_type': 'form',
-                #'res_model': 'sar.journal.settings',
-                #'type': 'ir.actions.act_window',
-                #'nodestroy': True,
-                #'target': 'new',
-                #'context': ctx}
-
-    #@api.model_create_multi
     def _update_ir_sequence(self):
         for fiscal_sequence in self.fiscal_sequence_regime_ids:
             if fiscal_sequence.sequence_id:
                 sequence_vals = {'expiration_date': self.expiration_date}
                 fiscal_sequence.sequence_id.write(sequence_vals)
         return True
-    
-    #@api.model_create_multi
-    def write(self, vals):
-        res = super(Authorization, self).write(vals)
+
+    def write(self, vals_list):
+        res = super(Authorization, self).write(vals_list)
         res = self._update_ir_sequence()
         return res
-
 
 class Fiscal_sequence(models.Model):
     _name = "sar.fiscal.sequence.regime"
@@ -70,7 +55,6 @@ class Fiscal_sequence(models.Model):
             res = prefix + str(number).zfill(padding)
         return res
 
-    #@api.model_create_multi
     def _update_ir_sequence(self):
         if self.sequence_id:
             sequence_vals = {'vitt_min_value': self.build_numbers(self._from),
@@ -85,10 +69,9 @@ class Fiscal_sequence(models.Model):
                 self.sequence_id.write({'active': False})
         if self.actived and not self.sequence_id.active:
             self.sequence_id.write({'active': True})
-
-    #@api.model_create_multi
-    def write(self, vals):
-        super(Fiscal_sequence, self).write(vals)
+    
+    def write(self, vals_list):
+        super(Fiscal_sequence, self).write(vals_list)
         self._update_ir_sequence()
     
     def _review_index(self,index,array):
@@ -98,11 +81,11 @@ class Fiscal_sequence(models.Model):
         except :
             return False
 
-    @api.model
-    def create(self, vals):
-        res = super(Fiscal_sequence, self).create(vals)
-        if not vals.get('journal_id'):
-            raise Warning(_('Set a journal and a sequence'))
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(Fiscal_sequence, self).create(vals_list)
+        if not vals_list.get('journal_id'):
+            raise UserError(_('Set a journal and a sequence'))
         return res
 
     # TODO : Verificar que no exista en facturas esta secuencia
@@ -110,7 +93,7 @@ class Fiscal_sequence(models.Model):
     #def unlink(self):
         #invoice = self.env["account.invoice"].search([('sequence_ids', '=', self.sequence_id.id)])
         #if invoice:
-            #raise Warning(_('You cannot delete a fiscal regime, you must disable it'))
+            #raise UserError(_('You cannot delete a fiscal regime, you must disable it'))
         #return super(Fiscal_sequence, self).unlink()
 
 

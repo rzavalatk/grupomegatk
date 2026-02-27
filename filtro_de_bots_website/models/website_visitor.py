@@ -14,7 +14,7 @@ class WebsiteVisitor(models.Model):
     duration = fields.Float('Duration', compute='compute_duration', store=True)
     set_duration = fields.Boolean('Set Duration')
 
-    def search(self, args, offset=0, limit=None, order=None, count=False):
+    def search(self, args, offset=0, limit=None, order=None):
         """Override the search"""
         for arg in args:
             if arg == ['set_duration', '=', True]:
@@ -26,8 +26,7 @@ class WebsiteVisitor(models.Model):
                     arg[1] = '>'
                     arg[2] = bot_duration
         res = super(WebsiteVisitor, self).search(args, offset=offset,
-                                                 limit=limit, order=order,
-                                                 count=count)
+                             limit=limit, order=order)
         return res
 
     @api.model

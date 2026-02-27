@@ -3,7 +3,7 @@
         <field name="name">gps.device.trip.tree</field>
         <field name="model">gps.device.trip</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="code"/>
                 <field name="name"/>
                 <field name="device_id"/>
@@ -12,7 +12,7 @@
                 <field name="end_time"/>
                 <field name="state"/>
                 <field name="id_employee" readonly='1' />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -39,12 +39,12 @@
                     <notebook>
                         <page string="Ubicaciones">
                             <field name="location_ids">
-                                <tree editable="false" create="false" delete="false">
+                                <list editable="false" create="false" delete="false">
                                     <field name="timestamp" readonly='1'/>
                                     <field name="latitude" readonly='1'/>
                                     <field name="longitude" readonly='1'/>
                                     <field name="map_btn" widget="html" readonly='1'/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -56,6 +56,6 @@
     <record id="action_gps_device_trip" model="ir.actions.act_window">
         <field name="name">Viajes GPS</field>
         <field name="res_model">gps.device.trip</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>

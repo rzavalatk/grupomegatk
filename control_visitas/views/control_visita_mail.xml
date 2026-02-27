@@ -7,14 +7,12 @@
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
             <field name="nextcall" eval="datetime.now(pytz.timezone('America/Tegucigalpa')).strftime('%Y-%m-%d 22:59:59')" />
             <field ref="control_visitas.model_control_visitas" name="model_id" />
             <field name="state">code</field>
             <field name="code">
             model.datos()
             </field>
-            <field eval="False" name="doall"/>
             <!--<field name="function">True</field>-->
         </record>
     </data>

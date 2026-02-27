@@ -6,7 +6,7 @@
 	<field name="model">sale.order</field>
 	<field name="inherit_id" ref="sale.view_order_form"/>
 	<field name="arch" type="xml">
-		<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+		<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/list/field[@name='price_subtotal']" position="before">
 			<field name="nombreproducto" invisible="1"/>
 	 		<field name="precio_id" domain="[('product_id.id','=',nombreproducto)]" options="{'no_create': True}"/>
 			<field name="precio_ids" domain="[('product_id.id','=',nombreproducto)]" options="{'no_create': True}" invisible="1"/>

@@ -46,17 +46,19 @@ class Product(models.Model):
         if grupo and self.env.user in grupo.users:
             pass
         else:
-            raise Warning(
+            raise UserError(
                     _('No tiene permisos para cambiar la marca del producto, contactese con su administrador'))  
-
-    def write(self, values):
+    
+    #DESCOMENTAR EN PRODUCCION 
+    """def write(self, values):
         grupo = self.env['res.groups'].search([('id', '=', 264)], limit=1)
 
         if grupo and self.env.user in grupo.users:
             return super(Product, self).write(values)
         else:
-            raise Warning(
-                    _('No tiene permisos para cambiar la marca del producto, contactese con su administrador'))  
+            raise UserError(
+                    _('No tiene permisos para cambiar la marca del producto, contactese con su administrador'))"""
+
 
 #Formulario al crear una marca
 class ProductMarca(models.Model):

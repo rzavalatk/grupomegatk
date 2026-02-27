@@ -5,13 +5,13 @@
             <field name="name">product.report.view.tree</field>
             <field name="model">product.report</field>
             <field name="arch" type="xml">
-                <tree string="Reportes">
+                <list string="Reportes">
                     <field name="name" />
                     <field name="date_from" />
                     <field name="date_to" />
                     <field name="company_id" />
                     <field name="state" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -21,12 +21,12 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button string="Agrupar lineas" name="init_report" states="draft" type="object" class="oe_highlight"/>
-                        <button string="Procesar" name="proccess_line_report" states="init" type="object" class="oe_highlight"/>
-                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
-                        <button string="Enviar por Email" states="done" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}" />
-                        <button string="Cancelar" name="cancel_report" states="draft,init,proccess,done" type="object"/>
-                        <button string="Volver a Borrador" name="back_to_draft" states="cancel" type="object"/>
+                        <button string="Agrupar lineas" name="init_report" modifiers="{'invisible':[('state','!=','draft')]}" type="object" class="oe_highlight"/>
+                        <button string="Procesar" name="proccess_line_report" modifiers="{'invisible':[('state','!=','init')]}" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" modifiers="{'invisible':[('state','!=','proccess')]}" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Enviar por Email" modifiers="{'invisible':[('state','!=','done')]}" name="%(crons_mega.account_cierre_mail_action)d" type="action" context="{'active_id': id}" />
+                        <button string="Cancelar" name="cancel_report" modifiers="{'invisible':[('state','not in',('draft','init','proccess','done'))]}" type="object"/>
+                        <button string="Volver a Borrador" name="back_to_draft" modifiers="{'invisible':[('state','!=','cancel')]}" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done"/>
                     </header>
                     <sheet>
@@ -46,24 +46,24 @@
                         <notebook>
                             <page string="Líneas de Factura">
                                 <field name="line_invoices" readonly="1">
-                                    <tree>
+                                    <list>
                                         <field name="name" />
                                         <field name="quantity" />
                                         <field name="price_unit" />
                                         <field name="price_subtotal" string="Sub-Total" sum="Total"/>
                                         <!--<field name="price_tax" string="Impuesto" sum="Total"/>-->
                                         <field name="price_total" string="Total" sum="Total"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Líneas de Reporte">
                                 <field name="line_report" readonly="1">
-                                    <tree>
+                                    <list>
                                         <field name="product_id" />
                                         <field name="total_quantity" />
                                         <field name="currency_id" invisible="1" />
                                         <field name="total_sold" string="Total" sum="Total"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -76,7 +76,7 @@
             <field name="name">Reporte de Marcas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">product.report</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <menuitem

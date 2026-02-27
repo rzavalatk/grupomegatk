@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError, ValidationError, AccessError
 from odoo.addons import decimal_precision as dp
 from datetime import date
 
 class ImportacionProducto(models.Model):
 	_name='import.product.mega'
 	_order = "name desc"
-	_description = "description"
+	_description = "Modulo de ponderación de productos importados con gastos"
 
+	#Campos
 	name = fields.Char(string="Name")
 	descripcion = fields.Char("Descripción")
 	stock_pick_ids = fields.Many2many(comodel_name="stock.picking", relation="x_stockpicking_impor_product_mega",column1="stock_picking_id",column2="import_mega_id", string="Transferencias",required=False,)
@@ -39,21 +40,21 @@ class ImportacionProducto(models.Model):
 
 	date = fields.Date(string="Fecha", help="Fecha de ponderación", required=True,)
 
-	#@api.model_create_multi
+	#Borrar ponderación
 	def unlink(self):
 		if not self.state == 'draft':
-			raise Warning(_('No se puede borrar las ponderaciones validadas'))
+			raise UserError(_('No se puede borrar las ponderaciones validadas'))
 		res = super(ImportacionProducto, self).unlink()
 		return res
 
-	#@api.model_create_multi
+	#Cancelar ponderación
 	def cancelar_impor(self):
 		if self.costo_id:
 			for lis in self.costo_id:
 				lis.unlink()
 		self.write({'state': 'cancelado'})
 
-	#@api.model_create_multi
+	#Volver a borrador
 	def back_draft(self):
 		if self.costo_id:
 			for lis in self.costo_id:
@@ -65,13 +66,13 @@ class ImportacionProducto(models.Model):
 				})
 		self.write({'state': 'draft'})
 
-	#@api.model_create_multi
+	#Validar ponderación
 	def validar(self):
 		if not self.import_line_id:
-			raise Warning(_('No existe detalle de facturación'))
+			raise UserError(_('No existe detalle de facturación'))
 
 		if not self.import_gsto_id:
-			raise Warning(_('No existe detalle de gastos'))
+			raise UserError(_('No existe detalle de gastos'))
 
 		ponderaciones = self.env["import.product.mega"].search([('company_id','=',self.company_id.id)])
 		for ponderacion in ponderaciones:
@@ -128,7 +129,6 @@ class ImportacionProducto(models.Model):
 					'date': date.today()
 					})
 
-	#@api.model_create_multi
 	@api.onchange('stock_pick_ids')
 	def _onchange_stock_pick_ids(self):
 		self.import_line_id = [(5, 0, 0)]  # Elimina todas las líneas existentes
@@ -152,10 +152,6 @@ class ImportacionProducto(models.Model):
 					'fecha_done': lineas.date,
 				}
 				self.import_line_id += self.env['import.product.mega.line.purchase'].new(vals)
-
-    
-    
-    
 
 	@api.depends('import_line_id.price_total')
 	def _amount_all(self):
@@ -206,7 +202,7 @@ class LinePurchaseImport(models.Model):
 
 class LinePurchaseImport(models.Model):
 	_name = 'import.product.mega.line.gasto'
-	_description = "description"
+	_description = "descripcion de gastos de la ponderación"
 
 	import_product_id = fields.Many2one('import.product.mega', string='Impor Product Reference', index=True, required=True, ondelete='cascade')
 	gasto_id = fields.Many2one('import.gasto.mega', 'Gasto')

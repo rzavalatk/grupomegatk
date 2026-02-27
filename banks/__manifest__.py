@@ -7,10 +7,10 @@
     'description': """
         Gestión de banco y caja
     """,
-    'author': "César Alejandro Rodriguez Castillo",
+    'author': "David Zuniga - MegaTK",
     'category': 'Accounting',
     "license": "LGPL-3",
-    'version': '0.1',
+    'version': '18.0',
     'depends': ['base', 'account', 'analytic', 'purchase'],
     'data': [
         "security/groups.xml",

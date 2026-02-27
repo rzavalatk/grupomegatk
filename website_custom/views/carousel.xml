@@ -11,7 +11,6 @@
                     <field name="website" />
                     <field name="image" widget="image"/>
                     <field name="color" />
-                    <separator/>
                     <templates>
                         <t t-name="kanban-box">
                             <div style="height:200px; display: flex; flex-direction: column;" t-attf-class="oe_kanban_global_click #{kanban_color(record.color.raw_value)}">
@@ -52,10 +51,10 @@
                             <group>
                                 <field name="label_button" />
                                 <field name="stroke_name" />
-                                <field name="color_stroke_name" attrs="{'invisible': [('stroke_name','=', False)]}" />
-                                <field name="size_stroke_name" attrs="{'invisible': [('stroke_name','=', False)]}"/>
+                                <field name="color_stroke_name" invisible="stroke_name == False" />
+                                <field name="size_stroke_name" invisible="stroke_name == False" />
                                 <field name="stroke_description" />
-                                <field name="color_stroke_description" attrs="{'invisible': [('stroke_description','=', False)]}" />
+                                <field name="color_stroke_description" invisible="stroke_description == False" />
                                 <field name="style" />
                             </group>
                         </group>

@@ -4,7 +4,7 @@
 			<field name="name">prestamos.cuotas.tree.view</field>
 			<field name="model">prestamos.cuotas</field>
 			<field name="arch" type="xml">
-				<tree edit="0" create="0" delete="0">
+				<list edit="0" create="0" delete="0">
 					<field name="name"/>
 					<field name="fecha_pago"/>
 					<field name="fecha_pagado"/>
@@ -15,14 +15,14 @@
 					<field name="pago"/>
 					<field name="saldo"/>
 					<field name="state"/>
-				</tree>
+				</list>
 			</field>
 		</record>
 
 		<record model="ir.actions.act_window" id="action_prestamo_cuotas">
 			<field name="name">Cuota</field>
 			<field name="res_model">prestamos.cuotas</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">list,form</field>
 			<field name="domain">[('cuotas_prestamo_id','=',active_id)]</field>
 		</record>
 
@@ -32,39 +32,39 @@
 			<field name="arch" type="xml">
 				<form string = "Cuota">
 					<header>
-						<button name="back_draft" type="object" string="Volver a borrador" states="cancelado" class="oe_highlight"/>
-						<button name="validar" type="object" string="Crear factura" states="validado" class="oe_highlight" confirm='¿Desea validar la cuota?'/>
-						<button name="%(action_wizard_prestamos_cuota_wizard_cheque)d" type="action" string="Validar" states="draft" class="oe_highlight"/>
-						<button name="cancelar" type="object" string="Cancelar" states="validado" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
+						<button name="back_draft" type="object" string="Volver a borrador" class="oe_highlight"/>
+						<button name="validar" type="object" string="Crear factura" class="oe_highlight" confirm='¿Desea validar la cuota?'/>
+						<button name="%(action_wizard_prestamos_cuota_wizard_cheque)d" type="action" string="Validar" class="oe_highlight"/>
+						<button name="cancelar" type="object" string="Cancelar" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
 						<field name="state" widget="statusbar" nolabel="1"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="button_box">
-							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" states="hecho">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
 								<field name="invoice_id" widget="statinfo" string="Factura"/>
 							</button>
 						</div>
 						<h1>
-							<field name="name" attrs='{"readonly": [["name","!=",False]]}'/>
+							<field name="name" modifiers='{"readonly": [["name","!=",False]]}'/>
 						</h1>
 						<h1>
 							<field name="tipo" />
 						</h1>
 						<group name="x_datos0">
 							<group name="x_1">
-								<field name="cuota_capital" attrs='{"readonly": [["cuota_capital","!=",False]]}'/>
+								<field name="cuota_capital" modifiers='{"readonly": [["cuota_capital","!=",False]]}'/>
 								<field name="saldo" invisible="1" />
-								<field name="gastos" attrs='{"readonly": [["gastos","!=",False]]}'/>
-								<field name="cuota_interes" attrs='{"readonly": [["cuota_interes","!=",False]]}'/>
-								<field name="cuota_prestamo" attrs='{"readonly": [["cuota_prestamo","!=",False]]}'/>
+								<field name="gastos" modifiers='{"readonly": [["gastos","!=",False]]}'/>
+								<field name="cuota_interes" modifiers='{"readonly": [["cuota_interes","!=",False]]}'/>
+								<field name="cuota_prestamo" modifiers='{"readonly": [["cuota_prestamo","!=",False]]}'/>
 							</group>
 							<group name="x_2">
 								<field name="fecha_pago" required="1" readonly="1"/>
-								<field name="cuotas_prestamo_id" attrs='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
-								<field name="pago" attrs='{"invisible": [["pago","=",0]]}'/>
-								<field name="fecha_pagado" attrs='{"readonly": [["state","!=","draft"]]}'/>
-								<field name="interes_generado" attrs='{"invisible": [["interes_generado","=",0]]}'/>
-								<field name="interes_moratorio" attrs='{"invisible": [["interes_moratorio","=",0]]}'/>
+								<field name="cuotas_prestamo_id" modifiers='{"readonly": [["cuotas_prestamo_id","!=",False]]}'/>
+								<field name="pago" modifiers='{"invisible": [["pago","=",0]]}'/>
+								<field name="fecha_pagado" modifiers='{"readonly": [["state","!=","draft"]]}'/>
+								<field name="interes_generado" modifiers='{"invisible": [["interes_generado","=",0]]}'/>
+								<field name="interes_moratorio" modifiers='{"invisible": [["interes_moratorio","=",0]]}'/>
 							</group>
 						</group>
 					</sheet>
@@ -79,51 +79,51 @@
 			<field name="arch" type="xml">
 				<form string = "Form Import">
 					<header>
-						<button name="back_draft" type="object" string="Volver a borrador" states="cancelado" class="oe_highlight"/>
-						<button name="validar" type="object" string="Validar" states="draft" class="oe_highlight" confirm='¿Desea validar el prestamo?'/>
-						<button name="crear_factura" type="object" string="Crear factura" confirm='¿Desea crear la factura?' states="desembolso" class="oe_highlight"/>
-						<button name="%(action_wizard_prestamos_wizard_cheque)d" type="action" string="Desembolso" attrs="{'invisible': ['|',('state','!=','validado'),('tipo_prestamo','=','financiamiento')]}" class="oe_highlight" />
-						<button name="%(action_wizard_prestamos_interes_wizard_personal)d" type="action" string="Facturar interes" attrs="{'invisible': ['|',('state','!=','proceso'),('tipo_prestamo','!=','personal')]}" class="oe_highlight" />
-						<button name="cancelar" type="object" string="Cancelar" states="validado,desembolso,proceso" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
+						<button name="back_draft" type="object" string="Volver a borrador" class="oe_highlight"/>
+						<button name="validar" type="object" string="Validar" class="oe_highlight" confirm='¿Desea validar el prestamo?'/>
+						<button name="crear_factura" type="object" string="Crear factura" confirm='¿Desea crear la factura?' class="oe_highlight"/>
+						<button name="%(action_wizard_prestamos_wizard_cheque)d" type="action" string="Desembolso" modifiers="{'invisible': ['|',('state','!=','validado'),('tipo_prestamo','=','financiamiento')]}" class="oe_highlight" />
+						<button name="%(action_wizard_prestamos_interes_wizard_personal)d" type="action" string="Facturar interes" modifiers="{'invisible': ['|',('state','!=','proceso'),('tipo_prestamo','!=','personal')]}" class="oe_highlight" />
+						<button name="cancelar" type="object" string="Cancelar" class="oe_highlight" confirm='¿Está seguro de cancelar el prestamo?'/>
 						<button name="fechainicio" type="object" string="Fecha" class="oe_highlight"/>
-						<button name="ending" type="object" string="Finalizar" states="proceso" class="oe_highlight"/>
-						<button name="re_validate" type="object" string="Re-validar" states="validado,desembolso,proceso"/>
-						<button name="%(aporte_capital_action_wizard)d" type="action" string="Aportar capital" states="proceso" context="{'active_id': id}" />
+						<button name="ending" type="object" string="Finalizar" class="oe_highlight"/>
+						<button name="re_validate" type="object" string="Re-validar"/>
+						<button name="%(aporte_capital_action_wizard)d" type="action" string="Aportar capital" context="{'active_id': id}" />
 						<button string="Revisar prestamo 1" name="review_prestamo" groups="planilla_y_metas.admin_functions" type="object"/>
 						<button string="Revisar prestamo 2" name="review_prestamo_2" groups="planilla_y_metas.admin_functions" type="object"/>
 						<field name="state" widget="statusbar" nolabel="1"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="button_box">
-							<button name="action_view_invoice_cxp" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count_cxp', '=', 0)]}">
+							<button name="action_view_invoice_cxp" type="object" class="oe_stat_button" icon="fa-pencil-square-o" modifiers="{'invisible': [('invoice_count_cxp', '=', 0)]}">
 								<field name="invoice_count_cxp" widget="statinfo" string="Facturas cxp"/>
 							</button>
-							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count_cxc', '=', 0)]}">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" modifiers="{'invisible': [('invoice_count_cxc', '=', 0)]}">
 								<field name="invoice_count_cxc" widget="statinfo" string="Facturas cxc"/>
 							</button>
-							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('payment_count', '=', 0)]}">
+							<button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-money" modifiers="{'invisible': [('payment_count', '=', 0)]}">
 								<field name="payment_count" widget="statinfo" string="Pagos cliente"/>
 							</button>
-							<button class="oe_stat_button" icon="fa-bank" type="action" name="%(action_prestamo_cuotas)d" attrs="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
+							<button class="oe_stat_button" icon="fa-bank" type="action" name="%(action_prestamo_cuotas)d" modifiers="{'invisible': ['|',('cuotas_count', '=', 0),('tipo_prestamo', '!=', 'financiamiento')]}">
 								<field name="cuotas_count" widget="statinfo" string="Cuotas"/>
 							</button>
 						</div>
 
 						<group>
 							<h1>
-								<field name="name" attrs="{'readonly': True}"/>
+								<field name="name" modifiers="{'readonly': True}"/>
 							</h1>
 						</group>
 						<group name='prestamo' string='Datos del prestamo'>
 							<group name="client">
 								<field name="tipo_prestamo" />
 								<field name="res_partner_id" />
-								<field name="monto_cxc" widget='monetary' attrs="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
-								<field name="monto_personal" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
-								<field name="monto_finan" widget='monetary' attrs="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>
+								<field name="monto_cxc" widget='monetary' modifiers="{'invisible': ['|','|',('name','=',False),('monto_cxc','=',0.00),('state','=','draft')]}" />
+								<field name="monto_personal" widget='monetary' modifiers="{'invisible': ['|',('tipo_prestamo', '=', 'financiamiento'),'&amp;',('name','!=',False),('state','!=','draft')],'required':[('tipo_prestamo', '=', 'personal')]}"/>
+								<field name="monto_finan" widget='monetary' modifiers="{'invisible': ['|',('tipo_prestamo', '=', 'personal'),'&amp;',('name','!=',False),('state','!=','draft')]}"/>
 								<!-- 'readonly': [('tipo_prestamo', '=', 'financiamiento')], -->
-								<field name="monto_restante" widget='monetary' readonly="1" attrs="{'invisible': [('state', '!=', 'proceso')]}"/>
-								<field name="interes_generado" widget='monetary' readonly="1" attrs="{'invisible': ['&amp;',('state', '=', 'proceso'),('tipo_prestamo', '!=', 'personal')]}"/>
+								<field name="monto_restante" widget='monetary' readonly="1" modifiers="{'invisible': [('state', '!=', 'proceso')]}"/>
+								<field name="interes_generado" widget='monetary' readonly="1" modifiers="{'invisible': ['&amp;',('state', '=', 'proceso'),('tipo_prestamo', '!=', 'personal')]}"/>
 							</group>
 							<group name="datos_pres">
 								<field name="gasto_prestamo" widget='monetary'/>
@@ -150,19 +150,19 @@
 									<field name="cuotas_id" nolabel='1' />
 								</group>
 							</page>
-							<page string="Producto" attrs="{'invisible': [('tipo_prestamo', '=', 'personal')]}">
+							<page string="Producto" modifiers="{'invisible': [('tipo_prestamo', '=', 'personal')]}">
 								<group string='Producto a financiar' >
 									<group>
-										<field name="res_partner_prov_id" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="res_partner_prov_id" modifiers="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
 										<!-- ,'readonly':[('res_partner_prov_id','!=',False)] -->
-										<field name="equipo" attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
-										<field name="precio_a" widget='monetary' attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
-										<field name="precio_m" widget='monetary' attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="equipo" modifiers="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="precio_a" widget='monetary' modifiers="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="precio_m" widget='monetary' modifiers="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
 									</group>
 									<group>
-										<field name="prima" widget='monetary' attrs="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
-										<field name="utilidad" widget='monetary' attrs="{'readonly': [('tipo_prestamo', '=', 'financiamiento')]}"/>
-										<field name="monto_cxp" attrs="{'readonly': [('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="prima" widget='monetary' modifiers="{'required':[('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="utilidad" widget='monetary' modifiers="{'readonly': [('tipo_prestamo', '=', 'financiamiento')]}"/>
+										<field name="monto_cxp" modifiers="{'readonly': [('tipo_prestamo', '=', 'financiamiento')]}"/>
 									</group>
 								</group>
 							</page>
@@ -171,7 +171,7 @@
 									<group name="productos">
 										<field name="company_id" />
 										<field name="user_id"/>
-										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' attrs='{"invisible": [["state","in",["draft","cancelado"]]]}'/>
+										<field name="banco_id" options="{'no_create': True}" readonly="1" domain='[("company_id", "=", company_id), ("state", "=", "validated")]' modifiers='{"invisible": [["state","in",["draft","cancelado"]]]}'/>
 									</group>
 									<group name="cuentas">
 										<field name="account_id"/>
@@ -201,12 +201,12 @@
 			<field name="name">prestamos.tree.view</field>
 			<field name="model">prestamos</field>
 			<field name="arch" type="xml">
-				<tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
+				<list decoration-info="state == 'draft'" decoration-muted="state == 'cancelado'">
 					<field name="name" string='Numero'/>
 					<field name="res_partner_id"/>
 					<field name="tipo_prestamo"/>
 					<field name="state"/>
-				</tree>
+				</list>
 			</field>
 		</record>
 
@@ -215,7 +215,7 @@
 			<field name="name">Personales</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">prestamos</field>
-			<field name="view_mode">tree,form,activity</field>
+			<field name="view_mode">list,form,activity</field>
 			<field name="context">{'default_tipo_prestamo': 'personal'}</field>
 			<field name="domain">[['tipo_prestamo', '=', 'personal']]</field>
 		</record>
@@ -225,7 +225,7 @@
 			<field name="name">Financiamiento</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">prestamos</field>
-			<field name="view_mode">tree,form,activity</field>
+			<field name="view_mode">list,form,activity</field>
 			<field name="context">{'default_tipo_prestamo': 'financiamiento'}</field>
 			<field name="domain">[['tipo_prestamo', '=', 'financiamiento']]</field>
 		</record>

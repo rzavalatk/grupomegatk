@@ -5,11 +5,11 @@
             <field name="name">hr.employee.markings.tree</field>
             <field name="model">hr.employee.markings</field>
             <field name="arch" type="xml">
-                <tree>
+                <list>
                     <field name="employee"/>
                     <field name="date"/>
                     <field name="hour"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -48,7 +48,7 @@
             <field name="name">Marcaciones</field>
             <field name="res_model">hr.employee.markings</field>
             <!--<field name= "view_type">form</field>-->
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <menuitem name="Marcaciones" id="hr_employee_markings_menu" 

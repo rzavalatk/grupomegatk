@@ -32,7 +32,7 @@
 	  		<field name="inherit_id" ref="crm.crm_lead_view_form" />
 				<field name="arch" type="xml">
 					<!--<header>
-						<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" attrs="{"invisible": [["tipo_soporte","=","llamada"]]}"/>
+						<button name="imprimir_soporte" type="object" string="IMPRIMIR" class="oe_highlight" modifiers='{"invisible": [["tipo_soporte","=","llamada"]]}'/>
 					</header>-->
 					<field name="name" position="before">
 						<h1>
@@ -50,20 +50,20 @@
 							<group name="soporte">
 								<group name="data1">
 									<field name="tipo_soporte"/>
-									<field name="estado_taller" attrs="{'invisible': [['tipo_soporte','not in',['taller','interno','in_costo']]]}"/>
-									<field name="tipo_visita" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
-									<field name="proposito" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
+									<field name="estado_taller" modifiers='{"invisible": [["tipo_soporte","not in",["taller","interno","in_costo"]]]}'/>
+									<field name="tipo_visita" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
+									<field name="proposito" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo"]]]}'/>
 								</group>
 								<group name="data2">
-									<field name="reporto" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="repor_tel" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="repor_email" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="repor_direction" attrs='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
-									<field name="serie" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
-									<field name="accesorio_ids" widget="many2many_tags" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
+									<field name="reporto" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="repor_tel" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="repor_email" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="repor_direction" modifiers='{"invisible": [["tipo_soporte","not in",["visita","visita_sin_costo","llamada"]]]}'/>
+									<field name="serie" modifiers='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
+									<field name="accesorio_ids" widget="many2many_tags" modifiers='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'/>
 								</group>
 							</group>
-							<group name="soporte1" attrs='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'>
+							<group name="soporte1" modifiers='{"invisible": [["tipo_soporte","not in",["taller","interno","sin_costo"]]]}'>
 								<group name="data3">
 									<field name="marca_id"/>
 									<field name="categoria_id" domain="[('marca_id', '=', marca_id)]"/>
@@ -100,15 +100,12 @@
 						</page>
 					</xpath>
 					<xpath expr="//field[@name='campaign_id']" position="attributes">
-						<attribute name="attrs">{}</attribute>
 						<attribute name="invisible">1</attribute>
 					</xpath>
 					<xpath expr="//field[@name='medium_id']" position="attributes">
-						<attribute name="attrs">{}</attribute>
 						<attribute name="invisible">1</attribute>
 					</xpath>
 					<xpath expr="//field[@name='source_id']" position="attributes">
-						<attribute name="attrs">{}</attribute>
 						<attribute name="invisible">1</attribute>
 					</xpath>
 					<xpath expr="//field[@name='source_id']" position="after">
@@ -131,7 +128,6 @@
 	  		<field name="inherit_id" ref="crm.quick_create_opportunity_form" />
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='name']" position="attributes">
-			    	<attribute name="attrs">{}</attribute>
 			    	<attribute name="invisible">1</attribute>
 			  	</xpath>
 				<field name="partner_id" position="before">
@@ -172,13 +168,13 @@
 			<field name="name">crm.servicio.view.tree</field>
 			<field name="model">crm.servicio</field>
 			<field name="arch" type="xml">
-				<tree string="">
+				<list string="">
 					<field name="name" />
 					<field name="marca_id"/>
 					<field name="puntaje_taller"/>
 					<field name="puntaje_llamada"/>
 					<field name="puntaje_visita" />
-				</tree>
+				</list>
 			</field>
 		</record>
 
@@ -186,26 +182,26 @@
 		<record id="crm_servicio_action" model="ir.actions.act_window">
 			<field name="name">Servicios</field>
 			<field name="res_model">crm.servicio</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">list,form</field>
 		</record>
 
  		<record model="ir.actions.act_window" id="action_crm_lead_marca">
 			<field name="name">Marcas</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">crm.lead.marca</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">list,form</field>
 	    </record>     
     	<record model="ir.actions.act_window" id="action_crm_lead_categoria">
 			<field name="name">Categorias</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">crm.lead.categoria</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">list,form</field>
 	    </record>
 	    <record model="ir.actions.act_window" id="action_crm_lead_modelo">
 			<field name="name">Modelos</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">crm.lead.modelo</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">list,form</field>
     	</record>
 
 	    <menuitem name="Soporte Tecnico" id="crm_menu_soporte_taller" sequence = "10" parent="crm.crm_menu_root"/>

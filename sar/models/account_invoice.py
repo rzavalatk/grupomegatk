@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from datetime import datetime, date
 import logging
-#from itertools import ifilter
-# mapping invoice type to journal type
 
 _logger = logging.getLogger(__name__)
 
@@ -16,11 +14,9 @@ TYPE2JOURNAL = {
     'in_refund': 'purchase',
 }
 
-
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    # @api.model_create_multi
     @api.depends("company_id")
     def _default_fiscal_validated(self, company_id):
         if company_id:
@@ -55,7 +51,6 @@ class AccountMove(models.Model):
         self.exento = exento
         #self.gravado = gravado
 
-    @api.model_create_multi
     @api.depends("journal_id")
     def _default_sequence(self, journal_id):
         flag = 0
@@ -74,19 +69,6 @@ class AccountMove(models.Model):
         if flag == 1:
             return self.env['ir.sequence'].search(domain)
 
-    """@api.model_create_multi
-    @api.depends("sequence_ids")
-    def _internal_number_sequence(self):
-        for inv in self:
-            if inv.move_id and inv.move_type == 'out_invoice' or inv.move_type == 'out_refund':
-                if not inv.internal_number:
-                    if self.fiscal_control and self.sequence_ids:
-                        new_name = self.sequence_ids.with_context(
-                            ir_sequence_date=inv.move_id.date).next_by_id()
-                        #inv.move_id.write({'name': self.invoice_date})
-                        inv.write({'internal_number': new_name})
-                        self.internal_number = new_name"""
-
     def button_confirm(self):
         for invoice in self:
             if invoice.move_type in ('out_invoice', 'out_refund'):
@@ -101,7 +83,7 @@ class AccountMove(models.Model):
             if inv.move_type == 'out_invoice' or inv.move_type == 'out_refund' or inv.move_type == 'in_invoice':
                 if not inv.internal_number and inv.sequence_ids:
                     new_name = inv.sequence_ids.next_by_id()
-                    inv.write({'internal_number': new_name})
+                    inv.internal_number = new_name
                     
 
     fiscal_control = fields.Boolean(
@@ -114,7 +96,7 @@ class AccountMove(models.Model):
     #sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
      #                              domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False),('user_ids','in', user_id.id)]")
     sequence_ids = fields.Many2one("ir.sequence", "Número Fiscal", states={'draft': [('readonly', False)]},
-                                   domain="[('is_fiscal_sequence', '=',True),('active', '=', True), '|',('code','=', move_type),('code','=', 'in_refund'),('journal_id', '=', journal_id), '|', ('user_ids','=',False)]")
+                                   domain="['&', ['is_fiscal_sequence','=',True], ['active','=',True]]")
     x_compra_exenta = fields.Char("Orden de compra exenta", default="N/A")
     x_registro_exonerado = fields.Char("Registro exonerado", default="N/A")
     x_registro_sag = fields.Char("Registro del SAG", default="N/A")
@@ -140,8 +122,7 @@ class AccountMove(models.Model):
         else:
             self.price_total_total_text = self.to_word(
                 self.amount_totall, self.user_id.company_id.currency_id.name)
-        return True
-    
+        return True   
     
     def to_word(self, number, mi_moneda):
         valor = number
@@ -345,34 +326,44 @@ class AccountMove(models.Model):
             s = s[:i] + ',' + s[i:]
         return s
 
-    """def create(self, vals):
-        if not vals.get("sequence_ids"):
-            vals["fiscal_control"] = 0
-            vals["sequence_ids"] = 0
-            if vals.get("company_id"):
-                vals["fiscal_control"] = self._default_fiscal_validated(vals.get("company_id"))
-            else:
-                company_id = self.env["res.users"].browse(vals.get("user_id")).company_id.id
-                vals["fiscal_control"] = self._default_fiscal_validated(company_id)
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Crear moves soportando creación múltiple en Odoo 18.
 
-            if vals.get("journal_id") and not vals["fiscal_control"]:
-                company_id = self.env["account.journal"].browse(vals.get("journal_id")).company_id.id
-                vals["fiscal_control"] = self._default_fiscal_validated(company_id)
+        Aplica la lógica fiscal sobre cada diccionario de valores.
+        """
+        if isinstance(vals_list, dict):
+            vals_list = [vals_list]
 
-            if vals["fiscal_control"] and vals.get("journal_id"):
-                flag = 0
-                domain = [
-                    ('is_fiscal_sequence', '=', True),
-                    ('active', '=', True),
-                    ('journal_id', '=', vals.get("journal_id")),
-                    ('code', '=', vals.get("move_type"))]
-                sequence = self.env["ir.sequence"].search(domain)
-                for count in sequence:
-                    flag += 1
-                if flag == 1:
-                    vals["sequence_ids"] = self.env['ir.sequence'].search(domain).id
-        invoice = super(AccountMove, self).create(vals)
-        return invoice"""
+        for vals in vals_list:
+            if not vals.get("sequence_ids"):
+                vals["fiscal_control"] = 0
+                vals["sequence_ids"] = 0
+                if vals.get("company_id"):
+                    vals["fiscal_control"] = self._default_fiscal_validated(vals.get("company_id"))
+                else:
+                    company_id = self.env["res.users"].browse(vals.get("user_id")).company_id.id
+                    vals["fiscal_control"] = self._default_fiscal_validated(company_id)
+
+                if vals.get("journal_id") and not vals["fiscal_control"]:
+                    company_id = self.env["account.journal"].browse(vals.get("journal_id")).company_id.id
+                    vals["fiscal_control"] = self._default_fiscal_validated(company_id)
+
+                if vals["fiscal_control"] and vals.get("journal_id"):
+                    flag = 0
+                    domain = [
+                        ('is_fiscal_sequence', '=', True),
+                        ('active', '=', True),
+                        ('journal_id', '=', vals.get("journal_id")),
+                        ('code', '=', vals.get("move_type"))]
+                    sequence = self.env["ir.sequence"].search(domain)
+                    for count in sequence:
+                        flag += 1
+                    if flag == 1:
+                        vals["sequence_ids"] = self.env['ir.sequence'].search(domain).id
+
+        moves = super(AccountMove, self).create(vals_list)
+        return moves
 
     @api.onchange('journal_id')
     def _onchange_journal_inh(self):
@@ -380,7 +371,6 @@ class AccountMove(models.Model):
             self.company_id.id)
         self.sequence_ids = self._default_sequence(self.journal_id.id)
 
-    #@api.model_create_multi
     def action_date_assign(self):
         res = super(AccountMove, self).action_date_assign()
         if self.state:
@@ -388,13 +378,13 @@ class AccountMove(models.Model):
                 self.invoice_date = date.today()
             if self.sequence_ids:
                 if not self.invoice_date:
-                    raise Warning(
+                    raise UserError(
                         _('No existe fecha establecida para esta factura'))
                 if self.invoice_date > self.sequence_ids.expiration_date:
-                    raise Warning(_('The Expiration Date for this fiscal sequence is %s ') % (
+                    raise UserError(_('The Expiration Date for this fiscal sequence is %s ') % (
                         self.sequence_ids.expiration_date))
                 if self.sequence_ids.vitt_number_next_actual > self.sequence_ids.max_value:
-                    raise Warning(
+                    raise UserError(
                         _('The range of sequence numbers is finished'))
         return res
 
@@ -418,7 +408,6 @@ class AccountMove(models.Model):
         #    ]
         #    self.journal_id = self.env['account.journal'].search(domain).id
 
-    #@api.model
     def action_move_create(self):
         res = super(AccountMove, self).action_move_create()
         for inv in self:

@@ -26,7 +26,7 @@
         <field name="doc_type"/>
         <field name="currency_id"/>
         <field name="es_moneda_base" invisible="1"/>
-        <field name="currency_rate" attrs="{'invisible': [('es_moneda_base','=', True)]}"/>
+        <field name="currency_rate" modifiers="{'invisible': [('es_moneda_base','=', True)]}"/>
     </group>
 </group>
 <footer>

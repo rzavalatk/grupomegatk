@@ -67,7 +67,6 @@ class SaleOrder(models.Model):
 class Invoice(models.Model):
     _inherit = "account.move"
 
-    @api.model
     def custom_unlink(self):
         for invoice in self:
             if invoice.name:

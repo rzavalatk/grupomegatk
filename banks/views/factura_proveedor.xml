@@ -12,15 +12,5 @@
         	</field>
             </field>
         </record>
-        <!-- <record id="factura_cxc_form_inherit" model="ir.ui.view">
-            <field name="name">factura.cxc.inherit</field>
-            <field name="model">account.invoice</field>
-            <field name="inherit_id" ref="account.invoice_supplier_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="before">
-                    <button name="hola" string="hola"/>
-                </xpath>
-            </field>
-        </record> -->
     </data>
 </odoo>

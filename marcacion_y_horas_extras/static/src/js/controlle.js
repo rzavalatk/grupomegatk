@@ -1,71 +1,78 @@
-odoo.define(
-  "marcacion_y_horas_extras.hr_employee_markings_assets",
-  function (require) {
-    "use strict";
+/** @odoo-module **/
 
-    const myExcelXML = require("excel.xml")
-    var core = require("web.core");
-    var ListController = require("web.ListController");
-    var QWeb = core.qweb;
+import { registry } from "@web/core/registry";
+import { rpc } from "@web/core/network/rpc";
+import { useService } from "@web/core/utils/hooks";
 
-    ListController.include({
-      renderButtons: function ($node) {
-        var self = this;
-        self._super($node);
-        self.$buttons
-          .find("#camaron_cuatrero")
-          .click(self.proxy("generate_report_camaron_cuatrero"));
-        self.$buttons
-          .find("#inside_marcking")
-          .click(self.proxy("tree_view_action"));
-        self.$buttons
-          .find("#generate_xhour")
-          .click(self.proxy("generate_report_hours_xtra"));
-      },
-      tree_view_action: function () {
-        let fileName = "plantilla-para-importar"
-        let col = [{
-          'Fecha': '',
-          'Nombre': '',
-          'Hora': '',
-        }]
-        var XML = new myExcelXML(col, fileName);
-        XML.downLoad();
-        location.reload();
-        // var self = this;
-        // self
-        //   ._rpc({
-        //     model: "hr.employee.markings",
-        //     method: "open_wizard",
-        //     args: [],
-        //   })
-        //   .then(function (e) {
-        //     self.do_action(e);
-        //   });
-      },
-      generate_report_hours_xtra: function () { 
-        var self = this;
-        self
-          ._rpc({
-            model: "hr.employee.markings",
-            method: "open_generate_hours_xtra",
-            args: [],
-          })
-          .then(function (e) {
-            self.do_action(e);
-          });
-      },generate_report_camaron_cuatrero: function () { 
-        var self = this;
-        self
-          ._rpc({
-            model: "hr.employee.markings",
-            method: "open_generate_camaron_cuatrero",
-            args: [],
-          })
-          .then(function (e) {
-            self.do_action(e);
-          });
-      },
-    });
-  }
-);
+export const marksListViewExtension = {
+  dependencies: ["action"],
+
+  async start(env, { action }) {
+    // Exportar plantilla Excel
+    async function exportTemplate() {
+      const columns = [
+        { Fecha: "", Nombre: "", Hora: "" },
+      ];
+      
+      // Convertir datos a CSV
+      const headers = Object.keys(columns[0]);
+      const csvContent = [
+        headers.join(","),
+        ...columns.map((row) => headers.map((h) => row[h] || "").join(",")),
+      ].join("\n");
+
+      // Descargar CSV como Excel
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "plantilla-para-importar.csv";
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }
+
+    // Generar reporte de horas extras
+    async function generateHoursReport() {
+      try {
+        const response = await rpc({
+          model: "hr.employee.markings",
+          method: "open_generate_hours_xtra",
+          args: [],
+        });
+        if (response) {
+          await action.doAction(response);
+        }
+      } catch (error) {
+        console.error("Error generando reporte de horas:", error);
+      }
+    }
+
+    // Generar reporte Camarón Cuatrero
+    async function generateCamaronReport() {
+      try {
+        const response = await rpc({
+          model: "hr.employee.markings",
+          method: "open_generate_camaron_cuatrero",
+          args: [],
+        });
+        if (response) {
+          await action.doAction(response);
+        }
+      } catch (error) {
+        console.error("Error generando reporte camarón:", error);
+      }
+    }
+
+    return {
+      exportTemplate,
+      generateHoursReport,
+      generateCamaronReport,
+    };
+  },
+};
+
+registry.category("services").add("marksListExtension", marksListViewExtension);

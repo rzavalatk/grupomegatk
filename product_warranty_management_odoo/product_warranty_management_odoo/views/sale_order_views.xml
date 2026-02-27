@@ -14,8 +14,7 @@
                         type="object"
                         class="oe_stat_button"
                         icon="fa-clock-o"
-                        string="Garantía"
-                        attrs="{'invisible': [('is_warranty_check', '!=', True)]}">
+                        string="Garantía">
                 </button>
             </xpath>
         </field>

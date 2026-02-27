@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-<!--    Website helpdesk portal menu action-->
+    <!--    Helpdesk ticket menu.-->
     <record id="website_helpdesk" model="website.menu">
-        <field name="name">Asistencia tecnica</field>
+        <field name="name">Helpdesk</field>
         <field name="url" eval="'/helpdesk_ticket'"/>
         <field name="parent_id" ref="website.main_menu"/>
         <field name="sequence" type="int">55</field>
     </record>
-<!--    Help desk thanks page in portal-->
+    <!--For displaying a "Thank You" message after a helpdesk ticket is submitted. -->
     <record id="odoo_website_helpdesk.helpdesk_thanks" model="website.page">
-        <field name="name">Gracias (Helpdesk)</field>
+        <field name="name">Thanks (Helpdesk)</field>
         <field name="type">qweb</field>
         <field name="url">/helpdesk-thank-you</field>
         <field name="website_indexed" eval="False"/>
@@ -27,7 +27,7 @@
                                     <div class="col-lg-7 col-xl-6 mr-lg-auto">
                                         <span class="d-block fa fa-4x fa-handshake-o mx-auto rounded-circle bg-primary"/>
                                         <br/>
-                                        <h1 class="text-center">Gracias!</h1>
+                                        <h1 class="text-center">Thank You!</h1>
                                         <div class="pb16 pt16 s_hr"
                                              data-snippet="s_hr"
                                              data-name="Separator">
@@ -35,20 +35,43 @@
                                         </div>
                                         <h5 class="text-center">
                                             <span class="fa fa-check-circle"/>
-                                            <span>Sus tickets
+                                            <span>Your Ticket
                                                 <a t-attf-href="/my/tickets/#{request.session.ticket_id}">
                                                     <strong>
                                                         <t t-esc="request.session.ticket_number"/>
                                                     </strong>
                                                 </a>
-                                                ha sido registrado
-                                                <b>exitosamente</b>
+                                                has been registered
+                                                <b>successfully</b>
                                             </span>
                                         </h5>
-                                        <p class="text-center">Volveremos a usted en un momento.
+                                        <p class="text-center">We will get back
+                                            to you shortly.
                                         </p>
                                     </div>
-                                    
+                                    <div class="col-lg-4">
+                                        <ul class="list-unstyled mb-0 pl-2">
+                                            <li>My Company</li>
+                                            <li>
+                                                <i class="fa fa-map-marker fa-fw mr-2"/>
+                                                <span class="o_force_ltr">3575
+                                                    Demo Buena Vista Avenue
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone fa-fw mr-2"/>
+                                                <span class="o_force_ltr">+1
+                                                    (650) 555-0111
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-1x fa-fw fa-envelope mr-2"/>
+                                                <span>
+                                                    info@yourcompany.example.com
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -57,7 +80,7 @@
             </t>
         </field>
     </record>
-<!--    Helpdesk ticket form template -->
+<!--    Defines a helpdesk ticket form for the Odoo website module.-->
     <template id="ticket_form" name="Helpdesk Ticket">
         <t t-call="website.layout">
             <t t-set="logged_partner"
@@ -72,7 +95,7 @@
             }"/>
             <span class="hidden" data-for="contactus_form"
                   t-att-data-values="contactus_form_values"/>
-            <div id="wrap" class="oe_structure oe_empty website_ticket">
+            <div id="wrap" class="oe_structure oe_empty">
                 <section
                         class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24"
                         data-vcss="001" data-snippet="s_title"
@@ -81,7 +104,7 @@
                           style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"/>
                     <div class="o_we_bg_filter bg-black-50"/>
                     <div class="container">
-                        <h1>Tickets de soporte tecnico</h1>
+                        <h1>Support Tickets</h1>
                     </div>
                 </section>
                 <section class="s_text_block pt40 pb40 o_colored_level "
@@ -90,9 +113,12 @@
                         <div class="row">
                             <div class="col-lg-8 mt-4 mt-lg-0">
                                 <h5 style="line-height: 1.6;">
-                                    Contáctenos sobre cualquier cosa relacionada con nuestra empresa o servicios.
+                                    Contact us about anything related to our
+                                    company or services.
                                     <br/>
-                                    Haremos todo lo posible para comunicarnos con usted lo antes posible.
+                                    We'll do our best to get back to you as
+                                    soon
+                                    as possible.
                                 </h5>
                                 <br/>
                                 <section class="s_website_form" data-vcss="001"
@@ -104,7 +130,7 @@
                                               enctype="multipart/form-data"
                                               class="o_mark_required"
                                               data-mark="*"
-                                              data-model_name="help.ticket"
+                                              data-model_name="ticket.helpdesk"
                                               data-success-mode="redirect"
                                               data-success-page="/helpdesk-thank-you"
                                               data-pre-fill="true">
@@ -117,7 +143,7 @@
                                                                style="width: 200px"
                                                                for="contact1">
                                                             <span class="s_website_form_label_content">
-                                                                Nombre
+                                                                Name
                                                             </span>
                                                             <span class="s_website_form_mark">
                                                                 *
@@ -142,7 +168,7 @@
                                                                style="width: 200px"
                                                                for="contact2">
                                                             <span class="s_website_form_label_content">
-                                                                Telefono
+                                                                Phone
                                                             </span>
                                                         </label>
                                                         <div class="col-sm">
@@ -163,7 +189,7 @@
                                                                style="width: 200px"
                                                                for="contact3">
                                                             <span class="s_website_form_label_content">
-                                                                Correo ELectronico
+                                                                Email
                                                             </span>
                                                             <span class="s_website_form_mark">
                                                                 *
@@ -188,7 +214,7 @@
                                                                style="width: 200px"
                                                                for="contact4">
                                                             <span class="s_website_form_label_content">
-                                                                Compañia
+                                                                Company
                                                             </span>
                                                         </label>
                                                         <div class="col-sm">
@@ -201,7 +227,7 @@
                                                     </div>
                                                     <br/>
                                                 </div>
-                                                 <div class="form-group col-12 s_website_form_field s_website_form_custom"
+                                                <div class="form-group col-12 s_website_form_field s_website_form_custom"
                                                      data-type="char"
                                                      data-name="Field">
                                                     <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -209,14 +235,14 @@
                                                                style="width: 200px"
                                                                for="contact53">
                                                             <span class="s_website_form_label_content">
-                                                                Tipo de ticket
+                                                                Ticket type
                                                             </span>
                                                             <span class="s_website_form_mark">
                                                                 *
                                                             </span>
                                                         </label>
                                                         <div class="col-sm">
-                                                            <select name="ticket_type" id="contact53"
+                                                            <select name="ticket_type_id" id="contact53"
                                                                     t-attf-class="form-control s_website_form_input"
                                                                     required="1">
                                                                 <t t-foreach="types or []"
@@ -227,7 +253,8 @@
                                                                 </t>
                                                             </select>
                                                         </div>
-                                                    </div><br/>
+                                                    </div>
+                                                    <br/>
                                                 </div>
                                                 <div class="form-group col-12 s_website_form_field s_website_form_required"
                                                      data-type="char"
@@ -237,7 +264,7 @@
                                                                style="width: 200px"
                                                                for="contact51">
                                                             <span class="s_website_form_label_content">
-                                                                Categoria
+                                                                Category
                                                             </span>
                                                             <span class="s_website_form_mark">
                                                                 *
@@ -255,35 +282,37 @@
                                                                 </t>
                                                             </select>
                                                         </div>
-                                                    </div><br/>
-                                                </div>
-                                                <t t-set="product" t-value="request.env['ir.config_parameter'].sudo().get_param('odoo_website_helpdesk.product_website')"/>
-                                                <t t-if="product">
-                                                <div class="form-group col-12 s_website_form_field s_website_form_custom s_website_form_required"
-                                                     data-type="text"
-                                                     data-name="Field">
-                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                        <label class="col-form-label col-sm-auto s_website_form_label"
-                                                               style="width: 200px"
-                                                               for="contact52">
-                                                            <span class="s_website_form_label_content">
-                                                                Productos
-                                                            </span>
-                                                        </label>
-                                                        <div class="col-sm">
-                                                            <select id="product"
-                                                                    name="product"
-                                                                    multiple="multiple">
-                                                                <option value="0"
-                                                                        selected="true">
-                                                                    Elije los
-                                                                    Productos
-                                                                </option>
-                                                            </select>
-                                                        </div>
                                                     </div>
                                                     <br/>
                                                 </div>
+                                                <t t-set="product"
+                                                   t-value="request.env['ir.config_parameter'].sudo().get_param('odoo_website_helpdesk.product_website')"/>
+                                                <t t-if="product">
+                                                    <div class="form-group col-12 s_website_form_field s_website_form_custom s_website_form_required"
+                                                         data-type="text"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                                   style="width: 200px"
+                                                                   for="contact52">
+                                                                <span class="s_website_form_label_content">
+                                                                    Products
+                                                                </span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <select id="product"
+                                                                        name="product"
+                                                                        multiple="multiple" class="form-control">
+                                                                    <option value="0"
+                                                                            selected="true">
+                                                                        Choose
+                                                                        Products
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                    </div>
                                                 </t>
                                                 <div class="form-group col-12 s_website_form_field s_website_form_required"
                                                      data-type="char"
@@ -293,7 +322,7 @@
                                                                style="width: 200px"
                                                                for="contact5">
                                                             <span class="s_website_form_label_content">
-                                                                Asunto
+                                                                Subject
                                                             </span>
                                                             <span class="s_website_form_mark">
                                                                 *
@@ -302,7 +331,7 @@
                                                         <div class="col-sm">
                                                             <input id="contact5"
                                                                    type="text"
-                                                                   placeholder="Mencione aquí su asunto"
+                                                                   placeholder="Mention your Issue here"
                                                                    class="form-control s_website_form_input"
                                                                    name="subject"
                                                                    required=""/>
@@ -319,7 +348,7 @@
                                                                style="width: 200px"
                                                                for="contact6">
                                                             <span class="s_website_form_label_content">
-                                                                Descripción
+                                                                Description
                                                             </span>
                                                         </label>
                                                         <div class="col-sm">
@@ -327,7 +356,7 @@
                                                                     id="contact6"
                                                                     class="form-control s_website_form_input"
                                                                     name="description"
-                                                                    placeholder="Descripción detallada del problema"
+                                                                    placeholder="Issue description in detail"
                                                                     required=""/>
                                                         </div>
                                                     </div>
@@ -347,10 +376,10 @@
                                                                style="width: 200px"
                                                                for="contact6">
                                                             <span class="s_website_form_label_content">
-                                                                Adjuntos
+                                                                Attachment
                                                             </span>
                                                         </label>
-                                                        <div class="col-sm">
+                                                        <div class="col-sm form-control">
                                                             <input type="file"
                                                                    name="ticket_attachment"
                                                                    multiple="true"/>
@@ -364,7 +393,7 @@
                                                                style="width: 200px"
                                                                for="contact7">
                                                             <span class="s_website_form_label_content">
-                                                                correo electrónico a
+                                                                Email To
                                                             </span>
                                                         </label>
                                                         <div class="col-sm">
@@ -381,7 +410,7 @@
                                                          class="s_website_form_label"/>
                                                     <a href="#" role="button"
                                                        class="btn btn-primary btn-lg s_website_form_send">
-                                                        Subir
+                                                        Submit
                                                     </a>
                                                     <span id="s_website_form_result"/>
                                                 </div>
@@ -390,7 +419,30 @@
                                     </div>
                                 </section>
                             </div>
-                            
+                            <div class="col-lg-4 m-1 mt-5 mt-lg-0">
+                                <ul class="list-unstyled  mb-0 pl-2">
+                                    <li class="mt-5">My Company</li>
+                                    <li>
+                                        <i class="fa fa-map-marker fa-fw mr-2"/>
+                                        <span class="o_force_ltr">3575 Demo
+                                            Buena
+                                            Vista Avenue
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw mr-2"/>
+                                        <span class="o_force_ltr">+1 (650)
+                                            555-0111
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-1x fa-fw fa-envelope mr-2"/>
+                                        <span>
+                                            info@yourcompany.example.com
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </section>

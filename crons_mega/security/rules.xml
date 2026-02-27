@@ -10,17 +10,7 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
             <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
-        </record>
-
-        <!--<record id="account_invoice_expire_rule" model="ir.rule">
-            <field name="name">account.invoice.expire.rule</field>
-            <field name="model_id" ref="crons_mega.model_account_move_expire" />
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
-        </record>-->   
+        </record>  
 
         <record id="product_report_rule" model="ir.rule">
             <field name="name">product.report.rule</field>

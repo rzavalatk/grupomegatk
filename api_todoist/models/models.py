@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api, fields
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 import requests
 
 
@@ -55,37 +55,5 @@ class TodoistUsers(models.Model):
         try:
             res['id']
         except:
-            raise Warning('Error al crear la tarea en todoist')
-
-
-
-class MailActivity(models.Model):
-    _inherit = "mail.activity"
-
-    """#@api.model_create_multi
-    def create(self, values):
-        try:
-            model = self.env['ir.model'].browse(values['res_model_id']).model
-            users = self.env['todoist.users'].search(
-                [('name', '=', values['user_id'])])
-            user = {}
-            if users:
-                for item in users:
-                    user = item
-            project = self.env['todoist.users'].browse(user.id).get_id_projects()
-            vals = {
-                "content": values['summary'] + " - Ticket: "+ str(values['res_id']) if model == 'crm.lead' else values['summary'],
-                "due_lang": "es",
-                "due_date": values['date_deadline'],
-                "project_id": project
-            }
-            self.env['todoist.users'].browse(user.id).create_task(vals)
-            return super(MailActivity, self).create(values)
-        except:
-        # except Exception as inst:
-            # print("/////////////////",type(inst),"/////////////////")
-            # print("/////////////////",inst.args,"/////////////////")
-            # print("/////////////////",inst,"/////////////////")            
-            return super(MailActivity, self).create(values)"""
-
+            raise UserError('Error al crear la tarea en todoist')
 

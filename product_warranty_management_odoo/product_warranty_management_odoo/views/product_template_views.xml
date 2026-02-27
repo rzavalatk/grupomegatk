@@ -12,12 +12,9 @@
                 <group>
                     <group>
                         <field name="is_warranty_available" widget="bool_badge"/>
-                        <field name="warranty_duration"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
-                        <field name="warranty_coverage"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
-                        <field name="not_cover_warranty"
-                        attrs="{'invisible': [('is_warranty_available', '=', False)]}"/>
+                        <field name="warranty_duration" />
+                        <field name="warranty_coverage" />
+                        <field name="not_cover_warranty"/>
                     </group>
                 </group>
             </page>
@@ -28,10 +25,10 @@
         <field name="name">product.template.view.tree.inherit.product.warranty.management.odoo</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" string="Producto"/>
                 <field name="warranty_duration"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="product_template_view_form" model="ir.ui.view">
@@ -54,9 +51,7 @@
         <record id="product_template_action" model="ir.actions.act_window">
         <field name="name">Detalles de garantia</field>
         <field name="res_model">product.template</field>
-        <field name="view_mode">tree,form</field>
-         <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('product_template_view_tree')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('product_template_view_form')})]"/>
+        <field name="view_mode">list,form</field>
+         
     </record>
 </odoo>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import datetime, time, date, timedelta
 import pytz
 import logging
@@ -38,23 +38,7 @@ class HrLeave(models.Model):
     tarde = time(13, 0, 0)
     salida = time(16, 0, 0)
     
-    request_hour_from = fields.Selection([
-            ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
-            ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
-            ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
-            ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
-            ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
-            ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
-            ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
-            ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
-            ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
-            ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
-            ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
-            ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
-            ('18', '6:00 PM')
-        ],
-        string='Hour from',
-    )
+    request_hour_from = fields.Float(string='Hour from')
     
     request_hour_from_1 = fields.Selection([
             ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
@@ -76,22 +60,7 @@ class HrLeave(models.Model):
     )
 
     
-    request_hour_to = fields.Selection([
-        ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
-        ('7', '7:00 AM'), ('7.25', '7:15 AM'), ('7.5', '7:30 AM'), ('7.75', '7:45 AM'),
-        ('8', '8:00 AM'), ('8.25', '8:15 AM'), ('8.5', '8:30 AM'), ('8.75', '8:45 AM'),
-        ('9', '9:00 AM'), ('9.25', '9:15 AM'), ('9.5', '9:30 AM'), ('9.75', '9:45 AM'),
-        ('10', '10:00 AM'), ('10.25', '10:15 AM'), ('10.5', '10:30 AM'), ('10.75', '10:45 AM'),
-        ('11', '11:00 AM'), ('11.25', '11:15 AM'), ('11.5', '11:30 AM'), ('11.75', '11:45 AM'),
-        ('12', '12:00 PM'), ('12.25', '12:15 PM'), ('12.5', '12:30 PM'), ('12.75', '12:45 PM'),
-        ('13', '1:00 PM'), ('13.25', '1:15 PM'), ('13.5', '1:30 PM'), ('13.75', '1:45 PM'),
-        ('14', '2:00 PM'), ('14.25', '2:15 PM'), ('14.5', '2:30 PM'), ('14.75', '2:45 PM'),
-        ('15', '3:00 PM'), ('15.25', '3:15 PM'), ('15.5', '3:30 PM'), ('15.75', '3:45 PM'),
-        ('16', '4:00 PM'), ('16.25', '4:15 PM'), ('16.5', '4:30 PM'), ('16.75', '4:45 PM'),
-        ('17', '5:00 PM'), ('17.25', '5:15 PM'), ('17.5', '5:30 PM'), ('17.75', '5:45 PM'),
-        ('18', '6:00 PM')
-    
-    ], string='Hour to')
+    request_hour_to = fields.Float(string='Hour to')
     
     request_hour_to_1 = fields.Selection([
         ('6', '6:00 AM'), ('6.25', '6:15 AM'), ('6.5', '6:30 AM'), ('6.75', '6:45 AM'),
@@ -120,6 +89,14 @@ class HrLeave(models.Model):
     compute='_compute_number_of_days_display',
     store=True
     )
+
+    # En Odoo 18 ya no existe number_of_hours_display en hr.leave,
+    # lo recreamos para soportar la lógica personalizada de este módulo.
+    number_of_hours_display = fields.Float(
+        string='Horas calculadas',
+        compute='_compute_number_of_hours_display',
+        store=False,
+    )
     
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
@@ -128,47 +105,46 @@ class HrLeave(models.Model):
             if holiday.holiday_status_id.allow_negative_balance:
                 continue
 
-            mapped_days = self.holiday_status_id.get_employees_days(
-                (holiday.employee_id | holiday.sudo().employee_ids).ids,
-                holiday.date_from.date()
-            )
-
             if (
-                holiday.holiday_type != 'employee'
-                or (not holiday.employee_id and not holiday.sudo().employee_ids)
+                (not holiday.employee_id)
                 or holiday.holiday_status_id.requires_allocation == 'no'
             ):
                 continue
 
-            if holiday.employee_id:
-                leave_days = mapped_days[holiday.employee_id.id][holiday.holiday_status_id.id]
-                if float_compare(leave_days['remaining_leaves'], 0, precision_digits=2) == -1 \
-                        or float_compare(leave_days['virtual_remaining_leaves'], 0, precision_digits=2) == -1:
-                    raise ValidationError((
-                        'No hay suficientes días disponibles para este tipo de permiso.\n'
-                        'Por favor revise también los permisos pendientes de validación.'
-                    ))
-            else:
-                unallocated_employees = []
-                for employee in holiday.sudo().employee_ids:
-                    leave_days = mapped_days[employee.id][holiday.holiday_status_id.id]
-                    if float_compare(leave_days['remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1 \
-                            or float_compare(leave_days['virtual_remaining_leaves'], holiday.number_of_days, precision_digits=2) == -1:
-                        unallocated_employees.append(employee.name)
-                if unallocated_employees:
-                    raise ValidationError((
-                        'No hay suficientes días disponibles para este tipo de permiso.\n'
-                        'Por favor revise también los permisos pendientes de validación.\n'
-                        'Los empleados sin días asignados son:\n%s'
-                    ) % (', '.join(unallocated_employees)))
+            requested_days = holiday.number_of_days or holiday.number_of_days_display or 0.0
+            employees = holiday.employee_id
+
+            unallocated_employees = []
+            for employee in employees:
+                leave_type_ctx = holiday.holiday_status_id.with_context(employee_id=employee.id)
+
+                remaining_leaves = leave_type_ctx.remaining_leaves if 'remaining_leaves' in leave_type_ctx._fields else None
+                virtual_remaining_leaves = leave_type_ctx.virtual_remaining_leaves if 'virtual_remaining_leaves' in leave_type_ctx._fields else None
+
+                if remaining_leaves is None or virtual_remaining_leaves is None:
+                    max_leaves = leave_type_ctx.max_leaves if 'max_leaves' in leave_type_ctx._fields else 0.0
+                    leaves_taken = leave_type_ctx.leaves_taken if 'leaves_taken' in leave_type_ctx._fields else 0.0
+                    remaining_leaves = max_leaves - leaves_taken
+                    virtual_remaining_leaves = remaining_leaves
+
+                if float_compare(remaining_leaves, requested_days, precision_digits=2) == -1 \
+                        or float_compare(virtual_remaining_leaves, requested_days, precision_digits=2) == -1:
+                    unallocated_employees.append(employee.name)
+
+            if unallocated_employees:
+                raise ValidationError(_(
+                    'No hay suficientes días disponibles para este tipo de permiso.\n'
+                    'Por favor revise también los permisos pendientes de validación.\n'
+                    'Los empleados sin días asignados son:\n%s'
+                ) % (', '.join(unallocated_employees)))
     
     @api.onchange('request_hour_from_1')
     def _onchange_request_hour_from_1(self):
-        self.request_hour_from = self.request_hour_from_1
+        self.request_hour_from = float(self.request_hour_from_1) if self.request_hour_from_1 else False
         
     @api.onchange('request_hour_to_1')
     def _onchange_request_hour_to_1(self):
-        self.request_hour_to = self.request_hour_to_1
+        self.request_hour_to = float(self.request_hour_to_1) if self.request_hour_to_1 else False
                 
     @api.onchange('request_date_from', 'request_date_to', 'request_unit_half', 'request_date_from_period', 'request_unit_hours', 'holiday_status_id', 'request_hour_to', 'request_hour_from')
     def _onchange_request_datetm_ft(self):
@@ -517,12 +493,28 @@ class HrLeave(models.Model):
     
     @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
     def _compute_number_of_hours_display(self):
-        super()._compute_number_of_hours_display()
         for leave in self:
+            hours = 0.0
+
+            # Permisos por horas personalizadas
+            if leave.request_unit_hours and leave.request_date_from and leave.request_date_to:
+                delta = leave.request_date_to - leave.request_date_from
+                hours = delta.total_seconds() / 3600.0
+
+            # Medio día
+            elif leave.request_unit_half:
+                hours = 4.0
+
+            # Permisos por días completos
+            elif leave.request_date_from and leave.request_date_to:
+                delta_days = (leave.request_date_to - leave.request_date_from).days + 1
+                hours = float(delta_days) * 8.0
+
+            # Sábado: duplicar horas para mostrar equivalentes
             if leave.request_date_from and leave.request_date_from.weekday() == 5:
-                # Si es sábado, mostrar las horas equivalentes (duplicar para mostrar el valor correcto)
-                # Esto es solo para display, el cálculo real se hace en _onchange_request_datetm_ft
-                leave.number_of_hours_display = leave.number_of_hours_display * 2
+                hours *= 2
+
+            leave.number_of_hours_display = hours
     @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
     def _compute_number_of_days_display(self):
         for leave in self:

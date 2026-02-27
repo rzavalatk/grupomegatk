@@ -2,10 +2,10 @@
 {
     'name': 'Account Invoice Line Report',
     'summary': 'Lineas de facturas validadas ',
-    'version': '14.0',
+    'version': '18.0',
     'category': 'Account',
     "license": "LGPL-3",
-    'author': 'Romel Zavala',
+    'author': 'David Zuniga',
     'depends': [
         'account', 'fields_megatk',
     ],

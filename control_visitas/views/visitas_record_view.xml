@@ -5,11 +5,11 @@
             <field name="name">registro.visitas.view.tree</field>
             <field name="model">registro.visitas</field>
             <field name="arch" type="xml">
-                <tree >
+                <list >
                     <field name="name_reporte" />
                     <field name="fecha_reporte" />
                     <field name="fecha_final" />
-                </tree>
+                </list>
             </field> 
         </record>
         <record id="registro_visitas_view_form" model="ir.ui.view">
@@ -18,9 +18,9 @@
             <field name="arch" type="xml">
                 <form string="">
                     <header>
-                        <button string="Agrupar Registros" name="agrupar_registros" states="borrador" type="object" class="oe_highlight"/>
-                        <button string="Generar Excel" name="exportar_excel" states="aprobado" type="object" class="btn-primary"/>
-                        <button string="Editar Reporte" name="editar_reporte" states="aprobado" type="object" class="btn-primary"/>
+                        <button string="Agrupar Registros" name="agrupar_registros" invisible=" state != 'borrador'" type="object" class="oe_highlight"/>
+                        <button string="Generar Excel" name="exportar_excel" invisible=" state != 'aprobado'" type="object" class="btn-primary"/>
+                        <button string="Editar Reporte" name="editar_reporte" invisible=" state != 'aprobado'" type="object" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="borrador, aporbado, rechazado"/>
                     </header>
                     <sheet>
@@ -42,13 +42,13 @@
                         <notebook>
                             <page name="registros" string="Registros">
                                 <field name="visita_diaria">
-                                    <tree editable="false" create="false" delete="false">
+                                    <list create="false" delete="false">
                                         <field readonly='1' name="name" />
                                         <field name="fecha" />
                                         <field name="hora" />
                                         <field name="region" />
                                         <field readonly='1' name="user_id" />  
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -60,7 +60,7 @@
         <record id="registro_visitas_action" model="ir.actions.act_window">
             <field name="name">Registros de Visitas</field>
             <field name="res_model">registro.visitas</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
     </data>

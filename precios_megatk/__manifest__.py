@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-##############################################################################
 
 {
     'name': "Lista de Precios Megatk",
@@ -10,8 +8,8 @@
     'description': """
          Módulo de gestion de lsta de precios y configuraciones de pedidos de ventas
     """,
-    'author': 'César Alejandro Rodriguez.',
-    'version': '1.0',
+    'author': 'David Zuniga.',
+    'version': '18.0',
     'maintainer': '',
     'contributors': '',
     "license": "LGPL-3",

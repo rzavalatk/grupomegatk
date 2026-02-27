@@ -5,11 +5,11 @@
             <field name="name">account.comisiones.view.tree</field>
             <field name="model">account.comisiones</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="name" />
                     <field name="date" />
                     <field name="company_id" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -19,13 +19,13 @@
             <field name="arch" type="xml">
                 <form string="">
                     <header>
-                        <button string="Iniciar" name="init_comisiones" states="draft" type="object" class="oe_highlight"/>
-                        <button string="Procesar" name="proccess_comisiones" states="init" type="object" class="oe_highlight"/>
-                        <button string="Depurar" name="depurar_facturas" states="proccess" type="object" class="oe_highlight"/>
-                        <button string="No Depurar" name="quit_depurar_facturas" states="done" type="object" class="oe_highlight"/>
-                        <button string="Generar Excel" name="gen_excel" states="proccess,done" type="button" id="create_excel" context="{'active_id': id}"/>
-                        <button string="Volver a borrador" states="cancel" name="volver_borrador" type="object"/>
-                        <button string="Cancelar" confirm="¿Esta seguro que desea cancelar las comisiones?" states="init,proccess,done" name="cancel" type="object"/>
+                        <button string="Iniciar" name="init_comisiones" invisible="state != 'draft'" type="object" class="oe_highlight"/>
+                        <button string="Procesar" name="proccess_comisiones" invisible="state != 'init'" type="object" class="oe_highlight"/>
+                        <button string="Depurar" name="depurar_facturas" invisible="state != 'proccess'" type="object" class="oe_highlight"/>
+                        <button string="No Depurar" name="quit_depurar_facturas" invisible="state != 'done'" type="object" class="oe_highlight"/>
+                        <button string="Generar Excel" name="gen_excel" invisible="state != 'proccess' and state != 'done'" type="button" id="create_excel" context="{'active_id': id}"/>
+                        <button string="Volver a borrador" invisible="state != 'cancel'" name="volver_borrador" type="object"/>
+                        <button string="Cancelar" confirm="¿Esta seguro que desea cancelar las comisiones?" invisible="state != 'init' and state != 'proccess' and state != 'done'" name="cancel" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,init,proccess,done" />
                     </header>
                     <sheet>
@@ -49,7 +49,7 @@
                             </page>
                             <page string="Facturas">
                                 <field name="facturas_ids" nolabel="1">
-                                    <tree string="Facturas">
+                                    <list string="Facturas">
                                         <field name="partner_id" string="Cliente" />
                                         <field name="invoice_date" string="Fecha" />
                                         <field name="name" />
@@ -60,7 +60,7 @@
                                         <field name="amount_residual" string="Saldo" sum="Total" />
                                         <field name="state" />
 
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -84,7 +84,7 @@
             <field name="name">Comisiones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.comisiones</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <menuitem id="account_comisiones_menu" name="Comisiones" action="account_comisiones_action" groups="hr.group_hr_user" parent="account.menu_finance_receivables" sequence="17"/>

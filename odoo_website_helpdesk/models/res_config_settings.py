@@ -1,71 +1,85 @@
 # -*- coding: utf-8 -*-
+################################################################################
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Bhagyadev KP (<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
 from odoo import api, fields, models
 
 
 class ResConfigSettings(models.TransientModel):
-    """Esta clase amplía la funcionalidad del modelo 'res.config.settings'
-     para proporcionar opciones de configuración para varias configuraciones relacionadas con el
-     módulo de soporte tecnico.
-   """
+    """Inheriting the res config settings model"""
     _inherit = 'res.config.settings'
 
-    show_create_task = fields.Boolean(
-        string="Crear Tares",
-        config_parameter='odoo_website_helpdesk.show_create_task',
-        help='Al habilitar este campo puedes crear una tarea debajo del ticket')
-    show_category = fields.Boolean(
-        string="Categoria",
-        config_parameter='odoo_website_helpdesk.show_category',
-        help='Al habilitar esto se muestra la categoría del boleto.',
-        implied_group='odoo_website_helpdesk.group_show_category')
-    product_website = fields.Boolean(
-        string="Producto en sitio web",
-        config_parameter='odoo_website_helpdesk.product_website',
-        help='Al habilitar esta función, puede mencionar el producto en el sitio web'
-             ' en el momento de crear el ticketProduct en el sitio web')
-    auto_close_ticket = fields.Boolean(
-        string="Ticket de cierre automático",
-        config_parameter='odoo_website_helpdesk.auto_close_ticket',
-        help='Cerrar ticket automáticamente si se cumple la condición')
-    no_of_days = fields.Integer(
-        string="Número de días",
-        config_parameter='odoo_website_helpdesk.no_of_days',
-        help='Después de esta fecha el ticket se cerrará automáticamente.')
-    closed_stage = fields.Many2one(
-        'ticket.stage', string='Etapa de cierre',
-        help='Etapa de cierre',
-        config_parameter='odoo_website_helpdesk.closed_stage')
+    show_create_task = fields.Boolean(string="Create Tasks",
+                                      config_parameter='odoo_website_helpdesk.show_create_task',
+                                      help='Enable this option to allow users'
+                                           'to create tasks directly from the '
+                                           'helpdesk module. When activated, users '
+                                           'will have the ability to generate and '
+                                           'assign tasks as part of their workflow '
+                                           'within the helpdesk interface.')
+    show_category = fields.Boolean(string="Category",
+                                   config_parameter='odoo_website_helpdesk.show_category',
+                                   help='Enable this option to display the '
+                                        'category field in the helpdesk tickets. '
+                                        'This can be useful for organizing and '
+                                        'filtering tickets based on their category.',
+                                   implied_group='odoo_website_helpdesk.group_show_category')
+    product_website = fields.Boolean(string="Product On Website",
+                                     config_parameter='odoo_website_helpdesk.product_website',
+                                     help='Product on website')
+    auto_close_ticket = fields.Boolean(string="Auto Close Ticket",
+                                       config_parameter='odoo_website_helpdesk.auto_close_ticket',
+                                       help='Auto Close ticket')
+    no_of_days = fields.Integer(string="No Of Days",
+                                config_parameter='odoo_website_helpdesk.no_of_days',
+                                help='No of Days')
+    closed_stage_id = fields.Many2one(
+        'ticket.stage', string='Closing stage',
+        help='Closing Stage of the ticket.',
+        config_parameter='odoo_website_helpdesk.closed_stage_id')
 
-    reply_template_id = fields.Many2one(
-        'mail.template',
-        string='ID retransmitida',
-        domain="[('model', '=', 'help.ticket')]",
-        config_parameter='odoo_website_helpdesk.reply_template_id',
-        help='Plantilla de respuesta')
-    helpdesk_menu_show = fields.Boolean(
-        string='Soporte tecnico Menu',
-        config_parameter='odoo_website_helpdesk.helpdesk_menu_show',
-        help='Al habilitar esta opción para hacer visible el menú de soporte técnico en el sitio web')
+    reply_template_id = fields.Many2one('mail.template',
+                                        domain="[('model', '=', 'ticket.helpdesk')]",
+                                        config_parameter='odoo_website_helpdesk.reply_template_id',
+                                        help='Reply Template of the helpdesk'
+                                             ' ticket.')
+    helpdesk_menu_show = fields.Boolean('Helpdesk Menu',
+                                        config_parameter=
+                                        'odoo_website_helpdesk.helpdesk_menu_show',
+                                        help='Helpdesk menu')
 
-    @api.onchange('closed_stage')
-    def closed_stage_a(self):
-        """Este método se activa cuando se cambia el campo 'closed_stage'.
-         Actualiza el atributo 'closing_stage' de la etapa seleccionada y
-         lo borra para otras etapas.
-       """
-        stage = self.closed_stage.id
-        in_stage = self.env['ticket.stage'].search([('id', '=', stage)])
-        not_in_stage = self.env['ticket.stage'].search([('id', '!=', stage)])
-        in_stage.closing_stage = True
-        for each in not_in_stage:
-            each.closing_stage = False
+    @api.onchange('closed_stage_id')
+    def _onchange_closed_stage_id(self):
+        """Closing stage function"""
+        if self.closed_stage_id:
+            stage = self.closed_stage_id.id
+            in_stage = self.env['ticket.stage'].search([('id', '=', stage)])
+            not_in_stage = self.env['ticket.stage'].search(
+                [('id', '!=', stage)])
+            in_stage.closing_stage = True
+            for each in not_in_stage:
+                each.closing_stage = False
 
     @api.constrains('show_category')
-    def show_category_subcategory(self):
-        """ Este método de restricción se activa cuando el campo 'show_category'
-        está cambiado. Actualiza los usuarios en 'group_show_category' según
-        el valor 'show_category'.
-       """
+    def _constrains_show_category_subcategory(self):
+        """Show category and the sub category"""
         if self.show_category:
             group_cat = self.env.ref(
                 'odoo_website_helpdesk.group_show_category')

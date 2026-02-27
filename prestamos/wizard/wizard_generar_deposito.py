@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
-import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
 from datetime import date, datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class WizardGenerarDeposito(models.TransientModel):
@@ -27,7 +26,7 @@ class WizardGenerarDeposito(models.TransientModel):
 		if self.monto > 0:
 			self.crear_factura_cxp()
 		else:
-			raise Warning(_('El monto debe ser mayor que cero.'))
+			raise UserError(_('El monto debe ser mayor que cero.'))
 
 	def crear_factura_cxp(self):
 		obj_factura = self.env["account.move"]
@@ -46,9 +45,9 @@ class WizardGenerarDeposito(models.TransientModel):
 		company_id = obj_prestamo.company_id.id
 		val_encabezado = {
 			'name': '',
-			'type': 'in_invoice',
-			'date_invoice': self.fecha,
-			'date_due': self.fechavence,
+			'move_type': 'in_invoice',
+			'invoice_date': self.fecha,
+			'invoice_date_due': self.fechavence,
 			'account_id': obj_prestamo.res_partner_prov_id.property_account_payable_id.id,
 			'partner_id': obj_prestamo.res_partner_prov_id.id,
 			'currency_id': self.currency_id.id or obj_prestamo.currency_id.id,
@@ -58,7 +57,7 @@ class WizardGenerarDeposito(models.TransientModel):
 		}
 
 		account_invoice_id = obj_factura.create(val_encabezado)
-		account_invoice_id.action_invoice_open()
+		account_invoice_id.action_post()
 		obj_prestamo.actualizar()
 		obj_prestamo.invoice_cxc_ids = [(4,account_invoice_id.id,0)]
 		obj_prestamo.saldo_inicial = self.monto

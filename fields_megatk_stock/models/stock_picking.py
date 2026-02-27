@@ -5,14 +5,12 @@ from odoo.exceptions import UserError
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
 
-	#@api.model_create_multi
 	def unlink(self):
 		for line in self:
 			if line.state == 'done':
 				raise UserError(_('No se puede eliminar un movimiento de inventario validado'))
 			return super(StockPicking, self).unlink()
 
-	#@api.model_create_multi
 	def button_validate(self):
 		message=''
 		if self.picking_type_id.code == 'internal' or self.picking_type_id.code == 'outgoing':
@@ -20,21 +18,20 @@ class StockPicking(models.Model):
 				for line in move.move_line_ids:
 					stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.location_id.id)])
 					if stock_quant:
-						if stock_quant.quantity < line.qty_done:
+						if stock_quant.quantity < line.quantity:
 							if stock_quant.quantity > 0:
 								message +=  _('\nPlanea vender %s Unidad(es) de %s pero solo tiene %s Unidad(es) disponible(s) en el almacén %s.') % \
-									(line.qty_done, line.product_id.name, stock_quant.quantity, self.location_id.name)
+									(line.quantity, line.product_id.name, stock_quant.quantity, self.location_id.name)
 							if stock_quant.quantity <= 0:
 								message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-									(line.qty_done, line.product_id.name, self.location_id.name)
+									(line.quantity, line.product_id.name, self.location_id.name)
 					else:
 						message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-								(line.qty_done, line.product_id.name, self.location_id.name)
+								(line.quantity, line.product_id.name, self.location_id.name)
 			if message != '':
 				raise UserError(_(message))
 		return super(StockPicking, self).button_validate()
 
-	#@api.model_create_multi
 	def button_borrador(self):
 		self.write({'state': 'draft'})
 		for move in self.move_ids:
@@ -79,14 +76,6 @@ class StockPickingLine(models.Model):
 
 	x_series = fields.Text(related = 'sale_line_id.x_series', string = "Series" )
 	x_codigo = fields.Char(related='product_id.barcode', string="Codigo")
-
-	#@api.multi
-	#def _action_cancel(self):
-	 #   for x in self:
-	  #      if x.state == 'done' and x.picking_type_id.code != 'internal':
-	   #         x.write({'state': 'confirmed'})
-		#        x.sale_line_id.write({'qty_delivered': 0})
-		#return super(StockPickingLine, self)._action_cancel()
 
 class Stock(models.Model):
 	_inherit = "stock.warehouse"

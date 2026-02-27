@@ -7,12 +7,12 @@
 			<form string="Operator User">
 				<group>
 					<field name="user_ids" nolabel="1" >
-						<tree create="false" delete="false" editable="bottom">
+						<list create="false" delete="false" editable="bottom">
 							<field name="check_box"/>
 							<field name="user_id" options="{'no_quick_create':True,'no_create_edit':True}" readonly="1"/>
 							<field name="login" readonly="1"/>
 							<field name="language" readonly="1"/>
-						</tree>
+						</list>
 					</field>
 				</group>
 				<footer>

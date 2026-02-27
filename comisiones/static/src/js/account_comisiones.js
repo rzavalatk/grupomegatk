@@ -1,33 +1,58 @@
-odoo.define("account_comisiones.assets_js", (require) => {
-  "use strict";
-  var FormController = require("web.FormController");
-  const rpc = require("web.rpc");
-  const myExcelXML = require("excel.xml");
+/** @odoo-module **/
 
-  var formController = FormController.include({
-    _onButtonClicked: function (event) {
-      if (event.data.attrs.id === "create_excel") {
-        rpc
-          .query({
-            model: "account.comisiones",
-            method: "generate_excel",
-            args: [[event.data.record.res_id]],
-          })
-          .done(function (e) {
-            if (e) {
-                var XML = new myExcelXML(e.data,e.name);
-                XML.downLoad();
-                location.reload();
-              }
-          })
-          .fail(function (err) {
-            alert("ERROR QUERY: (" + err.code + "): " + err.message);
-            // location.reload();
-          });
+import { registry } from "@web/core/registry";
+import { Component } from "@odoo/owl";
+import { rpc } from "@web/core/network/rpc";
+import { useService } from "@web/core/utils/hooks";
+
+export class AccountComisionesAction extends Component {
+  static template = "account_comisiones.AccountComisionesTemplate";
+
+  setup() {
+    this.notification = useService("notification");
+  }
+
+  async generateExcel(recordId) {
+    try {
+      const response = await rpc({
+        model: "account.comisiones",
+        method: "generate_excel",
+        args: [[recordId]],
+      });
+
+      if (response && response.data) {
+        // Decodificar base64 y crear blob
+        const byteCharacters = atob(response.data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Descargar archivo
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = response.name || "comisiones.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        link.remove();
+
+        // Recargar página
+        location.reload();
       }
-      this._super(event);
-    },
-  });
+    } catch (error) {
+      this.notification.add(
+        `Error: ${error.message || "Error desconocido"}`,
+        { type: "danger" }
+      );
+    }
+  }
+}
 
-  return formController;
-});
+// Registrar como acción cliente
+registry.category("actions").add("account_comisiones_action", AccountComisionesAction);

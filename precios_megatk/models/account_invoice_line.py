@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import except_orm, Warning, RedirectWarning
 
 
 class AccountMoveLine(models.Model):
@@ -39,17 +38,19 @@ class AccountMoveLine(models.Model):
                                     porcentaje = round(porcentaje, 2)
                                     if porcentaje >= lista.descuento:
                                         line.precio_id = lista.id
-    
-    """def create(self, values):
-        line = super(AccountMoveLine, self).create(values)
-        preciolista = self.env['lista.precios.producto']
-        preciodefaul = preciolista.search([('product_id', '=', line.product_id.product_tmpl_id.id)])
-        for lista in preciodefaul:
-            porcentaje = (((line.price_unit - line.product_id.list_price) * 100) / line.product_id.list_price)
-            porcentaje = round(porcentaje, 2)
-            if porcentaje >= lista.descuento:
-                line.precio_id = lista.id
-        return line"""
+    @api.model_create_multi
+    def create(self, vals_list):
+        lines = super(AccountMoveLine, self).create(vals_list)
+        for line in lines:
+            if line.product_id and line.product_id.list_price:
+                preciolista = self.env['lista.precios.producto']
+                preciodefaul = preciolista.search([('product_id', '=', line.product_id.product_tmpl_id.id)])
+                for lista in preciodefaul:
+                    porcentaje = (((line.price_unit - line.product_id.list_price) * 100) / line.product_id.list_price)
+                    porcentaje = round(porcentaje, 2)
+                    if porcentaje >= lista.descuento:
+                        line.precio_id = lista.id
+        return lines
     
     
     """def write(self, values):

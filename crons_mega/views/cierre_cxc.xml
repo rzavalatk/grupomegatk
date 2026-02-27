@@ -20,7 +20,6 @@
                         </group>
                     </sheet>
                 </form>
-
             </field>
         </record>
 
@@ -28,12 +27,12 @@
             <field name="name">account.cierre.cxc.view.tree</field>
             <field name="model">account.cierre.cxc</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <list string="">
                     <field name="date" />
                     <field name="name" />
                     <field name="company_id" />
                     <field name="state" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -43,12 +42,12 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button string="Iniciar" states="draft" name="init_cierre_cxc" type="object" class="oe_highlight"/>
-                        <button string="Obtener Movimientos" states="init" name="add_move" type="object" class="oe_highlight"/>
-                        <button string="Procesar" states="add_move" name="proccess_cierre" type="object" class="oe_highlight"/>
-                        <button string="Enviar por Email" states="proccess" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
-                        <button string="Volver a Borrador" states="cancel" name="come_back_draft" type="object" />
-                        <button string="Cancelar" states="init,add_move,proccess,done" name="cancel" type="object" />
+                        <button string="Iniciar" modifiers="{'readonly':[('state','!=','draft')]}" name="init_cierre_cxc" type="object" class="oe_highlight"/>
+                        <button string="Obtener Movimientos" modifiers="{'readonly':[('state','!=','init')]}" name="add_move" type="object" class="oe_highlight"/>
+                        <button string="Procesar" modifiers="{'readonly':[('state','!=','add_move')]}" name="proccess_cierre" type="object" class="oe_highlight"/>
+                        <button string="Enviar por Email" modifiers="{'readonly':[('state','!=','proccess')]}" name="%(crons_mega.account_cierre_mail_action)d" type="action" class="oe_highlight" context="{'active_id': id}" />
+                        <button string="Volver a Borrador" modifiers="{'readonly':[('state','!=','cancel')]}" name="come_back_draft" type="object" />
+                        <button string="Cancelar" modifiers="{'readonly':[('state','in',['draft','done'])]}" name="cancel" type="object" />
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
@@ -57,27 +56,27 @@
                         </h1>
                         <group>
                             <group>
-                                <field name="date" attrs="{'readonly':[('state','!=','draft')]}" />
+                                <field name="date" modifiers="{'readonly':[('state','!=','draft')]}" />
                             </group>
                             <group>
-                                <field name="company_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="company_id" modifiers="{'readonly':[('state','!=','draft')]}" />
                                 <field name="currency_id" invisible="1" />
                             </group>
                         </group>
                         <notebook>
                             <page string="Lineas CXC">
                                 <field name="cierre_cxc_line_ids" readonly="1">
-                                    <tree>
+                                    <list>
                                         <field name="name" />
                                         <field name="currency_id" invisible="1" />
                                         <field name="debe" sum="Total"/>
                                         <field name="haber" sum="Total"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Lineas de apuntes contables">
                                 <field name="moves_ids" readonly="1">
-                                    <tree>
+                                    <list>
                                         <field name="date" />
                                         <field name="name" />
                                         <field name="ref" />
@@ -85,7 +84,7 @@
                                         <field name="account_id" />
                                         <field name="debit" sum="Total" />
                                         <field name="credit" sum="Total" />
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Registros internos">
@@ -111,7 +110,6 @@
 
         <record id="account_cierre_cxc_action" model="ir.actions.server">
             <field name="name">Cierre Diario CXC</field>
-            <!--<field name="condition">True</field>-->
             <field name="type">ir.actions.server</field>
             <field name="model_id" ref="model_account_cierre_cxc" />
             <field name="state">code</field>

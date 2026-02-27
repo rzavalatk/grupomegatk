@@ -23,8 +23,8 @@
                     <separator string="Fiscal Sequences"/>
                     <group>
                         <field name="new_sequence"/>
-                        <field name="sequence_name" attrs="{'invisible': [('new_sequence', '=', False)], 'required': [('new_sequence', '=', True)]}"/>
-                        <field name="sequence_id" placeholder="Seleccione una secuencia..." attrs="{'invisible': [('new_sequence', '=', True)]}" domain="[('is_fiscal_sequence', '=', True),('journal_id','=', journal_id)]" options="{'no_create': True}"/>
+                        <field name="sequence_name" modifiers="{'invisible': [('new_sequence', '=', False)], 'required': [('new_sequence', '=', True)]}"/>
+                        <field name="sequence_id" placeholder="Seleccione una secuencia..." modifiers="{'invisible': [('new_sequence', '=', True)]}" domain="[('is_fiscal_sequence', '=', True),('journal_id','=', journal_id)]" options="{'no_create': True}"/>
                     </group>
                     <group colspan="4">
                         <group cols="2">

@@ -34,13 +34,13 @@
   		<field name="inherit_id" ref="product.product_normal_form_view"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='x_ponderaciones']" position="inside">
-			    <tree string="lista.precios.megatk.line" create="0" delete="0" limit="3">
-				    <field name="ponderacion_id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+			    <list string="lista.precios.megatk.line" create="0" delete="0" limit="3">
+				    <field name="ponderacion_id" modifiers="{'readonly': true}" invisible="1" readonly="1"/>
 				    <field name="fecha_recepcion"/>
 			    	<field name="product_id" invisible='1'/>
 			      	<field name="ponderacion"/>
 			      	<field name="costo_real"/>
-			    </tree>
+			    </list>
 			</xpath>
 		</field>
    	</record>
@@ -50,13 +50,13 @@
 		<field name="inherit_id" ref="product.product_template_only_form_view" />
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='x_ponderaciones']" position="inside">
-			    <tree string="lista.precios.megatk.line" create="0" delete="0" limit="3">
-				    <field name="ponderacion_id" modifiers="{'readonly': true}" attrs="{}" invisible="1" readonly="1"/>
+			    <list string="lista.precios.megatk.line" create="0" delete="0" limit="3">
+				    <field name="ponderacion_id" modifiers="{'readonly': true}" invisible="1" readonly="1"/>
 				    <field name="fecha_recepcion"/>
 			    	<field name="product_id" invisible='1'/>
 			      	<field name="ponderacion"/>
 			      	<field name="costo_real"/>
-			    </tree>
+			    </list>
 			</xpath>
 		</field>
    	</record>

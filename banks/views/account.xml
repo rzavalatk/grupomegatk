@@ -8,7 +8,7 @@
       <field name="inherit_id" ref="account.view_account_form" />
       <field name="arch" type="xml">
         <field name="account_type" position="after">
-          <field name="analytic_id" domain="[('company_id', '=', company_id)]" />
+          <field name="analytic_id" domain="['|', ('company_id', '=', False), ('company_id', 'in', allowed_company_ids)]" />
         </field>
       </field>
     </record>  

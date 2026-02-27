@@ -7,10 +7,10 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='phone']" position="attributes">
-                    <attribute name="attrs">{'required':[('email','in',[None,False,''])]}</attribute>
+                    <attribute name="modifiers">{"required": [["email", "=", false]]}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='email']" position="attributes">
-                    <attribute name="attrs">{'required':[('phone','in',[None,False,''])]}</attribute>
+                    <attribute name="modifiers">{"required": [["phone", "=", false]]}</attribute>
                 </xpath>
             </field>
         </record>

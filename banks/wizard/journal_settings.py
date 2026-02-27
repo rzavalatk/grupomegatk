@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class SequenceJournal(models.TransientModel):
     _name = "vitt.banks.journal.settings"
-    _description = "Journal Settings"
+    _description = "Ajustes de Secuencias por Diario"
 
-    #@api.model_create_multi
     def get_journal(self):
         context = dict(self._context or {})
         active_model = context.get('active_model')
@@ -54,26 +53,26 @@ class SequenceJournal(models.TransientModel):
                     if next_number > 0:
                         self.number_next = next_number
         else:
-            raise Warning(_("Select a journal."))
+            raise UserError(_("Seleccione un diario."))
 
     def fct_sequence_settings(self):
         ctx = self._context
         journal_id = self.env["account.journal"].browse(ctx['active_id'])
         obj_sequence_id = False
         if self.vitt_padding <= 0:
-            raise Warning(_("Padding must be greater than zero."))
+            raise UserError(_("El relleno (padding) debe ser mayor que cero."))
         if self.doc_type == 'check':
             if not (self.min_value and self.max_value):
-                raise Warning(_("Set a minimal and max value."))
+                raise UserError(_("Defina un valor mínimo y un valor máximo."))
             if self.min_value >= self.max_value:
-                raise Warning(_("Max Value must be greater than Minimal Value."))
+                raise UserError(_("El valor máximo debe ser mayor que el valor mínimo."))
             if self.number_next < self.min_value:
-                raise Warning(_("'Next Number to Use' must be greater than 'Minimal Value'."))
+                raise UserError(_("El 'Siguiente número a usar' debe ser mayor que el 'Valor mínimo'."))
             if self.number_next > self.max_value:
-                raise Warning(_("'Next Number to Use' must be less than 'Max Value'."))
+                raise UserError(_("El 'Siguiente número a usar' debe ser menor que el 'Valor máximo'."))
         if self.new_sequence:
             if not self.sequence_name:
-                raise Warning(_("Transaction name is empty."))
+                raise UserError(_("El nombre de la transacción está vacío."))
             else:
                 if self.doc_type == 'check':
                     validated_max = True
@@ -84,15 +83,15 @@ class SequenceJournal(models.TransientModel):
                             else:
                                 validated_max = False
                     if not validated_max:
-                        raise Warning(_("the range the numbers for the check book already exists, the number you can use is ."))
+                        raise UserError(_("El rango de números para la chequera ya existe; el número que puede usar es ."))
                 if not self.doc_type == 'check':
                     if journal_id.sequence_ids:
                         for jr_seq in journal_id.sequence_ids:
                             if jr_seq.code == self.doc_type:
-                                raise Warning(_("This transacion type already exists."))
+                                raise UserError(_("Este tipo de transacción ya existe."))
                 obj_sequence_id = self.fct_sequence_create(journal_id.id)
                 if not obj_sequence_id:
-                    raise Warning(_("Journal settings failed."))
+                    raise UserError(_("Falló la configuración del diario."))
         else:
             if self.sequence_id:
                 if self.doc_type == 'check':
@@ -106,10 +105,10 @@ class SequenceJournal(models.TransientModel):
                     if validated_max:
                         pass
                     else:
-                        raise Warning(_("the range the numbers for the check book already exists, the number you can use is ."))
+                        raise UserError(_("El rango de números para la chequera ya existe; el número que puede usar es ."))
                 obj_sequence_id = self.fct_sequence_write(self.sequence_id.id)
             else:
-                raise Warning(_("You need select a sequence."))
+                raise UserError(_("Debe seleccionar una secuencia."))
 
     def fct_sequence_write(self, sequence_id):
         obj_sequence = self.env["ir.sequence"].browse(sequence_id)

@@ -7,44 +7,45 @@
             <field name="inherit_id" ref="stock.view_picking_form" />
             <field name="arch" type="xml">
                 <!--'|', ('passed','=','Si'), -->
-                    <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
+                    <xpath expr="//button[@name='action_cancel']" position="after">
                         <button 
                         name="reportes_custom.action_custom_sign_wizard" 
                         string="Aprobar"
                         icon="fa-edit"
                         type="action" 
                         context="{'active_id': id, 'active_ids': [id,]}" 
-                        attrs="{'invisible': ['|', ('passed','=','Si'), ('state', 'not in', ('waiting','confirmed','assigned','done'))]}" 
+                        invisible="passed == 'Si' or state not in ('waiting','confirmed','assigned','done')" 
                         class="oe_highlight" />
+                        
                         <button 
                         name="%(reportes_custom.stock_picking_custom)d" 
                         string="Orden de entrega"
                         icon="fa-download"
                         type="action"
-                        attrs="{'invisible': [('passed','=','No')]}" 
+                        invisible="passed == 'No'" 
                         class="oe_highlight" />
                         <button 
                         name="%(reportes_custom.stock_picking_custom_pos)d" 
                         string="Orden de entrega POS"
                         icon="fa-download"
                         type="action"
-                        attrs="{'invisible': [('passed','=','No')]}"
+                        invisible="passed == 'No'"
                         class="oe_highlight" />
-                        <!--  -->
                         <button 
                         name="%(reportes_custom.stock_picking_custom)d" 
                         string="Orden de entrega"
                         icon="fa-download"
                         type="action"
-                        attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}" 
+                        invisible="picking_type_code in ('outgoing',)" 
                         class="oe_highlight" />
                         <button 
                         name="%(reportes_custom.stock_picking_custom_pos)d" 
                         string="Orden de entrega POS"
                         icon="fa-download"
                         type="action"
-                        attrs="{'invisible': [('picking_type_code','in',('outgoing'))]}"
+                        invisible="picking_type_code in ('outgoing',)"
                         class="oe_highlight" />
+                        
                     </xpath>
                     <xpath expr="//field[@name='origin']" position="after">
                         <field name="passed" invisible="1" />

@@ -2,12 +2,12 @@
 from odoo import models, fields, api, _
 import odoo.addons.decimal_precision as dp
 from datetime import datetime
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class PlantillasDocuments(models.Model):
 	_name = 'banks.template'
-	_description = "description"
+	_description = "Plantillas de Documentos Bancarios"
 
 	pagar_a = fields.Char("Pagar a", required=True)
 	journal_id = fields.Many2one("account.journal", "Banco", required=True)
@@ -25,7 +25,7 @@ class PlantillasDocuments(models.Model):
 
 class check_line(models.Model):
 	_name = 'banks.template.line'
-	_description = "description"
+	_description = "Detalle de Plantillas Bancarias"
 
 	template_id = fields.Many2one('banks.template', 'Plantilla')
 	partner_id = fields.Many2one('res.partner', 'Empresa', domain="[('company_id', '=', parent.company_id)]")

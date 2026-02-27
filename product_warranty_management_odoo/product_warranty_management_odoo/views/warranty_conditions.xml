@@ -4,11 +4,11 @@
         <field name="name">warranty.condition.tree</field>
         <field name="model">warranty.conditions</field>
         <field name="arch" type="xml">
-            <tree string="Condiciones de Garantía">
+            <list string="Condiciones de Garantía">
                 <field name="name"/>
                 <field name="warranty_coverage"/>
                 <field name="not_cover_warranty"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -31,7 +31,7 @@
     <record id="warranty_conditions_action" model="ir.actions.act_window">
         <field name="name">Condiciones de Garantía</field>
         <field name="res_model">warranty.conditions</field>
-        <field name="view_mode">tree,form</field> 
+        <field name="view_mode">list,form</field> 
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Crea tus propias condiciones de garantía.

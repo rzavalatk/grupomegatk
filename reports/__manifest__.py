@@ -1,6 +1,6 @@
 {
     'name': 'Control de reportes',
-    'version': '1.0',
+    'version': '18.0',
     'description': 'Modulo para control de reportes',
     'summary': 'Modulo para control de reportes e imprimirlos',
     'author': 'David Zuniga',
@@ -19,7 +19,7 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'static/src/js/stock_historial.js',
+            'reports/static/src/js/stock_historial.js',
         ],
     },
     'auto_install': False,

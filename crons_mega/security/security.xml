@@ -4,7 +4,7 @@
         <record id="account_cierre_access" model="ir.model.access">
             <field name="name">account.cierre.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -14,7 +14,7 @@
         <record id="account_cierre_line_access" model="ir.model.access">
             <field name="name">account.cierre.line.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre_line" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -24,7 +24,7 @@
         <record id="account_cierre_mail_access" model="ir.model.access">
             <field name="name">account.cierre.mail.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre_mail" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -34,7 +34,7 @@
         <record id="account_cierre_cxc_access" model="ir.model.access">
             <field name="name">account.cierre.cxc.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre_cxc" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -44,37 +44,17 @@
         <record id="account_cierre_cxc_line_access" model="ir.model.access">
             <field name="name">account.cierre.cxc.line.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre_cxc_line" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
             <field name="perm_unlink" eval="1" />
         </record>
 
-        <!--<record id="account_invoice_expire_access" model="ir.model.access">
-            <field name="name">account.invoice.expire.access</field>
-            <field name="model_id" ref="crons_mega.model_account_move_expire" />
-            <field name="group_id" ref="base.group_private_addresses" />
-            <field name="perm_read" eval="1" />
-            <field name="perm_write" eval="1" />
-            <field name="perm_create" eval="1" />
-            <field name="perm_unlink" eval="1" />
-        </record>-->
-
-        <!--<record id="account_invoice_expire_line_access" model="ir.model.access">
-            <field name="name">account.invoice.expire.line.access</field>
-            <field name="model_id" ref="crons_mega.model_invoice_expire_line" />
-            <field name="group_id" ref="base.group_private_addresses" />
-            <field name="perm_read" eval="1" />
-            <field name="perm_write" eval="1" />
-            <field name="perm_create" eval="1" />
-            <field name="perm_unlink" eval="1" />
-        </record>-->
-
         <record id="product_report_access" model="ir.model.access">
             <field name="name">product.report.access</field>
             <field name="model_id" ref="crons_mega.model_product_report" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -84,7 +64,7 @@
         <record id="product_report_line_access" model="ir.model.access">
             <field name="name">product.report.line.access</field>
             <field name="model_id" ref="crons_mega.model_product_report_line" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />
@@ -94,7 +74,7 @@
         <record id="orderpoint_review_rules_access" model="ir.model.access">
             <field name="name">orderpoint.review.rules.access</field>
             <field name="model_id" ref="crons_mega.model_orderpoint_review_rules" />
-            <field name="group_id" ref="base.group_private_addresses" />
+            <field name="group_id" ref="base.group_system" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />

@@ -10,15 +10,14 @@
         Restringe accesos menores al vendedor en el sistema
 
     """,
-    'author': "Alejandro Zelaya",
+    'author': "Alejandro Zelaya / David Zuniga",
     'website': "azelaya@megatk.com",
     'category': 'Usuarios',
     "license": "LGPL-3",
-    'version': '0.1',
+    'version': '18.0',
     'depends': ['base','crm','sale'],
     'data': [
         # 'security/security.xml',
         'views/res_users.xml',
-        'views/account_analitic.xml',
     ],
 }

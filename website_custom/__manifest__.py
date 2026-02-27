@@ -13,7 +13,7 @@
     'author': "Alejandro Zelaya",
     'website': "azelaya@megatk.com",
     'category': 'user',
-    'version': '0.1',
+    'version': '18.0',
     "license": "LGPL-3",
     'depends': ['base','website','banks'],
 

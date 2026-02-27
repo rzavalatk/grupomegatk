@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
-from odoo.addons import decimal_precision as dp
+from odoo.exceptions import UserError
 from datetime import datetime
 
 import math
@@ -33,7 +32,7 @@ class Prestamos(models.Model):
         x = 0
         z = 0
         for invoice in self.invoice_cxc_ids:
-            if(invoice.type == 'in_invoice'):
+            if(invoice.move_type == 'in_invoice'):
                 z = z + 1
             else:
                 x = x + 1
@@ -111,8 +110,7 @@ class Prestamos(models.Model):
     cuota_inicial = fields.Float(string='Cuota inicial', copy=False, readonly=True, states={
                                  'draft': [('readonly', False)]},)
 
-    tasa = fields.Float(string='Tasa', digits=dp.get_precision(
-        'Product Price'), copy=False, readonly=True, states={'draft': [('readonly', False)]},)
+    tasa = fields.Float(string='Tasa', copy=False, readonly=True, states={'draft': [('readonly', False)]},)
 
     payment_term_id = fields.Many2one('account.payment.term', string='Plazo de pago',
                                       required=True, readonly=True, states={'draft': [('readonly', False)]},)
@@ -126,13 +124,12 @@ class Prestamos(models.Model):
     company_id = fields.Many2one('res.company', string='Company', change_default=True, required=True,
                                  default=lambda self: self.env.user.company_id, readonly=True, states={'draft': [('readonly', False)]},)
 
-    res_partner_id = fields.Many2one('res.partner', string='Cliente', domain=[(
-        'customer', '=', True), ], required=True, readonly=True, states={'draft': [('readonly', False)]},)
+    res_partner_id = fields.Many2one('res.partner', string='Cliente', required=True, readonly=True, states={'draft': [('readonly', False)]},)
     res_partner_prov_id = fields.Many2one(
-        'res.partner', string='Proveedor', domain=[('supplier', '=', True), ],)
+        'res.partner', string='Proveedor',)
 
     state = fields.Selection([('draft', 'Borrador'), ('cancelado', 'Cancelado'), ('validado', 'Validado'), ('desembolso', 'Desembolsado'), (
-        'proceso', 'En proceso'), ('finalizado', 'Finalizado')], string="Estado", default='draft', copy=False, track_visibility='onchange', )
+        'proceso', 'En proceso'), ('finalizado', 'Finalizado')], string="Estado", default='draft', copy=False, tracking=True, )
     sequence_id = fields.Many2one('ir.sequence', "Fiscal Number")
 
     cuotas_id = fields.One2many(
@@ -229,7 +226,7 @@ class Prestamos(models.Model):
     def validar(self):
         if int(self.tasa) > 0:
             if self.monto_cxc < 0:
-                raise Warning(_('No se puede procesar el prestamo'))
+                raise UserError(_('No se puede procesar el prestamo'))
             if not self.name:
                 if self.tipo_prestamo == 'financiamiento':
                     if not self.sequence_id.id:
@@ -279,7 +276,7 @@ class Prestamos(models.Model):
                 else:
                     self._personal()
         else:
-            raise Warning(_('La Tasa no debe ser menor o igual a 0'))
+            raise UserError(_('La Tasa no debe ser menor o igual a 0'))
 
     def _financiamiento(self):
         monto = self.monto_cxc or self.monto_cxp
@@ -424,13 +421,12 @@ class Prestamos(models.Model):
                     'amount': monto,
                     'currency_id': self.currency_id.id,
                     'journal_id': self.recibir_pagos.id,
-                    'payment_date': date,
-                    'communication': self.name + ' ' + 'Abono a capital',
-                    'payment_method_id': 1
+                    'date': date,
+                    'ref': self.name + ' ' + 'Abono a capital',
                 }
                 if res_pago:    
                     paymet_id = obj_paymet_id.create(val_payment)
-                    paymet_id.post()
+                    paymet_id.action_post()
                 tasa = self.tasa / 100
                 cuota2 = cuota.cuota_prestamo - cuota.gastos
                 self._add_aporte_capital(restante,monto,date)
@@ -443,14 +439,14 @@ class Prestamos(models.Model):
                 }
                 self.write(vals)
             elif int(restante) < 0:
-                raise Warning(
+                raise UserError(
                     _('No se puede procesar el abono a capital por exeder lo adeudado'))
             else:
                 self.write({
                     'state': 'finalizado',
                 })
         else:
-            raise Warning(
+            raise UserError(
                 _('No se puede procesar abono a capital, Finalice el prestamo'))
 
     def ending(self):
@@ -463,7 +459,7 @@ class Prestamos(models.Model):
                 'state': 'finalizado',
             })
         else:
-            raise Warning(
+            raise UserError(
                 _('No se puede finalizar el prestamo'))
 
     def generar_fechas_cuotas(self, year, mes, dia):
@@ -505,12 +501,12 @@ class Prestamos(models.Model):
         if cuotas:
             for cuota in cuotas:
                 if cuota.state != 'draft':
-                    raise Warning(
+                    raise UserError(
                         _('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
                 cuota.sudo().unlink()
 
         if self.invoice_count_cxc > 1:
-            raise Warning(
+            raise UserError(
                 _('No se puede eliminar o cancelar un prestamo en estado de ' + self.state))
 
         self.write({'state': 'cancelado',
@@ -528,7 +524,7 @@ class Prestamos(models.Model):
     def unlink(self):
         for prestamo in self:
             if prestamo.state != 'draft':
-                raise Warning(
+                raise UserError(
                     _('No se puede eliminar o cancelar una prestamo en estado ' + prestamo.state))
         return super(Prestamos, self).unlink()
 
@@ -542,7 +538,7 @@ class Prestamos(models.Model):
             })
 
     def crear_factura_cxc(self):
-        obj_factura = self.env["account.invoice"]
+        obj_factura = self.env["account.move"]
         lineas = []
         val_lineas = {
             'name': 'Capital prestado',
@@ -564,14 +560,14 @@ class Prestamos(models.Model):
             }
             lineas.append((0, 0, val_lineas1))
         company_id = self.company_id.id
-        journal_id = (self.env['account.invoice'].with_context(company_id=company_id or self.env.user.company_id.id)
+        journal_id = (self.env['account.move'].with_context(company_id=company_id or self.env.user.company_id.id)
                       .default_get(['journal_id'])['journal_id'])
         if not journal_id:
             raise UserError(
                 _('Please define an accounting sales journal for this company.'))
         val_encabezado = {
             'name': '',
-            'type': 'out_invoice',
+            'move_type': 'out_invoice',
             'account_id': self.res_partner_id.property_account_receivable_id.id,
             'partner_id': self.res_partner_id.id,
             'journal_id': journal_id,
@@ -590,7 +586,7 @@ class Prestamos(models.Model):
         })
 
     def crear_factura_cxp(self):
-        obj_factura = self.env["account.invoice"]
+        obj_factura = self.env["account.move"]
 
         # product = self.product_id.with_context(force_company=self.company_id.id)
         # account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
@@ -616,7 +612,7 @@ class Prestamos(models.Model):
         company_id = self.company_id.id
         val_encabezado = {
             'name': '',
-            'type': 'in_invoice',
+            'move_type': 'in_invoice',
             'account_id': self.res_partner_prov_id.property_account_payable_id.id,
             'partner_id': self.res_partner_prov_id.id,
             'currency_id': self.currency_id.id,
@@ -637,10 +633,10 @@ class Prestamos(models.Model):
         action = self.env.ref('account.action_invoice_tree1').read()[0]
         if len(invoices) > 1:
             action['domain'] = [('id', 'in', invoices.ids),
-                                ('type', '=', 'out_invoice')]
+                                ('move_type', '=', 'out_invoice')]
         elif len(invoices) == 1:
             action['views'] = [
-                (self.env.ref('account.invoice_form').id, 'form')]
+                (self.env.ref('account.view_move_form').id, 'form')]
             action['res_id'] = invoices.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}
@@ -651,10 +647,10 @@ class Prestamos(models.Model):
         action = self.env.ref('account.action_vendor_bill_template').read()[0]
         if len(invoices) > 1:
             action['domain'] = [('id', 'in', invoices.ids),
-                                ('type', '=', 'in_invoice')]
+                                ('move_type', '=', 'in_invoice')]
         elif len(invoices) == 1:
             action['views'] = [
-                (self.env.ref('account.invoice_supplier_form').id, 'form')]
+                (self.env.ref('account.view_move_form').id, 'form')]
             action['res_id'] = invoices.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}
@@ -723,13 +719,16 @@ class Prestamos(models.Model):
             ac2 = []
             ac3 = []
             for item in self.invoice_cxc_ids:
-                if item.state == "open":
-                    d = json.loads(item.payments_widget)
-                    for pay in d:
-                        if pay == 'content':
-                            for i in d[pay]:
-                                if "Abono a capital" in i['ref']:
-                                    ac1.append(i)
+                if item.state == "posted":
+                    # TODO: payments_widget ya no existe en Odoo 18
+                    # Necesita refactorización para obtener pagos de otra forma
+                    # d = json.loads(item.payments_widget)
+                    # for pay in d:
+                    #     if pay == 'content':
+                    #         for i in d[pay]:
+                    #             if "Abono a capital" in i['ref']:
+                    #                 ac1.append(i)
+                    pass
             for item in self.cuotas_id:
                 if item.state == "hecho":
                     if "Cuota AC" in item.name:

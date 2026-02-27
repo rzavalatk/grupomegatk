@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 import datetime
 import pytz
 
@@ -72,7 +72,7 @@ class HrPermisos(models.Model):
                 self.dias = 0
                 self.horas = 0
                 self.minutos = 0
-                self.env.user.notify_warning(
+                self.env.user.notify_UserError(
                     message='La fecha final debe ser mayor o igual a la inicial')
 
     def rangeDate(self, dateInit, dateEnd):
@@ -215,7 +215,7 @@ class HrPermisos(models.Model):
             template_jefe.send_mail(
                 self.id, email_values=email_values_jefe, force_send=True)
         else:
-            self.env.user.notify_warning(
+            self.env.user.notify_UserError(
                 message='Verificar fechas, no puede solicitar 0 dias, 0 horas, 0 minutos')
 
     def vacaciones_restantes(self, operacion):
@@ -286,7 +286,7 @@ class HrPermisos(models.Model):
             if rec.state == 'draft':
                 return super(HrPermisos, self).unlink()
             else:
-                raise Warning(
+                raise UserError(
                     _('El permiso solo puede ser eliminado en estado de borrador'))
 
     def vacaciones_restantes1(self, minutos_actuales, minutos_solicitados):

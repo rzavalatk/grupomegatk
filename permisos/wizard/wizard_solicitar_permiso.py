@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 import datetime
 import pytz
 
@@ -41,7 +41,7 @@ class WizardSolicitarPermiso(models.TransientModel):
                 self.dias = 0
                 self.horas = 0
                 self.minutos = 0
-                self.env.user.notify_warning(message='La fecha final debe ser mayor a la fecha inicial')
+                self.env.user.notify_UserError(message='La fecha final debe ser mayor a la fecha inicial')
 
     def rangeDate(self, dateInit, dateEnd):
         dates = [
@@ -164,4 +164,4 @@ class WizardSolicitarPermiso(models.TransientModel):
                 permiso_id = obj_permiso.create(valores)
                 #permiso_id.aprobar('general')
         else:
-            raise Warning(_('Las fechas no deben ser iguales'))
+            raise UserError(_('Las fechas no deben ser iguales'))

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="hr_contract_form_view_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="type_id"/>
+            </xpath>
+
+            <!--<xpath expr="//field[@name='date_end']" position="after">
+                <field name="contract_type"/>
+            </xpath>-->
+
+            <xpath expr="//form/sheet/notebook/page[@name='information']/group[@name='salary_info']" position="after">
+                <group>
+                   <field name="salary_type"/>
+                    <field name="pay_type"/>
+                    <field name="currency_id"/> 
+                </group>
+                
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/group[@name='notes_group']" position="after">
+                <group >
+                    <group name="beneficios_adicionales" string="Beneficios adicionales">
+                        <field name="health"/>
+                        <field name="pension"/>
+                        <field name="vacation"/>
+                        <field name="Bonuses"/>
+                        <field name="Commissions"/>
+                        <field name="viaticos"/>
+                    </group>
+
+                    <group name="acuerdos" string="Acuerdos Adicionales">
+                        <field name="telework_modality"/>
+                        <field name="telework_days" invisible="[('telework_modality', '=', False)]" 
+                            required="[('telework_modality', '=', True)]"/>
+                        <field name="flexible_schedule"/>
+                    </group>   
+                </group>
+
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+            <!-- Nueva hoja -->
+            <page string="Información bancaria">
+                <!-- Contenido de la nueva hoja -->
+                <group>
+                    <field name="bank"/>
+                    <field name="account_number"/>
+                    <field name="account_type"/>
+                </group>
+            </page>
+
+            <page name="deductionpres" string="Deducciones y Prestaciones">
+                <group>
+                    <group name="deducciones" string="Deducciones">
+                        <field name="social_security"/>
+                        <field name="social_security_pay" invisible="[('social_security', '=', False)]" 
+                            required="[('social_security', '=', True)]"/>
+                        <field name="loans"/>
+                        <field name="loans_pay" invisible="[('loans', '=', False)]" 
+                            required="[('loans', '=', True)]"/>
+                        <field name="pensions"/>
+                        <field name="pensions_pay" invisible="[('pensions', '=', False)]" 
+                            required="[('pensions', '=', True)]"/>
+                    </group> 
+                    <group name="prestaciones" string="Prestaciones">
+                        <field name="vacation_pay"/>
+                        <field name="vacation_amount" invisible="[('vacation_pay', '=', False)]" 
+                            required="[('vacation_pay', '=', True)]"/>
+                        <field name="aguinaldo"/>
+                        <field name="aguinaldo_amount" invisible="[('aguinaldo', '=', False)]" 
+                            required="[('aguinaldo', '=', True)]"/>
+                        <field name="catorceavo"/>
+                        <field name="catorceavo_amount" invisible="[('catorceavo', '=', False)]" 
+                            required="[('catorceavo', '=', True)]"/>
+                    </group> 
+                </group>
+            </page>
+        </xpath>
+
+        </field>
+    </record>
+
+<!--    Tipo de contrato    -->
+    <record id="hr_contract_type_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.type.form</field>
+            <field name="model">hr.contract.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de contrato">
+                    <group col="4">
+                        <field colspan="4" name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_contract_type_view_tree" model="ir.ui.view">
+            <field name="name">hr.contract.type.tree</field>
+            <field name="model">hr.contract.type</field>
+            <field name="arch" type="xml">
+                <list string="Tipo de contrato">
+                    <field name="sequence" widget="handle"/>
+                    <field colspan="4" name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="hr_contract_type_view_search" model="ir.ui.view">
+            <field name="name">hr.contract.type.search</field>
+            <field name="model">hr.contract.type</field>
+            <field name="arch" type="xml">
+                <search string="Buscar tipo de contrato">
+                    <field name="name" string="Tipo de contrato"/>
+                    <field name="sequence" string="Secuencia"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_hr_contract_type" model="ir.actions.act_window">
+            <field name="name">Tipos de contratos</field>
+            <field name="res_model">hr.contract.type</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="hr_contract_type_view_search"/>
+        </record>
+
+        <menuitem
+            id="hr_menu_contract_type"
+            action="action_hr_contract_type"
+            parent="hr.menu_human_resources_configuration"
+            sequence="3"
+            groups="base.group_no_one"/>
+</odoo>
