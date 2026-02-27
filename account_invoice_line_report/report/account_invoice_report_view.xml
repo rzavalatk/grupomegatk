@@ -35,8 +35,8 @@
                 <filter string="Factura" name='factu_report' domain="[('move_type','=','out_invoice')]"/>
                 <filter string="Nota de credito" name='credit_report' domain="[('move_type','=','out_refund')]"/>
                 <separator/>
-                <filter string="Abiertas" name='state_open' domain="[('state','in',['open'])]"/>
-                <filter string="Cerradas" name='state_paid' domain="[('state','in',['paid'])]"/>
+                <filter string="Publicadas" name='state_posted' domain="[('state','=','posted')]"/>
+                <filter string="Canceladas" name='state_cancel' domain="[('state','=','cancel')]"/>
                 <separator/>
                 <filter string="Marca" name='group_marca' context="{'group_by':'marca_id'}"/>
                 <filter string="Responsable" name="invoicedate" context="{'group_by':'invoice_user_id'}"/>
