@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-    <report
-        id="crm_entrega_equipo"
-        model="crm.lead"
-        string="Entrega de Equipo"
-        name="fields_megatk.entrega_equipo_print_view"
-        file="fields_megatk.entrega_equipo_print_view"
-        report_type="qweb-pdf"
-        attachment_use="True" 
-        paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
+    <record id="crm_entrega_equipo" model="ir.actions.report">
+        <field name="name">Entrega de Equipo</field>
+        <field name="model">crm.lead</field>
+        <field name="report_name">fields_megatk.entrega_equipo_print_view</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
+    </record>
 	</data>
 </odoo>

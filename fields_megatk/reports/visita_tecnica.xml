@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-    <report
-        id="crm_visita_tecnica"
-        model="crm.lead"
-        string="Visita Técnica"
-        name="fields_megatk.visita_print_view"
-        file="fields_megatk.visita_print_view"
-        report_type="qweb-pdf"
-        paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
+    
+    <record id="crm_visita_tecnica" model="ir.actions.report">
+        <field name="name">Visita Técnica</field>
+        <field name="model">crm.lead</field>
+        <field name="report_name">fields_megatk.visita_print_view</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
+    </record>
 	</data>
+
 </odoo>

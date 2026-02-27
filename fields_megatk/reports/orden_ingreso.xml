@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-    <report
-        id="crm_orden_ingreso"
-        model="crm.lead"
-        string="Orden de Ingreso"
-        name="fields_megatk.ingreso_print_view"
-        file="fields_megatk.ingreso_print_view"
-        report_type="qweb-pdf" 
-        paperformat="formatos_papel_mega.report_paperformat_8_0f21f71b" />
-
+    <record id="crm_orden_ingreso" model="ir.actions.report">
+        <field name="name">Orden de Ingreso</field>
+        <field name="model">crm.lead</field>
+        <field name="report_name">fields_megatk.ingreso_print_view</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
+    </record>
     
 	</data>
 </odoo>
