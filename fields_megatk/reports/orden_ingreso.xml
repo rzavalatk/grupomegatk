@@ -10,7 +10,7 @@
 		<field name="binding_type">report</field>
         <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
         <field name="attachment_use">True</field>
-		<field name="print_report_name">Orden de ingreso</field>
+		<field name="print_report_name">'Orden de ingreso - %s' % (object.name)</field>
     </record>
     
 	</data>
