@@ -24,7 +24,7 @@
     <menuitem id="menu_helpdesk_configuration" name="Configuration"
               sequence="50" parent="menu_helpdesk"/>
     <!-- Helpdesk Team Configuration -->
-    <menuitem id="menu_helpdesk_team" name="Helpdesk Team"
+    <menuitem id="menu_helpdesk_team_config" name="Helpdesk Team"
               action="action_helpdesk_team"
               parent="menu_helpdesk_configuration" sequence="10"/>
     <!-- Categories Configuration -->
@@ -37,7 +37,7 @@
               action="action_helpdesk_general_settings"
               parent="menu_helpdesk_configuration" sequence="1"/>
     <!-- Teams Configuration -->
-    <menuitem id="menu_helpdesk_team" name="Teams"
+    <menuitem id="menu_helpdesk_teams_config" name="Teams"
               action="action_helpdesk_team"
               parent="menu_helpdesk_configuration" sequence="3"/>
     <!-- Tags Configuration -->

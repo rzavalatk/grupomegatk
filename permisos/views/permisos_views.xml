@@ -141,7 +141,7 @@
       <field name="state">code</field>
       <field name="code">model.vacaciones_por_ley()</field>
       </record>
-    <menuitem name="Permisos" id="hr_employe_permisos" sequence = "5" parent="hr.menu_hr_root" groups="permisos.permiso_admin"/>
+    <menuitem name="Permisos" id="hr_employe_permisos_admin" sequence = "5" parent="hr.menu_hr_root" groups="permisos.permiso_admin"/>
     <menuitem name="Permisos" id="hr_employe_permisos" sequence = "5" parent="hr.menu_hr_root"/>
     <menuitem name="Permisos generales" id="hr_employe_permisos_general" sequence = "1" parent="hr_employe_permisos" action = "action_emplyee_permiso_general"/>
   </data> 
