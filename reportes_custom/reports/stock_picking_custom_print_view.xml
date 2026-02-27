@@ -22,7 +22,7 @@
           <p style="font-family:'Arial'; font-size:24pt;  font-weight: bold;text-align: center;">ORDEN DE ENTREGA</p>
         </div>
 
-        <div style="float: right;margin-top: -30px;">
+        <div style="float: right;margin-top: -50px;">
           <div style="float: right;">
             <table style="text-align: center; width:330px">
               <tr>
@@ -55,7 +55,7 @@
             </div>
           </div>
         </div>
-        <div style="float: right; margin-top:45px; ">
+        <div style="float: right; margin-top: 5px; ">
           <table style="text-align: center;">
             <tr>
               <td style="color: white; background: rgb(13, 143, 210); padding: 2px; border: 1px solid rgb(13, 143, 210); text-align: center; font-family:'Times New Roman'; font-size:12pt;  font-weight: bold; min-width:180px;">TERMINOS</td>
