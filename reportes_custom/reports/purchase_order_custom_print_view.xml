@@ -122,7 +122,7 @@
 
     <template id="purchase_order_odoo_custom">
   		<t t-call="reportes_custom.external_layout_purchase_order_custom">
-        <div class="page" style="margin-top: 15px !important; margin-bottom: 15px !important;">
+        <div class="page" style="margin-top: 15px;">
           <div class="oe_structure"/>
           <table class="table table-sm o_main_table">
             <thead>
@@ -148,7 +148,7 @@
                     <span t-field="line.product_qty"/>
                     <span t-field="line.product_uom.name" groups="product.group_uom"/>
                 </td>
-                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 89);border-right: 1px solid rgb(13, 143, 210);">
+                <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
                     <span t-field="line.price_unit"/>
                 </td>
                 <td class="text-right" style="padding: 2px; vertical-align: middle; border-left: 1px solid rgb(13, 143, 210);border-right: 1px solid rgb(13, 143, 210);">
