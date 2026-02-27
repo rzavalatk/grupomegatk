@@ -3,7 +3,7 @@
     'name': "Reportes y plantillas ",
 
     'summary': """
-        Reportes de impresión (Factura,Cotización,Orden de entrega,etc...)""",
+        Reportes de impresión (Factura, Cotización, Orden de entrega, etc...)""",
 
     'author': "Romel Zavala / David Zuniga",
     'website': "https://www.megatk.net",
