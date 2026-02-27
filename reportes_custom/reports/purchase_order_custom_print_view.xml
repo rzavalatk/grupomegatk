@@ -92,7 +92,7 @@
         <t t-raw="0"/>
       </div>
       
-      <div class="footer" style='font-size:10pt !important; margin-top: 15px !important; margin-bottom: 15px !important;'>
+      <div class="footer" style='font-size:10pt !important;'>
         <div style="border-top: 1px solid rgb(13, 143, 210);">
           <ul style="text-align: center;" class="list-inline mb4">
             <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
