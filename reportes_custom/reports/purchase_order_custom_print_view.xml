@@ -122,7 +122,7 @@
 
     <template id="purchase_order_odoo_custom">
   		<t t-call="reportes_custom.external_layout_purchase_order_custom">
-        <div class="page" style="margin-top: 15px;">
+        <div class="page" style="margin-top: 15px !important; margin-bottom: 15px !important;">
           <div class="oe_structure"/>
           <table class="table table-sm o_main_table">
             <thead>
