@@ -7,9 +7,23 @@ odoo.define("web.rpc", ["@web/core/network/rpc"], function (require) {
     "use strict";
     const { rpc } = require("@web/core/network/rpc");
 
+    function withCsrfToken(params) {
+        const token = typeof odoo !== "undefined" ? odoo.csrf_token : null;
+        if (!token || !params || typeof params !== "object" || Array.isArray(params)) {
+            return params || {};
+        }
+        if (!Object.prototype.hasOwnProperty.call(params, "csrf_token")) {
+            return {
+                ...params,
+                csrf_token: token,
+            };
+        }
+        return params;
+    }
+
     function query(params) {
         // Emular web.rpc.query para llamadas a modelos (call_kw)
-        const promise = rpc("/web/dataset/call_kw", params || {});
+        const promise = rpc("/web/dataset/call_kw", withCsrfToken(params));
         // Añadir helpers .done() / .fail() estilo jQuery
         promise.done = function (cb) {
             promise.then(cb);
@@ -31,10 +45,24 @@ odoo.define("web.ajax", ["@web/core/network/rpc"], function (require) {
     "use strict";
     const { rpc } = require("@web/core/network/rpc");
 
+    function withCsrfToken(params) {
+        const token = typeof odoo !== "undefined" ? odoo.csrf_token : null;
+        if (!token || !params || typeof params !== "object" || Array.isArray(params)) {
+            return params || {};
+        }
+        if (!Object.prototype.hasOwnProperty.call(params, "csrf_token")) {
+            return {
+                ...params,
+                csrf_token: token,
+            };
+        }
+        return params;
+    }
+
     // Implementación simple de ajax.jsonRpc basada en el nuevo rpc()
     function jsonRpc(url, method, params) {
         // "method" se ignora; la mayoría del código legado usa siempre 'call'
-        return rpc(url, params || {});
+        return rpc(url, withCsrfToken(params));
     }
 
     return {
@@ -153,10 +181,24 @@ odoo.define("web.AbstractAction", ["@odoo/owl", "@web/core/network/rpc"], functi
     const { Component } = require("@odoo/owl");
     const { rpc } = require("@web/core/network/rpc");
 
+    function withCsrfToken(params) {
+        const token = typeof odoo !== "undefined" ? odoo.csrf_token : null;
+        if (!token || !params || typeof params !== "object" || Array.isArray(params)) {
+            return params || {};
+        }
+        if (!Object.prototype.hasOwnProperty.call(params, "csrf_token")) {
+            return {
+                ...params,
+                csrf_token: token,
+            };
+        }
+        return params;
+    }
+
     class AbstractAction extends Component {
         // Pequeño helper para emular this._rpc(...) en acciones antiguas
         _rpc(params) {
-            return rpc("/web/dataset/call_kw", params || {});
+            return rpc("/web/dataset/call_kw", withCsrfToken(params));
         }
     }
 
