@@ -16,6 +16,15 @@ _logger = logging.getLogger(__name__)
 class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
+
+    def _get_product_type(self, product):
+        product_type = getattr(product, 'detailed_type', False) or getattr(product, 'type', False)
+        if not product_type and product.product_tmpl_id:
+            product_type = (
+                getattr(product.product_tmpl_id, 'detailed_type', False)
+                or getattr(product.product_tmpl_id, 'type', False)
+            )
+        return product_type
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
@@ -47,6 +56,8 @@ class StockReportHistory(models.Model):
         # Genera los reportes de inventario para ambas fechas y calcula diferencias
         products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
         products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        _logger.warning(f"Productos/ubicaciones en reporte desde {self.date_from}: {len(products_from)}")
+        _logger.warning(f"Productos/ubicaciones en reporte hasta {self.date_to}: {len(products_to)}")
         self._calculate_differences(products_from, products_to)
         self.write({'state': 'aprobado'})
 
@@ -63,7 +74,7 @@ class StockReportHistory(models.Model):
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
             for producto in productos:
-                if producto.detailed_type not in ['consu', 'service'] and producto.list_price > 0:
+                if self._get_product_type(producto) not in ['consu', 'service'] and producto.list_price > 0:
                     for quant in producto.stock_quant_ids:
                         if quant.location_id.id in valid_locations:
                             inventario.append({
@@ -80,7 +91,7 @@ class StockReportHistory(models.Model):
             ])
             for ml in move_lines:
                 product = ml.product_id
-                if not product.active or product.detailed_type in ['consu', 'service'] or product.list_price <= 0:
+                if not product.active or self._get_product_type(product) in ['consu', 'service'] or product.list_price <= 0:
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
