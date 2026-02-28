@@ -25,6 +25,13 @@ class StockReportHistory(models.Model):
                 or getattr(product.product_tmpl_id, 'type', False)
             )
         return product_type
+
+    def _get_move_line_qty(self, move_line):
+        for field_name in ('qty_done', 'quantity', 'quantity_done', 'product_uom_qty'):
+            if field_name in move_line._fields:
+                qty = move_line[field_name]
+                return qty or 0.0
+        return 0.0
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
@@ -97,13 +104,14 @@ class StockReportHistory(models.Model):
                 if not product.active or self._get_product_type(product) in ['service'] or product.list_price <= 0:
                     _logger.warning(f"Saltando producto ID {product.id}  - nombre: {product.name} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
+                qty_done = self._get_move_line_qty(ml)
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+                    product_location_quantities[product.id][ml.location_id.id] -= qty_done
                     product_location_set.add((product.id, ml.location_id.id))
                 # Destino
                 if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                    product_location_quantities[product.id][ml.location_dest_id.id] += qty_done
                     product_location_set.add((product.id, ml.location_dest_id.id))
             _logger.warning(f"Productos/ubicaciones con movimientos registrados para la fecha {date_report}: {len(product_location_quantities)}")
             for product_id, locations in product_location_quantities.items():
