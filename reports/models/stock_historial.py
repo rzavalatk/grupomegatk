@@ -16,14 +16,30 @@ _logger = logging.getLogger(__name__)
 class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
+
+    def _get_product_type(self, product):
+        product_type = getattr(product, 'detailed_type', False) or getattr(product, 'type', False)
+        if not product_type and product.product_tmpl_id:
+            product_type = (
+                getattr(product.product_tmpl_id, 'detailed_type', False)
+                or getattr(product.product_tmpl_id, 'type', False)
+            )
+        return product_type
+
+    def _get_move_line_qty(self, move_line):
+        for field_name in ('qty_done', 'quantity', 'quantity_done', 'product_uom_qty'):
+            if field_name in move_line._fields:
+                qty = move_line[field_name]
+                return qty or 0.0
+        return 0.0
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    name = fields.Char(string="Nombre de reporte", required=True)
+    date_from = fields.Datetime(string="Fecha inicio", required=True)
+    date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id, required=True, readonly=True, states={'borrador': [('readonly', False)]},)
 
     state = fields.Selection([
@@ -47,11 +63,14 @@ class StockReportHistory(models.Model):
         # Genera los reportes de inventario para ambas fechas y calcula diferencias
         products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
         products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        _logger.warning(f"Productos/ubicaciones en reporte desde {self.date_from}: {len(products_from)}")
+        _logger.warning(f"Productos/ubicaciones en reporte hasta {self.date_to}: {len(products_to)}")
         self._calculate_differences(products_from, products_to)
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
         productos = self.env['product.product'].search([('company_id', '=', self.company_id.id), ('active', '=', True)])
+        _logger.warning(f"Generando reporte para la fecha: {date_report} con {len(productos)} productos activos en la compañía {self.company_id.name}")
         inventario = []
         product_location_set = set()
         company_locations = {
@@ -59,11 +78,12 @@ class StockReportHistory(models.Model):
             9: [181, 169, 175],
         }
         valid_locations = company_locations.get(self.company_id.id, [])
+        _logger.warning(f"Ubicaciones válidas para la compañía {self.company_id.name} (ID: {self.company_id.id}): {valid_locations}")
 
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
             for producto in productos:
-                if producto.detailed_type not in ['consu', 'service'] and producto.list_price > 0:
+                if self._get_product_type(producto) not in ['consu', 'service'] and producto.list_price > 0:
                     for quant in producto.stock_quant_ids:
                         if quant.location_id.id in valid_locations:
                             inventario.append({
@@ -78,18 +98,22 @@ class StockReportHistory(models.Model):
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
             ])
+            _logger.warning(f"Procesando {len(move_lines)} líneas de movimiento para la fecha: {date_report}")
             for ml in move_lines:
                 product = ml.product_id
-                if not product.active or product.detailed_type in ['consu', 'service'] or product.list_price <= 0:
+                if not product.active or self._get_product_type(product) in ['service'] or product.list_price <= 0:
+                    _logger.warning(f"Saltando producto ID {product.id}  - nombre: {product.name} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
+                qty_done = self._get_move_line_qty(ml)
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
+                    product_location_quantities[product.id][ml.location_id.id] -= qty_done
                     product_location_set.add((product.id, ml.location_id.id))
                 # Destino
                 if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
+                    product_location_quantities[product.id][ml.location_dest_id.id] += qty_done
                     product_location_set.add((product.id, ml.location_dest_id.id))
+            _logger.warning(f"Productos/ubicaciones con movimientos registrados para la fecha {date_report}: {len(product_location_quantities)}")
             for product_id, locations in product_location_quantities.items():
                 for location_id, qty in locations.items():
                     if qty >= 0 and location_id in valid_locations:
@@ -107,6 +131,7 @@ class StockReportHistory(models.Model):
                 'location_id': item["Ubicacion"],
                 'quantity': item["cantidad"],
             }))
+        _logger.warning(f"Escribiendo {len(lines)} líneas en el campo {field_name} para la fecha: {date_report}")
         self.write({field_name: lines})
 
         # Devuelve el set de (producto, ubicación) para usar en diferencias
