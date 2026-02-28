@@ -18,32 +18,13 @@ class StockReportHistory(models.Model):
     _description = 'Stock Report History'
 
     def _get_product_type(self, product):
-        return (
-            getattr(product, 'detailed_type', False)
-            or getattr(product, 'type', False)
-            or getattr(product.product_tmpl_id, 'detailed_type', False)
-            or getattr(product.product_tmpl_id, 'type', False)
-        )
-
-    def _get_valid_location_ids(self):
-        self.ensure_one()
-        warehouse_locations = self.env['stock.warehouse'].search([
-            ('company_id', '=', self.company_id.id),
-        ]).mapped('lot_stock_id')
-
-        if warehouse_locations:
-            locations = self.env['stock.location'].search([
-                ('id', 'child_of', warehouse_locations.ids),
-                ('usage', '=', 'internal'),
-            ])
-        else:
-            locations = self.env['stock.location'].search([
-                ('usage', '=', 'internal'),
-                '|',
-                ('company_id', '=', self.company_id.id),
-                ('company_id', '=', False),
-            ])
-        return locations.ids
+        product_type = getattr(product, 'detailed_type', False) or getattr(product, 'type', False)
+        if not product_type and product.product_tmpl_id:
+            product_type = (
+                getattr(product.product_tmpl_id, 'detailed_type', False)
+                or getattr(product.product_tmpl_id, 'type', False)
+            )
+        return product_type
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
@@ -75,25 +56,27 @@ class StockReportHistory(models.Model):
         # Genera los reportes de inventario para ambas fechas y calcula diferencias
         products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
         products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        _logger.warning(f"Productos/ubicaciones en reporte desde {self.date_from}: {len(products_from)}")
+        _logger.warning(f"Productos/ubicaciones en reporte hasta {self.date_to}: {len(products_to)}")
         self._calculate_differences(products_from, products_to)
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
-        productos = self.env['product.product'].search([
-            ('active', '=', True),
-            '|',
-            ('company_id', '=', self.company_id.id),
-            ('company_id', '=', False),
-        ])
+        productos = self.env['product.product'].search([('company_id', '=', self.company_id.id), ('active', '=', True)])
+        _logger.warning(f"Generando reporte para la fecha: {date_report} con {len(productos)} productos activos en la compañía {self.company_id.name}")
         inventario = []
         product_location_set = set()
-        valid_locations = self._get_valid_location_ids()
+        company_locations = {
+            8: [155, 161],
+            9: [181, 169, 175],
+        }
+        valid_locations = company_locations.get(self.company_id.id, [])
+        _logger.warning(f"Ubicaciones válidas para la compañía {self.company_id.name} (ID: {self.company_id.id}): {valid_locations}")
 
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
             for producto in productos:
-                product_type = self._get_product_type(producto)
-                if product_type not in ['consu', 'service'] and producto.list_price > 0:
+                if self._get_product_type(producto) not in ['consu', 'service'] and producto.list_price > 0:
                     for quant in producto.stock_quant_ids:
                         if quant.location_id.id in valid_locations:
                             inventario.append({
@@ -108,10 +91,11 @@ class StockReportHistory(models.Model):
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
             ])
+            _logger.warning(f"Procesando {len(move_lines)} líneas de movimiento para la fecha: {date_report}")
             for ml in move_lines:
                 product = ml.product_id
-                product_type = self._get_product_type(product)
-                if not product.active or product_type in ['consu', 'service'] or product.list_price <= 0:
+                if not product.active or self._get_product_type(product) in ['consu', 'service'] or product.list_price <= 0:
+                    _logger.warning(f"Saltando producto ID {product.id}  - nombre: {product.name} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
@@ -121,6 +105,7 @@ class StockReportHistory(models.Model):
                 if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                     product_location_set.add((product.id, ml.location_dest_id.id))
+            _logger.warning(f"Productos/ubicaciones con movimientos registrados para la fecha {date_report}: {len(product_location_quantities)}")
             for product_id, locations in product_location_quantities.items():
                 for location_id, qty in locations.items():
                     if qty >= 0 and location_id in valid_locations:
@@ -138,7 +123,8 @@ class StockReportHistory(models.Model):
                 'location_id': item["Ubicacion"],
                 'quantity': item["cantidad"],
             }))
-        self.write({field_name: [(5, 0, 0)] + lines})
+        _logger.warning(f"Escribiendo {len(lines)} líneas en el campo {field_name} para la fecha: {date_report}")
+        self.write({field_name: lines})
 
         # Devuelve el set de (producto, ubicación) para usar en diferencias
         return product_location_set
@@ -184,7 +170,7 @@ class StockReportHistory(models.Model):
                         'linea': product.x_ingresotk,
                         'marca': product.marca_id.name if product.marca_id else '',
                     }))
-        self.report_differences = [(5, 0, 0)] + differences
+        self.report_differences = differences
     
     
 
