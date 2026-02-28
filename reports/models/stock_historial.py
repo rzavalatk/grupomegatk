@@ -52,6 +52,7 @@ class StockReportHistory(models.Model):
 
     def _generate_report_lines(self, date_report, field_name):
         productos = self.env['product.product'].search([('company_id', '=', self.company_id.id), ('active', '=', True)])
+        _logger.warning(f"Generando reporte para la fecha: {date_report} con {len(productos)} productos activos en la compañía {self.company_id.name}")
         inventario = []
         product_location_set = set()
         company_locations = {
@@ -59,6 +60,7 @@ class StockReportHistory(models.Model):
             9: [181, 169, 175],
         }
         valid_locations = company_locations.get(self.company_id.id, [])
+        _logger.warning(f"Ubicaciones válidas para la compañía {self.company_id.name} (ID: {self.company_id.id}): {valid_locations}")
 
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
@@ -78,6 +80,7 @@ class StockReportHistory(models.Model):
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
             ])
+            _logger.warning(f"Procesando {len(move_lines)} líneas de movimiento para la fecha: {date_report}")
             for ml in move_lines:
                 product = ml.product_id
                 if not product.active or product.detailed_type in ['consu', 'service'] or product.list_price <= 0:
@@ -107,6 +110,7 @@ class StockReportHistory(models.Model):
                 'location_id': item["Ubicacion"],
                 'quantity': item["cantidad"],
             }))
+        _logger.warning(f"Escribiendo {len(lines)} líneas en el campo {field_name} para la fecha: {date_report}")
         self.write({field_name: lines})
 
         # Devuelve el set de (producto, ubicación) para usar en diferencias
