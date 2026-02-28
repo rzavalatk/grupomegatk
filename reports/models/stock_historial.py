@@ -83,7 +83,7 @@ class StockReportHistory(models.Model):
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
             for producto in productos:
-                if self._get_product_type(producto) not in ['consu', 'service'] and producto.list_price > 0:
+                if self._get_product_type(producto) not in ['service'] and producto.list_price > 0:
                     for quant in producto.stock_quant_ids:
                         if quant.location_id.id in valid_locations:
                             inventario.append({
