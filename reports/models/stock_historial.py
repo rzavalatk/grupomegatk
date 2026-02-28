@@ -95,6 +95,7 @@ class StockReportHistory(models.Model):
             for ml in move_lines:
                 product = ml.product_id
                 if not product.active or self._get_product_type(product) in ['consu', 'service'] or product.list_price <= 0:
+                    _logger.warning(f"Saltando producto ID {product.id} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
@@ -104,6 +105,7 @@ class StockReportHistory(models.Model):
                 if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                     product_location_set.add((product.id, ml.location_dest_id.id))
+            _logger.warning(f"Productos/ubicaciones con movimientos registrados para la fecha {date_report}: {len(product_location_quantities)}")
             for product_id, locations in product_location_quantities.items():
                 for location_id, qty in locations.items():
                     if qty >= 0 and location_id in valid_locations:
