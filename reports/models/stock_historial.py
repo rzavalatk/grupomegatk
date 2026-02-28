@@ -76,6 +76,14 @@ class StockReportHistory(models.Model):
         products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
         products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
         self._calculate_differences(products_from, products_to)
+        _logger.info(
+            "Stock report %s generated. company=%s lines_from=%s lines_to=%s differences=%s",
+            self.id,
+            self.company_id.id,
+            len(self.report_lines_from),
+            len(self.report_lines_to),
+            len(self.report_differences),
+        )
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
@@ -89,46 +97,36 @@ class StockReportHistory(models.Model):
         product_location_set = set()
         valid_locations = self._get_valid_location_ids()
 
-        # Determina si es inventario actual o histórico
-        if date.today() == date_report.date():
-            for producto in productos:
-                product_type = self._get_product_type(producto)
-                if product_type not in ['consu', 'service'] and producto.list_price > 0:
-                    for quant in producto.stock_quant_ids:
-                        if quant.location_id.id in valid_locations:
-                            inventario.append({
-                                "producto": producto.id,
-                                "Ubicacion": quant.location_id.id,
-                                "cantidad": quant.quantity
-                            })
-                            product_location_set.add((producto.id, quant.location_id.id))
-        else:
-            product_location_quantities = defaultdict(lambda: defaultdict(float))
-            move_lines = self.env['stock.move.line'].search([
-                ('date', '<=', date_report),
-                ('company_id', '=', self.company_id.id),
-            ])
-            for ml in move_lines:
-                product = ml.product_id
-                product_type = self._get_product_type(product)
-                if not product.active or product_type in ['consu', 'service'] or product.list_price <= 0:
-                    continue
-                # Origen
-                if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_id.id] -= ml.qty_done
-                    product_location_set.add((product.id, ml.location_id.id))
-                # Destino
-                if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
-                    product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
-                    product_location_set.add((product.id, ml.location_dest_id.id))
-            for product_id, locations in product_location_quantities.items():
-                for location_id, qty in locations.items():
-                    if qty >= 0 and location_id in valid_locations:
-                        inventario.append({
-                            "producto": product_id,
-                            "Ubicacion": location_id,
-                            "cantidad": qty
-                        })
+        if not valid_locations:
+            valid_locations = self.env['stock.location'].search([
+                ('usage', '=', 'internal')
+            ]).ids
+
+        _logger.info(
+            "Generating stock lines for report=%s date=%s company=%s valid_locations=%s products=%s",
+            self.id,
+            date_report,
+            self.company_id.id,
+            len(valid_locations),
+            len(productos),
+        )
+
+        for producto in productos:
+            product_type = self._get_product_type(producto)
+            if product_type in ['consu', 'service']:
+                continue
+            for location_id in valid_locations:
+                qty = producto.with_company(self.company_id).with_context(
+                    to_date=date_report,
+                    location=location_id,
+                ).qty_available
+                if qty > 0:
+                    inventario.append({
+                        "producto": producto.id,
+                        "Ubicacion": location_id,
+                        "cantidad": qty,
+                    })
+                    product_location_set.add((producto.id, location_id))
 
         # Escribir líneas del reporte
         lines = []
@@ -167,8 +165,9 @@ class StockReportHistory(models.Model):
                     ('date', '>=', self.date_from),
                     ('date', '<=', self.date_to),
                     ('company_id', '=', self.company_id.id),
-                    ('location_id', 'in', [loc.id for loc in product.stock_quant_ids.mapped('location_id')]),
-                    ('location_dest_id', 'in', [loc.id for loc in product.stock_quant_ids.mapped('location_id')]),
+                    '|',
+                    ('location_id', '=', location_id),
+                    ('location_dest_id', '=', location_id),
                 ])
                 
                 if movimiento == 0:
