@@ -95,7 +95,7 @@ class StockReportHistory(models.Model):
             for ml in move_lines:
                 product = ml.product_id
                 if not product.active or self._get_product_type(product) in ['consu', 'service'] or product.list_price <= 0:
-                    _logger.warning(f"Saltando producto ID {product.id} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
+                    _logger.warning(f"Saltando producto ID {product.id}  - nombre: {product.name} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
