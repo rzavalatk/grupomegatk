@@ -16,14 +16,22 @@ _logger = logging.getLogger(__name__)
 class StockReportHistory(models.Model):
     _name = 'stock.report.history'
     _description = 'Stock Report History'
+
+    def _get_product_type(self, product):
+        return (
+            getattr(product, 'detailed_type', False)
+            or getattr(product, 'type', False)
+            or getattr(product.product_tmpl_id, 'detailed_type', False)
+            or getattr(product.product_tmpl_id, 'type', False)
+        )
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=[('state', '!=', 'borrador')])
-    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=[('state', '!=', 'borrador')])
-    date_to = fields.Datetime(string="Fecha final", required=True, readonly=[('state', '!=', 'borrador')])
+    name = fields.Char(string="Nombre de reporte", required=True)
+    date_from = fields.Datetime(string="Fecha inicio", required=True)
+    date_to = fields.Datetime(string="Fecha final", required=True)
     company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id, required=True, readonly=True, states={'borrador': [('readonly', False)]},)
 
     state = fields.Selection([
@@ -63,7 +71,8 @@ class StockReportHistory(models.Model):
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
             for producto in productos:
-                if producto.detailed_type not in ['consu', 'service'] and producto.list_price > 0:
+                product_type = self._get_product_type(producto)
+                if product_type not in ['consu', 'service'] and producto.list_price > 0:
                     for quant in producto.stock_quant_ids:
                         if quant.location_id.id in valid_locations:
                             inventario.append({
@@ -80,7 +89,8 @@ class StockReportHistory(models.Model):
             ])
             for ml in move_lines:
                 product = ml.product_id
-                if not product.active or product.detailed_type in ['consu', 'service'] or product.list_price <= 0:
+                product_type = self._get_product_type(product)
+                if not product.active or product_type in ['consu', 'service'] or product.list_price <= 0:
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
