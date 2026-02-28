@@ -444,8 +444,11 @@ class HrLeave(models.Model):
     def action_validate(self, check_state=True):
         for leave in self:
             if leave.holiday_status_id.vacaciones:
-                # Determinar qué empleados procesar
-                employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
+                # Determinar qué empleados procesar (compatibilidad entre versiones)
+                if 'employee_ids' in leave._fields and leave.employee_ids:
+                    employees_to_process = leave.employee_ids
+                else:
+                    employees_to_process = leave.employee_id
                 
                 for employee_id in employees_to_process:
                     if employee_id:  # Verificar que el empleado existe
@@ -467,8 +470,11 @@ class HrLeave(models.Model):
         for leave in self:
             if leave.state == 'validate':
                 if leave.holiday_status_id.vacaciones:
-                    # Determinar qué empleados procesar
-                    employees_to_process = leave.employee_ids if leave.employee_ids else [leave.employee_id]
+                    # Determinar qué empleados procesar (compatibilidad entre versiones)
+                    if 'employee_ids' in leave._fields and leave.employee_ids:
+                        employees_to_process = leave.employee_ids
+                    else:
+                        employees_to_process = leave.employee_id
                     
                     for employee_id in employees_to_process:
                         if employee_id:  # Verificar que el empleado existe
