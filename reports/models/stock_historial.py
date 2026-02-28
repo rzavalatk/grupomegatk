@@ -52,7 +52,6 @@ class StockReportHistory(models.Model):
 
     def _generate_report_lines(self, date_report, field_name):
         productos = self.env['product.product'].search([('company_id', '=', self.company_id.id), ('active', '=', True)])
-        _logger.warning(f"Generando reporte para la fecha: {date_report} con {len(productos)} productos activos en la compañía {self.company_id.name}")
         inventario = []
         product_location_set = set()
         company_locations = {
@@ -60,7 +59,6 @@ class StockReportHistory(models.Model):
             9: [181, 169, 175],
         }
         valid_locations = company_locations.get(self.company_id.id, [])
-        _logger.warning(f"Ubicaciones válidas para la compañía {self.company_id.name} (ID: {self.company_id.id}): {valid_locations}")
 
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
@@ -80,10 +78,11 @@ class StockReportHistory(models.Model):
                 ('date', '<=', date_report),
                 ('company_id', '=', self.company_id.id),
             ])
-            _logger.warning(f"Procesando {len(move_lines)} líneas de movimiento para la fecha: {date_report}")
             for ml in move_lines:
                 product = ml.product_id
+                
                 if not product.active or product.detailed_type in ['consu', 'service'] or product.list_price <= 0:
+                    _logger.debug(f"Saltando producto {product.name} (ID: {product.id}) por ser inactivo, consumible, servicio o sin precio de venta.")
                     continue
                 # Origen
                 if ml.location_id.id in valid_locations and ml.location_id.usage == 'internal':
@@ -93,6 +92,7 @@ class StockReportHistory(models.Model):
                 if ml.location_dest_id.id in valid_locations and ml.location_dest_id.usage == 'internal':
                     product_location_quantities[product.id][ml.location_dest_id.id] += ml.qty_done
                     product_location_set.add((product.id, ml.location_dest_id.id))
+            _logger.warning(f"tamaño de product_location_quantities: {len(product_location_quantities)} para la fecha: {date_report}")
             for product_id, locations in product_location_quantities.items():
                 for location_id, qty in locations.items():
                     if qty >= 0 and location_id in valid_locations:
