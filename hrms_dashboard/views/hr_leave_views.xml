@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//list" position="attributes">
-                <attribute name="default_order">Visualización de la duración</attribute>
+                <attribute name="default_order">duration_display asc</attribute>
             </xpath>
         </field>
     </record>
