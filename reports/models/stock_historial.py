@@ -94,7 +94,7 @@ class StockReportHistory(models.Model):
             _logger.warning(f"Procesando {len(move_lines)} líneas de movimiento para la fecha: {date_report}")
             for ml in move_lines:
                 product = ml.product_id
-                if not product.active or self._get_product_type(product) in ['consu', 'service'] or product.list_price <= 0:
+                if not product.active or self._get_product_type(product) in ['service'] or product.list_price <= 0:
                     _logger.warning(f"Saltando producto ID {product.id}  - nombre: {product.name} - Activo: {product.active}, Tipo: {self._get_product_type(product)}, Precio: {product.list_price}")
                     continue
                 # Origen
