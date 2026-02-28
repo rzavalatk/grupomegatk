@@ -441,7 +441,7 @@ class HrLeave(models.Model):
 
         return dias, horas, minutos_restantes
 
-    def action_validate(self):
+    def action_validate(self, check_state=True):
         for leave in self:
             if leave.holiday_status_id.vacaciones:
                 # Determinar qué empleados procesar
@@ -461,7 +461,7 @@ class HrLeave(models.Model):
             else:
                 self.env.user.notify_success(message='Permiso aprobado')
                 
-        return super(HrLeave, self).action_validate()
+        return super(HrLeave, self).action_validate(check_state=check_state)
         
     def action_refuse(self):
         for leave in self:
