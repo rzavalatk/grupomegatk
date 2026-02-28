@@ -24,6 +24,26 @@ class StockReportHistory(models.Model):
             or getattr(product.product_tmpl_id, 'detailed_type', False)
             or getattr(product.product_tmpl_id, 'type', False)
         )
+
+    def _get_valid_location_ids(self):
+        self.ensure_one()
+        warehouse_locations = self.env['stock.warehouse'].search([
+            ('company_id', '=', self.company_id.id),
+        ]).mapped('lot_stock_id')
+
+        if warehouse_locations:
+            locations = self.env['stock.location'].search([
+                ('id', 'child_of', warehouse_locations.ids),
+                ('usage', '=', 'internal'),
+            ])
+        else:
+            locations = self.env['stock.location'].search([
+                ('usage', '=', 'internal'),
+                '|',
+                ('company_id', '=', self.company_id.id),
+                ('company_id', '=', False),
+            ])
+        return locations.ids
     
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
@@ -59,14 +79,15 @@ class StockReportHistory(models.Model):
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
-        productos = self.env['product.product'].search([('company_id', '=', self.company_id.id), ('active', '=', True)])
+        productos = self.env['product.product'].search([
+            ('active', '=', True),
+            '|',
+            ('company_id', '=', self.company_id.id),
+            ('company_id', '=', False),
+        ])
         inventario = []
         product_location_set = set()
-        company_locations = {
-            8: [155, 161],
-            9: [181, 169, 175],
-        }
-        valid_locations = company_locations.get(self.company_id.id, [])
+        valid_locations = self._get_valid_location_ids()
 
         # Determina si es inventario actual o histórico
         if date.today() == date_report.date():
@@ -117,7 +138,7 @@ class StockReportHistory(models.Model):
                 'location_id': item["Ubicacion"],
                 'quantity': item["cantidad"],
             }))
-        self.write({field_name: lines})
+        self.write({field_name: [(5, 0, 0)] + lines})
 
         # Devuelve el set de (producto, ubicación) para usar en diferencias
         return product_location_set
@@ -163,7 +184,7 @@ class StockReportHistory(models.Model):
                         'linea': product.x_ingresotk,
                         'marca': product.marca_id.name if product.marca_id else '',
                     }))
-        self.report_differences = differences
+        self.report_differences = [(5, 0, 0)] + differences
     
     
 
