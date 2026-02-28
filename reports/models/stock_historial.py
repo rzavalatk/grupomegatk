@@ -21,9 +21,9 @@ class StockReportHistory(models.Model):
     def _onchange_date_from(self):
         self.name = "No vendido del " +str(self.date_from) + " al " + str(self.date_to)
     
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=True)
-    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True)
-    date_to = fields.Datetime(string="Fecha final", required=True, readonly=True)
+    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_from = fields.Datetime(string="Fecha inicio", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_to = fields.Datetime(string="Fecha final", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     company_id = fields.Many2one('res.company', string='Compañia', default=lambda self: self.env.company.id, required=True, readonly=True, states={'borrador': [('readonly', False)]},)
 
     state = fields.Selection([
