@@ -13,6 +13,28 @@ _logger = logging.getLogger(__name__)
 class Account_Move(models.Model):
     _inherit = "account.move"
 
+    @api.model
+    def _move_requires_sales_team(self, move_type):
+        return move_type in ('out_invoice', 'out_refund', 'out_receipt')
+
+    @api.model
+    def _get_sales_team_for_company(self, company_id):
+        team_domain = [('company_id', 'in', [company_id, False])]
+        user_team = self.env['crm.team'].search(
+            [('member_ids', '=', self.env.user.id)] + team_domain,
+            limit=1,
+        )
+        if user_team:
+            return user_team
+        return self.env['crm.team'].search(team_domain, limit=1)
+
+    def _is_scrap_generated_move(self):
+        self.ensure_one()
+        if 'stock_move_id' not in self._fields:
+            return False
+        stock_move = self.stock_move_id
+        return bool(stock_move and 'scrap_id' in stock_move._fields and stock_move.scrap_id)
+
     def _compute_contacto(self):
         cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
         self.x_contacto = cotizacion.x_contacto
@@ -76,18 +98,15 @@ class Account_Move(models.Model):
     def create(self, vals_list):
         """Asegurar team_id + Condicion que busca si la factura es al credito"""
         
-        # Primero: Asegurar que team_id SIEMPRE tiene valor
+        # Primero: Asegurar team_id solo en documentos de venta
         for vals in vals_list:
-            if not vals.get('team_id'):
-                # Obtener el equipo del usuario
-                user_team = self.env['crm.team'].search([('member_ids', '=', self.env.user.id)], limit=1)
-                if user_team:
-                    vals['team_id'] = user_team.id
-                else:
-                    # Si no tiene equipo, tomar el primero disponible
-                    first_team = self.env['crm.team'].search([], limit=1)
-                    if first_team:
-                        vals['team_id'] = first_team.id
+            move_type = vals.get('move_type') or self.env.context.get('default_move_type') or 'entry'
+            if self._move_requires_sales_team(move_type):
+                if not vals.get('team_id'):
+                    company_id = vals.get('company_id') or self.env.company.id
+                    team = self._get_sales_team_for_company(company_id)
+                    if team:
+                        vals['team_id'] = team.id
         
         # Segundo: Validar crédito
         company_id = self.env.user.company_id.id
@@ -122,16 +141,15 @@ class Account_Move(models.Model):
                 
 
     def action_post(self):
-        # Asegurar que team_id tenga valor ANTES de publicar
+        # Asegurar team_id solo para documentos de venta ANTES de publicar
         for move in self:
-            if not move.team_id:
-                user_team = self.env['crm.team'].search([('member_ids', '=', self.env.user.id)], limit=1)
-                if user_team:
-                    move.team_id = user_team.id
-                else:
-                    first_team = self.env['crm.team'].search([], limit=1)
-                    if first_team:
-                        move.team_id = first_team.id
+            if self._move_requires_sales_team(move.move_type):
+                if not move.team_id:
+                    team = self._get_sales_team_for_company(move.company_id.id)
+                    if team:
+                        move.team_id = team.id
+            elif move.team_id and move._is_scrap_generated_move():
+                move.team_id = False
         
         res = super(Account_Move, self).action_post()
         credit_term = self.env['account.payment.term'].search([('id', '=', self.invoice_payment_term_id.id)])
