@@ -340,9 +340,11 @@ class Check(models.Model):
 			self.check_lines = lineas
 
 	@api.model_create_multi
-	def create(self, vals):
-		vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
-		check = super(Check, self).create(vals)
+	def create(self, vals_list):
+		for vals in vals_list:
+			if not vals.get("number"):
+				vals["number"] = self.get_char_seq(vals.get("journal_id"), vals.get("doc_type"))
+		check = super(Check, self).create(vals_list)
 		return check
 
 	def unlink(self):
