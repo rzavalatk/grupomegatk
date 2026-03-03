@@ -36,8 +36,9 @@ class TeamHelpDesk(models.Model):
     member_ids = fields.Many2many('res.users', string='Members',
                                   help='Team Members',
                                   domain=lambda self: [
-                                      ('groups_id', 'in', self.env.ref(
-                                          'odoo_website_helpdesk.helpdesk_user').id)])
+                                      ('groups_id', 'in', self.env.ref('base.group_user').id),
+                                      ('groups_id', 'not in', self.env.ref(
+                                          'odoo_website_helpdesk.helpdesk_team_leader').id)])
     email = fields.Char('Email', help='Email of the team member.')
     project_id = fields.Many2one('project.project',
                                  string='Project',
@@ -48,12 +49,11 @@ class TeamHelpDesk(models.Model):
     @api.onchange('team_lead_id')
     def _onchange_team_lead_id(self):
         """Members selection function"""
-        fetch_members = self.env['res.users'].search([])
-        filtered_members = fetch_members.filtered(
-            lambda x: x.id != self.team_lead_id.id)
+        domain = [
+            ('groups_id', 'in', self.env.ref('base.group_user').id),
+            ('groups_id', 'not in', self.env.ref('odoo_website_helpdesk.helpdesk_team_leader').id),
+        ]
+        if self.team_lead_id:
+            domain.append(('id', '!=', self.team_lead_id.id))
         return {'domain': {'member_ids':
-                               [('id', '=', filtered_members.ids), (
-                                   'groups_id', 'in',
-                                   self.env.ref('base.group_user').id),
-                                ('groups_id', 'not in', self.env.ref(
-                                    'odoo_website_helpdesk.helpdesk_team_leader').id)]}}
+                               domain}}
