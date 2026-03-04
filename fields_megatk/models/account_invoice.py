@@ -183,6 +183,18 @@ class Account_Move(models.Model):
 
         return super().write(vals)
 
+    def web_read(self, specification):
+        try:
+            return super().web_read(specification)
+        except AttributeError as error:
+            if "origin" not in str(error):
+                raise
+
+            field_names = list(specification.keys()) if isinstance(specification, dict) else []
+            if 'id' not in field_names:
+                field_names.append('id')
+            return self.read(field_names)
+
     #mostrar boton en factura de borrados
     def go_draft(self):
         self.write({
