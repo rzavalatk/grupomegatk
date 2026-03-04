@@ -97,6 +97,8 @@ class Account_Move(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         """Asegurar team_id + Condicion que busca si la factura es al credito"""
+
+        can_invoice_without_quote = self.env.user.has_group('fields_megatk.facturar_sin_cotizacion')
         
         # Primero: Asegurar team_id solo en documentos de venta
         for vals in vals_list:
@@ -107,6 +109,9 @@ class Account_Move(models.Model):
                     team = self._get_sales_team_for_company(company_id)
                     if team:
                         vals['team_id'] = team.id
+
+                if can_invoice_without_quote and not vals.get('invoice_origin'):
+                    vals['invoice_origin'] = 'SIN COTIZACION'
         
         # Segundo: Validar crédito
         company_id = self.env.user.company_id.id

@@ -22,5 +22,10 @@
         <field name="category_id" ref="module_category_factura_credito"/>
         <field name="name">Usuario Facturas Credito</field>
     </record>
+
+    <record id="facturar_sin_cotizacion" model="res.groups">
+        <field name="category_id" ref="module_category_factura_credito"/>
+        <field name="name">Facturar sin cotización</field>
+    </record>
 </data>
 </odoo>
