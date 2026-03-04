@@ -182,6 +182,22 @@ class Account_Move(models.Model):
                 break
 
         return super().write(vals)
+
+    def web_save(self, vals, specification):
+        records = self
+        if records:
+            records.write(vals)
+        else:
+            records = self.create(vals)
+
+        try:
+            return records.with_context(bin_size=True).web_read(specification)
+        except AttributeError as error:
+            if "origin" in str(error):
+                field_names = list(specification.keys()) if isinstance(specification, dict) else []
+                result = records.with_context(bin_size=True).read(field_names)
+                return result[0] if len(result) == 1 else result
+            raise
         
     #mostrar boton en factura de borrados
     def go_draft(self):
