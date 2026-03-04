@@ -35,6 +35,21 @@ class Account_Move(models.Model):
         stock_move = self.stock_move_id
         return bool(stock_move and 'scrap_id' in stock_move._fields and stock_move.scrap_id)
 
+    def _allow_invoice_without_quote(self, company_id=None):
+        can_by_group = self.env.user.has_group('fields_megatk.facturar_sin_cotizacion')
+        company = self.env['res.company'].browse(company_id) if company_id else self.env.company
+        is_lenka = ((company.name or '').strip().upper() == 'INVERSIONES LENKA')
+        return can_by_group or is_lenka
+
+    def _get_fallback_invoice_origin(self, partner_id, company_id):
+        if not partner_id:
+            return 'SIN COTIZACION'
+        fallback_order = self.env['sale.order'].search([
+            ('partner_id', '=', partner_id),
+            ('company_id', '=', company_id),
+        ], order='id desc', limit=1)
+        return fallback_order.name if fallback_order else 'SIN COTIZACION'
+
     def _compute_contacto(self):
         cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
         self.x_contacto = cotizacion.x_contacto
@@ -102,6 +117,7 @@ class Account_Move(models.Model):
             vals_list = [vals_list]
 
         can_invoice_without_quote = self.env.user.has_group('fields_megatk.facturar_sin_cotizacion')
+        allow_lenka_company = (self.env.company.name or '').strip().upper() == 'INVERSIONES LENKA'
         
         # Primero: Asegurar team_id solo en documentos de venta
         for vals in vals_list:
@@ -113,8 +129,11 @@ class Account_Move(models.Model):
                     if team:
                         vals['team_id'] = team.id
 
-                if can_invoice_without_quote and not vals.get('invoice_origin'):
-                    vals['invoice_origin'] = 'SIN COTIZACION'
+                allow_without_quote = can_invoice_without_quote or allow_lenka_company
+                if allow_without_quote and not vals.get('invoice_origin'):
+                    invoice_partner_id = vals.get('partner_id')
+                    invoice_company_id = vals.get('company_id') or self.env.company.id
+                    vals['invoice_origin'] = self._get_fallback_invoice_origin(invoice_partner_id, invoice_company_id)
         
         # Segundo: Validar crédito
         company_id = self.env.user.company_id.id
@@ -136,13 +155,46 @@ class Account_Move(models.Model):
         try:
             return super().create(vals_list)
         except AttributeError as error:
-            if can_invoice_without_quote and "origin" in str(error):
+            if (can_invoice_without_quote or allow_lenka_company) and "origin" in str(error):
                 for vals in vals_list:
                     if vals.get('invoice_origin') == 'SIN COTIZACION':
                         vals.pop('invoice_origin', None)
                 return super().create(vals_list)
             raise
-        
+
+    def write(self, vals):
+        vals = dict(vals)
+        if not vals.get('invoice_origin'):
+            for move in self:
+                if not self._move_requires_sales_team(move.move_type):
+                    continue
+
+                write_company_id = vals.get('company_id') or move.company_id.id
+                if not self._allow_invoice_without_quote(write_company_id):
+                    continue
+
+                current_origin = vals.get('invoice_origin') or move.invoice_origin
+                if current_origin:
+                    continue
+
+                write_partner_id = vals.get('partner_id') or move.partner_id.id
+                vals['invoice_origin'] = self._get_fallback_invoice_origin(write_partner_id, write_company_id)
+                break
+
+        return super().write(vals)
+
+    def web_read(self, specification):
+        try:
+            return super().web_read(specification)
+        except AttributeError as error:
+            if "origin" not in str(error):
+                raise
+
+            field_names = list(specification.keys()) if isinstance(specification, dict) else []
+            if 'id' not in field_names:
+                field_names.append('id')
+            return self.read(field_names)
+
     #mostrar boton en factura de borrados
     def go_draft(self):
         self.write({
