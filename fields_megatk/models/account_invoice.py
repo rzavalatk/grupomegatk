@@ -98,6 +98,9 @@ class Account_Move(models.Model):
     def create(self, vals_list):
         """Asegurar team_id + Condicion que busca si la factura es al credito"""
 
+        if isinstance(vals_list, dict):
+            vals_list = [vals_list]
+
         can_invoice_without_quote = self.env.user.has_group('fields_megatk.facturar_sin_cotizacion')
         
         # Primero: Asegurar team_id solo en documentos de venta
@@ -129,8 +132,16 @@ class Account_Move(models.Model):
                                 raise UserError(_("ERROR: Contacto no tiene el campo calle o ciudad de la dirección, agregar antes de crear facturas al credito."))
                         else:
                             raise UserError(_("ERROR: Contacto no tiene número de teléfono o móvil, agregar alguno de los dos antes de crear facturas al credito."))
-        
-        return super().create(vals_list)
+
+        try:
+            return super().create(vals_list)
+        except AttributeError as error:
+            if can_invoice_without_quote and "origin" in str(error):
+                for vals in vals_list:
+                    if vals.get('invoice_origin') == 'SIN COTIZACION':
+                        vals.pop('invoice_origin', None)
+                return super().create(vals_list)
+            raise
         
     #mostrar boton en factura de borrados
     def go_draft(self):
