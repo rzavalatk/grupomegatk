@@ -195,6 +195,8 @@ class Account_Move(models.Model):
         except AttributeError as error:
             if "origin" in str(error):
                 field_names = list(specification.keys()) if isinstance(specification, dict) else []
+                if 'id' not in field_names:
+                    field_names.append('id')
                 result = records.with_context(bin_size=True).read(field_names)
                 return result[0] if len(result) == 1 else result
             raise
