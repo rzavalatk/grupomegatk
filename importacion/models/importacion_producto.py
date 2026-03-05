@@ -74,29 +74,24 @@ class ImportacionProducto(models.Model):
 		if not self.import_gsto_id:
 			raise UserError(_('No existe detalle de gastos'))
 
-		ponderaciones = self.env["import.product.mega"].search([('company_id','=',self.company_id.id)])
-		for ponderacion in ponderaciones:
-			if not ponderacion.sequence_id.id:
-				obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Ponderacion')])
-				if not obj_sequence.id:
-					values = {'name': 'Ponderacion',
-						'prefix': 'POND. ',
-						'company_id': self.company_id.id,
-						'padding':8,}
-					sequence_id = obj_sequence.create(values)
-				else:
-					sequence_id = obj_sequence	
-				self.write({'sequence_id': sequence_id.id})
+		sequence_model = self.env["ir.sequence"].sudo()
+		sequence_id = sequence_model.search([
+			('company_id', '=', self.company_id.id),
+			('name', '=', 'Ponderacion')
+		], limit=1)
 
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
+		if not sequence_id:
+			values = {
+				'name': 'Ponderacion',
+				'prefix': 'POND. ',
+				'company_id': self.company_id.id,
+				'padding': 8,
+			}
+			sequence_id = sequence_model.create(values)
 
-				break
-			else:
-				self.write({'sequence_id': ponderacion.sequence_id.id})
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
-				break
+		self.write({'sequence_id': sequence_id.id})
+		new_name = sequence_id.with_context(force_company=self.company_id.id).next_by_id()
+		self.write({'name': new_name})
 		
 		self.total =  self.amount_total_gasto + self.amount_total
 		self.porcentaje = 100 * (self.amount_total_gasto / self.amount_total)
