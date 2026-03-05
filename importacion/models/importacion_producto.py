@@ -74,29 +74,24 @@ class ImportacionProducto(models.Model):
 		if not self.import_gsto_id:
 			raise UserError(_('No existe detalle de gastos'))
 
-		ponderaciones = self.env["import.product.mega"].search([('company_id','=',self.company_id.id)])
-		for ponderacion in ponderaciones:
-			if not ponderacion.sequence_id.id:
-				obj_sequence = self.env["ir.sequence"].search([('company_id','=',self.company_id.id),('name','=','Ponderacion')])
-				if not obj_sequence.id:
-					values = {'name': 'Ponderacion',
-						'prefix': 'POND. ',
-						'company_id': self.company_id.id,
-						'padding':8,}
-					sequence_id = obj_sequence.create(values)
-				else:
-					sequence_id = obj_sequence	
-				self.write({'sequence_id': sequence_id.id})
+		sequence_model = self.env["ir.sequence"].sudo()
+		sequence_id = sequence_model.search([
+			('company_id', '=', self.company_id.id),
+			('name', '=', 'Ponderacion')
+		], limit=1)
 
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
+		if not sequence_id:
+			values = {
+				'name': 'Ponderacion',
+				'prefix': 'POND. ',
+				'company_id': self.company_id.id,
+				'padding': 8,
+			}
+			sequence_id = sequence_model.create(values)
 
-				break
-			else:
-				self.write({'sequence_id': ponderacion.sequence_id.id})
-				new_name = self.sequence_id.with_context().next_by_id()
-				self.write({'name': new_name})
-				break
+		self.write({'sequence_id': sequence_id.id})
+		new_name = sequence_id.with_context(force_company=self.company_id.id).next_by_id()
+		self.write({'name': new_name})
 		
 		self.total =  self.amount_total_gasto + self.amount_total
 		self.porcentaje = 100 * (self.amount_total_gasto / self.amount_total)
@@ -134,22 +129,38 @@ class ImportacionProducto(models.Model):
 		self.import_line_id = [(5, 0, 0)]  # Elimina todas las líneas existentes
 		for recepcion in self.stock_pick_ids:
 			for lineas in recepcion.move_ids:
-				subtotal = lineas.quantity_done * lineas.price_unit
-				tax = subtotal * lineas.tax_id.amount / 100
-				total = tax + subtotal
+				qty = getattr(lineas, 'quantity_done', 0.0) or getattr(lineas, 'quantity', 0.0) or lineas.product_uom_qty or 0.0
+				price_unit = getattr(lineas, 'price_unit', 0.0) or 0.0
+				taxes = lineas.tax_ids if 'tax_ids' in lineas._fields else self.env['account.tax']
+
+				if taxes:
+					tax_data = taxes.compute_all(
+						price_unit,
+						currency=self.currency_id,
+						quantity=qty,
+						product=lineas.product_id,
+						partner=False,
+					)
+					subtotal = tax_data.get('total_excluded', 0.0)
+					total = tax_data.get('total_included', subtotal)
+					tax = total - subtotal
+				else:
+					subtotal = qty * price_unit
+					tax = 0.0
+					total = subtotal
 				vals = {
 					'import_product_id': self.id,
 					'product_id': lineas.product_id.product_tmpl_id.id,
 					'name': lineas.name,
 					'price_total': total,
 					'price_tax': tax,
-					'taxes_id': [(6, 0, lineas.tax_id.ids)],
-					'price_unit': lineas.price_unit,
+					'taxes_id': [(6, 0, taxes.ids)],
+					'price_unit': price_unit,
 					'price_subtotal': subtotal,
 					'currency_id': self.currency_id.id,
-					'quantity': lineas.quantity_done,
+					'quantity': qty,
 					'company_id': self.company_id.id,
-					'fecha_done': lineas.date,
+					'fecha_done': lineas.date or recepcion.date_done,
 				}
 				self.import_line_id += self.env['import.product.mega.line.purchase'].new(vals)
 
