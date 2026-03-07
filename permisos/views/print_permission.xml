@@ -14,6 +14,8 @@
     <template id="report_hr_employee_permission" name="Formulario de Permiso">
         <t t-call="web.basic_layout"><!-- Recomendado usar este layout ya que está sin formato -->
             <t t-set="o" t-value="docs[0]"/>
+            <t t-set="employee" t-value="o.employee_id.sudo()"/>
+            <t t-set="manager" t-value="employee.parent_id.sudo() if employee.parent_id else False"/>
             <main>
                 <div style="font-family: calibri; font-size: 14px; margin: 0 1cm; padding: 0;">
                     <!-- Encabezado simplificado -->
@@ -38,9 +40,9 @@
                                             <t t-else="">
                                                 <span t-field="o.request_date_from" t-field-options='{"format": "dd"}'/>
                                             </t>
-                                        el Sr. (Sra. Srita) <span t-field="o.employee_id.name"/>
-                                <br/> quien se desempeña como:  <span t-field="o.employee_id.job_id.name"/> 
-                                en el area de <span t-field="o.employee_id.department_id.name"/>
+                                        el Sr. (Sra. Srita) <span t-esc="employee.name or ''"/>
+                                    <br/> quien se desempeña como:  <span t-esc="employee.job_id.name or ''"/> 
+                                    en el area de <span t-esc="employee.department_id.name or ''"/>
                                 <div style="margin-bottom: 10px;">
                                     <p style="margin: 5px 0; text-align: center;">No se presentó a laborar en la(s) siguiente(s) fecha(s):</p>
                                     <p style="margin: 5px 0;">
@@ -164,11 +166,11 @@
                         <tr>
                             <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE JEFE INMEDIATO</p>
-                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employee_id.parent_id.name"/></p>
+                                <p style="margin: 5px 0 30px 0;"><span t-esc="manager.name or ''"/></p>
                             </td>
                             <td style="width: 50%; text-align: center; padding-top: 10px;">
                                 <p style="margin: 5px 0;">NOMBRE EMPLEADO</p>
-                                <p style="margin: 5px 0 30px 0;"><span t-field="o.employee_id.name"/></p>
+                                <p style="margin: 5px 0 30px 0;"><span t-esc="employee.name or ''"/></p>
                             </td>
                         </tr>
                         <tr>
