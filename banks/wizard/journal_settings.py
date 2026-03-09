@@ -139,7 +139,7 @@ class SequenceJournal(models.TransientModel):
           'journal_id': journal.id,
           'company_id': journal.company_id.id, }
         sequence_id = obj_sequence.create(values)
-                sequence_id.write({'number_next': self.number_next})
+        sequence_id.write({'number_next': self.number_next})
         if sequence_id:
             journal.write({'sequence_ids': [(4, sequence_id.id, None)]})
         return sequence_id.id
