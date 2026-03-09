@@ -10,7 +10,6 @@
 				<field name="arch" type="xml">
 					<xpath expr="//field[@name='user_id']" position="attributes">
 						<attribute name="string">Comercial</attribute>
-						<attribute name="readonly">0</attribute>
 					</xpath>
 					<xpath expr="//field[@name='partner_id']" position="after">
 						<field name="x_contacto"/>

@@ -4,5 +4,9 @@
         <record id="limits_vandedor" model="res.groups">
             <field name="name">Limites/Vendedor</field>
         </record>
+        <record id="edit_comercial_cotizacion" model="res.groups">
+            <field name="name">Editar Comercial en Cotizaciones</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
     </data>
 </odoo>
