@@ -117,8 +117,7 @@ class SequenceJournal(models.TransientModel):
         'max_value': self.max_value,
         'prefix': self.vitt_prefix,
         'padding': self.vitt_padding,
-        'code': self.doc_type,
-        'move_type': self.doc_type
+        'code': self.doc_type
         }
         obj_sequence.write(values)
         obj_sequence.write({'number_next': self.number_next})
@@ -135,11 +134,10 @@ class SequenceJournal(models.TransientModel):
           'max_value': self.max_value,
           'implementation': 'no_gap',
           'code': self.doc_type,
-                    'move_type': self.doc_type,
           'journal_id': journal.id,
           'company_id': journal.company_id.id, }
         sequence_id = obj_sequence.create(values)
-        sequence_id.write({'number_next': self.number_next})
+        obj_sequence.write({'number_next': self.number_next})
         if sequence_id:
             journal.write({'sequence_ids': [(4, sequence_id.id, None)]})
         return sequence_id.id
