@@ -9,7 +9,8 @@
 				<field name="arch" type="xml">
 					<xpath expr="//field[@name='user_id']" position="replace"/>
 					<field name="partner_id" position="after">
-							<field name="user_id" string='Responsable'/>
+							<field name="user_id" string="Comercial"/>
+							<field name="x_responsable_id"/>
 		            </field>
 
 					<xpath expr="//field[@name='partner_id']" position="after">
