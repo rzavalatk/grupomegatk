@@ -6,11 +6,13 @@
 	  		<field name="name">sale.order.campomegatk.view</field>
 	  		<field name="model">sale.order</field>
 	  		<field name="inherit_id" ref="sale.view_order_form" />
+	  		<field name="priority">99</field>
 				<field name="arch" type="xml">
-					<xpath expr="//field[@name='user_id']" position="replace"/>
+					<xpath expr="//field[@name='user_id']" position="attributes">
+						<attribute name="string">Comercial</attribute>
+						<attribute name="readonly">0</attribute>
+					</xpath>
 					<xpath expr="//field[@name='partner_id']" position="after">
-						<field name="x_responsable_id" string="Responsable"/>
-						<field name="user_id" string="Comercial"/>
 						<field name="x_contacto"/>
 					</xpath>
 
