@@ -37,8 +37,7 @@
             <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                    <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
+                    <attribute name="readonly">0</attribute>
                 </xpath>
                 <!--<xpath expr="//field[@name='x_user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
