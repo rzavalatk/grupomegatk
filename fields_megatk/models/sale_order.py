@@ -7,6 +7,12 @@ class Saleorder(models.Model):
     _inherit = "sale.order"
 
     pricelist_id = fields.Many2one('product.pricelist', copy=False)
+    x_responsable_id = fields.Many2one(
+        'res.users',
+        string='Responsable',
+        default=lambda self: self.env.user,
+        help='Al cambiar este campo se actualiza el Comercial de la cotizacion.',
+    )
     
     #CAMPO EN PRESUPUESTO
     x_valido = fields.Selection([('5','5 días'),('10','10 días'),('15','15 días'),('30','30 días'),('90','90 días'),('nunca','No vence')], string='Días Válidos', default='5')
@@ -17,6 +23,33 @@ class Saleorder(models.Model):
     
     sorteo_id = fields.Many2one('sorteo.sorteo', string='Sorteo', ondelete='set null')
     x_student = fields.Boolean(string='Es Estudiante', default=False)
+
+    @api.onchange('x_responsable_id')
+    def _onchange_x_responsable_id(self):
+        if self.x_responsable_id:
+            self.user_id = self.x_responsable_id
+
+    @api.onchange('user_id')
+    def _onchange_user_id_sync_responsable(self):
+        if self.user_id:
+            self.x_responsable_id = self.user_id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('x_responsable_id') and not vals.get('user_id'):
+                vals['user_id'] = vals['x_responsable_id']
+            elif vals.get('user_id') and not vals.get('x_responsable_id'):
+                vals['x_responsable_id'] = vals['user_id']
+        return super().create(vals_list)
+
+    def write(self, vals):
+        vals = dict(vals)
+        if vals.get('x_responsable_id') and not vals.get('user_id'):
+            vals['user_id'] = vals['x_responsable_id']
+        elif vals.get('user_id') and not vals.get('x_responsable_id'):
+            vals['x_responsable_id'] = vals['user_id']
+        return super().write(vals)
 
     def action_confirm(self):
         res = super(Saleorder, self).action_confirm()

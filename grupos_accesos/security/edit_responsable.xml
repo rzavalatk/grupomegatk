@@ -36,9 +36,9 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <!--<field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.limits_vandedor') ])]"/>-->
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='user_id']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                    <attribute name="groups">grupos_accesos.limits_vendedor</attribute>
+                <xpath expr="//field[@name='user_id']" position="replace">
+                    <field name="user_id" string="Comercial" readonly="1" groups="base.group_user,!grupos_accesos.edit_comercial_cotizacion"/>
+                    <field name="user_id" string="Comercial" readonly="0" groups="grupos_accesos.edit_comercial_cotizacion"/>
                 </xpath>
                 <!--<xpath expr="//field[@name='x_user_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
