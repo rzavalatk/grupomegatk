@@ -39,7 +39,7 @@
 
         <menuitem id="menu_zona_cliente"
                   name="Zonas de cliente"
-                  parent="sale.menu_sale_config"
+                  parent="contacts.res_partner_menu_config"
                   action="action_zona_cliente"
                   sequence="95"/>
     </data>
