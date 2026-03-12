@@ -8,7 +8,14 @@ class Campos_clientes(models.Model):
 
     x_zonac = fields.Selection([('centro','Centro (Teg, Comayagua, Sigua)'),('norte','Norte (SPS, Pto Cortez, Ceiba)')
     	,('oriente','Oriente (Danli y El Paraiso)'),('sur','Sur (Choluteca, San Lor, Amap)')],string = 'Zona cliente')
-    x_zona_cliente_id = fields.Many2one('zona.cliente', string='Zona cliente (catalogo)', ondelete='restrict')
+    x_zona_cliente_id = fields.Many2one(
+        'zona.cliente',
+        string='Zona cliente (catalogo)',
+        compute='_compute_x_zona_cliente_id',
+        inverse='_inverse_x_zona_cliente_id',
+        search='_search_x_zona_cliente_id',
+        store=False,
+    )
     
     x_customer = fields.Boolean(string='Es cliente ', default=False)
     x_supplier = fields.Boolean(string='Es proveedor', default=False)
@@ -27,37 +34,44 @@ class Campos_clientes(models.Model):
                 if partner:
                     raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
 
-            zona_id = vals.get('x_zona_cliente_id')
-            if zona_id and not vals.get('x_zonac'):
-                zona = self.env['zona.cliente'].browse(zona_id)
-                vals['x_zonac'] = zona.code
-
-            zona_code = vals.get('x_zonac')
-            if zona_code and not vals.get('x_zona_cliente_id'):
-                zona = self.env['zona.cliente'].search([('code', '=', zona_code)], limit=1)
-                if zona:
-                    vals['x_zona_cliente_id'] = zona.id
-
             vals['company_id'] = company_id
 
         return super().create(vals_list)
 
     def write(self, vals):
-        vals = dict(vals)
-        if vals.get('x_zona_cliente_id') and not vals.get('x_zonac'):
-            zona = self.env['zona.cliente'].browse(vals['x_zona_cliente_id'])
-            vals['x_zonac'] = zona.code
-
-        if vals.get('x_zonac') and not vals.get('x_zona_cliente_id'):
-            zona = self.env['zona.cliente'].search([('code', '=', vals['x_zonac'])], limit=1)
-            if zona:
-                vals['x_zona_cliente_id'] = zona.id
-
         return super().write(vals)
 
     @api.onchange('x_zona_cliente_id')
     def _onchange_x_zona_cliente_id(self):
-        if self.x_zona_cliente_id:
-            self.x_zonac = self.x_zona_cliente_id.code
+        self.x_zonac = self.x_zona_cliente_id.code if self.x_zona_cliente_id else False
+
+    @api.depends('x_zonac')
+    def _compute_x_zona_cliente_id(self):
+        zonas = self.env['zona.cliente'].search([])
+        zonas_by_code = {zona.code: zona for zona in zonas}
+        for partner in self:
+            partner.x_zona_cliente_id = zonas_by_code.get(partner.x_zonac)
+
+    def _inverse_x_zona_cliente_id(self):
+        for partner in self:
+            partner.x_zonac = partner.x_zona_cliente_id.code if partner.x_zona_cliente_id else False
+
+    def _search_x_zona_cliente_id(self, operator, value):
+        if operator in ('=', '!=') and not value:
+            return [('x_zonac', operator, False)]
+
+        if operator in ('=', '!='):
+            zona = self.env['zona.cliente'].browse(value)
+            return [('x_zonac', operator, zona.code if zona else False)]
+
+        if operator in ('in', 'not in'):
+            zona_ids = value if isinstance(value, list) else [value]
+            zonas = self.env['zona.cliente'].browse(zona_ids)
+            codes = [z.code for z in zonas if z.code]
+            if not codes:
+                return [('id', '=', 0)] if operator == 'in' else []
+            return [('x_zonac', operator, codes)]
+
+        return [('id', '=', 0)]
     
     

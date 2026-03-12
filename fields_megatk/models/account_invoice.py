@@ -91,12 +91,6 @@ class Account_Move(models.Model):
         string='Zona Cliente',
         store=True,
     )
-    x_zona_cliente_id = fields.Many2one(
-        'zona.cliente',
-        related='partner_id.x_zona_cliente_id',
-        string='Zona Cliente (catalogo)',
-        store=True,
-    )
 
     digital_signature = fields.Binary(string="Signature")
     digital_signature_name = fields.Char(string="Signature Name")
