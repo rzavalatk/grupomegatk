@@ -34,7 +34,7 @@
         <record id="action_zona_cliente" model="ir.actions.act_window">
             <field name="name">Zonas de cliente</field>
             <field name="res_model">zona.cliente</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <menuitem id="menu_zona_cliente"
