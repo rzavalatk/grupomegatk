@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_zona_cliente_tree" model="ir.ui.view">
+            <field name="name">zona.cliente.tree</field>
+            <field name="model">zona.cliente</field>
+            <field name="arch" type="xml">
+                <tree string="Zonas de cliente" editable="bottom">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_zona_cliente_form" model="ir.ui.view">
+            <field name="name">zona.cliente.form</field>
+            <field name="model">zona.cliente</field>
+            <field name="arch" type="xml">
+                <form string="Zona de cliente">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_zona_cliente" model="ir.actions.act_window">
+            <field name="name">Zonas de cliente</field>
+            <field name="res_model">zona.cliente</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_zona_cliente"
+                  name="Zonas de cliente"
+                  parent="sale.menu_sale_config"
+                  action="action_zona_cliente"
+                  sequence="95"/>
+    </data>
+</odoo>

@@ -9,3 +9,4 @@ from . import stock_picking
 from . import crm_lead
 from . import hr
 from . import res_parnert_industry
+from . import zona_cliente

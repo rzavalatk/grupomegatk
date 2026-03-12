@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 acces_fields_megatk.model_account_invoice,account.move,fields_megatk.model_account_move,fields_megatk.factura_credito_manager,1,1,1,1
+access_zona_cliente_user,zona.cliente.user,model_zona_cliente,base.group_user,1,0,0,0
+access_zona_cliente_manager,zona.cliente.manager,model_zona_cliente,base.group_system,1,1,1,1

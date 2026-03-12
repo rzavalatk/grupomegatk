@@ -8,7 +8,8 @@
 			<field name="arch" type="xml">
 				<data>
 					<xpath expr="//field[@name='industry_id']" position="after">
-						<field name="x_zonac"/>
+						<field name="x_zona_cliente_id"/>
+						<field name="x_zonac" invisible="1"/>
 					</xpath>
 
 					<xpath expr="//field[@name='property_payment_term_id']" position="after">
