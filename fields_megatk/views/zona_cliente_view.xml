@@ -5,12 +5,12 @@
             <field name="name">zona.cliente.tree</field>
             <field name="model">zona.cliente</field>
             <field name="arch" type="xml">
-                <tree string="Zonas de cliente" editable="bottom">
+                <list string="Zonas de cliente" editable="bottom">
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="code"/>
                     <field name="active"/>
-                </tree>
+                </list>
             </field>
         </record>
 

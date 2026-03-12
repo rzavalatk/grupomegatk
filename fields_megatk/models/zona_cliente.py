@@ -8,12 +8,7 @@ class ZonaCliente(models.Model):
     _order = 'sequence, name'
 
     name = fields.Char(string='Nombre', required=True)
-    code = fields.Selection([
-        ('centro', 'centro'),
-        ('norte', 'norte'),
-        ('oriente', 'oriente'),
-        ('sur', 'sur'),
-    ], string='Codigo', required=True)
+    code = fields.Char(string='Codigo', required=True)
     sequence = fields.Integer(string='Secuencia', default=10)
     active = fields.Boolean(string='Activo', default=True)
 
