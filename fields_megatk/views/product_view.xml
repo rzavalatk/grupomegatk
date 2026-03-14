@@ -85,11 +85,21 @@
 	<record id="marca_product_mega" model="ir.rule">
         <field name="name">producto marca</field>
         <field name="model_id" ref="model_product_marca"/>
-        <field name="perm_read" eval="True"/>
+	<field name="perm_read" eval="False"/>
         <field name="perm_write" eval="True"/>
         <field name="perm_create" eval="True"/>
         <field name="perm_unlink" eval="True"/>
         <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', user.company_ids.ids)]</field>
+    </record>
+
+	<record id="marca_product_mega_read_all" model="ir.rule">
+	<field name="name">producto marca lectura global</field>
+	<field name="model_id" ref="model_product_marca"/>
+	<field name="perm_read" eval="True"/>
+	<field name="perm_write" eval="False"/>
+	<field name="perm_create" eval="False"/>
+	<field name="perm_unlink" eval="False"/>
+	<field name="domain_force">[(1, '=', 1)]</field>
     </record>
 
 	<record model="ir.ui.view" id="marca_product_mega_tree_view">
