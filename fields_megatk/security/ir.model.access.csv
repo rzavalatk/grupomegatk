@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 acces_fields_megatk.model_account_invoice,account.move,fields_megatk.model_account_move,fields_megatk.factura_credito_manager,1,1,1,1
-access_fields_megatk_product_marca_user,product.marca user read,fields_megatk.model_product_marca,base.group_user,1,0,0,0
-access_fields_megatk_product_marca_manager,product.marca manager all,fields_megatk.model_product_marca,stock.group_stock_manager,1,1,1,1
+access_product_marca_user,product.marca.user,model_product_marca,base.group_user,1,0,0,0
+access_zona_cliente_user,zona.cliente.user,model_zona_cliente,base.group_user,1,0,0,0
+access_zona_cliente_manager,zona.cliente.manager,model_zona_cliente,fields_megatk.group_zona_cliente_manager,1,1,1,1

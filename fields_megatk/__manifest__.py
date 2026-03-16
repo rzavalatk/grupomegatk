@@ -17,6 +17,7 @@
 	    "sistema_de_tickets",
 	  ],
     "data": [
+        'data/zona_cliente_data.xml',
         'reports/orden_ingreso.xml',
         'data/template_email_invoice_post.xml',
         'reports/visita_tecnica.xml',
@@ -31,6 +32,7 @@
     	"views/purchase_order_view.xml",
     	"views/product_view.xml",
     	"views/res_partner_view.xml",
+        "views/zona_cliente_view.xml",
         "views/account_invoice_view.xml",
         "views/stock_picking_view.xml",
         "views/crm_lead.xml",
