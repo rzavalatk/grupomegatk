@@ -16,11 +16,27 @@ class Check(models.Model):
 	def print_chek(self):
 		if not self.princhek:
 			self.princhek = True
-			print = self.env.ref('banks.banks_check_print')\
-				.with_context(discard_logo_check=True).report_action(self)
+			report_action = self.env.ref('banks.banks_check_print', raise_if_not_found=False)
+			if not report_action:
+				report_action = self.env['ir.actions.report'].sudo().search([
+					('report_name', '=', 'banks.check_print'),
+					('model', '=', 'banks.check')
+				], limit=1)
+			if not report_action:
+				raise UserError(_('No se encontro el reporte de cheque (banks.banks_check_print). Actualiza el modulo banks.'))
+			print = report_action.with_context(discard_logo_check=True).report_action(self)
 		else:
-			print = self.env.ref('banks.banks_vaucher_print')\
-				.with_context(discard_logo_check=True).report_action(self)
+			report_action = self.env.ref('banks.banks_vaucher_print', raise_if_not_found=False)
+			if not report_action:
+				report_action = self.env.ref('banks.banks_voucher_print', raise_if_not_found=False)
+			if not report_action:
+				report_action = self.env['ir.actions.report'].sudo().search([
+					('report_name', '=', 'banks.voucher_print'),
+					('model', '=', 'banks.check')
+				], limit=1)
+			if not report_action:
+				raise UserError(_('No se encontro el reporte de voucher (banks.banks_vaucher_print / banks.banks_voucher_print). Actualiza el modulo banks.'))
+			print = report_action.with_context(discard_logo_check=True).report_action(self)
 		return print
 
 	def get_totalt(self):
@@ -200,8 +216,12 @@ class Check(models.Model):
 	def get_sequence(self):
 		if self.journal_id:
 			for seq in self.journal_id.secuencia_ids:
-				if seq.move_type == self.doc_type:
+				if self._is_sequence_for_doc_type(seq):
 					return seq.id
+
+	def _is_sequence_for_doc_type(self, seq, doc_type=None):
+		doc = doc_type or self.doc_type
+		return seq.move_type == doc or seq.code == doc
 
 	@api.onchange("currency_id")
 	def onchangecurrency(self):
@@ -219,7 +239,7 @@ class Check(models.Model):
 		payment_obj = self.env["banks.payment.invoices.custom"].search([('state', '=', 'draft'), ('doc_type', '=', self.doc_type)])
 		n = ""
 		for seq in self.journal_id.secuencia_ids:
-			if seq.move_type == self.doc_type:
+			if self._is_sequence_for_doc_type(seq):
 				n = seq.prefix + '%%0%sd' % seq.padding % (seq.number_next_actual + 1)
 		for pay in payment_obj:
 			pay.write({'name': n})
@@ -244,7 +264,7 @@ class Check(models.Model):
 			flag = False
 			if not self.cheque_anulado:
 				for seq in self.journal_id.secuencia_ids:
-					if seq.move_type == self.doc_type:
+					if self._is_sequence_for_doc_type(seq):
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
 						flag = True
 				if not flag:
@@ -266,7 +286,7 @@ class Check(models.Model):
 			flag = False
 			if not self.cheque_anulado:
 				for seq in self.journal_id.secuencia_ids:
-					if seq.move_type == self.doc_type:
+					if self._is_sequence_for_doc_type(seq):
 						self.number_calc = seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual
 						flag = True
 						break  # Agregamos un break para salir del bucle cuando encontramos una secuencia válida
@@ -285,7 +305,7 @@ class Check(models.Model):
 	def get_char_seq(self, journal_id, doc_type):
 		jr = self.env["account.journal"].search([('id', '=', journal_id)])
 		for seq in jr.secuencia_ids:
-			if seq.move_type == "Cheques":
+			if self._is_sequence_for_doc_type(seq, doc_type):
 				return (seq.prefix + '%%0%sd' % seq.padding % seq.number_next_actual)
 
 	journal_id = fields.Many2one("account.journal", "Banco", required=True)

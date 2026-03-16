@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	     
-		<report
-			id="banks_check_print"
-			model="banks.check"
-			string="Cheque"
-			report_type="qweb-pdf"
-			name="banks.check_print"
-			file="banks.check_print"
-			attachment_use="True" 
-			print_report_name="('Cheque'+((object.number).split('.'))[1])"
-			paperformat="banks.checks_paper_format"/>
-			
-		<report
-			id="banks_vaucher_print"
-			model="banks.check"
-			string="Voucher"
-			report_type="qweb-pdf"
-			name="banks.voucher_print"
-			file="banks.voucher_print"
-			attachment_use="True" 
-			print_report_name="('Vaucher'+((object.number).split('.'))[1])"
-			paperformat="banks.vaucher_paper_format"/>
+	<data>
+		<record id="banks_check_print" model="ir.actions.report">
+			<field name="name">Cheque</field>
+			<field name="model">banks.check</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">banks.check_print</field>
+			<field name="report_file">banks.check_print</field>
+			<field name="attachment_use" eval="True"/>
+			<field name="print_report_name">('Cheque'+((object.number).split('.'))[1])</field>
+			<field name="paperformat_id" ref="banks.checks_paper_format"/>
+		</record>
+
+		<record id="banks_vaucher_print" model="ir.actions.report">
+			<field name="name">Voucher</field>
+			<field name="model">banks.check</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">banks.voucher_print</field>
+			<field name="report_file">banks.voucher_print</field>
+			<field name="attachment_use" eval="True"/>
+			<field name="print_report_name">('Voucher'+((object.number).split('.'))[1])</field>
+			<field name="paperformat_id" ref="banks.vaucher_paper_format"/>
+		</record>
+
+		<!-- Alias de compatibilidad por ortografia usada en codigo y bases antiguas -->
+		<record id="banks_voucher_print" model="ir.actions.report">
+			<field name="name">Voucher</field>
+			<field name="model">banks.check</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">banks.voucher_print</field>
+			<field name="report_file">banks.voucher_print</field>
+			<field name="attachment_use" eval="True"/>
+			<field name="print_report_name">('Voucher'+((object.number).split('.'))[1])</field>
+			<field name="paperformat_id" ref="banks.vaucher_paper_format"/>
+		</record>
+	</data>
 	
 </odoo>
