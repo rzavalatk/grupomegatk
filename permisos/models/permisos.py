@@ -389,7 +389,10 @@ class HrPermisos(models.Model):
 
                             leave_allocation = allocation_model.create(
                                 allocation_vals)
-                            leave_allocation.action_confirm()
+                            if hasattr(leave_allocation, 'action_validate'):
+                                leave_allocation.action_validate()
+                            else:
+                                leave_allocation.action_confirm()
                             template = self.env.ref(
                                 'permisos.email_template_vaciones_automaticas')
                             email_values = {'email_to': 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com',

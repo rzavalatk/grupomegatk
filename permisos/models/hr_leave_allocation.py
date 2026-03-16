@@ -38,47 +38,55 @@ class HrLeaveAllocation(models.Model):
             minutos_resultante = minutos_resultante - (horas * 60)
 
         return dias, horas, minutos_resultante
-    def action_confirm(self): 
+
+    def _update_vacation_balances(self, operacion):
         for allocation in self:
-            if not allocation.asig_auto:
-                if allocation.holiday_status_id.vacaciones:    
-                    if allocation.employee_ids:
-                        for employee_id in allocation.employee_ids:
-                            dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                            'suma', employee_id, allocation)
-                            employee_id.sudo().write({'permisos_dias': dias,
-                                                        'permisos_horas': horas,
-                                                        'permisos_minutos': minutos_resultante})
-                    elif allocation.employee_id:
-                        employee_id = allocation.employee_id
-                        dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                        'suma', employee_id, allocation)
-                        employee_id.sudo().write({'permisos_dias': dias,
-                                                    'permisos_horas': horas,
-                                                    'permisos_minutos': minutos_resultante})
-                else:
-                    self.env.user.notify_success(message='Asignación aprobada')
-            return super(HrLeaveAllocation, self).action_confirm()
-    
-    def action_refuse(self):
-        for allocation in self:
-            if allocation.holiday_status_id.vacaciones:    
+            if operacion == 'suma' and allocation.asig_auto:
+                continue
+            if allocation.holiday_status_id.vacaciones:
                 if allocation.employee_ids:
                     for employee_id in allocation.employee_ids:
                         dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                        'resta', employee_id, allocation)
+                        operacion, employee_id, allocation)
                         employee_id.sudo().write({'permisos_dias': dias,
                                                     'permisos_horas': horas,
                                                     'permisos_minutos': minutos_resultante})
                 elif allocation.employee_id:
                     employee_id = allocation.employee_id
                     dias, horas, minutos_resultante = self.vacaciones_restantes_empl(
-                    'resta', employee_id, allocation)
+                    operacion, employee_id, allocation)
                     employee_id.sudo().write({'permisos_dias': dias,
                                                 'permisos_horas': horas,
                                                 'permisos_minutos': minutos_resultante})
-            else:
+
+    def action_confirm(self):
+        self._update_vacation_balances('suma')
+        super_action_validate = getattr(super(HrLeaveAllocation, self), 'action_validate', None)
+        if super_action_validate:
+            return super_action_validate()
+        super_action_confirm = getattr(super(HrLeaveAllocation, self), 'action_confirm', None)
+        if super_action_confirm:
+            return super_action_confirm()
+
+    def action_validate(self):
+        self._update_vacation_balances('suma')
+        super_action_validate = getattr(super(HrLeaveAllocation, self), 'action_validate', None)
+        if super_action_validate:
+            return super_action_validate()
+        super_action_confirm = getattr(super(HrLeaveAllocation, self), 'action_confirm', None)
+        if super_action_confirm:
+            return super_action_confirm()
+
+    def action_refuse(self):
+        self._update_vacation_balances('resta')
+        super_action_refuse = getattr(super(HrLeaveAllocation, self), 'action_refuse', None)
+        if super_action_refuse:
+            return super_action_refuse()
+
+        for allocation in self:
+            if not allocation.holiday_status_id.vacaciones:
+                else:
                 self.env.user.notify_success(message='Asignación rechazada')
-            return super(HrLeaveAllocation, self).action_refuse()
+        return True
         
     
