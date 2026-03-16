@@ -368,15 +368,26 @@ class HrPermisos(models.Model):
                             leave_type_id = self.env['hr.leave.type'].sudo().search(
                                 [('vacaciones', '=', 'True')], limit=1)
 
+                            allocation_model = self.env['hr.leave.allocation'].sudo()
+                            allocation_fields = allocation_model._fields
                             allocation_vals = {
-                                'holiday_type': 'employee',
-                                'employee_id': employe_id.id,
-                                'holiday_status_id': leave_type_id.id,
-                                'number_of_days': int(number_of_hours) / 8,
                                 'name': "Asignación de vacaciones por ley",
                                 'asig_auto': True
                             }
-                            leave_allocation = self.env['hr.leave.allocation'].create(
+                            if 'holiday_type' in allocation_fields:
+                                allocation_vals['holiday_type'] = 'employee'
+                            if 'employee_id' in allocation_fields:
+                                allocation_vals['employee_id'] = employe_id.id
+                            elif 'employee_ids' in allocation_fields:
+                                allocation_vals['employee_ids'] = [(6, 0, [employe_id.id])]
+                            if 'holiday_status_id' in allocation_fields:
+                                allocation_vals['holiday_status_id'] = leave_type_id.id
+                            if 'number_of_days' in allocation_fields:
+                                allocation_vals['number_of_days'] = int(number_of_hours) / 8
+                            elif 'number_of_days_display' in allocation_fields:
+                                allocation_vals['number_of_days_display'] = int(number_of_hours) / 8
+
+                            leave_allocation = allocation_model.create(
                                 allocation_vals)
                             leave_allocation.action_confirm()
                             template = self.env.ref(
