@@ -368,31 +368,26 @@ class HrPermisos(models.Model):
                             leave_type_id = self.env['hr.leave.type'].sudo().search(
                                 [('vacaciones', '=', 'True')], limit=1)
 
-                            allocation_model = self.env['hr.leave.allocation'].sudo()
-                            allocation_fields = allocation_model._fields
                             allocation_vals = {
+                                'holiday_status_id': leave_type_id.id,
+                                'number_of_days': int(number_of_hours) / 8,
                                 'name': "Asignación de vacaciones por ley",
-                                'asig_auto': True
+                                'asig_auto': True,
                             }
-                            if 'holiday_type' in allocation_fields:
-                                allocation_vals['holiday_type'] = 'employee'
-                            if 'employee_id' in allocation_fields:
-                                allocation_vals['employee_id'] = employe_id.id
-                            elif 'employee_ids' in allocation_fields:
+                            # Compatibilidad entre versiones de Odoo:
+                            # en algunas versiones el modelo usa employee_id y en otras employee_ids.
+                            if 'employee_ids' in self.env['hr.leave.allocation']._fields:
                                 allocation_vals['employee_ids'] = [(6, 0, [employe_id.id])]
-                            if 'holiday_status_id' in allocation_fields:
-                                allocation_vals['holiday_status_id'] = leave_type_id.id
-                            if 'number_of_days' in allocation_fields:
-                                allocation_vals['number_of_days'] = int(number_of_hours) / 8
-                            elif 'number_of_days_display' in allocation_fields:
-                                allocation_vals['number_of_days_display'] = int(number_of_hours) / 8
-
-                            leave_allocation = allocation_model.create(
+                            else:
+                                allocation_vals['employee_id'] = employe_id.id
+                            leave_allocation = self.env['hr.leave.allocation'].create(
                                 allocation_vals)
                             if hasattr(leave_allocation, 'action_validate'):
                                 leave_allocation.action_validate()
-                            else:
+                            elif hasattr(leave_allocation, 'action_confirm'):
                                 leave_allocation.action_confirm()
+                            elif hasattr(leave_allocation, 'action_approve'):
+                                leave_allocation.action_approve()
                             template = self.env.ref(
                                 'permisos.email_template_vaciones_automaticas')
                             email_values = {'email_to': 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com',

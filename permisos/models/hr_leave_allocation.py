@@ -38,7 +38,26 @@ class HrLeaveAllocation(models.Model):
             minutos_resultante = minutos_resultante - (horas * 60)
 
         return dias, horas, minutos_resultante
-    def action_confirm(self): 
+
+    def _run_super_validate(self):
+        parent = super(HrLeaveAllocation, self)
+        if hasattr(parent, 'action_validate'):
+            return parent.action_validate()
+        if hasattr(parent, 'action_confirm'):
+            return parent.action_confirm()
+        if hasattr(parent, 'action_approve'):
+            return parent.action_approve()
+        return True
+
+    def _run_super_refuse(self):
+        parent = super(HrLeaveAllocation, self)
+        if hasattr(parent, 'action_refuse'):
+            return parent.action_refuse()
+        if hasattr(parent, 'action_draft'):
+            return parent.action_draft()
+        return True
+
+    def _sync_balances_on_validate(self):
         for allocation in self:
             if not allocation.asig_auto:
                 if allocation.holiday_status_id.vacaciones:    
@@ -58,7 +77,15 @@ class HrLeaveAllocation(models.Model):
                                                     'permisos_minutos': minutos_resultante})
                 else:
                     self.env.user.notify_success(message='Asignación aprobada')
-            return super(HrLeaveAllocation, self).action_confirm()
+
+    # Compatibilidad: Odoo 18 usa action_validate en hr.leave.allocation.
+    # Se mantiene action_confirm para llamadas legacy del propio módulo.
+    def action_validate(self):
+        self._sync_balances_on_validate()
+        return self._run_super_validate()
+
+    def action_confirm(self):
+        return self.action_validate()
     
     def action_refuse(self):
         for allocation in self:
@@ -79,6 +106,6 @@ class HrLeaveAllocation(models.Model):
                                                 'permisos_minutos': minutos_resultante})
             else:
                 self.env.user.notify_success(message='Asignación rechazada')
-            return super(HrLeaveAllocation, self).action_refuse()
+        return self._run_super_refuse()
         
     
