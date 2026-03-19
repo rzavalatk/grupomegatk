@@ -15,7 +15,7 @@
     'category': 'user',
     'version': '18.0',
     "license": "LGPL-3",
-    'depends': ['base','website','banks'],
+    'depends': ['base','website','banks','crm'],
 
     'data': [
         'data/mail_templates.xml',
