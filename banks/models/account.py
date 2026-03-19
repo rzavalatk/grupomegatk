@@ -25,8 +25,12 @@ class AccountMove(models.Model):
 				account_id = vals.get('account_id')
 				if account_id:
 					account = self.env['account.account'].browse(account_id)
-					if not vals.get('analytic_account_id') and account.analytic_id:
-						vals['analytic_account_id'] = account.analytic_id.id
+					has_analytic = vals.get('analytic_distribution') or vals.get('analytic_account_id')
+					if not has_analytic and account.analytic_id:
+						if 'analytic_distribution' in self._fields:
+							vals['analytic_distribution'] = {account.analytic_id.id: 100.0}
+						elif 'analytic_account_id' in self._fields:
+							vals['analytic_account_id'] = account.analytic_id.id
 		return super(AccountMove, self).create(vals_list)
 	
 
