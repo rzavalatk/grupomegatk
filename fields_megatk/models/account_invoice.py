@@ -350,6 +350,12 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     x_user_id = fields.Many2one('res.users',  string='Responsable')
+    x_zonac = fields.Char(
+        related='move_id.partner_id.x_zonac',
+        string='Zona Cliente',
+        store=True,
+        readonly=True,
+    )
     obj_padre = fields.Many2one('res.users', related="move_id.invoice_user_id", string="ResponsableTem", readonly=True)
     x_series = fields.Text("Series")
     tax_editable = fields.Boolean('tax e.')
