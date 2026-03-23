@@ -7,6 +7,7 @@
     "license": "LGPL-3",
     'version': '18.0',
     "depends": ["base",
+        "account",
         "crm",
        	"sale",
         "hr",

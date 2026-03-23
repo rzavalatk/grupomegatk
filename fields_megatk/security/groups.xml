@@ -34,6 +34,11 @@
         <field name="name">Facturar sin cotización</field>
     </record>
 
+    <record id="group_reset_invoice_to_draft" model="res.groups">
+        <field name="category_id" ref="module_category_factura_credito"/>
+        <field name="name">Permitir restablecer facturas a borrador</field>
+    </record>
+
     <record id="group_zona_cliente_manager" model="res.groups">
         <field name="category_id" ref="module_category_zona_cliente"/>
         <field name="name">Gestionar Zona de Cliente</field>

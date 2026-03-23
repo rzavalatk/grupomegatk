@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.addons.account.models.account_move import BYPASS_LOCK_CHECK
 from collections import defaultdict
 import logging
 import math
@@ -200,11 +201,20 @@ class Account_Move(models.Model):
                 field_names.append('id')
             return self.read(field_names)
 
-    #mostrar boton en factura de borrados
+    def button_draft(self):
+        user = self.env.user
+        has_new_group = user.has_group('fields_megatk.group_reset_invoice_to_draft')
+        has_admin_group = user.has_group('sign_orders.group_admins')
+        has_legacy_group_name = any(g.name == 'Permiso mandar a borrador facturas' for g in user.groups_id)
+
+        if not (has_new_group or has_admin_group or has_legacy_group_name):
+            raise UserError(_('No tiene permisos para restablecer facturas a borrador.'))
+
+        return super(Account_Move, self.with_context(bypass_lock_check=BYPASS_LOCK_CHECK)).button_draft()
+
+    #mostrar boton personalizado en factura (llama al mismo button_draft)
     def go_draft(self):
-        self.write({
-            'state': 'draft'
-        })
+        return self.button_draft()
     
     @api.onchange('date_due')
     def update_move_lines(self):
