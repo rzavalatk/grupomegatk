@@ -22,6 +22,8 @@ class HrLeave(models.Model):
         self.deducciones = False
         self.sin_cargo = False
         self.incapacidad = False
+        if self.vacaciones:
+            self.allow_negative_balance = True
     
     @api.onchange('deducciones')
     def _onchange_deducciones(self):
@@ -40,3 +42,18 @@ class HrLeave(models.Model):
         self.vacaciones = False
         self.deducciones = False
         self.sin_cargo = False
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('vacaciones'):
+                vals['allow_negative_balance'] = True
+        return super().create(vals_list)
+
+    def write(self, vals):
+        result = super().write(vals)
+        if vals.get('vacaciones'):
+            self.filtered(lambda leave_type: leave_type.vacaciones and not leave_type.allow_negative_balance).write({
+                'allow_negative_balance': True
+            })
+        return result
