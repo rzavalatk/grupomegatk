@@ -97,16 +97,29 @@ class HrLeave(models.Model):
         compute='_compute_number_of_hours_display',
         store=False,
     )
+
+    def _is_compensatory_type(self, leave_type):
+        name = (leave_type.name or '').lower()
+        return 'compens' in name
+
+    def _skip_allocation_validation(self, leave):
+        leave_type = leave.holiday_status_id
+        return bool(
+            getattr(leave_type, 'vacaciones', False)
+            or leave_type.allow_negative_balance
+            or self._is_compensatory_type(leave_type)
+        )
+
+    def _check_validity(self):
+        leaves_to_check = self.filtered(lambda leave: not self._skip_allocation_validation(leave))
+        if not leaves_to_check:
+            return True
+        return super(HrLeave, leaves_to_check)._check_validity()
     
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
         for holiday in self:
-            # Permitir solicitar vacaciones a cuenta, incluso con saldo en cero o negativo.
-            if getattr(holiday.holiday_status_id, 'vacaciones', False):
-                continue
-
-            # 🛑 Si el tipo de permiso permite saldo negativo, omitir validación
-            if holiday.holiday_status_id.allow_negative_balance:
+            if self._skip_allocation_validation(holiday):
                 continue
 
             if (
