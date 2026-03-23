@@ -97,16 +97,70 @@ class HrLeave(models.Model):
         compute='_compute_number_of_hours_display',
         store=False,
     )
+
+    def _is_compensatory_type(self, leave_type):
+        name = (leave_type.name or '').lower()
+        return 'compens' in name
+
+    def _skip_allocation_validation(self, leave):
+        leave_type = leave.holiday_status_id
+        return bool(
+            getattr(leave_type, 'vacaciones', False)
+            or leave_type.allow_negative_balance
+            or self._is_compensatory_type(leave_type)
+        )
+
+    def _get_compensatory_balance(self, employee_id, leave_type):
+        """Calcula el saldo disponible de Tiempo compensatorio para el empleado"""
+        allocations = self.env['hr.leave.allocation'].search([
+            ('employee_id', '=', employee_id.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', '=', 'validate')
+        ])
+        
+        total_allocated = sum(allocations.mapped('number_of_days')) * 8  # Convertir días a horas
+        
+        # Buscar horas ya usadas del mismo tipo
+        used_leaves = self.env['hr.leave'].search([
+            ('employee_id', '=', employee_id.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', 'in', ['validate', 'validate1']),
+            ('id', '!=', self.id)
+        ])
+        
+        total_used = 0
+        for leave in used_leaves:
+            # Convertir días + horas a horas totales
+            total_used += (leave.number_of_days_display * 8)
+        
+        return total_allocated - total_used
+
+    def _check_validity(self):
+        leaves_to_check = self.filtered(lambda leave: not self._skip_allocation_validation(leave))
+        if not leaves_to_check:
+            return True
+        return super(HrLeave, leaves_to_check)._check_validity()
     
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
         for holiday in self:
-            # Permitir solicitar vacaciones a cuenta, incluso con saldo en cero o negativo.
-            if getattr(holiday.holiday_status_id, 'vacaciones', False):
+            # Para Tiempo compensatorio: validar que no exceda saldo disponible
+            if self._is_compensatory_type(holiday.holiday_status_id):
+                if holiday.employee_id and holiday.state == 'confirm':
+                    requested_hours = holiday.number_of_hours_display or 0.0
+                    balance = self._get_compensatory_balance(holiday.employee_id, holiday.holiday_status_id)
+                    
+                    if requested_hours > balance:
+                        raise ValidationError(_(
+                            'No hay suficientes horas de Tiempo compensatorio disponibles.\n'
+                            'Horas solicitadas: %.2f\n'
+                            'Horas disponibles: %.2f'
+                        ) % (requested_hours, balance))
                 continue
 
-            # 🛑 Si el tipo de permiso permite saldo negativo, omitir validación
-            if holiday.holiday_status_id.allow_negative_balance:
+            # Para otros tipos: omitir validación si están permitidos
+            if getattr(holiday.holiday_status_id, 'vacaciones', False) \
+               or holiday.holiday_status_id.allow_negative_balance:
                 continue
 
             if (
