@@ -101,6 +101,10 @@ class HrLeave(models.Model):
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
         for holiday in self:
+            # Permitir solicitar vacaciones a cuenta, incluso con saldo en cero o negativo.
+            if getattr(holiday.holiday_status_id, 'vacaciones', False):
+                continue
+
             # 🛑 Si el tipo de permiso permite saldo negativo, omitir validación
             if holiday.holiday_status_id.allow_negative_balance:
                 continue
