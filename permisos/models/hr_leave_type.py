@@ -1,6 +1,4 @@
 from odoo import models, fields, api
-import datetime
-import pytz
 
 
 class HrLeave(models.Model):
@@ -24,6 +22,7 @@ class HrLeave(models.Model):
         self.incapacidad = False
         if self.vacaciones:
             self.allow_negative_balance = True
+            self.requires_allocation = 'no'
     
     @api.onchange('deducciones')
     def _onchange_deducciones(self):
@@ -48,12 +47,30 @@ class HrLeave(models.Model):
         for vals in vals_list:
             if vals.get('vacaciones'):
                 vals['allow_negative_balance'] = True
+                vals['requires_allocation'] = 'no'
         return super().create(vals_list)
 
     def write(self, vals):
         result = super().write(vals)
-        if vals.get('vacaciones'):
-            self.filtered(lambda leave_type: leave_type.vacaciones and not leave_type.allow_negative_balance).write({
-                'allow_negative_balance': True
+        vacation_types = self.filtered(
+            lambda leave_type: leave_type.vacaciones and (
+                not leave_type.allow_negative_balance or leave_type.requires_allocation != 'no'
+            )
+        )
+        if vacation_types:
+            vacation_types.write({
+                'allow_negative_balance': True,
+                'requires_allocation': 'no',
             })
         return result
+
+    def init(self):
+        # Asegura consistencia en registros existentes al actualizar el modulo.
+        self.env.cr.execute(
+            """
+            UPDATE hr_leave_type
+               SET allow_negative_balance = TRUE,
+                   requires_allocation = 'no'
+             WHERE vacaciones IS TRUE
+            """
+        )
