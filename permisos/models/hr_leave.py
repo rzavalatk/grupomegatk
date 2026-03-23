@@ -110,6 +110,31 @@ class HrLeave(models.Model):
             or self._is_compensatory_type(leave_type)
         )
 
+    def _get_compensatory_balance(self, employee_id, leave_type):
+        """Calcula el saldo disponible de Tiempo compensatorio para el empleado"""
+        allocations = self.env['hr.leave.allocation'].search([
+            ('employee_id', '=', employee_id.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', '=', 'validate')
+        ])
+        
+        total_allocated = sum(allocations.mapped('number_of_days')) * 8  # Convertir días a horas
+        
+        # Buscar horas ya usadas del mismo tipo
+        used_leaves = self.env['hr.leave'].search([
+            ('employee_id', '=', employee_id.id),
+            ('holiday_status_id', '=', leave_type.id),
+            ('state', 'in', ['validate', 'validate1']),
+            ('id', '!=', self.id)
+        ])
+        
+        total_used = 0
+        for leave in used_leaves:
+            # Convertir días + horas a horas totales
+            total_used += (leave.number_of_days_display * 8)
+        
+        return total_allocated - total_used
+
     def _check_validity(self):
         leaves_to_check = self.filtered(lambda leave: not self._skip_allocation_validation(leave))
         if not leaves_to_check:
@@ -119,7 +144,23 @@ class HrLeave(models.Model):
     @api.constrains('state', 'number_of_days', 'holiday_status_id')
     def _check_holidays(self):
         for holiday in self:
-            if self._skip_allocation_validation(holiday):
+            # Para Tiempo compensatorio: validar que no exceda saldo disponible
+            if self._is_compensatory_type(holiday.holiday_status_id):
+                if holiday.employee_id and holiday.state == 'confirm':
+                    requested_hours = holiday.number_of_hours_display or 0.0
+                    balance = self._get_compensatory_balance(holiday.employee_id, holiday.holiday_status_id)
+                    
+                    if requested_hours > balance:
+                        raise ValidationError(_(
+                            'No hay suficientes horas de Tiempo compensatorio disponibles.\n'
+                            'Horas solicitadas: %.2f\n'
+                            'Horas disponibles: %.2f'
+                        ) % (requested_hours, balance))
+                continue
+
+            # Para otros tipos: omitir validación si están permitidos
+            if getattr(holiday.holiday_status_id, 'vacaciones', False) \
+               or holiday.holiday_status_id.allow_negative_balance:
                 continue
 
             if (
