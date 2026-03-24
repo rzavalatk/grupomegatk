@@ -225,9 +225,15 @@ class CierreDiario(models.Model):
         paid_amount = 0.0
 
         for payment_line in self._get_invoice_payment_lines(invoice):
-            payment_date = self._to_date(payment_line.get('date'))
-            if payment_line.get('account_payment_id') == payment.id and payment_date == self.date:
-                paid_amount += float(payment_line.get('amount', 0.0))
+            payment_date = self._to_date(payment_line.get('date') or payment_line.get('payment_date'))
+            payment_id = payment_line.get('account_payment_id') or payment_line.get('payment_id')
+            if payment_id != payment.id or payment_date != self.date:
+                continue
+
+            try:
+                paid_amount += float(payment_line.get('amount', 0.0) or 0.0)
+            except (TypeError, ValueError):
+                continue
 
         if paid_amount:
             return round(paid_amount, 2)
@@ -250,10 +256,8 @@ class CierreDiario(models.Model):
         pagos = self.env['account.payment'].sudo().search([
             '&',
             '&',
-            '&',
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
-            ('region', '=', self.region),
             ('partner_type', '=', 'customer'),
             ('state', '=', 'posted'),
         ])
@@ -290,25 +294,34 @@ class CierreDiario(models.Model):
             if not line:
                 continue
 
+            related_invoices = self._get_payment_related_invoices(pago)
+            if canales_ids:
+                related_invoices = related_invoices.filtered(lambda invoice: invoice.team_id.id in canales_ids)
+            if not related_invoices:
+                continue
+
             facturado_diario = 0.0
-            related_invoices = self._get_payment_related_invoices(pago).filtered(
+            cobrado_cxc = 0.0
+            related_day_invoices = related_invoices.filtered(
                 lambda invoice: invoice.id in facturas_del_dia_ids
             )
-            self.register_ids(related_invoices, f'facturas de pago {pago.id}')
+            self.register_ids(related_day_invoices, f'facturas de pago {pago.id}')
 
             for factura in related_invoices:
                 paid_amount = self._get_paid_amount_for_invoice(pago, factura)
                 if not paid_amount:
                     continue
 
-                facturado_diario += paid_amount
-                facturas_ganancia |= factura
-
-                if not self._is_credit_invoice(factura):
-                    ids_facturas.add(factura.id)
+                if factura.id in facturas_del_dia_ids:
+                    facturado_diario += paid_amount
+                    facturas_ganancia |= factura
+                    if not self._is_credit_invoice(factura):
+                        ids_facturas.add(factura.id)
+                else:
+                    cobrado_cxc += paid_amount
 
             line_values[line.id]['facturado'] += facturado_diario
-            line_values[line.id]['cobrado'] += max(pago.amount - facturado_diario, 0.0)
+            line_values[line.id]['cobrado'] += cobrado_cxc
 
         if line_values:
             self.write({
