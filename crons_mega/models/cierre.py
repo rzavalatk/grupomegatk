@@ -144,13 +144,108 @@ class CierreDiario(models.Model):
             "\n ----------------------------------------------------------------------\n"
         })
 
+    def _parse_int_list(self, value):
+        if not value:
+            return []
+
+        if isinstance(value, (list, tuple)):
+            return [int(item) for item in value if item]
+
+        cleaned_value = str(value).replace('[', '').replace(']', '')
+        return [int(item.strip()) for item in cleaned_value.split(',') if item.strip()]
+
+    def _get_region_team_ids(self):
+        default_team_ids = {
+            self.regions_list[1][0]: [35, 36, 37, 38, 39, 45, 47, 53],
+            self.regions_list[0][0]: [43, 41, 46, 58, 44],
+        }
+
+        if self.region == self.regions_list[0][0]:
+            configured_ids = self._parse_int_list(
+                self.env['ir.config_parameter'].sudo().get_param('crons_mega.teams_sps')
+            )
+            if configured_ids:
+                return configured_ids
+
+        return default_team_ids.get(self.region, [50, 49])
+
+    def _is_credit_invoice(self, invoice):
+        payment_term = invoice.invoice_payment_term_id.sudo()
+        if not payment_term:
+            return False
+
+        if 'credit' in payment_term._fields:
+            return bool(payment_term.credit)
+
+        return any(line.nb_days > 0 for line in payment_term.line_ids)
+
+    def _to_date(self, value):
+        if not value:
+            return False
+
+        if isinstance(value, datetime):
+            return value.date()
+
+        if isinstance(value, date):
+            return value
+
+        return fields.Date.to_date(value)
+
+    def _get_invoice_payment_lines(self, invoice):
+        payments_widget = invoice.invoice_payments_widget
+        if not payments_widget:
+            return []
+
+        if isinstance(payments_widget, str):
+            try:
+                payments_widget = json.loads(payments_widget)
+            except ValueError:
+                return []
+
+        if not isinstance(payments_widget, dict):
+            return []
+
+        return payments_widget.get('content', []) or []
+
+    def _get_payment_related_invoices(self, payment):
+        related_invoices = self.env['account.move']
+
+        if 'reconciled_invoice_ids' in payment._fields:
+            related_invoices |= payment.reconciled_invoice_ids
+
+        partial_reconciles = payment.move_id.line_ids.matched_debit_ids | payment.move_id.line_ids.matched_credit_ids
+        related_invoices |= partial_reconciles.debit_move_id.move_id | partial_reconciles.credit_move_id.move_id
+        related_invoices -= payment.move_id
+
+        return related_invoices.filtered(
+            lambda move: move.move_type == 'out_invoice' and move.company_id.id == self.company_id.id
+        )
+
+    def _get_paid_amount_for_invoice(self, payment, invoice):
+        paid_amount = 0.0
+
+        for payment_line in self._get_invoice_payment_lines(invoice):
+            payment_date = self._to_date(payment_line.get('date'))
+            if payment_line.get('account_payment_id') == payment.id and payment_date == self.date:
+                paid_amount += float(payment_line.get('amount', 0.0))
+
+        if paid_amount:
+            return round(paid_amount, 2)
+
+        partial_reconciles = payment.move_id.line_ids.matched_debit_ids | payment.move_id.line_ids.matched_credit_ids
+        related_partials = partial_reconciles.filtered(
+            lambda partial: partial.debit_move_id.move_id == invoice or partial.credit_move_id.move_id == invoice
+        )
+
+        for partial in related_partials:
+            partial_date = self._to_date(getattr(partial, 'max_date', False) or getattr(partial, 'create_date', False))
+            if not partial_date or partial_date == self.date:
+                paid_amount += partial.amount
+
+        return round(paid_amount, 2)
+
     def procesar_cierre(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_region_team_ids()
 
         pagos = self.env['account.payment'].sudo().search([
             '&',
@@ -164,98 +259,81 @@ class CierreDiario(models.Model):
         ])
         self.register_ids(pagos, 'pagos')
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
-            ('state', '!=', 'cancel'),
-            ('state', '!=', 'draft'),
-        ])
+            ('state', 'not in', ['cancel', 'draft']),
+        ]
+        if canales_ids:
+            facturas_domain.append(('team_id', 'in', canales_ids))
+
+        facturas = self.env['account.move'].sudo().search(facturas_domain)
         self.register_ids(facturas, 'facturas')
 
-        mas_de_un_pago_factura = {}
-        ids_facturas = []
-        facturas_ganancia = []
+        facturas_del_dia_ids = set(facturas.ids)
+        ids_facturas = set()
+        facturas_ganancia = self.env['account.move']
+        lines_by_journal = {
+            line.journal_id.id: line for line in self.cierre_line_ids if not line.credito and line.journal_id
+        }
+        line_values = {
+            line.id: {
+                'facturado': line.facturado,
+                'cobrado': line.cobrado,
+            }
+            for line in lines_by_journal.values()
+        }
 
-        # Recorrer los pagos
         for pago in pagos:
-            # Recorrer los diarios del cierre asignados
-            for item in self.cierre_line_ids:
-                # Compartar que pagos entran en los diarios de cierre
-                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    acumulado_factura = 0  # lo acumulado de facturas
-                    # recorrer facturas de los pagos
-                    for factura in pago.move_id.sudo().ids:
-                        
-                        #Obtenemos el dato del pago
-                        factura_move= self.env['account.move'].sudo().browse(factura)
-                        
-                        #OBtenemos la factura relacionada al pago
-                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        self.register_ids(factura_id, 'facturas de pagos')
+            line = lines_by_journal.get(pago.journal_id.id)
+            if not line:
+                continue
 
-                        if factura_id not in ids_facturas:
-                            if factura_id.invoice_date == self.date:
-                                try:
-                                    if factura_id.state != 'cancel':
-                                        payments_widget = factura_id.invoice_payments_widget
-                                        payments_list = payments_widget["content"]
-                                    else:
-                                        payments_widget = []
-                                except:
-                                    raise UserError(
-                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+            facturado_diario = 0.0
+            related_invoices = self._get_payment_related_invoices(pago).filtered(
+                lambda invoice: invoice.id in facturas_del_dia_ids
+            )
+            self.register_ids(related_invoices, f'facturas de pago {pago.id}')
 
-                                for pay in payments_list:                                    
-                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:                                       
-                                        acumulado_factura += pay['amount']                                        
-                                        facturas_ganancia.append(factura_id)                                        
-                                        if len(payments_widget) > 1:
-                                            try:
-                                                mas_de_un_pago_factura[factura_id.internal_number]
-                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
-                                                if temp <= 0:
-                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                        ids_facturas = ids_facturas + \
-                                                            [factura_id.id]
-                                                else:
-                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
-                                            except:
-                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                    payments_widget) - 1
-                                        else:
-                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                ids_facturas = ids_facturas + \
-                                                    [factura_id.id]
-                    self.write({
-                        'cierre_line_ids': [(1, item.id, {
-                            'facturado': acumulado_factura + item.facturado,
-                            'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
-                        })]
-                    })
-        self.register_list(ids_facturas, 'ids_facturas')
+            for factura in related_invoices:
+                paid_amount = self._get_paid_amount_for_invoice(pago, factura)
+                if not paid_amount:
+                    continue
+
+                facturado_diario += paid_amount
+                facturas_ganancia |= factura
+
+                if not self._is_credit_invoice(factura):
+                    ids_facturas.add(factura.id)
+
+            line_values[line.id]['facturado'] += facturado_diario
+            line_values[line.id]['cobrado'] += max(pago.amount - facturado_diario, 0.0)
+
+        if line_values:
+            self.write({
+                'cierre_line_ids': [(1, line_id, values) for line_id, values in line_values.items()]
+            })
+
+        self.register_list(list(ids_facturas), 'ids_facturas')
         for factura in facturas:
-            if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
+            if factura.amount_residual > 0 and not self._is_credit_invoice(factura):
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
 
+        credit_line = self.cierre_line_ids.filtered('credito')[:1]
+        credit_total = credit_line.facturado if credit_line else 0.0
         for factura in facturas:
-            if factura.id not in ids_facturas:
-                if factura.invoice_payment_term_id.sudo().name != 'Contado':
-                    for item in self.cierre_line_ids:
-                        if item.credito:
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
+            if factura.id not in ids_facturas and self._is_credit_invoice(factura):
+                credit_total += factura.amount_total_signed
+
+        if credit_line:
+            self.write({
+                'cierre_line_ids': [(1, credit_line.id, {
+                    'facturado': credit_total
+                })]
+            })
         
         ganancia_total = 0
         for factura in facturas_ganancia:
@@ -273,12 +351,7 @@ class CierreDiario(models.Model):
         })
         
     def procesar_promedio_mensual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_region_team_ids()
 
         dia = self.date.day
         mes = self.date.month
@@ -287,21 +360,17 @@ class CierreDiario(models.Model):
         #fecha para promedio mensual
         fecha_init_mensual = date(año, mes, 1)
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '>=', fecha_init_mensual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
-            ('state', '!=', 'cancel'),
-            ('state', '!=', 'draft'),
-        ])
+            ('state', 'not in', ['cancel', 'draft']),
+        ]
+        if canales_ids:
+            facturas_domain.append(('team_id', 'in', canales_ids))
+
+        facturas = self.env['account.move'].sudo().search(facturas_domain)
 
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
@@ -312,12 +381,7 @@ class CierreDiario(models.Model):
         })
             
     def procesar_promedio_anual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_region_team_ids()
 
         dia = self.date.day
         mes = self.date.month
@@ -326,21 +390,17 @@ class CierreDiario(models.Model):
         #fecha para el promedio anual
         fecha_init_anual = date(año, 1, 1)
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '>=', fecha_init_anual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
-            ('state', '!=', 'cancel'),
-            ('state', '!=', 'draft'),
-        ])
+            ('state', 'not in', ['cancel', 'draft']),
+        ]
+        if canales_ids:
+            facturas_domain.append(('team_id', 'in', canales_ids))
+
+        facturas = self.env['account.move'].sudo().search(facturas_domain)
         
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
