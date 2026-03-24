@@ -35,17 +35,6 @@
                             <div class="col-12 col-lg-6 o_setting_box">
                                 <div class="o_setting_left_pane"/>
                                 <div class="o_setting_right_pane">
-                                    <label for="teams_sps"/>
-                                    <div class="text-muted">IDs de canales de San Pedro Sula separados por coma</div>
-                                    <div class="text-muted">
-                                        <field name="teams_sps" placeholder="43,41,46,58,44"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-lg-6 o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
                                     <label for="marca_ids"/>
                                     <div class="text-muted">Marcas para reporte semanal</div>
                                     <div class="text-muted">
