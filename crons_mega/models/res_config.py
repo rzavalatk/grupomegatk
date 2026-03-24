@@ -21,13 +21,6 @@ class Settings(models.TransientModel):
         "account.account", "code", string="Cuentas Cxc para cierre")
     marca_ids = fields.Many2many(
         "product.marca", "setting_id", string="Marcas")
-
-    def _parse_int_list_param(self, value):
-        if not value:
-            return []
-
-        cleaned_value = str(value).replace('[', '').replace(']', '')
-        return [int(item.strip()) for item in cleaned_value.split(',') if item.strip()]
     
     def get_values_journal_ids(self, company):
         self.company_cierre["company"] = company
@@ -45,7 +38,11 @@ class Settings(models.TransientModel):
         
     def get_values_teams_sps(self):
         obj = self.get_values()
-        return self._parse_int_list_param(obj.get('teams_sps'))
+        res = []
+        l = obj['teams_sps'].split(',')
+        for item in l:
+            res.append(int(item))
+        return res
         
     def get_values(self):
         try:
@@ -54,7 +51,6 @@ class Settings(models.TransientModel):
             marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
             journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre["company"]))
             account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre["company"])) 
-            teams_sps = IrValues.get_param('crons_mega.teams_sps', default='')
             lines = []
             lines_account = []
             marcas = []
@@ -99,7 +95,7 @@ class Settings(models.TransientModel):
                     lines = [(6, 0, ids)]
             except:
                 pass
-            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas,teams_sps=teams_sps)
+            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
         except Exception as e:
             pass
            
