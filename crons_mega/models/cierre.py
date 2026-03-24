@@ -93,6 +93,47 @@ class CierreDiario(models.Model):
             })
         return facturas
 
+    def _normalize_to_date(self, value):
+        if not value:
+            return False
+        if isinstance(value, datetime):
+            return value.date()
+        if isinstance(value, date):
+            return value
+        return fields.Date.to_date(value)
+
+    def _get_paid_amount_for_invoice(self, pago, factura):
+        """Obtiene monto pagado de una factura por un pago usando widget y conciliaciones como fallback."""
+        monto = 0.0
+
+        try:
+            payments_widget = factura.invoice_payments_widget or {}
+            if isinstance(payments_widget, str):
+                payments_widget = json.loads(payments_widget)
+            payments_list = payments_widget.get("content", [])
+        except Exception:
+            payments_list = []
+
+        for pay in payments_list:
+            pay_date = self._normalize_to_date(pay.get('date'))
+            pay_id = pay.get('account_payment_id') or pay.get('payment_id')
+            if pay_date == self.date and str(pay_id) == str(pago.id):
+                monto += float(pay.get('amount', 0) or 0)
+
+        if monto:
+            return round(monto, 2)
+
+        # Fallback contable: tomar conciliaciones parciales del asiento de pago contra la factura.
+        partials = pago.move_id.line_ids.matched_debit_ids | pago.move_id.line_ids.matched_credit_ids
+        for partial in partials:
+            debit_move = partial.debit_move_id.move_id
+            credit_move = partial.credit_move_id.move_id
+            if factura not in (debit_move | credit_move):
+                continue
+            monto += partial.amount
+
+        return round(monto, 2)
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -218,7 +259,6 @@ class CierreDiario(models.Model):
         pagos = self.env['account.payment'].sudo().search([
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
-            ('region', 'in', region_values),
             ('partner_type', '=', 'customer'),
             ('state', '=', 'posted'),
         ])
@@ -255,6 +295,9 @@ class CierreDiario(models.Model):
                             ('move_type', '=', 'out_invoice'),
                         ])
 
+            # Limitar a facturas válidas del cierre del día para evitar cruces con otras regiones/fechas.
+            facturas_relacionadas = facturas_relacionadas.filtered(lambda inv: inv.id in facturas.ids)
+
             # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
@@ -265,21 +308,12 @@ class CierreDiario(models.Model):
                         self.register_ids(factura_id, 'facturas de pagos')
 
                         if factura_id.invoice_date == self.date and factura_id.state != 'cancel':
-                            try:
-                                payments_widget = factura_id.invoice_payments_widget or {}
-                                if isinstance(payments_widget, str):
-                                    payments_widget = json.loads(payments_widget)
-                                payments_list = payments_widget.get("content", [])
-                            except Exception:
-                                raise UserError(
-                                    f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-
-                            for pay in payments_list:
-                                if pay.get('date') == self.date and pay.get('account_payment_id') == pago.id:
-                                    acumulado_factura += pay.get('amount', 0)
-                                    facturas_ganancia.append(factura_id)
-                                    if not self._is_credit_term(factura_id.invoice_payment_term_id.sudo()):
-                                        ids_facturas.add(factura_id.id)
+                            paid_amount = self._get_paid_amount_for_invoice(pago, factura_id)
+                            if paid_amount > 0:
+                                acumulado_factura += paid_amount
+                                facturas_ganancia.append(factura_id)
+                                if not self._is_credit_term(factura_id.invoice_payment_term_id.sudo()):
+                                    ids_facturas.add(factura_id.id)
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
                             'facturado': acumulado_factura + item.facturado,
