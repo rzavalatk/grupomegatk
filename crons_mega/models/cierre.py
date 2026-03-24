@@ -27,131 +27,6 @@ class CierreDiario(models.Model):
         ("Tegucigalpa", "TGU"),
     ]
 
-    def _get_region_values(self):
-        """Devuelve variantes de la región para evitar filtros vacíos por formato."""
-        self.ensure_one()
-        values = {self.region}
-        for key, label in self.regions_list:
-            if self.region in (key, label):
-                values.update([key, label])
-                break
-        return list(values)
-
-    def _get_canales_ids(self):
-        """Obtiene canales por región con fallback a configuración y valores históricos."""
-        self.ensure_one()
-
-        if self.region in ("San Pedro Sula", "SPS"):
-            try:
-                canales = self.env['res.config.settings'].sudo().get_values_teams_sps()
-                if canales:
-                    return canales
-            except Exception:
-                pass
-            return [43, 41, 46, 58, 44]
-
-        if self.region in ("Tegucigalpa", "TGU"):
-            return [35, 36, 37, 38, 39, 45, 47, 53]
-
-        return [50, 49]
-
-    def _is_credit_term(self, payment_term):
-        """Determina si un término de pago es crédito sin depender del nombre textual."""
-        if not payment_term:
-            return False
-
-        if 'credit' in payment_term._fields:
-            return bool(payment_term.credit)
-
-        if payment_term.line_ids:
-            return any(line.nb_days > 0 for line in payment_term.line_ids)
-
-        name = (payment_term.name or '').strip().lower()
-        return 'credito' in name or 'crédito' in name
-
-    def _search_facturas_by_team(self, base_domain, canales_ids):
-        """Busca facturas por canales y si no encuentra, hace fallback sin canal para evitar reportes vacíos."""
-        self.ensure_one()
-
-        factura_obj = self.env['account.move'].sudo()
-        if not canales_ids:
-            return factura_obj.search(base_domain)
-
-        team_domain = ['|', ('team_id', 'in', canales_ids), ('team_id', '=', False)]
-        facturas = factura_obj.search(base_domain + team_domain)
-        if facturas:
-            return facturas
-
-        # Fallback controlado para detectar desalineación de canales configurados.
-        facturas = factura_obj.search(base_domain)
-        if facturas:
-            self.write({
-                'logs': self.logs + (
-                    f"Advertencia: no hubo facturas con canales {canales_ids} para región {self.region}. "
-                    "Se aplicó fallback sin filtro de team_id. Revisar canales de cierre.\n"
-                )
-            })
-        return facturas
-
-    def _normalize_to_date(self, value):
-        if not value:
-            return False
-        if isinstance(value, datetime):
-            return value.date()
-        if isinstance(value, date):
-            return value
-        return fields.Date.to_date(value)
-
-    def _get_paid_amount_for_invoice(self, pago, factura):
-        """Obtiene monto pagado de una factura por un pago usando widget y conciliaciones como fallback."""
-        monto = 0.0
-
-        try:
-            payments_widget = factura.invoice_payments_widget or {}
-            if isinstance(payments_widget, str):
-                payments_widget = json.loads(payments_widget)
-            payments_list = payments_widget.get("content", [])
-        except Exception:
-            payments_list = []
-
-        for pay in payments_list:
-            pay_date = self._normalize_to_date(pay.get('date'))
-            pay_id = pay.get('account_payment_id') or pay.get('payment_id')
-            if pay_date == self.date and str(pay_id) == str(pago.id):
-                monto += float(pay.get('amount', 0) or 0)
-
-        if monto:
-            return round(monto, 2)
-
-        # Fallback contable: tomar conciliaciones parciales del asiento de pago contra la factura.
-        partials = pago.move_id.line_ids.matched_debit_ids | pago.move_id.line_ids.matched_credit_ids
-        for partial in partials:
-            debit_move = partial.debit_move_id.move_id
-            credit_move = partial.credit_move_id.move_id
-            if factura not in (debit_move | credit_move):
-                continue
-            monto += partial.amount
-
-        return round(monto, 2)
-
-    def _get_related_invoices_from_payment(self, pago, valid_invoice_ids):
-        """Obtiene facturas conciliadas con un pago usando relaciones nativas y parciales contables."""
-        facturas_relacionadas = self.env['account.move']
-
-        if 'reconciled_invoice_ids' in pago._fields:
-            facturas_relacionadas |= pago.reconciled_invoice_ids.filtered(lambda inv: inv.move_type == 'out_invoice')
-
-        partials = pago.move_id.line_ids.matched_debit_ids | pago.move_id.line_ids.matched_credit_ids
-        for partial in partials:
-            candidate_moves = partial.debit_move_id.move_id | partial.credit_move_id.move_id
-            candidate_moves -= pago.move_id
-            facturas_relacionadas |= candidate_moves.filtered(lambda inv: inv.move_type == 'out_invoice')
-
-        if valid_invoice_ids:
-            facturas_relacionadas = facturas_relacionadas.filtered(lambda inv: inv.id in valid_invoice_ids)
-
-        return facturas_relacionadas
-
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -270,86 +145,110 @@ class CierreDiario(models.Model):
         })
 
     def procesar_cierre(self):
-        self.ensure_one()
-        canales_ids = self._get_canales_ids()
-        region_values = self._get_region_values()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         pagos = self.env['account.payment'].sudo().search([
+            '&',
+            '&',
+            '&',
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
+            ('region', '=', self.region),
             ('partner_type', '=', 'customer'),
             ('state', '=', 'posted'),
         ])
-        self.write({
-            'logs': self.logs + f"Región cierre: {self.region} | Valores usados: {region_values} | Canales usados: {canales_ids}\n"
-        })
         self.register_ids(pagos, 'pagos')
 
-        facturas_domain = [
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
             ('invoice_date', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
+            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ]
-        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
+        ])
         self.register_ids(facturas, 'facturas')
 
-        ids_facturas = set()
+        mas_de_un_pago_factura = {}
+        ids_facturas = []
         facturas_ganancia = []
 
         # Recorrer los pagos
         for pago in pagos:
-            facturas_relacionadas = self._get_related_invoices_from_payment(pago, set(facturas.ids))
-            if not facturas_relacionadas:
-                self.write({
-                    'logs': self.logs + (
-                        f"Pago {pago.id} ({pago.name}) sin facturas relacionadas para el dominio del cierre. "
-                        "Revisar conciliación y fecha contable.\n"
-                    )
-                })
-
             # Recorrer los diarios del cierre asignados
-            journal_applied = False
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    journal_applied = True
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
-                    for factura_id in facturas_relacionadas:
+                    for factura in pago.move_id.sudo().ids:
+                        
+                        #Obtenemos el dato del pago
+                        factura_move= self.env['account.move'].sudo().browse(factura)
+                        
+                        #OBtenemos la factura relacionada al pago
+                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
                         self.register_ids(factura_id, 'facturas de pagos')
 
-                        if factura_id.invoice_date == self.date and factura_id.state != 'cancel':
-                            paid_amount = self._get_paid_amount_for_invoice(pago, factura_id)
-                            if paid_amount > 0:
-                                acumulado_factura += paid_amount
-                                facturas_ganancia.append(factura_id)
-                                if not self._is_credit_term(factura_id.invoice_payment_term_id.sudo()):
-                                    ids_facturas.add(factura_id.id)
+                        if factura_id not in ids_facturas:
+                            if factura_id.invoice_date == self.date:
+                                try:
+                                    if factura_id.state != 'cancel':
+                                        payments_widget = factura_id.invoice_payments_widget
+                                        payments_list = payments_widget["content"]
+                                    else:
+                                        payments_widget = []
+                                except:
+                                    raise UserError(
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+
+                                for pay in payments_list:                                    
+                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:                                       
+                                        acumulado_factura += pay['amount']                                        
+                                        facturas_ganancia.append(factura_id)                                        
+                                        if len(payments_widget) > 1:
+                                            try:
+                                                mas_de_un_pago_factura[factura_id.internal_number]
+                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
+                                                if temp <= 0:
+                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                        ids_facturas = ids_facturas + \
+                                                            [factura_id.id]
+                                                else:
+                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                            except:
+                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
+                                                    payments_widget) - 1
+                                        else:
+                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
+                                                ids_facturas = ids_facturas + \
+                                                    [factura_id.id]
                     self.write({
                         'cierre_line_ids': [(1, item.id, {
                             'facturado': acumulado_factura + item.facturado,
                             'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
-            if not journal_applied:
-                self.write({
-                    'logs': self.logs + (
-                        f"Pago {pago.id} usa diario {pago.journal_id.display_name} ({pago.journal_id.id}) "
-                        "que no está en líneas de cierre. Revisar configuración de diarios.\n"
-                    )
-                })
-        self.register_list(list(ids_facturas), 'ids_facturas')
+        self.register_list(ids_facturas, 'ids_facturas')
         for factura in facturas:
-            if factura.payment_state == 'not_paid' and not self._is_credit_term(factura.invoice_payment_term_id.sudo()):
+            if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
                 self.write({
                     'facturas_ids': [(4, factura.id)]
                 })
 
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if self._is_credit_term(factura.invoice_payment_term_id.sudo()):
+                if factura.invoice_payment_term_id.sudo().name != 'Contado':
                     for item in self.cierre_line_ids:
                         if item.credito:
                             self.write({
@@ -374,8 +273,12 @@ class CierreDiario(models.Model):
         })
         
     def procesar_promedio_mensual(self):
-        self.ensure_one()
-        canales_ids = self._get_canales_ids()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         dia = self.date.day
         mes = self.date.month
@@ -384,15 +287,21 @@ class CierreDiario(models.Model):
         #fecha para promedio mensual
         fecha_init_mensual = date(año, mes, 1)
 
-        facturas_domain = [
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
             ('invoice_date', '>=', fecha_init_mensual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
+            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ]
-        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
+        ])
 
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
@@ -403,8 +312,12 @@ class CierreDiario(models.Model):
         })
             
     def procesar_promedio_anual(self):
-        self.ensure_one()
-        canales_ids = self._get_canales_ids()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         dia = self.date.day
         mes = self.date.month
@@ -413,15 +326,21 @@ class CierreDiario(models.Model):
         #fecha para el promedio anual
         fecha_init_anual = date(año, 1, 1)
 
-        facturas_domain = [
+        facturas = self.env['account.move'].sudo().search([
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
+            '&',
             ('invoice_date', '>=', fecha_init_anual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
+            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ]
-        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
+        ])
         
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
