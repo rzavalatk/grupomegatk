@@ -134,6 +134,24 @@ class CierreDiario(models.Model):
 
         return round(monto, 2)
 
+    def _get_related_invoices_from_payment(self, pago, valid_invoice_ids):
+        """Obtiene facturas conciliadas con un pago usando relaciones nativas y parciales contables."""
+        facturas_relacionadas = self.env['account.move']
+
+        if 'reconciled_invoice_ids' in pago._fields:
+            facturas_relacionadas |= pago.reconciled_invoice_ids.filtered(lambda inv: inv.move_type == 'out_invoice')
+
+        partials = pago.move_id.line_ids.matched_debit_ids | pago.move_id.line_ids.matched_credit_ids
+        for partial in partials:
+            candidate_moves = partial.debit_move_id.move_id | partial.credit_move_id.move_id
+            candidate_moves -= pago.move_id
+            facturas_relacionadas |= candidate_moves.filtered(lambda inv: inv.move_type == 'out_invoice')
+
+        if valid_invoice_ids:
+            facturas_relacionadas = facturas_relacionadas.filtered(lambda inv: inv.id in valid_invoice_ids)
+
+        return facturas_relacionadas
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -282,26 +300,21 @@ class CierreDiario(models.Model):
 
         # Recorrer los pagos
         for pago in pagos:
-            facturas_relacionadas = self.env['account.move']
-            if 'reconciled_invoice_ids' in pago._fields:
-                facturas_relacionadas = pago.reconciled_invoice_ids.filtered(lambda inv: inv.move_type == 'out_invoice')
-
+            facturas_relacionadas = self._get_related_invoices_from_payment(pago, set(facturas.ids))
             if not facturas_relacionadas:
-                for factura in pago.move_id.sudo().ids:
-                    factura_move = self.env['account.move'].sudo().browse(factura)
-                    if factura_move.ref:
-                        facturas_relacionadas |= self.env['account.move'].search([
-                            ('name', '=', factura_move.ref),
-                            ('move_type', '=', 'out_invoice'),
-                        ])
-
-            # Limitar a facturas válidas del cierre del día para evitar cruces con otras regiones/fechas.
-            facturas_relacionadas = facturas_relacionadas.filtered(lambda inv: inv.id in facturas.ids)
+                self.write({
+                    'logs': self.logs + (
+                        f"Pago {pago.id} ({pago.name}) sin facturas relacionadas para el dominio del cierre. "
+                        "Revisar conciliación y fecha contable.\n"
+                    )
+                })
 
             # Recorrer los diarios del cierre asignados
+            journal_applied = False
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
+                    journal_applied = True
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura_id in facturas_relacionadas:
@@ -320,6 +333,13 @@ class CierreDiario(models.Model):
                             'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
                         })]
                     })
+            if not journal_applied:
+                self.write({
+                    'logs': self.logs + (
+                        f"Pago {pago.id} usa diario {pago.journal_id.display_name} ({pago.journal_id.id}) "
+                        "que no está en líneas de cierre. Revisar configuración de diarios.\n"
+                    )
+                })
         self.register_list(list(ids_facturas), 'ids_facturas')
         for factura in facturas:
             if factura.payment_state == 'not_paid' and not self._is_credit_term(factura.invoice_payment_term_id.sudo()):
