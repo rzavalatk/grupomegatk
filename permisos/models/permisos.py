@@ -310,6 +310,7 @@ class HrPermisos(models.Model):
         return dias, horas, minutos_resultante
 
     def vacaciones_por_ley(self):
+        _logger.warning('Iniciando proceso de asignación automática de vacaciones por ley')
         año1 = 10 * 480
         año2 = 12 * 480
         año3 = 15 * 480
