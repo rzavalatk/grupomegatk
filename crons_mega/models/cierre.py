@@ -69,6 +69,30 @@ class CierreDiario(models.Model):
         name = (payment_term.name or '').strip().lower()
         return 'credito' in name or 'crédito' in name
 
+    def _search_facturas_by_team(self, base_domain, canales_ids):
+        """Busca facturas por canales y si no encuentra, hace fallback sin canal para evitar reportes vacíos."""
+        self.ensure_one()
+
+        factura_obj = self.env['account.move'].sudo()
+        if not canales_ids:
+            return factura_obj.search(base_domain)
+
+        team_domain = ['|', ('team_id', 'in', canales_ids), ('team_id', '=', False)]
+        facturas = factura_obj.search(base_domain + team_domain)
+        if facturas:
+            return facturas
+
+        # Fallback controlado para detectar desalineación de canales configurados.
+        facturas = factura_obj.search(base_domain)
+        if facturas:
+            self.write({
+                'logs': self.logs + (
+                    f"Advertencia: no hubo facturas con canales {canales_ids} para región {self.region}. "
+                    "Se aplicó fallback sin filtro de team_id. Revisar canales de cierre.\n"
+                )
+            })
+        return facturas
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -192,9 +216,6 @@ class CierreDiario(models.Model):
         region_values = self._get_region_values()
 
         pagos = self.env['account.payment'].sudo().search([
-            '&',
-            '&',
-            '&',
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
             ('region', 'in', region_values),
@@ -206,19 +227,14 @@ class CierreDiario(models.Model):
         })
         self.register_ids(pagos, 'pagos')
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ])
+        ]
+        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
         self.register_ids(facturas, 'facturas')
 
         ids_facturas = set()
@@ -314,21 +330,15 @@ class CierreDiario(models.Model):
         #fecha para promedio mensual
         fecha_init_mensual = date(año, mes, 1)
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '>=', fecha_init_mensual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ])
+        ]
+        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
 
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
@@ -349,21 +359,15 @@ class CierreDiario(models.Model):
         #fecha para el promedio anual
         fecha_init_anual = date(año, 1, 1)
 
-        facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
+        facturas_domain = [
             ('invoice_date', '>=', fecha_init_anual),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
-            ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel'),
             ('state', '!=', 'draft'),
-        ])
+        ]
+        facturas = self._search_facturas_by_team(facturas_domain, canales_ids)
         
         # Recorrer las facturas y sumar los totales
         total_ventas = sum(factura.amount_total for factura in facturas)
