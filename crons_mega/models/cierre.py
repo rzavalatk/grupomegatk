@@ -184,6 +184,14 @@ class CierreDiario(models.Model):
             ('partner_type', '=', 'customer'),
             ('state', '=', 'posted'),
         ])
+        if not pagos:
+            # Fallback para bases donde account.payment.region no se completa en todos los flujos.
+            pagos = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+                ('partner_type', '=', 'customer'),
+                ('state', '=', 'posted'),
+            ])
         self.register_ids(pagos, 'pagos')
 
         facturas = self.env['account.move'].sudo().search([
@@ -210,13 +218,16 @@ class CierreDiario(models.Model):
                 lambda l: not l.credito and l.journal_id.sudo().id == pago.journal_id.sudo().id
             )[:1]
             if not diario_linea:
-                continue
+                diario_linea = self.env['account.cierre.line'].sudo().create({
+                    'cierre_id': self.id,
+                    'journal_id': pago.journal_id.id,
+                    'credito': False,
+                })
 
             acumulado_factura = 0
             facturas_del_pago = pago.reconciled_invoice_ids.sudo().filtered(
                 lambda f: f.move_type == 'out_invoice'
                 and f.state not in ('cancel', 'draft')
-                and f.invoice_date == self.date
                 and f.company_id.id == self.company_id.id
                 and f.team_id.id in canales_ids
             )
@@ -238,6 +249,13 @@ class CierreDiario(models.Model):
                         matched_payment = True
 
                 if matched_payment:
+                    ids_facturas.add(factura_id.id)
+                    facturas_ganancia |= factura_id
+
+            if acumulado_factura == 0 and facturas_del_pago and pago.date == self.date:
+                # Si no vino detalle util en el widget, usar monto del pago para no perder distribucion por diario.
+                acumulado_factura = pago.amount
+                for factura_id in facturas_del_pago.filtered(lambda f: f.invoice_date == self.date):
                     ids_facturas.add(factura_id.id)
                     facturas_ganancia |= factura_id
 
