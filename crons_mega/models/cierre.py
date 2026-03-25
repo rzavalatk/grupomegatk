@@ -168,10 +168,13 @@ class CierreDiario(models.Model):
 
     def procesar_cierre(self):
         if self.region == self.regions_list[1][0]:
+            _logger.info("La region es {self.region}")
             canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
         elif self.region == self.regions_list[0][0]:
+            _logger.info("La region es {self.region}")
             canales_ids = [43, 41, 46, 58, 44]
         else:
+            _logger.info("La region es {self.region}")
             canales_ids = [50, 49]
 
         pagos = self.env['account.payment'].sudo().search([
@@ -207,6 +210,7 @@ class CierreDiario(models.Model):
 
         # Recorrer los pagos
         for pago in pagos:
+            _logger.info(f"Procesando pago con id {pago.id} y referencia {pago.ref}")
             # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
