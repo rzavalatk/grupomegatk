@@ -33,9 +33,11 @@ class Settings(models.TransientModel):
     
     def get_values_journal_ids(self, company):
         self.company_cierre["company"] = company
-        
         obj = self.get_values()
-        return obj['journal_ids'][0][2]
+        journal_ids = obj.get('journal_ids', [])
+        if journal_ids:
+            return journal_ids[0][2]
+        return []
     
     def get_values_account_ids_cron_mega(self,company):
         try:
@@ -54,60 +56,60 @@ class Settings(models.TransientModel):
         return res
         
     def get_values(self):
+        res = super(Settings, self).get_values()
+        IrValues = self.env['ir.config_parameter'].sudo()
+        lines = []
+        lines_account = []
+        marcas = []
+
         try:
-            res = super(Settings, self).get_values()
-            IrValues = self.env['ir.config_parameter'].sudo()
-            marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
-            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre["company"]))
-            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre["company"])) 
-            lines = []
-            lines_account = []
-            marcas = []
+            marca_ids = IrValues.get_param('crons_mega.marca_ids' + str(self.env.user.company_id.id))
             marcas_ids = []
- 
-            try:
-                marca_ids = marca_ids.replace('[','')
-                marca_ids = marca_ids.replace(']','')
-                marca_ids = marca_ids.split(',')
-                for item in marca_ids:
-                    marcas_ids.append(int(item))
-                    _logger.info(str(item))
-                if marcas_ids:
-                    marcas = [(6, 0, marcas_ids)]
-            except:
-                pass
-            
-            account_ids = []
-            if not account_ids_cron_mega:
-                account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id)) 
-            try:
-                account_ids_cron_mega = account_ids_cron_mega.replace('[','')
-                account_ids_cron_mega = account_ids_cron_mega.replace(']','')
-                account_ids_cron_mega = account_ids_cron_mega.split(',')
-                for item in account_ids_cron_mega:
-                    account_ids.append(int(item))
-                if account_ids:
-                    lines_account = [(6, 0, account_ids)]
-            except:
-                pass
-                
-            ids = []
-            if not journal_ids:
-                journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))    
-            try:
-                journal_ids = journal_ids.replace('[','')
-                journal_ids = journal_ids.replace(']','')
-                journal_ids = journal_ids.split(',')
-                for item in journal_ids:
-                    ids.append(int(item))
-                if ids:
-                    lines = [(6, 0, ids)]
-            except:
-                pass
-            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
-        except Exception as e:
+            if marca_ids:
+                for item in marca_ids.replace('[', '').replace(']', '').split(','):
+                    item = item.strip()
+                    if item:
+                        marcas_ids.append(int(item))
+            if marcas_ids:
+                marcas = [(6, 0, marcas_ids)]
+        except Exception:
             pass
-           
+
+        try:
+            account_ids_cron_mega = IrValues.get_param(
+                'crons_mega.account_ids_cron_mega_' + str(self.company_cierre["company"])
+            ) or IrValues.get_param(
+                'crons_mega.account_ids_cron_mega_' + str(self.env.user.company_id.id)
+            )
+            account_ids = []
+            if account_ids_cron_mega:
+                for item in account_ids_cron_mega.replace('[', '').replace(']', '').split(','):
+                    item = item.strip()
+                    if item:
+                        account_ids.append(int(item))
+            if account_ids:
+                lines_account = [(6, 0, account_ids)]
+        except Exception:
+            pass
+
+        try:
+            journal_ids = IrValues.get_param(
+                'crons_mega.journal_ids_' + str(self.company_cierre["company"])
+            ) or IrValues.get_param(
+                'crons_mega.journal_ids_' + str(self.env.user.company_id.id)
+            )
+            ids = []
+            if journal_ids:
+                for item in journal_ids.replace('[', '').replace(']', '').split(','):
+                    item = item.strip()
+                    if item:
+                        ids.append(int(item))
+            if ids:
+                lines = [(6, 0, ids)]
+        except Exception:
+            pass
+
+        res.update(journal_ids=lines, account_ids_cron_mega=lines_account, marca_ids=marcas)
         return res
 
     def set_values(self):
