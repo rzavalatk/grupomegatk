@@ -168,10 +168,10 @@ class CierreDiario(models.Model):
 
     def procesar_cierre(self):
         if self.region == self.regions_list[1][0]:
-            _logger.info("La region es {self.region}")
+            _logger.info(f"La region es {self.region}")
             canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
         elif self.region == self.regions_list[0][0]:
-            _logger.info("La region es {self.region}")
+            _logger.info(f"La region es {self.region}")
             canales_ids = [43, 41, 46, 58, 44]
         else:
             _logger.info("La region es {self.region}")
