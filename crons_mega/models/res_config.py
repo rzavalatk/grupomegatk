@@ -45,67 +45,77 @@ class Settings(models.TransientModel):
         return res
         
     def get_values(self):
+        res = super(Settings, self).get_values()
+        IrValues = self.env['ir.config_parameter'].sudo()
+        company_id = self.env.user.company_id.id
+        
+        # Inicializar valores por defecto
+        journal_ids = []
+        account_ids_cron_mega = []
+        marca_ids = []
+        
+        # Procesar journal_ids
         try:
-            res = super(Settings, self).get_values()
-            IrValues = self.env['ir.config_parameter'].sudo()
-            marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
-            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre["company"]))
-            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre["company"])) 
-            lines = []
-            lines_account = []
-            marcas = []
-            marcas_ids = []
- 
-            try:
-                marca_ids = marca_ids.replace('[','')
-                marca_ids = marca_ids.replace(']','')
-                marca_ids = marca_ids.split(',')
-                for item in marca_ids:
-                    marcas_ids.append(int(item))
-                    _logger.UserError(item)
-                if marcas_ids:
-                    marcas = [(6, 0, marcas_ids)]
-            except:
-                pass
-            
-            account_ids = []
-            if not account_ids_cron_mega:
-                account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id)) 
-            try:
-                account_ids_cron_mega = account_ids_cron_mega.replace('[','')
-                account_ids_cron_mega = account_ids_cron_mega.replace(']','')
-                account_ids_cron_mega = account_ids_cron_mega.split(',')
-                for item in account_ids_cron_mega:
-                    account_ids.append(int(item))
-                if account_ids:
-                    lines_account = [(6, 0, account_ids)]
-            except:
-                pass
-                
-            ids = []
-            if not journal_ids:
-                journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))    
-            try:
-                journal_ids = journal_ids.replace('[','')
-                journal_ids = journal_ids.replace(']','')
-                journal_ids = journal_ids.split(',')
-                for item in journal_ids:
-                    ids.append(int(item))
-                if ids:
-                    lines = [(6, 0, ids)]
-            except:
-                pass
-            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
+            journal_ids_str = IrValues.get_param(f'crons_mega.journal_ids_{company_id}')
+            if journal_ids_str:
+                journal_ids_str = journal_ids_str.replace('[', '').replace(']', '')
+                journal_ids_list = [int(x) for x in journal_ids_str.split(',') if x.strip()]
+                if journal_ids_list:
+                    journal_ids = [(6, 0, journal_ids_list)]
         except Exception as e:
-            pass
-           
+            _logger.warning(f"Error al cargar journal_ids: {str(e)}")
+        
+        # Procesar account_ids_cron_mega
+        try:
+            account_ids_str = IrValues.get_param(f'crons_mega.account_ids_cron_mega_{company_id}')
+            if account_ids_str:
+                account_ids_str = account_ids_str.replace('[', '').replace(']', '')
+                account_ids_list = [int(x) for x in account_ids_str.split(',') if x.strip()]
+                if account_ids_list:
+                    account_ids_cron_mega = [(6, 0, account_ids_list)]
+        except Exception as e:
+            _logger.warning(f"Error al cargar account_ids_cron_mega: {str(e)}")
+        
+        # Procesar marca_ids
+        try:
+            marca_ids_str = IrValues.get_param(f'crons_mega.marca_ids{company_id}')
+            if marca_ids_str:
+                marca_ids_str = marca_ids_str.replace('[', '').replace(']', '')
+                marca_ids_list = [int(x) for x in marca_ids_str.split(',') if x.strip()]
+                if marca_ids_list:
+                    marca_ids = [(6, 0, marca_ids_list)]
+        except Exception as e:
+            _logger.warning(f"Error al cargar marca_ids: {str(e)}")
+        
+        # Actualizar res siempre con los campos, aunque sean vacíos
+        res.update(
+            journal_ids=journal_ids,
+            account_ids_cron_mega=account_ids_cron_mega,
+            marca_ids=marca_ids
+        )
+        
         return res
 
     def set_values(self):
-        IrValues = self.env['ir.config_parameter'].sudo()
-        IrValues.set_param('crons_mega.marca_ids'+str(self.env.user.company_id.id), self.marca_ids.ids)
-        IrValues.set_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id), self.account_ids_cron_mega.ids)
-        IrValues.set_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id), self.journal_ids.ids)
-        IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
-        super(Settings, self).set_values()
+
+        try:
+            IrValues = self.env['ir.config_parameter'].sudo()
+            company_id = self.env.user.company_id.id
+            
+            # Guardar journal_ids
+            IrValues.set_param(f'crons_mega.journal_ids_{company_id}', self.journal_ids.ids)
+            
+            # Guardar account_ids_cron_mega
+            IrValues.set_param(f'crons_mega.account_ids_cron_mega_{company_id}', self.account_ids_cron_mega.ids)
+            
+            # Guardar marca_ids
+            IrValues.set_param(f'crons_mega.marca_ids{company_id}', self.marca_ids.ids)
+            
+            # Guardar teams_sps
+            IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
+            
+            super(Settings, self).set_values()
+        except Exception as e:
+            _logger.error(f"Error al guardar configuraciones de cierres: {str(e)}")
+            raise
 
