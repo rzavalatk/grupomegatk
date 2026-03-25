@@ -15,12 +15,21 @@ class Settings(models.TransientModel):
     company_cierre = {"company": 0}
     puntero = 0
     journal_ids = fields.Many2many(
-        "account.journal", "alias_id", string="Diarios de cierre")
+        "account.journal",
+        "crons_mega_config_journal_rel",
+        "config_id", "journal_id",
+        string="Diarios de cierre")
     teams_sps = fields.Char("Canales de SPS")
     account_ids_cron_mega = fields.Many2many(
-        "account.account", "code", string="Cuentas Cxc para cierre")
+        "account.account",
+        "crons_mega_config_account_rel",
+        "config_id", "account_id",
+        string="Cuentas Cxc para cierre")
     marca_ids = fields.Many2many(
-        "product.marca", "setting_id", string="Marcas")
+        "product.marca",
+        "crons_mega_config_marca_rel",
+        "config_id", "marca_id",
+        string="Marcas")
     
     def get_values_journal_ids(self, company):
         self.company_cierre["company"] = company
@@ -62,7 +71,7 @@ class Settings(models.TransientModel):
                 marca_ids = marca_ids.split(',')
                 for item in marca_ids:
                     marcas_ids.append(int(item))
-                    _logger.UserError(item)
+                    _logger.info(str(item))
                 if marcas_ids:
                     marcas = [(6, 0, marcas_ids)]
             except:

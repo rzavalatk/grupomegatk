@@ -190,45 +190,40 @@ class CierreDiario(models.Model):
                 # Compartar que pagos entran en los diarios de cierre
                 if pago.journal_id.sudo().id == item.journal_id.sudo().id:
                     acumulado_factura = 0  # lo acumulado de facturas
-                    # recorrer facturas de los pagos
-                    for factura in pago.move_id.sudo().ids:
-                        
-                        #Obtenemos el dato del pago
-                        factura_move= self.env['account.move'].sudo().browse(factura)
-                        
-                        #OBtenemos la factura relacionada al pago
-                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
+                    # En Odoo 18 se usa reconciled_invoice_ids para obtener las facturas del pago
+                    for factura_id in pago.reconciled_invoice_ids.sudo():
                         self.register_ids(factura_id, 'facturas de pagos')
 
-                        if factura_id not in ids_facturas:
+                        if factura_id.id not in ids_facturas:
                             if factura_id.invoice_date == self.date:
+                                payments_list = []
                                 try:
                                     if factura_id.state != 'cancel':
                                         payments_widget = factura_id.invoice_payments_widget
-                                        payments_list = payments_widget["content"]
-                                    else:
-                                        payments_widget = []
-                                except:
+                                        if payments_widget and isinstance(payments_widget, dict):
+                                            payments_list = payments_widget.get("content", [])
+                                except Exception as e:
                                     raise UserError(
-                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
+                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}: {e}')
 
-                                for pay in payments_list:                                    
-                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:                                       
-                                        acumulado_factura += pay['amount']                                        
-                                        facturas_ganancia.append(factura_id)                                        
-                                        if len(payments_widget) > 1:
+                                for pay in payments_list:
+                                    # Comparar fechas como string para evitar discrepancias de tipo
+                                    if str(pay.get('date', '')) == str(self.date) and pay.get('account_payment_id') == pago.id:
+                                        acumulado_factura += pay['amount']
+                                        facturas_ganancia.append(factura_id)
+                                        if len(payments_list) > 1:
                                             try:
-                                                mas_de_un_pago_factura[factura_id.internal_number]
-                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
+                                                mas_de_un_pago_factura[factura_id.name]
+                                                temp = mas_de_un_pago_factura[factura_id.name] - 1
                                                 if temp <= 0:
                                                     if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
                                                         ids_facturas = ids_facturas + \
                                                             [factura_id.id]
                                                 else:
-                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
+                                                    mas_de_un_pago_factura[factura_id.name] = temp
                                             except:
-                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                    payments_widget) - 1
+                                                mas_de_un_pago_factura[factura_id.name] = len(
+                                                    payments_list) - 1
                                         else:
                                             if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
                                                 ids_facturas = ids_facturas + \
