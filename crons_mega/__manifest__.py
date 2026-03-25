@@ -12,7 +12,7 @@
     'category': 'Accounting',
     'version': '18.0',
     "license": "LGPL-3",
-    'depends': ['base','account','fields_megatk'],
+    'depends': ['base', 'base_setup','account','fields_megatk'],
     'data': [
         'wizard/wizard.xml',
         'security/security.xml',

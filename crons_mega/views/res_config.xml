@@ -7,7 +7,7 @@
             <field name="priority" eval="5"/>
             <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//div[@id='languages']" position="after">
+                <xpath expr="//form" position="inside">
                     <div class="app_settings_block" string="Cierre Diario" data-string="Cierre Diario">
                         <div class="row mt16 o_settings_container">
                             <div class="col-12 col-lg-6 o_setting_box">
