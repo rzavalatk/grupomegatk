@@ -105,7 +105,11 @@ class CierreDiario(models.Model):
         })        
 
     def iniciar_cierre(self):
-        JOURNAL_NAMES = ['Efectivo', 'Cheques', 'Transferencia', 'Tarjeta de Credito', 'Pendiente de Deposito']
+        JOURNAL_NAMES = [
+            'Efectivo', 'Cheques', 'Transferencia',
+            'Tarjeta de Credito', 'Tarjeta de Crédito',
+            'Pendiente de Deposito', 'Pendiente de Depósito',
+        ]
 
         # Intentar obtener los diarios desde la configuración guardada
         journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
@@ -118,6 +122,16 @@ class CierreDiario(models.Model):
                 ('company_id', '=', self.company_id.id),
             ])
             journal_ids = journals.ids
+
+        # Último recurso: tomar todos los diarios de tipo banco/efectivo de la compañía
+        if not journal_ids:
+            journals = self.env['account.journal'].sudo().search([
+                ('type', 'in', ['bank', 'cash']),
+                ('company_id', '=', self.company_id.id),
+            ])
+            journal_ids = journals.ids
+
+        _logger.info("CierreDiario [%s] - journal_ids encontrados: %s", self.id, journal_ids)
 
         values = [(0, 0, {'credito': True})]
         for item in journal_ids:
