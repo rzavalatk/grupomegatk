@@ -60,7 +60,7 @@ class CXC(models.Model):
         })
         
     def init_cierre_cxc(self):
-        account_ids_setting = self.env["res.config.settings"].get_values_account_ids_cron_mega(self.company_id)
+        account_ids_setting = self.env['account.cierre.config'].sudo().get_account_ids(self.company_id.id)
         account_ids = self.env["account.account"].browse(account_ids_setting)
         for item in account_ids:
             self.write({
@@ -71,7 +71,7 @@ class CXC(models.Model):
             })
             
     def add_move(self):
-        account_ids_setting = self.env["res.config.settings"].get_values_account_ids_cron_mega(self.company_id)
+        account_ids_setting = self.env['account.cierre.config'].sudo().get_account_ids(self.company_id.id)
         moves_ids = self.env["account.move.line"].sudo().search(['&',
             ('date','=',self.date),
             ('company_id','=',self.company_id.id),

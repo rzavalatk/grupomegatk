@@ -29,6 +29,7 @@
         'views/cierre.xml',
         'views/order_point.xml',
         #'views/invoice_expire.xml',
+        'views/cierre_config.xml',
         'views/cierre_cxc.xml',
         'views/product_report.xml',
         'views/cierre_line.xml',

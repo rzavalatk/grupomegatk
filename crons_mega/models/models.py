@@ -92,8 +92,7 @@ class ReporteSemanal(models.Model):
         return dates
     
     def init_report(self):
-        marcas = self.env['res.config.settings'].get_values()
-        marcas = marcas['marca_ids'][0][2]
+        marcas = self.env['account.cierre.config'].sudo().get_marca_ids(self.env.company.id)
         range_date = self.rangeDate(self.date_from,self.date_to)
         invoice_ids = self.env['account.move'].search(['&',
             ('date_invoice','in',range_date),
@@ -114,8 +113,7 @@ class ReporteSemanal(models.Model):
         })
         
     def proccess_line_report(self):
-        marcas = self.env['res.config.settings'].get_values()
-        marcas = marcas['marca_ids'][0][2]
+        marcas = self.env['account.cierre.config'].sudo().get_marca_ids(self.env.company.id)
         product_ids = self.env['product.template'].search([('marca_id','in',marcas)])
         for product in product_ids:
             total_quantity = 0

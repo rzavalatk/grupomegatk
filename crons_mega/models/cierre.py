@@ -111,9 +111,8 @@ class CierreDiario(models.Model):
             'Pendiente de Deposito', 'Pendiente de Depósito',
         ]
 
-        # Intentar obtener los diarios desde la configuración guardada
-        journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
-            self.company_id.id)
+        # Intentar obtener los diarios desde la configuracion de cierre por compania
+        journal_ids = self.env['account.cierre.config'].sudo().get_journal_ids(self.company_id.id)
 
         # Si no hay configuración guardada, buscarlos por nombre en la compañía actual
         if not journal_ids:
