@@ -23,7 +23,7 @@
                         <group>
                             <field name="company_id"/>
                         </group>
-                        <group string="Configuracion">
+                        <group string="Configuracion Cierre">
                             <group>
                                 <field name="journal_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
                             </group>
@@ -43,6 +43,7 @@
             <field name="name">Configuracion Cierre Diario</field>
             <field name="res_model">account.cierre.config</field>
             <field name="view_mode">list,form</field>
+            <field name="domain">[('company_id', '=', company_id)]</field>
         </record>
 
         <menuitem id="account_cierre_config_menu"

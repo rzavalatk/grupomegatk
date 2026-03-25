@@ -75,22 +75,28 @@ class CierreConfig(models.Model):
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
+    # Compatibilidad con codigo legado que aun consulte este modelo.
     journal_ids = fields.Many2many(
         'account.journal',
         'crons_mega_config_journal_rel',
-        'config_id', 'journal_id',
-        string='Diarios de cierre')
-    teams_sps = fields.Char('Canales de SPS')
+        'config_id',
+        'journal_id',
+        string='Diarios de cierre',
+    )
     account_ids_cron_mega = fields.Many2many(
         'account.account',
         'crons_mega_config_account_rel',
-        'config_id', 'account_id',
-        string='Cuentas Cxc para cierre')
+        'config_id',
+        'account_id',
+        string='Cuentas Cxc para cierre',
+    )
     marca_ids = fields.Many2many(
         'product.marca',
         'crons_mega_config_marca_rel',
-        'config_id', 'marca_id',
-        string='Marcas')
+        'config_id',
+        'marca_id',
+        string='Marcas',
+    )
 
     def _company_id_from_input(self, company):
         if hasattr(company, 'id'):
@@ -100,21 +106,19 @@ class Settings(models.TransientModel):
         return self.env.company.id
 
     def get_values_journal_ids(self, company):
-        company_id = self._company_id_from_input(company)
-        return self.env['account.cierre.config'].sudo().get_journal_ids(company_id)
+        return self.env['account.cierre.config'].sudo().get_journal_ids(
+            self._company_id_from_input(company)
+        )
 
     def get_values_account_ids_cron_mega(self, company):
-        company_id = self._company_id_from_input(company)
-        return self.env['account.cierre.config'].sudo().get_account_ids(company_id)
-
-    def get_values_teams_sps(self):
-        return []
+        return self.env['account.cierre.config'].sudo().get_account_ids(
+            self._company_id_from_input(company)
+        )
 
     def get_values(self):
         res = super(Settings, self).get_values()
-        company_id = self.env.company.id
         config = self.env['account.cierre.config'].sudo().search([
-            ('company_id', '=', company_id)
+            ('company_id', '=', self.env.company.id)
         ], limit=1)
         res.update(
             journal_ids=[(6, 0, config.journal_ids.ids)] if config else [],
@@ -125,12 +129,10 @@ class Settings(models.TransientModel):
 
     def set_values(self):
         super(Settings, self).set_values()
-        company_id = self.env.company.id
-        config = self.env['account.cierre.config'].sudo().search([
-            ('company_id', '=', company_id)
-        ], limit=1)
+        config_model = self.env['account.cierre.config'].sudo()
+        config = config_model.search([('company_id', '=', self.env.company.id)], limit=1)
         values = {
-            'company_id': company_id,
+            'company_id': self.env.company.id,
             'journal_ids': [(6, 0, self.journal_ids.ids)],
             'account_ids_cron_mega': [(6, 0, self.account_ids_cron_mega.ids)],
             'marca_ids': [(6, 0, self.marca_ids.ids)],
@@ -138,5 +140,5 @@ class Settings(models.TransientModel):
         if config:
             config.write(values)
         else:
-            self.env['account.cierre.config'].sudo().create(values)
+            config_model.create(values)
 
