@@ -382,17 +382,25 @@ class CierreDiario(models.Model):
         })
                    
     def send_email(self, email, cc=""):
+        if not email:
+            _logger.warning("send_email (cierre %s): email_to vacío, se omite envío.", self.id)
+            return False
         template = self.env.ref(
-            'crons_mega.email_template_cierre_diario_1')
+            'crons_mega.email_template_cierre_diario_1', raise_if_not_found=False)
+        if not template:
+            _logger.error("send_email (cierre %s): template 'email_template_cierre_diario_1' no encontrada.", self.id)
+            return False
         email_values = {
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': email,
-            'email_cc': cc
+            'email_cc': cc or '',
         }
-        template.send_mail(self.id, email_values=email_values, force_send=True)
-        self.write({
-            'state': 'done'
-        })
+        try:
+            template.send_mail(self.id, email_values=email_values, force_send=True)
+            self.write({'state': 'done'})
+        except Exception as e:
+            _logger.error("send_email (cierre %s) falló al enviar a '%s': %s", self.id, email, e)
+            return False
         return True
 
     def cron_eject(self):

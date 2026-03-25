@@ -101,18 +101,26 @@ class CXC(models.Model):
             'state': 'proccess'
         })
         
-    def send_email(self,mail,cc):
+    def send_email(self, mail, cc):
+        if not mail:
+            _logger.warning("send_email (cierre_cxc %s): email_to vacío, se omite envío.", self.id)
+            return False
         template = self.env.ref(
-            'crons_mega.email_template_cierre_diario_cxc')
+            'crons_mega.email_template_cierre_diario_cxc', raise_if_not_found=False)
+        if not template:
+            _logger.error("send_email (cierre_cxc %s): template 'email_template_cierre_diario_cxc' no encontrada.", self.id)
+            return False
         email_values = {
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': mail,
-            'email_cc': cc
+            'email_cc': cc or '',
         }
-        template.send_mail(self.id, email_values=email_values, force_send=True)
-        self.write({
-            'state': 'done'
-        })
+        try:
+            template.send_mail(self.id, email_values=email_values, force_send=True)
+            self.write({'state': 'done'})
+        except Exception as e:
+            _logger.error("send_email (cierre_cxc %s) falló al enviar a '%s': %s", self.id, mail, e)
+            return False
         return True
     
     def cron_eject(self):
