@@ -105,11 +105,21 @@ class CierreDiario(models.Model):
         })        
 
     def iniciar_cierre(self):
+        JOURNAL_NAMES = ['Efectivo', 'Cheques', 'Transferencia', 'Tarjeta de Credito', 'Pendiente de Deposito']
+
+        # Intentar obtener los diarios desde la configuración guardada
         journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
             self.company_id.id)
-        values = [(0, 0,  {
-            'credito': True
-        })]
+
+        # Si no hay configuración guardada, buscarlos por nombre en la compañía actual
+        if not journal_ids:
+            journals = self.env['account.journal'].sudo().search([
+                ('name', 'in', JOURNAL_NAMES),
+                ('company_id', '=', self.company_id.id),
+            ])
+            journal_ids = journals.ids
+
+        values = [(0, 0, {'credito': True})]
         for item in journal_ids:
             values.append((0, 0, {
                 'journal_id': item
@@ -207,8 +217,13 @@ class CierreDiario(models.Model):
                                         f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}: {e}')
 
                                 for pay in payments_list:
-                                    # Comparar fechas como string para evitar discrepancias de tipo
-                                    if str(pay.get('date', '')) == str(self.date) and pay.get('account_payment_id') == pago.id:
+                                    # En Odoo 18 account_payment_id puede venir como False;
+                                    # se usa move_id del asiento del pago como identificador de respaldo
+                                    pay_id_match = (
+                                        pay.get('account_payment_id') == pago.id
+                                        or pay.get('move_id') == pago.move_id.id
+                                    )
+                                    if str(pay.get('date', '')) == str(self.date) and pay_id_match:
                                         acumulado_factura += pay['amount']
                                         facturas_ganancia.append(factura_id)
                                         if len(payments_list) > 1:
@@ -243,14 +258,17 @@ class CierreDiario(models.Model):
 
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.invoice_payment_term_id.sudo().name != 'Contado':
-                    for item in self.cierre_line_ids:
-                        if item.credito:
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
+                # Solo va a crédito si la factura realmente no ha sido cobrada:
+                # evita que facturas pagadas en efectivo (cuyo match falló) aparezcan como crédito
+                if factura.payment_state in ('not_paid', 'partial'):
+                    if factura.invoice_payment_term_id.sudo().name != 'Contado':
+                        for item in self.cierre_line_ids:
+                            if item.credito:
+                                self.write({
+                                    'cierre_line_ids': [(1, item.id, {
+                                        'facturado': factura.amount_total_signed + item.facturado
+                                    })]
+                                })
         
         ganancia_total = 0
         for factura in facturas_ganancia:
