@@ -168,13 +168,13 @@ class CierreDiario(models.Model):
 
     def procesar_cierre(self):
         if self.region == self.regions_list[1][0]:
-            _logger.info(f"La region es {self.region}")
+            _logger.warning(f"La region es {self.region}")
             canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
         elif self.region == self.regions_list[0][0]:
-            _logger.info(f"La region es {self.region}")
+            _logger.warning(f"La region es {self.region}")
             canales_ids = [43, 41, 46, 58, 44]
         else:
-            _logger.info("La region es {self.region}")
+            _logger.warning(f"La region es {self.region}")
             canales_ids = [50, 49]
 
         pagos = self.env['account.payment'].sudo().search([
@@ -208,9 +208,14 @@ class CierreDiario(models.Model):
         ids_facturas = []
         facturas_ganancia = []
 
+        _logger.warning(f"Iniciando cierre")
+        _logger.warning(f"Canales ids para la region {self.region}: {canales_ids}")
+        _logger.warning(f"Total de pagos encontrados: {len(pagos)}")
+        _logger.warning(f"Total de facturas encontradas: {len(facturas)}")
+        
         # Recorrer los pagos
         for pago in pagos:
-            _logger.info(f"Procesando pago con id {pago.id} y referencia {pago.ref}")
+            _logger.warning(f"Procesando pago con id {pago.id} y referencia {pago.ref}")
             # Recorrer los diarios del cierre asignados
             for item in self.cierre_line_ids:
                 # Compartar que pagos entran en los diarios de cierre
@@ -218,7 +223,7 @@ class CierreDiario(models.Model):
                     acumulado_factura = 0  # lo acumulado de facturas
                     # recorrer facturas de los pagos
                     for factura in pago.move_id.sudo().ids:
-                        
+                        _logger.warning(f"Procesando factura con id {factura}")
                         #Obtenemos el dato del pago
                         factura_move= self.env['account.move'].sudo().browse(factura)
                         
