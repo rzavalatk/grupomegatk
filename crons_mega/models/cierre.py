@@ -499,7 +499,7 @@ class CierreDiario(models.Model):
                 # principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
                 # cc_mega = "yalvarado@megatk.com"
                 # cc_meditek = "nfuentes@meditekhn.com"
-                principal_emails = "areyes@megatk.com"
+                principal_emails = "areyes@megatk.com,dvasquez@megatk.com"
                 cc_mega = "areyes@megatk.com"
                 cc_meditek = "areyes@megatk.com"
                 try:
@@ -514,8 +514,8 @@ class CierreDiario(models.Model):
                         if cierre.sudo().region == 'San Pedro Sula':
                             # cc_mega += ",vmoran@megatk.com"
                             # cc_meditek += "dgarcia@meditekhn.com"
-                            cc_mega += ",areyes@megatk.com"
-                            cc_meditek += "areyes@megatk.com"
+                            cc_mega += ",areyes@megatk.com, dvasquez@megatk.com"
+                            cc_meditek += "areyes@megatk.com, dvasquez@megatk.com"
                         if not cierre.send_email(principal_emails, cc_mega):
                             _logger.error("cron_eject: fallo envio cierre_id=%s company_id=%s", cierre.id, cierre.company_id.id)
                     if cierre.company_id.sudo().id in [9]:
