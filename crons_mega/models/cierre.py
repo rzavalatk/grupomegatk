@@ -204,14 +204,43 @@ class CierreDiario(models.Model):
         else:
             canales_ids = [50, 49]
 
-        # FIX: account.payment NO tiene campo 'region'; la región se determina
-        # por team_id de las facturas reconciliadas (canales_ids).
+        # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
+        # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
         pagos = self.env['account.payment'].sudo().search([
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
             ('partner_type', '=', 'customer'),
-            ('state', '=', 'posted'),
+            ('move_id.state', '=', 'posted'),
         ])
+
+        # Diagnóstico: si sigue en 0, loguear cuántos hay sin cada filtro para aislar cuál falla.
+        if not pagos:
+            pagos_sin_state = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+                ('partner_type', '=', 'customer'),
+            ])
+            pagos_sin_partner = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+                ('move_id.state', '=', 'posted'),
+            ])
+            pagos_solo_fecha = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+            ])
+            _logger.warning(
+                "DIAG pagos (company=%s, date=%s): "
+                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company=%s",
+                self.company_id.id, self.date,
+                len(pagos_sin_state), len(pagos_sin_partner), len(pagos_solo_fecha),
+            )
+            for p in pagos_solo_fecha[:10]:
+                _logger.warning(
+                    "  pago id=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
+                    p.id, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
+                )
+
         self.register_ids(pagos, 'pagos')
 
         facturas = self.env['account.move'].sudo().search([
