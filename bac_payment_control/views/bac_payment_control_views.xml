@@ -21,6 +21,28 @@
             </field>
         </record>
 
+        <record id="view_bac_payment_control_search" model="ir.ui.view">
+            <field name="name">bac.payment.control.search</field>
+            <field name="model">bac.payment.control</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <filter name="filter_pending_validation"
+                            string="Pendientes por validar"
+                            domain="[('payment_state', 'in', ('pending', 'mismatch'))]"/>
+                    <filter name="filter_paid" string="Pagados" domain="[('payment_state', '=', 'paid')]"/>
+                    <filter name="filter_duplicates" string="Con duplicados" domain="[('duplicate_attempt_count', '>', 0)]"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter name="group_state" string="Estado" context="{'group_by': 'payment_state'}"/>
+                        <filter name="group_partner" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <record id="view_bac_payment_control_form" model="ir.ui.view">
             <field name="name">bac.payment.control.form</field>
             <field name="model">bac.payment.control</field>
@@ -73,6 +95,17 @@
             <field name="name">Controles BAC</field>
             <field name="res_model">bac.payment.control</field>
             <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_bac_payment_control_search"/>
+        </record>
+
+        <record id="action_bac_payment_pending" model="ir.actions.act_window">
+            <field name="name">Pendientes por validar</field>
+            <field name="res_model">bac.payment.control</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_bac_payment_control_search"/>
+            <field name="domain">[('payment_state', 'in', ('pending', 'mismatch'))]</field>
+            <field name="context">{'search_default_filter_pending_validation': 1}</field>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
         </record>
 
         <menuitem id="menu_bac_payment_control"
@@ -80,5 +113,12 @@
                   parent="sale.sale_order_menu"
                   sequence="80"
                   action="action_bac_payment_control"/>
+
+        <menuitem id="menu_bac_payment_pending"
+                  name="Pendientes por validar"
+                  parent="menu_bac_payment_control"
+                  sequence="10"
+                  action="action_bac_payment_pending"
+                  groups="sales_team.group_sale_manager"/>
     </data>
 </odoo>

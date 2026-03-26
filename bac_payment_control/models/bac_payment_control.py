@@ -144,7 +144,9 @@ class BacPaymentControl(models.Model):
     def action_mark_paid(self):
         self._check_manual_validation_permission()
         for record in self:
-            reference = record.incoming_reference or record.payment_reference or _('MANUAL')
+            if not record.incoming_reference:
+                raise UserError(_('Debe ingresar la referencia de comprobante antes de validar el pago manual.'))
+            reference = record.incoming_reference
             if not record.amount_matches:
                 raise UserError(_('No puede registrar el pago porque el monto del pedido no coincide con el monto configurado en BAC.'))
             if record.payment_state == 'paid':
@@ -168,7 +170,9 @@ class BacPaymentControl(models.Model):
         for record in self:
             if record.payment_state != 'paid':
                 raise UserError(_('Solo puede marcar pagos duplicados sobre controles ya pagados.'))
-            reference = record.incoming_reference or _('DUPLICADO')
+            if not record.incoming_reference:
+                raise UserError(_('Debe ingresar la referencia del segundo intento para registrar el duplicado.'))
+            reference = record.incoming_reference
             record.write({
                 'duplicate_attempt_count': record.duplicate_attempt_count + 1,
                 'last_duplicate_reference': reference,
