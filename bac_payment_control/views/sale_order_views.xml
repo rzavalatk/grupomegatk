@@ -29,8 +29,8 @@
 
                 <xpath expr="//notebook" position="inside">
                     <page string="BAC" name="bac_payment_controls">
-                        <field name="bac_payment_control_ids" readonly="1" context="{'form_view_ref': 'bac_payment_control.view_bac_payment_control_form_popup'}">
-                            <list>
+                        <field name="bac_payment_control_ids" context="{'form_view_ref': 'bac_payment_control.view_bac_payment_control_form_popup'}">
+                            <list create="0" delete="0">
                                 <field name="product_id"/>
                                 <field name="payment_state"/>
                                 <field name="configured_amount"/>

@@ -107,10 +107,12 @@ class BacPaymentControl(models.Model):
         for record in self:
             if current_user.has_group('sales_team.group_sale_manager'):
                 continue
+            if current_user.has_group('website.group_website_restricted_editor'):
+                continue
             if record.salesperson_id and record.salesperson_id == current_user:
                 continue
             raise UserError(_(
-                'Solo el vendedor responsable del pedido o un gerente de ventas puede validar o marcar pagos duplicados.'
+                'Solo el vendedor responsable del pedido, el encargado de ventas de sitio web o un gerente de ventas puede validar o marcar pagos duplicados.'
             ))
 
     def _is_reference_used_in_order(self, reference):
