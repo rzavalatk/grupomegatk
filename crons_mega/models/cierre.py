@@ -109,6 +109,12 @@ class CierreDiario(models.Model):
     def iniciar_cierre(self):
         journal_ids = self.env['account.cierre.config'].sudo().get_journal_ids(
             self.company_id.id)
+
+        _logger.warning(
+            "iniciar_cierre (company_id=%s): journal_ids desde config=%s",
+            self.company_id.id,
+            journal_ids,
+        )
         
         config = self.env['account.cierre.config'].search([('company_id', '=', self.company_id.id)])
         _logger.warning(f"Configuración encontrada para company_id={self.company_id.id}: {config}")
@@ -139,6 +145,19 @@ class CierreDiario(models.Model):
                 ('company_id', '=', self.company_id.id),
                 ('type', 'in', ['bank', 'cash']),
             ]).ids
+
+        if not journal_ids:
+            _logger.warning(
+                "iniciar_cierre (company_id=%s): no se encontraron diarios para crear lineas de cierre.",
+                self.company_id.id,
+            )
+        else:
+            journal_names = self.env['account.journal'].sudo().browse(journal_ids).mapped('name')
+            _logger.warning(
+                "iniciar_cierre (company_id=%s): diarios finales para cierre=%s",
+                self.company_id.id,
+                journal_names,
+            )
 
         values = [(0, 0,  {
             'credito': True
@@ -222,8 +241,14 @@ class CierreDiario(models.Model):
                 lambda l, jid=journal_id_pago: not l.credito and l.journal_id.id == jid
             )[:1]
             if not diario_linea:
-                _logger.warning(f"  Diario '{pago.journal_id.name}' no está en las líneas del cierre, se omite.")
-                continue
+                _logger.warning(
+                    "  Diario '%s' no estaba en cierre_line_ids; se crea linea dinamica para no perder el pago.",
+                    pago.journal_id.name,
+                )
+                diario_linea = self.env['account.cierre.line'].sudo().create({
+                    'cierre_id': self.id,
+                    'journal_id': pago.journal_id.id,
+                })
 
             # FIX Odoo 18: usar reconciled_invoice_ids en lugar de move_id.ids
             facturas_del_pago = pago.reconciled_invoice_ids.sudo().filtered(
@@ -269,6 +294,13 @@ class CierreDiario(models.Model):
                 diario_linea.write({
                     'facturado': diario_linea.facturado + acumulado_factura,
                 })
+
+                # Si el pago excede lo facturado hoy, el remanente corresponde a CxC antigua.
+                remanente_cxc = (pago.amount or 0.0) - (acumulado_factura or 0.0)
+                if remanente_cxc > 0:
+                    diario_linea.write({
+                        'cobrado': diario_linea.cobrado + remanente_cxc,
+                    })
             else:
                 # Pago para facturas antiguas (CXC) de esta región → "Cobrado CXC"
                 diario_linea.write({
@@ -285,7 +317,8 @@ class CierreDiario(models.Model):
         # Facturas no cobradas hoy → línea de crédito
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.payment_state in ('not_paid', 'partial'):
+                # Si no quedo marcada en ids_facturas pero ya tiene pagos, no mandarla a credito.
+                if factura.payment_state in ('not_paid', 'partial') and factura.amount_residual == factura.amount_total:
                     if factura.invoice_payment_term_id.sudo().name != 'Contado':
                         for item in self.cierre_line_ids:
                             if item.credito:
