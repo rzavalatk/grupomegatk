@@ -1,111 +1,144 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo import models, fields, api
 
-import logging
 
-_logger = logging.getLogger(__name__)
+class CierreConfig(models.Model):
+    _name = 'account.cierre.config'
+    _description = 'Configuracion de cierre diario'
+
+    company_id = fields.Many2one(
+        'res.company',
+        string='Compania',
+        required=True,
+        default=lambda self: self.env.company.id,
+    )
+    journal_ids = fields.Many2many(
+        'account.journal',
+        'crons_mega_cfg_journal_rel',
+        'config_id',
+        'journal_id',
+        string='Diarios de cierre',
+    )
+    account_ids_cron_mega = fields.Many2many(
+        'account.account',
+        'crons_mega_cfg_account_rel',
+        'config_id',
+        'account_id',
+        string='Cuentas CXC para cierre',
+    )
+    marca_ids = fields.Many2many(
+        'product.marca',
+        'crons_mega_cfg_marca_rel',
+        'config_id',
+        'marca_id',
+        string='Marcas',
+    )
+
+    _sql_constraints = [
+        (
+            'crons_mega_unique_company_config',
+            'unique(company_id)',
+            'Solo puede existir una configuracion de cierre por compania.',
+        )
+    ]
+
+    @api.model
+    def _normalize_company_id(self, company):
+        if hasattr(company, 'id'):
+            return company.id
+        if company:
+            return int(company)
+        return self.env.company.id
+
+    @api.model
+    def _get_config(self, company):
+        company_id = self._normalize_company_id(company)
+        return self.search([('company_id', '=', company_id)], limit=1)
+
+    @api.model
+    def get_journal_ids(self, company=None):
+        config = self._get_config(company)
+        return config.journal_ids.ids if config else []
+
+    @api.model
+    def get_account_ids(self, company=None):
+        config = self._get_config(company)
+        return config.account_ids_cron_mega.ids if config else []
+
+    @api.model
+    def get_marca_ids(self, company=None):
+        config = self._get_config(company)
+        return config.marca_ids.ids if config else []
 
 
 class Settings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    #company_cierre = []
-    company_cierre = {"company": 0}
-    puntero = 0
+    # Compatibilidad con codigo legado que aun consulte este modelo.
     journal_ids = fields.Many2many(
-        "account.journal", "alias_id", string="Diarios de cierre")
-    teams_sps = fields.Char("Canales de SPS")
+        'account.journal',
+        'crons_mega_config_journal_rel',
+        'config_id',
+        'journal_id',
+        string='Diarios de cierre',
+    )
     account_ids_cron_mega = fields.Many2many(
-        "account.account", "code", string="Cuentas Cxc para cierre")
+        'account.account',
+        'crons_mega_config_account_rel',
+        'config_id',
+        'account_id',
+        string='Cuentas Cxc para cierre',
+    )
     marca_ids = fields.Many2many(
-        "product.marca", "setting_id", string="Marcas")
-    
+        'product.marca',
+        'crons_mega_config_marca_rel',
+        'config_id',
+        'marca_id',
+        string='Marcas',
+    )
+
+    def _company_id_from_input(self, company):
+        if hasattr(company, 'id'):
+            return company.id
+        if company:
+            return int(company)
+        return self.env.company.id
+
     def get_values_journal_ids(self, company):
-        self.company_cierre["company"] = company
-        
-        obj = self.get_values()
-        return obj['journal_ids'][0][2]
-    
-    def get_values_account_ids_cron_mega(self,company):
-        try:
-            self.write({'company_cierre': company})
-            obj = self.get_values()
-            return obj['account_ids_cron_mega'][0][2]
-        except:
-            return []
-        
-    def get_values_teams_sps(self):
-        obj = self.get_values()
-        res = []
-        l = obj['teams_sps'].split(',')
-        for item in l:
-            res.append(int(item))
-        return res
-        
+        return self.env['account.cierre.config'].sudo().get_journal_ids(
+            self._company_id_from_input(company)
+        )
+
+    def get_values_account_ids_cron_mega(self, company):
+        return self.env['account.cierre.config'].sudo().get_account_ids(
+            self._company_id_from_input(company)
+        )
+
     def get_values(self):
-        try:
-            res = super(Settings, self).get_values()
-            IrValues = self.env['ir.config_parameter'].sudo()
-            marca_ids = IrValues.get_param('crons_mega.marca_ids'+str(self.env.user.company_id.id))
-            journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.company_cierre["company"]))
-            account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.company_cierre["company"])) 
-            lines = []
-            lines_account = []
-            marcas = []
-            marcas_ids = []
- 
-            try:
-                marca_ids = marca_ids.replace('[','')
-                marca_ids = marca_ids.replace(']','')
-                marca_ids = marca_ids.split(',')
-                for item in marca_ids:
-                    marcas_ids.append(int(item))
-                    _logger.UserError(item)
-                if marcas_ids:
-                    marcas = [(6, 0, marcas_ids)]
-            except:
-                pass
-            
-            account_ids = []
-            if not account_ids_cron_mega:
-                account_ids_cron_mega = IrValues.get_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id)) 
-            try:
-                account_ids_cron_mega = account_ids_cron_mega.replace('[','')
-                account_ids_cron_mega = account_ids_cron_mega.replace(']','')
-                account_ids_cron_mega = account_ids_cron_mega.split(',')
-                for item in account_ids_cron_mega:
-                    account_ids.append(int(item))
-                if account_ids:
-                    lines_account = [(6, 0, account_ids)]
-            except:
-                pass
-                
-            ids = []
-            if not journal_ids:
-                journal_ids = IrValues.get_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id))    
-            try:
-                journal_ids = journal_ids.replace('[','')
-                journal_ids = journal_ids.replace(']','')
-                journal_ids = journal_ids.split(',')
-                for item in journal_ids:
-                    ids.append(int(item))
-                if ids:
-                    lines = [(6, 0, ids)]
-            except:
-                pass
-            res.update(journal_ids=lines,account_ids_cron_mega=lines_account,marca_ids=marcas)
-        except Exception as e:
-            pass
-           
+        res = super(Settings, self).get_values()
+        config = self.env['account.cierre.config'].sudo().search([
+            ('company_id', '=', self.env.company.id)
+        ], limit=1)
+        res.update(
+            journal_ids=[(6, 0, config.journal_ids.ids)] if config else [],
+            account_ids_cron_mega=[(6, 0, config.account_ids_cron_mega.ids)] if config else [],
+            marca_ids=[(6, 0, config.marca_ids.ids)] if config else [],
+        )
         return res
 
     def set_values(self):
-        IrValues = self.env['ir.config_parameter'].sudo()
-        IrValues.set_param('crons_mega.marca_ids'+str(self.env.user.company_id.id), self.marca_ids.ids)
-        IrValues.set_param('crons_mega.account_ids_cron_mega_'+str(self.env.user.company_id.id), self.account_ids_cron_mega.ids)
-        IrValues.set_param('crons_mega.journal_ids_'+str(self.env.user.company_id.id), self.journal_ids.ids)
-        IrValues.set_param('crons_mega.teams_sps', self.teams_sps)
         super(Settings, self).set_values()
+        config_model = self.env['account.cierre.config'].sudo()
+        config = config_model.search([('company_id', '=', self.env.company.id)], limit=1)
+        values = {
+            'company_id': self.env.company.id,
+            'journal_ids': [(6, 0, self.journal_ids.ids)],
+            'account_ids_cron_mega': [(6, 0, self.account_ids_cron_mega.ids)],
+            'marca_ids': [(6, 0, self.marca_ids.ids)],
+        }
+        if config:
+            config.write(values)
+        else:
+            config_model.create(values)
 

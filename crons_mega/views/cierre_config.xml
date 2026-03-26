@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="account_cierre_config_view_tree" model="ir.ui.view">
+            <field name="name">account.cierre.config.view.tree</field>
+            <field name="model">account.cierre.config</field>
+            <field name="arch" type="xml">
+                <list string="Configuracion Cierre Diario">
+                    <field name="company_id"/>
+                    <field name="journal_ids" widget="many2many_tags"/>
+                    <field name="account_ids_cron_mega" widget="many2many_tags"/>
+                    <field name="marca_ids" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="account_cierre_config_view_form" model="ir.ui.view">
+            <field name="name">account.cierre.config.view.form</field>
+            <field name="model">account.cierre.config</field>
+            <field name="arch" type="xml">
+                <form string="Configuracion Cierre Diario">
+                    <sheet>
+                        <group>
+                            <field name="company_id"/>
+                        </group>
+                        <group string="Configuracion Cierre">
+                            <group>
+                                <field name="journal_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="account_ids_cron_mega" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                            </group>
+                        </group>
+                        <group string="Reporte Semanal">
+                            <field name="marca_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_cierre_config_action" model="ir.actions.act_window">
+            <field name="name">Configuracion Cierre Diario</field>
+            <field name="res_model">account.cierre.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>
+        </record>
+
+        <menuitem id="account_cierre_config_menu"
+                  name="Configuracion Cierre Diario"
+                  action="account_cierre_config_action"
+                  parent="account.menu_finance_receivables"
+                  sequence="15"
+                  groups="account.group_account_manager"/>
+    </data>
+</odoo>

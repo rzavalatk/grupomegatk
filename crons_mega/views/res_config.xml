@@ -3,6 +3,7 @@
     <data>
         <record id="res_config_settings_view_form_cierre_diario" model="ir.ui.view">
             <field name="name">res.config.settings.view.form.inherit.prestamos</field>
+            <field name="active" eval="False"/>
             <field name="model">res.config.settings</field>
             <field name="priority" eval="5"/>
             <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>

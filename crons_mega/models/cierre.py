@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from logging import config
+
 from odoo import models, api, fields
 from datetime import datetime
 from odoo.exceptions import UserError
@@ -105,8 +107,58 @@ class CierreDiario(models.Model):
         })        
 
     def iniciar_cierre(self):
-        journal_ids = self.env['res.config.settings'].sudo().get_values_journal_ids(
+        journal_ids = self.env['account.cierre.config'].sudo().get_journal_ids(
             self.company_id.id)
+
+        _logger.warning(
+            "iniciar_cierre (company_id=%s): journal_ids desde config=%s",
+            self.company_id.id,
+            journal_ids,
+        )
+        
+        config = self.env['account.cierre.config'].search([('company_id', '=', self.company_id.id)])
+        _logger.warning(f"Configuración encontrada para company_id={self.company_id.id}: {config}")
+        
+        journals = self.env['account.journal'].search([
+        ('company_id', '=', self.company_id.id),
+        ('type', 'in', ['bank', 'cash'])])
+
+        _logger.warning(f"Diarios de tipo 'bank' o 'cash' para company_id={self.company_id.id}: {[j.name for j in journals]}")
+        
+        if not journal_ids:
+            journal_names = [
+                'Efectivo',
+                'Cheques',
+                'Transferencia',
+                'Tarjeta de Credito',
+                'Tarjeta de Crédito',
+                'Pendiente de Deposito',
+                'Pendiente de Depósito',
+            ]
+            journal_ids = self.env['account.journal'].sudo().search([
+                ('company_id', '=', self.company_id.id),
+                ('name', 'in', journal_names),
+            ]).ids
+
+        if not journal_ids:
+            journal_ids = self.env['account.journal'].sudo().search([
+                ('company_id', '=', self.company_id.id),
+                ('type', 'in', ['bank', 'cash']),
+            ]).ids
+
+        if not journal_ids:
+            _logger.warning(
+                "iniciar_cierre (company_id=%s): no se encontraron diarios para crear lineas de cierre.",
+                self.company_id.id,
+            )
+        else:
+            journal_names = self.env['account.journal'].sudo().browse(journal_ids).mapped('name')
+            _logger.warning(
+                "iniciar_cierre (company_id=%s): diarios finales para cierre=%s",
+                self.company_id.id,
+                journal_names,
+            )
+
         values = [(0, 0,  {
             'credito': True
         })]
@@ -152,125 +204,173 @@ class CierreDiario(models.Model):
         else:
             canales_ids = [50, 49]
 
+        # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
+        # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
         pagos = self.env['account.payment'].sudo().search([
-            '&',
-            '&',
-            '&',
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
-            ('region', '=', self.region),
             ('partner_type', '=', 'customer'),
-            ('state', '=', 'posted'),
+            ('move_id.state', '=', 'posted'),
         ])
+
+        # Diagnóstico: si sigue en 0, loguear cuántos hay sin cada filtro para aislar cuál falla.
+        if not pagos:
+            pagos_sin_state = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+                ('partner_type', '=', 'customer'),
+            ])
+            pagos_sin_partner = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+                ('move_id.state', '=', 'posted'),
+            ])
+            pagos_solo_fecha = self.env['account.payment'].sudo().search([
+                ('date', '=', self.date),
+                ('company_id', '=', self.company_id.id),
+            ])
+            _logger.warning(
+                "DIAG pagos (company=%s, date=%s): "
+                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company=%s",
+                self.company_id.id, self.date,
+                len(pagos_sin_state), len(pagos_sin_partner), len(pagos_solo_fecha),
+            )
+            for p in pagos_solo_fecha[:10]:
+                _logger.warning(
+                    "  pago id=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
+                    p.id, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
+                )
+
         self.register_ids(pagos, 'pagos')
 
         facturas = self.env['account.move'].sudo().search([
-            '&',
-            '&',
-            '&',
-            '&',
-            '&',
             ('invoice_date', '=', self.date),
             ('company_id', '=', self.company_id.sudo().id),
             ('team_id', 'in', canales_ids),
             ('move_type', '=', 'out_invoice'),
-            ('state', '!=', 'cancel'),
-            ('state', '!=', 'draft'),
+            ('state', 'not in', ('cancel', 'draft')),
         ])
         self.register_ids(facturas, 'facturas')
 
-        mas_de_un_pago_factura = {}
-        ids_facturas = []
-        facturas_ganancia = []
+        _logger.warning(f"La region es {self.region}")
+        _logger.warning(f"Iniciando cierre")
+        _logger.warning(f"Canales ids: {canales_ids}")
+        _logger.warning(f"Total de pagos encontrados: {len(pagos)}")
+        _logger.warning(f"Total de facturas encontradas: {len(facturas)}")
 
-        # Recorrer los pagos
+        ids_facturas = set()
+        facturas_ganancia = self.env['account.move']
+
         for pago in pagos:
-            # Recorrer los diarios del cierre asignados
-            for item in self.cierre_line_ids:
-                # Compartar que pagos entran en los diarios de cierre
-                if pago.journal_id.sudo().id == item.journal_id.sudo().id:
-                    acumulado_factura = 0  # lo acumulado de facturas
-                    # recorrer facturas de los pagos
-                    for factura in pago.move_id.sudo().ids:
-                        
-                        #Obtenemos el dato del pago
-                        factura_move= self.env['account.move'].sudo().browse(factura)
-                        
-                        #OBtenemos la factura relacionada al pago
-                        factura_id = self.env['account.move'].search([('name', '=', factura_move.ref)])
-                        self.register_ids(factura_id, 'facturas de pagos')
+            _logger.warning(f"Pago id={pago.id} journal={pago.journal_id.name} amount={pago.amount}")
 
-                        if factura_id not in ids_facturas:
-                            if factura_id.invoice_date == self.date:
-                                try:
-                                    if factura_id.state != 'cancel':
-                                        payments_widget = factura_id.invoice_payments_widget
-                                        payments_list = payments_widget["content"]
-                                    else:
-                                        payments_widget = []
-                                except:
-                                    raise UserError(
-                                        f'Valor de payments_widget {factura_id.invoice_payments_widget} de factura {factura_id.name} con id {factura_id.id}')
-
-                                for pay in payments_list:                                    
-                                    if pay['date'] == self.date and pay['account_payment_id'] == pago.id:                                       
-                                        acumulado_factura += pay['amount']                                        
-                                        facturas_ganancia.append(factura_id)                                        
-                                        if len(payments_widget) > 1:
-                                            try:
-                                                mas_de_un_pago_factura[factura_id.internal_number]
-                                                temp = mas_de_un_pago_factura[factura_id.internal_number] - 1
-                                                if temp <= 0:
-                                                    if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                        ids_facturas = ids_facturas + \
-                                                            [factura_id.id]
-                                                else:
-                                                    mas_de_un_pago_factura[factura_id.internal_number] = temp
-                                            except:
-                                                mas_de_un_pago_factura[factura_id.internal_number] = len(
-                                                    payments_widget) - 1
-                                        else:
-                                            if 'Crédito' not in factura_id.invoice_payment_term_id.sudo().name:
-                                                ids_facturas = ids_facturas + \
-                                                    [factura_id.id]
-                    self.write({
-                        'cierre_line_ids': [(1, item.id, {
-                            'facturado': acumulado_factura + item.facturado,
-                            'cobrado': pago.amount + item.cobrado if acumulado_factura == 0 else item.cobrado
-                        })]
-                    })
-        self.register_list(ids_facturas, 'ids_facturas')
-        for factura in facturas:
-            if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
-                self.write({
-                    'facturas_ids': [(4, factura.id)]
+            # Buscar la línea de diario correspondiente (excluir línea de crédito)
+            journal_id_pago = pago.journal_id.id
+            diario_linea = self.cierre_line_ids.filtered(
+                lambda l, jid=journal_id_pago: not l.credito and l.journal_id.id == jid
+            )[:1]
+            if not diario_linea:
+                _logger.warning(
+                    "  Diario '%s' no estaba en cierre_line_ids; se crea linea dinamica para no perder el pago.",
+                    pago.journal_id.name,
+                )
+                diario_linea = self.env['account.cierre.line'].sudo().create({
+                    'cierre_id': self.id,
+                    'journal_id': pago.journal_id.id,
                 })
 
+            # FIX Odoo 18: usar reconciled_invoice_ids en lugar de move_id.ids
+            facturas_del_pago = pago.reconciled_invoice_ids.sudo().filtered(
+                lambda f: f.move_type == 'out_invoice'
+                and f.state not in ('cancel', 'draft')
+                and f.company_id.id == self.company_id.id
+                and f.team_id.id in canales_ids
+            )
+            # Sólo facturas de HOY → van a "Facturado"
+            fecha_str = str(self.date)
+            facturas_hoy = facturas_del_pago.filtered(
+                lambda f, fs=fecha_str: str(f.invoice_date) == fs
+            )
+            _logger.warning(f"  reconciliadas region={len(facturas_del_pago)}, hoy={len(facturas_hoy)}")
+
+            acumulado_factura = 0
+
+            if facturas_hoy:
+                for factura_id in facturas_hoy:
+                    payments_widget = factura_id.invoice_payments_widget or {}
+                    payments_list = (
+                        payments_widget.get("content", [])
+                        if isinstance(payments_widget, dict) else []
+                    )
+                    for pay in payments_list:
+                        pay_id_match = (
+                            (pay.get('account_payment_id') and pay.get('account_payment_id') == pago.id)
+                            or (pay.get('move_id') and pay.get('move_id') == pago.move_id.id)
+                        )
+                        if str(pay.get('date') or '') == fecha_str and pay_id_match:
+                            acumulado_factura += pay.get('amount') or 0
+                            ids_facturas.add(factura_id.id)
+                            facturas_ganancia |= factura_id
+
+                # Fallback: widget no devolvió match pero sí hay facturas reconciliadas de hoy
+                if acumulado_factura == 0:
+                    acumulado_factura = pago.amount
+                    for factura_id in facturas_hoy:
+                        ids_facturas.add(factura_id.id)
+                        facturas_ganancia |= factura_id
+                    _logger.warning(f"  Widget sin match, usando pago.amount={pago.amount} como fallback")
+
+                diario_linea.write({
+                    'facturado': diario_linea.facturado + acumulado_factura,
+                })
+
+                # Si el pago excede lo facturado hoy, el remanente corresponde a CxC antigua.
+                remanente_cxc = (pago.amount or 0.0) - (acumulado_factura or 0.0)
+                if remanente_cxc > 0:
+                    diario_linea.write({
+                        'cobrado': diario_linea.cobrado + remanente_cxc,
+                    })
+            else:
+                # Pago para facturas antiguas (CXC) de esta región → "Cobrado CXC"
+                diario_linea.write({
+                    'cobrado': diario_linea.cobrado + pago.amount,
+                })
+
+        self.register_list(list(ids_facturas), 'ids_facturas')
+
+        # Facturas al contado sin pago → registro de pendientes
+        for factura in facturas:
+            if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
+                self.write({'facturas_ids': [(4, factura.id)]})
+
+        # Facturas no cobradas hoy → línea de crédito
         for factura in facturas:
             if factura.id not in ids_facturas:
-                if factura.invoice_payment_term_id.sudo().name != 'Contado':
-                    for item in self.cierre_line_ids:
-                        if item.credito:
-                            self.write({
-                                'cierre_line_ids': [(1, item.id, {
-                                    'facturado': factura.amount_total_signed + item.facturado
-                                })]
-                            })
-        
+                # Si no quedo marcada en ids_facturas pero ya tiene pagos, no mandarla a credito.
+                if factura.payment_state in ('not_paid', 'partial') and factura.amount_residual == factura.amount_total:
+                    if factura.invoice_payment_term_id.sudo().name != 'Contado':
+                        for item in self.cierre_line_ids:
+                            if item.credito:
+                                item.write({
+                                    'facturado': item.facturado + factura.amount_total_signed,
+                                })
+                                break
+
         ganancia_total = 0
         for factura in facturas_ganancia:
-            costo_total = sum(line.product_id.standard_price * line.quantity for line in factura.invoice_line_ids)
+            costo_total = sum(
+                line.product_id.standard_price * line.quantity
+                for line in factura.invoice_line_ids
+            )
             ganancia_factura = factura.amount_total - costo_total
             ganancia_total += ganancia_factura
         self.ganancia_diaria = ganancia_total
-        
+
         self.procesar_promedio_mensual()
         time.sleep(1)
         self.procesar_promedio_anual()
-        
-        self.write({
-            'state': 'proccess'
-        })
+
+        self.write({'state': 'proccess'})
         
     def procesar_promedio_mensual(self):
         if self.region == self.regions_list[1][0]:
@@ -351,17 +451,25 @@ class CierreDiario(models.Model):
         })
                    
     def send_email(self, email, cc=""):
+        if not email:
+            _logger.warning("send_email (cierre %s): email_to vacío, se omite envío.", self.id)
+            return False
         template = self.env.ref(
-            'crons_mega.email_template_cierre_diario_1')
+            'crons_mega.email_template_cierre_diario_1', raise_if_not_found=False)
+        if not template:
+            _logger.error("send_email (cierre %s): template 'email_template_cierre_diario_1' no encontrada.", self.id)
+            return False
         email_values = {
             'email_from': 'megatk.no_reply@megatk.com',
             'email_to': email,
-            'email_cc': cc
+            'email_cc': cc or '',
         }
-        template.send_mail(self.id, email_values=email_values, force_send=True)
-        self.write({
-            'state': 'done'
-        })
+        try:
+            template.send_mail(self.id, email_values=email_values, force_send=True)
+            self.write({'state': 'done'})
+        except Exception as e:
+            _logger.error("send_email (cierre %s) falló al enviar a '%s': %s", self.id, email, e)
+            return False
         return True
 
     def cron_eject(self):
@@ -384,9 +492,12 @@ class CierreDiario(models.Model):
                         j += 1
 
             for i in ids:
-                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
-                cc_mega = "yalvarado@megatk.com"
-                cc_meditek = "nfuentes@meditekhn.com"
+                # principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
+                # cc_mega = "yalvarado@megatk.com"
+                # cc_meditek = "nfuentes@meditekhn.com"
+                principal_emails = "areyes@megatk.com"
+                cc_mega = "areyes@megatk.com"
+                cc_meditek = "areyes@megatk.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
                 time.sleep(1)
@@ -396,8 +507,10 @@ class CierreDiario(models.Model):
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
                     if cierre.sudo().region == 'San Pedro Sula':
-                        cc_mega += ",vmoran@megatk.com"
-                        cc_meditek += "dgarcia@meditekhn.com"
+                        # cc_mega += ",vmoran@megatk.com"
+                        # cc_meditek += "dgarcia@meditekhn.com"
+                        cc_mega += ",areyes@megatk.com"
+                        cc_meditek += "areyes@megatk.com"
                     cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
