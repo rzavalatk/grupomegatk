@@ -18,6 +18,7 @@ un control manual de pagos y duplicados desde pedidos de venta.
         'views/product_template_views.xml',
         'views/bac_payment_control_views.xml',
         'views/sale_order_views.xml',
+        'views/website_sale_templates.xml',
     ],
     'installable': True,
     'application': False,

@@ -2,10 +2,40 @@ from urllib.parse import quote
 
 from odoo import http
 from odoo.http import request
+from odoo.tools.misc import format_amount
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 
 class WebsiteSaleBacPaymentControl(WebsiteSale):
+
+    def _get_shop_payment_values(self, order, **kwargs):
+        values = super()._get_shop_payment_values(order, **kwargs)
+        bac_payment_controls = []
+        if order and order._bac_contains_enabled_products():
+            controls = order.sudo().bac_payment_control_ids.filtered(
+                lambda control: control.payment_link and control.payment_state != 'cancelled'
+            )
+            state_labels = dict(request.env['bac.payment.control']._fields['payment_state'].selection)
+            bac_payment_controls = [
+                {
+                    'product_name': control.product_id.display_name,
+                    'payment_link': control.payment_link,
+                    'configured_amount_display': format_amount(
+                        request.env,
+                        control.configured_amount,
+                        control.configured_currency_id,
+                    ),
+                    'payment_state': control.payment_state,
+                    'payment_state_label': state_labels.get(control.payment_state, control.payment_state),
+                    'note': control.note,
+                }
+                for control in controls
+            ]
+        values.update({
+            'bac_payment_controls': bac_payment_controls,
+            'bac_has_payment_links': bool(bac_payment_controls),
+        })
+        return values
 
     def _bac_get_setting(self, key, default=False):
         param = request.env['ir.config_parameter'].sudo().get_param(key)

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_sale_payment_bac_links" inherit_id="website_sale.payment" name="BAC links on website checkout">
+        <xpath expr="//div[@name='website_sale_non_free_cart']" position="replace">
+            <t t-if="bac_has_payment_links">
+                <t t-set="hide_payment_button" t-value="True"/>
+                <div name="website_sale_non_free_cart">
+                    <div id="payment_method" class="o_not_editable mt-4">
+                        <h4 class="mb-3">Pago BAC</h4>
+
+                        <div class="alert alert-info" role="alert">
+                            <h5 class="alert-heading mb-2">Pago por link BAC</h5>
+                            <p class="mb-2">Para completar esta compra debe usar el link de pago BAC. No hay otras opciones de pago disponibles para este pedido.</p>
+                            <p class="mb-0">Realice el pago, conserve su comprobante y luego el equipo validara manualmente la transaccion.</p>
+                        </div>
+
+                        <div class="d-flex flex-column gap-3">
+                            <div t-foreach="bac_payment_controls" t-as="bac_control" class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                                        <div>
+                                            <h5 class="mb-1" t-out="bac_control['product_name']"/>
+                                            <div class="text-muted mb-2">
+                                                <strong>Monto BAC:</strong>
+                                                <span t-out="bac_control['configured_amount_display']"/>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Estado:</strong>
+                                                <span t-out="bac_control['payment_state_label']"/>
+                                            </div>
+                                            <p t-if="bac_control['note']" class="mb-0 text-muted" t-out="bac_control['note']"/>
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <a t-att-href="bac_control['payment_link']" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                                                Abrir link de pago BAC
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <div t-if="not errors and website_sale_order.amount_total" name="website_sale_non_free_cart">
+                    <div id="payment_method" class="o_not_editable mt-4">
+                        <t t-call="payment.form"/>
+                    </div>
+                    <t t-if="not (payment_methods_sudo or tokens_sudo)" t-set="hide_payment_button" t-value="True"/>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>
