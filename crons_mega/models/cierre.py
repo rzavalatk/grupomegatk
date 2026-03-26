@@ -474,22 +474,26 @@ class CierreDiario(models.Model):
 
     def cron_eject(self):
         admin = self.env['res.users'].sudo().browse(2)
-        user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
+        tz_name = self.env.context.get('tz') or admin.tz or 'UTC'
+        try:
+            user_tz = pytz.timezone(tz_name)
+        except Exception:
+            _logger.warning("cron_eject: zona horaria invalida '%s', usando UTC.", tz_name)
+            user_tz = pytz.UTC
         today = datetime.now(user_tz)
         if today.weekday() != 6:
             company_ids = [8, 9, 12]
             ids = []
             for i in company_ids:
-                if i != 12:
-                    j = 0
-                    while j < 2:
-                        obj = self.create({
-                            'date': today,
-                            'company_id': i,
-                            'region': self.regions_list[j][0]
-                        })
-                        ids.append(obj.id)
-                        j += 1
+                j = 0
+                while j < 2:
+                    obj = self.create({
+                        'date': today,
+                        'company_id': i,
+                        'region': self.regions_list[j][0]
+                    })
+                    ids.append(obj.id)
+                    j += 1
 
             for i in ids:
                 # principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
@@ -498,24 +502,29 @@ class CierreDiario(models.Model):
                 principal_emails = "areyes@megatk.com"
                 cc_mega = "areyes@megatk.com"
                 cc_meditek = "areyes@megatk.com"
-                cierre = self.sudo().browse(i)
-                cierre.iniciar_cierre()
-                time.sleep(1)
-                cierre.procesar_cierre()
-                time.sleep(1)
-                
-                if cierre.company_id.sudo().id in [8, 12]:
+                try:
+                    cierre = self.sudo().browse(i)
+                    cierre.iniciar_cierre()
                     time.sleep(1)
-                    if cierre.sudo().region == 'San Pedro Sula':
-                        # cc_mega += ",vmoran@megatk.com"
-                        # cc_meditek += "dgarcia@meditekhn.com"
-                        cc_mega += ",areyes@megatk.com"
-                        cc_meditek += "areyes@megatk.com"
-                    cierre.send_email(principal_emails, cc_mega)
-                if cierre.company_id.sudo().id in [9]:
+                    cierre.procesar_cierre()
                     time.sleep(1)
-                    cierre.send_email(principal_emails, cc_meditek) #Meditek
-                time.sleep(1)
+
+                    if cierre.company_id.sudo().id in [8, 12]:
+                        time.sleep(1)
+                        if cierre.sudo().region == 'San Pedro Sula':
+                            # cc_mega += ",vmoran@megatk.com"
+                            # cc_meditek += "dgarcia@meditekhn.com"
+                            cc_mega += ",areyes@megatk.com"
+                            cc_meditek += "areyes@megatk.com"
+                        if not cierre.send_email(principal_emails, cc_mega):
+                            _logger.error("cron_eject: fallo envio cierre_id=%s company_id=%s", cierre.id, cierre.company_id.id)
+                    if cierre.company_id.sudo().id in [9]:
+                        time.sleep(1)
+                        if not cierre.send_email(principal_emails, cc_meditek): #Meditek
+                            _logger.error("cron_eject: fallo envio cierre_id=%s company_id=%s", cierre.id, cierre.company_id.id)
+                    time.sleep(1)
+                except Exception:
+                    _logger.exception("cron_eject: error procesando cierre_id=%s", i)
 
     def go_to_view_tree(self):
         return {
