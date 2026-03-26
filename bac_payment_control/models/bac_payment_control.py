@@ -32,6 +32,12 @@ class BacPaymentControl(models.Model):
         store=True,
         readonly=True,
     )
+    salesperson_id = fields.Many2one(
+        related='order_id.user_id',
+        string='Vendedor responsable',
+        store=True,
+        readonly=True,
+    )
     product_id = fields.Many2one(
         'product.product',
         string='Producto',
@@ -97,8 +103,15 @@ class BacPaymentControl(models.Model):
     note = fields.Text(string='Observaciones')
 
     def _check_manual_validation_permission(self):
-        if not self.env.user.has_group('sales_team.group_sale_manager'):
-            raise UserError(_('Solo un responsable de ventas autorizado puede validar o marcar pagos duplicados.'))
+        current_user = self.env.user
+        for record in self:
+            if current_user.has_group('sales_team.group_sale_manager'):
+                continue
+            if record.salesperson_id and record.salesperson_id == current_user:
+                continue
+            raise UserError(_(
+                'Solo el vendedor responsable del pedido o un gerente de ventas puede validar o marcar pagos duplicados.'
+            ))
 
     def _is_reference_used_in_order(self, reference):
         self.ensure_one()

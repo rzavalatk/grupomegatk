@@ -8,6 +8,7 @@
                 <list>
                     <field name="name"/>
                     <field name="partner_id"/>
+                    <field name="salesperson_id"/>
                     <field name="order_id"/>
                     <field name="product_id"/>
                     <field name="payment_state"/>
@@ -28,6 +29,7 @@
                 <search>
                     <field name="name"/>
                     <field name="partner_id"/>
+                    <field name="salesperson_id"/>
                     <field name="order_id"/>
                     <field name="product_id"/>
                     <filter name="filter_pending_validation"
@@ -35,9 +37,11 @@
                             domain="[('payment_state', 'in', ('pending', 'mismatch'))]"/>
                     <filter name="filter_paid" string="Pagados" domain="[('payment_state', '=', 'paid')]"/>
                     <filter name="filter_duplicates" string="Con duplicados" domain="[('duplicate_attempt_count', '>', 0)]"/>
+                    <filter name="filter_my_controls" string="Mis controles" domain="[('salesperson_id', '=', uid)]"/>
                     <group expand="0" string="Agrupar por">
                         <filter name="group_state" string="Estado" context="{'group_by': 'payment_state'}"/>
                         <filter name="group_partner" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_salesperson" string="Vendedor" context="{'group_by': 'salesperson_id'}"/>
                     </group>
                 </search>
             </field>
@@ -49,9 +53,9 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_mark_paid" string="Validar pago manual" type="object" class="oe_highlight" groups="sales_team.group_sale_manager" invisible="payment_state == 'cancelled'"/>
-                        <button name="action_mark_duplicate" string="Registrar duplicado" type="object" groups="sales_team.group_sale_manager" invisible="payment_state != 'paid'"/>
-                        <button name="action_cancel_control" string="Cancelar control" type="object" groups="sales_team.group_sale_manager" invisible="payment_state == 'cancelled'"/>
+                        <button name="action_mark_paid" string="Validar pago manual" type="object" class="oe_highlight" groups="sales_team.group_sale_salesman" invisible="payment_state in ('paid', 'cancelled')"/>
+                        <button name="action_mark_duplicate" string="Registrar duplicado" type="object" groups="sales_team.group_sale_salesman" invisible="payment_state != 'paid'"/>
+                        <button name="action_cancel_control" string="Cancelar control" type="object" groups="sales_team.group_sale_salesman" invisible="payment_state == 'cancelled'"/>
                         <field name="payment_state" widget="statusbar" statusbar_visible="pending,paid,mismatch,cancelled"/>
                     </header>
                     <sheet>
@@ -61,6 +65,7 @@
                                 <field name="order_id" readonly="1"/>
                                 <field name="order_line_id" readonly="1"/>
                                 <field name="partner_id" readonly="1"/>
+                                <field name="salesperson_id" readonly="1"/>
                                 <field name="product_id" readonly="1"/>
                             </group>
                             <group>
@@ -96,6 +101,50 @@
             </field>
         </record>
 
+        <record id="view_bac_payment_control_form_popup" model="ir.ui.view">
+            <field name="name">bac.payment.control.form.popup</field>
+            <field name="model">bac.payment.control</field>
+            <field name="arch" type="xml">
+                <form string="Validacion BAC">
+                    <header>
+                        <button name="action_mark_paid" string="Validar pago manual" type="object" class="oe_highlight" groups="sales_team.group_sale_salesman" invisible="payment_state in ('paid', 'cancelled')"/>
+                        <button name="action_mark_duplicate" string="Registrar duplicado" type="object" groups="sales_team.group_sale_salesman" invisible="payment_state != 'paid'"/>
+                        <button name="action_cancel_control" string="Cancelar control" type="object" groups="sales_team.group_sale_salesman" invisible="payment_state == 'cancelled'"/>
+                        <field name="payment_state" widget="statusbar" statusbar_visible="pending,paid,mismatch,cancelled"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="order_id" readonly="1"/>
+                                <field name="order_line_id" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="salesperson_id" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="configured_amount" readonly="1"/>
+                                <field name="configured_currency_id" readonly="1"/>
+                                <field name="expected_amount" readonly="1"/>
+                                <field name="order_currency_id" readonly="1"/>
+                                <field name="amount_matches" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Pago BAC">
+                            <field name="payment_link" widget="url" readonly="1"/>
+                            <field name="incoming_reference" placeholder="Referencia recibida de BAC"/>
+                            <field name="payment_reference" readonly="1"/>
+                            <field name="last_duplicate_reference" readonly="1"/>
+                            <field name="duplicate_attempt_count" readonly="1"/>
+                            <field name="manual_validated_by_id" readonly="1"/>
+                            <field name="manual_validated_on" readonly="1"/>
+                            <field name="paid_on" readonly="1"/>
+                            <field name="note"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <record id="action_bac_payment_control" model="ir.actions.act_window">
             <field name="name">Controles BAC</field>
             <field name="res_model">bac.payment.control</field>
@@ -109,8 +158,8 @@
             <field name="view_mode">list,form</field>
             <field name="search_view_id" ref="view_bac_payment_control_search"/>
             <field name="domain">[('payment_state', 'in', ('pending', 'mismatch'))]</field>
-            <field name="context">{'search_default_filter_pending_validation': 1}</field>
-            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
+            <field name="context">{'search_default_filter_pending_validation': 1, 'search_default_filter_my_controls': 1}</field>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
         </record>
 
         <menuitem id="menu_bac_payment_control"
@@ -124,6 +173,6 @@
                   parent="menu_bac_payment_control"
                   sequence="10"
                   action="action_bac_payment_pending"
-                  groups="sales_team.group_sale_manager"/>
+                  groups="sales_team.group_sale_salesman"/>
     </data>
 </odoo>
