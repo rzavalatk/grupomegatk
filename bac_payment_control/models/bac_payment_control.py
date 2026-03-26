@@ -98,6 +98,28 @@ class BacPaymentControl(models.Model):
         if not self.env.user.has_group('sales_team.group_sale_manager'):
             raise UserError(_('Solo un responsable de ventas autorizado puede validar o marcar pagos duplicados.'))
 
+    def _is_reference_used_in_order(self, reference):
+        self.ensure_one()
+        if not reference:
+            return False
+        domain = [
+            ('order_id', '=', self.order_id.id),
+            ('id', '!=', self.id),
+            '|', '|',
+            ('payment_reference', '=', reference),
+            ('last_duplicate_reference', '=', reference),
+            ('incoming_reference', '=', reference),
+        ]
+        return bool(self.search_count(domain))
+
+    @api.constrains('order_id', 'payment_reference', 'last_duplicate_reference', 'incoming_reference')
+    def _check_references_unique_per_order(self):
+        for record in self:
+            for field_name in ('payment_reference', 'last_duplicate_reference', 'incoming_reference'):
+                reference = (record[field_name] or '').strip()
+                if reference and record._is_reference_used_in_order(reference):
+                    raise UserError(_('La referencia "%s" ya fue usada en este pedido. Debe ingresar una referencia unica por pedido.') % reference)
+
     @api.depends('order_id.name', 'product_id.display_name')
     def _compute_name(self):
         for record in self:
@@ -146,7 +168,9 @@ class BacPaymentControl(models.Model):
         for record in self:
             if not record.incoming_reference:
                 raise UserError(_('Debe ingresar la referencia de comprobante antes de validar el pago manual.'))
-            reference = record.incoming_reference
+            reference = record.incoming_reference.strip()
+            if record._is_reference_used_in_order(reference):
+                raise UserError(_('La referencia "%s" ya fue usada en este pedido. Debe ingresar una referencia unica por pedido.') % reference)
             if not record.amount_matches:
                 raise UserError(_('No puede registrar el pago porque el monto del pedido no coincide con el monto configurado en BAC.'))
             if record.payment_state == 'paid':
@@ -172,7 +196,9 @@ class BacPaymentControl(models.Model):
                 raise UserError(_('Solo puede marcar pagos duplicados sobre controles ya pagados.'))
             if not record.incoming_reference:
                 raise UserError(_('Debe ingresar la referencia del segundo intento para registrar el duplicado.'))
-            reference = record.incoming_reference
+            reference = record.incoming_reference.strip()
+            if record._is_reference_used_in_order(reference):
+                raise UserError(_('La referencia "%s" ya fue usada en este pedido. Debe ingresar una referencia unica por pedido.') % reference)
             record.write({
                 'duplicate_attempt_count': record.duplicate_attempt_count + 1,
                 'last_duplicate_reference': reference,
