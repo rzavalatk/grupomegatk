@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_form_bac_payment_control" model="ir.ui.view">
+            <field name="name">product.template.form.bac.payment.control</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='general_information']/group[1]" position="after">
+                    <group string="Pago BAC">
+                        <group>
+                            <field name="bac_payment_enabled"/>
+                            <field name="bac_payment_link" invisible="not bac_payment_enabled"/>
+                            <field name="bac_payment_notes" invisible="not bac_payment_enabled" placeholder="Uso interno del enlace BAC"/>
+                        </group>
+                        <group>
+                            <field name="bac_payment_amount" invisible="not bac_payment_enabled"/>
+                            <field name="bac_payment_currency_id" invisible="not bac_payment_enabled"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_bac_payment_control" model="ir.ui.view">
+            <field name="name">product.template.only.form.bac.payment.control</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[@name='Product Template']/sheet/notebook" position="inside">
+                    <page string="Pago BAC" name="bac_payment_page">
+                        <group>
+                            <group>
+                                <field name="bac_payment_enabled"/>
+                                <field name="bac_payment_link" invisible="not bac_payment_enabled" widget="url"/>
+                                <field name="bac_payment_notes" invisible="not bac_payment_enabled"/>
+                            </group>
+                            <group>
+                                <field name="bac_payment_amount" invisible="not bac_payment_enabled"/>
+                                <field name="bac_payment_currency_id" invisible="not bac_payment_enabled"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

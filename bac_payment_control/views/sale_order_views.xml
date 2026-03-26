@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_form_bac_payment_control" model="ir.ui.view">
+            <field name="name">sale.order.form.bac.payment.control</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_bac_payment_controls"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-credit-card">
+                        <field name="bac_payment_control_count" widget="statinfo" string="BAC"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button name="action_prepare_bac_payment_controls"
+                            string="Preparar controles BAC"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state not in ('draft', 'sent', 'sale')"/>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="bac_payment_status" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="BAC" name="bac_payment_controls">
+                        <field name="bac_payment_control_ids" readonly="1">
+                            <list>
+                                <field name="product_id"/>
+                                <field name="payment_state"/>
+                                <field name="configured_amount"/>
+                                <field name="expected_amount"/>
+                                <field name="amount_matches"/>
+                                <field name="payment_reference"/>
+                                <field name="duplicate_attempt_count"/>
+                                <field name="last_duplicate_reference"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -36,5 +36,6 @@
         'views/email_template_2.xml',
         'views/stock_production_lot.xml',
         'views/res_config.xml',
+        'views/res_config_menu.xml',
     ]
 }

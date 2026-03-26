@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bac_payment_control_user,bac.payment.control.user,model_bac_payment_control,sales_team.group_sale_salesman,1,1,1,0
+access_bac_payment_control_manager,bac.payment.control.manager,model_bac_payment_control,sales_team.group_sale_manager,1,1,1,1

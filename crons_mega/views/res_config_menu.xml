@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Acción de Configuración de Cierres Diarios -->
+        <record id="res_config_settings_action_cierres_diarios" model="ir.actions.act_window">
+            <field name="name">Configuración de Cierres Diarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="view_id" ref="res_config_settings_view_form_cierre_diario"/>
+            <field name="context">{'module': 'crons_mega'}</field>
+        </record>
+
+        <!-- Menú de Configuración en raíz de Crons Mega -->
+        <menuitem 
+            id="menu_crons_mega_configuration"
+            name="Configuración de Cierres"
+            parent="base.menu_administration"
+            sequence="90"
+            action="res_config_settings_action_cierres_diarios"
+            groups="base.group_system"/>
+    </data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bac_payment_control_tree" model="ir.ui.view">
+            <field name="name">bac.payment.control.tree</field>
+            <field name="model">bac.payment.control</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="payment_state"/>
+                    <field name="configured_amount"/>
+                    <field name="expected_amount"/>
+                    <field name="amount_matches"/>
+                    <field name="payment_reference"/>
+                    <field name="duplicate_attempt_count"/>
+                    <field name="paid_on"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_bac_payment_control_form" model="ir.ui.view">
+            <field name="name">bac.payment.control.form</field>
+            <field name="model">bac.payment.control</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_mark_paid" string="Registrar pago" type="object" class="oe_highlight" invisible="payment_state == 'cancelled'"/>
+                        <button name="action_mark_duplicate" string="Registrar duplicado" type="object" invisible="payment_state != 'paid'"/>
+                        <button name="action_cancel_control" string="Cancelar control" type="object" invisible="payment_state == 'cancelled'"/>
+                        <field name="payment_state" widget="statusbar" statusbar_visible="pending,paid,mismatch,cancelled"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="order_id" readonly="1"/>
+                                <field name="order_line_id" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="payment_link" widget="url" readonly="1"/>
+                                <field name="configured_amount" readonly="1"/>
+                                <field name="configured_currency_id" readonly="1"/>
+                                <field name="expected_amount" readonly="1"/>
+                                <field name="order_currency_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Control de pago">
+                            <group>
+                                <field name="amount_matches" readonly="1"/>
+                                <field name="incoming_reference" placeholder="Referencia recibida de BAC"/>
+                                <field name="payment_reference" readonly="1"/>
+                                <field name="paid_on" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="duplicate_attempt_count" readonly="1"/>
+                                <field name="last_duplicate_reference" readonly="1"/>
+                                <field name="note"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_bac_payment_control" model="ir.actions.act_window">
+            <field name="name">Controles BAC</field>
+            <field name="res_model">bac.payment.control</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_bac_payment_control"
+                  name="Controles BAC"
+                  parent="sale.sale_order_menu"
+                  sequence="80"
+                  action="action_bac_payment_control"/>
+    </data>
+</odoo>
