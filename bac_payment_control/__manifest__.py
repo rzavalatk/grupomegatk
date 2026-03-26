@@ -11,7 +11,7 @@ un control manual de pagos y duplicados desde pedidos de venta.
     'category': 'Sales',
     'version': '18.0.1.0.0',
     'license': 'LGPL-3',
-    'depends': ['sale_management', 'website_sale'],
+    'depends': ['sale_management', 'website_sale', 'mail'],
     'data': [
         'security/ir.model.access.csv',
         'views/res_config_settings_views.xml',

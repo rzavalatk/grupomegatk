@@ -7,6 +7,7 @@ class BacPaymentControl(models.Model):
     _name = 'bac.payment.control'
     _description = 'Control de pago BAC'
     _order = 'create_date desc, id desc'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(
         string='Nombre',
@@ -72,6 +73,7 @@ class BacPaymentControl(models.Model):
         string='Estado',
         default='pending',
         required=True,
+        tracking=True,
     )
     amount_matches = fields.Boolean(
         string='Monto coincide',
@@ -143,6 +145,17 @@ class BacPaymentControl(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         records._sync_payment_state_with_amount()
+        for record in records:
+            if record.payment_state == 'pending':
+                responsible = record.order_id.user_id or self.env.user
+                record.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    note=_(
+                        'Pago BAC pendiente de validacion: Pedido <b>%s</b> — Producto <b>%s</b>. '
+                        'Ingrese la referencia del comprobante BAC y valide el pago.'
+                    ) % (record.order_id.name, record.product_id.display_name),
+                    user_id=responsible.id,
+                )
         return records
 
     def write(self, vals):
@@ -188,6 +201,14 @@ class BacPaymentControl(models.Model):
                 'manual_validated_on': fields.Datetime.now(),
                 'incoming_reference': False,
             })
+            record.message_post(
+                body=_(
+                    'Pago BAC confirmado por <b>%s</b>.<br/>'
+                    'Referencia de comprobante: <b>%s</b>'
+                ) % (self.env.user.name, reference),
+                partner_ids=record.partner_id.ids,
+                subtype_xmlid='mail.mt_comment',
+            )
 
     def action_mark_duplicate(self):
         self._check_manual_validation_permission()
