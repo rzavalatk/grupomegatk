@@ -14,6 +14,7 @@ un control manual de pagos y duplicados desde pedidos de venta.
     'depends': ['sale_management', 'website_sale'],
     'data': [
         'security/ir.model.access.csv',
+        'views/res_config_settings_views.xml',
         'views/product_template_views.xml',
         'views/bac_payment_control_views.xml',
         'views/sale_order_views.xml',

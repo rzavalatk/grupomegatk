@@ -4,6 +4,13 @@ from odoo import _, fields, models
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    def _bac_contains_enabled_products(self):
+        self.ensure_one()
+        lines = self.order_line.filtered(
+            lambda line: not line.display_type and line.product_template_id.bac_payment_enabled
+        )
+        return bool(lines)
+
     bac_payment_control_ids = fields.One2many(
         'bac.payment.control',
         'order_id',

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_bac_payment_control" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.bac.payment.control</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="BAC Payment" string="BAC Payment" groups="base.group_system">
+                        <h2>Pago BAC</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="bac_registered_only_payment"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Restringir pago a usuarios registrados</span>
+                                    <div class="text-muted">
+                                        Si el carrito incluye productos BAC, el cliente debe iniciar sesion para pagar.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="bac_auto_prepare_checkout"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Preparar controles BAC en checkout</span>
+                                    <div class="text-muted">
+                                        Genera automaticamente los controles BAC al entrar a la pagina de pago.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

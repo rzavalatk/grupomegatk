@@ -83,7 +83,20 @@ class BacPaymentControl(models.Model):
     paid_on = fields.Datetime(string='Fecha de pago')
     duplicate_attempt_count = fields.Integer(string='Intentos duplicados', default=0)
     last_duplicate_reference = fields.Char(string='Ultima referencia duplicada')
+    manual_validated_by_id = fields.Many2one(
+        'res.users',
+        string='Validado por',
+        readonly=True,
+    )
+    manual_validated_on = fields.Datetime(
+        string='Fecha de validacion',
+        readonly=True,
+    )
     note = fields.Text(string='Observaciones')
+
+    def _check_manual_validation_permission(self):
+        if not self.env.user.has_group('sales_team.group_sale_manager'):
+            raise UserError(_('Solo un responsable de ventas autorizado puede validar o marcar pagos duplicados.'))
 
     @api.depends('order_id.name', 'product_id.display_name')
     def _compute_name(self):
@@ -129,6 +142,7 @@ class BacPaymentControl(models.Model):
             record.payment_state = 'pending' if record.amount_matches else 'mismatch'
 
     def action_mark_paid(self):
+        self._check_manual_validation_permission()
         for record in self:
             reference = record.incoming_reference or record.payment_reference or _('MANUAL')
             if not record.amount_matches:
@@ -144,10 +158,13 @@ class BacPaymentControl(models.Model):
                 'payment_state': 'paid',
                 'payment_reference': reference,
                 'paid_on': fields.Datetime.now(),
+                'manual_validated_by_id': self.env.user.id,
+                'manual_validated_on': fields.Datetime.now(),
                 'incoming_reference': False,
             })
 
     def action_mark_duplicate(self):
+        self._check_manual_validation_permission()
         for record in self:
             if record.payment_state != 'paid':
                 raise UserError(_('Solo puede marcar pagos duplicados sobre controles ya pagados.'))
@@ -159,4 +176,5 @@ class BacPaymentControl(models.Model):
             })
 
     def action_cancel_control(self):
+        self._check_manual_validation_permission()
         self.write({'payment_state': 'cancelled', 'incoming_reference': False})
