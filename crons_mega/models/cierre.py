@@ -29,14 +29,6 @@ class CierreDiario(models.Model):
         ("Tegucigalpa", "TGU"),
     ]
 
-    def _get_canales_ids(self):
-        self.ensure_one()
-        if self.region == self.regions_list[1][0]:
-            return [35, 36, 37, 38, 39, 45, 47, 53]
-        if self.region == self.regions_list[0][0]:
-            return [43, 41, 46, 58, 44]
-        return [50, 49]
-
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -205,7 +197,12 @@ class CierreDiario(models.Model):
         })
 
     def procesar_cierre(self):
-        canales_ids = self._get_canales_ids()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
         # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
@@ -244,16 +241,7 @@ class CierreDiario(models.Model):
                     p.id, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
                 )
 
-        pagos_region = pagos.filtered(
-            lambda pago: pago.reconciled_invoice_ids.sudo().filtered(
-                lambda factura: factura.move_type == 'out_invoice'
-                and factura.state not in ('cancel', 'draft')
-                and factura.company_id.id == self.company_id.id
-                and factura.team_id.id in canales_ids
-            )
-        )
-
-        self.register_ids(pagos_region, 'pagos')
+        self.register_ids(pagos, 'pagos')
 
         facturas = self.env['account.move'].sudo().search([
             ('invoice_date', '=', self.date),
@@ -268,13 +256,12 @@ class CierreDiario(models.Model):
         _logger.warning(f"Iniciando cierre")
         _logger.warning(f"Canales ids: {canales_ids}")
         _logger.warning(f"Total de pagos encontrados: {len(pagos)}")
-        _logger.warning(f"Total de pagos filtrados por region: {len(pagos_region)}")
         _logger.warning(f"Total de facturas encontradas: {len(facturas)}")
 
         ids_facturas = set()
         facturas_ganancia = self.env['account.move']
 
-        for pago in pagos_region:
+        for pago in pagos:
             _logger.warning(f"Pago id={pago.id} journal={pago.journal_id.name} amount={pago.amount}")
 
             # Buscar la línea de diario correspondiente (excluir línea de crédito)
@@ -299,14 +286,6 @@ class CierreDiario(models.Model):
                 and f.company_id.id == self.company_id.id
                 and f.team_id.id in canales_ids
             )
-            if not facturas_del_pago:
-                _logger.warning(
-                    "  Pago id=%s omitido del cierre de %s porque no tiene facturas reconciliadas de esta region.",
-                    pago.id,
-                    self.region,
-                )
-                continue
-
             # Sólo facturas de HOY → van a "Facturado"
             fecha_str = str(self.date)
             facturas_hoy = facturas_del_pago.filtered(
@@ -394,7 +373,12 @@ class CierreDiario(models.Model):
         self.write({'state': 'proccess'})
         
     def procesar_promedio_mensual(self):
-        canales_ids = self._get_canales_ids()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         dia = self.date.day
         mes = self.date.month
@@ -428,7 +412,12 @@ class CierreDiario(models.Model):
         })
             
     def procesar_promedio_anual(self):
-        canales_ids = self._get_canales_ids()
+        if self.region == self.regions_list[1][0]:
+            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
+        elif self.region == self.regions_list[0][0]:
+            canales_ids = [43, 41, 46, 58, 44]
+        else:
+            canales_ids = [50, 49]
 
         dia = self.date.day
         mes = self.date.month
