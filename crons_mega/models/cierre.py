@@ -29,6 +29,20 @@ class CierreDiario(models.Model):
         ("Tegucigalpa", "TGU"),
     ]
 
+    def _get_region_values(self):
+        region_map = {
+            'San Pedro Sula': ['San Pedro Sula', 'SPS'],
+            'Tegucigalpa': ['Tegucigalpa', 'TGU'],
+        }
+        return region_map.get(self.region, [self.region])
+
+    def _get_canales_ids(self):
+        if self.region == self.regions_list[1][0]:
+            return [35, 36, 37, 38, 39, 45, 47, 53]
+        if self.region == self.regions_list[0][0]:
+            return [43, 41, 46, 58, 44]
+        return [50, 49]
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -197,18 +211,15 @@ class CierreDiario(models.Model):
         })
 
     def procesar_cierre(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
+        region_values = self._get_region_values()
 
         # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
         # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
         pagos = self.env['account.payment'].sudo().search([
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
+            ('region', 'in', region_values),
             ('partner_type', '=', 'customer'),
             ('move_id.state', '=', 'posted'),
         ])
@@ -218,27 +229,30 @@ class CierreDiario(models.Model):
             pagos_sin_state = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('partner_type', '=', 'customer'),
             ])
             pagos_sin_partner = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('move_id.state', '=', 'posted'),
             ])
             pagos_solo_fecha = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
             ])
             _logger.warning(
-                "DIAG pagos (company=%s, date=%s): "
-                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company=%s",
-                self.company_id.id, self.date,
+                "DIAG pagos (company=%s, region=%s, date=%s): "
+                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company_region=%s",
+                self.company_id.id, self.region, self.date,
                 len(pagos_sin_state), len(pagos_sin_partner), len(pagos_solo_fecha),
             )
             for p in pagos_solo_fecha[:10]:
                 _logger.warning(
-                    "  pago id=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
-                    p.id, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
+                    "  pago id=%s region=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
+                    p.id, p.region, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
                 )
 
         self.register_ids(pagos, 'pagos')
@@ -373,12 +387,7 @@ class CierreDiario(models.Model):
         self.write({'state': 'proccess'})
         
     def procesar_promedio_mensual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
 
         dia = self.date.day
         mes = self.date.month
@@ -412,12 +421,7 @@ class CierreDiario(models.Model):
         })
             
     def procesar_promedio_anual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
 
         dia = self.date.day
         mes = self.date.month
@@ -474,57 +478,48 @@ class CierreDiario(models.Model):
 
     def cron_eject(self):
         admin = self.env['res.users'].sudo().browse(2)
-        tz_name = self.env.context.get('tz') or admin.tz or 'UTC'
-        try:
-            user_tz = pytz.timezone(tz_name)
-        except Exception:
-            _logger.warning("cron_eject: zona horaria invalida '%s', usando UTC.", tz_name)
-            user_tz = pytz.UTC
+        user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
         if today.weekday() != 6:
             company_ids = [8, 9, 12]
             ids = []
             for i in company_ids:
-                j = 0
-                while j < 2:
-                    obj = self.create({
-                        'date': today,
-                        'company_id': i,
-                        'region': self.regions_list[j][0]
-                    })
-                    ids.append(obj.id)
-                    j += 1
+                if i != 12:
+                    j = 0
+                    while j < 2:
+                        obj = self.create({
+                            'date': today,
+                            'company_id': i,
+                            'region': self.regions_list[j][0]
+                        })
+                        ids.append(obj.id)
+                        j += 1
 
             for i in ids:
-                # principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
-                # cc_mega = "yalvarado@megatk.com"
-                # cc_meditek = "nfuentes@meditekhn.com"
-                principal_emails = "areyes@megatk.com,dvasquez@megatk.com"
-                cc_mega = "areyes@megatk.com"
-                cc_meditek = "areyes@megatk.com"
-                try:
-                    cierre = self.sudo().browse(i)
-                    cierre.iniciar_cierre()
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
+                cc_meditek = "nfuentes@meditekhn.com"
+                # principal_emails = "areyes@megatk.com"
+                # cc_mega = "areyes@megatk.com"
+                # cc_meditek = "areyes@megatk.com"
+                cierre = self.sudo().browse(i)
+                cierre.iniciar_cierre()
+                time.sleep(1)
+                cierre.procesar_cierre()
+                time.sleep(1)
+                
+                if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
-                    cierre.procesar_cierre()
+                    if cierre.sudo().region == 'San Pedro Sula':
+                        cc_mega += ",vmoran@megatk.com"
+                        cc_meditek += "dgarcia@meditekhn.com"
+                        # cc_mega += ",areyes@megatk.com"
+                        # cc_meditek += "areyes@megatk.com"
+                    cierre.send_email(principal_emails, cc_mega)
+                if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
-
-                    if cierre.company_id.sudo().id in [8, 12]:
-                        time.sleep(1)
-                        if cierre.sudo().region == 'San Pedro Sula':
-                            # cc_mega += ",vmoran@megatk.com"
-                            # cc_meditek += "dgarcia@meditekhn.com"
-                            cc_mega += ",areyes@megatk.com, dvasquez@megatk.com"
-                            cc_meditek += "areyes@megatk.com, dvasquez@megatk.com"
-                        if not cierre.send_email(principal_emails, cc_mega):
-                            _logger.error("cron_eject: fallo envio cierre_id=%s company_id=%s", cierre.id, cierre.company_id.id)
-                    if cierre.company_id.sudo().id in [9]:
-                        time.sleep(1)
-                        if not cierre.send_email(principal_emails, cc_meditek): #Meditek
-                            _logger.error("cron_eject: fallo envio cierre_id=%s company_id=%s", cierre.id, cierre.company_id.id)
-                    time.sleep(1)
-                except Exception:
-                    _logger.exception("cron_eject: error procesando cierre_id=%s", i)
+                    cierre.send_email(principal_emails, cc_meditek) #Meditek
+                time.sleep(1)
 
     def go_to_view_tree(self):
         return {
