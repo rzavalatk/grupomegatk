@@ -29,6 +29,20 @@ class CierreDiario(models.Model):
         ("Tegucigalpa", "TGU"),
     ]
 
+    def _get_region_values(self):
+        region_map = {
+            'San Pedro Sula': ['San Pedro Sula', 'SPS'],
+            'Tegucigalpa': ['Tegucigalpa', 'TGU'],
+        }
+        return region_map.get(self.region, [self.region])
+
+    def _get_canales_ids(self):
+        if self.region == self.regions_list[1][0]:
+            return [35, 36, 37, 38, 39, 45, 47, 53]
+        if self.region == self.regions_list[0][0]:
+            return [43, 41, 46, 58, 44]
+        return [50, 49]
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -197,18 +211,15 @@ class CierreDiario(models.Model):
         })
 
     def procesar_cierre(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
+        region_values = self._get_region_values()
 
         # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
         # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
         pagos = self.env['account.payment'].sudo().search([
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
+            ('region', 'in', region_values),
             ('partner_type', '=', 'customer'),
             ('move_id.state', '=', 'posted'),
         ])
@@ -218,27 +229,30 @@ class CierreDiario(models.Model):
             pagos_sin_state = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('partner_type', '=', 'customer'),
             ])
             pagos_sin_partner = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('move_id.state', '=', 'posted'),
             ])
             pagos_solo_fecha = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
             ])
             _logger.warning(
-                "DIAG pagos (company=%s, date=%s): "
-                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company=%s",
-                self.company_id.id, self.date,
+                "DIAG pagos (company=%s, region=%s, date=%s): "
+                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company_region=%s",
+                self.company_id.id, self.region, self.date,
                 len(pagos_sin_state), len(pagos_sin_partner), len(pagos_solo_fecha),
             )
             for p in pagos_solo_fecha[:10]:
                 _logger.warning(
-                    "  pago id=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
-                    p.id, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
+                    "  pago id=%s region=%s partner_type=%s move_state=%s date=%s amount=%s journal=%s",
+                    p.id, p.region, p.partner_type, p.move_id.state, p.date, p.amount, p.journal_id.name,
                 )
 
         self.register_ids(pagos, 'pagos')
@@ -373,12 +387,7 @@ class CierreDiario(models.Model):
         self.write({'state': 'proccess'})
         
     def procesar_promedio_mensual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
 
         dia = self.date.day
         mes = self.date.month
@@ -412,12 +421,7 @@ class CierreDiario(models.Model):
         })
             
     def procesar_promedio_anual(self):
-        if self.region == self.regions_list[1][0]:
-            canales_ids = [35, 36, 37, 38, 39, 45, 47, 53]
-        elif self.region == self.regions_list[0][0]:
-            canales_ids = [43, 41, 46, 58, 44]
-        else:
-            canales_ids = [50, 49]
+        canales_ids = self._get_canales_ids()
 
         dia = self.date.day
         mes = self.date.month
