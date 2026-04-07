@@ -94,7 +94,7 @@ class Stock(models.Model):
 
 	def write(self, vals):
 		result = super().write(vals)
-		if not self.env.context.get('skip_company_sync') and 'company_id' in vals:
+		if not self.env.context.get('skip_company_sync'):
 			self._sync_related_company_ids()
 		return result
 
@@ -115,14 +115,11 @@ class Stock(models.Model):
 		]
 
 		for warehouse in self.sudo():
-			target_company = company or warehouse.company_id
+			target_company = warehouse.company_id or company
 			if target_company and not getattr(target_company, '_name', False):
 				target_company = self.env['res.company'].browse(target_company)
 			if not target_company:
 				continue
-
-			if warehouse.company_id != target_company:
-				warehouse.with_context(skip_company_sync=True).write({'company_id': target_company.id})
 
 			picking_types = picking_type_model.search([('warehouse_id', '=', warehouse.id)])
 			locations = self.env['stock.location']
@@ -161,13 +158,14 @@ class StockPickingType(models.Model):
 					warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists()
 
 				company_id = vals.get('company_id')
-				if company_id:
-					target_company = self.env['res.company'].browse(company_id)
-				elif warehouse and warehouse.company_id:
+				if warehouse and warehouse.company_id:
 					target_company = warehouse.company_id
-					vals['company_id'] = target_company.id
+					if company_id != target_company.id:
+						vals['company_id'] = target_company.id
+				elif company_id:
+					target_company = self.env['res.company'].browse(company_id)
 
-				if warehouse and target_company:
+				if warehouse:
 					warehouse._sync_related_company_ids(company=target_company)
 
 				if target_company:
