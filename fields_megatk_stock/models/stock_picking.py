@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
@@ -81,6 +85,108 @@ class Stock(models.Model):
 	_inherit = "stock.warehouse"
 
 	x_ubicacion = fields.Selection([('1','NIC'),('2','SPS'),('3','TGU')], string='Ubicación')
+
+	@api.model_create_multi
+	def create(self, vals_list):
+		warehouses = super().create(vals_list)
+		warehouses._sync_related_company_ids()
+		return warehouses
+
+	def write(self, vals):
+		result = super().write(vals)
+		if not self.env.context.get('skip_company_sync') and 'company_id' in vals:
+			self._sync_related_company_ids()
+		return result
+
+	def _sync_related_company_ids(self, company=False):
+		picking_type_model = self.env['stock.picking.type']
+		warehouse_location_fields = [
+			'view_location_id',
+			'lot_stock_id',
+			'wh_input_stock_loc_id',
+			'wh_qc_stock_loc_id',
+			'wh_output_stock_loc_id',
+			'wh_pack_stock_loc_id',
+		]
+		location_fields = [
+			field_name
+			for field_name, field in picking_type_model._fields.items()
+			if getattr(field, 'comodel_name', None) == 'stock.location'
+		]
+
+		for warehouse in self.sudo():
+			target_company = company or warehouse.company_id
+			if target_company and not getattr(target_company, '_name', False):
+				target_company = self.env['res.company'].browse(target_company)
+			if not target_company:
+				continue
+
+			if warehouse.company_id != target_company:
+				warehouse.with_context(skip_company_sync=True).write({'company_id': target_company.id})
+
+			picking_types = picking_type_model.search([('warehouse_id', '=', warehouse.id)])
+			locations = self.env['stock.location']
+			for field_name in warehouse_location_fields:
+				if field_name in warehouse._fields:
+					locations |= warehouse[field_name]
+			for field_name in location_fields:
+				locations |= picking_types.mapped(field_name)
+			sequences = picking_types.mapped('sequence_id')
+
+			for records in (locations, picking_types, sequences):
+				records_to_fix = records.filtered(
+					lambda record: 'company_id' in record._fields and record.company_id != target_company
+				)
+				if records_to_fix:
+					records_to_fix.with_context(skip_company_sync=True).write({'company_id': target_company.id})
+					_logger.info(
+						"Synchronized company_id to %s for %s linked to warehouse %s",
+						target_company.display_name,
+						records_to_fix._name,
+						warehouse.display_name,
+					)
+
+
+class StockPickingType(models.Model):
+	_inherit = "stock.picking.type"
+
+	@api.model_create_multi
+	def create(self, vals_list):
+		if not self.env.context.get('skip_company_sync'):
+			for vals in vals_list:
+				warehouse = False
+				target_company = False
+				warehouse_id = vals.get('warehouse_id')
+				if warehouse_id:
+					warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists()
+
+				company_id = vals.get('company_id')
+				if company_id:
+					target_company = self.env['res.company'].browse(company_id)
+				elif warehouse and warehouse.company_id:
+					target_company = warehouse.company_id
+					vals['company_id'] = target_company.id
+
+				if warehouse and target_company:
+					warehouse._sync_related_company_ids(company=target_company)
+
+				if target_company:
+					for field_name, field in self._fields.items():
+						if getattr(field, 'comodel_name', None) != 'stock.location':
+							continue
+						location_id = vals.get(field_name)
+						if not location_id:
+							continue
+						location = self.env['stock.location'].browse(location_id).exists()
+						if location and location.company_id != target_company:
+							location.sudo().with_context(skip_company_sync=True).write({
+								'company_id': target_company.id,
+							})
+
+		picking_types = super().create(vals_list)
+		if not self.env.context.get('skip_company_sync'):
+			picking_types.mapped('warehouse_id')._sync_related_company_ids()
+		return picking_types
 
 class SaleOrder(models.Model):
 	_inherit = 'sale.order'
