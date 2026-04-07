@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
@@ -81,6 +85,59 @@ class Stock(models.Model):
 	_inherit = "stock.warehouse"
 
 	x_ubicacion = fields.Selection([('1','NIC'),('2','SPS'),('3','TGU')], string='Ubicación')
+
+	def _get_repair_operation_values(self):
+		self.ensure_one()
+		values = {}
+		company = self.company_id
+		if company:
+			values['company_id'] = company.id
+		if self.lot_stock_id:
+			values['default_location_src_id'] = self.lot_stock_id.id
+			values['default_recycle_location_dest_id'] = self.lot_stock_id.id
+
+		production_location = self.env['stock.location'].search([
+			('usage', '=', 'production'),
+			'|', ('company_id', '=', company.id if company else False), ('company_id', '=', False),
+		], limit=1)
+		if production_location:
+			values['default_location_dest_id'] = production_location.id
+
+		scrap_location = self.env['stock.location'].search([
+			('scrap_location', '=', True),
+			'|', ('company_id', '=', company.id if company else False), ('company_id', '=', False),
+		], limit=1)
+		if scrap_location:
+			values['default_remove_location_dest_id'] = scrap_location.id
+		return values
+
+
+class StockPickingType(models.Model):
+	_inherit = "stock.picking.type"
+
+	@api.model_create_multi
+	def create(self, vals_list):
+		for vals in vals_list:
+			warehouse_id = vals.get('warehouse_id')
+			if not warehouse_id:
+				continue
+
+			warehouse = self.env['stock.warehouse'].browse(warehouse_id).exists()
+			if not warehouse:
+				continue
+
+			if warehouse.company_id:
+				vals['company_id'] = warehouse.company_id.id
+
+			if vals.get('code') == 'repair_operation':
+				vals.update(warehouse._get_repair_operation_values())
+				_logger.info(
+					"Normalized repair picking type values for warehouse %s and company %s",
+					warehouse.display_name,
+					warehouse.company_id.display_name,
+				)
+
+		return super().create(vals_list)
 
 class SaleOrder(models.Model):
 	_inherit = 'sale.order'
