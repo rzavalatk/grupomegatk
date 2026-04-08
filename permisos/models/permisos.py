@@ -309,107 +309,180 @@ class HrPermisos(models.Model):
 
         return dias, horas, minutos_resultante
 
+    def _enviar_correo_vacaciones_automaticas(self, employe_id, destinatarios, body_html):
+        template = self.env.ref(
+            'permisos.email_template_vaciones_automaticas', raise_if_not_found=False)
+        asunto = "Vacaciones aplicadas a %s" % employe_id.name
+
+        try:
+            if template and self.ids:
+                template.sudo().send_mail(
+                    self.ids[0],
+                    email_values={
+                        'email_to': destinatarios,
+                        'subject': asunto,
+                        'body_html': body_html,
+                    },
+                    force_send=True)
+            else:
+                mail_values = {
+                    'subject': asunto,
+                    'body_html': body_html,
+                    'email_to': destinatarios,
+                }
+                email_from = self.env.user.email_formatted or self.env.company.email or False
+                if email_from:
+                    mail_values['email_from'] = email_from
+                self.env['mail.mail'].sudo().create(mail_values).send()
+        except Exception:
+            _logger.exception(
+                'No se pudo enviar el correo de vacaciones automáticas para %s', employe_id.name)
+
+    @api.model
     def vacaciones_por_ley(self):
         _logger.warning('Iniciando proceso de asignación automática de vacaciones por ley')
-        año1 = 10 * 480
-        año2 = 12 * 480
-        año3 = 15 * 480
-        añomas = 20 * 480
-        nic = 2.5 * 480
-        number_of_hours = 0
-        dias = 0
-        horas = 0
-        minutos_resultante = 0
-        hoy = fields.Date.context_today(self)
-        employee_ids = self.env["hr.employee"].sudo().search([])
-        for employe_id in employee_ids:
-            minutos_actuales = (employe_id.permisos_dias * 480) + \
-                (employe_id.permisos_horas * 60) + employe_id.permisos_minutos
-            if employe_id.country_of_birth:
-                if employe_id.country_of_birth.code == 'HN':
-                    if employe_id.fecha_ingreso:
-                        if employe_id.fecha_ingreso.day == hoy.day and employe_id.fecha_ingreso.month == hoy.month:
-                            if hoy.year - employe_id.fecha_ingreso.year == 1:
-                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                        minutos_actuales, año1)
-                                if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                    number_of_hours = minutos_vac / 60
-                                else:
-                                    number_of_hours = año1 / 60
-                            elif hoy.year - employe_id.fecha_ingreso.year == 2:
-                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                        minutos_actuales, año2)
-                                if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                    number_of_hours = minutos_vac / 60
-                                else:
-                                    number_of_hours = año2 / 60
-                            elif hoy.year - employe_id.fecha_ingreso.year == 3:
-                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                        minutos_actuales, año3)
-                                if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                    number_of_hours = minutos_vac / 60
-                                else:
-                                    number_of_hours = año3 / 60
-                            else:
-                                dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                        minutos_actuales, añomas)
-                                if minutos_actuales < 0:
-                                    minutos_vac = dias * 480 + horas *60 + minutos_resultante
-                                    number_of_hours = minutos_vac / 60
-                                else:
-                                    number_of_hours = añomas / 60
-                            # AGREGAR VACACIONES A PERFIL DE EMPLEADOS
-                            employe_id.sudo().write({'permisos_dias': dias,
-                                                        'permisos_horas': horas,
-                                                        'permisos_minutos': minutos_resultante})
-                            # AGREGAR VACACIONES A MODULO DE PERMISOS
-                            leave_type_id = self.env['hr.leave.type'].sudo().search(
-                                [('vacaciones', '=', 'True')], limit=1)
 
-                            allocation_vals = {
-                                'holiday_status_id': leave_type_id.id,
-                                'number_of_days': int(number_of_hours) / 8,
-                                'name': "Asignación de vacaciones por ley",
-                                'asig_auto': True,
-                            }
-                            # Compatibilidad entre versiones de Odoo:
-                            # en algunas versiones el modelo usa employee_id y en otras employee_ids.
-                            if 'employee_ids' in self.env['hr.leave.allocation']._fields:
-                                allocation_vals['employee_ids'] = [(6, 0, [employe_id.id])]
-                            else:
-                                allocation_vals['employee_id'] = employe_id.id
-                            leave_allocation = self.env['hr.leave.allocation'].create(
-                                allocation_vals)
-                            if hasattr(leave_allocation, 'action_validate'):
-                                leave_allocation.action_validate()
-                            elif hasattr(leave_allocation, 'action_confirm'):
-                                leave_allocation.action_confirm()
-                            elif hasattr(leave_allocation, 'action_approve'):
-                                leave_allocation.action_approve()
-                            template = self.env.ref(
-                                'permisos.email_template_vaciones_automaticas')
-                            email_values = {'email_to': 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com',
-                                            'subject': "Vacaciones aplicadas a " + str(employe_id.name),
-                                            'body_html': "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas<br/><br/> <b>Años cumplidos</b>: " + str(hoy.year - employe_id.fecha_ingreso.year) + '<br/>' +
-                                            '<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos'}
-                            template.send_mail(
-                                self.id, email_values=email_values, force_send=True)
-                elif employe_id.country_of_birth.code == 'NI':
-                    if employe_id.fecha_ingreso:
-                        if employe_id.fecha_ingreso.day == hoy.day:
-                            dias, horas, minutos_resultante = self.vacaciones_restantes1(
-                                minutos_actuales, nic)
-                            employe_id.sudo().write({'permisos_dias': dias,
-                                                        'permisos_horas': horas,
-                                                        'permisos_minutos': minutos_resultante})
-                            template = self.env.ref(
-                                'permisos.email_template_vaciones_automaticas')
-                            email_values = {'email_to': 'dzuniga@megatk.com',
-                                            'subject': "Vacaciones aplicadas a " + str(employe_id.name),
-                                            'body_html': 'Estimado Sr(a) <b>Rodriguez</b>.<br/><br/> Se notifica que las vacaciones han sido aplicadas <br/><br/><b>2.5 dias</b> por mes cumplido <br/>' +
-                                            '<b>Vacaciones disponibles</b>: ' + str(dias) + ' dias, ' + str(horas) + ' horas, ' + str(minutos_resultante) + ' minutos'}
-                            template.send_mail(
-                                self.id, email_values=email_values, force_send=True)
+        anio1 = 10 * 480
+        anio2 = 12 * 480
+        anio3 = 15 * 480
+        aniomas = 20 * 480
+        nic = 2.5 * 480
+
+        hoy = fields.Date.context_today(self)
+        employee_ids = self.env['hr.employee'].sudo().search([('active', '=', True)])
+        allocation_model = self.env['hr.leave.allocation'].sudo()
+        leave_type_id = self.env['hr.leave.type'].sudo().search(
+            [('vacaciones', '=', True)], limit=1)
+
+        if not leave_type_id:
+            _logger.error(
+                'No se encontró un tipo de ausencia con vacaciones=True. Se cancela la asignación automática.')
+            return False
+
+        inicio_dia = datetime.datetime.combine(hoy, datetime.time.min)
+        fin_dia = datetime.datetime.combine(hoy, datetime.time.max)
+
+        for employe_id in employee_ids:
+            try:
+                if not employe_id.country_of_birth or not employe_id.fecha_ingreso:
+                    continue
+
+                fecha_ingreso = fields.Date.to_date(employe_id.fecha_ingreso)
+                if fecha_ingreso > hoy:
+                    continue
+
+                codigo_pais = employe_id.country_of_birth.code
+                minutos_actuales = (employe_id.permisos_dias * 480) + \
+                    (employe_id.permisos_horas * 60) + employe_id.permisos_minutos
+
+                dias = 0
+                horas = 0
+                minutos_resultante = 0
+                minutos_otorgados = 0
+                destinatarios = False
+                body_html = False
+                anios_cumplidos = 0
+
+                if codigo_pais == 'HN':
+                    if fecha_ingreso.day != hoy.day or fecha_ingreso.month != hoy.month:
+                        continue
+
+                    anios_cumplidos = hoy.year - fecha_ingreso.year
+                    if anios_cumplidos < 1:
+                        continue
+                    elif anios_cumplidos == 1:
+                        minutos_otorgados = anio1
+                    elif anios_cumplidos == 2:
+                        minutos_otorgados = anio2
+                    elif anios_cumplidos == 3:
+                        minutos_otorgados = anio3
+                    else:
+                        minutos_otorgados = aniomas
+
+                    destinatarios = 'dzuniga@megatk.com, erodriguez@megatk.com, dvasquez@megatk.com'
+
+                elif codigo_pais == 'NI':
+                    if fecha_ingreso.day != hoy.day or fecha_ingreso >= hoy:
+                        continue
+
+                    minutos_otorgados = nic
+                    destinatarios = 'dzuniga@megatk.com'
+                else:
+                    continue
+
+                dias, horas, minutos_resultante = self.vacaciones_restantes1(
+                    minutos_actuales, minutos_otorgados)
+                number_of_days = minutos_otorgados / 480.0
+
+                employe_id.sudo().write({
+                    'permisos_dias': dias,
+                    'permisos_horas': horas,
+                    'permisos_minutos': minutos_resultante,
+                })
+
+                allocation_domain = [
+                    ('holiday_status_id', '=', leave_type_id.id),
+                    ('asig_auto', '=', True),
+                    ('name', '=', 'Asignación de vacaciones por ley'),
+                    ('create_date', '>=', inicio_dia),
+                    ('create_date', '<=', fin_dia),
+                ]
+                if 'employee_ids' in allocation_model._fields:
+                    allocation_domain.append(('employee_ids', 'in', employe_id.id))
+                else:
+                    allocation_domain.append(('employee_id', '=', employe_id.id))
+
+                leave_allocation = allocation_model.search(allocation_domain, limit=1)
+                if not leave_allocation and number_of_days > 0:
+                    allocation_vals = {
+                        'holiday_status_id': leave_type_id.id,
+                        'name': 'Asignación de vacaciones por ley',
+                        'asig_auto': True,
+                    }
+                    if 'number_of_days_display' in allocation_model._fields:
+                        allocation_vals['number_of_days_display'] = number_of_days
+                    else:
+                        allocation_vals['number_of_days'] = number_of_days
+
+                    if 'employee_ids' in allocation_model._fields:
+                        allocation_vals['employee_ids'] = [(6, 0, [employe_id.id])]
+                    else:
+                        allocation_vals['employee_id'] = employe_id.id
+
+                    leave_allocation = allocation_model.create(allocation_vals)
+                    if hasattr(leave_allocation, 'action_validate'):
+                        leave_allocation.action_validate()
+                    elif hasattr(leave_allocation, 'action_confirm'):
+                        leave_allocation.action_confirm()
+                    elif hasattr(leave_allocation, 'action_approve'):
+                        leave_allocation.action_approve()
+                elif leave_allocation:
+                    _logger.info(
+                        'Ya existe una asignación automática para %s en la fecha %s',
+                        employe_id.name, hoy)
+
+                if destinatarios:
+                    if codigo_pais == 'HN':
+                        body_html = (
+                            "Estimado Sr(a) <b>Rodriguez</b>.<br/><br/>"
+                            "Se notifica que las vacaciones han sido aplicadas.<br/><br/>"
+                            "<b>Años cumplidos</b>: %s<br/>"
+                            "<b>Vacaciones disponibles</b>: %s dias, %s horas, %s minutos"
+                        ) % (anios_cumplidos, dias, horas, minutos_resultante)
+                    else:
+                        body_html = (
+                            'Estimado Sr(a) <b>Rodriguez</b>.<br/><br/>'
+                            'Se notifica que las vacaciones han sido aplicadas.<br/><br/>'
+                            '<b>2.5 dias</b> por mes cumplido.<br/>'
+                            '<b>Vacaciones disponibles</b>: %s dias, %s horas, %s minutos'
+                        ) % (dias, horas, minutos_resultante)
+
+                    self._enviar_correo_vacaciones_automaticas(
+                        employe_id, destinatarios, body_html)
+
+            except Exception:
+                _logger.exception(
+                    'Error asignando vacaciones por ley al empleado %s (%s)',
+                    employe_id.name, employe_id.id)
+
+        return True
