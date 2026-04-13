@@ -219,6 +219,7 @@ class CierreDiario(models.Model):
         pagos = self.env['account.payment'].sudo().search([
             ('date', '=', self.date),
             ('company_id', '=', self.company_id.id),
+            ('region', 'in', region_values),
             ('partner_type', '=', 'customer'),
             ('move_id.state', '=', 'posted'),
         ])
@@ -228,20 +229,23 @@ class CierreDiario(models.Model):
             pagos_sin_state = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('partner_type', '=', 'customer'),
             ])
             pagos_sin_partner = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
                 ('move_id.state', '=', 'posted'),
             ])
             pagos_solo_fecha = self.env['account.payment'].sudo().search([
                 ('date', '=', self.date),
                 ('company_id', '=', self.company_id.id),
+                ('region', 'in', region_values),
             ])
             _logger.warning(
                 "DIAG pagos (company=%s, region=%s, date=%s): "
-                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company=%s",
+                "con_todos_filtros=0 | sin_state=%s | sin_partner_type=%s | solo_fecha_company_region=%s",
                 self.company_id.id, self.region, self.date,
                 len(pagos_sin_state), len(pagos_sin_partner), len(pagos_solo_fecha),
             )
@@ -296,20 +300,6 @@ class CierreDiario(models.Model):
                 and f.company_id.id == self.company_id.id
                 and f.team_id.id in canales_ids
             )
-
-            # Si no hay facturas reconciliadas por team de esta region, usar region del pago
-            # como fallback para no perder pagos no conciliados al momento del cron.
-            if not facturas_del_pago:
-                if 'region' in self.env['account.payment']._fields and pago.region not in region_values:
-                    _logger.warning(
-                        "  Pago id=%s omitido en cierre %s: region pago=%s fuera de %s y sin facturas reconciliadas de la region.",
-                        pago.id,
-                        self.region,
-                        pago.region,
-                        region_values,
-                    )
-                    continue
-
             # Sólo facturas de HOY → van a "Facturado"
             fecha_str = str(self.date)
             facturas_hoy = facturas_del_pago.filtered(
@@ -506,12 +496,12 @@ class CierreDiario(models.Model):
                         j += 1
 
             for i in ids:
-                # principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
-                # cc_mega = "yalvarado@megatk.com"
-                # cc_meditek = "nfuentes@meditekhn.com"
-                principal_emails = "areyes@megatk.com"
-                cc_mega = "areyes@megatk.com"
-                cc_meditek = "areyes@megatk.com"
+                principal_emails = "lmoran@megatk.com,jmoran@meditekhn.com,dvasquez@megatk.com,erodriguez@megatk.com"
+                cc_mega = "yalvarado@megatk.com"
+                cc_meditek = "nfuentes@meditekhn.com"
+                # principal_emails = "areyes@megatk.com"
+                # cc_mega = "areyes@megatk.com"
+                # cc_meditek = "areyes@megatk.com"
                 cierre = self.sudo().browse(i)
                 cierre.iniciar_cierre()
                 time.sleep(1)
@@ -521,10 +511,10 @@ class CierreDiario(models.Model):
                 if cierre.company_id.sudo().id in [8, 12]:
                     time.sleep(1)
                     if cierre.sudo().region == 'San Pedro Sula':
-                        # cc_mega += ",vmoran@megatk.com"
-                        # cc_meditek += "dgarcia@meditekhn.com"
-                        cc_mega += ",areyes@megatk.com"
-                        cc_meditek += "areyes@megatk.com"
+                        cc_mega += ",vmoran@megatk.com"
+                        cc_meditek += "dgarcia@meditekhn.com"
+                        # cc_mega += ",areyes@megatk.com"
+                        # cc_meditek += "areyes@megatk.com"
                     cierre.send_email(principal_emails, cc_mega)
                 if cierre.company_id.sudo().id in [9]:
                     time.sleep(1)
