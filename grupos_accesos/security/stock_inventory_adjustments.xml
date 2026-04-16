@@ -4,5 +4,8 @@
         <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
             <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.group_inventory_adjustments_access')])]"/>
         </record>
+        <record id="stock.menu_stock_scrap" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.group_inventory_scrap_access')])]"/>
+        </record>
     </data>
 </odoo>
