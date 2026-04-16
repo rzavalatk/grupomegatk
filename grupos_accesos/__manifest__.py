@@ -21,10 +21,11 @@
     'category': 'Usuarios',
     'version': '0.1',
 
-    'depends': ['base','sale','account'],
+    'depends': ['base','sale','account','stock'],
 
     'data': [
         'security/groups.xml',
+        'security/stock_inventory_adjustments.xml',
         'security/edit_responsable.xml',
         'views/config.xml',
         'views/crm_lead.xml',

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.group_inventory_adjustments_access')])]"/>
+        </record>
+    </data>
+</odoo>
