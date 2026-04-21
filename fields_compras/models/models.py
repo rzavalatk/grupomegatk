@@ -15,6 +15,18 @@ class Payment(models.Model):
     ],string="Región",required=True,
     default=lambda self : self.regiones[int(self.env.user.ubicacion_vendedor)])
 
+
+class SalesTeam(models.Model):
+    """Agrega campo región al equipo de ventas para poder filtrar
+    facturas por región sin depender de listas hardcodeadas de IDs."""
+    _inherit = 'crm.team'
+
+    region = fields.Selection([
+        ('Tegucigalpa', 'TGU'),
+        ('San Pedro Sula', 'SPS'),
+        ('Nicaragua', 'NIC'),
+    ], string="Región")
+
 class ModelCompras(models.Model):
     _inherit = 'purchase.order'
 

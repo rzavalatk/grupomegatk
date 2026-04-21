@@ -10,7 +10,7 @@
     'category': 'Usuarios',
     'version': '18.0',
     "license": "LGPL-3",
-    'depends': ['base','purchase','importacion','account'],
+    'depends': ['base','purchase','importacion','account','sales_team'],
     'data': [
         'views/account_payment.xml',
         'views/stock.xml',

@@ -11,10 +11,30 @@
             <field name="perm_unlink" eval="1" />
         </record>
 
+        <record id="account_cierre_access_account_manager" model="ir.model.access">
+            <field name="name">account.cierre.access.account.manager</field>
+            <field name="model_id" ref="crons_mega.model_account_cierre" />
+            <field name="group_id" ref="account.group_account_manager" />
+            <field name="perm_read" eval="1" />
+            <field name="perm_write" eval="1" />
+            <field name="perm_create" eval="1" />
+            <field name="perm_unlink" eval="1" />
+        </record>
+
         <record id="account_cierre_line_access" model="ir.model.access">
             <field name="name">account.cierre.line.access</field>
             <field name="model_id" ref="crons_mega.model_account_cierre_line" />
             <field name="group_id" ref="base.group_system" />
+            <field name="perm_read" eval="1" />
+            <field name="perm_write" eval="1" />
+            <field name="perm_create" eval="1" />
+            <field name="perm_unlink" eval="1" />
+        </record>
+
+        <record id="account_cierre_line_access_account_manager" model="ir.model.access">
+            <field name="name">account.cierre.line.access.account.manager</field>
+            <field name="model_id" ref="crons_mega.model_account_cierre_line" />
+            <field name="group_id" ref="account.group_account_manager" />
             <field name="perm_read" eval="1" />
             <field name="perm_write" eval="1" />
             <field name="perm_create" eval="1" />

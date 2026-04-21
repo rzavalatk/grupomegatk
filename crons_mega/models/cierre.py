@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-from logging import config
-
 from odoo import models, api, fields
 from datetime import datetime
 from odoo.exceptions import UserError
 import pytz
 import time
-import json
 from datetime import date
 
 import logging
-import math
 
 _logger = logging.getLogger(__name__)
 
@@ -43,6 +39,16 @@ class CierreDiario(models.Model):
             return [43, 41, 46, 58, 44]
         return [50, 49]
 
+    def _get_other_region_canales_ids(self):
+        """Devuelve los canales de la region CONTRARIA.
+        Se usa para excluir facturas de la otra region cuando
+        account.move no tiene campo region propio."""
+        if self.region == self.regions_list[1][0]:  # TGU → excluir SPS
+            return [43, 41, 46, 58, 44]
+        if self.region == self.regions_list[0][0]:  # SPS → excluir TGU
+            return [35, 36, 37, 38, 39, 45, 47, 53]
+        return []
+
     def _recorrec_lines(self, field):
         total = 0
         for item in self.cierre_line_ids:
@@ -67,17 +73,26 @@ class CierreDiario(models.Model):
         if self.region == "San Pedro Sula":
             self.team_id = 43
 
+    @api.depends('company_id', 'date')
     def _name_(self):
-        self.name = self.company_id.name + \
-            " - " + self.date.strftime("%d/%m/%Y")
+        for record in self:
+            if record.company_id and record.date:
+                record.name = "%s - %s" % (
+                    record.company_id.name,
+                    record.date.strftime("%d/%m/%Y"),
+                )
+            elif record.company_id:
+                record.name = record.company_id.name
+            else:
+                record.name = ""
 
     name = fields.Char(compute=_name_)
     cierre_line_ids = fields.One2many(
         "account.cierre.line", "cierre_id", string="Lineas de Cierre")
     company_id = fields.Many2one(
-        "res.company", "Compañia", default=lambda self: self.env.user.company_id.id)
+        "res.company", "Compañia", default=lambda self: self.env.company.id)
     currency_id = fields.Many2one('res.currency', string='Currency', readonly=True,
-                                  default=lambda self: self.env.user.company_id.currency_id)
+                                  default=lambda self: self.env.company.currency_id)
     total_facturado = fields.Monetary(
         "Total Facturado", compute=_total_facturado)
     facturas_ids = fields.One2many("account.move", "cierre_id", "Facturas")
@@ -98,7 +113,15 @@ class CierreDiario(models.Model):
         ("done", "Hecho"),
         ("cancel", "Cancelado")
     ], string="Estado", default="draft")
-    date = fields.Date("Fecha")
+
+    def _validate_manual_context(self):
+        self.ensure_one()
+        if not self.company_id:
+            raise UserError("Debe seleccionar una compañia antes de iniciar/procesar el cierre.")
+        if not self.date:
+            raise UserError("Debe seleccionar una fecha para ejecutar el cierre manualmente.")
+        if not self.region:
+            raise UserError("Debe seleccionar una region/zona para ejecutar el cierre manualmente.")
 
     def volver_borrador(self):
         self.write({
@@ -121,6 +144,9 @@ class CierreDiario(models.Model):
         })        
 
     def iniciar_cierre(self):
+        self.ensure_one()
+        self._validate_manual_context()
+
         journal_ids = self.env['account.cierre.config'].sudo().get_journal_ids(
             self.company_id.id)
 
@@ -161,9 +187,8 @@ class CierreDiario(models.Model):
             ]).ids
 
         if not journal_ids:
-            _logger.warning(
-                "iniciar_cierre (company_id=%s): no se encontraron diarios para crear lineas de cierre.",
-                self.company_id.id,
+            raise UserError(
+                "No se encontraron diarios para esta compañia. Configure diarios en 'Configuracion Cierre Diario' o cree diarios tipo Caja/Banco."
             )
         else:
             journal_names = self.env['account.journal'].sudo().browse(journal_ids).mapped('name')
@@ -211,9 +236,16 @@ class CierreDiario(models.Model):
         })
 
     def procesar_cierre(self):
+        self.ensure_one()
+        self._validate_manual_context()
+        if self.state != 'init':
+            raise UserError("Primero ejecute 'Iniciar Cierre' para generar las lineas del diario.")
+        if not self.cierre_line_ids:
+            raise UserError("No existen lineas de cierre. Verifique la configuracion de diarios y vuelva a iniciar el cierre.")
+
         canales_ids = self._get_canales_ids()
         region_values = self._get_region_values()
-
+        _logger.warning('fecha cierre: ' + str(self.date))
         # FIX Odoo 18: 'state' en account.payment es campo computed no almacenado;
         # hay que filtrar por move_id.state para que el ORM haga el JOIN correctamente.
         pagos = self.env['account.payment'].sudo().search([
@@ -265,6 +297,37 @@ class CierreDiario(models.Model):
             ('state', 'not in', ('cancel', 'draft')),
         ])
         self.register_ids(facturas, 'facturas')
+
+        # Query para "Al crédito":
+        # Usa dos mecanismos combinados con OR para máxima cobertura:
+        #  1. team_id.region = esta_region  → equipos con campo Región configurado
+        #  2. team_id IN canales_ids         → fallback con IDs hardcodeados
+        # Ambos mecanismos se excluyen mutuamente en la práctica: cuando los equipos
+        # tengan Región configurada, la rama 2 no aporta nada nuevo; hasta entonces,
+        # la rama 1 no encuentra nada y la rama 2 garantiza resultados correctos.
+        # La condición NOT IN other_canales_ids en la rama 2 evita mezclar regiones.
+        other_canales_ids = self._get_other_region_canales_ids()
+        credito_domain = [
+            ('invoice_date', '=', self.date),
+            ('company_id', '=', self.company_id.sudo().id),
+            ('move_type', '=', 'out_invoice'),
+            ('state', 'not in', ('cancel', 'draft')),
+            ('payment_state', 'in', ('not_paid', 'partial')),
+            '|',
+            ('team_id.region', '=', self.region),
+            ('team_id', 'in', canales_ids),
+        ]
+        facturas_credito = self.env['account.move'].sudo().search(credito_domain)
+        _logger.warning(
+            "facturas_credito (company=%s, region=%s, date=%s): %s facturas | ids=%s",
+            self.company_id.id, self.region, self.date,
+            len(facturas_credito),
+            [(f.id, f.team_id.id, f.team_id.name, f.amount_total_signed) for f in facturas_credito],
+        )
+        _logger.warning(
+            f"facturas_credito (company={self.company_id.id}, region={self.region}, "
+            f"date={self.date}): {len(facturas_credito)} facturas pendientes encontradas"
+        )
 
         _logger.warning(f"La region es {self.region}")
         _logger.warning(f"Iniciando cierre")
@@ -323,6 +386,8 @@ class CierreDiario(models.Model):
                         )
                         if str(pay.get('date') or '') == fecha_str and pay_id_match:
                             acumulado_factura += pay.get('amount') or 0
+                            # ids_facturas solo sirve para el mapeo banco→Facturado.
+                            # Al crédito se determina por payment_state (ver segundo loop).
                             ids_facturas.add(factura_id.id)
                             facturas_ganancia |= factura_id
 
@@ -357,18 +422,17 @@ class CierreDiario(models.Model):
             if factura.payment_state == 'not_paid' and factura.invoice_payment_term_id.sudo().name == 'Contado':
                 self.write({'facturas_ids': [(4, factura.id)]})
 
-        # Facturas no cobradas hoy → línea de crédito
-        for factura in facturas:
-            if factura.id not in ids_facturas:
-                # Si no quedo marcada en ids_facturas pero ya tiene pagos, no mandarla a credito.
-                if factura.payment_state in ('not_paid', 'partial') and factura.amount_residual == factura.amount_total:
-                    if factura.invoice_payment_term_id.sudo().name != 'Contado':
-                        for item in self.cierre_line_ids:
-                            if item.credito:
-                                item.write({
-                                    'facturado': item.facturado + factura.amount_total_signed,
-                                })
-                                break
+        # Facturas a crédito → línea "Al crédito".
+        # Usa facturas_credito (sin filtro team_id) para capturar TODAS las facturas
+        # pendientes de la compañía en esa fecha, independientemente del canal de ventas.
+        for factura in facturas_credito:
+            if factura.invoice_payment_term_id.sudo().name != 'Contado':
+                for item in self.cierre_line_ids:
+                    if item.credito:
+                        item.write({
+                            'facturado': item.facturado + factura.amount_total_signed,
+                        })
+                        break
 
         ganancia_total = 0
         for factura in facturas_ganancia:
@@ -480,6 +544,8 @@ class CierreDiario(models.Model):
         admin = self.env['res.users'].sudo().browse(2)
         user_tz = pytz.timezone(self.env.context.get('tz') or admin.tz)
         today = datetime.now(user_tz)
+        # user_tz = pytz.timezone(self.env.user.tz or 'UTC')
+        # today = user_tz.localize(datetime(2026, 4, 10, 0, 0, 0))
         if today.weekday() != 6:
             company_ids = [8, 9, 12]
             ids = []
@@ -540,9 +606,10 @@ class CierreDiarioLine(models.Model):
     @api.depends('cobrado', 'facturado', 'credito')
     def _total(self):
         for record in self:
-            total = record.cobrado + record.facturado
             if record.credito:
-                total = 0
+                total = record.facturado
+            else:
+                total = record.cobrado + record.facturado
             record.total = round(total, 2)
 
     @api.depends('credito', 'journal_id.name')
