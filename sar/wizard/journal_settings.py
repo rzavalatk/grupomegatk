@@ -107,6 +107,7 @@ class SequenceJournal(models.TransientModel):
                   'min_value': self.min_value,
                   'max_value': self.max_value,
                   'expiration_date': obj_code_authorization.expiration_date,
+                  'cai': obj_code_authorization.name,
                   'vitt_prefix': self.vitt_prefix,
                   'vitt_padding': self.vitt_padding,
                   'vitt_min_value': vitt_min_value,
