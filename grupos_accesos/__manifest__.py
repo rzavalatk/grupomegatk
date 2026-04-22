@@ -28,6 +28,7 @@
         'security/stock_inventory_adjustments.xml',
         'security/edit_responsable.xml',
         'views/config.xml',
+        'views/res_users_view.xml',
         'views/crm_lead.xml',
     ],
 }

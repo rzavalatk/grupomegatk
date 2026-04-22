@@ -18,5 +18,10 @@
             <field name="category_id" ref="base.module_category_inventory"/>
             <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
         </record>
+        <record id="group_invoice_by_warehouse" model="res.groups">
+            <field name="name">Facturacion Restringida por Almacen</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
     </data>
 </odoo>
