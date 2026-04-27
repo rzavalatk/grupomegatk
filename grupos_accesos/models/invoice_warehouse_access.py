@@ -128,3 +128,47 @@ class AccountMove(models.Model):
     def action_post(self):
         self._check_user_allowed_invoice_warehouses()
         return super().action_post()
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    def _get_user_allowed_warehouses_for_sale(self, user, company=None):
+        return self.env["account.move"]._get_user_allowed_warehouses(user, company=company)
+
+    def _check_user_allowed_sale_warehouses(self):
+        user = self.env.user
+        if not user.has_group("grupos_accesos.group_invoice_by_warehouse"):
+            return
+
+        for order in self:
+            if not order.warehouse_id:
+                continue
+
+            allowed = order._get_user_allowed_warehouses_for_sale(user, company=order.company_id)
+            if not allowed:
+                raise UserError(_(
+                    "No tiene almacenes permitidos para cotizar. "
+                    "Asigne almacenes permitidos o configure property_warehouse_id en el usuario."
+                ))
+
+            if order.warehouse_id not in allowed:
+                raise UserError(_(
+                    "No puede cotizar en el almacén %(warehouse)s. "
+                    "Almacenes permitidos: %(allowed)s."
+                ) % {
+                    "warehouse": order.warehouse_id.name,
+                    "allowed": ", ".join(allowed.mapped("name")),
+                })
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        orders = super().create(vals_list)
+        orders._check_user_allowed_sale_warehouses()
+        return orders
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "warehouse_id" in vals:
+            self._check_user_allowed_sale_warehouses()
+        return res
