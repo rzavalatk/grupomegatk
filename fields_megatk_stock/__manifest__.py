@@ -10,12 +10,12 @@
         "precios_megatk",
         "campos_referencia"
 	  ],
-    "data": [
-        "views/stock_picking_view.xml"
-        #,"views/product_view.xml"
-        ,"views/res_config.xml"
-         
-        ],
+   "data": [
+        "views/stock_picking_view.xml",
+        "views/product_expiry_helper_view.xml",
+        "views/stock_lot_expiry_helper_view.xml",
+        "views/res_config.xml",
+    ],
 	"auto_install": True,
 	"installable": True,
 }
