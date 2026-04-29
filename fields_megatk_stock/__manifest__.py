@@ -6,20 +6,16 @@
     "category": "Sale",
     "license": "LGPL-3",
     "depends": ["base",
-        "stock",
-        "product_expiry",
         "fields_megatk",
         "precios_megatk",
         "campos_referencia"
 	  ],
     "data": [
-        "security/ir.model.access.csv",
-        "views/stock_picking_view.xml",
-        "views/product_expiry_helper_view.xml",
-        "views/stock_lot_expiry_helper_view.xml",
-        "views/res_config.xml",
-        "views/invoice_warehouse_group_view.xml"
-    ],
+        "views/stock_picking_view.xml"
+        #,"views/product_view.xml"
+        ,"views/res_config.xml"
+         
+        ],
 	"auto_install": True,
 	"installable": True,
 }
