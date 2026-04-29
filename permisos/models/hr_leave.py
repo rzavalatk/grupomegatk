@@ -99,6 +99,10 @@ class HrLeave(models.Model):
     )
 
     def _is_compensatory_type(self, leave_type):
+        if getattr(leave_type, 'is_overtime_compensation', False):
+            return True
+        if getattr(leave_type, 'overtime_deductible', False):
+            return True
         name = (leave_type.name or '').lower()
         return 'compens' in name
 

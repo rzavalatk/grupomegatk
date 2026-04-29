@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models
+from odoo import api, fields, models
 from datetime import datetime, time
 from pytz import timezone, utc
 
@@ -12,6 +12,39 @@ class HrLeaveAllocation(models.Model):
     _inherit = 'hr.leave.allocation'
     
     asig_auto = fields.Boolean('Asignación automática')
+
+    @staticmethod
+    def _opened_from_employee_context(ctx):
+        return bool(
+            ctx.get('active_model') == 'hr.employee'
+            or ctx.get('default_employee_id')
+            or ctx.get('default_employee_ids')
+        )
+
+    @api.model
+    def default_get(self, fields_list):
+        values = super().default_get(fields_list)
+        ctx = dict(self.env.context or {})
+
+        if not self._opened_from_employee_context(ctx):
+            return values
+
+        if 'holiday_status_id' in self._fields and not values.get('holiday_status_id'):
+            overtime_type = self.env['hr.leave.type'].sudo().search([
+                ('is_overtime_compensation', '=', True),
+                ('active', '=', True),
+            ], limit=1)
+            if overtime_type:
+                values['holiday_status_id'] = overtime_type.id
+
+        active_id = ctx.get('active_id')
+        if active_id and ctx.get('active_model') == 'hr.employee':
+            if 'employee_id' in self._fields and not values.get('employee_id'):
+                values['employee_id'] = active_id
+            if 'employee_ids' in self._fields and not values.get('employee_ids'):
+                values['employee_ids'] = [(6, 0, [active_id])]
+
+        return values
     
     def vacaciones_restantes_empl(self, operacion, employee_id, allocation):
         _logger.warning("Prueba de vacaciones restantes empl")
