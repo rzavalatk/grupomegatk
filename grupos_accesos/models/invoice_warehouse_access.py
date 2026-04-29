@@ -185,14 +185,23 @@ class StockPicking(models.Model):
         user = self.env.user
         if self.env.context.get("allow_delivery_validation_write"):
             return
-        if user.has_group("grupos_accesos.group_edit_delivery_operations"):
-            return
 
-        restricted_pickings = self.filtered(lambda picking: picking._delivery_edit_restricted())
+        restricted_pickings = self.filtered(
+            lambda picking: picking._delivery_edit_restricted()
+            and user._company_restriction_active_for_group(
+                "grupos_accesos.group_edit_delivery_operations",
+                company=picking.company_id or self.env.company,
+            )
+            and not user.has_group("grupos_accesos.group_edit_delivery_operations")
+        )
         if restricted_pickings:
             raise UserError(_(
                 "No tiene permisos para editar entregas. Solo puede validarlas."
             ))
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        return super(StockPicking, self.with_context(allow_delivery_validation_write=True)).create(vals_list)
 
     def write(self, vals):
         self._check_delivery_edit_access()
@@ -205,14 +214,24 @@ class StockPicking(models.Model):
 class StockMove(models.Model):
     _inherit = "stock.move"
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        return super(StockMove, self.with_context(allow_delivery_validation_write=True)).create(vals_list)
+
     def _check_delivery_edit_access(self):
         user = self.env.user
         if self.env.context.get("allow_delivery_validation_write"):
             return
-        if user.has_group("grupos_accesos.group_edit_delivery_operations"):
-            return
 
-        restricted_moves = self.filtered(lambda move: move.picking_id and move.picking_id.picking_type_id.code == "outgoing")
+        restricted_moves = self.filtered(
+            lambda move: move.picking_id
+            and move.picking_id.picking_type_id.code == "outgoing"
+            and user._company_restriction_active_for_group(
+                "grupos_accesos.group_edit_delivery_operations",
+                company=move.company_id or self.env.company,
+            )
+            and not user.has_group("grupos_accesos.group_edit_delivery_operations")
+        )
         if restricted_moves:
             raise UserError(_(
                 "No tiene permisos para editar entregas. Solo puede validarlas."
@@ -226,16 +245,25 @@ class StockMove(models.Model):
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        return super(StockMoveLine, self.with_context(allow_delivery_validation_write=True)).create(vals_list)
+
     def _check_delivery_edit_access(self):
         user = self.env.user
         if self.env.context.get("allow_delivery_validation_write"):
             return
-        if user.has_group("grupos_accesos.group_edit_delivery_operations"):
-            return
 
         restricted_lines = self.filtered(
-            lambda line: (line.picking_id and line.picking_id.picking_type_id.code == "outgoing")
-            or (line.move_id.picking_id and line.move_id.picking_id.picking_type_id.code == "outgoing")
+            lambda line: (
+                (line.picking_id and line.picking_id.picking_type_id.code == "outgoing")
+                or (line.move_id.picking_id and line.move_id.picking_id.picking_type_id.code == "outgoing")
+            )
+            and user._company_restriction_active_for_group(
+                "grupos_accesos.group_edit_delivery_operations",
+                company=line.company_id or self.env.company,
+            )
+            and not user.has_group("grupos_accesos.group_edit_delivery_operations")
         )
         if restricted_lines:
             raise UserError(_(

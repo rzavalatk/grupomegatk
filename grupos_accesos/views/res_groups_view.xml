@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="view_groups_form_company_restriction" model="ir.ui.view">
+            <field name="name">res.groups.form.company.restriction</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field
+                        name="restriction_company_ids"
+                        widget="many2many_tags"
+                        options="{'no_create_edit': True, 'no_create': True}"
+                    />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

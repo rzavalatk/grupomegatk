@@ -2,10 +2,10 @@
 <odoo>
     <data>
         <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.group_inventory_adjustments_access')])]"/>
+            <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
         </record>
         <record id="stock.menu_stock_scrap" model="ir.ui.menu">
-            <field name="groups_id" eval="[(6, 0, [ref('grupos_accesos.group_inventory_scrap_access')])]"/>
+            <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
         </record>
     </data>
 </odoo>
