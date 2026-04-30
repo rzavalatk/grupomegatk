@@ -84,3 +84,7 @@ class StockScrap(models.Model):
     def action_validate(self):
         self._check_scrap_access_by_company()
         return super().action_validate()
+    
+    
+    
+    

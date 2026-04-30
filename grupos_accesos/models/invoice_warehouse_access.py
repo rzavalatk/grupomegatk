@@ -207,6 +207,12 @@ class StockPicking(models.Model):
         self._check_delivery_edit_access()
         return super().write(vals)
 
+    def action_confirm(self):
+        return super(StockPicking, self.with_context(allow_delivery_validation_write=True)).action_confirm()
+
+    def action_assign(self):
+        return super(StockPicking, self.with_context(allow_delivery_validation_write=True)).action_assign()
+
     def button_validate(self):
         return super(StockPicking, self.with_context(allow_delivery_validation_write=True)).button_validate()
 
