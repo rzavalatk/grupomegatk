@@ -21,7 +21,7 @@
                         <button string="Agrupar Registros" name="agrupar_registros" invisible=" state != 'borrador'" type="object" class="oe_highlight"/>
                         <button string="Generar Excel" name="exportar_excel" invisible=" state != 'aprobado'" type="object" class="btn-primary"/>
                         <button string="Editar Reporte" name="editar_reporte" invisible=" state != 'aprobado'" type="object" class="btn-primary"/>
-                        <field name="state" widget="statusbar" statusbar_visible="borrador, aporbado, rechazado"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,aprobado"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -61,6 +61,20 @@
             <field name="name">Registros de Visitas</field>
             <field name="res_model">registro.visitas</field>
             <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="registro_visitas_action_list_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="visitas_record_view_tree"/>
+            <field name="act_window_id" ref="registro_visitas_action"/>
+        </record>
+
+        <record id="registro_visitas_action_form_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="registro_visitas_view_form"/>
+            <field name="act_window_id" ref="registro_visitas_action"/>
         </record>
 
     </data>
