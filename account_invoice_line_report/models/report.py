@@ -9,6 +9,10 @@ class AccountInvoiceReport(models.Model):
 	_description = "Productos vendidos"
 	_auto = False
 	_rec_name = 'date'
+
+	def _sales_team_name_sql(self):
+		lang = (self.env.lang or 'en_US').replace("'", "''")
+		return "COALESCE(ct.name->>'%s', ct.name->>'en_US', '')" % lang
 	
 	@api.depends('currency_id', 'date', 'price_total', 'price_average', 'amount_residual')
 	def _compute_amounts_in_user_currency(self):
@@ -41,7 +45,8 @@ class AccountInvoiceReport(models.Model):
 	partner_id = fields.Many2one('res.partner', string='Cliente', readonly=True)
 	commercial_partner_id = fields.Many2one('res.partner', string='Partner Company', help="Commercial Entity")
 	company_id = fields.Many2one('res.company', string='Company', readonly=True)
-	invoice_user_id = fields.Many2one('res.users', string='Responsable', readonly=True)
+	invoice_user_id = fields.Char(string='Responsable', readonly=True)
+	sales_team_name = fields.Char(string='Canal de ventas', readonly=True)
 	price_total = fields.Float(string='Sub total', readonly=True)
 	user_currency_price_total = fields.Float(string="Total Without Tax in Currency", compute='_compute_amounts_in_user_currency', digits=0)
 	price_average = fields.Float(string='P.U.', readonly=True, group_operator="avg")
@@ -97,7 +102,7 @@ class AccountInvoiceReport(models.Model):
 		select_str = """
 			SELECT sub.id, sub.number, sub.date, sub.product_id, sub.partner_id, sub.country_id,
 				sub.invoice_payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
-				sub.fiscal_position_id, sub.invoice_user_id, sub.company_id, sub.nbr,  sub.move_type, sub.state,
+				sub.fiscal_position_id, sub.invoice_user_id, sub.sales_team_name, sub.company_id, sub.nbr,  sub.move_type, sub.state,
 				sub.categ_id, sub.marca_id, sub.costo, sub.invoice_date_due, sub.account_line_id, sub.partner_bank_id,
 				sub.product_qty, sub.price_total as price_total, sub.price_average as price_average, sub.amount_total / COALESCE(cr.rate, 1) as amount_total,
 				COALESCE(cr.rate, 1) as currency_rate, sub.residual as residual, sub.commercial_partner_id as commercial_partner_id
@@ -105,13 +110,14 @@ class AccountInvoiceReport(models.Model):
 		return select_str
 
 	def _sub_select(self):
+		sales_team_name_sql = self._sales_team_name_sql()
 		select_str = """
 				SELECT ail.id AS id,
 					ai.invoice_date AS date,
 					ai.name as number,
 					ail.product_id, ai.partner_id, ai.invoice_payment_term_id, 
 					u2.name AS uom_name,
-					ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.invoice_user_id, ai.company_id,
+					ai.currency_id, ai.journal_id, ai.fiscal_position_id, COALESCE(user_partner.name, '') AS invoice_user_id, %s AS sales_team_name, ai.company_id,
 					1 AS nbr,
 					ai.id AS invoice_origin, ai.move_type, ai.state, pt.categ_id, pt.marca_id, 
 					CASE 
@@ -133,7 +139,7 @@ class AccountInvoiceReport(models.Model):
 					count(*) * invoice_type.sign AS residual,
 					ai.commercial_partner_id as commercial_partner_id,
 					coalesce(partner.country_id, partner_ai.country_id) AS country_id
-		"""
+		""" % sales_team_name_sql
 		return select_str
 
 	def _from(self):
@@ -142,6 +148,9 @@ class AccountInvoiceReport(models.Model):
 				JOIN account_move ai ON ai.id = ail.move_id
 				JOIN res_partner partner ON ai.commercial_partner_id = partner.id
 				JOIN res_partner partner_ai ON ai.partner_id = partner_ai.id
+				LEFT JOIN res_users ru ON ru.id = ai.invoice_user_id
+				LEFT JOIN res_partner user_partner ON user_partner.id = ru.partner_id
+				LEFT JOIN crm_team ct ON ct.id = ai.team_id
 				LEFT JOIN product_product pr ON pr.id = ail.product_id
 				left JOIN product_template pt ON pt.id = pr.product_tmpl_id
 				LEFT JOIN uom_uom u ON u.id = ail.product_uom_id
@@ -163,13 +172,14 @@ class AccountInvoiceReport(models.Model):
 		return from_str
 
 	def _group_by(self):
+		sales_team_name_sql = self._sales_team_name_sql()
 		group_by_str = """
 				GROUP BY ail.id, ail.product_id, ai.invoice_date, ai.id,
 					ai.partner_id, ai.invoice_payment_term_id, u2.name, u2.id, ai.currency_id, ai.journal_id,
-					ai.fiscal_position_id, ai.invoice_user_id, ai.company_id, ai.id, ai.move_type, invoice_type.sign, ai.state, pt.categ_id, 
+					ai.fiscal_position_id, user_partner.name, %s, ai.company_id, ai.id, ai.move_type, invoice_type.sign, ai.state, pt.categ_id, 
 					pt.marca_id, pt.x_costo_real, ai.invoice_date_due, ail.account_id, ai.partner_bank_id, ai.amount_residual_signed,
 					ai.amount_total_signed, ai.commercial_partner_id, coalesce(partner.country_id, partner_ai.country_id)
-		"""
+		""" % sales_team_name_sql
 		return group_by_str
 
 	def init(self):
