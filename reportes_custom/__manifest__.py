@@ -16,7 +16,7 @@
     "license": "LGPL-3",
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fields_megatk','fields_megatk_stock','formatos_papel_mega'],
+    'depends': ['base','project','odoo_website_helpdesk','fields_megatk','fields_megatk_stock','formatos_papel_mega'],
 
     # always loaded
     'data': [
@@ -38,5 +38,6 @@
         'reports/stock_picking_custom_print_view_pos.xml',
         'reports/cotizacion_custom_proforma_view.xml',
         'reports/report_certificate_deposit.xml',
+        'reports/hoja_trabajo_task_report.xml',
     ],
 }

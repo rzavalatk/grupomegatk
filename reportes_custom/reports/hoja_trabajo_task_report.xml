@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="external_layout_standard_hoja_trabajo">
+        <div class="header">
+            <div class="row" style="margin-top: -90px;">
+                <div class="col-xs-3 mb4">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px;" alt="Logo"/>
+                </div>
+            </div>
+            <div style="float: right; margin-top: -170px;">
+                <h3>Tarea # <span t-field="o.id"/></h3>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-raw="0"/>
+        </div>
+        <div class="footer" style="font-size:10pt !important;">
+            <div style="border-top: 1px solid rgb(13, 143, 210);">
+                <ul style="text-align: center;" class="list-inline mb4">
+                    <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
+                </ul>
+                <ul style="text-align: center;" class="list-inline mb4">
+                    <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
+                </ul>
+                <ul style="text-align: center;" class="list-inline mb4">
+                    <li>
+                        <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
+                        <t t-if="user.company_id.email"> Correo: <span t-field="user.company_id.email"/></t>
+                        <t t-if="user.company_id.website"> Web: <span t-field="user.company_id.website"/></t>
+                        <t t-if="user.company_id.vat">
+                            <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/>
+                        </t>
+                    </li>
+                </ul>
+                <div style="text-align: right;" class="text-muted">
+                    Pag. <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="hoja_trabajo_task_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="reportes_custom.hoja_trabajo_task_report_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="hoja_trabajo_task_report_document">
+        <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
+            <t t-set="tipo_soporte_label" t-value="o.tipo_soporte_label or ''"/>
+            <t t-set="tipo_visita_label" t-value="o.tipo_visita_label or ''"/>
+            <t t-set="estado_equipo_label" t-value="o.estado_equipo_label or ''"/>
+            <t t-set="proposito_llamada" t-value="o.proposito_llamada or ''"/>
+            <t t-set="proposito_visita" t-value="o.proposito_visita or ''"/>
+            <t t-set="persona_reporto" t-value="o.persona_reporto or ''"/>
+            <t t-set="telefono" t-value="o.telefono_visita or ''"/>
+            <t t-set="correo" t-value="o.correo_visita or ''"/>
+            <t t-set="direccion" t-value="o.direccion_visita or ''"/>
+
+            <div class="page">
+                <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+                    Hoja de Trabajo
+                </div>
+                <br/>
+                <div style="float: right; margin-top: -30px;">
+                    <h4>Fecha: <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/></h4>
+                </div>
+
+                <table style="table-layout: fixed; width:100%;">
+                    <tr>
+                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210);">
+                            FORMULARIO DE VISITA
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
+                            &amp;nbsp;Tipo de Soporte: <t t-esc="tipo_soporte_label"/>
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
+                            &amp;nbsp;La persona que reporto: <t t-esc="persona_reporto"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Proposito Llamada: <t t-esc="proposito_llamada"/>
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Telefono: <t t-esc="telefono"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Estado del Equipo: <t t-esc="estado_equipo_label"/>
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Correo Electrónico: <t t-esc="correo"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Tipo de Visita: <t t-esc="tipo_visita_label"/>
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Dirección de visita: <t t-esc="direccion"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Propósito de la visita: <t t-esc="proposito_visita"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <br/>
+                <table style="width:100%;">
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 20%;">
+                            &amp;nbsp;Cliente:
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 80%;">
+                            &amp;nbsp;<span t-if="o.partner_id" t-field="o.partner_id.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;Tarea:
+                        </td>
+                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                            &amp;nbsp;<span t-field="o.name"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <record id="action_report_hoja_trabajo_task" model="ir.actions.report">
+        <field name="name">Hoja de Trabajo</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_trabajo_task_report</field>
+        <field name="report_file">reportes_custom.hoja_trabajo_task_report</field>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Hoja de Trabajo - %s' % (object.name or '')</field>
+    </record>
+</odoo>
