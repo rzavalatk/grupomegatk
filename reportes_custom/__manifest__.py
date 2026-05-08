@@ -16,7 +16,7 @@
     "license": "LGPL-3",
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fields_megatk', 'helpdesk', 'fields_megatk_stock','formatos_papel_mega'],
+    'depends': ['base','fields_megatk', 'fields_megatk_stock','formatos_papel_mega'],
 
     # always loaded
     'data': [
