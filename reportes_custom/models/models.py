@@ -105,9 +105,9 @@ class InvoiceOrder(models.Model):
 
     num_word = fields.Char(string="Amount In Words:", compute='_compute_amount_in_word')    
 
-# class HelpdeskTagCompatibility(models.Model):
-#     _inherit = 'helpdesk.tag'
+class HelpdeskTagCompatibility(models.Model):
+    _inherit = 'helpdesk.tag'
 
-#     # Keep name as varchar-compatible field to avoid JSON translation SQL on legacy DBs.
-#     name = fields.Char(string='Tag', translate=False)
+    # Keep name as varchar-compatible field to avoid JSON translation SQL on legacy DBs.
+    name = fields.Char(string='Tag', translate=False)
         
