@@ -38,5 +38,6 @@
         'reports/stock_picking_custom_print_view_pos.xml',
         'reports/cotizacion_custom_proforma_view.xml',
         'reports/report_certificate_deposit.xml',
+        'reports/hoja_trabajo_task_report.xml',
     ],
 }
