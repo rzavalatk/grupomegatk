@@ -1,13 +1,115 @@
 # -*- coding: utf-8 -*-
 import logging
+from collections import defaultdict
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 _logger = logging.getLogger(__name__)
 
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
+
+	def _get_move_line_qty_in_product_uom(self, move, line):
+		"""Return requested quantity for a move line normalized to product UoM."""
+		qty = 0.0
+		if hasattr(line, 'quantity') and line.quantity:
+			qty = line.quantity
+		elif hasattr(line, 'product_uom_qty') and line.product_uom_qty:
+			qty = line.product_uom_qty
+		elif hasattr(line, 'qty_done') and line.qty_done:
+			qty = line.qty_done
+
+		line_uom = getattr(line, 'product_uom_id', False) or move.product_uom
+		if line_uom:
+			return line_uom._compute_quantity(qty, move.product_id.uom_id)
+		return qty
+
+	def _get_availability_error_messages(self):
+		"""Validate stock availability by product+source location for multi-location pickings."""
+		self.ensure_one()
+		messages = []
+
+		if self.picking_type_id.code not in ('internal', 'outgoing'):
+			return messages
+
+		demand_by_key = defaultdict(float)
+		product_cache = {}
+		location_cache = {}
+
+		for move in self.move_ids.filtered(lambda m: m.product_id.type == 'product'):
+			product = move.product_id
+			product_cache[product.id] = product
+
+			if move.move_line_ids:
+				for line in move.move_line_ids.filtered(lambda l: l.product_id and l.product_id.type == 'product'):
+					source_location = line.location_id or move.location_id or self.location_id
+					if not source_location:
+						continue
+
+					location_cache[source_location.id] = source_location
+					qty = self._get_move_line_qty_in_product_uom(move, line)
+					if qty <= 0:
+						continue
+					demand_by_key[(product.id, source_location.id)] += qty
+			else:
+				source_location = move.location_id or self.location_id
+				if not source_location:
+					continue
+
+				location_cache[source_location.id] = source_location
+				qty = move.product_uom._compute_quantity(move.product_uom_qty, product.uom_id)
+				if qty <= 0:
+					continue
+				demand_by_key[(product.id, source_location.id)] += qty
+
+		if not demand_by_key:
+			return messages
+
+		quant_groups = self.env['stock.quant'].read_group(
+			[
+				('product_id', 'in', list(product_cache.keys())),
+				('location_id', 'in', list(location_cache.keys())),
+			],
+			['product_id', 'location_id', 'quantity:sum'],
+			['product_id', 'location_id'],
+			lazy=False,
+		)
+
+		available_by_key = {
+			(group['product_id'][0], group['location_id'][0]): group['quantity']
+			for group in quant_groups
+			if group.get('product_id') and group.get('location_id')
+		}
+
+		for (product_id, location_id), requested_qty in demand_by_key.items():
+			product = product_cache[product_id]
+			location = location_cache[location_id]
+			available_qty = available_by_key.get((product_id, location_id), 0.0)
+
+			if float_compare(available_qty, requested_qty, precision_rounding=product.uom_id.rounding) < 0:
+				if available_qty > 0:
+					messages.append(
+						_('\nPlanea vender %(requested).2f Unidad(es) de %(product)s pero solo tiene %(available).2f Unidad(es) disponible(s) en el almacén %(location)s.')
+						% {
+							'requested': requested_qty,
+							'product': product.display_name,
+							'available': available_qty,
+							'location': location.display_name,
+						}
+					)
+				else:
+					messages.append(
+						_('\nPlanea vender %(requested).2f Unidad(es) de %(product)s pero no tiene cantidades disponible(s) en el almacén %(location)s.')
+						% {
+							'requested': requested_qty,
+							'product': product.display_name,
+							'location': location.display_name,
+						}
+					)
+
+		return messages
 
 	def unlink(self):
 		for line in self:
@@ -16,24 +118,12 @@ class StockPicking(models.Model):
 			return super(StockPicking, self).unlink()
 
 	def button_validate(self):
-		message=''
-		if self.picking_type_id.code == 'internal' or self.picking_type_id.code == 'outgoing':
-			for move in self.move_ids:
-				for line in move.move_line_ids:
-					stock_quant = self.env['stock.quant'].search([('product_id.id', '=', line.product_id.id),('location_id.id','=',self.location_id.id)])
-					if stock_quant:
-						if stock_quant.quantity < line.quantity:
-							if stock_quant.quantity > 0:
-								message +=  _('\nPlanea vender %s Unidad(es) de %s pero solo tiene %s Unidad(es) disponible(s) en el almacén %s.') % \
-									(line.quantity, line.product_id.name, stock_quant.quantity, self.location_id.name)
-							if stock_quant.quantity <= 0:
-								message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-									(line.quantity, line.product_id.name, self.location_id.name)
-					else:
-						message += ('\nPlanea vender %s Unidad(es) de %s pero no tiene cantidades disponible(s) en el almacén %s.') % \
-								(line.quantity, line.product_id.name, self.location_id.name)
-			if message != '':
-				raise UserError(_(message))
+		messages = []
+		for picking in self:
+			messages.extend(picking._get_availability_error_messages())
+
+		if messages:
+			raise UserError(_('Operación no válida') + ''.join(messages))
 		return super(StockPicking, self).button_validate()
 
 	def button_borrador(self):
