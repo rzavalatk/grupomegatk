@@ -331,7 +331,7 @@ class Visitas(models.Model):
         
         if zona == "TGU":
             self.env['control.visitas'].create({'name': 'Visita Otros'})
-            if filtro == "this_day_tgu " or filtro == "this_day":
+            if filtro == "this_day_tgu" or filtro == "this_day":
                 otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '=', hoy),('region', '=', "TGU")])
             elif filtro == "this_week_tgu":
                 otros_val_tgu = self.env["control.visitas"].search_count([('name', '=', 'Visita Otros'), ('fecha', '>', semana),('region', '=', "TGU")])
