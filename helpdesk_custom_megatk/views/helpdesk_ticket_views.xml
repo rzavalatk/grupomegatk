@@ -27,19 +27,6 @@
                         </group>
                     </group>
                 </page>
-                <page name="x_reportes_impresion" string="Reportes e Impresiones" invisible="not x_is_technical_area">
-                    <group string="Imprimir Reportes">
-                        <button name="action_print_orden_ingreso" type="object" 
-                                string="Imprimir Orden de Ingreso" 
-                                class="oe_highlight"/>
-                        <button name="action_print_visita_tecnica" type="object" 
-                                string="Imprimir Visita Técnica" 
-                                class="oe_highlight"/>
-                        <button name="action_print_entrega_equipo" type="object" 
-                                string="Imprimir Entrega de Equipo" 
-                                class="oe_highlight"/>
-                    </group>
-                </page>
             </xpath>
         </field>
     </record>
