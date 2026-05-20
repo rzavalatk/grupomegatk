@@ -5,11 +5,11 @@
         <field name="model">helpdesk.ticket</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='extra_info']" position="attributes">
+            <xpath expr="//page[@name='support']" position="attributes">
                 <attribute name="string">Soporte</attribute>
                 <attribute name="invisible">not x_is_technical_area</attribute>
             </xpath>
-            <xpath expr="//page[@name='extra_info']" position="inside">
+            <xpath expr="//page[@name='support']" position="inside">
                 <group name="studio_group_588_1jnt2pp3l">
                     <group name="studio_group_588_left">
                         <field name="x_studio_tipo_de_soporte"/>
