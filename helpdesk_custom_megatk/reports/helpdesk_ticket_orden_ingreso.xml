@@ -14,38 +14,106 @@
     <template id="helpdesk_ticket_orden_ingreso_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
+                <t t-call="fields_megatk.external_layout_standard_soporte" t-lang="o.partner_id.lang">
                     <div class="page">
-                        <h2 t-esc="o.name"/>
-                        <table class="table table-bordered">
+                        <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+                            Orden de Ingreso
+                        </div>
+                        <br/>
+                        <div style="float: right; margin-top: -30px;">
+                            <h4>Fecha Ingreso: <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/></h4>
+                        </div>
+
+                        <table style="table-layout: fixed; width:100%">
                             <tr>
-                                <th>Cliente</th>
-                                <td t-esc="o.partner_id.name" t-if="o.partner_id"/>
+                                <td colspan="3" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                                    Información del Cliente
+                                </td>
                             </tr>
                             <tr>
-                                <th>Email</th>
-                                <td t-esc="o.partner_id.email" t-if="o.partner_id"/>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Cliente: <span t-esc="(o.partner_id and o.partner_id.name) or ''"/>
+                                </td>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Telefono: <span t-esc="o.x_studio_telfono or (o.partner_id and o.partner_id.phone) or ''"/>
+                                </td>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Email: <span t-esc="o.x_studio_correo_electrnico or (o.partner_id and o.partner_id.email) or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="table-layout: fixed; width:100%">
+                            <tr>
+                                <td colspan="4" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                                    Datos del Equipo
+                                </td>
                             </tr>
                             <tr>
-                                <th>Teléfono</th>
-                                <td t-esc="o.partner_id.phone" t-if="o.partner_id"/>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;# Serie: <span t-esc="o.x_studio_numero_de_serie or ''"/>
+                                </td>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Marca: <span t-esc="o.x_studio_marca or ''"/>
+                                </td>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Categoría: <span t-esc="o.x_studio_categoria or ''"/>
+                                </td>
+                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Modelo: <span t-esc="o.x_studio_modelo or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <table style="table-layout: fixed; width:100%">
+                            <tr>
+                                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                                    Accesorios Incluidos
+                                </td>
                             </tr>
                             <tr>
-                                <th>Descripción</th>
-                                <td t-esc="o.description"/>
+                                <td colspan="2" class="text-center" style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; ">
+                                    <span t-esc="o.x_studio_l or '(Ninguno)'"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="width:100%">
+                            <tr>
+                                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
+                                    Estado del Equipo
+                                </td>
                             </tr>
                             <tr>
-                                <th>Equipo</th>
-                                <td t-esc="o.team_id.name" t-if="o.team_id"/>
+                                <td style="word-wrap: break-word; width:10%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Fallas:
+                                </td>
+                                <td style="width:90%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;<span t-esc="o.x_tecnico_diagnostico or ''"/>
+                                </td>
                             </tr>
+                        </table>
+
+                        <br/>
+                        <div style="width:100%; vertical-align:middle; font-family:'Arial'; font-size:11pt; text-align: justify;">
+                            NOTA: La presente sirve como constancia de que nuestra empresa está a la disposición de brindar la revisión, diagnóstico y reparación del equipo ingresado a nuestro Departamento Técnico. El tiempo de respuesta para los equipos es de tres días hábiles después de notificada la reparación del equipo se dará una prórroga de 30 días para retirarlo luego de este tiempo se cobrara el 5% del importe de la reparación. Pasada 90 días el equipo entrara en subasta. Este documento no es válido sin firma ni sello de la empresa. Para sugerencias o reclamos con atención al cliente Tel.(504) 2269 4416 o escribanos a: info@megatk.com.
+                        </div>
+
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <table style="width:100%">
                             <tr>
-                                <th>Estado</th>
-                                <td t-esc="o.stage_id.name" t-if="o.stage_id"/>
-                            </tr>
-                            <tr>
-                                <th>Fecha Creación</th>
-                                <td>
-                                    <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                                <td class="text-center" style="width:50%; vertical-align:middle;">
+                                    <div style="width:70%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt;">Firma del Cliente</div>
+                                </td>
+                                <td class="text-center" style="width:50%; vertical-align:middle;">
+                                    <div style="width:70%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt;">Firma del Técnico</div>
                                 </td>
                             </tr>
                         </table>

@@ -7,7 +7,7 @@
     "category": "Services/Helpdesk",
     "license": "LGPL-3",
     "version": "18.0",
-    "depends": ["helpdesk", "formatos_papel_mega"],
+    "depends": ["helpdesk", "formatos_papel_mega", "fields_megatk"],
     "data": [
         "views/helpdesk_team_views.xml",
         "views/helpdesk_ticket_views.xml",
