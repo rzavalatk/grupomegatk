@@ -5,6 +5,8 @@
         <field name="model">helpdesk.ticket</field>
         <field name="report_name">helpdesk_custom_megatk.helpdesk_ticket_visita_tecnica_template</field>
         <field name="report_type">qweb-pdf</field>
+        <field name="binding_model_id" ref="helpdesk.model_helpdesk_ticket"/>
+        <field name="binding_type">report</field>
         <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
         <field name="print_report_name">'Visita Técnica - %s' % (object.name)</field>
     </record>
