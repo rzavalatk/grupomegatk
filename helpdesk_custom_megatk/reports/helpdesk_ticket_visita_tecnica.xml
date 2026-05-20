@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_visita_tecnica" model="ir.actions.report">
+        <field name="name">Visita Técnica (Ticket)</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="report_name">helpdesk_custom_megatk.helpdesk_ticket_visita_tecnica_template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
+        <field name="print_report_name">'Visita Técnica - %s' % (object.name)</field>
+    </record>
+
+    <template id="helpdesk_ticket_visita_tecnica_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Reporte de Visita Técnica - <t t-esc="o.name"/></h2>
+                        <h4>Información General</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Cliente</th>
+                                <td t-esc="o.partner_id.name" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Dirección</th>
+                                <td t-esc="o.partner_id.street" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Teléfono</th>
+                                <td t-esc="o.partner_id.phone" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td t-esc="o.partner_id.email" t-if="o.partner_id"/>
+                            </tr>
+                        </table>
+                        <h4>Detalles de la Visita</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Tipo de Visita</th>
+                                <td t-esc="o.x_studio_tipo_de_visita" t-if="o.x_studio_tipo_de_visita"/>
+                            </tr>
+                            <tr>
+                                <th>Propósito de la Visita</th>
+                                <td t-esc="o.x_studio_propsito_de_la_visita" t-if="o.x_studio_propsito_de_la_visita"/>
+                            </tr>
+                            <tr>
+                                <th>Marca del Equipo</th>
+                                <td t-esc="o.x_studio_marca" t-if="o.x_studio_marca"/>
+                            </tr>
+                            <tr>
+                                <th>Categoría</th>
+                                <td t-esc="o.x_studio_categoria" t-if="o.x_studio_categoria"/>
+                            </tr>
+                            <tr>
+                                <th>Modelo</th>
+                                <td t-esc="o.x_studio_modelo" t-if="o.x_studio_modelo"/>
+                            </tr>
+                            <tr>
+                                <th>Número de Serie</th>
+                                <td t-esc="o.x_studio_numero_de_serie" t-if="o.x_studio_numero_de_serie"/>
+                            </tr>
+                        </table>
+                        <h4>Diagnóstico Técnico</h4>
+                        <p t-esc="o.x_tecnico_diagnostico"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_entrega_equipo" model="ir.actions.report">
+        <field name="name">Entrega de Equipo (Ticket)</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="report_name">helpdesk_custom_megatk.helpdesk_ticket_entrega_equipo_template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="formatos_papel_mega.report_paperformat_8_0f21f71b"/>
+        <field name="print_report_name">'Entrega de Equipo - %s' % (object.name)</field>
+    </record>
+
+    <template id="helpdesk_ticket_entrega_equipo_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Constancia de Entrega de Equipo</h2>
+                        </div>
+                        <h4>Información del Cliente</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Cliente</th>
+                                <td t-esc="o.partner_id.name" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Teléfono</th>
+                                <td t-esc="o.partner_id.phone" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td t-esc="o.partner_id.email" t-if="o.partner_id"/>
+                            </tr>
+                            <tr>
+                                <th>Dirección</th>
+                                <td t-esc="o.x_studio_direccin_de_visita" t-if="o.x_studio_direccin_de_visita"/>
+                            </tr>
+                        </table>
+                        <h4>Datos del Equipo</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Número de Serie</th>
+                                <td t-esc="o.x_studio_numero_de_serie" t-if="o.x_studio_numero_de_serie"/>
+                            </tr>
+                            <tr>
+                                <th>Marca</th>
+                                <td t-esc="o.x_studio_marca" t-if="o.x_studio_marca"/>
+                            </tr>
+                            <tr>
+                                <th>Modelo</th>
+                                <td t-esc="o.x_studio_modelo" t-if="o.x_studio_modelo"/>
+                            </tr>
+                            <tr>
+                                <th>Categoría</th>
+                                <td t-esc="o.x_studio_categoria" t-if="o.x_studio_categoria"/>
+                            </tr>
+                            <tr>
+                                <th>Estado del Equipo</th>
+                                <td t-esc="o.x_studio_estado_del_equipo" t-if="o.x_studio_estado_del_equipo"/>
+                            </tr>
+                        </table>
+                        <h4>Solución Aplicada</h4>
+                        <p t-esc="o.x_tecnico_solucion"/>
+                        <br/>
+                        <h4>Fechas</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Fecha Ingreso</th>
+                                <td t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Entrega</th>
+                                <td t-esc="o.name"/>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
