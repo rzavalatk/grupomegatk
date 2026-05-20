@@ -5,16 +5,11 @@
         <field name="model">helpdesk.ticket</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='analytic_account_id']" position="replace"/>
-            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='extra_info']/group[1]/field[@name='company_id']" position="replace"/>
-            <xpath expr="//field[@name='active']" position="after">
-                <field name="x_studio_l"/>
-            </xpath>
             <xpath expr="//page[@name='extra_info']" position="attributes">
                 <attribute name="string">Soporte</attribute>
                 <attribute name="invisible">not x_is_technical_area</attribute>
             </xpath>
-            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='extra_info']/group[1]" position="after">
+            <xpath expr="//page[@name='extra_info']" position="inside">
                 <group name="studio_group_588_1jnt2pp3l">
                     <group name="studio_group_588_left">
                         <field name="x_studio_tipo_de_soporte"/>
