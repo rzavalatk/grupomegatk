@@ -68,7 +68,9 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Fecha Ingreso</th>
-                                <td t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                                <td>
+                                    <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Fecha de Entrega</th>

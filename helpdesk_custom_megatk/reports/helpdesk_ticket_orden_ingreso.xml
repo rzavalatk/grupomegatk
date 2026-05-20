@@ -44,7 +44,9 @@
                             </tr>
                             <tr>
                                 <th>Fecha Creación</th>
-                                <td t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                                <td>
+                                    <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
+                                </td>
                             </tr>
                         </table>
                     </div>
