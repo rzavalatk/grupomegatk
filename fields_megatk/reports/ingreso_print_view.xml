@@ -13,7 +13,7 @@
           </div>
       </div>
       <div class="article o_report_layout_standard">
-          <t t-raw="0"/>
+          <t t-out="0"/>
       </div>
       <div class="footer" style='font-size:10pt !important;'>
         <div style="border-top: 1px solid rgb(13, 143, 210);">
