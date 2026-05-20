@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_form_megatk_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.megatk.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_account_id']" position="replace"/>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='extra_info']/group[1]/field[@name='company_id']" position="replace"/>
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="x_studio_l"/>
+            </xpath>
+            <xpath expr="//page[@name='extra_info']" position="attributes">
+                <attribute name="string">Soporte</attribute>
+                <attribute name="invisible">not x_is_technical_area</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='extra_info']/group[1]" position="after">
+                <group name="studio_group_588_1jnt2pp3l">
+                    <group name="studio_group_588_left">
+                        <field name="x_studio_tipo_de_soporte"/>
+                        <field name="x_studio_propsito_llamada"/>
+                        <field name="x_studio_estado_del_equipo"/>
+                        <field name="x_studio_tipo_de_visita"/>
+                        <field name="x_studio_propsito_de_la_visita"/>
+                        <field name="x_studio_marca"/>
+                        <field name="x_studio_categoria"/>
+                        <field name="x_studio_modelo" required="True" class="Modelo:"/>
+                    </group>
+                    <group name="studio_group_588_right">
+                        <field name="x_studio_la_persona_que_reporto"/>
+                        <field name="x_studio_telfono"/>
+                        <field name="x_studio_correo_electrnico"/>
+                        <field name="x_studio_direccin_de_visita"/>
+                        <field name="x_studio_numero_de_serie"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
