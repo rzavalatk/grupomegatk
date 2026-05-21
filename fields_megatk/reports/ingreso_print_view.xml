@@ -9,7 +9,10 @@
               </div>
           </div>
           <div style="float: right; margin-top: -170px;">
-              <h3>Ticket # <span t-field="o.id"/></h3>                           
+              <h3>
+                Ticket #
+                <span t-esc="getattr(o, 'ticket_ref', False) or getattr(o, 'ticket_number', False) or (((o.display_name or '').split('(#')[-1].split(')')[0]) if '(#' in (o.display_name or '') else o.id)"/>
+              </h3>
           </div>
       </div>
       <div class="article o_report_layout_standard">
