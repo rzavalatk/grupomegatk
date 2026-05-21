@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_team_view_form_megatk_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.team.form.megatk.inherit</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <div class="o_row" style="align-items: center; gap: 6px; font-size: 14px; margin-top: 6px;">
+                    <field name="x_is_technical_area" nolabel="1" class="oe_inline" style="transform: scale(0.75); transform-origin: left center;"/>
+                    <span style="font-size: 14px; font-weight: 500;">Equipo de Soporte Tecnico</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
