@@ -14,57 +14,108 @@
     <template id="helpdesk_ticket_visita_tecnica_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
+                <t t-call="fields_megatk.external_layout_standard_visita" t-lang="o.partner_id.lang">
                     <div class="page">
-                        <h2>Reporte de Visita Técnica - <t t-esc="o.name"/></h2>
-                        <h4>Información General</h4>
-                        <table class="table table-bordered">
+                        <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+                            CONTROL DE VISITA
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div style="float: left; margin-top: -30px;">
+                            <h3>N. <span t-field="o.id"/></h3>
+                        </div>
+                        <div style="float: right; margin-top: -30px;">
+                            <h4>Fecha: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/></h4>
+                        </div>
+
+                        <table style="table-layout: fixed; width:100%">
                             <tr>
-                                <th>Cliente</th>
-                                <td t-esc="o.partner_id.name" t-if="o.partner_id"/>
+                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Empresa: <span t-esc="(o.partner_id and o.partner_id.name) or ''"/>
+                                </td>
+                                <td style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Telefono: <span t-esc="o.x_studio_telfono or (o.partner_id and o.partner_id.phone) or ''"/>
+                                </td>
                             </tr>
                             <tr>
-                                <th>Dirección</th>
-                                <td t-esc="o.partner_id.street" t-if="o.partner_id"/>
+                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Persona que reporto: <span t-esc="o.x_studio_la_persona_que_reporto or ''"/>
+                                </td>
                             </tr>
                             <tr>
-                                <th>Teléfono</th>
-                                <td t-esc="o.partner_id.phone" t-if="o.partner_id"/>
+                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Dirección: <span t-esc="o.x_studio_direccin_de_visita or (o.partner_id and o.partner_id.street) or ''"/>
+                                </td>
                             </tr>
                             <tr>
-                                <th>Email</th>
-                                <td t-esc="o.partner_id.email" t-if="o.partner_id"/>
-                            </tr>
-                        </table>
-                        <h4>Detalles de la Visita</h4>
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Tipo de Visita</th>
-                                <td t-esc="o.x_studio_tipo_de_visita" t-if="o.x_studio_tipo_de_visita"/>
+                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:50px;">
+                                    &amp;nbsp;Proposito de la visita: <span t-esc="o.x_studio_propsito_de_la_visita or ''"/>
+                                </td>
                             </tr>
                             <tr>
-                                <th>Propósito de la Visita</th>
-                                <td t-esc="o.x_studio_propsito_de_la_visita" t-if="o.x_studio_propsito_de_la_visita"/>
-                            </tr>
-                            <tr>
-                                <th>Marca del Equipo</th>
-                                <td t-esc="o.x_studio_marca" t-if="o.x_studio_marca"/>
-                            </tr>
-                            <tr>
-                                <th>Categoría</th>
-                                <td t-esc="o.x_studio_categoria" t-if="o.x_studio_categoria"/>
-                            </tr>
-                            <tr>
-                                <th>Modelo</th>
-                                <td t-esc="o.x_studio_modelo" t-if="o.x_studio_modelo"/>
-                            </tr>
-                            <tr>
-                                <th>Número de Serie</th>
-                                <td t-esc="o.x_studio_numero_de_serie" t-if="o.x_studio_numero_de_serie"/>
+                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
+                                    &amp;nbsp;Correo electrónico: <span t-esc="o.x_studio_correo_electrnico or (o.partner_id and o.partner_id.email) or ''"/>
+                                </td>
                             </tr>
                         </table>
-                        <h4>Diagnóstico Técnico</h4>
-                        <p t-esc="o.x_tecnico_diagnostico"/>
+
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <div style="margin-left: 17%;">
+                            <table style="width:74%">
+                                <tr>
+                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Cortesía&amp;nbsp;</td>
+                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['cortesia', 'cortesía']"><b>X</b></span>
+                                    </td>
+                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Contado&amp;nbsp;</td>
+                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() == 'contado'"><b>X</b></span>
+                                    </td>
+                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Garantía&amp;nbsp;</td>
+                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['garantia', 'garantía']"><b>X</b></span>
+                                    </td>
+                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Capacitación</td>
+                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['capacitacion', 'capacitación']"><b>X</b></span>
+                                    </td>
+                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Instalación</td>
+                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
+                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['instalacion', 'instalación']"><b>X</b></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <table style="table-layout: fixed; width:100%">
+                            <tr>
+                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:70px;">
+                                    &amp;nbsp;<b>Visita realizada por:</b> <span t-esc="(o.user_id and o.user_id.name) or (o.create_uid and o.create_uid.name) or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:70px;">
+                                    &amp;nbsp;<b>Firma y sello del cliente:</b>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+                        <table style="table-layout: fixed; width:100%">
+                            <tr>
+                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:top; font-family:'Arial'; font-size:14pt; height:200px;">
+                                    &amp;nbsp;<b>Obsevaciones:</b> <span t-esc="o.x_tecnico_diagnostico or o.description or ''"/>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </t>
             </t>
