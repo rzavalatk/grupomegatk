@@ -6,7 +6,10 @@
         <field name="inherit_id" ref="helpdesk.helpdesk_team_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
-                <field name="x_is_technical_area"/>
+                <div class="o_row" style="align-items: center; gap: 8px;">
+                    <field name="x_is_technical_area" nolabel="1" class="oe_inline"/>
+                    <span>Equipo de Soporte Tecnico</span>
+                </div>
             </xpath>
         </field>
     </record>
