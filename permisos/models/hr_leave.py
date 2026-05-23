@@ -98,6 +98,14 @@ class HrLeave(models.Model):
         store=False,
     )
 
+    # Sobrescribir duration_display para que muestre las horas equivalentes
+    # en lugar de las horas reales del calendario (importante para sábados)
+    duration_display = fields.Char(
+        string='Duración',
+        compute='_compute_duration_display',
+        store=False,
+    )
+
     def _is_compensatory_type(self, leave_type):
         if getattr(leave_type, 'is_overtime_compensation', False):
             return True
@@ -583,6 +591,39 @@ class HrLeave(models.Model):
                 hours *= 2
 
             leave.number_of_hours_display = hours
+    
+    @api.depends('number_of_hours_display', 'number_of_days_display')
+    def _compute_duration_display(self):
+        """
+        Calcula la duración a mostrar usando las horas equivalentes
+        (importantes para sábados donde 4 horas físicas = 8 horas equivalentes)
+        """
+        for leave in self:
+            hours = leave.number_of_hours_display
+            days = leave.number_of_days_display
+            
+            # Si hay días completos, mostrarlos
+            if days >= 1:
+                if days == 1:
+                    leave.duration_display = "1 día"
+                else:
+                    leave.duration_display = f"{int(days)} días"
+            # Si solo hay horas
+            elif hours > 0:
+                if hours == 1:
+                    leave.duration_display = "1 hora"
+                else:
+                    # Formatear horas y minutos
+                    hours_int = int(hours)
+                    minutes = int((hours - hours_int) * 60)
+                    
+                    if minutes > 0:
+                        leave.duration_display = f"{hours_int} horas {minutes} minutos"
+                    else:
+                        leave.duration_display = f"{hours_int} horas"
+            else:
+                leave.duration_display = "0 horas"
+    
     @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
     def _compute_number_of_days_display(self):
         for leave in self:

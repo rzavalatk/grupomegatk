@@ -26,7 +26,9 @@ class HrLeave(models.Model):
         self.incapacidad = False
         if self.vacaciones:
             self.allow_negative_balance = True
-            self.requires_allocation = 'no'
+            # Solo cambiar requires_allocation en nuevos registros
+            if not self.id or not self._origin.id:
+                self.requires_allocation = 'no'
     
     @api.onchange('deducciones')
     def _onchange_deducciones(self):
@@ -51,22 +53,37 @@ class HrLeave(models.Model):
         for vals in vals_list:
             if vals.get('vacaciones'):
                 vals['allow_negative_balance'] = True
-                vals['requires_allocation'] = 'no'
+                # Solo establecer requires_allocation para nuevos registros
+                if 'id' not in vals:
+                    vals['requires_allocation'] = 'no'
         return super().create(vals_list)
 
     def write(self, vals):
-        result = super().write(vals)
-        vacation_types = self.filtered(
-            lambda leave_type: leave_type.vacaciones and (
-                not leave_type.allow_negative_balance or leave_type.requires_allocation != 'no'
-            )
-        )
-        if vacation_types:
-            vacation_types.write({
-                'allow_negative_balance': True,
-                'requires_allocation': 'no',
-            })
-        return result
+        # Si hay permisos validados, NO permitir cambio de requires_allocation
+        if 'requires_allocation' in vals and self._has_validated_leaves():
+            # Remover requires_allocation de los valores a actualizar
+            vals = dict(vals)  # Crear copia para no modificar el original
+            vals.pop('requires_allocation')
+        
+        # Si se está activando el checkbox de vacaciones, ajustar allow_negative_balance
+        if vals.get('vacaciones'):
+            vals['allow_negative_balance'] = True
+            # Solo intentar cambiar requires_allocation si no hay permisos validados
+            if not self._has_validated_leaves():
+                vals['requires_allocation'] = 'no'
+        
+        return super().write(vals)
+    
+    def _has_validated_leaves(self):
+        """Verifica si este tipo de permiso tiene permisos validados"""
+        for leave_type in self:
+            validated_leaves = self.env['hr.leave'].search_count([
+                ('holiday_status_id', '=', leave_type.id),
+                ('state', 'in', ['validate', 'validate1'])
+            ], limit=1)
+            if validated_leaves:
+                return True
+        return False
 
     def _selection_has(self, field_name, value):
         field = self._fields.get(field_name)
@@ -120,20 +137,25 @@ class HrLeave(models.Model):
         vals = self._get_overtime_leave_type_vals()
 
         if leave_type:
-            leave_type.write(vals)
+            # Si el tipo de permiso ya existe, NO modificar requires_allocation
+            # para evitar conflictos con permisos validados
+            safe_vals = {k: v for k, v in vals.items() if k != 'requires_allocation'}
+            leave_type.write(safe_vals)
             if 'active' in leave_type._fields and not leave_type.active:
                 leave_type.active = True
             return leave_type
 
+        # Para nuevos tipos, usar todos los valores
         return self.create(vals)
 
     def init(self):
         # Asegura consistencia en registros existentes al actualizar el modulo.
+        # Solo actualizar allow_negative_balance (siempre es seguro de modificar)
+        # NO tocar requires_allocation para evitar conflictos con permisos validados
         self.env.cr.execute(
             """
             UPDATE hr_leave_type
-               SET allow_negative_balance = TRUE,
-                   requires_allocation = 'no'
+               SET allow_negative_balance = TRUE
              WHERE vacaciones IS TRUE
             """
         )
