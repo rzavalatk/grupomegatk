@@ -567,15 +567,24 @@ class HrLeave(models.Model):
         vals['number_of_days_display'] = 
         return super(HrLeave, self).create(vals)"""
     
-    @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours')
+    @api.depends('request_date_from', 'request_date_to', 'request_unit_half', 'request_unit_hours', 'request_hour_from', 'request_hour_to')
     def _compute_number_of_hours_display(self):
         for leave in self:
             hours = 0.0
 
             # Permisos por horas personalizadas
-            if leave.request_unit_hours and leave.request_date_from and leave.request_date_to:
-                delta = leave.request_date_to - leave.request_date_from
-                hours = delta.total_seconds() / 3600.0
+            if leave.request_unit_hours:
+                if leave.request_hour_from and leave.request_hour_to:
+                    # Usar las horas específicas del día
+                    hours = leave.request_hour_to - leave.request_hour_from
+                    
+                    # Restar hora de almuerzo si cruza el mediodía (12:00-13:00)
+                    if leave.request_hour_from < 13 and leave.request_hour_to > 13:
+                        hours -= 1
+                elif leave.request_date_from and leave.request_date_to:
+                    # Fallback: calcular por diferencia de datetime
+                    delta = leave.request_date_to - leave.request_date_from
+                    hours = delta.total_seconds() / 3600.0
 
             # Medio día
             elif leave.request_unit_half:
