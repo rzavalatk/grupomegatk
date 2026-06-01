@@ -42,7 +42,7 @@
                 <separator/>
                 <filter string="Marca" name='group_marca' context="{'group_by':'marca_id'}"/>
                 <filter string="Responsable" name="invoicedate" context="{'group_by':'invoice_user_id'}"/>
-                <filter string="Canal de ventas" name="sales_channel" context="{'group_by':'sales_team_name'}"/>
+                <filter string="Canal de ventas" name="sales_channel" context="{'group_by':'sales_team_id'}"/>
                 <filter string="Cliente" name="customer" context="{'group_by':'partner_id'}"/>
                 <filter string="Fecha" name="date" context="{'group_by':'date'}"/>
             </search>
