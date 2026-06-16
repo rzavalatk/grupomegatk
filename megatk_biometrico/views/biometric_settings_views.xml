@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="view_biometric_settings_form" model="ir.ui.view">
-        <field name="name">biometric.settings.form</field>
-        <field name="model">res.config.settings</field>
+        <field name="name">biometric.config.form</field>
+        <field name="model">biometric.config</field>
         <field name="arch" type="xml">
             <form string="Ajustes Biométricos">
                 <sheet>
@@ -20,9 +20,13 @@
 
     <record id="action_biometric_settings" model="ir.actions.act_window">
         <field name="name">Ajustes Biométricos</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
+        <field name="res_model">biometric.config</field>
+        <field name="view_mode">form,tree</field>
         <field name="view_id" ref="view_biometric_settings_form"/>
-        <field name="target">new</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Configura la conexión a los dispositivos biométricos por compañía.
+            </p>
+        </field>
     </record>
 </odoo>
