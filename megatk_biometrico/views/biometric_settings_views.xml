@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_biometric_settings_form" model="ir.ui.view">
+        <field name="name">biometric.settings.form</field>
+        <field name="model">biometric.settings</field>
+        <field name="arch" type="xml">
+            <form string="Ajustes Biométricos">
+                <sheet>
+                    <group>
+                        <field name="server_url"/>
+                        <field name="api_token"/>
+                        <field name="websocket_url"/>
+                        <field name="default_device_group"/>
+                        <field name="allow_command_execution"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_biometric_settings" model="ir.actions.act_window">
+        <field name="name">Ajustes Biométricos</field>
+        <field name="res_model">biometric.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_biometric_settings_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

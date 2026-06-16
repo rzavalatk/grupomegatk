@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_biometric_manager" model="res.groups">
+        <field name="name">Biométrico Manager</field>
+    </record>
+    <record id="group_biometric_user" model="res.groups">
+        <field name="name">Biométrico Usuario</field>
+    </record>
+</odoo>

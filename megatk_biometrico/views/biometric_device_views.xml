@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_biometric_device_tree" model="ir.ui.view">
+        <field name="name">biometric.device.tree</field>
+        <field name="model">biometric.device</field>
+        <field name="arch" type="xml">
+            <tree string="Dispositivos Biométricos">
+                <field name="name"/>
+                <field name="sn"/>
+                <field name="ip"/>
+                <field name="status"/>
+                <field name="classroom_id"/>
+                <field name="last_activity"/>
+                <field name="record_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_biometric_device_form" model="ir.ui.view">
+        <field name="name">biometric.device.form</field>
+        <field name="model">biometric.device</field>
+        <field name="arch" type="xml">
+            <form string="Dispositivo Biométrico">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sn"/>
+                        <field name="ip"/>
+                        <field name="status"/>
+                        <field name="classroom_id"/>
+                    </group>
+                    <group>
+                        <field name="last_activity"/>
+                        <field name="record_count"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_biometric_device" model="ir.actions.act_window">
+        <field name="name">Dispositivos</field>
+        <field name="res_model">biometric.device</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_biometric_device_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Crea dispositivos biométricos y vincúlalos a su ubicación.
+            </p>
+        </field>
+    </record>
+</odoo>

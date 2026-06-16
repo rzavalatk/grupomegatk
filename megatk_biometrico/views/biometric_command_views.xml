@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_biometric_command_tree" model="ir.ui.view">
+        <field name="name">biometric.command.tree</field>
+        <field name="model">biometric.command</field>
+        <field name="arch" type="xml">
+            <tree string="Comandos Biométricos">
+                <field name="serial"/>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="send_status"/>
+                <field name="err_count"/>
+                <field name="run_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_biometric_command_form" model="ir.ui.view">
+        <field name="name">biometric.command.form</field>
+        <field name="model">biometric.command</field>
+        <field name="arch" type="xml">
+            <form string="Comando Biométrico">
+                <sheet>
+                    <group>
+                        <field name="serial"/>
+                        <field name="name"/>
+                        <field name="status"/>
+                        <field name="send_status"/>
+                    </group>
+                    <group>
+                        <field name="err_count"/>
+                        <field name="run_time"/>
+                        <field name="created_at"/>
+                    </group>
+                    <group>
+                        <field name="content"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_biometric_command" model="ir.actions.act_window">
+        <field name="name">Comandos</field>
+        <field name="res_model">biometric.command</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_biometric_command_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Administra comandos pendientes y revive envíos a dispositivos biométricos.
+            </p>
+        </field>
+    </record>
+</odoo>

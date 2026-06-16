@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_biometric_root" name="Biométrico" sequence="10" groups="group_biometric_manager"/>
+    <menuitem id="menu_biometric_settings" name="Ajustes" parent="menu_biometric_root" action="action_biometric_settings" sequence="1"/>
+    <menuitem id="menu_biometric_devices" name="Dispositivos" parent="menu_biometric_root" action="action_biometric_device" sequence="2"/>
+    <menuitem id="menu_biometric_records" name="Marcaciones" parent="menu_biometric_root" action="action_biometric_record" sequence="3"/>
+    <menuitem id="menu_biometric_commands" name="Comandos" parent="menu_biometric_root" action="action_biometric_command" sequence="4"/>
+</odoo>
