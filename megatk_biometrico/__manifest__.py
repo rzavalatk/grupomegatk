@@ -17,7 +17,7 @@
         "views/biometric_command_views.xml",
         "views/biometric_menu.xml"
     ],
-    "installable": true,
-    "application": true,
-    "auto_install": false
+    "installable": True,
+    "application": True,
+    "auto_install": False
 }
