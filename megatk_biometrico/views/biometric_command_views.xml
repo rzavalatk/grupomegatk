@@ -4,14 +4,14 @@
         <field name="name">biometric.command.tree</field>
         <field name="model">biometric.command</field>
         <field name="arch" type="xml">
-            <tree string="Comandos Biométricos">
+            <list string="Comandos Biométricos">
                 <field name="serial"/>
                 <field name="name"/>
                 <field name="status"/>
                 <field name="send_status"/>
                 <field name="err_count"/>
                 <field name="run_time"/>
-            </tree>
+            </list>
         </field>
     </record>
 

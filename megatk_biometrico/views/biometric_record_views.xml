@@ -4,7 +4,7 @@
         <field name="name">biometric.record.tree</field>
         <field name="model">biometric.record</field>
         <field name="arch" type="xml">
-            <tree string="Marcaciones">
+            <list string="Marcaciones">
                 <field name="device_serial_num"/>
                 <field name="enroll_id"/>
                 <field name="records_time"/>
@@ -12,7 +12,7 @@
                 <field name="inout"/>
                 <field name="event"/>
                 <field name="temperature"/>
-            </tree>
+            </list>
         </field>
     </record>
 

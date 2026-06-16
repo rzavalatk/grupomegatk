@@ -4,7 +4,7 @@
         <field name="name">biometric.device.tree</field>
         <field name="model">biometric.device</field>
         <field name="arch" type="xml">
-            <tree string="Dispositivos Biométricos">
+            <list string="Dispositivos Biométricos">
                 <field name="name"/>
                 <field name="sn"/>
                 <field name="ip"/>
@@ -12,7 +12,7 @@
                 <field name="classroom_id"/>
                 <field name="last_activity"/>
                 <field name="record_count"/>
-            </tree>
+            </list>
         </field>
     </record>
 
