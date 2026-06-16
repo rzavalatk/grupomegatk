@@ -1,7 +1,6 @@
 from odoo import fields, models
 
 class BiometricSettings(models.TransientModel):
-    _name = 'biometric.settings'
     _inherit = 'res.config.settings'
     _description = 'Ajustes biométricos'
 
