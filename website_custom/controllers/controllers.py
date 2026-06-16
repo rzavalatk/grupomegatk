@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import http
 
-
+# prueba de commit
 class RoutesJSON(http.Controller):
     @http.route(['/get_images_breadcum'], type='json', auth='public', website=True)
     def get_images_breadcum(self):
