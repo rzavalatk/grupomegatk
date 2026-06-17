@@ -23,7 +23,7 @@
             <form string="Comando Biométrico">
                 <header>
                     <button name="execute_command" type="object" string="Ejecutar Comando" class="btn btn-primary" states="0" icon="fa-send"/>
-                    <button name="%(action_sync_devices)d" type="action" string="Refrescar Dispositivos" icon="fa-refresh"/>
+                    <button name="%(action_sync_devices_server)d" type="action" string="Refrescar Dispositivos" icon="fa-refresh"/>
                 </header>
                 <sheet>
                     <group>
