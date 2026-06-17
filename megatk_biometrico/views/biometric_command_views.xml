@@ -22,7 +22,7 @@
         <field name="arch" type="xml">
             <form string="Comando Biométrico">
                 <header>
-                    <button name="execute_command" type="object" string="Ejecutar Comando" class="btn btn-primary" states="0" icon="fa-send"/>
+                    <button name="execute_command" type="object" string="Ejecutar Comando" class="btn btn-primary" icon="fa-send"/>
                     <button name="%(action_sync_devices_server)d" type="action" string="Refrescar Dispositivos" icon="fa-refresh"/>
                 </header>
                 <sheet>
@@ -32,7 +32,7 @@
                         <field name="command_type" widget="radio" options="{'horizontal': true}"/>
                     </group>
                     <group>
-                        <field name="person_id" attrs="{'required': [('command_type', '!=', 'getuserlist')], 'invisible': [('command_type', '=', 'getuserlist')]}"/>
+                        <field name="person_id"/>
                     </group>
                     <group>
                         <field name="status" widget="badge" decoration-success="status=='2'" decoration-warning="status=='0'" decoration-info="status=='1'" decoration-danger="status=='3'"/>
@@ -45,7 +45,7 @@
                         <field name="name" readonly="1"/>
                         <field name="content" widget="text" readonly="1"/>
                     </group>
-                    <group string="Resultado" attrs="{'invisible': [('message', '=', False)]}">
+                    <group string="Resultado">
                         <field name="message" widget="text" readonly="1"/>
                     </group>
                 </sheet>
