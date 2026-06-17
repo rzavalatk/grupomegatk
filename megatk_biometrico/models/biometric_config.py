@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from datetime import datetime
 import requests
 import json
 from requests.exceptions import RequestException, Timeout
@@ -75,6 +76,35 @@ class BiometricConfig(models.Model):
         except json.JSONDecodeError:
             raise ValueError(f'Respuesta inválida del servidor: {response.text}')
 
+    def _parse_datetime_string(self, value):
+        """Parsea timestamps ISO y permite microsegundos."""
+        if not value:
+            return False
+        if isinstance(value, datetime):
+            return value.strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(value, str):
+            text = value.strip()
+            # Odoo no siempre maneja bien el formato ISO con microsegundos o Z
+            if text.endswith('Z'):
+                text = text[:-1]
+            text = text.replace('T', ' ')
+            try:
+                dt = datetime.fromisoformat(text)
+                return dt.strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                pass
+            try:
+                dt = datetime.strptime(text, '%Y-%m-%d %H:%M:%S.%f')
+                return dt.strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                pass
+            try:
+                dt = datetime.strptime(text, '%Y-%m-%d %H:%M:%S')
+                return dt.strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                return text
+        return value
+
     def sync_devices(self):
         """
         Sincroniza dispositivos desde el servidor biométrico
@@ -104,13 +134,14 @@ class BiometricConfig(models.Model):
                 # Buscar dispositivo existente
                 device = self.env['biometric.device'].search([('sn', '=', sn)], limit=1)
                 
+                last_activity = self._parse_datetime_string(device_data.get('last_activity'))
                 if device:
                     # Actualizar estado y IP
                     status = 'connected' if device_data.get('status') == 1 else 'disconnected'
                     device.write({
                         'status': status,
                         'ip': device_data.get('ip') or device.ip,
-                        'last_activity': device_data.get('last_activity'),
+                        'last_activity': last_activity,
                     })
                     updated += 1
                 else:
@@ -120,7 +151,7 @@ class BiometricConfig(models.Model):
                         'sn': sn,
                         'ip': device_data.get('ip'),
                         'status': 'connected' if device_data.get('status') == 1 else 'disconnected',
-                        'last_activity': device_data.get('last_activity'),
+                        'last_activity': last_activity,
                     })
                     created += 1
             
@@ -168,7 +199,7 @@ class BiometricConfig(models.Model):
                     self.env['biometric.record'].create({
                         'device_serial_num': record_data.get('device_serial_num'),
                         'enroll_id': record_data.get('enroll_id'),
-                        'records_time': record_data.get('records_time'),
+                        'records_time': self._parse_datetime_string(record_data.get('records_time')),
                         'mode': str(record_data.get('mode', 0)),
                         'inout': str(record_data.get('inout', 0)),
                         'event': record_data.get('event', 0),
