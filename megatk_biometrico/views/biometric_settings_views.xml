@@ -20,12 +20,16 @@
         <field name="model">biometric.config</field>
         <field name="arch" type="xml">
             <form string="Ajustes Biométricos">
+                <header>
+                    <button name="sync_devices" type="object" string="Sincronizar Dispositivos" class="btn btn-primary" icon="fa-refresh"/>
+                    <button name="sync_records" type="object" string="Sincronizar Marcaciones" class="btn btn-primary" icon="fa-refresh"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="company_id"/>
-                        <field name="server_url"/>
-                        <field name="api_token"/>
-                        <field name="websocket_url"/>
+                        <field name="server_url" placeholder="http://13.58.64.227:7792"/>
+                        <field name="api_token" placeholder="Token opcional para autenticación"/>
+                        <field name="websocket_url" placeholder="ws://13.58.64.227:7792/pub/chat"/>
                         <field name="default_device_group"/>
                         <field name="allow_command_execution"/>
                     </group>

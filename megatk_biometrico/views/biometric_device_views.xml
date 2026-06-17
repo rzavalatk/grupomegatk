@@ -8,7 +8,7 @@
                 <field name="name"/>
                 <field name="sn"/>
                 <field name="ip"/>
-                <field name="status"/>
+                <field name="status" widget="badge" decoration-success="status=='connected'" decoration-danger="status=='disconnected'"/>
                 <field name="classroom_id"/>
                 <field name="last_activity"/>
                 <field name="record_count"/>
@@ -16,17 +16,35 @@
         </field>
     </record>
 
-    <record id="view_biometric_device_form" model="ir.ui.view">
+    <record id="action_biometric_device" model="ir.actions.act_window">
+        <field name="name">Dispositivos</field>
+        <field name="res_model">biometric.device</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_biometric_device_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Crea dispositivos biométricos y vincúlalos a su ubicación.
+            </p>
+        </field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <act_window id="action_sync_devices" name="Sincronizar Dispositivos" res_model="biometric.device" type="ir.actions.act_window" src_model="biometric.device" view_mode="form" binding_model_id="ref(model_biometric_device)" binding_type="action">
+        <field name="multi">False</field>
+    </act_window>
         <field name="name">biometric.device.form</field>
         <field name="model">biometric.device</field>
         <field name="arch" type="xml">
             <form string="Dispositivo Biométrico">
+                <header>
+                    <button name="action_refresh_status" type="object" string="Actualizar Estado" class="btn btn-primary" icon="fa-refresh"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="sn"/>
                         <field name="ip"/>
-                        <field name="status"/>
+                        <field name="status" widget="badge" decoration-success="status=='connected'" decoration-danger="status=='disconnected'"/>
                         <field name="classroom_id"/>
                     </group>
                     <group>

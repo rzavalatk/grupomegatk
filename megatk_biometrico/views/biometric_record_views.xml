@@ -50,7 +50,18 @@
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Revisa y descarga todos los registros de marcación biométrica.
+                Presiona el botón "Sincronizar" para obtener nuevas marcaciones del servidor.
             </p>
+        </field>
+    </record>
+
+    <!-- Acción de menú para sincronizar registros -->
+    <record id="action_sync_records_button" model="ir.actions.server">
+        <field name="name">Sincronizar Marcaciones</field>
+        <field name="model_id" ref="model_biometric_record"/>
+        <field name="state">code</field>
+        <field name="code">
+result = model.action_sync_records()
         </field>
     </record>
 </odoo>

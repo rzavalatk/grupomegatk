@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 class BiometricRecord(models.Model):
     _name = 'biometric.record'
@@ -28,3 +28,42 @@ class BiometricRecord(models.Model):
     def _compute_device(self):
         for rec in self:
             rec.device_id = self.env['biometric.device'].search([('sn', '=', rec.device_serial_num)], limit=1)
+
+    @api.model
+    def action_sync_records(self):
+        """Acción para sincronizar registros desde el servidor"""
+        config = self.env['biometric.config'].search([
+            ('company_id', '=', self.env.company.id)
+        ], limit=1)
+        
+        if not config:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Error',
+                    'message': 'No hay configuración de servidor biométrico para esta compañía',
+                    'sticky': True,
+                    'type': 'danger',
+                }
+            }
+        
+        try:
+            result = config.sync_records()
+            message = result['message']
+            msg_type = 'success' if result['success'] else 'danger'
+        except Exception as e:
+            message = f'Error: {str(e)}'
+            msg_type = 'danger'
+        
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Sincronización de Marcaciones',
+                'message': message,
+                'sticky': True,
+                'type': msg_type,
+            }
+        }
+

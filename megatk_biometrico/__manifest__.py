@@ -8,6 +8,9 @@
     "website": "https://example.com",
     "license": "LGPL-3",
     "depends": ["base", "web", "mail"],
+    "external_dependencies": {
+        "python": ["requests"]
+    },
     "data": [
         "security/biometric_security.xml",
         "security/ir.model.access.csv",
