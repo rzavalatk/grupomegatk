@@ -33,7 +33,6 @@
         <field name="name">Sincronizar Dispositivos</field>
         <field name="res_model">biometric.device</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="src_model">biometric.device</field>
         <field name="view_mode">form</field>
         <field name="binding_model_id" ref="model_biometric_device"/>
         <field name="binding_type">action</field>
