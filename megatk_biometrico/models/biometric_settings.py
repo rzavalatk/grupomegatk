@@ -53,3 +53,15 @@ class BiometricSettings(models.TransientModel):
             config.write(vals)
         else:
             config_model.create(vals)
+        # Intentar sincronizar inmediatamente al guardar la configuración
+        try:
+            cfg = config_model.search([('company_id', '=', self.env.company.id)], limit=1)
+            if cfg:
+                # Sincronizar persons, enrollInfo, devices y registros
+                cfg.sync_persons()
+                cfg.sync_enrollinfo()
+                cfg.sync_devices()
+                cfg.sync_records()
+        except Exception:
+            # No interrumpir el guardado si hay errores de red; el usuario puede reintentar manualmente
+            pass

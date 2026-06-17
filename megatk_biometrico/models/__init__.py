@@ -4,3 +4,4 @@ from . import biometric_command
 from . import biometric_config
 from . import biometric_settings
 from . import biometric_classroom
+from . import biometric_enrollinfo

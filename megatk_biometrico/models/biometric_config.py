@@ -190,6 +190,87 @@ class BiometricConfig(models.Model):
                 'message': f'Error sincronizando registros: {str(e)}'
             }
 
+    def sync_persons(self):
+        """
+        Sincroniza usuarios desde el servidor (/persons)
+        Crea/actualiza registros en `biometric.person` con enroll_id y nombre
+        """
+        if not self.server_url:
+            raise ValueError('URL del servidor no configurada')
+
+        try:
+            response = self._make_request('GET', '/persons')
+            if not isinstance(response, list):
+                raise ValueError('Respuesta inválida: se esperaba lista de persons')
+
+            created = 0
+            updated = 0
+            for p in response:
+                enroll = p.get('id') or p.get('enroll_id') or p.get('enrollid')
+                name = p.get('name') or p.get('username') or p.get('display_name')
+                if enroll is None:
+                    continue
+                existing = self.env['biometric.person'].search([('enroll_id', '=', int(enroll))], limit=1)
+                vals = {
+                    'enroll_id': int(enroll),
+                    'name': name or f'User {enroll}',
+                    'active': True,
+                }
+                if existing:
+                    existing.write(vals)
+                    updated += 1
+                else:
+                    self.env['biometric.person'].create(vals)
+                    created += 1
+
+            return {'success': True, 'created': created, 'updated': updated, 'message': f'{created} creados, {updated} actualizados'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e), 'message': f'Error sincronizando persons: {str(e)}'}
+
+    def sync_enrollinfo(self):
+        """
+        Sincroniza información biométrica (enrollInfo) desde `/enrollInfo`
+        Guarda los datos en `biometric.enrollinfo` vinculados al usuario.
+        """
+        if not self.server_url:
+            raise ValueError('URL del servidor no configurada')
+
+        try:
+            response = self._make_request('GET', '/enrollInfo')
+            if not isinstance(response, list):
+                raise ValueError('Respuesta inválida: se esperaba lista de enrollInfo')
+
+            created = 0
+            updated = 0
+            for e in response:
+                enroll_id = e.get('enroll_id') or e.get('enrollId') or e.get('id')
+                backupnum = e.get('backupnum')
+                signature = e.get('signature') or e.get('signatures') or e.get('data')
+                if enroll_id is None:
+                    continue
+
+                person = self.env['biometric.person'].search([('enroll_id', '=', int(enroll_id))], limit=1)
+                vals = {
+                    'enroll_id': int(enroll_id),
+                    'backupnum': backupnum,
+                    'signature': signature if signature is not None else False,
+                    'person_id': person.id if person else False,
+                }
+
+                existing = self.env['biometric.enrollinfo'].search([('enroll_id', '=', int(enroll_id)), ('backupnum', '=', backupnum)], limit=1)
+                if existing:
+                    existing.write(vals)
+                    updated += 1
+                else:
+                    self.env['biometric.enrollinfo'].create(vals)
+                    created += 1
+
+            return {'success': True, 'created': created, 'updated': updated, 'message': f'{created} enrollinfo creados, {updated} actualizados'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e), 'message': f'Error sincronizando enrollInfo: {str(e)}'}
+
     @api.model
     def _get_config(self):
         """Obtiene la configuración para la compañía actual"""
