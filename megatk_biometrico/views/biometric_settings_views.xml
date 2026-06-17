@@ -21,8 +21,11 @@
         <field name="arch" type="xml">
             <form string="Ajustes Biométricos">
                 <header>
+                    <button name="sync_persons" type="object" string="Sincronizar Usuarios" class="btn btn-primary" icon="fa-users"/>
+                    <button name="sync_enrollinfo" type="object" string="Sincronizar Biométricos" class="btn btn-primary" icon="fa-id-card"/>
                     <button name="sync_devices" type="object" string="Sincronizar Dispositivos" class="btn btn-primary" icon="fa-refresh"/>
                     <button name="sync_records" type="object" string="Sincronizar Marcaciones" class="btn btn-primary" icon="fa-refresh"/>
+                    <button name="sync_all" type="object" string="Sincronizar Todo" class="btn btn-success" icon="fa-sync"/>
                 </header>
                 <sheet>
                     <group>

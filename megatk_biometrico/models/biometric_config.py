@@ -302,6 +302,22 @@ class BiometricConfig(models.Model):
         except Exception as e:
             return {'success': False, 'error': str(e), 'message': f'Error sincronizando enrollInfo: {str(e)}'}
 
+    def sync_all(self):
+        """Sincroniza toda la información biométrica desde el servidor."""
+        results = []
+        for method_name in ('sync_persons', 'sync_enrollinfo', 'sync_devices', 'sync_records'):
+            try:
+                method = getattr(self, method_name)
+                result = method()
+                results.append(f"{method_name}: {result.get('message', 'OK')}")
+            except Exception as e:
+                results.append(f"{method_name}: ERROR {e}")
+
+        return {
+            'success': True,
+            'message': '\n'.join(results)
+        }
+
     @api.model
     def _get_config(self):
         """Obtiene la configuración para la compañía actual"""
