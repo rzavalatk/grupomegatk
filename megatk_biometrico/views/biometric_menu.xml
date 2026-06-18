@@ -3,7 +3,9 @@
     <menuitem id="menu_biometric_root" name="Biométrico" sequence="10" groups="group_biometric_manager"/>
     <menuitem id="menu_biometric_commands" name="Comandos" parent="menu_biometric_root" action="action_biometric_command" sequence="1"/>
     <menuitem id="menu_biometric_devices" name="Dispositivos" parent="menu_biometric_root" action="action_biometric_device" sequence="2"/>
-    <menuitem id="menu_biometric_persons" name="Usuarios Biométricos" parent="menu_biometric_root" action="action_biometric_person" sequence="3"/>
+    <menuitem id="menu_biometric_persons" name="Usuarios Biométricos" parent="menu_biometric_root" sequence="3"/>
+    <menuitem id="menu_biometric_persons_employees" name="Empleados (Enroll)" parent="menu_biometric_persons" action="action_biometric_employees" sequence="1"/>
+    <menuitem id="menu_biometric_persons_list" name="Usuarios en Sistema" parent="menu_biometric_persons" action="action_biometric_person" sequence="2"/>
     <menuitem id="menu_biometric_records" name="Marcaciones" parent="menu_biometric_root" action="action_biometric_record" sequence="4"/>
     <menuitem id="menu_biometric_settings" name="Ajustes" parent="menu_biometric_root" action="action_biometric_settings" sequence="5"/>
 </odoo>

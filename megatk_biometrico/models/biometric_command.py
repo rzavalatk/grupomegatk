@@ -66,10 +66,14 @@ class BiometricCommand(models.Model):
             elif rec.command_type == 'setuserinfo':
                 if not rec.person_id:
                     raise UserError('Debe seleccionar un usuario para agregar')
+                # La contraseña no puede ir vacía al crear usuario en el dispositivo
+                if not rec.person_id.password:
+                    raise UserError('El usuario seleccionado no tiene contraseña. Agrega una contraseña en Usuarios Biométricos antes de ejecutar este comando.')
                 content = {
                     "cmd": "setuserinfo",
                     "enrollid": rec.person_id.enroll_id,
-                    "sn": rec.serial
+                    "sn": rec.serial,
+                    "password": rec.person_id.password,
                 }
             elif rec.command_type in ['deleteuser', 'deleteuser-complete']:
                 if not rec.person_id:
@@ -117,7 +121,10 @@ class BiometricCommand(models.Model):
             url = f"{config.server_url.rstrip('/')}{endpoint}"
             headers = config._get_headers()
             
-            response = requests.post(url, headers=headers, timeout=10)
+            # Enviar contenido JSON del comando en el body (incluye contraseña si aplica)
+            headers_with_json = headers.copy() if headers else {}
+            headers_with_json.update({'Content-Type': 'application/json'})
+            response = requests.post(url, headers=headers_with_json, data=self.content, timeout=10)
             response.raise_for_status()
             
             data = response.json()
@@ -191,9 +198,9 @@ class BiometricPerson(models.Model):
     """Modelo para usuarios biométricos (enrollid + nombre)"""
     _name = 'biometric.person'
     _description = 'Usuario Biométrico'
-
     enroll_id = fields.Integer(string='Enroll ID', required=True, unique=True, index=True)
     name = fields.Char(string='Nombre', required=True)
+    password = fields.Char(string='Contraseña', help='Contraseña usada para crear el usuario en el dispositivo')
     active = fields.Boolean(default=True)
     created_at = fields.Datetime(string='Creado', default=fields.Datetime.now)
 

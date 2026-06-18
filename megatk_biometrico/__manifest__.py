@@ -19,6 +19,7 @@
         "views/biometric_record_views.xml",
         "views/biometric_command_views.xml",
         "views/biometric_menu.xml",
+        "views/biometric_employee_views.xml",
         "views/hr_employee_views.xml"
     ],
     "installable": True,
