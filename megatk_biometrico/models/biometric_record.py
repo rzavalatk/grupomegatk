@@ -6,7 +6,7 @@ class BiometricRecord(models.Model):
     _order = 'records_time desc'
 
     device_serial_num = fields.Char(string='Serial Dispositivo', required=True)
-    enroll_id = fields.Integer(string='Enroll ID', required=True)
+    enroll_id = fields.Integer(string='Enroll ID', required=True, index=True)
     records_time = fields.Datetime(string='Hora de Marcación', required=True)
     mode = fields.Selection([
         ('0','Huella'),
@@ -23,11 +23,23 @@ class BiometricRecord(models.Model):
     event = fields.Integer(string='Evento')
     temperature = fields.Float(string='Temperatura')
     image = fields.Char(string='Imagen/base64')
-    device_id = fields.Many2one('biometric.device', string='Dispositivo', compute='_compute_device')
+    device_id = fields.Many2one('biometric.device', string='Dispositivo', compute='_compute_device', store=False)
+    employee_id = fields.Many2one('hr.employee', string='Empleado', compute='_compute_employee', store=False)
+    employee_name = fields.Char(string='Nombre Empleado', compute='_compute_employee_name', store=False)
 
     def _compute_device(self):
         for rec in self:
             rec.device_id = self.env['biometric.device'].search([('sn', '=', rec.device_serial_num)], limit=1)
+
+    def _compute_employee(self):
+        for rec in self:
+            employee = self.env['hr.employee'].search([('enroll_id', '=', rec.enroll_id)], limit=1)
+            rec.employee_id = employee
+
+    def _compute_employee_name(self):
+        for rec in self:
+            employee = self.env['hr.employee'].search([('enroll_id', '=', rec.enroll_id)], limit=1)
+            rec.employee_name = employee.name if employee else f'Desconocido (ID: {rec.enroll_id})'
 
     @api.model
     def action_sync_records(self):
