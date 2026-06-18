@@ -83,10 +83,11 @@ class BiometricDevice(models.Model):
                 device_info = next((d for d in devices_response if d.get('sn') == self.sn), None)
                 if device_info:
                     status = 'connected' if device_info.get('status') == 1 else 'disconnected'
+                    last_activity = config._parse_datetime_string(device_info.get('last_activity'))
                     self.write({
                         'status': status,
                         'ip': device_info.get('ip') or self.ip,
-                        'last_activity': device_info.get('last_activity'),
+                        'last_activity': last_activity,
                     })
                     message = f"Estado actualizado: {status.upper()}"
                     msg_type = 'success'

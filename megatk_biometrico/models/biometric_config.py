@@ -188,18 +188,23 @@ class BiometricConfig(models.Model):
             
             created = 0
             for record_data in response:
+                record_time_raw = record_data.get('records_time')
+                record_time = self._parse_datetime_string(record_time_raw)
+                if not record_time:
+                    continue
+
                 # Verificar si el registro ya existe
                 existing = self.env['biometric.record'].search([
                     ('device_serial_num', '=', record_data.get('device_serial_num')),
                     ('enroll_id', '=', record_data.get('enroll_id')),
-                    ('records_time', '=', record_data.get('records_time')),
+                    ('records_time', '=', record_time),
                 ], limit=1)
                 
                 if not existing:
                     self.env['biometric.record'].create({
                         'device_serial_num': record_data.get('device_serial_num'),
                         'enroll_id': record_data.get('enroll_id'),
-                        'records_time': self._parse_datetime_string(record_data.get('records_time')),
+                        'records_time': record_time,
                         'mode': str(record_data.get('mode', 0)),
                         'inout': str(record_data.get('inout', 0)),
                         'event': record_data.get('event', 0),
