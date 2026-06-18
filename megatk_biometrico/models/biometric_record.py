@@ -27,21 +27,23 @@ class BiometricRecord(models.Model):
     employee_id = fields.Many2one('hr.employee', string='Empleado', compute='_compute_employee', store=False)
     employee_name = fields.Char(string='Nombre Empleado', compute='_compute_employee_name', store=False)
 
+    @api.depends('device_serial_num')
     def _compute_device(self):
         for rec in self:
             rec.device_id = self.env['biometric.device'].search([('sn', '=', rec.device_serial_num)], limit=1)
 
+    @api.depends('enroll_id')
     def _compute_employee(self):
         for rec in self:
             employee = self.env['hr.employee'].search([('enroll_id', '=', rec.enroll_id)], limit=1)
             rec.employee_id = employee
 
+    @api.depends('enroll_id')
     def _compute_employee_name(self):
         for rec in self:
             employee = self.env['hr.employee'].search([('enroll_id', '=', rec.enroll_id)], limit=1)
             rec.employee_name = employee.name if employee else f'Desconocido (ID: {rec.enroll_id})'
 
-    @api.model
     def action_sync_records(self):
         """Acción para sincronizar registros desde el servidor"""
         config = self.env['biometric.config'].search([

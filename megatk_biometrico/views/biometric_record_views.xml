@@ -65,8 +65,6 @@
         <field name="name">Sincronizar Marcaciones</field>
         <field name="model_id" ref="model_biometric_record"/>
         <field name="state">code</field>
-        <field name="code">
-result = model.action_sync_records()
-        </field>
+        <field name="code">result = model.action_sync_records()</field>
     </record>
 </odoo>

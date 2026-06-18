@@ -7,7 +7,7 @@
     "author": "Jiovanny Morales",
     "website": "https://example.com",
     "license": "LGPL-3",
-    "depends": ["base", "web", "mail"],
+    "depends": ["base", "web", "mail", "hr"],
     "external_dependencies": {
         "python": ["requests"]
     },
