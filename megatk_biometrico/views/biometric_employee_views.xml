@@ -4,13 +4,13 @@
         <field name="name">biometric.employee.tree</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <tree string="Empleados Biométricos">
+            <list string="Empleados Biométricos">
                 <field name="enroll_id"/>
                 <field name="name"/>
                 <field name="biometric_person_name"/>
                 <field name="biometric_on_device" widget="boolean_toggle"/>
                 <field name="work_email"/>
-            </tree>
+            </list>
         </field>
     </record>
 
