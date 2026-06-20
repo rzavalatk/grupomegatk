@@ -5,11 +5,7 @@
         <field name="model">biometric.record</field>
         <field name="arch" type="xml">
             <list string="Marcaciones">
-                <field name="records_time"/>
-                <field name="employee_name"/>
-                <field name="enroll_id"/>
-                <field name="device_serial_num"/>
-                <field name="mode"/>
+                <field name="records_time_raw"/>
                 <field name="inout"/>
                 <field name="event"/>
                 <field name="temperature"/>

@@ -7,13 +7,13 @@ class BiometricController(http.Controller):
     def download_records(self, **kwargs):
         records = request.env['biometric.record'].search([])
         lines = [
-            'device_serial_num,enroll_id,records_time,mode,inout,event,temperature,image',
+            'device_serial_num,enroll_id,records_time_raw,mode,inout,event,temperature,image',
         ]
         for rec in records:
             lines.append(','.join([
                 rec.device_serial_num or '',
                 str(rec.enroll_id or ''),
-                rec.records_time or '',
+                rec.records_time_raw or '',
                 str(rec.mode or ''),
                 str(rec.inout or ''),
                 str(rec.event or ''),

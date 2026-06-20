@@ -100,7 +100,7 @@ class BiometricConfig(models.Model):
                 dt = datetime.strptime(text, '%Y-%m-%d %H:%M:%S')
                 return dt.strftime('%Y-%m-%d %H:%M:%S')
             except ValueError:
-                return text
+                return False
         return value
 
     def sync_devices(self):
@@ -186,7 +186,9 @@ class BiometricConfig(models.Model):
             
             created = 0
             for record_data in response:
-                record_time_raw = record_data.get('records_time')
+                record_time_raw = record_data.get('records_time') or record_data.get('time')
+                if not record_time_raw:
+                    continue
                 record_time = self._parse_datetime_string(record_time_raw)
                 if not record_time:
                     continue
@@ -203,7 +205,7 @@ class BiometricConfig(models.Model):
                         'device_serial_num': record_data.get('device_serial_num'),
                         'enroll_id': record_data.get('enroll_id'),
                         'records_time': record_time,
-                        'records_time_raw': record_data.get('records_time'),
+                        'records_time_raw': record_time_raw,
                         'mode': str(record_data.get('mode', 0)),
                         'inout': str(record_data.get('inout', 0)),
                         'event': record_data.get('event', 0),
