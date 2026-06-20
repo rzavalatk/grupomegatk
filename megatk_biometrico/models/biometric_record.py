@@ -25,8 +25,8 @@ class BiometricRecord(models.Model):
     temperature = fields.Float(string='Temperatura')
     image = fields.Char(string='Imagen/base64')
     device_id = fields.Many2one('biometric.device', string='Dispositivo', compute='_compute_device', store=True)
-    employee_id = fields.Many2one('hr.employee', string='Empleado', compute='_compute_employee', store=True)
-    employee_name = fields.Char(string='Nombre Empleado', compute='_compute_employee_name', store=True)
+    employee_id = fields.Many2one('hr.employee', string='Empleado', compute='_compute_employee', store=False)
+    employee_name = fields.Char(string='Nombre Empleado', compute='_compute_employee_name', store=False)
 
     @api.depends('device_serial_num')
     def _compute_device(self):
