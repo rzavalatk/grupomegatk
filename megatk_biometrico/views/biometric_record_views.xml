@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <list string="Marcaciones">
                 <field name="id"/>
-                <field name="records_time_raw"/>
+                <field name="records_time_raw" string="Hora de Marcación"/>
                 <field name="enroll_id"/>
                 <field name="employee_id"/>
                 <field name="device_serial_num"/>
@@ -27,7 +27,7 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="records_time_raw" readonly="1"/>
+                        <field name="records_time_raw" string="Hora de Marcación" readonly="1"/>
                         <field name="records_time" readonly="1"/>
                         <field name="employee_name" readonly="1"/>
                     </group>
