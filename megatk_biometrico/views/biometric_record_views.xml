@@ -27,7 +27,8 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="records_time"/>
+                        <field name="records_time_raw" readonly="1"/>
+                        <field name="records_time" readonly="1"/>
                         <field name="employee_name" readonly="1"/>
                     </group>
                     <group>

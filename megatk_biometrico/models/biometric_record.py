@@ -8,6 +8,7 @@ class BiometricRecord(models.Model):
     device_serial_num = fields.Char(string='Serial Dispositivo', required=True)
     enroll_id = fields.Integer(string='Enroll ID', required=True, index=True)
     records_time = fields.Datetime(string='Hora de Marcación', required=True)
+    records_time_raw = fields.Char(string='Hora de Marcación Cruda', readonly=True)
     mode = fields.Selection([
         ('0','Huella'),
         ('1','PIN'),

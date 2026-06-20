@@ -203,6 +203,7 @@ class BiometricConfig(models.Model):
                         'device_serial_num': record_data.get('device_serial_num'),
                         'enroll_id': record_data.get('enroll_id'),
                         'records_time': record_time,
+                        'records_time_raw': record_data.get('records_time'),
                         'mode': str(record_data.get('mode', 0)),
                         'inout': str(record_data.get('inout', 0)),
                         'event': record_data.get('event', 0),
