@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 from datetime import datetime
+import re
 import requests
 import json
 from requests.exceptions import RequestException, Timeout
@@ -77,22 +78,19 @@ class BiometricConfig(models.Model):
             raise ValueError(f'Respuesta inválida del servidor: {response.text}')
 
     def _parse_datetime_string(self, value):
-        """Parsea timestamps ISO y permite microsegundos."""
+        """Parsea timestamps y devuelve el valor en formato compatible sin cambiar la hora."""
         if not value:
             return False
         if isinstance(value, datetime):
             return value.strftime('%Y-%m-%d %H:%M:%S')
         if isinstance(value, str):
             text = value.strip()
-            # Odoo no siempre maneja bien el formato ISO con microsegundos o Z
-            if text.endswith('Z'):
-                text = text[:-1]
-            text = text.replace('T', ' ')
-            try:
-                dt = datetime.fromisoformat(text)
-                return dt.strftime('%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                pass
+            # Aceptar ISO con Z o con offset, pero no convertir de zona horaria.
+            iso_match = re.match(r"^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(\.\d+)?(Z|[+-]\d{2}:?\d{2})?$", text)
+            if iso_match:
+                date_part = iso_match.group(1)
+                time_part = iso_match.group(2)
+                return f"{date_part} {time_part}"
             try:
                 dt = datetime.strptime(text, '%Y-%m-%d %H:%M:%S.%f')
                 return dt.strftime('%Y-%m-%d %H:%M:%S')
