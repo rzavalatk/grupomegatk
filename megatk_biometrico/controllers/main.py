@@ -1,7 +1,7 @@
 from odoo import http
 from odoo.http import request
 import json
-
+#prueba de conexion ded biometrico
 class BiometricController(http.Controller):
     @http.route('/biometric/records/download', type='http', auth='user', methods=['GET'])
     def download_records(self, **kwargs):
