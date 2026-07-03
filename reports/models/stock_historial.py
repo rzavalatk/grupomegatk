@@ -141,9 +141,33 @@ class StockReportHistory(models.Model):
         self.ensure_one()
         # Combina todos los productos/ubicaciones de ambas fechas
         all_product_locations = products_from.union(products_to)
-        # Indexa líneas por producto y ubicación
-        lines_from = {(line.product_id.id, line.location_id.id): line for line in self.report_lines_from}
-        lines_to = {(line.product_id.id, line.location_id.id): line for line in self.report_lines_to}
+        # Indexa líneas por producto y ubicación (manejo defensivo de referencias rotas)
+        lines_from = {}
+        for line in self.report_lines_from:
+            try:
+                pid = line.product_id.id if line.product_id and line.product_id.exists() else False
+            except Exception:
+                pid = False
+            try:
+                lid = line.location_id.id if line.location_id and line.location_id.exists() else False
+            except Exception:
+                lid = False
+            if pid and lid:
+                lines_from[(pid, lid)] = line
+
+        lines_to = {}
+        for line in self.report_lines_to:
+            try:
+                pid = line.product_id.id if line.product_id and line.product_id.exists() else False
+            except Exception:
+                pid = False
+            try:
+                lid = line.location_id.id if line.location_id and line.location_id.exists() else False
+            except Exception:
+                lid = False
+            if pid and lid:
+                lines_to[(pid, lid)] = line
+
         differences = []
 
         for product_id, location_id in all_product_locations:
