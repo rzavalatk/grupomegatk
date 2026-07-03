@@ -142,7 +142,7 @@ class CustomerPurchaseReport(models.Model):
                                 if invoice_item.invoice_date >= date1:
                                     if n:
                                         invoice_info.append(invoice_item.id)
-                                        invoice_info.append(invoice_item.name)  # Guardar nombre/número de factura como respaldo
+                                        invoice_info.append(invoice_item.name or invoice_item.display_name or str(invoice_item.id))  # Nombre, fallback a display_name o ID
                                         invoice_info.append(invoice_item.invoice_date)
                                         invoice_info.append(invoice_item.invoice_payment_term_id.display_name)
                                         n = False
