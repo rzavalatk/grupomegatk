@@ -16,12 +16,30 @@ class CustomerPurchaseReport(models.Model):
     _description = 'Customer No Purchase Report'
 
     def _build_report_name(self, company_id=False, date_from=False, date_to=False):
+        def _fmt(d):
+            if not d:
+                return ''
+            try:
+                # date/datetime -> YYYY-MM-DD
+                if hasattr(d, 'strftime'):
+                    return d.strftime('%Y-%m-%d')
+                return str(d)
+            except Exception:
+                return str(d)
+
         company_name = ''
         if company_id:
-            company = self.env['res.company'].browse(int(company_id)).exists()
-            company_name = company.name or ''
-        if company_name and date_from and date_to:
-            return f"Reporte de Clientes inactivos de {company_name} del {date_from} al {date_to}"
+            try:
+                company = self.env['res.company'].browse(int(company_id))
+                if company and company.exists():
+                    company_name = (company.name or '').upper()
+            except Exception:
+                company_name = ''
+
+        dfrom = _fmt(date_from)
+        dto = _fmt(date_to)
+        if company_name and dfrom and dto:
+            return f"Reporte de Clientes inactivos de {company_name} del {dfrom} al {dto}"
         return 'Reporte de Clientes inactivos'
 
     @api.model
