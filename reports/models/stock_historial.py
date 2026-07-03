@@ -47,6 +47,8 @@ class StockReportHistory(models.Model):
         ('aprobado', 'Aprobado'),
         ('rechazado', 'Rechazado'),
         ], default='borrador')
+
+    generation_log = fields.Text(string='Registro de generación', readonly=True)
     
 
     report_lines_from = fields.One2many(
@@ -61,11 +63,40 @@ class StockReportHistory(models.Model):
 
     def generate_reports(self):
         # Genera los reportes de inventario para ambas fechas y calcula diferencias
-        products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
-        products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        try:
+            products_from = self._generate_report_lines(self.date_from, 'report_lines_from')
+        except Exception:
+            _logger.exception('Error al generar report_lines_from')
+            # Marcar como rechazado para evitar continuar en una transacción posiblemente abortada
+            try:
+                self.write({'state': 'rechazado'})
+            except Exception:
+                _logger.exception('No se pudo marcar el reporte como rechazado tras fallo en report_lines_from')
+            return
+
+        try:
+            products_to = self._generate_report_lines(self.date_to, 'report_lines_to')
+        except Exception:
+            _logger.exception('Error al generar report_lines_to')
+            try:
+                self.write({'state': 'rechazado'})
+            except Exception:
+                _logger.exception('No se pudo marcar el reporte como rechazado tras fallo en report_lines_to')
+            return
+
         _logger.warning(f"Productos/ubicaciones en reporte desde {self.date_from}: {len(products_from)}")
         _logger.warning(f"Productos/ubicaciones en reporte hasta {self.date_to}: {len(products_to)}")
-        self._calculate_differences(products_from, products_to)
+
+        try:
+            self._calculate_differences(products_from, products_to)
+        except Exception:
+            _logger.exception('Error al calcular diferencias de inventario')
+            try:
+                self.write({'state': 'rechazado'})
+            except Exception:
+                _logger.exception('No se pudo marcar el reporte como rechazado tras fallo en calcular diferencias')
+            return
+
         self.write({'state': 'aprobado'})
 
     def _generate_report_lines(self, date_report, field_name):
@@ -125,14 +156,52 @@ class StockReportHistory(models.Model):
 
         # Escribir líneas del reporte
         lines = []
+        messages = []
         for item in inventario:
+            pid = item["producto"]
+            lid = item["Ubicacion"]
+            # Validate product and location exist before adding the line
+            product = self.env['product.product'].browse(pid)
+            location = self.env['stock.location'].browse(lid)
+            if not product or not product.exists():
+                msg = f"Skipped product_id={pid} (no existe) for date {date_report}"
+                _logger.warning(msg)
+                messages.append(msg)
+                continue
+            if not location or not location.exists():
+                msg = f"Skipped location_id={lid} (no existe) for date {date_report}"
+                _logger.warning(msg)
+                messages.append(msg)
+                continue
             lines.append((0, 0, {
-                'product_id': item["producto"],
-                'location_id': item["Ubicacion"],
+                'product_id': pid,
+                'location_id': lid,
                 'quantity': item["cantidad"],
             }))
         _logger.warning(f"Escribiendo {len(lines)} líneas en el campo {field_name} para la fecha: {date_report}")
-        self.write({field_name: lines})
+        try:
+            self.write({field_name: lines})
+        except Exception:
+            _logger.exception(f"Fallo al escribir líneas en {field_name} para fecha {date_report}")
+            # Record failure and return empty set to avoid stopping the whole process
+            messages.append(f"Error al escribir {len(lines)} líneas en campo {field_name} para fecha {date_report}")
+            # Append messages to generation_log on the record
+            try:
+                prev = self.generation_log or ''
+                new = prev + '\n'.join([f"[{datetime.now()}] {m}" for m in messages])
+                self.write({'generation_log': new})
+            except Exception:
+                _logger.exception('No se pudo actualizar generation_log tras fallo al escribir líneas')
+            return product_location_set
+
+        # Append any skip messages to generation_log
+        if messages:
+            try:
+                prev = self.generation_log or ''
+                new = prev + '\n'.join([f"[{datetime.now()}] {m}" for m in messages])
+                self.write({'generation_log': new})
+            except Exception:
+                _logger.exception('No se pudo actualizar generation_log con mensajes de validación')
 
         # Devuelve el set de (producto, ubicación) para usar en diferencias
         return product_location_set
