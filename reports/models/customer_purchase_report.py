@@ -15,9 +15,39 @@ class CustomerPurchaseReport(models.Model):
     _name = 'customer.purchase.report'
     _description = 'Customer No Purchase Report'
 
+    def _build_report_name(self, company_id=False, date_from=False, date_to=False):
+        company_name = ''
+        if company_id:
+            company = self.env['res.company'].browse(int(company_id)).exists()
+            company_name = company.name or ''
+        if company_name and date_from and date_to:
+            return f"Reporte de Clientes inactivos de {company_name} del {date_from} al {date_to}"
+        return 'Reporte de Clientes inactivos'
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('name'):
+            vals['name'] = self._build_report_name(
+                vals.get('company_id'),
+                vals.get('date_from'),
+                vals.get('date_to'),
+            )
+        return super().create(vals)
+
+    def write(self, vals):
+        if not vals.get('name'):
+            for record in self:
+                vals['name'] = record._build_report_name(
+                    vals.get('company_id', record.company_id.id if record.company_id else False),
+                    vals.get('date_from', record.date_from),
+                    vals.get('date_to', record.date_to),
+                )
+                break
+        return super().write(vals)
+
     @api.onchange('date_from','date_to','company_id')
     def _onchange_date_from(self):
-        self.name = "Reporte de Clientes inactivos de " + str(self.company_id.name) + " del " +str(self.date_from) + " al " + str(self.date_to)
+        self.name = self._build_report_name(self.company_id.id if self.company_id else False, self.date_from, self.date_to)
     
     
     report_lines_from_customer_purchase = fields.One2many(
@@ -32,7 +62,7 @@ class CustomerPurchaseReport(models.Model):
     report_differences_OI = fields.One2many(
         'customer.purchase.report.line.difference', 'report_id_OI', string="Report Differences", readonly=True)
     
-    name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    name = fields.Char(string="Nombre de reporte", required=False, readonly=True, states={'borrador': [('readonly', False)]},)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, readonly=True, states={'borrador': [('readonly', False)]},)
     date_from = fields.Date(string='Start Date', required=True)
     date_to = fields.Date(string='End Date', required=True)
