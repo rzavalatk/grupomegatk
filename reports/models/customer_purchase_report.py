@@ -240,12 +240,22 @@ class CustomerPurchaseReport(models.Model):
 
         # Preparar los datos (usar directamente campos guardados, no campos calculados)
         def safe_excel_row_lines(*fields):
-            """Retorna tupla de valores seguros para Excel, evitando acceso a relaciones _unknown"""
+            """Retorna tupla de valores seguros para Excel, manejando fechas y valores None"""
             try:
-                return tuple(
-                    f or 'Sin referencia' if f is not None else 'Sin referencia'
-                    for f in fields
-                )
+                result = []
+                for f in fields:
+                    if f is None or f == False:
+                        result.append('Sin referencia')
+                    elif isinstance(f, (date, datetime)):
+                        # Convertir fechas a string
+                        result.append(str(f))
+                    elif isinstance(f, (int, float)):
+                        # Mantener números como son
+                        result.append(f)
+                    else:
+                        # Para strings y otros, usar como están
+                        result.append(f if f else 'Sin referencia')
+                return tuple(result)
             except Exception:
                 return tuple('Sin referencia' for _ in fields)
 
@@ -350,12 +360,22 @@ class CustomerPurchaseReport(models.Model):
     
         # Preparar los datos (usar directamente campos guardados)
         def safe_excel_row_lines(*fields):
-            """Retorna tupla de valores seguros para Excel"""
+            """Retorna tupla de valores seguros para Excel, manejando fechas y valores None"""
             try:
-                return tuple(
-                    f or 'Sin referencia' if f is not None else 'Sin referencia'
-                    for f in fields
-                )
+                result = []
+                for f in fields:
+                    if f is None or f == False:
+                        result.append('Sin referencia')
+                    elif isinstance(f, (date, datetime)):
+                        # Convertir fechas a string
+                        result.append(str(f))
+                    elif isinstance(f, (int, float)):
+                        # Mantener números como son
+                        result.append(f)
+                    else:
+                        # Para strings y otros, usar como están
+                        result.append(f if f else 'Sin referencia')
+                return tuple(result)
             except Exception:
                 return tuple('Sin referencia' for _ in fields)
 
