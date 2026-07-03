@@ -142,21 +142,21 @@ class CustomerPurchaseReport(models.Model):
                                 if invoice_item.invoice_date >= date1:
                                     if n:
                                         invoice_info.append(invoice_item.id)
+                                        invoice_info.append(invoice_item.name)  # Guardar nombre/número de factura como respaldo
                                         invoice_info.append(invoice_item.invoice_date)
                                         invoice_info.append(invoice_item.invoice_payment_term_id.display_name)
                                         n = False
                                     
-                                    valor_total = valor_total + invoice_item.amount_total     
-                                
-                                         
+                                    valor_total = valor_total + invoice_item.amount_total
             if invoice_info:
                 lines.append((0, 0, {
                     'partner_id': customer_item.id,
                     'last_purchase': invoice_info[0],
-                    'purchase_date': invoice_info[1],
+                    'last_purchase_number': invoice_info[1],  # Guardar número de factura como respaldo
+                    'purchase_date': invoice_info[2],
                     'purchase_comercial': customer_item.user_id.id,
                     'purchase_amount': valor_total,
-                    'purchase_term_id': invoice_info[2],
+                    'purchase_term_id': invoice_info[3],
                 }))
         
         if lines:
@@ -409,6 +409,7 @@ class CustomerReportLine(models.Model):
     
     partner_id = fields.Many2one('res.partner', string='Customer')
     last_purchase = fields.Many2one('account.move', string='Ultima compra')
+    last_purchase_number = fields.Char('Número de factura', help='Respaldo si la factura es eliminada')
     purchase_date = fields.Date('Fecha ultima compra')
     purchase_comercial = fields.Many2one('res.users', string='Comercial del cliente')
     purchase_amount = fields.Float('Total comprado')
@@ -419,15 +420,16 @@ class CustomerReportLine(models.Model):
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
 
-    @api.depends('partner_id', 'last_purchase', 'purchase_comercial')
+    @api.depends('partner_id', 'last_purchase', 'last_purchase_number', 'purchase_comercial')
     def _compute_display_values(self):
         for record in self:
             try:
                 record.partner_name = record.partner_id.display_name if record.partner_id else False
             except Exception:
                 record.partner_name = False
+            # Mostrar número/ID guardado (siempre disponible aunque factura sea eliminada)
             try:
-                record.last_purchase_name = record.last_purchase.display_name if record.last_purchase else False
+                record.last_purchase_name = record.last_purchase_number if record.last_purchase_number else False
             except Exception:
                 record.last_purchase_name = False
             try:

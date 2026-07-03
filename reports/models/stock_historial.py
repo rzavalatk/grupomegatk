@@ -175,7 +175,9 @@ class StockReportHistory(models.Model):
                 continue
             lines.append((0, 0, {
                 'product_id': pid,
+                'product_name_backup': product.name,  # Guardar nombre de producto como respaldo
                 'location_id': lid,
+                'location_name_backup': location.name,  # Guardar nombre de ubicación como respaldo
                 'quantity': item["cantidad"],
             }))
         _logger.warning(f"Escribiendo {len(lines)} líneas en el campo {field_name} para la fecha: {date_report}")
@@ -259,9 +261,12 @@ class StockReportHistory(models.Model):
                 ])
                 
                 if movimiento == 0:
+                    location = self.env['stock.location'].browse(location_id)
                     differences.append((0, 0, {
                         'product_id': product_id,
+                        'product_name_backup': product.name,  # Guardar nombre de producto como respaldo
                         'location_id': location_id,
+                        'location_name_backup': location.name,  # Guardar nombre de ubicación como respaldo
                         'quantity_from': cantidad_inicial,
                         'quantity_to': cantidad_final,
                         'quantity_difference': diferencia,
@@ -316,11 +321,11 @@ class StockReportHistory(models.Model):
         col_widths_reports_differences = [30,45, 25, 25, 25, 25, 25, 25, 25]  # Ajusta estos valores según sea necesario
         formatos_reports_differences = [None,None, number_format, number_format, number_format, number_format, number_format, None, None]  # Formatos para cada columna
         
-        # Preparar los datos 
+        # Preparar los datos (usar campos backup para evitar acceso a relaciones rotas)
         datos_lines_from_report = [
             (
-                record.product_id.name,
-                record.location_id.name,
+                record.product_name_backup if record.product_name_backup else 'Sin referencia',
+                record.location_name_backup if record.location_name_backup else 'Sin referencia',
                 record.quantity,
             )
             for record in self.report_lines_from
@@ -328,8 +333,8 @@ class StockReportHistory(models.Model):
         
         datos_lines_to_report = [
             (
-                record.product_id.name,
-                record.location_id.name,
+                record.product_name_backup if record.product_name_backup else 'Sin referencia',
+                record.location_name_backup if record.location_name_backup else 'Sin referencia',
                 record.quantity,
             )
             for record in self.report_lines_to
@@ -338,7 +343,7 @@ class StockReportHistory(models.Model):
         datos_differences = [
             (
                 record.barcode,
-                record.product_id.name,
+                record.product_name_backup if record.product_name_backup else 'Sin referencia',
                 record.quantity_from,
                 record.quantity_to,
                 record.quantity_difference,
@@ -406,21 +411,23 @@ class StockReportLine(models.Model):
         'stock.report.history', string="Reporte Final", ondelete='cascade')
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
+    product_name_backup = fields.Char('Nombre producto', help='Respaldo si el producto es eliminado')
     quantity = fields.Float(string="Cantidad al dia", required=True)
     location_id = fields.Many2one('stock.location', string="Ubicación")
+    location_name_backup = fields.Char('Nombre ubicación', help='Respaldo si la ubicación es eliminada')
     product_name = fields.Char(string='Producto', compute='_compute_display_values', store=False)
     location_name = fields.Char(string='Ubicación', compute='_compute_display_values', store=False)
     #date_create = fields.Datetime(string="Create Date", required=True)
 
-    @api.depends('product_id', 'location_id')
+    @api.depends('product_id', 'product_name_backup', 'location_id', 'location_name_backup')
     def _compute_display_values(self):
         for record in self:
             try:
-                record.product_name = record.product_id.display_name if record.product_id else False
+                record.product_name = record.product_name_backup if record.product_name_backup else False
             except Exception:
                 record.product_name = False
             try:
-                record.location_name = record.location_id.display_name if record.location_id else False
+                record.location_name = record.location_name_backup if record.location_name_backup else False
             except Exception:
                 record.location_name = False
 
@@ -433,6 +440,7 @@ class StockReportDifference(models.Model):
         'stock.report.history', string="Reporte", ondelete='cascade')
     product_id = fields.Many2one(
         'product.product', string="Producto", required=True)
+    product_name_backup = fields.Char('Nombre producto', help='Respaldo si el producto es eliminado')
     quantity_from = fields.Float(string="Cantidad Inicial", required=True)
     quantity_to = fields.Float(string="Cantidad Final", required=True)
     quantity_difference = fields.Float(
@@ -440,6 +448,7 @@ class StockReportDifference(models.Model):
     lst_price = fields.Float(string="Precio de venta", required=True)
     standard_price = fields.Float(string="Precio de coste", required=True)
     location_id = fields.Many2one('stock.location', string="Ubicación")
+    location_name_backup = fields.Char('Nombre ubicación', help='Respaldo si la ubicación es eliminada')
     
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")
@@ -447,15 +456,15 @@ class StockReportDifference(models.Model):
     product_name = fields.Char(string='Producto', compute='_compute_display_values', store=False)
     location_name = fields.Char(string='Ubicación', compute='_compute_display_values', store=False)
 
-    @api.depends('product_id', 'location_id')
+    @api.depends('product_id', 'product_name_backup', 'location_id', 'location_name_backup')
     def _compute_display_values(self):
         for record in self:
             try:
-                record.product_name = record.product_id.display_name if record.product_id else False
+                record.product_name = record.product_name_backup if record.product_name_backup else False
             except Exception:
                 record.product_name = False
             try:
-                record.location_name = record.location_id.display_name if record.location_id else False
+                record.location_name = record.location_name_backup if record.location_name_backup else False
             except Exception:
                 record.location_name = False
 
