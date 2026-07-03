@@ -47,10 +47,38 @@ class CustomerPurchaseReport(models.Model):
         ], default='borrador')
     
     def volver_borrador(self):
-         self.write({'state': 'borrador'})   
+         self.write({'state': 'borrador'})
+
+    @api.model
+    def _normalize_many2one_id(self, value):
+        if value is None or value is False:
+            return False
+        if isinstance(value, models.BaseModel):
+            try:
+                return value.id if value and value.exists() else False
+            except Exception:
+                return False
+        if isinstance(value, int):
+            return value
+        if isinstance(value, str):
+            try:
+                return int(value)
+            except ValueError:
+                return False
+        return False
+
+    def _clear_report_lines(self):
+        self.ensure_one()
+        self.write({
+            'report_lines_from_customer_purchase': [(5, 0, 0)],
+            'report_lines_to_customer_purchase': [(5, 0, 0)],
+            'report_differences': [(5, 0, 0)],
+            'report_differences_OI': [(5, 0, 0)],
+        })
 
     def generate_reports(self):
         time.sleep(4)
+        self._clear_report_lines()
         line_from = self._get_customers_purchase( self.date_from, self.date_to, 'report_lines_from_customer_purchase')
         time.sleep(4)
         line_to = self._get_customers_purchase( self.date_from_i2, self.date_to_i2, 'report_lines_to_customer_purchase')
@@ -85,6 +113,8 @@ class CustomerPurchaseReport(models.Model):
             n = True
             invoice_info = []
             valor_total = 0
+            partner_id = self._normalize_many2one_id(customer_item)
+            comercial_id = self._normalize_many2one_id(customer_item.user_id)
             for invoice_item in customer_item.invoice_ids: #TODAS LAS FACTURAS DEL CLIENTE YA SEAN COMPRAS, VENTAS O COTIZACONES
                 
                 if invoice_item.move_type == 'out_invoice':
@@ -93,7 +123,7 @@ class CustomerPurchaseReport(models.Model):
                             if invoice_item.invoice_date <= date2: 
                                 if invoice_item.invoice_date >= date1:
                                     if n:
-                                        invoice_info.append(invoice_item.id)
+                                        invoice_info.append(self._normalize_many2one_id(invoice_item))
                                         invoice_info.append(invoice_item.invoice_date)
                                         invoice_info.append(invoice_item.invoice_payment_term_id.display_name)
                                         n = False
@@ -101,12 +131,12 @@ class CustomerPurchaseReport(models.Model):
                                     valor_total = valor_total + invoice_item.amount_total     
                                 
                                          
-            if invoice_info:
+            if invoice_info and partner_id:
                 lines.append((0, 0, {
-                    'partner_id': customer_item.id,
+                    'partner_id': partner_id,
                     'last_purchase': invoice_info[0],
                     'purchase_date': invoice_info[1],
-                    'purchase_comercial': customer_item.user_id.id,
+                    'purchase_comercial': comercial_id,
                     'purchase_amount': valor_total,
                     'purchase_term_id': invoice_info[2],
                 }))
@@ -132,8 +162,8 @@ class CustomerPurchaseReport(models.Model):
                 if item['partner_id'] == item_to['partner_id']:
                     no_encontrado = True
                     differences.append((0, 0, {
-                        'partner_id': item['partner_id'],
-                        'comercial': item['purchase_comercial'],
+                        'partner_id': self._normalize_many2one_id(item['partner_id']),
+                        'comercial': self._normalize_many2one_id(item['purchase_comercial']),
                         'amount_first': item['purchase_amount'],
                         'amount_second': item_to['purchase_amount'], 
                         'amount_total': item['purchase_amount'] + item_to['purchase_amount'],
@@ -143,10 +173,10 @@ class CustomerPurchaseReport(models.Model):
                     
             if not no_encontrado:
                 differences_OI.append((0, 0, {
-                    'partner_id': item['partner_id'],
-                    'comercial': item['purchase_comercial'],
+                    'partner_id': self._normalize_many2one_id(item['partner_id']),
+                    'comercial': self._normalize_many2one_id(item['purchase_comercial']),
                     'amount_first': item['purchase_amount'],
-                    'amount_second': '0', 
+                    'amount_second': 0.0, 
                     'amount_total': item['purchase_amount'],
                     
                 }))
