@@ -31,27 +31,27 @@
                         <page string="Reporte Inicial">
                             <field name="report_lines_from">
                                 <list editable="bottom">
-                                    <field name="product_id"/>
+                                    <field name="product_name"/>
                                     <field name="quantity"/>
                                     <!--<field name="date_create" />-->
-                                    <field name="location_id"/>
+                                    <field name="location_name"/>
                                 </list>
                             </field>
                         </page>
                         <page string="Reporte Final">
                             <field name="report_lines_to">
                                 <list editable="bottom">
-                                    <field name="product_id"/>
+                                    <field name="product_name"/>
                                     <field name="quantity"/>
                                     <!--<field name="date_create" />-->
-                                    <field name="location_id"/>
+                                    <field name="location_name"/>
                                 </list>
                             </field>
                         </page>
                         <page string="Reporte de diferencias">
                             <field name="report_differences">
                                 <list editable="bottom">
-                                    <field name="product_id"/>
+                                    <field name="product_name"/>
                                     <field name="standard_price" />
                                     <field name="lst_price" />
                                     <field name="quantity_from"/>

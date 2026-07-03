@@ -315,7 +315,21 @@ class StockReportLine(models.Model):
         'product.product', string="Producto", required=True)
     quantity = fields.Float(string="Cantidad al dia", required=True)
     location_id = fields.Many2one('stock.location', string="Ubicación")
+    product_name = fields.Char(string='Producto', compute='_compute_display_values', store=False)
+    location_name = fields.Char(string='Ubicación', compute='_compute_display_values', store=False)
     #date_create = fields.Datetime(string="Create Date", required=True)
+
+    @api.depends('product_id', 'location_id')
+    def _compute_display_values(self):
+        for record in self:
+            try:
+                record.product_name = record.product_id.display_name if record.product_id else False
+            except Exception:
+                record.product_name = False
+            try:
+                record.location_name = record.location_id.display_name if record.location_id else False
+            except Exception:
+                record.location_name = False
 
 
 class StockReportDifference(models.Model):
@@ -337,4 +351,18 @@ class StockReportDifference(models.Model):
     barcode = fields.Char(string="Barcode")
     linea = fields.Char(string="Linea")
     marca = fields.Char(string="Marca")
+    product_name = fields.Char(string='Producto', compute='_compute_display_values', store=False)
+    location_name = fields.Char(string='Ubicación', compute='_compute_display_values', store=False)
+
+    @api.depends('product_id', 'location_id')
+    def _compute_display_values(self):
+        for record in self:
+            try:
+                record.product_name = record.product_id.display_name if record.product_id else False
+            except Exception:
+                record.product_name = False
+            try:
+                record.location_name = record.location_id.display_name if record.location_id else False
+            except Exception:
+                record.location_name = False
 
