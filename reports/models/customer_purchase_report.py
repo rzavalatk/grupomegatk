@@ -238,12 +238,22 @@ class CustomerPurchaseReport(models.Model):
         encabezados_differences = ['Customer', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
         col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
 
-        # Preparar los datos (usando campos calculados seguros)
+        # Preparar los datos (usando campos calculados seguros, sin acceso a relaciones rotas)
+        def safe_excel_row_lines(*fields):
+            """Retorna tupla de valores seguros para Excel, evitando acceso a relaciones _unknown"""
+            try:
+                return tuple(
+                    f or 'Sin referencia' if f is not None else 'Sin referencia'
+                    for f in fields
+                )
+            except Exception:
+                return tuple('Sin referencia' for _ in fields)
+
         datos_lines_from_customer = [
-            (
-                record.partner_name or record.partner_id.name if record.partner_id else 'Sin referencia',
-                record.last_purchase_name or (record.last_purchase.name if record.last_purchase else 'Sin referencia'),
-                record.purchase_comercial_name or (record.purchase_comercial.name if record.purchase_comercial else 'Sin referencia'),
+            safe_excel_row_lines(
+                record.partner_name,
+                record.last_purchase_name,
+                record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
             )
@@ -251,10 +261,10 @@ class CustomerPurchaseReport(models.Model):
         ]
 
         datos_lines_to_customer = [
-            (
-                record.partner_name or record.partner_id.name if record.partner_id else 'Sin referencia',
-                record.last_purchase_name or (record.last_purchase.name if record.last_purchase else 'Sin referencia'),
-                record.purchase_comercial_name or (record.purchase_comercial.name if record.purchase_comercial else 'Sin referencia'),
+            safe_excel_row_lines(
+                record.partner_name,
+                record.last_purchase_name,
+                record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
             )
@@ -262,9 +272,9 @@ class CustomerPurchaseReport(models.Model):
         ]
 
         datos_differences = [
-            (
-                record.partner_name or record.partner_id.name if record.partner_id else 'Sin referencia',
-                record.comercial_name or (record.comercial.name if record.comercial else 'Sin referencia'),
+            safe_excel_row_lines(
+                record.partner_name,
+                record.comercial_name,
                 record.amount_first,
                 record.amount_second,
                 record.amount_total
@@ -273,9 +283,9 @@ class CustomerPurchaseReport(models.Model):
         ]
 
         datos_differences_OIz9c = [
-            (
-                record.partner_name or record.partner_id.name if record.partner_id else 'Sin referencia',
-                record.comercial_name or (record.comercial.name if record.comercial else 'Sin referencia'),
+            safe_excel_row_lines(
+                record.partner_name,
+                record.comercial_name,
                 record.amount_first,
                 record.amount_second,
                 record.amount_total
@@ -337,11 +347,21 @@ class CustomerPurchaseReport(models.Model):
         col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
     
         # Preparar los datos (usando campos calculados seguros)
+        def safe_excel_row_lines(*fields):
+            """Retorna tupla de valores seguros para Excel"""
+            try:
+                return tuple(
+                    f or 'Sin referencia' if f is not None else 'Sin referencia'
+                    for f in fields
+                )
+            except Exception:
+                return tuple('Sin referencia' for _ in fields)
+
         datos_lines_from_customer = [
-            (
-                record.partner_name or record.partner_id.name if record.partner_id else 'Sin referencia',
-                record.last_purchase_name or (record.last_purchase.name if record.last_purchase else 'Sin referencia'),
-                record.purchase_comercial_name or (record.purchase_comercial.name if record.purchase_comercial else 'Sin referencia'),
+            safe_excel_row_lines(
+                record.partner_name,
+                record.last_purchase_name,
+                record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
             )
