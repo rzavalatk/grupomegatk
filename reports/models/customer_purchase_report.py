@@ -34,11 +34,11 @@ class CustomerPurchaseReport(models.Model):
     
     name = fields.Char(string="Nombre de reporte", required=True, readonly=True, states={'borrador': [('readonly', False)]},)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company.id, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_from = fields.Date(string='Start Date', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_to = fields.Date(string='End Date', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_from = fields.Date(string='Start Date', required=True)
+    date_to = fields.Date(string='End Date', required=True)
     
-    date_from_i2 = fields.Date(string='Fencha inicio', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
-    date_to_i2 = fields.Date(string='Fecha final', required=True, readonly=True, states={'borrador': [('readonly', False)]},)
+    date_from_i2 = fields.Date(string='Fencha inicio', required=True)
+    date_to_i2 = fields.Date(string='Fecha final', required=True)
     
     state = fields.Selection([
         ('borrador', 'Borrador'),

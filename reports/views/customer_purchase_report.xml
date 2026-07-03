@@ -24,12 +24,12 @@
 
                     <group name="fechas">
                         <group name="first_time" string="Primer intervalo de tiempo">
-                            <field name="date_from"/>
-                            <field name="date_to"/>
+                            <field name="date_from" readonly="state != 'borrador'"/>
+                            <field name="date_to" readonly="state != 'borrador'"/>
                         </group>
                         <group name="second_time" string="Segundo intervalo de tiempo">
-                            <field name="date_from_i2"/>
-                            <field name="date_to_i2"/>
+                            <field name="date_from_i2" readonly="state != 'borrador'"/>
+                            <field name="date_to_i2" readonly="state != 'borrador'"/>
                         </group>
                     </group>
                     
