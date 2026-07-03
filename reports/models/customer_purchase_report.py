@@ -236,9 +236,9 @@ class CustomerPurchaseReport(models.Model):
         col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
         
         encabezados_differences = ['Customer', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
-        col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]  # Ajusta estos valores según sea necesario
+        col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]
 
-        # Preparar los datos (usando campos calculados seguros, sin acceso a relaciones rotas)
+        # Preparar los datos (usar directamente campos guardados, no campos calculados)
         def safe_excel_row_lines(*fields):
             """Retorna tupla de valores seguros para Excel, evitando acceso a relaciones _unknown"""
             try:
@@ -252,7 +252,8 @@ class CustomerPurchaseReport(models.Model):
         datos_lines_from_customer = [
             safe_excel_row_lines(
                 record.partner_name,
-                record.last_purchase_name,
+                record.last_purchase_number or 'Sin factura',  # Usar directamente el número guardado
+                record.purchase_date,
                 record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
@@ -263,7 +264,8 @@ class CustomerPurchaseReport(models.Model):
         datos_lines_to_customer = [
             safe_excel_row_lines(
                 record.partner_name,
-                record.last_purchase_name,
+                record.last_purchase_number or 'Sin factura',  # Usar directamente el número guardado
+                record.purchase_date,
                 record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
@@ -343,10 +345,10 @@ class CustomerPurchaseReport(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
-        col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
+        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
+        col_widths_lines_customer = [35, 20, 15, 20, 25, 20]
     
-        # Preparar los datos (usando campos calculados seguros)
+        # Preparar los datos (usar directamente campos guardados)
         def safe_excel_row_lines(*fields):
             """Retorna tupla de valores seguros para Excel"""
             try:
@@ -360,7 +362,8 @@ class CustomerPurchaseReport(models.Model):
         datos_lines_from_customer = [
             safe_excel_row_lines(
                 record.partner_name,
-                record.last_purchase_name,
+                record.last_purchase_number or 'Sin factura',  # Usar directamente el número guardado
+                record.purchase_date,
                 record.purchase_comercial_name,
                 record.purchase_amount,
                 record.purchase_term_id
