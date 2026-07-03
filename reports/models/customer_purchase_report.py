@@ -232,11 +232,11 @@ class CustomerPurchaseReport(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
-        col_widths_lines_customer = [35, 20, 20, 25, 20, 25]  # Ajusta estos valores según sea necesario
+        encabezados_lines_customer = ['Cliente', 'Última Compra', 'Fecha Compra', 'Comercial', 'Total Comprado', 'Término de Pago']
+        col_widths_lines_customer = [30, 20, 15, 20, 20, 25]
         
-        encabezados_differences = ['Customer', 'Comercial del cliente', 'Total comprado primer intervalo', 'Total comprado segundo intervalo', 'Total comprado']
-        col_widths_differences = [35, 25, 30, 20, 25, 25, 25, 20]
+        encabezados_differences = ['Cliente', 'Comercial', 'Total Intervalo 1', 'Total Intervalo 2', 'Total General']
+        col_widths_differences = [30, 20, 20, 20, 20]
 
         # Preparar los datos (usar directamente campos guardados, no campos calculados)
         def safe_excel_row_lines(*fields):
@@ -355,8 +355,8 @@ class CustomerPurchaseReport(models.Model):
                 row += 1
 
         # Encabezados y anchos de columnas
-        encabezados_lines_customer = ['Customer', 'Ultima compra', 'Fecha compra', 'Comercial del cliente', 'Total comprado', 'Termino de pago ultima compra']
-        col_widths_lines_customer = [35, 20, 15, 20, 25, 20]
+        encabezados_lines_customer = ['Cliente', 'Última Compra', 'Fecha Compra', 'Comercial', 'Total Comprado', 'Término de Pago']
+        col_widths_lines_customer = [30, 20, 15, 20, 20, 25]
     
         # Preparar los datos (usar directamente campos guardados)
         def safe_excel_row_lines(*fields):
