@@ -37,11 +37,11 @@
                         <page string="Cliente primer intervalo de tiempo">
                             <field name="report_lines_from_customer_purchase">
                                 <list editable="bottom">
-                                    <field name="partner_id"/>
-                                    <field name="last_purchase"/>
+                                    <field name="partner_name"/>
+                                    <field name="last_purchase_name"/>
                                     <field name="purchase_date" />
                                     <field name="purchase_term_id" />
-                                    <field name="purchase_comercial" />
+                                    <field name="purchase_comercial_name" />
                                     <field name="purchase_amount" />
                                     
                                    
@@ -51,11 +51,11 @@
                         <page string="Cliente segundo intervalo de tiempo">
                             <field name="report_lines_to_customer_purchase">
                                 <list editable="bottom">
-                                    <field name="partner_id"/>
-                                    <field name="last_purchase"/>
+                                    <field name="partner_name"/>
+                                    <field name="last_purchase_name"/>
                                     <field name="purchase_date" />
                                     <field name="purchase_term_id" />
-                                    <field name="purchase_comercial" />
+                                    <field name="purchase_comercial_name" />
                                     <field name="purchase_amount" />
                                     
                                    
@@ -65,8 +65,8 @@
                         <page string="Clientes que compraron en ambos intervalos">
                             <field name="report_differences">
                                 <list editable="bottom">
-                                    <field name="partner_id"/>
-                                    <field name="comercial" />
+                                    <field name="partner_name"/>
+                                    <field name="comercial_name" />
                                     <field name="amount_first"/>
                                     <field name="amount_second"/>
                                     <field name="amount_total"/>
@@ -77,8 +77,8 @@
                         <page string="Clientes que compraron en un solo intervalo">
                             <field name="report_differences_OI">
                                 <list editable="bottom">
-                                    <field name="partner_id"/>
-                                    <field name="comercial" />
+                                    <field name="partner_name"/>
+                                    <field name="comercial_name" />
                                     <field name="amount_first"/>
                                     <field name="amount_second"/>
                                     <field name="amount_total"/>

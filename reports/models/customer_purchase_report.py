@@ -345,8 +345,27 @@ class CustomerReportLine(models.Model):
     purchase_comercial = fields.Many2one('res.users', string='Comercial del cliente')
     purchase_amount = fields.Float('Total comprado')
     purchase_term_id = fields.Char('Termino de pago ultima compra')
+    partner_name = fields.Char(string='Cliente', compute='_compute_display_values', store=False)
+    last_purchase_name = fields.Char(string='Última compra', compute='_compute_display_values', store=False)
+    purchase_comercial_name = fields.Char(string='Comercial', compute='_compute_display_values', store=False)
     #location_id = fields.Many2one('stock.location', string="Location", required=True)
     #date_create = fields.Datetime(string="Create Date", required=True)
+
+    @api.depends('partner_id', 'last_purchase', 'purchase_comercial')
+    def _compute_display_values(self):
+        for record in self:
+            try:
+                record.partner_name = record.partner_id.display_name if record.partner_id else False
+            except Exception:
+                record.partner_name = False
+            try:
+                record.last_purchase_name = record.last_purchase.display_name if record.last_purchase else False
+            except Exception:
+                record.last_purchase_name = False
+            try:
+                record.purchase_comercial_name = record.purchase_comercial.name if record.purchase_comercial else False
+            except Exception:
+                record.purchase_comercial_name = False
     
 class CustomerReportLineDifference(models.Model):
     _name = 'customer.purchase.report.line.difference'
@@ -366,4 +385,18 @@ class CustomerReportLineDifference(models.Model):
     amount_first = fields.Float('Total comprado primer intervalo')
     amount_second = fields.Float('Total comprado segundo intervalo')
     amount_total = fields.Float('Total comprado')
+    partner_name = fields.Char(string='Cliente', compute='_compute_display_values', store=False)
+    comercial_name = fields.Char(string='Comercial', compute='_compute_display_values', store=False)
+
+    @api.depends('partner_id', 'comercial')
+    def _compute_display_values(self):
+        for record in self:
+            try:
+                record.partner_name = record.partner_id.display_name if record.partner_id else False
+            except Exception:
+                record.partner_name = False
+            try:
+                record.comercial_name = record.comercial.name if record.comercial else False
+            except Exception:
+                record.comercial_name = False
     
