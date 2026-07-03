@@ -194,7 +194,7 @@ class CustomerPurchaseReport(models.Model):
                     'partner_id': item['partner_id'],
                     'comercial': item['purchase_comercial'],
                     'amount_first': item['purchase_amount'],
-                    'amount_second': '0', 
+                    'amount_second': 0,  # Usar 0 como número, no string
                     'amount_total': item['purchase_amount'],
                     
                 }))
