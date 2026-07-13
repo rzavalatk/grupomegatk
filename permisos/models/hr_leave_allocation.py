@@ -6,7 +6,7 @@ from pytz import timezone, utc
 import logging
 
 _logger = logging.getLogger(__name__)
-
+# prueba de commit
 
 class HrLeaveAllocation(models.Model):
     _inherit = 'hr.leave.allocation'
