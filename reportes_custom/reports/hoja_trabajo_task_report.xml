@@ -88,19 +88,19 @@
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Persona que entrega:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['Persona que reporto', 'La persona que reporto'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['Persona que entrega', 'Persona que reporto', 'La persona que reporto'])"/></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Marca:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_marca', 'marca_id'], ['Marca'])"/></td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Telefono:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono', 'Número de contacto'])"/></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Modelo:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_modelo', 'modelo_id'], ['Modelo'])"/></td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Correo Electronico:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico', 'Correo'])"/></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de Serie:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_numero_de_serie', 'serie'], ['Numero de Serie', 'Número de Serie'])"/></td>
                     </tr>

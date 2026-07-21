@@ -2,6 +2,7 @@
 import logging
 import math
 import base64
+import re
 import unicodedata
 from lxml import etree
 
@@ -129,7 +130,10 @@ class ProjectTask(models.Model):
         value = value or ''
         value = unicodedata.normalize('NFKD', value)
         value = ''.join(char for char in value if not unicodedata.combining(char))
-        return value.strip().lower()
+        value = value.lower().strip()
+        value = re.sub(r'[^a-z0-9\s]', ' ', value)
+        value = re.sub(r'\s+', ' ', value).strip()
+        return value
 
     def _get_task_worksheet_record(self):
         self.ensure_one()
@@ -164,29 +168,38 @@ class ProjectTask(models.Model):
         if not worksheet:
             return ''
 
+        def _format_value(field, value):
+            field_type = getattr(field, 'type', None)
+            if value in (False, None, ''):
+                return ''
+            if selection and field_type == 'selection':
+                return dict(field.selection).get(value, '')
+            if field_type == 'many2one':
+                return value.display_name or ''
+            if field_type in ('many2many', 'one2many'):
+                return ', '.join(value.mapped('name')) if value else ''
+            return value
+
         # Prefer exact technical field names from Studio when available.
         for field_name in (field_names or []):
             if field_name not in worksheet._fields:
                 continue
             field = worksheet._fields[field_name]
             value = worksheet[field_name]
-            if not value:
-                return ''
-            if selection and getattr(field, 'type', None) == 'selection':
-                return dict(field.selection).get(value, '')
-            return value.display_name if getattr(field, 'type', None) == 'many2one' else value
+            formatted = _format_value(field, value)
+            if formatted not in (False, None, ''):
+                return formatted
 
-        normalized_labels = {self._normalize_worksheet_label(label) for label in labels}
+        normalized_labels = [self._normalize_worksheet_label(label) for label in labels if label]
         for field_name, field in worksheet._fields.items():
-            if self._normalize_worksheet_label(getattr(field, 'string', '')) not in normalized_labels:
+            field_label = self._normalize_worksheet_label(getattr(field, 'string', ''))
+            if not field_label:
                 continue
-
             value = worksheet[field_name]
-            if not value:
-                return ''
-            if selection and getattr(field, 'type', None) == 'selection':
-                return dict(field.selection).get(value, '')
-            return value.display_name if getattr(field, 'type', None) == 'many2one' else value
+            if any(lbl == field_label or lbl in field_label or field_label in lbl for lbl in normalized_labels):
+                formatted = _format_value(field, value)
+                if formatted not in (False, None, ''):
+                    return formatted
         return ''
 
     @api.depends('partner_id', 'name')
