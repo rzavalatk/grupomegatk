@@ -4,7 +4,7 @@
         <div class="header">
             <div style="width: 100%; margin: 0; padding: 0;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 44px; margin: 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 86px; margin: 0; padding: 0;" alt="Logo"/>
                 </div>
                 <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
                     Soluciones tecnologicas para su empresa
@@ -26,6 +26,19 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="reportes_custom.hoja_trabajo_task_report_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="hoja_trabajo_worksheet_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="w">
+                <t t-set="task_field_names" t-value="[fname for fname, f in w._fields.items() if f.type == 'many2one' and f.comodel_name == 'project.task']"/>
+                <t t-set="task" t-value="w[task_field_names[0]] if task_field_names else False"/>
+                <t t-if="task">
+                    <t t-set="o" t-value="task.with_context(worksheet_id=w.id)"/>
+                    <t t-call="reportes_custom.hoja_trabajo_task_report_document"/>
+                </t>
             </t>
         </t>
     </template>
@@ -135,6 +148,33 @@
         <field name="report_file">reportes_custom.hoja_trabajo_task_report</field>
         <field name="binding_model_id" ref="project.model_project_task"/>
         <field name="binding_type">report</field>
+        <field name="active">False</field>
         <field name="print_report_name">'Ingreso de equipos - %s' % (object.name or '')</field>
+    </record>
+
+    <record id="paperformat_hoja_trabajo_ingresos" model="report.paperformat">
+        <field name="name">Hoja Trabajo Ingresos</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">24</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">4</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_hoja_trabajo_worksheet" model="ir.actions.report">
+        <field name="name">Ingreso de equipos Reporte</field>
+        <field name="model">x_project_task_worksheet_template_4</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="report_file">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="binding_model_id" eval="env['ir.model']._get_id('x_project_task_worksheet_template_4')"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
+        <field name="print_report_name">'Ingreso de equipos - %s' % (object.display_name or object.id)</field>
     </record>
 </odoo>

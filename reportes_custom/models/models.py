@@ -137,6 +137,15 @@ class ProjectTask(models.Model):
         if model_name not in self.env:
             return False
 
+        worksheet_id = self.env.context.get('worksheet_id')
+        if worksheet_id:
+            worksheet_ctx = self.env[model_name].browse(worksheet_id).exists()
+            if worksheet_ctx:
+                for field_name, field in worksheet_ctx._fields.items():
+                    if getattr(field, 'type', None) == 'many2one' and getattr(field, 'comodel_name', None) == 'project.task':
+                        if worksheet_ctx[field_name] and worksheet_ctx[field_name].id == self.id:
+                            return worksheet_ctx
+
         worksheet_model = self.env[model_name]
         candidate_fields = []
         for field_name, field in worksheet_model._fields.items():
