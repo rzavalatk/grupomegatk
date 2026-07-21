@@ -11,124 +11,97 @@
         <field name="print_report_name">'Entrega de Equipo - %s' % (object.name)</field>
     </record>
 
+    <template id="external_layout_service_ticket_compact">
+        <div class="header">
+            <div style="width: 100%; margin: 0; padding: 0;">
+                <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 44px; margin: 0; padding: 0;" alt="Logo"/>
+                </div>
+                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
+                    Soluciones tecnologicas para su empresa
+                </div>
+            </div>
+            <div style="border-top: 1px solid #d3d9df; margin-top: 5px;"/>
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer" style="font-size: 9pt;">
+            <div style="border-top: 1px solid #d3d9df; padding-top: 3px; text-align: right; color: #666;">
+                Pag. <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </template>
+
     <template id="helpdesk_ticket_entrega_equipo_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="fields_megatk.external_layout_standard_soporte" t-lang="o.partner_id.lang">
-                    <div class="page">
-                        <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
-                            Entrega de Equipo
-                        </div>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <div style="float: right; margin-top: -30px;">
-                            <h4>
-                                Fecha Ingreso:
-                                <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/>
-                                &amp;nbsp;&amp;nbsp;
-                                Fecha Entrega:
-                                <span t-if="o.close_date" t-field="o.close_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
-                                <span t-if="not o.close_date" t-field="o.write_date" t-field-options='{"format": "dd-MM-yyyy"}'/>
-                            </h4>
-                        </div>
-
-                        <table style="table-layout: fixed; width:100%">
+                <t t-call="helpdesk_custom_megatk.external_layout_service_ticket_compact" t-lang="o.partner_id.lang">
+                    <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 2px;">
                             <tr>
-                                <td colspan="3" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
-                                    Información del Cliente
+                                <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 7px 0;">
+                                    <b>Numero de ticket:</b>
+                                    <span style="margin-left: 16px;" t-esc="o.id"/>
+                                </td>
+                                <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 7px 0;">
+                                    <b>Direccion de visita:</b>
+                                    <span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'], '')"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Cliente: <span t-esc="(o.partner_id and o.partner_id.name) or ''"/>
-                                </td>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Telefono: <span t-esc="o.x_studio_telfono or (o.partner_id and o.partner_id.phone) or ''"/>
-                                </td>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Email: <span t-esc="o.x_studio_correo_electrnico or (o.partner_id and o.partner_id.email) or ''"/>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <table style="table-layout: fixed; width:100%">
-                            <tr>
-                                <td colspan="4" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
-                                    Datos del Equipo
-                                </td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Nombre de la empresa</b><span style="margin-left: 16px;" t-esc="(o.partner_id and o.partner_id.name) or (o.lead_id and o.lead_id.partner_id and o.lead_id.partner_id.name) or ''"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Equipo:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_categoria', 'categoria_id'], ['Tipo de Equipo', 'Categoria'], '')"/></td>
                             </tr>
                             <tr>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;# Serie: <span t-esc="o.x_studio_numero_de_serie or ''"/>
-                                </td>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Marca: <span t-esc="o.x_studio_marca or ''"/>
-                                </td>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Categoría: <span t-esc="o.x_studio_categoria or ''"/>
-                                </td>
-                                <td style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Modelo: <span t-esc="o.x_studio_modelo or ''"/>
-                                </td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Persona que entrega:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['Persona que reporto', 'La persona que reporto'], '')"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Marca:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_marca', 'marca_id'], ['Marca'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Telefono:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_telfono', 'phone', 'repor_tel'], ['Telefono', 'Teléfono'], '')"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Modelo:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_modelo', 'modelo_id'], ['Modelo'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Correo Electronico:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico'], '')"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de Serie:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_numero_de_serie', 'serie'], ['Numero de Serie', 'Número de Serie'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fecha y hora de ingreso:</b><span style="margin-left: 10px;" t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Accesorios:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_studio_l'], ['Accesorios'], '') or (o.lead_id and ', '.join(o.lead_id.accesorio_ids.mapped('name')) or '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Atencion:</b><span style="margin-left: 10px;" t-esc="o._report_pick_selection(['x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Soporte', 'Tipo de Atencion', 'Tipo de Atención'], '')"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Diagnostico Inicial:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_tecnico_diagnostico', 'fallas'], ['Diagnostico Inicial', 'Diagnóstico Inicial', 'Fallas'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tecnico que recibe:</b><span style="margin-left: 10px;" t-esc="(o.user_id and o.user_id.name) or (o.create_uid and o.create_uid.name) or ''"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Estado del Equipo:</b><span style="margin-left: 10px;" t-esc="o._report_pick_selection(['x_studio_estado_del_equipo', 'estado_taller'], ['Estado del Equipo'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Sucursal o Area:</b><span style="margin-left: 10px;" t-esc="(o.team_id and o.team_id.name) or ''"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fallas reportadas:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['fallas', 'description'], ['Fallas reportadas', 'Fallas'], '')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Campo de observacion:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['description', 'x_tecnico_diagnostico'], ['Observaciones', 'Campo de observacion'], '')"/></td>
+                                <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Informe Tecnico:</b><span style="margin-left: 10px;" t-esc="o._report_pick(['x_tecnico_solucion', 'informe_tecnico'], ['Informe Tecnico', 'Informe Técnico'], '')"/></td>
                             </tr>
                         </table>
 
-                        <br/>
-
-                        <table style="table-layout: fixed; width:100%">
+                        <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; page-break-inside: avoid;">
                             <tr>
-                                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
-                                    Accesorios Incluidos
+                                <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                                    <b>Firma del tecnico:</b>
+                                    <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                        <img t-if="o._report_pick_binary(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico'])" t-att-src="image_data_uri(o._report_pick_binary(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico']))" style="max-height: 78px; max-width: 92%;" alt="Firma tecnico"/>
+                                    </div>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="text-center" style="word-wrap: break-word; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                    <span t-esc="o.x_studio_l or '(Ninguno)'"/>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <table style="width:100%">
-                            <tr>
-                                <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210); ">
-                                    Estado del Equipo
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="word-wrap: break-word; width:10%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Fallas:
-                                </td>
-                                <td style="width:90%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;<span t-esc="o.x_tecnico_diagnostico or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="word-wrap: break-word; width:10%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Informe Técnico:
-                                </td>
-                                <td style="width:90%; vertical-align:middle; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;<span t-esc="o.x_tecnico_solucion or ''"/>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <br/>
-                        <span style="font-family:'Arial'; font-size:14pt;">&amp;nbsp;&amp;nbsp;Técnico Asignado:&amp;nbsp;<t t-esc="(o.user_id and o.user_id.name) or (o.create_uid and o.create_uid.name) or ''"/></span>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-
-                        <table style="table-layout: fixed; width:100%">
-                            <tr>
-                                <td class="text-center" style="width:50%; vertical-align:middle;">
-                                    <div style="width:90%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt;">Firma del Cliente</div>
-                                </td>
-                                <td class="text-center" style="width:50%; vertical-align:middle;">
-                                    <div style="width:90%; vertical-align:middle; border-top: 2px solid; font-family:'Arial'; font-size:14pt;">Firma del Técnico</div>
+                                <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                                    <b>Firma del cliente:</b>
+                                    <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                        <img t-if="o._report_pick_binary(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente'])" t-att-src="image_data_uri(o._report_pick_binary(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente']))" style="max-height: 78px; max-width: 92%;" alt="Firma cliente"/>
+                                    </div>
                                 </td>
                             </tr>
                         </table>
