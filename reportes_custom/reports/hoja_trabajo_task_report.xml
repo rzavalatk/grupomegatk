@@ -146,7 +146,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">reportes_custom.hoja_trabajo_task_report</field>
         <field name="report_file">reportes_custom.hoja_trabajo_task_report</field>
-        <field name="binding_model_id" eval="False"/>
+        <field name="binding_model_id" ref="project.model_project_task"/>
         <field name="binding_type">report</field>
         <field name="print_report_name">'Ingreso de equipos - %s' % (object.name or '')</field>
     </record>
@@ -171,7 +171,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">reportes_custom.hoja_trabajo_worksheet_report</field>
         <field name="report_file">reportes_custom.hoja_trabajo_worksheet_report</field>
-        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_4')]"/>
+        <field name="binding_model_id" search="[('model', 'like', 'x_project_task_worksheet_template_%')]"/>
         <field name="binding_type">report</field>
         <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
         <field name="print_report_name">'Ingreso de equipos - %s' % (object.display_name or object.id)</field>
