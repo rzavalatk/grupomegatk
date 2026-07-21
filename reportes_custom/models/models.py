@@ -261,3 +261,47 @@ class ProjectTask(models.Model):
                     task.tipo_visita_label = dict(lead._fields['tipo_visita'].selection).get(lead.tipo_visita, '') or task.tipo_visita_label
                 if 'estado_taller' in lead._fields and lead.estado_taller:
                     task.estado_equipo_label = dict(lead._fields['estado_taller'].selection).get(lead.estado_taller, '') or task.estado_equipo_label
+
+    def _report_task_pick(self, field_names=None, labels=None, selection=False, default=''):
+        self.ensure_one()
+        field_names = field_names or []
+        labels = labels or []
+
+        lead = False
+        if 'ticket_id' in self._fields and self.ticket_id and 'lead_id' in self.ticket_id._fields:
+            lead = self.ticket_id.lead_id
+
+        candidates = [self]
+        if 'ticket_id' in self._fields and self.ticket_id:
+            candidates.append(self.ticket_id)
+        if lead:
+            candidates.append(lead)
+
+        for record in candidates:
+            for field_name in field_names:
+                if field_name not in record._fields:
+                    continue
+                value = record[field_name]
+                if value in (False, None, ''):
+                    continue
+                field = record._fields[field_name]
+                if selection and getattr(field, 'type', None) == 'selection':
+                    return dict(field.selection).get(value, default) or default
+                if getattr(field, 'type', None) == 'many2one':
+                    return value.display_name or default
+                if getattr(field, 'type', None) in ('many2many', 'one2many'):
+                    return ', '.join(value.mapped('name')) if value else default
+                return value
+
+        worksheet = self._get_task_worksheet_record()
+        if worksheet:
+            value = self._get_worksheet_field_value(
+                worksheet,
+                labels,
+                field_names=field_names,
+                selection=selection,
+            )
+            if value not in (False, None, ''):
+                return value
+
+        return default

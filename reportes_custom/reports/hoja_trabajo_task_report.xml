@@ -2,39 +2,22 @@
 <odoo>
     <template id="external_layout_standard_hoja_trabajo">
         <div class="header">
-            <div class="row" style="margin-top: -90px;">
-                <div class="col-xs-3 mb4">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px;" alt="Logo"/>
+            <div style="width: 100%; margin: 0; padding: 0;">
+                <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 44px; margin: 0; padding: 0;" alt="Logo"/>
+                </div>
+                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
+                    Soluciones tecnologicas para su empresa
                 </div>
             </div>
-            <div style="float: right; margin-top: -170px;">
-                <h3>Tarea # <span t-field="o.id"/></h3>
-            </div>
+            <div style="border-top: 1px solid #d3d9df; margin-top: 5px;"/>
         </div>
-        <div class="article o_report_layout_standard">
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
             <t t-raw="0"/>
         </div>
-        <div class="footer" style="font-size:10pt !important;">
-            <div style="border-top: 1px solid rgb(13, 143, 210);">
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
-                </ul>
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
-                </ul>
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li>
-                        <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
-                        <t t-if="user.company_id.email"> Correo: <span t-field="user.company_id.email"/></t>
-                        <t t-if="user.company_id.website"> Web: <span t-field="user.company_id.website"/></t>
-                        <t t-if="user.company_id.vat">
-                            <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/>
-                        </t>
-                    </li>
-                </ul>
-                <div style="text-align: right;" class="text-muted">
-                    Pag. <span class="page"/> / <span class="topage"/>
-                </div>
+        <div class="footer" style="font-size: 9pt;">
+            <div style="border-top: 1px solid #d3d9df; padding-top: 3px; text-align: right; color: #666;">
+                Pag. <span class="page"/> / <span class="topage"/>
             </div>
         </div>
     </template>
@@ -49,86 +32,94 @@
 
     <template id="hoja_trabajo_task_report_document">
         <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
-            <t t-set="tipo_soporte_label" t-value="o.tipo_soporte_label or ''"/>
-            <t t-set="tipo_visita_label" t-value="o.tipo_visita_label or ''"/>
-            <t t-set="estado_equipo_label" t-value="o.estado_equipo_label or ''"/>
-            <t t-set="proposito_llamada" t-value="o.proposito_llamada or ''"/>
-            <t t-set="proposito_visita" t-value="o.proposito_visita or ''"/>
-            <t t-set="persona_reporto" t-value="o.persona_reporto or ''"/>
-            <t t-set="telefono" t-value="o.telefono_visita or ''"/>
-            <t t-set="correo" t-value="o.correo_visita or ''"/>
-            <t t-set="direccion" t-value="o.direccion_visita or ''"/>
+            <t t-set="ticket" t-value="o.ticket_id if 'ticket_id' in o._fields else False"/>
+            <t t-set="lead" t-value="ticket.lead_id if ticket and 'lead_id' in ticket._fields else False"/>
 
-            <div class="page">
-                <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
-                    Hoja de Trabajo
-                </div>
-                <br/>
-                <div style="float: right; margin-top: -30px;">
-                    <h4>Fecha: <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/></h4>
-                </div>
-
-                <table style="table-layout: fixed; width:100%;">
+            <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 2px;">
                     <tr>
-                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210);">
-                            FORMULARIO DE VISITA
+                        <td colspan="2" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
+                            INGRESOS DE EQUIPOS
+                        </td>
+                        <td colspan="2" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
+                            INGRESOS DE EQUIPOS
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
-                            &amp;nbsp;Tipo de Soporte: <t t-esc="tipo_soporte_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
-                            &amp;nbsp;La persona que reporto: <t t-esc="persona_reporto"/>
-                        </td>
+                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de ticket:</b></td>
+                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="ticket.id if ticket else o.id"/></td>
+                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Direccion de visita:</b></td>
+                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Proposito Llamada: <t t-esc="proposito_llamada"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Telefono: <t t-esc="telefono"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Nombre de la empresa:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="(o.partner_id and o.partner_id.name) or (ticket and ticket.partner_id and ticket.partner_id.name) or ''"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Equipo:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_categoria', 'categoria_id'], ['Tipo de Equipo', 'Categoria'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Estado del Equipo: <t t-esc="estado_equipo_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Correo Electrónico: <t t-esc="correo"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Persona que entrega:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['Persona que reporto', 'La persona que reporto'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Marca:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_marca', 'marca_id'], ['Marca'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Tipo de Visita: <t t-esc="tipo_visita_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Dirección de visita: <t t-esc="direccion"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Telefono:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Modelo:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_modelo', 'modelo_id'], ['Modelo'])"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Propósito de la visita: <t t-esc="proposito_visita"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Correo Electronico:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de Serie:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_numero_de_serie', 'serie'], ['Numero de Serie', 'Número de Serie'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fecha y hora de ingreso:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy HH:mm:ss"}'/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Accesorios:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_l', 'accesorio_ids'], ['Accesorios', 'Accesorios Incluidos'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Atencion:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Soporte', 'Tipo de Atencion', 'Tipo de Atención'], selection=True)"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Diagnostico Inicial:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_tecnico_diagnostico', 'fallas'], ['Diagnostico Inicial', 'Diagnóstico Inicial', 'Fallas'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tecnico que recibe:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="(ticket and ticket.user_id and ticket.user_id.name) or (o.user_ids and ', '.join(o.user_ids.mapped('name'))) or ''"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Estado del Equipo:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_estado_del_equipo', 'estado_taller'], ['Estado del Equipo'], selection=True)"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Sucursal o Area:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="(ticket and ticket.team_id and ticket.team_id.name) or ''"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fallas reportadas:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['fallas', 'description'], ['Fallas reportadas', 'Fallas'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Campo de observacion:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['description', 'x_tecnico_diagnostico'], ['Observaciones', 'Campo de observacion'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Informe Tecnico:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_tecnico_solucion', 'informe_tecnico'], ['Informe Tecnico', 'Informe Técnico'])"/></td>
                     </tr>
                 </table>
 
-                <br/>
-                <table style="width:100%;">
+                <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; page-break-inside: avoid;">
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 20%;">
-                            &amp;nbsp;Cliente:
+                        <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                            <b>Firma del tecnico:</b>
+                            <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico']))" style="max-height: 78px; max-width: 92%;" alt="Firma tecnico"/>
+                            </div>
                         </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 80%;">
-                            &amp;nbsp;<span t-if="o.partner_id" t-field="o.partner_id.name"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Tarea:
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;<span t-field="o.name"/>
+                        <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                            <b>Firma del cliente:</b>
+                            <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente']))" style="max-height: 78px; max-width: 92%;" alt="Firma cliente"/>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -137,13 +128,13 @@
     </template>
 
     <record id="action_report_hoja_trabajo_task" model="ir.actions.report">
-        <field name="name">Hoja de Trabajo</field>
+        <field name="name">Ingreso de equipos Reporte</field>
         <field name="model">project.task</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">reportes_custom.hoja_trabajo_task_report</field>
         <field name="report_file">reportes_custom.hoja_trabajo_task_report</field>
         <field name="binding_model_id" ref="project.model_project_task"/>
         <field name="binding_type">report</field>
-        <field name="print_report_name">'Hoja de Trabajo - %s' % (object.name or '')</field>
+        <field name="print_report_name">'Ingreso de equipos - %s' % (object.name or '')</field>
     </record>
 </odoo>
