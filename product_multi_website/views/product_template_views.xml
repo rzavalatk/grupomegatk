@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_multi_website" model="ir.ui.view">
+        <field name="name">product.template.form.multi.website</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Reemplaza el campo nativo (1 sitio) por el selector multiple -->
+            <xpath expr="//field[@name='website_id']" position="replace">
+                <field name="website_ids_multi" widget="many2many_tags" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

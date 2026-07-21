@@ -11,111 +11,138 @@
         <field name="print_report_name">'Visita Técnica - %s' % (object.name)</field>
     </record>
 
+    <template id="external_layout_service_ticket">
+        <div class="header">
+            <div class="row" style="width: 100%; margin: 0; padding: 0 12px;">
+                <div class="col-6" style="display: inline-block; width: 49%; vertical-align: middle;">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 56px;" alt="Logo"/>
+                </div>
+                <div class="col-6" style="display: inline-block; width: 49%; text-align: right; vertical-align: middle;">
+                    <div style="font-family: Arial, sans-serif; font-size: 12pt; font-weight: 700; color: #0d8fd2;">
+                        Soluciones tecnologicas para su empresa
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #0d8fd2; margin-top: 8px;"/>
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer" style="font-size: 9pt;">
+            <div style="border-top: 1px solid #0d8fd2; padding-top: 4px;">
+                <div style="text-align: center;">
+                    <span t-if="user.company_id.street" t-field="user.company_id.street"/>
+                    <span t-if="user.company_id.street2">, <span t-field="user.company_id.street2"/></span>
+                </div>
+                <div style="text-align: center;">
+                    <t t-if="user.company_id.phone">Tel: <span t-field="user.company_id.phone"/> </t>
+                    <t t-if="user.company_id.email">| Correo: <span t-field="user.company_id.email"/> </t>
+                    <t t-if="user.company_id.vat">| <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/></t>
+                </div>
+                <div style="text-align: right;" class="text-muted">
+                    Pag. <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="helpdesk_ticket_visita_tecnica_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="fields_megatk.external_layout_standard_visita" t-lang="o.partner_id.lang">
-                    <div class="page">
-                        <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
+                <t t-call="helpdesk_custom_megatk.external_layout_service_ticket" t-lang="o.partner_id.lang">
+                    <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt;">
+                        <h2 style="text-align: center; margin: 6px 0 10px 0; font-weight: 700;">
                             CONTROL DE VISITA
-                        </div>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <div style="float: left; margin-top: -30px;">
-                            <h3>N. <span t-field="o.id"/></h3>
-                        </div>
-                        <div style="float: right; margin-top: -30px;">
-                            <h4>Fecha: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/></h4>
-                        </div>
+                        </h2>
 
-                        <table style="table-layout: fixed; width:100%">
+                        <table style="width: 100%; table-layout: fixed; margin-bottom: 8px;">
                             <tr>
-                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Empresa: <span t-esc="(o.partner_id and o.partner_id.name) or ''"/>
+                                <td style="width: 50%;">
+                                    <b>No.:</b> <span t-field="o.id"/>
                                 </td>
-                                <td style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Telefono: <span t-esc="o.x_studio_telfono or (o.partner_id and o.partner_id.phone) or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Persona que reporto: <span t-esc="o.x_studio_la_persona_que_reporto or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Dirección: <span t-esc="o.x_studio_direccin_de_visita or (o.partner_id and o.partner_id.street) or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:50px;">
-                                    &amp;nbsp;Proposito de la visita: <span t-esc="o.x_studio_propsito_de_la_visita or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="border-bottom: 1px solid; border-top: 1px solid; border-right: 1px solid; border-left: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt;">
-                                    &amp;nbsp;Correo electrónico: <span t-esc="o.x_studio_correo_electrnico or (o.partner_id and o.partner_id.email) or ''"/>
+                                <td style="width: 50%; text-align: right;">
+                                    <b>Fecha:</b> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
                                 </td>
                             </tr>
                         </table>
 
-                        <br/>
-                        <br/>
-                        <br/>
+                        <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin-bottom: 8px;">
+                            <tr>
+                                <td colspan="3" style="border: 1px solid #000; padding: 6px;">
+                                    <b>Empresa:</b> <span t-esc="(o.partner_id and o.partner_id.name) or ''"/>
+                                </td>
+                                <td style="border: 1px solid #000; padding: 6px;">
+                                    <b>Telefono:</b> <span t-esc="o.x_studio_telfono or (o.partner_id and o.partner_id.phone) or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border: 1px solid #000; padding: 6px;">
+                                    <b>Persona que reporto:</b> <span t-esc="o.x_studio_la_persona_que_reporto or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border: 1px solid #000; padding: 6px;">
+                                    <b>Direccion:</b> <span t-esc="o.x_studio_direccin_de_visita or (o.partner_id and o.partner_id.street) or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border: 1px solid #000; padding: 6px; min-height: 38px;">
+                                    <b>Proposito de la visita:</b> <span t-esc="o.x_studio_propsito_de_la_visita or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border: 1px solid #000; padding: 6px;">
+                                    <b>Correo electronico:</b> <span t-esc="o.x_studio_correo_electrnico or (o.partner_id and o.partner_id.email) or ''"/>
+                                </td>
+                            </tr>
+                        </table>
 
-                        <div style="margin-left: 17%;">
-                            <table style="width:74%">
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 4px 6px;"><b>Cortesia</b></td>
+                                <td style="border: 1px solid #000; width: 26px; text-align: center;"><span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['cortesia', 'cortesía']">X</span></td>
+                                <td style="border: 1px solid #000; padding: 4px 6px;"><b>Contado</b></td>
+                                <td style="border: 1px solid #000; width: 26px; text-align: center;"><span t-if="(o.x_studio_tipo_de_visita or '').lower() == 'contado'">X</span></td>
+                                <td style="border: 1px solid #000; padding: 4px 6px;"><b>Garantia</b></td>
+                                <td style="border: 1px solid #000; width: 26px; text-align: center;"><span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['garantia', 'garantía']">X</span></td>
+                                <td style="border: 1px solid #000; padding: 4px 6px;"><b>Capacitacion</b></td>
+                                <td style="border: 1px solid #000; width: 26px; text-align: center;"><span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['capacitacion', 'capacitación']">X</span></td>
+                                <td style="border: 1px solid #000; padding: 4px 6px;"><b>Instalacion</b></td>
+                                <td style="border: 1px solid #000; width: 26px; text-align: center;"><span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['instalacion', 'instalación']">X</span></td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; min-height: 46px;">
+                                    <b>Visita realizada por:</b> <span t-esc="(o.user_id and o.user_id.name) or (o.create_uid and o.create_uid.name) or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; min-height: 88px; vertical-align: top;">
+                                    <b>Observaciones:</b> <span t-esc="o.x_tecnico_diagnostico or o.description or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="page-break-inside: avoid; margin-top: 14px;">
+                            <table style="width: 100%; table-layout: fixed;">
                                 <tr>
-                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Cortesía&amp;nbsp;</td>
-                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['cortesia', 'cortesía']"><b>X</b></span>
+                                    <td style="width: 48%; text-align: center; vertical-align: top; padding-right: 8px;">
+                                        <div style="border-top: 1px solid #000; padding-top: 4px;">Trabajador</div>
                                     </td>
-                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Contado&amp;nbsp;</td>
-                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() == 'contado'"><b>X</b></span>
-                                    </td>
-                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Garantía&amp;nbsp;</td>
-                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['garantia', 'garantía']"><b>X</b></span>
-                                    </td>
-                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Capacitación</td>
-                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['capacitacion', 'capacitación']"><b>X</b></span>
-                                    </td>
-                                    <td style="width:70px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">&amp;nbsp;Instalación</td>
-                                    <td style="width:15px; vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                                        <span t-if="(o.x_studio_tipo_de_visita or '').lower() in ['instalacion', 'instalación']"><b>X</b></span>
+                                    <td style="width: 4%;"/>
+                                    <td style="width: 48%; text-align: center; vertical-align: top; padding-left: 8px;">
+                                        <div style="border-top: 1px solid #000; padding-top: 4px;">Cliente</div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-
-                        <br/>
-                        <br/>
-                        <br/>
-
-                        <table style="table-layout: fixed; width:100%">
-                            <tr>
-                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:70px;">
-                                    &amp;nbsp;<b>Visita realizada por:</b> <span t-esc="(o.user_id and o.user_id.name) or (o.create_uid and o.create_uid.name) or ''"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:middle; font-family:'Arial'; font-size:14pt; height:70px;">
-                                    &amp;nbsp;<b>Firma y sello del cliente:</b>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <br/>
-                        <table style="table-layout: fixed; width:100%">
-                            <tr>
-                                <td colspan="3" style="border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid; border-right: 1px solid; word-wrap: break-word; vertical-align:top; font-family:'Arial'; font-size:14pt; height:200px;">
-                                    &amp;nbsp;<b>Obsevaciones:</b> <span t-esc="o.x_tecnico_diagnostico or o.description or ''"/>
-                                </td>
-                            </tr>
-                        </table>
                     </div>
                 </t>
             </t>
