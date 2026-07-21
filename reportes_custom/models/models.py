@@ -133,7 +133,9 @@ class ProjectTask(models.Model):
 
     def _get_task_worksheet_record(self):
         self.ensure_one()
-        model_name = 'x_project_task_worksheet_template_4'
+        model_name = self.env.context.get('worksheet_model') or self.env.context.get('active_model') or 'x_project_task_worksheet_template_4'
+        if not str(model_name).startswith('x_project_task_worksheet_template_'):
+            model_name = 'x_project_task_worksheet_template_4'
         if model_name not in self.env:
             return False
 
