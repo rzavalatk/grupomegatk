@@ -4,9 +4,9 @@
         <div class="header">
             <div style="width: 100%; margin: 0; padding: 0;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 82px; margin: -30px 0 0 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 100px; margin: -50px 0 0 0; padding: 0;" alt="Logo"/>
                 </div>
-                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
+                <div style="display: inline-block; width: 51%; margin: -30px 0 0 0; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
                     Soluciones tecnologicas para su empresa
                 </div>
             </div>
