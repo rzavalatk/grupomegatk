@@ -2,15 +2,15 @@
 <odoo>
     <template id="external_layout_standard_hoja_trabajo">
         <div class="header">
-            <div style="width: 100%; margin: 0; padding: 0;">
+            <div style="width: 100%; margin: 0; padding: 0; min-height: 74px;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; margin: -6px 0 0 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 52px; margin: 2px 0 0 0; padding: 0;" alt="Logo"/>
                 </div>
-                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 12px;">
+                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 8px;">
                     Soluciones tecnologicas para su empresa
                 </div>
             </div> 
-            <div style="border-top: 1px solid #d3d9df; margin-top: 5px;"/>
+            <div style="border-top: 1px solid #d3d9df; margin-top: 2px;"/>
         </div>
         <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
             <t t-raw="0"/>
@@ -195,13 +195,13 @@
     <template id="hoja_visita_task_report_document">
         <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <div style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63; margin-bottom: 6px;">
+                    FORMULARIO DE VISITA
+                </div>
                 <table style="width: 100%; border-collapse: separate; border-spacing: 6px 6px; table-layout: fixed;">
                     <tr>
                         <td style="width: 50%; border: 1px solid #e4e6eb; vertical-align: top; padding: 6px;">
                             <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                                <tr>
-                                    <td colspan="2" style="border-bottom: 1px solid #d7dbe2; padding: 6px 0; font-weight: 700; color: #1f3b63;">FORMULARIO DE VISITA</td>
-                                </tr>
                                 <tr><td style="padding: 8px 0; width: 42%;"><b>Tipo de Soporte:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Soporte'], selection=True)"/></td></tr>
                                 <tr><td style="padding: 8px 0;"><b>Proposito Llamada:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_propsito_llamada', 'proposito_llamada'], ['Proposito Llamada', 'Propósito Llamada'])"/></td></tr>
                                 <tr><td style="padding: 8px 0;"><b>Estado del Equipo:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_estado_del_equipo', 'estado_taller'], ['Estado del Equipo'], selection=True)"/></td></tr>
@@ -212,9 +212,6 @@
                         </td>
                         <td style="width: 50%; border: 1px solid #e4e6eb; vertical-align: top; padding: 6px;">
                             <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                                <tr>
-                                    <td colspan="2" style="border-bottom: 1px solid #d7dbe2; padding: 6px 0; font-weight: 700; color: #1f3b63;">FORMULARIO DE VISITA</td>
-                                </tr>
                                 <tr><td style="padding: 8px 0; width: 42%;"><b>La persona que reporto:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['La persona que reporto', 'Persona que reporto'])"/></td></tr>
                                 <tr><td style="padding: 8px 0;"><b>Telefono:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono', 'Número de contacto'])"/></td></tr>
                                 <tr><td style="padding: 8px 0;"><b>Correo Electronico:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico'])"/></td></tr>
@@ -268,7 +265,7 @@
         <field name="default" eval="False"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">30</field>
+        <field name="margin_top">36</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">8</field>
         <field name="margin_right">8</field>
