@@ -4,12 +4,12 @@
         <div class="header">
             <div style="width: 100%; margin: 0; padding: 0;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 100px; margin: -50px 0 0 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 100px; margin: 0px 0 0 0; padding: 0;" alt="Logo"/>
                 </div>
-                <div style="display: inline-block; width: 51%; margin: -30px 0 0 0; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
+                <div style="display: inline-block; width: 51%;  vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
                     Soluciones tecnologicas para su empresa
                 </div>
-            </div>
+            </div> 
             <div style="border-top: 1px solid #d3d9df; margin-top: 5px;"/>
         </div>
         <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
@@ -95,12 +95,9 @@
             <t t-set="sheet_title" t-value="o._report_task_title()"/>
 
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
-                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 2px;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 12px;">
                     <tr>
-                        <td colspan="2" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
-                            <t t-esc="sheet_title"/>
-                        </td>
-                        <td colspan="2" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
+                        <td colspan="4" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
                             <t t-esc="sheet_title"/>
                         </td>
                     </tr>
