@@ -81,7 +81,7 @@
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
                 <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
                     <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
-                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; max-width: 240px;" alt="Logo"/>
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 136px; max-width: 480px;" alt="Logo"/>
                     </div>
                     <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
                         Soluciones tecnologicas para su empresa
@@ -191,7 +191,7 @@
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
                 <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
                     <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
-                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; max-width: 240px;" alt="Logo"/>
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 136px; max-width: 480px;" alt="Logo"/>
                     </div>
                     <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
                         Soluciones tecnologicas para su empresa
