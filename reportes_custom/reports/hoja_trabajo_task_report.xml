@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="external_layout_standard_hoja_trabajo">
-        <div class="header">
-            <div style="width: 100%; margin: 0; padding: 0; min-height: 74px;">
-                <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 52px; margin: 2px 0 0 0; padding: 0;" alt="Logo"/>
-                </div>
-                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 8px;">
-                    Soluciones tecnologicas para su empresa
-                </div>
-            </div> 
-            <div style="border-top: 1px solid #d3d9df; margin-top: 2px;"/>
-        </div>
-        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+        <t t-call="web.basic_layout">
             <t t-raw="0"/>
-        </div>
-        <div class="footer" style="font-size: 9pt;">
-            <div style="border-top: 1px solid #d3d9df; padding-top: 3px; text-align: right; color: #666;">
-                Pag. <span class="page"/> / <span class="topage"/>
-            </div>
-        </div>
+        </t>
     </template>
 
     <template id="hoja_trabajo_task_report">
@@ -95,6 +79,20 @@
             <t t-set="sheet_title" t-value="o._report_task_title()"/>
 
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                        <tr>
+                            <td style="width: 45%; vertical-align: top; text-align: left; padding: 0;">
+                                <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 58px; max-width: 220px;" alt="Logo"/>
+                            </td>
+                            <td style="width: 55%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                                Soluciones tecnologicas para su empresa
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
+                </div>
+
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 12px;">
                     <tr>
                         <td colspan="4" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
@@ -195,6 +193,20 @@
     <template id="hoja_visita_task_report_document">
         <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                        <tr>
+                            <td style="width: 45%; vertical-align: top; text-align: left; padding: 0;">
+                                <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 58px; max-width: 220px;" alt="Logo"/>
+                            </td>
+                            <td style="width: 55%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                                Soluciones tecnologicas para su empresa
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
+                </div>
+
                 <div style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63; margin-bottom: 6px;">
                     FORMULARIO DE VISITA
                 </div>
@@ -265,7 +277,7 @@
         <field name="default" eval="False"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">36</field>
+        <field name="margin_top">12</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">8</field>
         <field name="margin_right">8</field>
