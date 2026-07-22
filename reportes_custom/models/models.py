@@ -291,6 +291,23 @@ class ProjectTask(models.Model):
         field_names = field_names or []
         labels = labels or []
 
+        worksheet_context_mode = bool(
+            self.env.context.get('worksheet_id')
+            or str(self.env.context.get('worksheet_model', '')).startswith('x_project_task_worksheet_template_')
+            or str(self.env.context.get('active_model', '')).startswith('x_project_task_worksheet_template_')
+        )
+
+        worksheet = self._get_task_worksheet_record()
+        if worksheet_context_mode and worksheet:
+            value = self._get_worksheet_field_value(
+                worksheet,
+                labels,
+                field_names=field_names,
+                selection=selection,
+            )
+            if value not in (False, None, ''):
+                return value
+
         lead = False
         if 'ticket_id' in self._fields and self.ticket_id and 'lead_id' in self.ticket_id._fields:
             lead = self.ticket_id.lead_id
@@ -317,7 +334,6 @@ class ProjectTask(models.Model):
                     return ', '.join(value.mapped('name')) if value else default
                 return value
 
-        worksheet = self._get_task_worksheet_record()
         if worksheet:
             value = self._get_worksheet_field_value(
                 worksheet,
@@ -329,3 +345,18 @@ class ProjectTask(models.Model):
                 return value
 
         return default
+
+    def _report_task_title(self):
+        self.ensure_one()
+        title = (self.env.context.get('worksheet_title') or '').strip()
+        if title:
+            return title.upper()
+
+        title = self._report_task_pick(
+            field_names=['x_studio_nombre_de_plantilla', 'x_studio_titulo', 'x_name', 'name'],
+            labels=['Plantilla de hoja de trabajo', 'Nombre de plantilla', 'Titulo', 'Título'],
+            default='',
+        )
+        if not title:
+            title = self.name or 'HOJA DE TRABAJO'
+        return str(title).strip().upper()
