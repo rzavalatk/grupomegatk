@@ -4,9 +4,9 @@
         <div class="header">
             <div style="width: 100%; margin: 0; padding: 0;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 100px; margin: 0px 0 0 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; margin: -6px 0 0 0; padding: 0;" alt="Logo"/>
                 </div>
-                <div style="display: inline-block; width: 51%;  vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
+                <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 12px;">
                     Soluciones tecnologicas para su empresa
                 </div>
             </div> 
@@ -104,14 +104,14 @@
                     <tr>
                         <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de ticket:</b></td>
                         <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_numero_de_ticket', 'x_studio_ticket', 'ticket_id'], ['Numero de ticket', 'Número de ticket', 'Ticket'], default=(ticket.id if ticket else o.id))"/></td>
-                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Direccion de visita:</b></td>
-                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'])"/></td>
+                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Equipo:</b></td>
+                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_categoria', 'categoria_id'], ['Tipo de Equipo', 'Categoria'])"/></td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Nombre de la empresa:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_nombre_de_la_empresa', 'partner_id', 'customer_id'], ['Nombre de la empresa', 'Empresa', 'Cliente'], default=((o.partner_id and o.partner_id.name) or (ticket and ticket.partner_id and ticket.partner_id.name) or ''))"/></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Equipo:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_categoria', 'categoria_id'], ['Tipo de Equipo', 'Categoria'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Direccion de visita:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0; line-height: 1.2;"><span t-esc="o._report_task_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'])"/></td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Persona que entrega:</b></td>
