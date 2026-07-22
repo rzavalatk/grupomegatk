@@ -80,16 +80,12 @@
 
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
                 <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
-                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                        <tr>
-                            <td style="width: 45%; vertical-align: top; text-align: left; padding: 0;">
-                                <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 58px; max-width: 220px;" alt="Logo"/>
-                            </td>
-                            <td style="width: 55%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
-                                Soluciones tecnologicas para su empresa
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; max-width: 240px;" alt="Logo"/>
+                    </div>
+                    <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                        Soluciones tecnologicas para su empresa
+                    </div>
                     <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
                 </div>
 
@@ -194,16 +190,12 @@
         <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
             <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
                 <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
-                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                        <tr>
-                            <td style="width: 45%; vertical-align: top; text-align: left; padding: 0;">
-                                <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 58px; max-width: 220px;" alt="Logo"/>
-                            </td>
-                            <td style="width: 55%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
-                                Soluciones tecnologicas para su empresa
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 68px; max-width: 240px;" alt="Logo"/>
+                    </div>
+                    <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                        Soluciones tecnologicas para su empresa
+                    </div>
                     <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
                 </div>
 
