@@ -2,6 +2,7 @@
 import logging
 import math
 import base64
+import re
 import unicodedata
 from lxml import etree
 
@@ -129,13 +130,27 @@ class ProjectTask(models.Model):
         value = value or ''
         value = unicodedata.normalize('NFKD', value)
         value = ''.join(char for char in value if not unicodedata.combining(char))
-        return value.strip().lower()
+        value = value.lower().strip()
+        value = re.sub(r'[^a-z0-9\s]', ' ', value)
+        value = re.sub(r'\s+', ' ', value).strip()
+        return value
 
     def _get_task_worksheet_record(self):
         self.ensure_one()
-        model_name = 'x_project_task_worksheet_template_4'
+        model_name = self.env.context.get('worksheet_model') or self.env.context.get('active_model') or 'x_project_task_worksheet_template_4'
+        if not str(model_name).startswith('x_project_task_worksheet_template_'):
+            model_name = 'x_project_task_worksheet_template_4'
         if model_name not in self.env:
             return False
+
+        worksheet_id = self.env.context.get('worksheet_id')
+        if worksheet_id:
+            worksheet_ctx = self.env[model_name].browse(worksheet_id).exists()
+            if worksheet_ctx:
+                for field_name, field in worksheet_ctx._fields.items():
+                    if getattr(field, 'type', None) == 'many2one' and getattr(field, 'comodel_name', None) == 'project.task':
+                        if worksheet_ctx[field_name] and worksheet_ctx[field_name].id == self.id:
+                            return worksheet_ctx
 
         worksheet_model = self.env[model_name]
         candidate_fields = []
@@ -153,29 +168,38 @@ class ProjectTask(models.Model):
         if not worksheet:
             return ''
 
+        def _format_value(field, value):
+            field_type = getattr(field, 'type', None)
+            if value in (False, None, ''):
+                return ''
+            if selection and field_type == 'selection':
+                return dict(field.selection).get(value, '')
+            if field_type == 'many2one':
+                return value.display_name or ''
+            if field_type in ('many2many', 'one2many'):
+                return ', '.join(value.mapped('name')) if value else ''
+            return value
+
         # Prefer exact technical field names from Studio when available.
         for field_name in (field_names or []):
             if field_name not in worksheet._fields:
                 continue
             field = worksheet._fields[field_name]
             value = worksheet[field_name]
-            if not value:
-                return ''
-            if selection and getattr(field, 'type', None) == 'selection':
-                return dict(field.selection).get(value, '')
-            return value.display_name if getattr(field, 'type', None) == 'many2one' else value
+            formatted = _format_value(field, value)
+            if formatted not in (False, None, ''):
+                return formatted
 
-        normalized_labels = {self._normalize_worksheet_label(label) for label in labels}
+        normalized_labels = [self._normalize_worksheet_label(label) for label in labels if label]
         for field_name, field in worksheet._fields.items():
-            if self._normalize_worksheet_label(getattr(field, 'string', '')) not in normalized_labels:
+            field_label = self._normalize_worksheet_label(getattr(field, 'string', ''))
+            if not field_label:
                 continue
-
             value = worksheet[field_name]
-            if not value:
-                return ''
-            if selection and getattr(field, 'type', None) == 'selection':
-                return dict(field.selection).get(value, '')
-            return value.display_name if getattr(field, 'type', None) == 'many2one' else value
+            if any(lbl == field_label or lbl in field_label or field_label in lbl for lbl in normalized_labels):
+                formatted = _format_value(field, value)
+                if formatted not in (False, None, ''):
+                    return formatted
         return ''
 
     @api.depends('partner_id', 'name')
@@ -261,3 +285,78 @@ class ProjectTask(models.Model):
                     task.tipo_visita_label = dict(lead._fields['tipo_visita'].selection).get(lead.tipo_visita, '') or task.tipo_visita_label
                 if 'estado_taller' in lead._fields and lead.estado_taller:
                     task.estado_equipo_label = dict(lead._fields['estado_taller'].selection).get(lead.estado_taller, '') or task.estado_equipo_label
+
+    def _report_task_pick(self, field_names=None, labels=None, selection=False, default=''):
+        self.ensure_one()
+        field_names = field_names or []
+        labels = labels or []
+
+        worksheet_context_mode = bool(
+            self.env.context.get('worksheet_id')
+            or str(self.env.context.get('worksheet_model', '')).startswith('x_project_task_worksheet_template_')
+            or str(self.env.context.get('active_model', '')).startswith('x_project_task_worksheet_template_')
+        )
+
+        worksheet = self._get_task_worksheet_record()
+        if worksheet_context_mode and worksheet:
+            value = self._get_worksheet_field_value(
+                worksheet,
+                labels,
+                field_names=field_names,
+                selection=selection,
+            )
+            if value not in (False, None, ''):
+                return value
+
+        lead = False
+        if 'ticket_id' in self._fields and self.ticket_id and 'lead_id' in self.ticket_id._fields:
+            lead = self.ticket_id.lead_id
+
+        candidates = [self]
+        if 'ticket_id' in self._fields and self.ticket_id:
+            candidates.append(self.ticket_id)
+        if lead:
+            candidates.append(lead)
+
+        for record in candidates:
+            for field_name in field_names:
+                if field_name not in record._fields:
+                    continue
+                value = record[field_name]
+                if value in (False, None, ''):
+                    continue
+                field = record._fields[field_name]
+                if selection and getattr(field, 'type', None) == 'selection':
+                    return dict(field.selection).get(value, default) or default
+                if getattr(field, 'type', None) == 'many2one':
+                    return value.display_name or default
+                if getattr(field, 'type', None) in ('many2many', 'one2many'):
+                    return ', '.join(value.mapped('name')) if value else default
+                return value
+
+        if worksheet:
+            value = self._get_worksheet_field_value(
+                worksheet,
+                labels,
+                field_names=field_names,
+                selection=selection,
+            )
+            if value not in (False, None, ''):
+                return value
+
+        return default
+
+    def _report_task_title(self):
+        self.ensure_one()
+        title = (self.env.context.get('worksheet_title') or '').strip()
+        if title:
+            return title.upper()
+
+        title = self._report_task_pick(
+            field_names=['x_studio_nombre_de_plantilla', 'x_studio_titulo', 'x_name', 'name'],
+            labels=['Plantilla de hoja de trabajo', 'Nombre de plantilla', 'Titulo', 'Título'],
+            default='',
+        )
+        if not title:
+            title = self.name or 'HOJA DE TRABAJO'
+        return str(title).strip().upper()

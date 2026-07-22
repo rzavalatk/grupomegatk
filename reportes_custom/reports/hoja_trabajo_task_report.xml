@@ -1,42 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="external_layout_standard_hoja_trabajo">
-        <div class="header">
-            <div class="row" style="margin-top: -90px;">
-                <div class="col-xs-3 mb4">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 350px;" alt="Logo"/>
-                </div>
-            </div>
-            <div style="float: right; margin-top: -170px;">
-                <h3>Tarea # <span t-field="o.id"/></h3>
-            </div>
-        </div>
-        <div class="article o_report_layout_standard">
+        <t t-call="web.basic_layout">
             <t t-raw="0"/>
-        </div>
-        <div class="footer" style="font-size:10pt !important;">
-            <div style="border-top: 1px solid rgb(13, 143, 210);">
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li t-if="user.company_id.street"><span t-field="user.company_id.street"/></li>
-                </ul>
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li t-if="user.company_id.street2"><span t-field="user.company_id.street2"/></li>
-                </ul>
-                <ul style="text-align: center;" class="list-inline mb4">
-                    <li>
-                        <t t-if="user.company_id.phone">Telefono: <span t-field="user.company_id.phone"/></t>
-                        <t t-if="user.company_id.email"> Correo: <span t-field="user.company_id.email"/></t>
-                        <t t-if="user.company_id.website"> Web: <span t-field="user.company_id.website"/></t>
-                        <t t-if="user.company_id.vat">
-                            <t t-esc="user.company_id.country_id.vat_label or 'RTN'"/>: <span t-field="user.company_id.vat"/>
-                        </t>
-                    </li>
-                </ul>
-                <div style="text-align: right;" class="text-muted">
-                    Pag. <span class="page"/> / <span class="topage"/>
-                </div>
-            </div>
-        </div>
+        </t>
     </template>
 
     <template id="hoja_trabajo_task_report">
@@ -47,103 +14,321 @@
         </t>
     </template>
 
+    <template id="hoja_trabajo_worksheet_report">
+        <t t-call="web.html_container">
+            <t t-set="active_model" t-value="env.context.get('active_model')"/>
+            <t t-set="active_ids" t-value="env.context.get('active_ids') or ([env.context.get('active_id')] if env.context.get('active_id') else [])"/>
+
+            <t t-if="active_model and active_ids">
+                <t t-foreach="env[active_model].browse(active_ids).exists()" t-as="w">
+                    <t t-set="task_field_names" t-value="[fname for fname, f in w._fields.items() if f.type == 'many2one' and f.comodel_name == 'project.task']"/>
+                    <t t-set="task" t-value="w[task_field_names[0]] if task_field_names else False"/>
+                    <t t-if="task">
+                        <t t-set="o" t-value="task.with_context(worksheet_id=w.id, worksheet_model=w._name, worksheet_title=w.display_name)"/>
+                        <t t-call="reportes_custom.hoja_trabajo_task_report_document"/>
+                    </t>
+                </t>
+            </t>
+
+            <t t-if="not (active_model and active_ids)">
+                <t t-foreach="docs.exists()" t-as="w">
+                    <t t-set="task_field_names" t-value="[fname for fname, f in w._fields.items() if f.type == 'many2one' and f.comodel_name == 'project.task']"/>
+                    <t t-set="task" t-value="w[task_field_names[0]] if task_field_names else False"/>
+                    <t t-if="task">
+                        <t t-set="o" t-value="task.with_context(worksheet_id=w.id, worksheet_model=w._name, worksheet_title=w.display_name)"/>
+                        <t t-call="reportes_custom.hoja_trabajo_task_report_document"/>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="hoja_visita_worksheet_report">
+        <t t-call="web.html_container">
+            <t t-set="active_model" t-value="env.context.get('active_model')"/>
+            <t t-set="active_ids" t-value="env.context.get('active_ids') or ([env.context.get('active_id')] if env.context.get('active_id') else [])"/>
+
+            <t t-if="active_model and active_ids">
+                <t t-foreach="env[active_model].browse(active_ids).exists()" t-as="w">
+                    <t t-set="task_field_names" t-value="[fname for fname, f in w._fields.items() if f.type == 'many2one' and f.comodel_name == 'project.task']"/>
+                    <t t-set="task" t-value="w[task_field_names[0]] if task_field_names else False"/>
+                    <t t-if="task">
+                        <t t-set="o" t-value="task.with_context(worksheet_id=w.id, worksheet_model=w._name, worksheet_title=w.display_name)"/>
+                        <t t-call="reportes_custom.hoja_visita_task_report_document"/>
+                    </t>
+                </t>
+            </t>
+
+            <t t-if="not (active_model and active_ids)">
+                <t t-foreach="docs.exists()" t-as="w">
+                    <t t-set="task_field_names" t-value="[fname for fname, f in w._fields.items() if f.type == 'many2one' and f.comodel_name == 'project.task']"/>
+                    <t t-set="task" t-value="w[task_field_names[0]] if task_field_names else False"/>
+                    <t t-if="task">
+                        <t t-set="o" t-value="task.with_context(worksheet_id=w.id, worksheet_model=w._name, worksheet_title=w.display_name)"/>
+                        <t t-call="reportes_custom.hoja_visita_task_report_document"/>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
     <template id="hoja_trabajo_task_report_document">
         <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
-            <t t-set="tipo_soporte_label" t-value="o.tipo_soporte_label or ''"/>
-            <t t-set="tipo_visita_label" t-value="o.tipo_visita_label or ''"/>
-            <t t-set="estado_equipo_label" t-value="o.estado_equipo_label or ''"/>
-            <t t-set="proposito_llamada" t-value="o.proposito_llamada or ''"/>
-            <t t-set="proposito_visita" t-value="o.proposito_visita or ''"/>
-            <t t-set="persona_reporto" t-value="o.persona_reporto or ''"/>
-            <t t-set="telefono" t-value="o.telefono_visita or ''"/>
-            <t t-set="correo" t-value="o.correo_visita or ''"/>
-            <t t-set="direccion" t-value="o.direccion_visita or ''"/>
+            <t t-set="ticket" t-value="o.ticket_id if 'ticket_id' in o._fields else False"/>
+            <t t-set="lead" t-value="ticket.lead_id if ticket and 'lead_id' in ticket._fields else False"/>
+            <t t-set="sheet_title" t-value="o._report_task_title()"/>
 
-            <div class="page">
-                <div class="text-center" style="font-family:'Arial'; font-size:30pt;">
-                    Hoja de Trabajo
-                </div>
-                <br/>
-                <div style="float: right; margin-top: -30px;">
-                    <h4>Fecha: <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'/></h4>
+            <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
+                    <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 136px; max-width: 480px;" alt="Logo"/>
+                    </div>
+                    <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                        Soluciones tecnologicas para su empresa
+                    </div>
+                    <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
                 </div>
 
-                <table style="table-layout: fixed; width:100%;">
+                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 12px;">
                     <tr>
-                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:22pt; text-align: center; background: rgb(13, 143, 210);">
-                            FORMULARIO DE VISITA
+                        <td colspan="4" style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63;">
+                            <t t-esc="sheet_title"/>
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
-                            &amp;nbsp;Tipo de Soporte: <t t-esc="tipo_soporte_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 50%;">
-                            &amp;nbsp;La persona que reporto: <t t-esc="persona_reporto"/>
-                        </td>
+                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de ticket:</b></td>
+                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_numero_de_ticket', 'x_studio_ticket', 'ticket_id'], ['Numero de ticket', 'Número de ticket', 'Ticket'], default=(ticket.id if ticket else o.id))"/></td>
+                        <td style="width: 19%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Equipo:</b></td>
+                        <td style="width: 31%; border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_categoria', 'categoria_id'], ['Tipo de Equipo', 'Categoria'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Proposito Llamada: <t t-esc="proposito_llamada"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Telefono: <t t-esc="telefono"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Nombre de la empresa:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_nombre_de_la_empresa', 'partner_id', 'customer_id'], ['Nombre de la empresa', 'Empresa', 'Cliente'], default=((o.partner_id and o.partner_id.name) or (ticket and ticket.partner_id and ticket.partner_id.name) or ''))"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Direccion de visita:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0; line-height: 1.2;"><span t-esc="o._report_task_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Estado del Equipo: <t t-esc="estado_equipo_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Correo Electrónico: <t t-esc="correo"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Persona que entrega:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['Persona que entrega', 'Persona que reporto', 'La persona que reporto'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Marca:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_marca', 'marca_id'], ['Marca'])"/></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Tipo de Visita: <t t-esc="tipo_visita_label"/>
-                        </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Dirección de visita: <t t-esc="direccion"/>
-                        </td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Telefono:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono', 'Número de contacto'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Modelo:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_modelo', 'modelo_id'], ['Modelo'])"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Propósito de la visita: <t t-esc="proposito_visita"/>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Correo Electronico:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico', 'Correo'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Numero de Serie:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_numero_de_serie', 'serie'], ['Numero de Serie', 'Número de Serie'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fecha y hora de ingreso:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_fecha_y_hora_de_ingreso', 'x_studio_fecha_de_ingreso'], ['Fecha y hora de ingreso', 'Fecha de ingreso'], default='') or (context_timestamp(o.create_date).strftime('%d/%m/%Y %H:%M:%S') if o.create_date else '')"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Accesorios:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_l', 'accesorio_ids'], ['Accesorios', 'Accesorios Incluidos'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Atencion:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_atencion', 'x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Atencion', 'Tipo de Atención', 'Tipo de Soporte'], selection=True)"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Diagnostico Inicial:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_tecnico_diagnostico', 'fallas'], ['Diagnostico Inicial', 'Diagnóstico Inicial', 'Fallas'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tecnico que recibe:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="(ticket and ticket.user_id and ticket.user_id.name) or (o.user_ids and ', '.join(o.user_ids.mapped('name'))) or ''"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Estado del Equipo:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_estado_del_equipo', 'estado_taller'], ['Estado del Equipo'], selection=True)"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Sucursal o Area:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_sucursal_o_area', 'x_studio_area', 'team_id'], ['Sucursal o Area', 'Sucursal o Área', 'Area', 'Equipo'], default=((ticket and ticket.team_id and ticket.team_id.name) or ''))"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fallas reportadas:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['fallas', 'description'], ['Fallas reportadas', 'Fallas'])"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Campo de observacion:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['description', 'x_tecnico_diagnostico'], ['Observaciones', 'Campo de observacion'])"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Informe Tecnico:</b></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_tecnico_solucion', 'informe_tecnico'], ['Informe Tecnico', 'Informe Técnico'])"/></td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; page-break-inside: avoid;">
+                    <tr>
+                        <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                            <b>Firma del tecnico:</b>
+                            <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico']))" style="max-height: 78px; max-width: 92%;" alt="Firma tecnico"/>
+                            </div>
+                        </td>
+                        <td style="width: 50%; border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0 4px 0; vertical-align: top;">
+                            <b>Firma del cliente:</b>
+                            <div style="height: 82px; margin-top: 4px; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente']))" style="max-height: 78px; max-width: 92%;" alt="Firma cliente"/>
+                            </div>
                         </td>
                     </tr>
                 </table>
 
-                <br/>
-                <table style="width:100%;">
+                <div style="margin-top: 8px; border-top: 1px solid #d3d9df; padding-top: 6px; font-size: 9pt; color: #555; page-break-inside: avoid;">
+                    <div style="text-align: center;">
+                        <span t-if="o.company_id.street" t-field="o.company_id.street"/>
+                        <span t-if="o.company_id.street2">, <span t-field="o.company_id.street2"/></span>
+                        <span t-if="o.company_id.city">, <span t-field="o.company_id.city"/></span>
+                        <span t-if="o.company_id.country_id">, <span t-field="o.company_id.country_id"/></span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="hoja_visita_task_report_document">
+        <t t-call="reportes_custom.external_layout_standard_hoja_trabajo">
+            <div class="page" style="font-family: Arial, sans-serif; font-size: 11pt; color: #1f2937;">
+                <div style="width: 100%; margin: 0 0 8px 0; padding: 0;">
+                    <div style="display: inline-block; width: 45%; vertical-align: top; text-align: left;">
+                        <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 136px; max-width: 480px;" alt="Logo"/>
+                    </div>
+                    <div style="display: inline-block; width: 54%; vertical-align: top; text-align: right; padding: 6px 0 0 0; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2;">
+                        Soluciones tecnologicas para su empresa
+                    </div>
+                    <div style="border-top: 1px solid #d3d9df; margin-top: 4px;"/>
+                </div>
+
+                <div style="border-top: 1px solid #cfd6dd; border-bottom: 1px solid #cfd6dd; padding: 8px 0; font-weight: 700; color: #1f3b63; margin-bottom: 6px;">
+                    FORMULARIO DE VISITA
+                </div>
+                <table style="width: 100%; border-collapse: separate; border-spacing: 6px 6px; table-layout: fixed;">
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 20%;">
-                            &amp;nbsp;Cliente:
+                        <td style="width: 50%; border: 1px solid #e4e6eb; vertical-align: top; padding: 6px;">
+                            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                                <tr><td style="padding: 8px 0; width: 42%;"><b>Tipo de Soporte:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Soporte'], selection=True)"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Proposito Llamada:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_propsito_llamada', 'proposito_llamada'], ['Proposito Llamada', 'Propósito Llamada'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Estado del Equipo:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_estado_del_equipo', 'estado_taller'], ['Estado del Equipo'], selection=True)"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Tipo de Visita:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_visita', 'tipo_visita'], ['Tipo de Visita'], selection=True)"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Proposito de la visita:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_propsito_de_la_visita', 'proposito'], ['Proposito de la visita', 'Propósito de la visita'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Hora de Llegada:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_hora_de_llegada'], ['Hora de Llegada'])"/></td></tr>
+                            </table>
                         </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt; width: 80%;">
-                            &amp;nbsp;<span t-if="o.partner_id" t-field="o.partner_id.name"/>
+                        <td style="width: 50%; border: 1px solid #e4e6eb; vertical-align: top; padding: 6px;">
+                            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                                <tr><td style="padding: 8px 0; width: 42%;"><b>La persona que reporto:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_la_persona_que_reporto', 'reporto'], ['La persona que reporto', 'Persona que reporto'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Telefono:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_telfono', 'x_studio_telfono_1', 'phone', 'repor_tel'], ['Telefono', 'Teléfono', 'Número de contacto'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Correo Electronico:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_correo_electrnico', 'email_from', 'repor_email'], ['Correo Electronico', 'Correo electrónico'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Direccion de visita:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_direccin_de_visita', 'repor_direction'], ['Direccion de visita', 'Dirección de visita'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Informa de visita:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_informa_de_visita', 'x_studio_informe_de_visita'], ['Informa de visita', 'Informe de visita'])"/></td></tr>
+                                <tr><td style="padding: 8px 0;"><b>Constancia de la visita:</b></td><td style="padding: 8px 0;"><span t-esc="o._report_task_pick(['x_studio_constancia_de_la_visita'], ['Constancia de la visita'])"/></td></tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;Tarea:
+                        <td style="border: 1px solid #e4e6eb; vertical-align: top; padding: 8px;">
+                            <b>Firma del tecnico:</b>
+                            <div style="height: 160px; margin-top: 6px; border: 1px solid #eef1f5; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_tecnico', 'x_studio_firma_del_tecnico', 'x_firma_tecnico'], ['Firma del tecnico', 'Firma del técnico', 'Firma tecnico']))" style="max-height: 145px; max-width: 95%; margin-top: 8px;" alt="Firma tecnico"/>
+                            </div>
                         </td>
-                        <td style="vertical-align:middle; border: 1px solid black; font-family:'Arial'; font-size:14pt;">
-                            &amp;nbsp;<span t-field="o.name"/>
+                        <td style="border: 1px solid #e4e6eb; vertical-align: top; padding: 8px;">
+                            <b>Firma del cliente:</b>
+                            <div style="height: 160px; margin-top: 6px; border: 1px solid #eef1f5; text-align: center;">
+                                <img t-if="o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente'])" t-att-src="image_data_uri(o._report_task_pick(['x_studio_firma_cliente', 'x_studio_firma_del_cliente', 'x_firma_cliente'], ['Firma del cliente', 'Firma cliente']))" style="max-height: 145px; max-width: 95%; margin-top: 8px;" alt="Firma cliente"/>
+                            </div>
                         </td>
                     </tr>
                 </table>
+
+                <div style="margin-top: 8px; border-top: 1px solid #d3d9df; padding-top: 6px; font-size: 9pt; color: #555; page-break-inside: avoid;">
+                    <div style="text-align: center;">
+                        <span t-if="o.company_id.street" t-field="o.company_id.street"/>
+                        <span t-if="o.company_id.street2">, <span t-field="o.company_id.street2"/></span>
+                        <span t-if="o.company_id.city">, <span t-field="o.company_id.city"/></span>
+                        <span t-if="o.company_id.country_id">, <span t-field="o.company_id.country_id"/></span>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
 
     <record id="action_report_hoja_trabajo_task" model="ir.actions.report">
-        <field name="name">Hoja de Trabajo</field>
+        <field name="name">Reporte hoja de trabajo</field>
         <field name="model">project.task</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">reportes_custom.hoja_trabajo_task_report</field>
         <field name="report_file">reportes_custom.hoja_trabajo_task_report</field>
         <field name="binding_model_id" ref="project.model_project_task"/>
         <field name="binding_type">report</field>
-        <field name="print_report_name">'Hoja de Trabajo - %s' % (object.name or '')</field>
+        <field name="print_report_name">'Hoja de trabajo - %s' % (object.name or '')</field>
     </record>
+
+    <record id="paperformat_hoja_trabajo_ingresos" model="report.paperformat">
+        <field name="name">Hoja Trabajo Ingresos</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">4</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_hoja_trabajo_worksheet" model="ir.actions.report">
+        <field name="name">Reporte hoja de trabajo</field>
+        <field name="model">x_project_task_worksheet_template_3</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="report_file">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_3')]"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
+        <field name="print_report_name">'Hoja de trabajo - %s' % (object.display_name or object.id)</field>
+    </record>
+
+    <record id="action_report_hoja_trabajo_worksheet_t4" model="ir.actions.report">
+        <field name="name">Reporte hoja de trabajo</field>
+        <field name="model">x_project_task_worksheet_template_4</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="report_file">reportes_custom.hoja_trabajo_worksheet_report</field>
+        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_4')]"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
+        <field name="print_report_name">'Hoja de trabajo - %s' % (object.display_name or object.id)</field>
+    </record>
+
+    <record id="action_report_hoja_visita_worksheet" model="ir.actions.report">
+        <field name="name">Hoja de visita</field>
+        <field name="model">x_project_task_worksheet_template_3</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_visita_worksheet_report</field>
+        <field name="report_file">reportes_custom.hoja_visita_worksheet_report</field>
+        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_3')]"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
+        <field name="print_report_name">'Hoja de visita - %s' % (object.display_name or object.id)</field>
+    </record>
+
+    <record id="action_report_hoja_visita_worksheet_t4" model="ir.actions.report">
+        <field name="name">Hoja de visita</field>
+        <field name="model">x_project_task_worksheet_template_4</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reportes_custom.hoja_visita_worksheet_report</field>
+        <field name="report_file">reportes_custom.hoja_visita_worksheet_report</field>
+        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_4')]"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
+        <field name="print_report_name">'Hoja de visita - %s' % (object.display_name or object.id)</field>
+    </record>
+
+    <!-- Oculta solo reportes legacy "Ingreso de equipos Reporte" -->
+    <function model="ir.actions.report" name="write">
+        <value model="ir.actions.report" search="[('name', '=', 'Ingreso de equipos Reporte'), ('model', 'in', ['x_project_task_worksheet_template_3', 'x_project_task_worksheet_template_4'])]"/>
+        <value eval="{'binding_model_id': False}"/>
+    </function>
 </odoo>
