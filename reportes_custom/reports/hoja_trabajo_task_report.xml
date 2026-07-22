@@ -4,7 +4,7 @@
         <div class="header">
             <div style="width: 100%; margin: 0; padding: 0;">
                 <div style="display: inline-block; width: 48%; vertical-align: top; text-align: left;">
-                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 40px; margin: 0; padding: 0;" alt="Logo"/>
+                    <img t-if="o.company_id.logo_web or o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_web or o.company_id.logo)" style="max-height: 82px; margin: -12px 0 0 0; padding: 0;" alt="Logo"/>
                 </div>
                 <div style="display: inline-block; width: 51%; vertical-align: top; text-align: right; font-family: Arial, sans-serif; font-size: 10.5pt; font-weight: 700; color: #0d8fd2; padding-top: 4px;">
                     Soluciones tecnologicas para su empresa
@@ -182,6 +182,15 @@
                         </td>
                     </tr>
                 </table>
+
+                <div style="margin-top: 8px; border-top: 1px solid #d3d9df; padding-top: 6px; font-size: 9pt; color: #555; page-break-inside: avoid;">
+                    <div style="text-align: center;">
+                        <span t-if="o.company_id.street" t-field="o.company_id.street"/>
+                        <span t-if="o.company_id.street2">, <span t-field="o.company_id.street2"/></span>
+                        <span t-if="o.company_id.city">, <span t-field="o.company_id.city"/></span>
+                        <span t-if="o.company_id.country_id">, <span t-field="o.company_id.country_id"/></span>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
@@ -233,6 +242,15 @@
                         </td>
                     </tr>
                 </table>
+
+                <div style="margin-top: 8px; border-top: 1px solid #d3d9df; padding-top: 6px; font-size: 9pt; color: #555; page-break-inside: avoid;">
+                    <div style="text-align: center;">
+                        <span t-if="o.company_id.street" t-field="o.company_id.street"/>
+                        <span t-if="o.company_id.street2">, <span t-field="o.company_id.street2"/></span>
+                        <span t-if="o.company_id.city">, <span t-field="o.company_id.city"/></span>
+                        <span t-if="o.company_id.country_id">, <span t-field="o.company_id.country_id"/></span>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
@@ -253,7 +271,7 @@
         <field name="default" eval="False"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">24</field>
+        <field name="margin_top">30</field>
         <field name="margin_bottom">10</field>
         <field name="margin_left">8</field>
         <field name="margin_right">8</field>
