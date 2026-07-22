@@ -136,13 +136,13 @@
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Fecha y hora de ingreso:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_fecha_y_hora_de_ingreso', 'x_studio_fecha_de_ingreso', 'create_date'], ['Fecha y hora de ingreso', 'Fecha de ingreso'], default='')"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_fecha_y_hora_de_ingreso', 'x_studio_fecha_de_ingreso'], ['Fecha y hora de ingreso', 'Fecha de ingreso'], default='') or (context_timestamp(o.create_date).strftime('%d/%m/%Y %H:%M:%S') if o.create_date else '')"/></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Accesorios:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_l', 'accesorio_ids'], ['Accesorios', 'Accesorios Incluidos'])"/></td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Tipo de Atencion:</b></td>
-                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Soporte', 'Tipo de Atencion', 'Tipo de Atención'], selection=True)"/></td>
+                        <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_studio_tipo_de_atencion', 'x_studio_tipo_de_soporte', 'tipo_soporte'], ['Tipo de Atencion', 'Tipo de Atención', 'Tipo de Soporte'], selection=True)"/></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><b>Diagnostico Inicial:</b></td>
                         <td style="border-bottom: 1px solid #cfd6dd; padding: 7px 0;"><span t-esc="o._report_task_pick(['x_tecnico_diagnostico', 'fallas'], ['Diagnostico Inicial', 'Diagnóstico Inicial', 'Fallas'])"/></td>
                     </tr>
@@ -289,6 +289,12 @@
     <!-- Oculta reportes heredados de worksheet _4 que quedan visibles y fallan al imprimir -->
     <function model="ir.actions.report" name="write">
         <value model="ir.actions.report" search="[('model', '=', 'x_project_task_worksheet_template_4'), ('name', 'in', ['Ingreso de equipos Reporte', 'Reporte hoja de trabajo'])]"/>
+        <value eval="{'binding_model_id': False}"/>
+    </function>
+
+    <!-- Oculta el reporte duplicado legacy "Ingreso de equipos Reporte" en worksheet activa -->
+    <function model="ir.actions.report" name="write">
+        <value model="ir.actions.report" search="[('name', '=', 'Ingreso de equipos Reporte'), ('model', 'in', ['x_project_task_worksheet_template_3', 'x_project_task_worksheet_template_4'])]"/>
         <value eval="{'binding_model_id': False}"/>
     </function>
 </odoo>
