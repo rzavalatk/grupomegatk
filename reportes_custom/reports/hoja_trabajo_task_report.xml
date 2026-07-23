@@ -290,31 +290,7 @@
         <field name="print_report_name">'Hoja de trabajo - %s' % (object.display_name or object.id)</field>
     </record>
 
-    <record id="action_report_hoja_trabajo_worksheet_t4" model="ir.actions.report">
-        <field name="name">Reporte hoja de trabajo</field>
-        <field name="model">x_project_task_worksheet_template_4</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">reportes_custom.hoja_trabajo_worksheet_report</field>
-        <field name="report_file">reportes_custom.hoja_trabajo_worksheet_report</field>
-        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_4')]"/>
-        <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
-        <field name="print_report_name">'Hoja de trabajo - %s' % (object.display_name or object.id)</field>
-    </record>
-
     <record id="action_report_hoja_visita_worksheet" model="ir.actions.report">
-        <field name="name">Hoja de visita</field>
-        <field name="model">x_project_task_worksheet_template_4</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">reportes_custom.hoja_visita_worksheet_report</field>
-        <field name="report_file">reportes_custom.hoja_visita_worksheet_report</field>
-        <field name="binding_model_id" search="[('model', '=', 'x_project_task_worksheet_template_4')]"/>
-        <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="reportes_custom.paperformat_hoja_trabajo_ingresos"/>
-        <field name="print_report_name">'Hoja de visita - %s' % (object.display_name or object.id)</field>
-    </record>
-
-    <record id="action_report_hoja_visita_worksheet_t4" model="ir.actions.report">
         <field name="name">Hoja de visita</field>
         <field name="model">x_project_task_worksheet_template_4</field>
         <field name="report_type">qweb-pdf</field>
@@ -328,7 +304,7 @@
 
     <!-- Oculta solo reportes legacy "Ingreso de equipos Reporte" -->
     <function model="ir.actions.report" name="write">
-        <value model="ir.actions.report" search="[('name', '=', 'Ingreso de equipos Reporte'), ('model', 'in', ['x_project_task_worksheet_template_4', 'x_project_task_worksheet_template_4'])]"/>
+        <value model="ir.actions.report" search="[('name', '=', 'Ingreso de equipos Reporte'), ('model', '=', 'x_project_task_worksheet_template_4')]"/>
         <value eval="{'binding_model_id': False}"/>
     </function>
 </odoo>
