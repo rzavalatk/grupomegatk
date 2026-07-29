@@ -18,10 +18,10 @@ class Authorization(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        res = super(Authorization, self).create(vals_list)
-        if vals_list.get("start_date") > vals_list.get("expiration_date"):
-            raise UserError(_('Start date is greater than than expiration date'))
-        return res
+        for vals in vals_list:
+            if vals.get("start_date") and vals.get("expiration_date") and vals.get("start_date") > vals.get("expiration_date"):
+                raise UserError(_('Start date is greater than than expiration date'))
+        return super(Authorization, self).create(vals_list)
 
     def _update_ir_sequence(self):
         for fiscal_sequence in self.fiscal_sequence_regime_ids:
@@ -83,10 +83,10 @@ class Fiscal_sequence(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        res = super(Fiscal_sequence, self).create(vals_list)
-        if not vals_list.get('journal_id'):
-            raise UserError(_('Set a journal and a sequence'))
-        return res
+        for vals in vals_list:
+            if not vals.get('journal_id'):
+                raise UserError(_('Set a journal and a sequence'))
+        return super(Fiscal_sequence, self).create(vals_list)
 
     # TODO : Verificar que no exista en facturas esta secuencia
     #@api.multi
