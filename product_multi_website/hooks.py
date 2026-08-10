@@ -20,3 +20,4 @@ def post_init_hook(env): # se ejecuta despues de la instalacion recibe el entorn
             or env.company
         )
         product.owner_company_id = owner_company.id
+# prueba
