@@ -1,4 +1,4 @@
-def post_init_hook(env):
+def post_init_hook(env): # se ejecuta despues de la instalacion recibe el entorno de ejecucion env como argumento que es un objeto de la clase odoo.api.Environment
     """Copia el website_id historico al nuevo campo website_ids_multi al instalar.
 
     Esto evita que los productos ya configurados pierdan su restriccion de sitio.
