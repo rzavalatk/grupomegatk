@@ -35,6 +35,6 @@
         'views/gifcard_views.xml',
     ],
     # only loaded in demonstration mode
-    'installable': True,
+    'installable': False,
     'auto_install': False,
 }
