@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_whatsapp_requests" name="Solicitudes WhatsApp" parent="odental_communications.menu_odental_communications" action="action_whatsapp_request" sequence="35" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_whatsapp_events" name="Eventos WhatsApp" parent="odental_communications.menu_odental_communications" action="action_whatsapp_event" sequence="80" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_whatsapp_accounts" name="Cuentas WhatsApp" parent="odental_communications.menu_odental_communications" action="action_whatsapp_account" sequence="95" groups="odental_core.group_odental_manager"/>
+</odoo>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_communication_message_form_whatsapp" model="ir.ui.view">
+        <field name="name">odental.communication.message.form.whatsapp</field>
+        <field name="model">odental.communication.message</field>
+        <field name="inherit_id" ref="odental_communications.view_communication_message_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_send_whatsapp" type="object" string="Enviar por WhatsApp" class="btn-primary" invisible="channel != 'whatsapp' or state not in ('queued', 'failed')" groups="odental_core.group_odental_manager"/>
+            </xpath>
+            <xpath expr="//group[@name='odental_delivery']" position="inside">
+                <field name="whatsapp_account_id" invisible="channel != 'whatsapp'"/>
+                <field name="whatsapp_provider_message_id" invisible="not whatsapp_provider_message_id"/>
+                <field name="whatsapp_payload_digest" invisible="not whatsapp_payload_digest"/>
+                <field name="whatsapp_next_retry_at" invisible="not whatsapp_next_retry_at"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

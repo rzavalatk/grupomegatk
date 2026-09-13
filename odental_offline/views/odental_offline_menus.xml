@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_offline_root" name="Contingencia" parent="odental_core.menu_odental_root" sequence="30" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_offline_open" name="Modo sin internet" parent="menu_odental_offline_root" action="action_odental_contingency_pwa" sequence="10"/>
+    <menuitem id="menu_odental_offline_batches" name="Lotes recibidos" parent="menu_odental_offline_root" action="action_odental_contingency_batch" sequence="20"/>
+    <menuitem id="menu_odental_offline_entries" name="Entradas para revisión" parent="menu_odental_offline_root" action="action_odental_contingency_entry" sequence="30"/>
+</odoo>
+

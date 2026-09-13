@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_contingency_batch_list" model="ir.ui.view">
+        <field name="name">odental.contingency.batch.list</field>
+        <field name="model">odental.contingency.batch</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" default_order="received_at desc">
+                <field name="name"/>
+                <field name="received_at"/>
+                <field name="organization_id"/>
+                <field name="user_id"/>
+                <field name="entry_count"/>
+                <field name="state" widget="badge" decoration-info="state == 'received'" decoration-warning="state in ('reviewed', 'partially_applied')" decoration-success="state == 'applied'" decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odental_contingency_batch_form" model="ir.ui.view">
+        <field name="name">odental.contingency.batch.form</field>
+        <field name="model">odental.contingency.batch</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_review" type="object" string="Marcar revisado" class="btn-primary" invisible="state != 'received'"/>
+                    <button name="action_reject" type="object" string="Rechazar lote" invisible="state not in ('received', 'reviewed')" confirm="Se rechazarán todas las entradas pendientes del lote."/>
+                    <field name="state" widget="statusbar" statusbar_visible="received,reviewed,partially_applied,applied,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="received_at" readonly="1"/>
+                            <field name="entry_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="client_batch_uuid" readonly="1"/>
+                            <field name="device_hash" readonly="1" password="True"/>
+                            <field name="content_hash" readonly="1" password="True"/>
+                            <field name="reviewed_by_id" readonly="1"/>
+                            <field name="reviewed_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="review_notes" placeholder="Motivo de rechazo u observaciones..." readonly="state in ('applied', 'rejected')"/>
+                    </group>
+                    <notebook>
+                        <page string="Entradas">
+                            <field name="entry_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="client_created_at"/>
+                                    <field name="patient_id"/>
+                                    <field name="entry_type"/>
+                                    <field name="content"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Recepción técnica">
+                            <group>
+                                <field name="received_ip" readonly="1"/>
+                                <field name="user_agent" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_odental_contingency_entry_list" model="ir.ui.view">
+        <field name="name">odental.contingency.entry.list</field>
+        <field name="model">odental.contingency.entry</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" default_order="client_created_at desc">
+                <field name="batch_id"/>
+                <field name="client_created_at"/>
+                <field name="organization_id"/>
+                <field name="patient_id"/>
+                <field name="professional_id"/>
+                <field name="entry_type"/>
+                <field name="state" widget="badge" decoration-info="state == 'pending'" decoration-warning="state in ('reviewed', 'conflict')" decoration-success="state == 'applied'" decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odental_contingency_entry_form" model="ir.ui.view">
+        <field name="name">odental.contingency.entry.form</field>
+        <field name="model">odental.contingency.entry</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_apply" type="object" string="Aplicar como borrador" class="btn-primary" invisible="state != 'reviewed'"/>
+                    <button name="action_reject" type="object" string="Rechazar" invisible="state not in ('pending', 'reviewed', 'conflict')" confirm="La entrada quedará rechazada en la auditoría."/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,reviewed,applied,rejected,conflict"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="batch_id" readonly="1"/>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="appointment_id" readonly="1"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="professional_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="entry_type" readonly="1"/>
+                            <field name="client_created_at" readonly="1"/>
+                            <field name="received_at" readonly="1"/>
+                            <field name="client_uuid" readonly="1"/>
+                            <field name="content_hash" readonly="1" password="True"/>
+                        </group>
+                    </group>
+                    <group string="Hallazgo odontológico" invisible="entry_type != 'odontogram_finding'">
+                        <field name="tooth_code" readonly="1"/>
+                        <field name="surface" readonly="1"/>
+                        <field name="condition" readonly="1"/>
+                        <field name="finding_status" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="content" readonly="1"/>
+                        <field name="review_notes" placeholder="Observaciones o motivo de rechazo..." readonly="state in ('applied', 'rejected')"/>
+                    </group>
+                    <group string="Resultado" invisible="not target_model">
+                        <field name="target_model" readonly="1"/>
+                        <field name="target_res_id" readonly="1"/>
+                        <field name="applied_by_id" readonly="1"/>
+                        <field name="applied_at" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_odental_contingency_batch_search" model="ir.ui.view">
+        <field name="name">odental.contingency.batch.search</field>
+        <field name="model">odental.contingency.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="organization_id"/>
+                <field name="user_id"/>
+                <filter name="pending" string="Por revisar" domain="[('state', 'in', ('received', 'reviewed', 'partially_applied'))]"/>
+                <filter name="finished" string="Finalizados" domain="[('state', 'in', ('applied', 'rejected'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Organización" name="group_organization" context="{'group_by': 'organization_id'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_odental_contingency_entry_search" model="ir.ui.view">
+        <field name="name">odental.contingency.entry.search</field>
+        <field name="model">odental.contingency.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="patient_id"/>
+                <field name="professional_id"/>
+                <field name="appointment_id"/>
+                <filter name="pending" string="Por resolver" domain="[('state', 'in', ('pending', 'reviewed', 'conflict'))]"/>
+                <filter name="applied" string="Aplicadas" domain="[('state', '=', 'applied')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Organización" name="group_organization" context="{'group_by': 'organization_id'}"/>
+                    <filter string="Tipo" name="group_type" context="{'group_by': 'entry_type'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_odental_contingency_batch" model="ir.actions.act_window">
+        <field name="name">Lotes de contingencia</field>
+        <field name="res_model">odental.contingency.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+    </record>
+    <record id="action_odental_contingency_entry" model="ir.actions.act_window">
+        <field name="name">Entradas de contingencia</field>
+        <field name="res_model">odental.contingency.entry</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+    </record>
+    <record id="action_odental_contingency_pwa" model="ir.actions.act_url">
+        <field name="name">Abrir modo sin internet</field>
+        <field name="url">/odental/contingency</field>
+        <field name="target">self</field>
+    </record>
+</odoo>

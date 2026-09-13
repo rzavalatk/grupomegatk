@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_record_list" model="ir.ui.view">
+        <field name="name">odental.clinical.record.list</field>
+        <field name="model">odental.clinical.record</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'closed'">
+                <field name="patient_id"/>
+                <field name="organization_id"/>
+                <field name="blood_type"/>
+                <field name="opened_at"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_clinical_record_form" model="ir.ui.view">
+        <field name="name">odental.clinical.record.form</field>
+        <field name="model">odental.clinical.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_close" type="object" string="Cerrar expediente" invisible="state != 'active'"/>
+                    <button name="action_reopen" type="object" string="Reabrir expediente" class="btn-primary" invisible="state != 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="patient_id"/>
+                        <h1><field name="patient_id"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="opened_at" readonly="1"/>
+                            <field name="blood_type"/>
+                        </group>
+                        <group>
+                            <field name="alerts" placeholder="Alergias críticas, anticoagulantes u otras alertas..."/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Antecedentes">
+                            <field name="history_entry_ids" context="{'default_clinical_record_id': id}">
+                                <list editable="bottom" decoration-danger="severity == 'critical'" decoration-warning="sensitivity == 'restricted'">
+                                    <field name="category"/>
+                                    <field name="name"/>
+                                    <field name="status"/>
+                                    <field name="severity"/>
+                                    <field name="clinically_relevant"/>
+                                    <field name="sensitivity"/>
+                                    <field name="referral_sharing"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group><field name="category"/><field name="name"/><field name="status"/><field name="severity"/></group>
+                                        <group><field name="start_date"/><field name="end_date"/><field name="clinically_relevant"/><field name="sensitivity"/><field name="referral_sharing"/></group>
+                                    </group>
+                                    <field name="details"/>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Evoluciones">
+                            <field name="encounter_ids" context="{'default_clinical_record_id': id}">
+                                <list><field name="name"/><field name="encounter_datetime"/><field name="professional_id"/><field name="version"/><field name="state"/></list>
+                            </field>
+                        </page>
+                        <page string="Consentimientos">
+                            <field name="consent_ids" context="{'default_clinical_record_id': id}">
+                                <list><field name="name"/><field name="template_name"/><field name="purpose"/><field name="signer_name"/><field name="signed_at"/><field name="state"/></list>
+                            </field>
+                        </page>
+                        <page string="Observaciones"><field name="general_notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_clinical_record" model="ir.actions.act_window">
+        <field name="name">Expedientes clínicos</field>
+        <field name="res_model">odental.clinical.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

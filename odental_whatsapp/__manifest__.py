@@ -1,0 +1,26 @@
+{
+    "name": "O Dental WhatsApp Cloud",
+    "summary": "Mensajería multinúmero, webhook verificado y respuestas de pacientes",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_academic", "odental_communications"],
+    "external_dependencies": {"python": ["requests"]},
+    "data": [
+        "security/odental_whatsapp_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_whatsapp_sequence.xml",
+        "data/odental_whatsapp_cron.xml",
+        "views/whatsapp_account_views.xml",
+        "views/whatsapp_template_views.xml",
+        "views/whatsapp_message_views.xml",
+        "views/whatsapp_event_views.xml",
+        "views/whatsapp_request_views.xml",
+        "wizard/whatsapp_credentials_wizard_views.xml",
+        "views/odental_whatsapp_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}
+

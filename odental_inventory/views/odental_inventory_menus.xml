@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_inventory" name="Inventario clínico" parent="odental_core.menu_odental_root" sequence="50" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_material_consumption" name="Consumos por cita" parent="menu_odental_inventory" action="action_material_consumption" sequence="10"/>
+</odoo>
+

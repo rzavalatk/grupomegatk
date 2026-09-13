@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_account_list" model="ir.ui.view">
+        <field name="name">odental.whatsapp.account.list</field>
+        <field name="model">odental.whatsapp.account</field>
+        <field name="arch" type="xml">
+            <list decoration-success="automatic_delivery" decoration-muted="not active">
+                <field name="name"/><field name="organization_id"/><field name="display_phone"/>
+                <field name="phone_number_id"/><field name="graph_api_version"/>
+                <field name="credentials_configured"/><field name="automatic_delivery"/><field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_whatsapp_account_form" model="ir.ui.view">
+        <field name="name">odental.whatsapp.account.form</field>
+        <field name="model">odental.whatsapp.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_configure_credentials" type="object" string="Configurar credenciales" class="btn-primary" groups="odental_core.group_odental_admin"/>
+                    <button name="action_clear_credentials" type="object" string="Borrar credenciales" confirm="Se deshabilitará la entrega automática. ¿Continuar?" groups="odental_core.group_odental_admin" invisible="not credentials_configured"/>
+                    <field name="active" widget="boolean_button"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="organization_id"/>
+                            <field name="display_phone"/>
+                            <field name="phone_number_id"/>
+                            <field name="business_account_id"/>
+                        </group>
+                        <group>
+                            <field name="graph_api_version"/>
+                            <field name="api_base_url" groups="odental_core.group_odental_admin"/>
+                            <field name="credentials_configured"/>
+                            <field name="automatic_delivery"/>
+                        </group>
+                    </group>
+                    <group string="Webhook verificado">
+                        <field name="webhook_url" widget="url" readonly="1"/>
+                        <field name="webhook_key" groups="odental_core.group_odental_admin"/>
+                    </group>
+                    <group string="Automatización controlada">
+                        <group>
+                            <field name="auto_apply_confirmations"/>
+                            <field name="auto_apply_cancellations"/>
+                            <field name="auto_apply_slot_offers"/>
+                        </group>
+                        <group>
+                            <field name="max_attempts"/>
+                            <field name="request_timeout_seconds"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mensajes"><field name="message_ids" readonly="1"/></page>
+                        <page string="Eventos"><field name="event_ids" readonly="1"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_whatsapp_account" model="ir.actions.act_window">
+        <field name="name">Cuentas WhatsApp</field>
+        <field name="res_model">odental.whatsapp.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

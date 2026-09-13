@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_odental_ai_session_member" model="ir.rule">
+        <field name="name">O Dental: sesiones IA autorizadas</field>
+        <field name="model_id" ref="model_odental_ai_session"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_ai_action_member" model="ir.rule">
+        <field name="name">O Dental: acciones IA autorizadas</field>
+        <field name="model_id" ref="model_odental_ai_action"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_ai_audit_member" model="ir.rule">
+        <field name="name">O Dental: auditoría IA autorizada</field>
+        <field name="model_id" ref="model_odental_ai_audit"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_ai_session_admin" model="ir.rule">
+        <field name="name">O Dental: sesiones IA globales</field>
+        <field name="model_id" ref="model_odental_ai_session"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_ai_action_admin" model="ir.rule">
+        <field name="name">O Dental: acciones IA globales</field>
+        <field name="model_id" ref="model_odental_ai_action"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_ai_audit_admin" model="ir.rule">
+        <field name="name">O Dental: auditoría IA global</field>
+        <field name="model_id" ref="model_odental_ai_audit"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

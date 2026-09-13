@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_laboratory_user,odental.laboratory user,model_odental_laboratory,odental_core.group_odental_user,1,0,0,0
+access_laboratory_manager,odental.laboratory manager,model_odental_laboratory,odental_core.group_odental_manager,1,1,1,1
+access_lab_case_professional,odental.lab.case professional,model_odental_lab_case,odental_core.group_odental_professional,1,1,1,0
+access_lab_case_manager,odental.lab.case manager,model_odental_lab_case,odental_core.group_odental_manager,1,1,1,1
+access_lab_case_event_professional,odental.lab.case.event professional,model_odental_lab_case_event,odental_core.group_odental_professional,1,0,0,0
+

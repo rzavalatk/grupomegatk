@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_billing" name="Caja y facturación" parent="odental_core.menu_odental_root" sequence="60" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_odental_cash_session" name="Sesiones de caja" parent="menu_odental_billing" action="action_odental_cash_session" sequence="10"/>
+    <menuitem id="menu_odental_clinical_collection" name="Cobros clínicos" parent="menu_odental_billing" action="action_odental_clinical_collection" sequence="20"/>
+    <menuitem id="menu_odental_fiscal_authorization" name="Autorizaciones SAR" parent="menu_odental_billing" action="action_odental_fiscal_authorization" sequence="80" groups="odental_core.group_odental_manager"/>
+</odoo>

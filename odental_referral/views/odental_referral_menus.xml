@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_referral" name="Referencias" parent="odental_core.menu_odental_clinical" action="action_odental_referral" sequence="80" groups="odental_core.group_odental_professional"/>
+</odoo>

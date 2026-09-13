@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_rental_package" model="ir.sequence"><field name="name">Paquete de alquiler O Dental</field><field name="code">odental.rental.package</field><field name="prefix">PAQ/%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_odental_rental_booking" model="ir.sequence"><field name="name">Reserva de alquiler O Dental</field><field name="code">odental.rental.booking</field><field name="prefix">ALQ/%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_odental_shared_expense" model="ir.sequence"><field name="name">Gasto compartido O Dental</field><field name="code">odental.shared.expense</field><field name="prefix">GCO/%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+</odoo>
+

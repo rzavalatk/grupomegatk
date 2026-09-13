@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_odental_academic_student" model="res.groups">
+        <field name="name">Estudiante clínico aislado</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="comment">Accede únicamente a casos académicos asignados; no implica acceso clínico general.</field>
+    </record>
+    <record id="group_odental_academic_supervisor" model="res.groups">
+        <field name="name">Docente supervisor</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="implied_ids" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+    </record>
+    <record id="group_odental_academic_manager" model="res.groups">
+        <field name="name">Coordinador académico</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="implied_ids" eval="[(4, ref('odental_academic.group_odental_academic_supervisor')), (4, ref('odental_core.group_odental_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>
+

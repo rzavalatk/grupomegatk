@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_treatment_plan_professional,odental.treatment.plan professional,model_odental_treatment_plan,odental_core.group_odental_professional,1,1,1,0
+access_odental_treatment_plan_manager,odental.treatment.plan manager,model_odental_treatment_plan,odental_core.group_odental_manager,1,1,1,0
+access_odental_treatment_plan_admin,odental.treatment.plan admin,model_odental_treatment_plan,odental_core.group_odental_admin,1,1,1,1
+access_odental_treatment_line_professional,odental.treatment.plan.line professional,model_odental_treatment_plan_line,odental_core.group_odental_professional,1,1,1,0
+access_odental_treatment_line_manager,odental.treatment.plan.line manager,model_odental_treatment_plan_line,odental_core.group_odental_manager,1,1,1,1
+access_odental_treatment_line_admin,odental.treatment.plan.line admin,model_odental_treatment_plan_line,odental_core.group_odental_admin,1,1,1,1

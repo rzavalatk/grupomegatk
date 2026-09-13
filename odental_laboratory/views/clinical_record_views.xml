@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_clinical_record_form_lab" model="ir.ui.view"><field name="name">odental.clinical.record.form.lab</field><field name="model">odental.clinical.record</field><field name="inherit_id" ref="odental_clinical.view_odental_clinical_record_form"/><field name="arch" type="xml"><xpath expr="//notebook" position="inside"><page string="Laboratorio"><field name="lab_case_ids" context="{'default_clinical_record_id': id}"><list><field name="name"/><field name="laboratory_id"/><field name="work_type"/><field name="tooth_id"/><field name="expected_return_date"/><field name="state"/></list></field></page></xpath></field></record>
+</odoo>
+

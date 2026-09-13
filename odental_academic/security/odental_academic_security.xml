@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_academic_program_student" model="ir.rule">
+        <field name="name">O Dental académico: programas del estudiante</field>
+        <field name="model_id" ref="model_odental_academic_program"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('period_ids.rotation_ids.student_user_ids', 'in', [user.id]), ('period_ids.rotation_ids.state', '=', 'active'), ('period_ids.rotation_ids.date_start', '&lt;=', time.strftime('%Y-%m-%d')), ('period_ids.rotation_ids.date_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+    <record id="rule_academic_period_student" model="ir.rule">
+        <field name="name">O Dental académico: períodos del estudiante</field>
+        <field name="model_id" ref="model_odental_academic_period"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('rotation_ids.student_user_ids', 'in', [user.id]), ('rotation_ids.state', '=', 'active'), ('rotation_ids.date_start', '&lt;=', time.strftime('%Y-%m-%d')), ('rotation_ids.date_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+    <record id="rule_academic_rotation_student" model="ir.rule">
+        <field name="name">O Dental académico: rotaciones del estudiante</field>
+        <field name="model_id" ref="model_odental_academic_rotation"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('student_user_ids', 'in', [user.id]), ('state', '=', 'active'), ('date_start', '&lt;=', time.strftime('%Y-%m-%d')), ('date_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+    <record id="rule_academic_case_student" model="ir.rule">
+        <field name="name">O Dental académico: casos asignados al estudiante</field>
+        <field name="model_id" ref="model_odental_academic_case"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('student_user_id', '=', user.id), ('state', '=', 'active'), ('access_start', '&lt;=', time.strftime('%Y-%m-%d')), ('access_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+    <record id="rule_academic_submission_student" model="ir.rule">
+        <field name="name">O Dental académico: trabajos propios del estudiante</field>
+        <field name="model_id" ref="model_odental_academic_submission"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('student_user_id', '=', user.id), ('case_id.state', '=', 'active'), ('case_id.access_start', '&lt;=', time.strftime('%Y-%m-%d')), ('case_id.access_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+    <record id="rule_academic_audit_student" model="ir.rule">
+        <field name="name">O Dental académico: auditoría del estudiante</field>
+        <field name="model_id" ref="model_odental_academic_audit"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_student'))]"/>
+        <field name="domain_force">[('case_id.student_user_id', '=', user.id), ('case_id.state', '=', 'active'), ('case_id.access_start', '&lt;=', time.strftime('%Y-%m-%d')), ('case_id.access_end', '&gt;=', time.strftime('%Y-%m-%d'))]</field>
+    </record>
+
+    <record id="rule_academic_program_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: programas autorizados</field>
+        <field name="model_id" ref="model_odental_academic_program"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_academic_period_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: períodos autorizados</field>
+        <field name="model_id" ref="model_odental_academic_period"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_academic_rotation_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: rotaciones autorizadas</field>
+        <field name="model_id" ref="model_odental_academic_rotation"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_academic_case_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: casos autorizados</field>
+        <field name="model_id" ref="model_odental_academic_case"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_academic_submission_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: trabajos autorizados</field>
+        <field name="model_id" ref="model_odental_academic_submission"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_academic_audit_supervisor" model="ir.rule">
+        <field name="name">O Dental académico: auditoría autorizada</field>
+        <field name="model_id" ref="model_odental_academic_audit"/>
+        <field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_supervisor'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="rule_academic_program_manager" model="ir.rule"><field name="name">O Dental académico: todos los programas</field><field name="model_id" ref="model_odental_academic_program"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_academic_period_manager" model="ir.rule"><field name="name">O Dental académico: todos los períodos</field><field name="model_id" ref="model_odental_academic_period"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_academic_rotation_manager" model="ir.rule"><field name="name">O Dental académico: todas las rotaciones</field><field name="model_id" ref="model_odental_academic_rotation"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_academic_case_manager" model="ir.rule"><field name="name">O Dental académico: todos los casos</field><field name="model_id" ref="model_odental_academic_case"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_academic_submission_manager" model="ir.rule"><field name="name">O Dental académico: todos los trabajos</field><field name="model_id" ref="model_odental_academic_submission"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_academic_audit_manager" model="ir.rule"><field name="name">O Dental académico: toda la auditoría</field><field name="model_id" ref="model_odental_academic_audit"/><field name="groups" eval="[(4, ref('odental_academic.group_odental_academic_manager'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+</odoo>
+

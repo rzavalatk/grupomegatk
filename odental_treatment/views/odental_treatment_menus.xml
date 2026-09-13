@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_treatment_plan" name="Planes de tratamiento" parent="odental_core.menu_odental_clinical" action="action_odental_treatment_plan" sequence="50" groups="odental_core.group_odental_professional"/>
+</odoo>

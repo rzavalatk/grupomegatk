@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="contingency_page" name="O Dental - Modo contingencia">
+        <html lang="es">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+                <meta name="theme-color" content="#0f766e"/>
+                <meta name="robots" content="noindex,nofollow,noarchive"/>
+                <title>O Dental · Contingencia</title>
+                <style>
+                    :root { color-scheme: light; --ink:#18302e; --muted:#607471; --brand:#0f766e; --brand2:#115e59; --soft:#e9f5f3; --line:#d6e4e1; --danger:#b42318; --warning:#9a6700; }
+                    * { box-sizing:border-box; }
+                    body { margin:0; background:#f3f7f6; color:var(--ink); font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+                    header { background:linear-gradient(135deg,var(--brand2),var(--brand)); color:white; padding:18px max(18px,env(safe-area-inset-left)); box-shadow:0 2px 12px #173c3820; }
+                    header strong { font-size:1.2rem; letter-spacing:.02em; } header small { display:block; opacity:.85; }
+                    main { width:min(980px,100%); margin:0 auto; padding:20px 16px 60px; }
+                    .card { background:white; border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 8px 24px #18302e0a; }
+                    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+                    h1,h2,h3 { line-height:1.2; margin-top:0; } h1 { font-size:1.5rem; } h2 { font-size:1.12rem; }
+                    label { display:block; font-weight:650; margin:12px 0 6px; }
+                    input,select,textarea,button { width:100%; font:inherit; border-radius:10px; }
+                    input,select,textarea { border:1px solid #afc5c1; background:white; color:var(--ink); padding:11px 12px; }
+                    textarea { min-height:110px; resize:vertical; }
+                    button { border:0; padding:11px 14px; font-weight:700; cursor:pointer; background:var(--brand); color:white; }
+                    button.secondary { background:var(--soft); color:var(--brand2); border:1px solid #bee0db; }
+                    button.danger { background:white; color:var(--danger); border:1px solid #efb4ae; }
+                    button:disabled { opacity:.55; cursor:not-allowed; }
+                    .toolbar { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-bottom:16px; }
+                    .toolbar button { width:auto; }
+                    .pill { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 10px; background:var(--soft); font-size:.87rem; font-weight:700; }
+                    .dot { width:9px; height:9px; border-radius:50%; background:var(--warning); } .online .dot { background:#16803b; }
+                    .muted { color:var(--muted); } .small { font-size:.88rem; } .hidden { display:none !important; }
+                    .notice { border-left:4px solid var(--brand); background:var(--soft); padding:12px 14px; border-radius:8px; }
+                    .notice.error { border-color:var(--danger); background:#fff1f0; color:#7a271a; }
+                    .appointment,.pending { border:1px solid var(--line); border-radius:12px; padding:13px; margin-top:10px; }
+                    .appointment strong,.pending strong { display:block; } .meta { color:var(--muted); font-size:.87rem; margin-top:3px; }
+                    .count { margin-left:auto; } .footer-note { text-align:center; color:var(--muted); font-size:.82rem; margin-top:28px; }
+                    @media (max-width:560px) { .toolbar button { flex:1 1 45%; } .card { padding:16px; } }
+                </style>
+            </head>
+            <body>
+                <header><strong>O Dental</strong><small>Modo de contingencia clínica</small></header>
+                <main>
+                    <section id="unlockCard" class="card">
+                        <h1 id="unlockTitle">Proteja los datos de este dispositivo</h1>
+                        <p class="muted">La agenda y las anotaciones se guardan cifradas. Esta clave es exclusiva de este teléfono o computadora y no se envía a O Dental.</p>
+                        <label for="passphrase">Clave local de contingencia</label>
+                        <input id="passphrase" type="password" minlength="8" autocomplete="current-password" placeholder="Mínimo 8 caracteres"/>
+                        <div id="confirmWrap">
+                            <label for="passphraseConfirm">Confirmar clave</label>
+                            <input id="passphraseConfirm" type="password" minlength="8" autocomplete="new-password"/>
+                        </div>
+                        <button id="unlockButton" type="button" style="margin-top:14px">Crear bóveda y continuar</button>
+                        <div id="unlockMessage" class="notice error hidden" style="margin-top:14px"></div>
+                    </section>
+
+                    <div id="app" class="hidden">
+                        <div class="toolbar">
+                            <span id="connectionPill" class="pill"><span class="dot"></span><span id="connectionText">Comprobando red</span></span>
+                            <span id="pendingCount" class="pill count">0 pendientes</span>
+                            <button id="refreshButton" class="secondary" type="button">Actualizar agenda</button>
+                            <button id="syncButton" type="button">Sincronizar</button>
+                            <button id="lockButton" class="secondary" type="button">Bloquear</button>
+                            <button id="eraseButton" class="danger" type="button">Borrar este dispositivo</button>
+                        </div>
+                        <div id="appMessage" class="notice hidden"></div>
+
+                        <section class="card">
+                            <h2>Agenda disponible</h2>
+                            <p id="cacheInfo" class="muted small">Todavía no se ha descargado la agenda.</p>
+                            <div id="appointmentList"></div>
+                        </section>
+
+                        <section class="card">
+                            <h2>Capturar anotación sin conexión</h2>
+                            <p class="muted small">Se guardará cifrada y llegará a O Dental como borrador pendiente de revisión.</p>
+                            <div class="grid">
+                                <div>
+                                    <label for="appointment">Cita</label>
+                                    <select id="appointment" required="required"><option value="">Seleccione una cita</option></select>
+                                </div>
+                                <div>
+                                    <label for="entryType">Tipo</label>
+                                    <select id="entryType">
+                                        <option value="clinical_note">Nota clínica</option>
+                                        <option value="prescription">Indicación o receta</option>
+                                        <option value="odontogram_finding">Hallazgo de odontograma</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="dentalFields" class="grid hidden">
+                                <div><label for="toothCode">Pieza FDI</label><input id="toothCode" inputmode="numeric" maxlength="2" placeholder="Ej. 26"/></div>
+                                <div><label for="surface">Superficie</label><select id="surface"><option value="whole">Pieza completa</option><option value="occlusal">Oclusal</option><option value="incisal">Incisal</option><option value="mesial">Mesial</option><option value="distal">Distal</option><option value="buccal">Vestibular</option><option value="lingual">Lingual</option><option value="palatal">Palatina</option><option value="cervical">Cervical</option><option value="root">Raíz</option></select></div>
+                                <div><label for="condition">Condición</label><select id="condition"><option value="caries">Caries</option><option value="restoration">Restauración</option><option value="temporary_restoration">Restauración temporal</option><option value="missing">Ausente</option><option value="unerupted">No erupcionada</option><option value="crown">Corona</option><option value="bridge_abutment">Pilar de puente</option><option value="pontic">Póntico</option><option value="implant">Implante</option><option value="root_canal">Tratamiento endodóntico</option><option value="extraction_indicated">Extracción indicada</option><option value="fracture">Fractura</option><option value="mobility">Movilidad</option><option value="sealant">Sellante</option><option value="prosthesis">Prótesis</option><option value="healthy">Sana</option><option value="other">Otro</option></select></div>
+                                <div><label for="findingStatus">Estado</label><select id="findingStatus"><option value="existing">Existente</option><option value="planned">Planificado</option><option value="completed">Realizado</option><option value="monitor">En observación</option></select></div>
+                            </div>
+                            <label for="content">Contenido u observaciones</label>
+                            <textarea id="content" maxlength="5000" placeholder="Escriba únicamente lo necesario para esta atención..."></textarea>
+                            <button id="saveEntryButton" type="button" style="margin-top:14px">Guardar cifrado en este dispositivo</button>
+                        </section>
+
+                        <section class="card">
+                            <h2>Anotaciones pendientes</h2>
+                            <div id="pendingList"><p class="muted">No hay anotaciones pendientes.</p></div>
+                        </section>
+                        <p class="footer-note">La sincronización requiere una sesión activa en O Dental. Ninguna anotación queda firmada automáticamente.</p>
+                    </div>
+                </main>
+                <script src="/odental/contingency/app.js" defer="defer"></script>
+            </body>
+        </html>
+    </template>
+</odoo>

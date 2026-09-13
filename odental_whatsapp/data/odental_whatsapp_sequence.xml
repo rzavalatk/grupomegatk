@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_whatsapp_request" model="ir.sequence">
+        <field name="name">Solicitud WhatsApp O Dental</field>
+        <field name="code">odental.whatsapp.request</field>
+        <field name="prefix">WA-REQ-</field>
+        <field name="padding">6</field>
+    </record>
+</odoo>
+

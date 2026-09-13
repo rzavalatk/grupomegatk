@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_laboratory" name="Laboratorio" parent="odental_core.menu_odental_root" sequence="60" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_lab_case" name="Casos" parent="menu_odental_laboratory" action="action_lab_case" sequence="10"/>
+    <menuitem id="menu_laboratory_configuration" name="Laboratorios" parent="menu_odental_laboratory" action="action_laboratory" sequence="90" groups="odental_core.group_odental_manager"/>
+</odoo>
+

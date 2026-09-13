@@ -1,0 +1,26 @@
+{
+    "name": "O Dental Espacios Compartidos",
+    "summary": "Alquiler de consultorios, recursos, paquetes y gastos compartidos",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_treatment", "sale_management"],
+    "data": [
+        "security/odental_rental_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_rental_sequence.xml",
+        "views/rental_category_views.xml",
+        "views/rental_rate_views.xml",
+        "views/rental_package_views.xml",
+        "views/rental_booking_views.xml",
+        "views/shared_expense_views.xml",
+        "views/resource_views.xml",
+        "views/appointment_views.xml",
+        "views/sale_order_views.xml",
+        "views/odental_rental_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}
+

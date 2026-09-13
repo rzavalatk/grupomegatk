@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_shared_spaces" name="Espacios compartidos" parent="odental_core.menu_odental_root" sequence="40" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_rental_booking" name="Reservas y consumos" parent="menu_odental_shared_spaces" action="action_rental_booking" sequence="10"/>
+    <menuitem id="menu_rental_package" name="Paquetes prepagados" parent="menu_odental_shared_spaces" action="action_rental_package" sequence="20"/>
+    <menuitem id="menu_shared_expense" name="Gastos compartidos" parent="menu_odental_shared_spaces" action="action_shared_expense" sequence="30" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_rental_configuration" name="Configuración" parent="menu_odental_shared_spaces" sequence="90" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_rental_category" name="Categorías" parent="menu_rental_configuration" action="action_rental_category" sequence="10"/>
+    <menuitem id="menu_rental_rate" name="Tarifas" parent="menu_rental_configuration" action="action_rental_rate" sequence="20"/>
+    <menuitem id="menu_rental_package_type" name="Tipos de paquete" parent="menu_rental_configuration" action="action_rental_package_type" sequence="30"/>
+</odoo>

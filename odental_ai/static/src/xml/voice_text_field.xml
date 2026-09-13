@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odental_ai.VoiceTextField" owl="1">
+        <div class="o_odental_voice_field">
+            <div class="d-flex flex-wrap gap-2 mb-2" t-if="!props.readonly">
+                <button type="button" class="btn btn-primary" t-if="state.supported and !state.listening" t-on-click="startListening">
+                    <i class="fa fa-microphone me-1"/> Iniciar dictado
+                </button>
+                <button type="button" class="btn btn-danger" t-if="state.supported and state.listening" t-on-click="stopListening" aria-pressed="true">
+                    <i class="fa fa-stop-circle me-1"/> Detener dictado
+                </button>
+                <span class="text-danger align-self-center" t-if="state.listening">
+                    <i class="fa fa-circle me-1"/> Escuchando
+                </span>
+                <span class="text-muted align-self-center" t-if="!state.supported">
+                    El dictado no está disponible en este navegador; puede escribir normalmente.
+                </span>
+            </div>
+            <textarea class="o_input form-control" rows="9" t-att-readonly="props.readonly" t-att-placeholder="props.placeholder" t-att-value="state.value" t-on-input="onInput"></textarea>
+            <div class="form-text" t-if="!props.readonly">
+                Revise la transcripción antes de analizarla. La IA nunca ejecuta mientras el micrófono está activo.
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_request_list" model="ir.ui.view">
+        <field name="name">odental.whatsapp.request.list</field>
+        <field name="model">odental.whatsapp.request</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" decoration-info="state == 'pending'" decoration-success="state == 'applied'" decoration-danger="state == 'failed'">
+                <field name="name"/><field name="received_at"/><field name="organization_id"/>
+                <field name="patient_id"/><field name="appointment_id"/><field name="action"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_whatsapp_request_form" model="ir.ui.view">
+        <field name="name">odental.whatsapp.request.form</field>
+        <field name="model">odental.whatsapp.request</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_apply" type="object" string="Aplicar solicitud" class="btn-primary" invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="Rechazar" invisible="state != 'pending'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,applied,rejected,failed"/>
+                </header>
+                <sheet><div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group><group><field name="organization_id"/><field name="account_id"/><field name="patient_id"/><field name="received_at"/></group>
+                    <group><field name="action"/><field name="appointment_id"/><field name="slot_offer_id"/><field name="source_message_id"/></group></group>
+                    <field name="requested_start_datetime" invisible="action != 'reschedule' or state != 'pending'" required="action == 'reschedule' and state == 'pending'"/>
+                    <group string="Procesamiento" invisible="state == 'pending'"><field name="processed_at"/><field name="processed_by"/><field name="processing_note"/></group>
+                </sheet><chatter/></form>
+        </field>
+    </record>
+    <record id="action_whatsapp_request" model="ir.actions.act_window">
+        <field name="name">Solicitudes WhatsApp</field><field name="res_model">odental.whatsapp.request</field>
+        <field name="view_mode">list,form</field><field name="context">{'create': False}</field>
+    </record>
+</odoo>
+

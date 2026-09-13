@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_odental_clinical_record_member" model="ir.rule">
+        <field name="name">O Dental: expedientes autorizados</field>
+        <field name="model_id" ref="model_odental_clinical_record"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_history_member" model="ir.rule">
+        <field name="name">O Dental: antecedentes autorizados</field>
+        <field name="model_id" ref="model_odental_medical_history_entry"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_encounter_member" model="ir.rule">
+        <field name="name">O Dental: evoluciones autorizadas</field>
+        <field name="model_id" ref="model_odental_clinical_encounter"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_consent_template_member" model="ir.rule">
+        <field name="name">O Dental: plantillas autorizadas</field>
+        <field name="model_id" ref="model_odental_consent_template"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_consent_member" model="ir.rule">
+        <field name="name">O Dental: consentimientos autorizados</field>
+        <field name="model_id" ref="model_odental_patient_consent"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_audit_member" model="ir.rule">
+        <field name="name">O Dental: auditoría autorizada</field>
+        <field name="model_id" ref="model_odental_clinical_audit"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="rule_odental_clinical_record_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de expedientes</field>
+        <field name="model_id" ref="model_odental_clinical_record"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_history_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de antecedentes</field>
+        <field name="model_id" ref="model_odental_medical_history_entry"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_encounter_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de evoluciones</field>
+        <field name="model_id" ref="model_odental_clinical_encounter"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_consent_template_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de plantillas</field>
+        <field name="model_id" ref="model_odental_consent_template"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_consent_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de consentimientos</field>
+        <field name="model_id" ref="model_odental_patient_consent"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_audit_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de auditoría</field>
+        <field name="model_id" ref="model_odental_clinical_audit"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>
+

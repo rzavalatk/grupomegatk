@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_service_form_treatment" model="ir.ui.view">
+        <field name="name">odental.service.form.treatment</field>
+        <field name="model">odental.service</field>
+        <field name="inherit_id" ref="odental_core.view_odental_service_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position="after">
+                <group string="Venta y facturación">
+                    <field name="product_id"/>
+                    <field name="price_unit"/>
+                    <field name="currency_id" invisible="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_cash_session" model="ir.sequence">
+        <field name="name">Sesión de caja O Dental</field>
+        <field name="code">odental.cash.session</field>
+        <field name="prefix">CAJ/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_odental_clinical_collection" model="ir.sequence">
+        <field name="name">Cobro clínico O Dental</field>
+        <field name="code">odental.clinical.collection</field>
+        <field name="prefix">COB/%(year)s/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_patient_update_request" model="ir.sequence">
+        <field name="name">Solicitud de actualización O Dental</field>
+        <field name="code">odental.patient.update.request</field>
+        <field name="prefix">ACT/%(year)s/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_odental_patient_intake" model="ir.sequence">
+        <field name="name">Formulario clínico O Dental</field>
+        <field name="code">odental.patient.intake</field>
+        <field name="prefix">FIC/%(year)s/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

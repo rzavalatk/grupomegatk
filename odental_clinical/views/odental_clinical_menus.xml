@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_clinical_record" name="Expedientes" parent="odental_core.menu_odental_clinical" action="action_odental_clinical_record" sequence="30" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_clinical_encounter" name="Evoluciones" parent="odental_core.menu_odental_clinical" action="action_odental_clinical_encounter" sequence="40" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_patient_consent" name="Consentimientos" parent="odental_core.menu_odental_clinical" action="action_odental_patient_consent" sequence="50" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_clinical_audit" name="Auditoría clínica" parent="odental_core.menu_odental_configuration" action="action_odental_clinical_audit" sequence="70" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_odental_consent_template" name="Plantillas de consentimiento" parent="odental_core.menu_odental_configuration" action="action_odental_consent_template" sequence="80" groups="odental_core.group_odental_manager"/>
+</odoo>
+

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_referral_list" model="ir.ui.view">
+        <field name="name">odental.referral.list</field>
+        <field name="model">odental.referral</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-info="state == 'report_submitted'" decoration-danger="state == 'invalidated'" decoration-muted="state in ('closed', 'revoked', 'rejected', 'expired')">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="referring_professional_id"/>
+                <field name="recipient_name"/>
+                <field name="expires_at"/>
+                <field name="access_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odental_referral_search" model="ir.ui.view">
+        <field name="name">odental.referral.search</field>
+        <field name="model">odental.referral</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="recipient_name"/>
+                <field name="referring_professional_id"/>
+                <filter name="active_access" string="Accesos activos" domain="[('state', '=', 'active')]"/>
+                <filter name="pending_consent" string="Esperando consentimiento" domain="[('state', '=', 'awaiting_consent')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_professional" string="Profesional" context="{'group_by': 'referring_professional_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_odental_referral_form" model="ir.ui.view">
+        <field name="name">odental.referral.form</field>
+        <field name="model">odental.referral</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_request_consent" type="object" string="Solicitar consentimiento" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_view_consent" type="object" string="Abrir consentimiento" invisible="not consent_id"/>
+                    <button name="action_reissue_consent_credentials" type="object" string="Renovar acceso del paciente" groups="odental_core.group_odental_manager" invisible="state != 'awaiting_consent' or consent_state != 'pending'"/>
+                    <button name="action_activate" type="object" string="Activar acceso" class="btn-primary" groups="odental_core.group_odental_manager" invisible="state != 'awaiting_consent' or consent_state != 'signed'"/>
+                    <button name="action_reissue_credentials" type="object" string="Renovar credenciales" groups="odental_core.group_odental_manager" invisible="state != 'active'"/>
+                    <button name="action_revoke" type="object" string="Revocar acceso" groups="odental_core.group_odental_manager" invisible="state != 'active'"/>
+                    <button name="action_close" type="object" string="Cerrar referencia" groups="odental_core.group_odental_manager" invisible="state not in ('active', 'report_submitted', 'expired', 'invalidated')"/>
+                    <button name="action_reject" type="object" string="Rechazar" invisible="state not in ('draft', 'awaiting_consent')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,awaiting_consent,active,report_submitted,closed"/>
+                    <field name="consent_state" invisible="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="clinical_record_id" readonly="state != 'draft'"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="referring_professional_id" domain="[('organization_ids', 'in', [organization_id])]" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="recipient_professional_id" readonly="state != 'draft'"/>
+                            <field name="recipient_name" readonly="state != 'draft'"/>
+                            <field name="recipient_specialty" readonly="state != 'draft'"/>
+                            <field name="recipient_license" readonly="state != 'draft'"/>
+                            <field name="recipient_email" readonly="state != 'draft'"/>
+                            <field name="recipient_mobile" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="referral_reason" readonly="state != 'draft'"/>
+                        <field name="clinical_question" readonly="state != 'draft'"/>
+                    </group>
+                    <notebook>
+                        <page string="Información compartida">
+                            <div class="alert alert-info" role="alert">
+                                Seleccione solo lo necesario para resolver esta referencia. Las notas clínicas restringidas de las evoluciones nunca se muestran en el portal externo.
+                            </div>
+                            <group>
+                                <field name="share_alerts" readonly="state != 'draft'"/>
+                                <field name="scope_summary" readonly="1"/>
+                                <field name="scope_content_hash" readonly="1"/>
+                                <field name="restricted_data_justification" readonly="state != 'draft'"/>
+                            </group>
+                            <group string="Antecedentes e historia clínica">
+                                <field name="history_entry_ids" widget="many2many_tags" domain="[('clinical_record_id', '=', clinical_record_id), ('referral_sharing', '!=', 'never')]" readonly="state != 'draft'"/>
+                                <field name="encounter_ids" widget="many2many_tags" domain="[('clinical_record_id', '=', clinical_record_id), ('state', '=', 'signed')]" readonly="state != 'draft'"/>
+                            </group>
+                            <group string="Diagnóstico e imágenes">
+                                <field name="odontogram_ids" widget="many2many_tags" domain="[('clinical_record_id', '=', clinical_record_id), ('state', '=', 'signed')]" readonly="state != 'draft'"/>
+                                <field name="image_ids" widget="many2many_tags" domain="[('clinical_record_id', '=', clinical_record_id), ('state', 'in', ('final', 'archived')), ('referral_sharing', '!=', 'never')]" readonly="state != 'draft'"/>
+                                <field name="treatment_plan_ids" widget="many2many_tags" domain="[('clinical_record_id', '=', clinical_record_id), ('state', 'in', ('approved', 'in_progress', 'completed'))]" readonly="state != 'draft'"/>
+                            </group>
+                        </page>
+                        <page string="Consentimiento y acceso">
+                            <group>
+                                <group>
+                                    <field name="consent_template_id" domain="[('organization_id', '=', organization_id), ('purpose', '=', 'referral'), ('active', '=', True)]" readonly="state != 'draft'"/>
+                                    <field name="consent_id" readonly="1"/>
+                                    <field name="consent_expires_at"/>
+                                    <field name="consent_access_token_hint"/>
+                                    <field name="access_level" readonly="state != 'draft'"/>
+                                    <field name="allow_file_download" readonly="state != 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="valid_days" readonly="state != 'draft'"/>
+                                    <field name="expires_at"/>
+                                    <field name="max_access_count" readonly="state != 'draft'"/>
+                                    <field name="access_count"/>
+                                    <field name="last_access_at"/>
+                                    <field name="access_token_hint"/>
+                                </group>
+                            </group>
+                            <group string="Autorización del custodio">
+                                <field name="authorized_at"/>
+                                <field name="authorized_by_user_id"/>
+                                <field name="activated_at"/>
+                            </group>
+                            <group string="Revocación">
+                                <field name="revocation_reason" readonly="state in ('closed', 'revoked', 'rejected', 'expired')"/>
+                                <field name="revoked_at"/>
+                                <field name="revoked_by_user_id"/>
+                            </group>
+                        </page>
+                        <page string="Informes externos">
+                            <field name="report_ids">
+                                <list create="false" delete="false" decoration-success="state == 'reviewed'" decoration-muted="state == 'rejected'">
+                                    <field name="submitted_at"/>
+                                    <field name="author_name"/>
+                                    <field name="summary"/>
+                                    <field name="filename"/>
+                                    <field name="state"/>
+                                    <button name="action_mark_reviewed" type="object" string="Aceptar revisión" invisible="state != 'submitted'"/>
+                                    <button name="action_reject_report" type="object" string="Descartar" invisible="state != 'submitted'"/>
+                                </list>
+                                <form create="false" delete="false">
+                                    <header>
+                                        <button name="action_mark_reviewed" type="object" string="Marcar revisado" class="btn-primary" invisible="state != 'submitted'"/>
+                                        <button name="action_reject_report" type="object" string="Descartar" invisible="state != 'submitted'"/>
+                                        <field name="state" widget="statusbar"/>
+                                    </header>
+                                    <sheet>
+                                        <group><field name="author_name"/><field name="submitted_at"/><field name="filename"/><field name="file_data" filename="filename"/><field name="file_hash"/><field name="content_hash"/></group>
+                                        <field name="summary"/>
+                                        <field name="review_notes"/>
+                                        <group><field name="reviewed_at"/><field name="reviewed_by_user_id"/></group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Bitácora">
+                            <field name="access_log_ids" readonly="1">
+                                <list decoration-danger="not success">
+                                    <field name="occurred_at"/>
+                                    <field name="event_type"/>
+                                    <field name="success"/>
+                                    <field name="details"/>
+                                    <field name="ip_address" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odental_referral" model="ir.actions.act_window">
+        <field name="name">Referencias profesionales</field>
+        <field name="res_model">odental.referral</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_odental_referral_search"/>
+    </record>
+</odoo>

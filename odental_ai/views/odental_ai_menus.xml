@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_ai_root" name="Asistente IA" parent="odental_core.menu_odental_root" sequence="25" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_ai_sessions" name="Comandos y voz" parent="menu_odental_ai_root" action="action_odental_ai_session" sequence="10"/>
+    <menuitem id="menu_odental_ai_audit" name="Auditoría" parent="menu_odental_ai_root" action="action_odental_ai_audit" sequence="20"/>
+</odoo>

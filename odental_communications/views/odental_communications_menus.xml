@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_communications" name="Comunicaciones" parent="odental_core.menu_odental_root" sequence="70" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_waitlist_entry" name="Lista de espera" parent="menu_odental_communications" action="action_waitlist_entry" sequence="10"/>
+    <menuitem id="menu_slot_offer" name="Ofertas de espacios" parent="menu_odental_communications" action="action_slot_offer" sequence="20"/>
+    <menuitem id="menu_communication_message" name="Bandeja de salida" parent="menu_odental_communications" action="action_communication_message" sequence="30"/>
+    <menuitem id="menu_communication_template" name="Plantillas" parent="menu_odental_communications" action="action_communication_template" sequence="90" groups="odental_core.group_odental_manager"/>
+</odoo>
+
