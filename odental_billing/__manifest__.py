@@ -1,0 +1,23 @@
+{
+    "name": "O Dental Caja y Facturación",
+    "summary": "Facturación clínica, caja, cobros y control de rangos fiscales SAR",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_communications", "odental_treatment", "account"],
+    "data": [
+        "security/odental_billing_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_billing_sequence.xml",
+        "views/fiscal_authorization_views.xml",
+        "views/cash_session_views.xml",
+        "views/clinical_collection_views.xml",
+        "views/organization_views.xml",
+        "views/treatment_plan_views.xml",
+        "views/account_move_views.xml",
+        "views/odental_billing_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}

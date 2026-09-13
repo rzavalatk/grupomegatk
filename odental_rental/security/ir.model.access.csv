@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rental_category_user,odental.rental.category user,model_odental_rental_category,odental_core.group_odental_user,1,0,0,0
+access_rental_category_manager,odental.rental.category manager,model_odental_rental_category,odental_core.group_odental_manager,1,1,1,1
+access_rental_rate_user,odental.rental.rate user,model_odental_rental_rate,odental_core.group_odental_user,1,0,0,0
+access_rental_rate_manager,odental.rental.rate manager,model_odental_rental_rate,odental_core.group_odental_manager,1,1,1,1
+access_rental_package_type_user,odental.rental.package.type user,model_odental_rental_package_type,odental_core.group_odental_user,1,0,0,0
+access_rental_package_type_manager,odental.rental.package.type manager,model_odental_rental_package_type,odental_core.group_odental_manager,1,1,1,1
+access_rental_package_user,odental.rental.package user,model_odental_rental_package,odental_core.group_odental_user,1,0,0,0
+access_rental_package_manager,odental.rental.package manager,model_odental_rental_package,odental_core.group_odental_manager,1,1,1,0
+access_rental_package_admin,odental.rental.package admin,model_odental_rental_package,odental_core.group_odental_admin,1,1,1,1
+access_rental_credit_move_user,odental.rental.credit.move user,model_odental_rental_credit_move,odental_core.group_odental_user,1,0,0,0
+access_rental_booking_user,odental.rental.booking user,model_odental_rental_booking,odental_core.group_odental_user,1,1,1,0
+access_rental_booking_manager,odental.rental.booking manager,model_odental_rental_booking,odental_core.group_odental_manager,1,1,1,1
+access_rental_booking_line_user,odental.rental.booking.line user,model_odental_rental_booking_line,odental_core.group_odental_user,1,1,1,0
+access_rental_booking_line_manager,odental.rental.booking.line manager,model_odental_rental_booking_line,odental_core.group_odental_manager,1,1,1,1
+access_shared_expense_professional,odental.shared.expense professional,model_odental_shared_expense,odental_core.group_odental_professional,1,0,0,0
+access_shared_expense_manager,odental.shared.expense manager,model_odental_shared_expense,odental_core.group_odental_manager,1,1,1,0
+access_shared_expense_admin,odental.shared.expense admin,model_odental_shared_expense,odental_core.group_odental_admin,1,1,1,1
+access_shared_expense_line_professional,odental.shared.expense.line professional,model_odental_shared_expense_line,odental_core.group_odental_professional,1,0,0,0
+access_shared_expense_line_manager,odental.shared.expense.line manager,model_odental_shared_expense_line,odental_core.group_odental_manager,1,1,1,1

@@ -1,0 +1,21 @@
+{
+    "name": "O Dental Cuentas por Cobrar y Comisiones",
+    "summary": "Convenios de pago, cuotas, abonos y liquidaciones de profesionales",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_billing"],
+    "data": [
+        "security/odental_finance_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_finance_sequence.xml",
+        "views/payment_agreement_views.xml",
+        "views/commission_views.xml",
+        "views/patient_views.xml",
+        "views/account_move_views.xml",
+        "views/odental_finance_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}

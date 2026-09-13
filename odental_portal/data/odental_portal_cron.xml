@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_expire_patient_portal_invitations" model="ir.cron">
+        <field name="name">O Dental: vencer invitaciones de portal</field>
+        <field name="model_id" ref="model_odental_patient_portal_invitation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_invitations()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

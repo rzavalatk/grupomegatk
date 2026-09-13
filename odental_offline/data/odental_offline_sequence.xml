@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_contingency_batch" model="ir.sequence">
+        <field name="name">Lote de contingencia O Dental</field>
+        <field name="code">odental.contingency.batch</field>
+        <field name="prefix">CONT/%(year)s/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>
+

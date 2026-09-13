@@ -1,0 +1,23 @@
+{
+    "name": "O Dental Tratamientos y Presupuestos",
+    "summary": "Planes de tratamiento, aprobación del paciente y cotización en Odoo",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_diagnostics", "sale_management", "account"],
+    "data": [
+        "security/odental_treatment_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_treatment_sequence.xml",
+        "views/treatment_plan_views.xml",
+        "views/service_views.xml",
+        "views/professional_views.xml",
+        "views/clinical_record_views.xml",
+        "views/sale_order_views.xml",
+        "views/odental_treatment_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}
+

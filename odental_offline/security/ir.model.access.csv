@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_contingency_batch_professional,Lote contingencia profesional,model_odental_contingency_batch,odental_core.group_odental_professional,1,1,0,0
+access_odental_contingency_entry_professional,Entrada contingencia profesional,model_odental_contingency_entry,odental_core.group_odental_professional,1,1,0,0
+access_odental_contingency_batch_admin,Lote contingencia administrador,model_odental_contingency_batch,odental_core.group_odental_admin,1,1,0,0
+access_odental_contingency_entry_admin,Entrada contingencia administrador,model_odental_contingency_entry,odental_core.group_odental_admin,1,1,0,0
+

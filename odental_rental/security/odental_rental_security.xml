@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_rental_category_member" model="ir.rule">
+        <field name="name">O Dental: categorías disponibles</field>
+        <field name="model_id" ref="model_odental_rental_category"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id]), ('resource_ids.shared_with_organization_ids.owner_user_id', '=', user.id), ('resource_ids.shared_with_organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_rate_member" model="ir.rule">
+        <field name="name">O Dental: tarifas disponibles</field>
+        <field name="model_id" ref="model_odental_rental_rate"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', '|', '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id]), ('resource_id.shared_with_organization_ids.owner_user_id', '=', user.id), ('resource_id.shared_with_organization_ids.user_ids', 'in', [user.id]), ('category_id.resource_ids.shared_with_organization_ids.owner_user_id', '=', user.id), ('category_id.resource_ids.shared_with_organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_package_type_member" model="ir.rule">
+        <field name="name">O Dental: tipos de paquete disponibles</field>
+        <field name="model_id" ref="model_odental_rental_package_type"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', '|', '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id]), ('resource_id.shared_with_organization_ids.owner_user_id', '=', user.id), ('resource_id.shared_with_organization_ids.user_ids', 'in', [user.id]), ('category_id.resource_ids.shared_with_organization_ids.owner_user_id', '=', user.id), ('category_id.resource_ids.shared_with_organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_package_member" model="ir.rule">
+        <field name="name">O Dental: paquetes autorizados</field>
+        <field name="model_id" ref="model_odental_rental_package"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('renter_organization_id.owner_user_id', '=', user.id), ('renter_organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_credit_member" model="ir.rule">
+        <field name="name">O Dental: movimientos autorizados</field>
+        <field name="model_id" ref="model_odental_rental_credit_move"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('renter_organization_id.owner_user_id', '=', user.id), ('renter_organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_booking_member" model="ir.rule">
+        <field name="name">O Dental: reservas autorizadas</field>
+        <field name="model_id" ref="model_odental_rental_booking"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('renter_organization_id.owner_user_id', '=', user.id), ('renter_organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_rental_booking_line_member" model="ir.rule">
+        <field name="name">O Dental: líneas de reserva autorizadas</field>
+        <field name="model_id" ref="model_odental_rental_booking_line"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('renter_organization_id.owner_user_id', '=', user.id), ('renter_organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_shared_expense_member" model="ir.rule">
+        <field name="name">O Dental: gastos compartidos autorizados</field>
+        <field name="model_id" ref="model_odental_shared_expense"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('line_ids.professional_id.user_id', '=', user.id)]</field>
+    </record>
+    <record id="rule_shared_expense_line_member" model="ir.rule">
+        <field name="name">O Dental: líneas de gasto autorizadas</field>
+        <field name="model_id" ref="model_odental_shared_expense_line"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', '|', ('provider_organization_id.owner_user_id', '=', user.id), ('provider_organization_id.user_ids', 'in', [user.id]), ('professional_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_rental_category_admin" model="ir.rule"><field name="name">O Dental: categorías globales</field><field name="model_id" ref="model_odental_rental_category"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_rate_admin" model="ir.rule"><field name="name">O Dental: tarifas globales</field><field name="model_id" ref="model_odental_rental_rate"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_package_type_admin" model="ir.rule"><field name="name">O Dental: paquetes configurables globales</field><field name="model_id" ref="model_odental_rental_package_type"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_package_admin" model="ir.rule"><field name="name">O Dental: paquetes globales</field><field name="model_id" ref="model_odental_rental_package"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_credit_admin" model="ir.rule"><field name="name">O Dental: movimientos globales</field><field name="model_id" ref="model_odental_rental_credit_move"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_booking_admin" model="ir.rule"><field name="name">O Dental: reservas globales</field><field name="model_id" ref="model_odental_rental_booking"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_rental_booking_line_admin" model="ir.rule"><field name="name">O Dental: líneas globales</field><field name="model_id" ref="model_odental_rental_booking_line"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_shared_expense_admin" model="ir.rule"><field name="name">O Dental: gastos globales</field><field name="model_id" ref="model_odental_shared_expense"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_shared_expense_line_admin" model="ir.rule"><field name="name">O Dental: líneas de gastos globales</field><field name="model_id" ref="model_odental_shared_expense_line"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_odental_treatment_plan" model="ir.sequence">
+        <field name="name">Plan de tratamiento O Dental</field>
+        <field name="code">odental.treatment.plan</field>
+        <field name="prefix">TRT/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_whatsapp_account_user,Cuenta WhatsApp usuario,model_odental_whatsapp_account,odental_core.group_odental_user,1,0,0,0
+access_whatsapp_account_manager,Cuenta WhatsApp administrador clínico,model_odental_whatsapp_account,odental_core.group_odental_manager,1,1,1,0
+access_whatsapp_account_admin,Cuenta WhatsApp administrador O Dental,model_odental_whatsapp_account,odental_core.group_odental_admin,1,1,1,1
+access_whatsapp_event_user,Evento WhatsApp usuario,model_odental_whatsapp_event,odental_core.group_odental_user,1,0,0,0
+access_whatsapp_event_admin,Evento WhatsApp administrador,model_odental_whatsapp_event,odental_core.group_odental_admin,1,0,0,0
+access_whatsapp_request_user,Solicitud WhatsApp usuario,model_odental_whatsapp_request,odental_core.group_odental_user,1,1,0,0
+access_whatsapp_request_manager,Solicitud WhatsApp administrador clínico,model_odental_whatsapp_request,odental_core.group_odental_manager,1,1,0,0
+access_whatsapp_action_token_user,Token WhatsApp usuario,model_odental_whatsapp_action_token,odental_core.group_odental_user,1,0,0,0
+access_whatsapp_credentials_admin,Credenciales WhatsApp administrador,model_odental_whatsapp_credentials_wizard,odental_core.group_odental_admin,1,1,1,1
+

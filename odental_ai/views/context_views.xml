@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_patient_ai_form" model="ir.ui.view">
+        <field name="name">odental.patient.ai.form</field>
+        <field name="model">odental.patient</field>
+        <field name="inherit_id" ref="odental_portal.view_odental_patient_portal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_ai_assistant" type="object" class="oe_stat_button" icon="fa-magic" groups="odental_core.group_odental_professional">
+                    <div class="o_stat_info"><span class="o_stat_text">Asistente IA</span></div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_odental_clinical_record_ai_form" model="ir.ui.view">
+        <field name="name">odental.clinical.record.ai.form</field>
+        <field name="model">odental.clinical.record</field>
+        <field name="inherit_id" ref="odental_clinical.view_odental_clinical_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_ai_assistant" type="object" string="Asistente IA" icon="fa-magic" groups="odental_core.group_odental_professional" invisible="state != 'active'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_odental_appointment_ai_form" model="ir.ui.view">
+        <field name="name">odental.appointment.ai.form</field>
+        <field name="model">odental.appointment</field>
+        <field name="inherit_id" ref="odental_core.view_odental_appointment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_ai_assistant" type="object" string="Asistente IA" icon="fa-magic" groups="odental_core.group_odental_professional" invisible="state in ('done', 'cancelled', 'no_show')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

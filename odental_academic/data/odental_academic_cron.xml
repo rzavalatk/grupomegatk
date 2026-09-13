@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_odental_academic_expire_access" model="ir.cron">
+        <field name="name">O Dental: vencer accesos académicos</field>
+        <field name="model_id" ref="model_odental_academic_case"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_access()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>
+

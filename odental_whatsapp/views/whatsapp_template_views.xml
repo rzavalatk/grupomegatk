@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_communication_template_form_whatsapp" model="ir.ui.view">
+        <field name="name">odental.communication.template.form.whatsapp</field>
+        <field name="model">odental.communication.template</field>
+        <field name="inherit_id" ref="odental_communications.view_communication_template_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='body']" position="after">
+                <group string="Plantilla WhatsApp Cloud" invisible="channel != 'whatsapp'">
+                    <field name="whatsapp_account_id"/>
+                    <field name="whatsapp_template_name"/>
+                    <field name="whatsapp_language_code"/>
+                    <field name="whatsapp_template_status"/>
+                    <field name="whatsapp_body_parameter_names"/>
+                    <field name="whatsapp_action_mode"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

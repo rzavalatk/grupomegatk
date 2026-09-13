@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_image_list" model="ir.ui.view">
+        <field name="name">odental.clinical.image.list</field>
+        <field name="model">odental.clinical.image</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'final'" decoration-muted="state == 'archived'" default_order="capture_datetime desc">
+                <field name="name"/><field name="capture_datetime"/><field name="patient_id"/><field name="category"/><field name="modality"/><field name="tooth_ids" widget="many2many_tags"/><field name="professional_id"/><field name="sensitivity"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_clinical_image_form" model="ir.ui.view">
+        <field name="name">odental.clinical.image.form</field>
+        <field name="model">odental.clinical.image</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_finalize" type="object" string="Finalizar imagen" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_archive_clinical" type="object" string="Archivar" invisible="state != 'final'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,final,archived"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group><field name="clinical_record_id" readonly="state != 'draft'"/><field name="patient_id" readonly="1"/><field name="organization_id" readonly="1"/><field name="professional_id" domain="[('organization_ids', 'in', organization_id)]" readonly="state != 'draft'"/><field name="encounter_id" domain="[('clinical_record_id', '=', clinical_record_id)]" readonly="state != 'draft'"/></group>
+                        <group><field name="category" readonly="state != 'draft'"/><field name="modality" readonly="state != 'draft'"/><field name="capture_datetime" readonly="state != 'draft'"/><field name="source_equipment" readonly="state != 'draft'"/><field name="tooth_ids" widget="many2many_tags" readonly="state != 'draft'"/></group>
+                    </group>
+                    <notebook>
+                        <page string="Archivo"><field name="file_data" filename="filename" readonly="state != 'draft'"/><field name="filename" readonly="state != 'draft'"/><group><field name="mimetype" readonly="1"/><field name="file_size" readonly="1"/><field name="file_hash" readonly="1"/></group></page>
+                        <page string="Privacidad"><group><field name="sensitivity" readonly="state != 'draft'"/><field name="referral_sharing" readonly="state != 'draft'"/><field name="notes" readonly="state != 'draft'"/></group></page>
+                        <page string="DICOM"><group><field name="dicom_study_uid" readonly="state != 'draft'"/><field name="dicom_series_uid" readonly="state != 'draft'"/><field name="dicom_instance_uid" readonly="state != 'draft'"/></group></page>
+                        <page string="Auditoría"><group><field name="finalized_at" readonly="1"/><field name="finalized_by_user_id" readonly="1"/></group></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_clinical_image" model="ir.actions.act_window">
+        <field name="name">Imágenes clínicas</field>
+        <field name="res_model">odental.clinical.image</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>
+

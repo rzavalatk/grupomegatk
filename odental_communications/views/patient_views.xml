@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_patient_form_communications" model="ir.ui.view"><field name="name">odental.patient.form.communications</field><field name="model">odental.patient</field><field name="inherit_id" ref="odental_core.view_odental_patient_form"/><field name="arch" type="xml"><xpath expr="//notebook" position="inside"><page string="Comunicaciones"><group><group><field name="preferred_appointment_channel"/><field name="appointment_messages_consent"/></group><group><field name="appointment_messages_consent_at"/><field name="appointment_messages_consent_source"/></group></group><field name="communication_consent_event_ids" readonly="1"><list><field name="occurred_at"/><field name="event_type"/><field name="channel"/><field name="source"/><field name="user_id"/></list></field></page></xpath></field></record>
+</odoo>
+

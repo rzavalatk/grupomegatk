@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_ai_session_professional,odental.ai.session professional,model_odental_ai_session,odental_core.group_odental_professional,1,1,1,0
+access_odental_ai_session_manager,odental.ai.session manager,model_odental_ai_session,odental_core.group_odental_manager,1,1,1,0
+access_odental_ai_session_admin,odental.ai.session admin,model_odental_ai_session,odental_core.group_odental_admin,1,1,1,0
+access_odental_ai_action_professional,odental.ai.action professional,model_odental_ai_action,odental_core.group_odental_professional,1,0,0,0
+access_odental_ai_action_manager,odental.ai.action manager,model_odental_ai_action,odental_core.group_odental_manager,1,0,0,0
+access_odental_ai_action_admin,odental.ai.action admin,model_odental_ai_action,odental_core.group_odental_admin,1,0,0,0
+access_odental_ai_audit_professional,odental.ai.audit professional,model_odental_ai_audit,odental_core.group_odental_professional,1,0,0,0
+access_odental_ai_audit_manager,odental.ai.audit manager,model_odental_ai_audit,odental_core.group_odental_manager,1,0,0,0
+access_odental_ai_audit_admin,odental.ai.audit admin,model_odental_ai_audit,odental_core.group_odental_admin,1,0,0,0

@@ -1,0 +1,26 @@
+{
+    "name": "O Dental Comunicaciones y Recuperación de Agenda",
+    "summary": "Confirmaciones, recordatorios, cancelaciones y lista de sustitución",
+    "version": "18.0.1.0.0",
+    "category": "Services/Healthcare",
+    "author": "MEGATK / MEDITEKSA",
+    "license": "LGPL-3",
+    "depends": ["odental_rental", "mail"],
+    "data": [
+        "security/odental_communications_security.xml",
+        "security/ir.model.access.csv",
+        "data/odental_communications_sequence.xml",
+        "data/odental_communications_cron.xml",
+        "views/organization_views.xml",
+        "views/patient_views.xml",
+        "views/appointment_views.xml",
+        "views/communication_template_views.xml",
+        "views/communication_message_views.xml",
+        "views/waitlist_views.xml",
+        "views/slot_offer_views.xml",
+        "views/odental_communications_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}
+

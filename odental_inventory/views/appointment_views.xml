@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_appointment_form_inventory" model="ir.ui.view"><field name="name">odental.appointment.form.inventory</field><field name="model">odental.appointment</field><field name="inherit_id" ref="odental_core.view_odental_appointment_form"/><field name="arch" type="xml"><xpath expr="//sheet" position="inside"><div class="oe_button_box" name="inventory_button_box"><button name="action_view_material_consumption" type="object" class="oe_stat_button" icon="fa-cubes" invisible="material_consumption_count == 0 and state != 'done'"><field name="material_consumption_count" string="Materiales" widget="statinfo"/></button></div></xpath></field></record>
+</odoo>
+

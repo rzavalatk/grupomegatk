@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_organization_billing_form" model="ir.ui.view">
+        <field name="name">odental.organization.billing.form</field>
+        <field name="model">odental.organization</field>
+        <field name="inherit_id" ref="odental_core.view_odental_organization_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='billing_mode']" position="after">
+                <field name="require_hn_fiscal_control"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_appointment_form_rental" model="ir.ui.view"><field name="name">odental.appointment.form.rental</field><field name="model">odental.appointment</field><field name="inherit_id" ref="odental_core.view_odental_appointment_form"/><field name="arch" type="xml"><xpath expr="//sheet" position="inside"><div class="oe_button_box" name="button_box"><button name="action_view_rental_booking" type="object" class="oe_stat_button" icon="fa-building-o" invisible="rental_booking_count == 0"><field name="rental_booking_count" string="Alquiler" widget="statinfo"/></button></div></xpath></field></record>
+</odoo>

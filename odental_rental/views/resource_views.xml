@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_resource_form_rental" model="ir.ui.view"><field name="name">odental.resource.form.rental</field><field name="model">odental.resource</field><field name="inherit_id" ref="odental_core.view_odental_resource_form"/><field name="arch" type="xml"><xpath expr="//field[@name='notes']" position="before"><group string="Alquiler"><field name="is_rentable"/><field name="rental_category_id" invisible="not is_rentable" domain="[('organization_id', '=', organization_id)]"/></group></xpath></field></record>
+    <record id="view_resource_list_rental" model="ir.ui.view"><field name="name">odental.resource.list.rental</field><field name="model">odental.resource</field><field name="inherit_id" ref="odental_core.view_odental_resource_list"/><field name="arch" type="xml"><xpath expr="//field[@name='resource_type']" position="after"><field name="is_rentable" optional="show"/><field name="rental_category_id" optional="show"/></xpath></field></record>
+</odoo>
+

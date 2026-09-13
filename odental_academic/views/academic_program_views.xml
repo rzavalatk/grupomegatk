@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_academic_program_list" model="ir.ui.view">
+        <field name="name">odental.academic.program.list</field>
+        <field name="model">odental.academic.program</field>
+        <field name="arch" type="xml">
+            <list><field name="code"/><field name="name"/><field name="organization_id"/><field name="coordinator_user_id"/><field name="active"/></list>
+        </field>
+    </record>
+    <record id="view_academic_program_form" model="ir.ui.view">
+        <field name="name">odental.academic.program.form</field>
+        <field name="model">odental.academic.program</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group><group><field name="code"/><field name="organization_id" domain="[('organization_type', 'in', ('university', 'institution'))]"/></group><group><field name="coordinator_user_id"/><field name="active"/></group></group>
+                    <notebook><page string="Períodos"><field name="period_ids"><list editable="bottom"><field name="name"/><field name="date_start"/><field name="date_end"/><field name="state" readonly="1"/></list></field></page><page string="Notas"><field name="notes"/></page></notebook>
+                </sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_academic_period_list" model="ir.ui.view">
+        <field name="name">odental.academic.period.list</field><field name="model">odental.academic.period</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="program_id"/><field name="date_start"/><field name="date_end"/><field name="state" widget="badge"/></list></field>
+    </record>
+    <record id="view_academic_period_form" model="ir.ui.view">
+        <field name="name">odental.academic.period.form</field><field name="model">odental.academic.period</field>
+        <field name="arch" type="xml"><form><header><button name="action_activate" type="object" string="Activar" class="btn-primary" invisible="state != 'draft'"/><button name="action_close" type="object" string="Cerrar" invisible="state != 'active'"/><field name="state" widget="statusbar" statusbar_visible="draft,active,closed"/></header><sheet><div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div><group><field name="program_id" readonly="state != 'draft'"/><field name="organization_id" readonly="1"/><field name="date_start" readonly="state != 'draft'"/><field name="date_end" readonly="state != 'draft'"/></group><field name="rotation_ids"><list create="0"><field name="code"/><field name="name"/><field name="service_area"/><field name="date_start"/><field name="date_end"/><field name="state"/></list></field></sheet><chatter/></form></field>
+    </record>
+    <record id="action_academic_program" model="ir.actions.act_window"><field name="name">Programas</field><field name="res_model">odental.academic.program</field><field name="view_mode">list,form</field></record>
+    <record id="action_academic_period" model="ir.actions.act_window"><field name="name">Períodos</field><field name="res_model">odental.academic.period</field><field name="view_mode">list,form</field></record>
+</odoo>
+

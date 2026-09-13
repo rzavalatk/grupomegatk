@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_organization_form_inventory" model="ir.ui.view"><field name="name">odental.organization.form.inventory</field><field name="model">odental.organization</field><field name="inherit_id" ref="odental_core.view_odental_organization_form"/><field name="arch" type="xml"><xpath expr="//field[@name='notes']" position="before"><group string="Inventario clínico"><field name="clinical_stock_location_id"/><field name="clinical_consumption_location_id"/><field name="clinical_picking_type_id"/></group></xpath></field></record>
+</odoo>
+

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_patient_portal" name="Portal del paciente" parent="odental_core.menu_odental_root" sequence="75" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_odental_patient_updates" name="Actualizaciones" parent="menu_odental_patient_portal" action="action_odental_patient_update" sequence="10"/>
+    <menuitem id="menu_odental_patient_intakes" name="Formularios clínicos" parent="menu_odental_patient_portal" action="action_odental_patient_intake" sequence="20"/>
+    <menuitem id="menu_odental_portal_invitations" name="Invitaciones y QR" parent="menu_odental_patient_portal" action="action_odental_portal_invitation" sequence="30" groups="odental_core.group_odental_manager"/>
+</odoo>

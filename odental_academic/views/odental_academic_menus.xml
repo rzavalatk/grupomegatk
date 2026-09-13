@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_academic_root" name="O Dental Académico" sequence="16" groups="odental_academic.group_odental_academic_student,odental_academic.group_odental_academic_supervisor"/>
+    <menuitem id="menu_academic_student" name="Mi clínica académica" parent="menu_odental_academic_root" sequence="10" groups="odental_academic.group_odental_academic_student"/>
+    <menuitem id="menu_academic_my_cases" name="Mis casos" parent="menu_academic_student" action="action_academic_my_case" sequence="10"/>
+    <menuitem id="menu_academic_my_submissions" name="Mis trabajos" parent="menu_academic_student" action="action_academic_my_submission" sequence="20"/>
+    <menuitem id="menu_academic_supervision" name="Supervisión" parent="menu_odental_academic_root" sequence="20" groups="odental_academic.group_odental_academic_supervisor"/>
+    <menuitem id="menu_academic_cases" name="Casos asignados" parent="menu_academic_supervision" action="action_academic_case" sequence="10"/>
+    <menuitem id="menu_academic_submissions" name="Trabajos por revisar" parent="menu_academic_supervision" action="action_academic_submission" sequence="20"/>
+    <menuitem id="menu_academic_report" name="Experiencia clínica" parent="menu_academic_supervision" action="action_academic_report" sequence="30"/>
+    <menuitem id="menu_academic_configuration" name="Configuración" parent="menu_odental_academic_root" sequence="90" groups="odental_academic.group_odental_academic_supervisor"/>
+    <menuitem id="menu_academic_program" name="Programas" parent="menu_academic_configuration" action="action_academic_program" sequence="10"/>
+    <menuitem id="menu_academic_period" name="Períodos" parent="menu_academic_configuration" action="action_academic_period" sequence="20"/>
+    <menuitem id="menu_academic_rotation" name="Rotaciones" parent="menu_academic_configuration" action="action_academic_rotation" sequence="30"/>
+    <menuitem id="menu_academic_audit" name="Auditoría" parent="menu_academic_configuration" action="action_academic_audit" sequence="40"/>
+</odoo>
+

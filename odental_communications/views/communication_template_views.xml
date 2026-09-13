@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_communication_template_list" model="ir.ui.view"><field name="name">odental.communication.template.list</field><field name="model">odental.communication.template</field><field name="arch" type="xml"><list><field name="name"/><field name="organization_id"/><field name="message_type"/><field name="channel"/><field name="active"/></list></field></record>
+    <record id="view_communication_template_form" model="ir.ui.view"><field name="name">odental.communication.template.form</field><field name="model">odental.communication.template</field><field name="arch" type="xml"><form><sheet><div class="oe_title"><h1><field name="name"/></h1></div><group><field name="organization_id"/><field name="message_type"/><field name="channel"/><field name="active"/></group><field name="body" placeholder="Hola {patient_name}..."/><label string="Variables disponibles: {patient_name}, {service_name}, {professional_name}, {organization_name}, {appointment_datetime}, {offer_expires_at}" for="body" class="text-muted"/></sheet></form></field></record>
+    <record id="action_communication_template" model="ir.actions.act_window"><field name="name">Plantillas</field><field name="res_model">odental.communication.template</field><field name="view_mode">list,form</field></record>
+</odoo>
+

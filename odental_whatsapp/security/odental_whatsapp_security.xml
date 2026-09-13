@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_whatsapp_account_member" model="ir.rule">
+        <field name="name">O Dental WhatsApp: cuentas autorizadas</field>
+        <field name="model_id" ref="model_odental_whatsapp_account"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_whatsapp_event_member" model="ir.rule">
+        <field name="name">O Dental WhatsApp: eventos autorizados</field>
+        <field name="model_id" ref="model_odental_whatsapp_event"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_whatsapp_request_member" model="ir.rule">
+        <field name="name">O Dental WhatsApp: solicitudes autorizadas</field>
+        <field name="model_id" ref="model_odental_whatsapp_request"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_whatsapp_token_member" model="ir.rule">
+        <field name="name">O Dental WhatsApp: acciones autorizadas</field>
+        <field name="model_id" ref="model_odental_whatsapp_action_token"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_whatsapp_account_admin" model="ir.rule"><field name="name">O Dental WhatsApp: todas las cuentas</field><field name="model_id" ref="model_odental_whatsapp_account"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_whatsapp_event_admin" model="ir.rule"><field name="name">O Dental WhatsApp: todos los eventos</field><field name="model_id" ref="model_odental_whatsapp_event"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_whatsapp_request_admin" model="ir.rule"><field name="name">O Dental WhatsApp: todas las solicitudes</field><field name="model_id" ref="model_odental_whatsapp_request"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+    <record id="rule_whatsapp_token_admin" model="ir.rule"><field name="name">O Dental WhatsApp: todas las acciones</field><field name="model_id" ref="model_odental_whatsapp_action_token"/><field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/><field name="domain_force">[(1, '=', 1)]</field></record>
+</odoo>
+

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_referral_invalid" name="O Dental - Acceso no disponible">
+        <t t-call="web.frontend_layout">
+            <main class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-5 text-center">
+                                <h1 class="h3 mb-3">Acceso no disponible</h1>
+                                <p class="text-muted mb-0" t-esc="message"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_consent_verify" name="O Dental - Verificar consentimiento">
+        <t t-call="web.frontend_layout">
+            <main class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-5">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4 p-md-5">
+                                <p class="text-uppercase text-primary small fw-bold mb-2">O Dental</p>
+                                <h1 class="h3">Consentimiento digital</h1>
+                                <p class="text-muted">
+                                    La organización <strong t-esc="referral.organization_id.name"/>
+                                    solicita autorización para la referencia <strong t-esc="referral.name"/>.
+                                </p>
+                                <div t-if="error" class="alert alert-danger" t-esc="error"/>
+                                <form t-att-action="'/odental/referral/consent/%s/verify' % token" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <label class="form-label" for="consent_code">Código temporal de seis dígitos</label>
+                                    <input id="consent_code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" class="form-control form-control-lg text-center" required="required"/>
+                                    <button type="submit" class="btn btn-primary w-100 mt-3">Verificar identidad</button>
+                                </form>
+                                <p class="small text-muted mt-4 mb-0">
+                                    Los intentos incorrectos se registran y cinco fallos bloquean temporalmente el acceso.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_consent_document" name="O Dental - Firmar consentimiento">
+        <t t-call="web.frontend_layout">
+            <main class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4 p-md-5">
+                                <p class="text-uppercase text-primary small fw-bold mb-2">O Dental · Consentimiento seguro</p>
+                                <h1 class="h3" t-esc="referral.consent_id.template_name"/>
+                                <p class="text-muted">
+                                    Paciente: <strong t-esc="referral.patient_id.name"/>
+                                    · Referencia: <strong t-esc="referral.name"/>
+                                </p>
+                                <div t-if="error" class="alert alert-danger" t-esc="error"/>
+                                <section class="border rounded p-3 p-md-4 mb-4">
+                                    <div t-field="referral.consent_id.consent_text"/>
+                                </section>
+                                <section class="alert alert-info mb-4">
+                                    <h2 class="h6">Información exacta que se autoriza compartir</h2>
+                                    <p class="mb-0" style="white-space: pre-wrap" t-esc="referral.consent_id.scope_summary"/>
+                                </section>
+                                <form t-att-action="'/odental/referral/consent/%s/sign' % token" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="signer_name">Nombre completo del firmante</label>
+                                            <input id="signer_name" name="signer_name" type="text" class="form-control" required="required"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="signer_identification">Identificación del firmante</label>
+                                            <input id="signer_identification" name="signer_identification" type="text" class="form-control" required="required"/>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" for="signer_type">Firma como</label>
+                                            <select id="signer_type" name="signer_type" class="form-select" required="required">
+                                                <option value="patient">Paciente</option>
+                                                <option value="representative">Padre, madre o representante legal</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-check">
+                                                <input id="accepted" name="accepted" value="yes" type="checkbox" class="form-check-input" required="required"/>
+                                                <label class="form-check-label" for="accepted">
+                                                    Confirmo que leí el documento y autorizo únicamente el alcance descrito.
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mt-4">Firmar consentimiento</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_consent_signed" name="O Dental - Consentimiento firmado">
+        <t t-call="web.frontend_layout">
+            <main class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-5 text-center">
+                                <p class="text-uppercase text-success small fw-bold">O Dental</p>
+                                <h1 class="h3">Consentimiento registrado</h1>
+                                <p>
+                                    El consentimiento <strong t-esc="consent.name"/>
+                                    fue firmado correctamente por <strong t-esc="consent.signer_name"/>.
+                                </p>
+                                <p class="text-muted mb-0">
+                                    La clínica todavía debe autorizar el acceso temporal del profesional receptor. La firma no habilita el acceso por sí sola.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_referral_verify" name="O Dental - Verificar referencia">
+        <t t-call="web.frontend_layout">
+            <main class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-5">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4 p-md-5">
+                                <p class="text-uppercase text-primary small fw-bold mb-2">O Dental</p>
+                                <h1 class="h3">Acceso clínico temporal</h1>
+                                <p class="text-muted">
+                                    Referencia <strong t-esc="referral.name"/> dirigida a
+                                    <strong t-esc="referral.recipient_name"/>.
+                                </p>
+                                <div t-if="error" class="alert alert-danger" t-esc="error"/>
+                                <form t-att-action="'/odental/referral/%s/verify' % token" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <label class="form-label" for="code">Código temporal de seis dígitos</label>
+                                    <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" class="form-control form-control-lg text-center" required="required"/>
+                                    <button type="submit" class="btn btn-primary w-100 mt-3">Verificar identidad</button>
+                                </form>
+                                <p class="small text-muted mt-4 mb-0">
+                                    El enlace y el código deben recibirse por canales separados. Los intentos fallidos quedan registrados.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_referral_detail" name="O Dental - Referencia clínica">
+        <t t-call="web.frontend_layout">
+            <main class="container py-4">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                    <div>
+                        <p class="text-uppercase text-primary small fw-bold mb-1">O Dental · Referencia segura</p>
+                        <h1 class="h3 mb-1" t-esc="referral.name"/>
+                        <p class="text-muted mb-0">
+                            Paciente: <strong t-esc="referral.patient_id.name"/>
+                            · Receptor: <strong t-esc="referral.recipient_name"/>
+                        </p>
+                    </div>
+                    <div class="text-md-end mt-3 mt-md-0">
+                        <span class="badge text-bg-warning">Acceso temporal</span>
+                        <div class="small text-muted mt-1">Vence: <span t-esc="referral.expires_at"/></div>
+                    </div>
+                </div>
+
+                <div t-if="submitted" class="alert alert-success">
+                    El informe fue recibido. La clínica de origen deberá revisarlo antes de incorporarlo al seguimiento clínico.
+                </div>
+                <div class="alert alert-info">
+                    Este acceso muestra exclusivamente la información seleccionada para la referencia. No permite navegar por el expediente completo.
+                </div>
+
+                <section class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Motivo y consulta</h2>
+                        <p class="mb-2" style="white-space: pre-wrap" t-esc="referral.referral_reason"/>
+                        <p t-if="referral.clinical_question" class="mb-0"><strong>Pregunta clínica:</strong> <span style="white-space: pre-wrap" t-esc="referral.clinical_question"/></p>
+                    </div>
+                </section>
+
+                <section t-if="referral.share_alerts and referral.clinical_record_id.alerts" class="card shadow-sm border-danger mb-4">
+                    <div class="card-body">
+                        <h2 class="h5 text-danger">Alertas clínicas necesarias</h2>
+                        <p class="mb-0" style="white-space: pre-wrap" t-esc="referral.clinical_record_id.alerts"/>
+                    </div>
+                </section>
+
+                <section t-if="referral.history_entry_ids" class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Antecedentes seleccionados</h2>
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead><tr><th>Antecedente</th><th>Estado</th><th>Severidad</th><th>Detalle</th></tr></thead>
+                                <tbody>
+                                    <tr t-foreach="referral.history_entry_ids" t-as="entry">
+                                        <td t-esc="entry.name"/>
+                                        <td t-esc="entry.status"/>
+                                        <td t-esc="entry.severity or ''"/>
+                                        <td style="white-space: pre-wrap" t-esc="entry.details or ''"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section t-if="referral.encounter_ids" class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Evoluciones seleccionadas</h2>
+                        <article t-foreach="referral.encounter_ids" t-as="encounter" class="border-bottom py-3">
+                            <div class="small text-muted mb-2"><span t-esc="encounter.name"/> · <span t-esc="encounter.encounter_datetime"/></div>
+                            <p t-if="encounter.chief_complaint"><strong>Motivo:</strong> <span t-esc="encounter.chief_complaint"/></p>
+                            <p t-if="encounter.clinical_findings"><strong>Hallazgos:</strong> <span t-esc="encounter.clinical_findings"/></p>
+                            <p t-if="encounter.diagnosis_summary"><strong>Diagnóstico:</strong> <span t-esc="encounter.diagnosis_summary"/></p>
+                            <p t-if="encounter.procedures_performed" class="mb-0"><strong>Procedimientos:</strong> <span t-esc="encounter.procedures_performed"/></p>
+                        </article>
+                    </div>
+                </section>
+
+                <section t-if="referral.odontogram_ids" class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Odontogramas seleccionados</h2>
+                        <div t-foreach="referral.odontogram_ids" t-as="chart" class="mb-3">
+                            <strong><span t-esc="chart.name"/> · versión <span t-esc="chart.version"/></strong>
+                            <p t-if="chart.summary" t-esc="chart.summary"/>
+                            <ul class="mb-0">
+                                <li t-foreach="chart.finding_ids" t-as="finding">
+                                    Pieza <span t-esc="finding.tooth_id.code"/> ·
+                                    <span t-esc="finding.surface"/> ·
+                                    <span t-esc="finding.condition"/>
+                                    <span t-if="finding.notes"> — <span t-esc="finding.notes"/></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section t-if="referral.image_ids" class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Imágenes y archivos seleccionados</h2>
+                        <div class="row g-3">
+                            <div t-foreach="referral.image_ids" t-as="image" class="col-md-6">
+                                <div class="border rounded p-3 h-100">
+                                    <t t-set="safe_image" t-value="image.mimetype in ('image/jpeg', 'image/png', 'image/gif', 'image/webp')"/>
+                                    <strong t-esc="image.filename"/>
+                                    <div class="small text-muted mb-2"><span t-esc="image.category"/> · <span t-esc="image.capture_datetime"/></div>
+                                    <img t-if="safe_image" t-att-src="'/odental/referral/%s/image/%s' % (token, image.id)" class="img-fluid rounded mb-2" alt="Imagen clínica seleccionada"/>
+                                    <a t-if="referral.allow_file_download" t-att-href="'/odental/referral/%s/image/%s?download=1' % (token, image.id)" class="btn btn-sm btn-outline-primary">Descargar archivo</a>
+                                    <a t-elif="image.mimetype == 'application/pdf'" t-att-href="'/odental/referral/%s/image/%s' % (token, image.id)" target="_blank" rel="noreferrer" class="btn btn-sm btn-outline-secondary">Visualizar PDF</a>
+                                    <span t-elif="not safe_image" class="small text-muted">La clínica no autorizó la descarga de este formato.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section t-if="referral.treatment_plan_ids" class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Tratamientos clínicos seleccionados</h2>
+                        <div t-foreach="referral.treatment_plan_ids" t-as="plan" class="mb-3">
+                            <strong><span t-esc="plan.name"/> · versión <span t-esc="plan.version"/></strong>
+                            <ul class="mb-0">
+                                <t t-foreach="plan.line_ids" t-as="line">
+                                    <li t-if="line.state != 'cancelled'">
+                                        <span t-esc="line.description"/>
+                                        <span t-if="line.tooth_id"> · pieza <span t-esc="line.tooth_id.code"/></span>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section t-if="referral.access_level == 'read_report'" class="card shadow-sm border-0 mb-5">
+                    <div class="card-body">
+                        <h2 class="h5">Informe del profesional receptor</h2>
+                        <div t-if="referral.report_ids" class="alert alert-success mb-0">
+                            El informe ya fue recibido y está pendiente de revisión por la clínica de origen.
+                        </div>
+                        <form t-else="" t-att-action="'/odental/referral/%s/report' % token" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <label class="form-label" for="summary">Hallazgos y recomendaciones</label>
+                            <textarea id="summary" name="summary" rows="7" class="form-control" required="required"></textarea>
+                            <label class="form-label mt-3" for="report_file">Documento opcional (máximo 10 MB)</label>
+                            <input id="report_file" name="report_file" type="file" class="form-control"/>
+                            <button type="submit" class="btn btn-primary mt-3">Enviar informe</button>
+                        </form>
+                    </div>
+                </section>
+
+                <p class="small text-muted text-center">
+                    Todos los accesos, verificaciones y archivos consultados quedan registrados por seguridad.
+                </p>
+            </main>
+        </t>
+    </template>
+
+    <template id="portal_referral_report_received" name="O Dental - Informe recibido">
+        <t t-call="web.frontend_layout">
+            <main class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-5 text-center">
+                                <p class="text-uppercase text-success small fw-bold">O Dental</p>
+                                <h1 class="h3">Informe recibido</h1>
+                                <p>
+                                    El informe de <strong t-esc="referral.recipient_name"/>
+                                    fue registrado correctamente para la referencia
+                                    <strong t-esc="referral.name"/>.
+                                </p>
+                                <p class="text-muted mb-0">
+                                    El acceso clínico temporal terminó automáticamente. La clínica de origen revisará el informe antes de incorporarlo al seguimiento del paciente.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>

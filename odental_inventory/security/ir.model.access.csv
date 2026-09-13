@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_material_user,odental.service.material user,model_odental_service_material,odental_core.group_odental_user,1,0,0,0
+access_service_material_manager,odental.service.material manager,model_odental_service_material,odental_core.group_odental_manager,1,1,1,1
+access_material_consumption_user,odental.material.consumption user,model_odental_material_consumption,odental_core.group_odental_user,1,1,1,0
+access_material_consumption_manager,odental.material.consumption manager,model_odental_material_consumption,odental_core.group_odental_manager,1,1,1,1
+access_material_consumption_line_user,odental.material.consumption.line user,model_odental_material_consumption_line,odental_core.group_odental_user,1,1,1,0
+access_material_consumption_line_manager,odental.material.consumption.line manager,model_odental_material_consumption_line,odental_core.group_odental_manager,1,1,1,1
+

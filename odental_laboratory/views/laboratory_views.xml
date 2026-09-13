@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_laboratory_list" model="ir.ui.view"><field name="name">odental.laboratory.list</field><field name="model">odental.laboratory</field><field name="arch" type="xml"><list><field name="name"/><field name="partner_id"/><field name="organization_id"/><field name="email"/><field name="phone"/><field name="default_turnaround_days"/><field name="active"/></list></field></record>
+    <record id="view_laboratory_form" model="ir.ui.view"><field name="name">odental.laboratory.form</field><field name="model">odental.laboratory</field><field name="arch" type="xml"><form><sheet><div class="oe_title"><h1><field name="name"/></h1></div><group><group><field name="organization_id"/><field name="partner_id"/><field name="active"/></group><group><field name="email"/><field name="phone"/><field name="default_turnaround_days"/></group></group><field name="notes"/></sheet><chatter/></form></field></record>
+    <record id="action_laboratory" model="ir.actions.act_window"><field name="name">Laboratorios</field><field name="res_model">odental.laboratory</field><field name="view_mode">list,form</field></record>
+</odoo>
+

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_communication_consent_event_user,odental.communication.consent.event user,model_odental_communication_consent_event,odental_core.group_odental_user,1,0,0,0
+access_communication_template_user,odental.communication.template user,model_odental_communication_template,odental_core.group_odental_user,1,0,0,0
+access_communication_template_manager,odental.communication.template manager,model_odental_communication_template,odental_core.group_odental_manager,1,1,1,1
+access_communication_message_user,odental.communication.message user,model_odental_communication_message,odental_core.group_odental_user,1,1,1,0
+access_communication_message_manager,odental.communication.message manager,model_odental_communication_message,odental_core.group_odental_manager,1,1,1,1
+access_waitlist_entry_user,odental.waitlist.entry user,model_odental_waitlist_entry,odental_core.group_odental_user,1,1,1,0
+access_waitlist_entry_manager,odental.waitlist.entry manager,model_odental_waitlist_entry,odental_core.group_odental_manager,1,1,1,1
+access_slot_offer_user,odental.slot.offer user,model_odental_slot_offer,odental_core.group_odental_user,1,1,0,0
+access_slot_offer_manager,odental.slot.offer manager,model_odental_slot_offer,odental_core.group_odental_manager,1,1,1,1
+

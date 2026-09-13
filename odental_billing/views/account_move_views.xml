@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_odental_billing" model="ir.ui.view">
+        <field name="name">account.move.form.odental.billing</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="odental_billing" string="O Dental" invisible="not odental_is_clinical">
+                    <group>
+                        <group>
+                            <field name="odental_is_clinical" invisible="1"/>
+                            <field name="odental_treatment_plan_id"/>
+                            <field name="odental_patient_id"/>
+                            <field name="odental_organization_id"/>
+                            <field name="odental_site_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Control fiscal SAR">
+                            <field name="odental_fiscal_authorization_id" readonly="state != 'draft'"/>
+                            <field name="odental_fiscal_number"/>
+                            <field name="odental_cai" password="True"/>
+                            <field name="odental_fiscal_date_limit"/>
+                            <field name="odental_fiscal_range"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

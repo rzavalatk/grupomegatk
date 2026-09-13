@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_odental_referral_member" model="ir.rule">
+        <field name="name">O Dental: referencias autorizadas</field>
+        <field name="model_id" ref="model_odental_referral"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_referral_report_member" model="ir.rule">
+        <field name="name">O Dental: informes de referencia autorizados</field>
+        <field name="model_id" ref="model_odental_referral_report"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_referral_log_member" model="ir.rule">
+        <field name="name">O Dental: bitácoras de referencia autorizadas</field>
+        <field name="model_id" ref="model_odental_referral_access_log"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="rule_odental_referral_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de referencias</field>
+        <field name="model_id" ref="model_odental_referral"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_referral_report_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de informes</field>
+        <field name="model_id" ref="model_odental_referral_report"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_referral_log_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de bitácoras</field>
+        <field name="model_id" ref="model_odental_referral_access_log"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

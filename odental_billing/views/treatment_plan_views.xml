@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_treatment_plan_billing_form" model="ir.ui.view">
+        <field name="name">odental.treatment.plan.billing.form</field>
+        <field name="model">odental.treatment.plan</field>
+        <field name="inherit_id" ref="odental_treatment.view_odental_treatment_plan_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_create_quotation']" position="after">
+                <button name="action_create_invoice" type="object" string="Crear factura borrador" class="btn-primary" groups="odental_core.group_odental_manager" invisible="state not in ('approved', 'in_progress', 'completed') or invoice_id"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-money" invisible="not invoice_id">
+                    <field name="invoice_id" widget="statinfo" string="Factura"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='billing_company_id']" position="after">
+                <field name="billing_site_id" readonly="state not in ('draft', 'rejected', 'offered')" domain="['|', ('organization_id', '=', organization_id), ('shared_with_organization_ids', 'in', [organization_id])]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
