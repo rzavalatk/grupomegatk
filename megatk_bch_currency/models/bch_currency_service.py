@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+import logging
 
 
 import requests
@@ -7,6 +8,8 @@ import requests
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 
 
@@ -137,9 +140,50 @@ class BCHCurrencyService(models.AbstractModel):
             self.with_context(tz="America/Tegucigalpa"),
             fields.Datetime.now(),
         )
-        if honduras_now.weekday() == 6:
+
+        # Ejecutar de lunes a sábado, entre las 9:00 y las 11:59 de Honduras.
+        # El cron corre cada 15 minutos para reintentar si el BCH aún no
+        # publicó la tasa o si hubo una falla temporal.
+        if honduras_now.weekday() == 6 or not 9 <= honduras_now.hour < 12:
             return False
-        return self.update_usd_rates()
+
+        try:
+            today = honduras_now.date()
+            companies = self._companies()
+            usd = self.env.ref("base.USD")
+            existing = self.env["res.currency.rate"].sudo().search_count(
+                [
+                    ("currency_id", "=", usd.id),
+                    ("company_id", "in", companies.ids),
+                    ("name", "=", today),
+                ]
+            )
+            if existing >= len(companies):
+                return False
+
+            quote_date, hnl_per_usd = self._quote()
+            if quote_date != today:
+                _logger.warning(
+                    "BCH USD: tasa todavía no disponible para %s; "
+                    "última fecha recibida %s. Se reintentará.",
+                    today,
+                    quote_date,
+                )
+                return False
+
+            preview, results = self.update_usd_rates()
+            _logger.info(
+                "BCH USD actualizado: fecha=%s tasa=%s resultados=%s",
+                preview["date"],
+                preview["hnl_per_usd"],
+                ", ".join(results),
+            )
+            return True
+        except Exception:
+            _logger.exception(
+                "BCH USD: falló el intento automático; se reintentará."
+            )
+            return False
 
 
 
