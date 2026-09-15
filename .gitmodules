@@ -1,0 +1,4 @@
+[submodule "commercial_planning_addons"]
+	path = commercial_planning_addons
+	url = git@github.com:ajz04megatk/comercial-odoo.git
+	branch = fix/clasificacion-origen-cliente
