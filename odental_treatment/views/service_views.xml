@@ -8,6 +8,7 @@
             <xpath expr="//group[1]" position="after">
                 <group string="Venta y facturación">
                     <field name="product_id"/>
+                    <field name="product_auto_created" invisible="1"/>
                     <field name="price_unit"/>
                     <field name="currency_id" invisible="1"/>
                 </group>

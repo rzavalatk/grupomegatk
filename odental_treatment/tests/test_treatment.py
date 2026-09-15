@@ -76,6 +76,25 @@ class TestODentalTreatment(TransactionCase):
         with self.assertRaises(UserError):
             plan.line_ids.write({"price_unit": 1.0})
 
+    def test_service_creates_and_updates_billing_product_automatically(self):
+        service = self.env["odental.service"].create(
+            {
+                "name": "Consulta automática",
+                "code": "AUTO-CONS",
+                "organization_id": self.organization.id,
+                "price_unit": 850.0,
+            }
+        )
+        self.assertTrue(service.product_id)
+        self.assertTrue(service.product_auto_created)
+        self.assertEqual(service.product_id.type, "service")
+        self.assertTrue(service.product_id.sale_ok)
+        self.assertFalse(service.product_id.purchase_ok)
+        self.assertEqual(service.product_id.lst_price, 850.0)
+        service.write({"name": "Consulta automática actualizada", "price_unit": 900.0})
+        self.assertEqual(service.product_id.name, "Consulta automática actualizada")
+        self.assertEqual(service.product_id.lst_price, 900.0)
+
     def test_approval_requires_verifiable_evidence(self):
         plan = self._new_plan()
         plan.action_offer()

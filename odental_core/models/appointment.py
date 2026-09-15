@@ -10,14 +10,32 @@ class ODentalAppointment(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "start_datetime desc"
 
-    name = fields.Char(default="Nuevo", readonly=True, copy=False, index=True)
-    active = fields.Boolean(default=True)
-    organization_id = fields.Many2one("odental.organization", required=True, ondelete="restrict", index=True)
-    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
-    patient_id = fields.Many2one("odental.patient", required=True, ondelete="restrict", index=True, tracking=True)
-    professional_id = fields.Many2one("odental.professional", required=True, ondelete="restrict", index=True, tracking=True)
-    service_id = fields.Many2one("odental.service", required=True, ondelete="restrict", tracking=True)
-    site_id = fields.Many2one("odental.site", required=True, ondelete="restrict")
+    name = fields.Char(string="Número de cita", default="Nuevo", readonly=True, copy=False, index=True)
+    active = fields.Boolean(string="Activo", default=True)
+    organization_id = fields.Many2one(
+        "odental.organization", string="Organización", required=True, ondelete="restrict", index=True
+    )
+    company_id = fields.Many2one(
+        related="organization_id.company_id", string="Compañía", store=True, index=True
+    )
+    patient_id = fields.Many2one(
+        "odental.patient", string="Paciente", required=True, ondelete="restrict", index=True, tracking=True
+    )
+    professional_id = fields.Many2one(
+        "odental.professional", string="Profesional responsable", required=True,
+        ondelete="restrict", index=True, tracking=True
+    )
+    service_id = fields.Many2one(
+        "odental.service", string="Servicio", required=True, ondelete="restrict", tracking=True
+    )
+    service_requires_assistant = fields.Boolean(
+        related="service_id.require_assistant",
+        string="El servicio requiere asistente",
+        readonly=True,
+    )
+    site_id = fields.Many2one(
+        "odental.site", string="Sede", required=True, ondelete="restrict"
+    )
     resource_ids = fields.Many2many(
         "odental.resource", "odental_appointment_resource_rel", "appointment_id", "resource_id",
         string="Recursos reservados"
@@ -33,13 +51,13 @@ class ODentalAppointment(models.Model):
         compute="_compute_available_participant_users",
         string="Usuarios disponibles",
     )
-    start_datetime = fields.Datetime(required=True, index=True, tracking=True)
-    duration_minutes = fields.Integer(required=True, default=30, tracking=True)
-    preparation_minutes = fields.Integer(default=0)
-    cleaning_minutes = fields.Integer(default=0)
-    end_datetime = fields.Datetime(compute="_compute_datetimes", store=True, index=True)
-    blocking_start = fields.Datetime(compute="_compute_datetimes", store=True, index=True)
-    blocking_end = fields.Datetime(compute="_compute_datetimes", store=True, index=True)
+    start_datetime = fields.Datetime(string="Fecha y hora de inicio", required=True, index=True, tracking=True)
+    duration_minutes = fields.Integer(string="Duración (minutos)", required=True, default=30, tracking=True)
+    preparation_minutes = fields.Integer(string="Preparación previa (minutos)", default=0)
+    cleaning_minutes = fields.Integer(string="Limpieza posterior (minutos)", default=0)
+    end_datetime = fields.Datetime(string="Fecha y hora de finalización", compute="_compute_datetimes", store=True, index=True)
+    blocking_start = fields.Datetime(string="Inicio del bloqueo", compute="_compute_datetimes", store=True, index=True)
+    blocking_end = fields.Datetime(string="Fin del bloqueo", compute="_compute_datetimes", store=True, index=True)
     state = fields.Selection(
         [
             ("draft", "Borrador"),
@@ -50,9 +68,9 @@ class ODentalAppointment(models.Model):
             ("cancelled", "Cancelada"),
             ("no_show", "No asistió"),
         ],
-        default="draft", required=True, index=True, tracking=True
+        string="Estado", default="draft", required=True, index=True, tracking=True
     )
-    notes = fields.Text()
+    notes = fields.Text(string="Notas")
 
     @api.depends(
         "organization_id",
@@ -166,9 +184,9 @@ class ODentalAppointment(models.Model):
                 raise ValidationError("Uno o más recursos no están disponibles para la organización de la cita.")
             if any(resource.site_id != appointment.site_id for resource in appointment.resource_ids):
                 raise ValidationError("Todos los recursos deben pertenecer a la sede seleccionada.")
-            appointment._check_required_resources()
             if appointment.state not in blocking_states or not appointment.blocking_start or not appointment.blocking_end:
                 continue
+            appointment._check_required_resources()
             base_domain = [
                 ("id", "!=", appointment.id),
                 ("state", "in", blocking_states),
@@ -242,7 +260,12 @@ class ODentalAppointment(models.Model):
         missing = [resource_type for resource_type, required in requirements.items() if required and resource_type not in present_types]
         if missing:
             labels = dict(self.env["odental.resource"]._fields["resource_type"].selection)
-            raise ValidationError("Faltan recursos obligatorios: %s" % ", ".join(labels[item] for item in missing))
+            missing_labels = ", ".join(labels[item] for item in missing)
+            raise ValidationError(
+                "El servicio «%s» requiere los siguientes recursos: %s. "
+                "Revise la configuración del servicio o asígnelos a la cita."
+                % (self.service_id.display_name, missing_labels)
+            )
 
     def action_schedule(self):
         self.write({"state": "scheduled"})
