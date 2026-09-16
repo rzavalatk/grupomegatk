@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_odental_professional_list" model="ir.ui.view"><field name="name">odental.professional.list</field><field name="model">odental.professional</field><field name="arch" type="xml"><list><field name="name"/><field name="specialty"/><field name="license_number"/><field name="user_id"/><field name="organization_ids" widget="many2many_tags"/></list></field></record>
-    <record id="view_odental_professional_form" model="ir.ui.view"><field name="name">odental.professional.form</field><field name="model">odental.professional</field><field name="arch" type="xml"><form><sheet><div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div><group><group><field name="user_id"/><field name="partner_id"/><field name="license_number"/></group><group><field name="specialty"/><field name="company_id" groups="base.group_multi_company"/><field name="active"/></group></group><group string="Organización a la que pertenece"><field name="organization_ids" widget="many2many_tags" nolabel="1"/></group></sheet><chatter/></form></field></record>
+    <record id="view_odental_professional_list" model="ir.ui.view">
+        <field name="name">odental.professional.list</field>
+        <field name="model">odental.professional</field>
+        <field name="arch" type="xml">
+            <list default_order="first_surname,second_surname,first_name,middle_name">
+                <field name="first_surname"/>
+                <field name="second_surname" optional="show"/>
+                <field name="first_name"/>
+                <field name="middle_name" optional="hide"/>
+                <field name="specialty"/>
+                <field name="license_number"/>
+                <field name="professional_code" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="organization_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_professional_form" model="ir.ui.view">
+        <field name="name">odental.professional.form</field>
+        <field name="model">odental.professional</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="name" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="first_name" string="Profesional"/>
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group string="Nombres y apellidos">
+                        <group>
+                            <field name="first_name" required="1" placeholder="Primer nombre"/>
+                            <field name="middle_name" placeholder="Segundo nombre"/>
+                        </group>
+                        <group>
+                            <field name="first_surname" required="1" placeholder="Primer apellido"/>
+                            <field name="second_surname" placeholder="Segundo apellido"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                            <field name="license_number"/>
+                        </group>
+                        <group>
+                            <field name="specialty"/>
+                            <field name="professional_code" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="organization_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_odental_professional_search" model="ir.ui.view">
+        <field name="name">odental.professional.search</field>
+        <field name="model">odental.professional</field>
+        <field name="arch" type="xml">
+            <search string="Buscar profesionales">
+                <field name="name" string="Nombre o apellido"/>
+                <field name="specialty"/>
+                <field name="license_number"/>
+                <field name="professional_code"/>
+                <field name="organization_ids"/>
+            </search>
+        </field>
+    </record>
     <record id="action_odental_professional" model="ir.actions.act_window"><field name="name">Profesionales</field><field name="res_model">odental.professional</field><field name="view_mode">list,form</field></record>
 </odoo>

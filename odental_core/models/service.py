@@ -6,7 +6,7 @@ class ODentalService(models.Model):
     _description = "Servicio clínico O Dental"
     _order = "name"
 
-    name = fields.Char(string="Nombre del servicio", required=True, tracking=True)
+    name = fields.Char(string="Nombre del servicio", required=True)
     code = fields.Char(string="Código interno", required=True, index=True)
     active = fields.Boolean(string="Activo", default=True)
     organization_id = fields.Many2one(
@@ -67,9 +67,13 @@ class ODentalServiceDuration(models.Model):
     _name = "odental.service.duration"
     _description = "Duración de servicio por profesional"
 
-    service_id = fields.Many2one("odental.service", required=True, ondelete="cascade")
-    professional_id = fields.Many2one("odental.professional", required=True, ondelete="cascade")
-    duration_minutes = fields.Integer(required=True)
+    service_id = fields.Many2one(
+        "odental.service", string="Servicio", required=True, ondelete="cascade"
+    )
+    professional_id = fields.Many2one(
+        "odental.professional", string="Profesional", required=True, ondelete="cascade"
+    )
+    duration_minutes = fields.Integer(string="Duración (minutos)", required=True)
 
     _sql_constraints = [
         ("service_professional_unique", "unique(service_id, professional_id)", "Ya existe una duración para este profesional."),
