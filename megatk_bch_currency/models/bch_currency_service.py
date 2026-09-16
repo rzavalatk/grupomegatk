@@ -1,18 +1,27 @@
 from datetime import datetime
 from decimal import Decimal
+import logging
+
 
 import requests
 
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
+
+
 
 
 class BCHCurrencyService(models.AbstractModel):
     _name = "megatk.bch.currency.service"
     _description = "MEGATK BCH currency update service"
 
+
     _API = "https://bchapi-am.azure-api.net/api/v1/indicadores/620/cifras?formato=Json"
     _AUTHORIZED_COMPANY_IDS = (8, 9, 11)
+
 
     def _companies(self):
         companies = self.env["res.company"].browse(self._AUTHORIZED_COMPANY_IDS).exists()
@@ -25,6 +34,7 @@ class BCHCurrencyService(models.AbstractModel):
                 % ", ".join(bad.mapped("name"))
             )
         return companies.sorted("id")
+
 
     def _quote(self):
         key = self.env["ir.config_parameter"].sudo().get_param(
@@ -43,6 +53,7 @@ class BCHCurrencyService(models.AbstractModel):
         except (requests.RequestException, ValueError) as error:
             raise UserError(_("BCH no respondió correctamente: %s") % error) from error
 
+
         rows = rows if isinstance(rows, list) else rows.get("data", [])
         quotes = []
         for row in rows:
@@ -58,8 +69,10 @@ class BCHCurrencyService(models.AbstractModel):
             except (TypeError, ValueError, ArithmeticError):
                 continue
 
+
         if not quotes:
             raise UserError(_("BCH no devolvió una tasa de venta USD utilizable."))
+
 
         quote_date, hnl_per_usd = max(quotes)
         if not Decimal("15") <= hnl_per_usd <= Decimal("45"):
@@ -68,6 +81,7 @@ class BCHCurrencyService(models.AbstractModel):
                 % hnl_per_usd
             )
         return quote_date, hnl_per_usd
+
 
     def preview_usd_rate(self):
         quote_date, hnl_per_usd = self._quote()
@@ -78,11 +92,13 @@ class BCHCurrencyService(models.AbstractModel):
             "companies": self._companies(),
         }
 
+
     def update_usd_rates(self):
         preview = self.preview_usd_rate()
         usd = self.env.ref("base.USD")
         Rate = self.env["res.currency.rate"].sudo()
         results = []
+
 
         for company in preview["companies"]:
             rate = Rate.search(
@@ -114,19 +130,73 @@ class BCHCurrencyService(models.AbstractModel):
                 action = "creada"
             results.append("%s: %s" % (company.name, action))
 
+
         return preview, results
 
+
+    @api.model
     def cron_update_usd_rates(self):
-        return self.update_usd_rates()
+        honduras_now = fields.Datetime.context_timestamp(
+            self.with_context(tz="America/Tegucigalpa"),
+            fields.Datetime.now(),
+        )
+
+        # Ejecutar de lunes a sábado, entre las 9:00 y las 11:59 de Honduras.
+        # El cron corre cada 15 minutos para reintentar si el BCH aún no
+        # publicó la tasa o si hubo una falla temporal.
+        if honduras_now.weekday() == 6 or not 9 <= honduras_now.hour < 12:
+            return False
+
+        try:
+            today = honduras_now.date()
+            companies = self._companies()
+            usd = self.env.ref("base.USD")
+            existing = self.env["res.currency.rate"].sudo().search_count(
+                [
+                    ("currency_id", "=", usd.id),
+                    ("company_id", "in", companies.ids),
+                    ("name", "=", today),
+                ]
+            )
+            if existing >= len(companies):
+                return False
+
+            quote_date, hnl_per_usd = self._quote()
+            if quote_date != today:
+                _logger.warning(
+                    "BCH USD: tasa todavía no disponible para %s; "
+                    "última fecha recibida %s. Se reintentará.",
+                    today,
+                    quote_date,
+                )
+                return False
+
+            preview, results = self.update_usd_rates()
+            _logger.info(
+                "BCH USD actualizado: fecha=%s tasa=%s resultados=%s",
+                preview["date"],
+                preview["hnl_per_usd"],
+                ", ".join(results),
+            )
+            return True
+        except Exception:
+            _logger.exception(
+                "BCH USD: falló el intento automático; se reintentará."
+            )
+            return False
+
+
 
 
 class ResCurrency(models.Model):
     _inherit = "res.currency"
 
+
     def action_bch_preview(self):
         self.ensure_one()
         if self.name != "USD":
             raise UserError(_("La consulta BCH está disponible únicamente para USD."))
+
 
         preview = self.env["megatk.bch.currency.service"].preview_usd_rate()
         wizard = self.env["megatk.bch.currency.preview"].create(
@@ -148,9 +218,12 @@ class ResCurrency(models.Model):
         }
 
 
+
+
 class BCHCurrencyPreview(models.TransientModel):
     _name = "megatk.bch.currency.preview"
     _description = "Vista previa de tasa BCH"
+
 
     currency_id = fields.Many2one("res.currency", readonly=True, required=True)
     quote_date = fields.Date(string="Fecha BCH", readonly=True, required=True)
@@ -161,6 +234,7 @@ class BCHCurrencyPreview(models.TransientModel):
         string="USD por HNL (valor interno Odoo)", digits=(16, 12), readonly=True
     )
     company_names = fields.Text(string="Empresas autorizadas", readonly=True)
+
 
     def action_apply(self):
         self.ensure_one()
