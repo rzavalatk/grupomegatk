@@ -17,14 +17,38 @@ class ODentalService(models.Model):
         related="organization_id.company_id", string="Empresa de facturación",
         store=True, index=True,
     )
-    duration_minutes = fields.Integer(string="Duración de la atención (minutos)", required=True, default=30)
-    preparation_minutes = fields.Integer(string="Preparación previa (minutos)", default=0)
-    cleaning_minutes = fields.Integer(string="Limpieza posterior (minutos)", default=0)
-    require_room = fields.Boolean(string="Requiere consultorio", default=True)
-    require_chair = fields.Boolean(string="Requiere sillón o unidad dental", default=True)
-    require_assistant = fields.Boolean(string="Requiere asistente", default=False)
-    require_equipment = fields.Boolean(string="Requiere equipo adicional", default=False)
-    professional_duration_ids = fields.One2many("odental.service.duration", "service_id")
+    duration_minutes = fields.Integer(
+        string="Duración de la atención (minutos)", required=True, default=30,
+        help="Tiempo clínico habitual que se reservará en la agenda.",
+    )
+    preparation_minutes = fields.Integer(
+        string="Preparación previa (minutos)", default=0,
+        help="Tiempo que debe bloquearse antes de la cita para preparar el consultorio.",
+    )
+    cleaning_minutes = fields.Integer(
+        string="Limpieza posterior (minutos)", default=0,
+        help="Tiempo que debe bloquearse después de la cita para limpieza y desinfección.",
+    )
+    require_room = fields.Boolean(
+        string="Requiere consultorio", default=True,
+        help="Exige reservar un consultorio físico para poder programar la cita.",
+    )
+    require_chair = fields.Boolean(
+        string="Requiere sillón o unidad dental", default=True,
+        help="Exige un consultorio que incluya sillón o una unidad dental reservada por separado.",
+    )
+    require_assistant = fields.Boolean(
+        string="Requiere asistente", default=False,
+        help="Actívelo solo cuando la cita no pueda programarse sin una persona asignada como asistente.",
+    )
+    require_equipment = fields.Boolean(
+        string="Requiere equipo adicional", default=False,
+        help="Exige reservar al menos un equipo compartido además del consultorio.",
+    )
+    professional_duration_ids = fields.One2many(
+        "odental.service.duration", "service_id", string="Duración por profesional",
+        help="Use esta tabla únicamente cuando un profesional necesite una duración distinta a la general.",
+    )
 
     _sql_constraints = [
         ("code_organization_unique", "unique(code, organization_id)", "El código debe ser único por organización."),

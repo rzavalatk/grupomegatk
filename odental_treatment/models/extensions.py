@@ -10,11 +10,68 @@ class ODentalService(models.Model):
         string="Producto facturable",
         domain="[('type', '=', 'service')]",
         ondelete="restrict",
+        help="Producto de servicio que aparecerá en cotizaciones y facturas. O Dental lo crea automáticamente.",
+    )
+    product_auto_created = fields.Boolean(
+        string="Producto creado automáticamente",
+        default=False,
+        readonly=True,
+        copy=False,
     )
     currency_id = fields.Many2one(
         related="organization_id.company_id.currency_id", readonly=True
     )
-    price_unit = fields.Monetary(string="Precio de referencia", currency_field="currency_id")
+    price_unit = fields.Monetary(
+        string="Precio de referencia",
+        currency_field="currency_id",
+        help="Precio sugerido del servicio. Podrá ajustarse al preparar el plan de tratamiento.",
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        services = super().create(vals_list)
+        services._ensure_billing_product()
+        return services
+
+    def write(self, vals):
+        if self.env.context.get("skip_odental_product_sync"):
+            return super().write(vals)
+        values = dict(vals)
+        if "product_id" in values:
+            values["product_auto_created"] = False
+        result = super().write(values)
+        if {"name", "price_unit", "organization_id", "product_id"} & set(values):
+            self._ensure_billing_product()
+            self.filtered("product_auto_created")._sync_billing_product()
+        return result
+
+    def _ensure_billing_product(self):
+        for service in self.filtered(lambda item: not item.product_id):
+            product = self.env["product.product"].sudo().with_company(
+                service.organization_id.company_id
+            ).create(
+                {
+                    "name": service.name,
+                    "type": "service",
+                    "sale_ok": True,
+                    "purchase_ok": False,
+                    "list_price": service.price_unit,
+                    "company_id": service.organization_id.company_id.id,
+                }
+            )
+            service.with_context(skip_odental_product_sync=True).write(
+                {"product_id": product.id, "product_auto_created": True}
+            )
+
+    def _sync_billing_product(self):
+        for service in self.filtered(lambda item: item.product_id and item.product_auto_created):
+            service.product_id.sudo().write(
+                {
+                    "name": service.name,
+                    "list_price": service.price_unit,
+                    "company_id": service.organization_id.company_id.id,
+                }
+            )
 
     @api.onchange("product_id")
     def _onchange_product_id(self):
@@ -71,4 +128,3 @@ class SaleOrderLine(models.Model):
         copy=False,
         index=True,
     )
-

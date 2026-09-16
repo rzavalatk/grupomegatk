@@ -7,21 +7,27 @@ class ODentalPatient(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "name"
 
-    reference = fields.Char(default="Nuevo", readonly=True, copy=False, index=True)
-    name = fields.Char(required=True, tracking=True)
-    active = fields.Boolean(default=True)
+    reference = fields.Char(
+        string="Código de paciente", default="Nuevo", readonly=True, copy=False, index=True
+    )
+    name = fields.Char(string="Nombre completo", required=True, tracking=True)
+    active = fields.Boolean(string="Activo", default=True)
     identification = fields.Char(string="Identificación", index=True, tracking=True)
     birthdate = fields.Date(string="Fecha de nacimiento")
     gender = fields.Selection(
-        [("female", "Femenino"), ("male", "Masculino"), ("other", "Otro"), ("unspecified", "No especificado")]
+        [("female", "Femenino"), ("male", "Masculino"), ("other", "Otro"), ("unspecified", "No especificado")],
+        string="Género",
     )
-    mobile = fields.Char()
-    email = fields.Char()
+    mobile = fields.Char(string="Teléfono móvil")
+    email = fields.Char(string="Correo electrónico")
     partner_id = fields.Many2one("res.partner", string="Contacto vinculado")
     organization_id = fields.Many2one(
-        "odental.organization", required=True, ondelete="restrict", index=True, tracking=True
+        "odental.organization", string="Organización", required=True,
+        ondelete="restrict", index=True, tracking=True
     )
-    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
+    company_id = fields.Many2one(
+        related="organization_id.company_id", string="Compañía", store=True, index=True
+    )
     responsible_partner_id = fields.Many2one(
         "res.partner", string="Padre, madre o representante"
     )
@@ -45,3 +51,17 @@ class ODentalPatient(models.Model):
     def name_get(self):
         return [(record.id, f"{record.reference} - {record.name}") for record in self]
 
+    def action_new_appointment(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Nueva cita",
+            "res_model": "odental.appointment",
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "current",
+            "context": {
+                "default_patient_id": self.id,
+                "default_organization_id": self.organization_id.id,
+            },
+        }

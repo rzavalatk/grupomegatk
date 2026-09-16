@@ -85,6 +85,77 @@ class TestODentalAppointment(TransactionCase):
         self.assertEqual(appointment.blocking_start, start - timedelta(minutes=5))
         self.assertEqual(appointment.blocking_end, start + timedelta(minutes=40))
 
+    def test_schedule_without_assistant_does_not_require_participants(self):
+        values = self._appointment_values(datetime(2026, 9, 14, 16, 0))
+        values["state"] = "draft"
+        appointment = self.env["odental.appointment"].create(values)
+        self.assertFalse(appointment.participant_line_ids)
+        appointment.action_schedule()
+        self.assertEqual(appointment.state, "scheduled")
+
+    def test_incomplete_draft_can_be_saved_and_requirement_is_clear_on_schedule(self):
+        self.service.require_assistant = True
+        values = self._appointment_values(datetime(2026, 9, 14, 17, 0))
+        values["state"] = "draft"
+        appointment = self.env["odental.appointment"].create(values)
+        with self.assertRaisesRegex(ValidationError, "Evaluación.*Asistente"):
+            appointment.action_schedule()
+
+    def test_patient_new_appointment_prefills_patient_and_organization(self):
+        action = self.patient.action_new_appointment()
+        self.assertEqual(action["res_model"], "odental.appointment")
+        self.assertEqual(action["view_mode"], "form")
+        self.assertEqual(action["context"]["default_patient_id"], self.patient.id)
+        self.assertEqual(
+            action["context"]["default_organization_id"], self.organization.id
+        )
+
+    def test_equipment_handover_and_maintenance_update_status(self):
+        equipment = self.env["odental.resource"].create(
+            {
+                "name": "Motor de endodoncia 1",
+                "resource_type": "equipment",
+                "organization_id": self.organization.id,
+                "site_id": self.site.id,
+                "brand": "Marca prueba",
+                "model": "ENDO-1",
+                "serial_number": "SER-001",
+                "inventory_code": "INV-001",
+            }
+        )
+        receiver = self.env["res.partner"].create({"name": "Dra. Arrendataria"})
+        handover = self.env["odental.resource.handover"].create(
+            {
+                "resource_id": equipment.id,
+                "receiver_partner_id": receiver.id,
+                "checkout_condition": "good",
+                "checkout_notes": "Se entrega sin daños visibles.",
+            }
+        )
+        self.assertEqual(equipment.equipment_status, "loaned")
+        handover.write(
+            {
+                "returned_at": datetime(2026, 9, 18, 12, 0),
+                "returned_to_id": self.env.user.id,
+                "return_condition": "fair",
+                "return_notes": "Rayadura leve en el costado derecho.",
+            }
+        )
+        self.assertEqual(equipment.equipment_status, "available")
+        self.assertEqual(equipment.current_condition, "fair")
+        self.assertIn("Rayadura", equipment.condition_notes)
+        maintenance = self.env["odental.resource.maintenance"].create(
+            {
+                "resource_id": equipment.id,
+                "maintenance_type": "corrective",
+                "state": "in_progress",
+                "issue_description": "Revisar botón de encendido.",
+            }
+        )
+        self.assertEqual(equipment.equipment_status, "maintenance")
+        maintenance.state = "done"
+        self.assertEqual(equipment.equipment_status, "available")
+
     def test_prevent_professional_overlap(self):
         start = datetime(2026, 9, 14, 14, 0)
         self.env["odental.appointment"].create(self._appointment_values(start))
