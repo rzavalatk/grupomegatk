@@ -35,18 +35,20 @@ class ODentalServiceMaterial(models.Model):
     _description = "Material previsto por servicio O Dental"
     _order = "sequence, id"
 
-    sequence = fields.Integer(default=10)
-    service_id = fields.Many2one("odental.service", required=True, ondelete="cascade", index=True)
+    sequence = fields.Integer(string="Secuencia", default=10)
+    service_id = fields.Many2one(
+        "odental.service", string="Servicio", required=True, ondelete="cascade", index=True
+    )
     organization_id = fields.Many2one(related="service_id.organization_id", store=True, index=True)
     company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
     product_id = fields.Many2one(
         "product.product", string="Material", required=True, ondelete="restrict",
         domain="[('type', '!=', 'service')]", check_company=True
     )
-    quantity = fields.Float(required=True, default=1.0)
+    quantity = fields.Float(string="Cantidad", required=True, default=1.0)
     product_uom_id = fields.Many2one("uom.uom", string="Unidad", required=True)
     mandatory = fields.Boolean(string="Obligatorio", default=True)
-    notes = fields.Char()
+    notes = fields.Char(string="Observaciones")
 
     _sql_constraints = [
         ("service_product_unique", "unique(service_id, product_id)", "El material ya está incluido en este servicio."),

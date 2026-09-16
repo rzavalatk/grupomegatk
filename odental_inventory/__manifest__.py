@@ -1,7 +1,7 @@
 {
     "name": "O Dental Inventario Clínico",
     "summary": "Protocolos de materiales, lotes, vencimientos y consumos por cita",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
@@ -20,4 +20,3 @@
     "application": False,
     "installable": True,
 }
-

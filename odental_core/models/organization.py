@@ -8,9 +8,9 @@ class ODentalOrganization(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "name"
 
-    name = fields.Char(required=True, tracking=True)
-    code = fields.Char(required=True, copy=False, index=True)
-    active = fields.Boolean(default=True)
+    name = fields.Char(string="Nombre", required=True, tracking=True)
+    code = fields.Char(string="Código", required=True, copy=False, index=True)
+    active = fields.Boolean(string="Activo", default=True)
     organization_type = fields.Selection(
         [
             ("individual", "Odontólogo individual"),
@@ -19,6 +19,7 @@ class ODentalOrganization(models.Model):
             ("institution", "Institución"),
             ("university", "Universidad"),
         ],
+        string="Tipo de organización",
         required=True,
         default="individual",
         tracking=True,
@@ -29,12 +30,14 @@ class ODentalOrganization(models.Model):
             ("centralized", "Facturación centralizada"),
             ("mixed", "Ambas modalidades"),
         ],
+        string="Modalidad de facturación",
         required=True,
         default="independent",
         tracking=True,
     )
     company_id = fields.Many2one(
-        "res.company", required=True, default=lambda self: self.env.company, index=True
+        "res.company", string="Compañía", required=True,
+        default=lambda self: self.env.company, index=True
     )
     owner_user_id = fields.Many2one(
         "res.users", string="Propietario/administrador", required=True,
@@ -53,7 +56,7 @@ class ODentalOrganization(models.Model):
         string="Sedes compartidas disponibles",
         readonly=True,
     )
-    notes = fields.Text()
+    notes = fields.Text(string="Notas")
 
     _sql_constraints = [
         ("code_company_unique", "unique(code, company_id)", "El código debe ser único por compañía."),
