@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_bch_currency_preview_manager,bch.currency.preview.manager,model_megatk_bch_currency_preview,account.group_account_manager,1,1,1,1
+access_bch_currency_service_system,bch.currency.service.system,model_megatk_bch_currency_service,base.group_system,1,1,0,0
