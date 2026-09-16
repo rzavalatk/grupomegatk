@@ -3,6 +3,12 @@ from odoo.tests.common import TransactionCase
 
 
 class TestODentalProfessional(TransactionCase):
+    def _partner_compatible_values(self, **values):
+        """Supply defaults required by optional Grupo Mega partner extensions."""
+        if "autopost_bills" in self.env["res.partner"]._fields:
+            values.setdefault("autopost_bills", False)
+        return values
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -72,7 +78,9 @@ class TestODentalProfessional(TransactionCase):
             )
 
     def test_duplicate_user_and_contact_are_blocked(self):
-        contact = self.env["res.partner"].create({"name": "Jennifer Jovel"})
+        contact = self.env["res.partner"].create(
+            self._partner_compatible_values(name="Jennifer Jovel")
+        )
         self.env["odental.professional"].create(
             self._values(user_id=self.env.user.id, partner_id=contact.id)
         )
