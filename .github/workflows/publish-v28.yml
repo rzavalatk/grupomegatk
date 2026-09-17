@@ -1,0 +1,23 @@
+name: Publicar planificación comercial 18.0.28
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          submodules: false
+      - name: Actualizar referencia del módulo
+        run: |
+          git update-index --cacheinfo 160000,771a45bcb4ac8d2fe49d91e894a0cc73d08b152a,commercial_planning_addons
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Publica planificación comercial 18.0.28.0.0"
+          git push origin master
