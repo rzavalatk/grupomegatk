@@ -1,0 +1,27 @@
+name: Actualizar planificación comercial
+
+on:
+  push:
+    branches:
+      - comercial-planificacion
+    paths:
+      - '.github/workflows/update-commercial-planning-submodule.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: comercial-planificacion
+      - name: Actualizar submódulo y retirar flujo temporal
+        run: |
+          git config user.name "ajz04megatk"
+          git config user.email "ajz04megatk@users.noreply.github.com"
+          git update-index --cacheinfo 160000,65ef4f393ee10defb51507b46bcd9c23e5925ea2,commercial_planning_addons
+          git rm .github/workflows/update-commercial-planning-submodule.yml
+          git commit -m "Actualiza planificación comercial a 18.0.27.0.0"
+          git push origin HEAD:comercial-planificacion
