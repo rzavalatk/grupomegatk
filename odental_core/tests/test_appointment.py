@@ -6,6 +6,13 @@ from odoo.tests.common import TransactionCase
 
 class TestODentalAppointment(TransactionCase):
     @classmethod
+    def _partner_compatible_values(cls, **values):
+        """Supply defaults required by optional Grupo Mega partner extensions."""
+        if "autopost_bills" in cls.env["res.partner"]._fields:
+            values.setdefault("autopost_bills", False)
+        return values
+
+    @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.organization = cls.env["odental.organization"].create({
@@ -15,14 +22,18 @@ class TestODentalAppointment(TransactionCase):
             "name": "Dra. Prueba", "user_id": cls.env.user.id,
             "organization_ids": [(4, cls.organization.id)]
         })
-        cls.second_user = cls.env["res.users"].with_context(no_reset_password=True).create({
-            "name": "Profesional de turno",
-            "login": "professional.shift@test.invalid",
-        })
-        cls.supervisor_user = cls.env["res.users"].with_context(no_reset_password=True).create({
-            "name": "Docente supervisor",
-            "login": "supervisor.shift@test.invalid",
-        })
+        cls.second_user = cls.env["res.users"].with_context(no_reset_password=True).create(
+            cls._partner_compatible_values(
+                name="Profesional de turno",
+                login="professional.shift@test.invalid",
+            )
+        )
+        cls.supervisor_user = cls.env["res.users"].with_context(no_reset_password=True).create(
+            cls._partner_compatible_values(
+                name="Docente supervisor",
+                login="supervisor.shift@test.invalid",
+            )
+        )
         cls.organization.write({
             "user_ids": [(4, cls.second_user.id), (4, cls.supervisor_user.id)]
         })
@@ -123,7 +134,9 @@ class TestODentalAppointment(TransactionCase):
                 "inventory_code": "INV-001",
             }
         )
-        receiver = self.env["res.partner"].create({"name": "Dra. Arrendataria"})
+        receiver = self.env["res.partner"].create(
+            self._partner_compatible_values(name="Dra. Arrendataria")
+        )
         handover = self.env["odental.resource.handover"].create(
             {
                 "resource_id": equipment.id,
