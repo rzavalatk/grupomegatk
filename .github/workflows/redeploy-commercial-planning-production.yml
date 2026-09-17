@@ -1,0 +1,26 @@
+name: Reconstruir planificación comercial
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/redeploy-commercial-planning-production.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Retirar disparador temporal
+        run: |
+          git config user.name "ajz04megatk"
+          git config user.email "ajz04megatk@users.noreply.github.com"
+          git rm .github/workflows/redeploy-commercial-planning-production.yml
+          git commit -m "Retira disparador temporal de producción"
+          git push origin HEAD:master
