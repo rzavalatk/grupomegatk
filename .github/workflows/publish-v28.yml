@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.29
+name: Publicar planificación comercial 18.0.30
 
 on:
   workflow_dispatch:
@@ -16,9 +16,9 @@ jobs:
           submodules: false
       - name: Actualizar referencia del módulo probado
         run: |
-          git update-index --cacheinfo 160000,695e671e8a1c173d5a998a3381f8ca34682628de,commercial_planning_addons
+          git update-index --cacheinfo 160000,1fe617bc1084a88dfd176ac2fb17d5829ef10229,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.29.0.0"
+          git commit -m "Publica planificación comercial 18.0.30.0.0"
           git push origin master
