@@ -1,7 +1,7 @@
 {
     "name": "O Dental Caja y Facturación",
     "summary": "Facturación clínica, caja, cobros y control de rangos fiscales SAR",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
