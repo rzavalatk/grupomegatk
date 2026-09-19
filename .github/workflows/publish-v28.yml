@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.33
+name: Publicar planificación comercial 18.0.34
 on:
   workflow_dispatch:
 permissions:
@@ -11,11 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Actualizar resumen acumulado por equipos y zonas
+      - name: Corregir CXC de facturas con vendedor conservando tabla
         run: |
-          git update-index --cacheinfo 160000,2f6230d26338d292f0a61c39ec0f599f03eb2c7f,commercial_planning_addons
+          git update-index --cacheinfo 160000,2b86ab8fa63c99263725c119e1343d268cd8e4de,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.33.0.0"
+          git commit -m "Publica planificación comercial 18.0.34.0.0"
           git push origin master
