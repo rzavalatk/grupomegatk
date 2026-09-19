@@ -107,6 +107,24 @@ class TestODentalTreatment(TransactionCase):
         with self.assertRaises(ValidationError):
             plan.action_approve()
 
+    def test_approval_fingerprint_includes_fdi_tooth(self):
+        plan = self._new_plan()
+        tooth = self.env["odental.tooth"].search([("code", "=", "11")], limit=1)
+        self.assertTrue(tooth)
+        initial_hash = plan._hash_payload()
+        plan.line_ids.tooth_id = tooth
+        self.assertEqual(plan.line_ids._snapshot_values()["tooth"], "11")
+        self.assertNotEqual(plan._hash_payload(), initial_hash)
+        plan.action_offer()
+        plan.write({
+            "signer_name": "Paciente tratamiento",
+            "acceptance_method": "in_person",
+            "acceptance_reference": "tooth-approval-001",
+        })
+        plan.action_approve()
+        self.assertEqual(plan.state, "approved")
+        self.assertEqual(plan.content_hash, plan._hash_payload())
+
     def test_revision_preserves_approved_version(self):
         plan = self._new_plan()
         plan.action_offer()
