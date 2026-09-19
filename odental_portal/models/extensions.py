@@ -1,6 +1,23 @@
 from odoo import fields, models
 
 
+class ODentalClinicalAudit(models.Model):
+    _inherit = "odental.clinical.audit"
+
+    event_type = fields.Selection(
+        selection_add=[
+            ("portal_demographics_approved", "Datos del paciente aprobados desde el portal"),
+            ("portal_intake_submitted", "Formulario clínico recibido desde el portal"),
+            ("portal_intake_incorporated", "Formulario del portal incorporado al expediente"),
+        ],
+        ondelete={
+            "portal_demographics_approved": "cascade",
+            "portal_intake_submitted": "cascade",
+            "portal_intake_incorporated": "cascade",
+        },
+    )
+
+
 class ODentalPatient(models.Model):
     _inherit = "odental.patient"
 
