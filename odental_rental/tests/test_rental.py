@@ -47,13 +47,13 @@ class TestODentalRental(TransactionCase):
         })
         cls.standard_room = cls.env["odental.resource"].create({
             "name": "Consultorio 1", "resource_type": "room", "organization_id": cls.provider.id,
-            "site_id": cls.site.id, "is_rentable": True,
+            "site_id": cls.site.id, "is_rentable": True, "includes_chair": True,
             "rental_category_id": cls.standard_category.id,
             "shared_with_organization_ids": [(4, cls.renter.id)],
         })
         cls.premium_room = cls.env["odental.resource"].create({
             "name": "Clínica Dra. Jennifer", "resource_type": "room", "organization_id": cls.provider.id,
-            "site_id": cls.site.id, "is_rentable": True,
+            "site_id": cls.site.id, "is_rentable": True, "includes_chair": True,
             "rental_category_id": cls.premium_category.id,
             "shared_with_organization_ids": [(4, cls.renter.id)],
         })
@@ -158,7 +158,7 @@ class TestODentalRental(TransactionCase):
             "groups_id": [(6, 0, [user_group.id])],
             "company_id": self.env.company.id, "company_ids": [(6, 0, [self.env.company.id])],
         })
-        self.renter.write({"user_ids": [(4, renter_user.id)]})
+        self.renter.with_context(active_test=False).write({"user_ids": [(4, renter_user.id)]})
         provider_patient = self.env["odental.patient"].create({
             "name": "Paciente privado del centro", "organization_id": self.provider.id,
         })
