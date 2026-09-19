@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.31
+name: Publicar planificación comercial 18.0.32
 on:
   workflow_dispatch:
 permissions:
@@ -11,12 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Actualizar referencia del módulo probado
+      - name: Actualizar referencia del reporte mensual y acumulado
         run: |
-          git update-index --cacheinfo 160000,46b2aa41ca1a92a61466776ba2a6b6631b0adc98,commercial_planning_addons
+          git update-index --cacheinfo 160000,5223c031a9c5565048ac6a721de628f7844a3d8e,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.31.0.0"
+          git commit -m "Publica planificación comercial 18.0.32.0.0"
           git push origin master
-# Reintento de despliegue Odoo.sh 18.0.31.0.0 tras liberarse la cola, 2026-09-19.
