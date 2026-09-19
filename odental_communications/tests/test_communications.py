@@ -126,6 +126,12 @@ class TestODentalCommunications(TransactionCase):
         self.assertEqual(appointment.patient_response, "pending")
 
     def test_cancelled_slot_is_offered_and_rebooked(self):
+        self.env["odental.communication.template"].create({
+            "name": "Oferta personalizada de prueba",
+            "organization_id": self.organization.id,
+            "message_type": "waitlist_offer", "channel": "whatsapp",
+            "body": "Hola {patient_name}. Hay un espacio para {service_name} el {appointment_datetime}.",
+        })
         entry = self.env["odental.waitlist.entry"].create({
             "organization_id": self.organization.id,
             "patient_id": self.waiting_patient.id,
@@ -141,6 +147,8 @@ class TestODentalCommunications(TransactionCase):
         self.assertEqual(entry.state, "offered")
         self.assertEqual(offer.state, "offered")
         self.assertEqual(offer.message_ids.state, "queued")
+        self.assertEqual(offer.message_ids.patient_id, self.waiting_patient)
+        self.assertEqual(offer.message_ids.recipient, self.waiting_patient.mobile)
         self.assertIn(self.waiting_patient.name, offer.message_ids.body)
         self.assertNotIn(self.patient.name, offer.message_ids.body)
         action = offer.action_accept()
