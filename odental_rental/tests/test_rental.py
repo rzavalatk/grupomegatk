@@ -168,5 +168,15 @@ class TestODentalRental(TransactionCase):
         patients = self.env["odental.patient"].with_user(renter_user).search([
             ("id", "=", provider_patient.id)
         ])
-        self.assertEqual(organizations, self.provider)
+        # Sharing a location grants access to its resources, not the provider's
+        # organization record or private patient records.
+        self.assertFalse(organizations)
+        sites = self.env["odental.site"].with_user(renter_user).search([
+            ("id", "=", self.site.id)
+        ])
+        resources = self.env["odental.resource"].with_user(renter_user).search([
+            ("id", "in", (self.standard_room | self.premium_room).ids)
+        ])
+        self.assertEqual(sites, self.site)
+        self.assertEqual(set(resources.ids), {self.standard_room.id, self.premium_room.id})
         self.assertFalse(patients)
