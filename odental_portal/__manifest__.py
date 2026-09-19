@@ -1,7 +1,7 @@
 {
     "name": "O Dental Portal del Paciente",
     "summary": "Registro por QR, actualización segura, formularios y autoservicio del paciente",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
