@@ -1,5 +1,8 @@
+from psycopg2 import IntegrityError
+
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
+from odoo.tools import mute_logger
 
 
 class TestODentalClinical(TransactionCase):
@@ -20,8 +23,13 @@ class TestODentalClinical(TransactionCase):
         )
 
     def test_one_record_per_patient(self):
-        with self.env.cr.savepoint(), self.assertRaises(Exception):
+        # A duplicate must fail; its expected SQL error must not mark the
+        # entire Odoo.sh build as failed. Roll back before checking the result.
+        with self.assertRaises(IntegrityError), mute_logger("odoo.sql_db"), self.env.cr.savepoint():
             self.env["odental.clinical.record"].create({"patient_id": self.patient.id})
+        self.assertEqual(self.env["odental.clinical.record"].search_count([
+            ("patient_id", "=", self.patient.id)
+        ]), 1)
 
     def test_signed_encounter_is_immutable(self):
         encounter = self.env["odental.clinical.encounter"].create(
