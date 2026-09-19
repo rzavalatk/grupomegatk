@@ -9,6 +9,9 @@ class TestODentalAcademic(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Odoo's install-time superuser is archived but serves as the test
+        # supervisor; keep it visible in the rotation's user relations.
+        cls.env = cls.env(context={**cls.env.context, "active_test": False})
         manager_group = cls.env.ref("odental_academic.group_odental_academic_manager")
         if manager_group not in cls.env.user.groups_id:
             cls.env.user.write({"groups_id": [(4, manager_group.id)]})
@@ -100,7 +103,10 @@ class TestODentalAcademic(TransactionCase):
             "procedure_name": "Evaluación integral",
         }
         values.update(extra)
-        return self.env["odental.academic.submission"].with_user(self.student).create(values)
+        submission = self.env["odental.academic.submission"].with_user(self.student).create(values)
+        # Submission is made as the student; review actions below are performed
+        # by the supervisor, with student actions explicitly using with_user.
+        return submission.with_env(self.env)
 
     def test_student_profile_cannot_receive_general_clinical_access(self):
         with self.assertRaises(ValidationError), self.env.cr.savepoint():
