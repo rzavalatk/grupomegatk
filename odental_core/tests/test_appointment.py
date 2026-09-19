@@ -35,7 +35,10 @@ class TestODentalAppointment(TransactionCase):
             )
         )
         cls.organization.write({
-            "user_ids": [(4, cls.second_user.id), (4, cls.supervisor_user.id)]
+            "user_ids": [(6, 0, (
+                cls.organization.user_ids | cls.organization.owner_user_id
+                | cls.env.user | cls.second_user | cls.supervisor_user
+            ).ids)]
         })
         cls.second_professional = cls.env["odental.professional"].create({
             "name": "Dr. Segundo",
@@ -141,6 +144,7 @@ class TestODentalAppointment(TransactionCase):
             {
                 "resource_id": equipment.id,
                 "receiver_partner_id": receiver.id,
+                "delivered_at": datetime(2026, 9, 18, 8, 0),
                 "checkout_condition": "good",
                 "checkout_notes": "Se entrega sin daños visibles.",
             }
@@ -178,7 +182,8 @@ class TestODentalAppointment(TransactionCase):
     def test_allow_adjacent_appointment_after_cleaning(self):
         start = datetime(2026, 9, 14, 14, 0)
         self.env["odental.appointment"].create(self._appointment_values(start))
-        second = self.env["odental.appointment"].create(self._appointment_values(start + timedelta(minutes=40)))
+        # Include preparation of the next appointment after the first cleaning.
+        second = self.env["odental.appointment"].create(self._appointment_values(start + timedelta(minutes=45)))
         self.assertTrue(second)
 
     def test_fixed_room_selects_professional_and_operator(self):
