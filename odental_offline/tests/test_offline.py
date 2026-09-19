@@ -38,6 +38,8 @@ class TestODentalOffline(TransactionCase):
                 "code": "OFF-EVAL",
                 "organization_id": cls.organization.id,
                 "duration_minutes": 30,
+                "require_room": False,
+                "require_chair": False,
             }
         )
         cls.appointment = cls.env["odental.appointment"].create(
@@ -166,4 +168,3 @@ class TestODentalOffline(TransactionCase):
         self._batch([entry])
         with self.assertRaises(ValidationError):
             self._batch([entry])
-
