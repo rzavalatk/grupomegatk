@@ -738,7 +738,7 @@ class ODentalTreatmentPlanLine(models.Model):
             "sequence": self.sequence,
             "service": self.service_id.id,
             "product": self.service_id.product_id.id,
-            "tooth": self.tooth_id.fdi_code or "",
+            "tooth": self.tooth_id.code or "",
             "surface": self.surface or "",
             "description": self.description,
             "quantity": self.quantity,
