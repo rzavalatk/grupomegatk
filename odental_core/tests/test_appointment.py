@@ -34,7 +34,9 @@ class TestODentalAppointment(TransactionCase):
                 login="supervisor.shift@test.invalid",
             )
         )
-        cls.organization.write({
+        # Install-time tests run as the archived superuser. Include that owner
+        # when the many-to-many authorization list is read by the constraint.
+        cls.organization.with_context(active_test=False).write({
             "user_ids": [(6, 0, (
                 cls.organization.user_ids | cls.organization.owner_user_id
                 | cls.env.user | cls.second_user | cls.supervisor_user
