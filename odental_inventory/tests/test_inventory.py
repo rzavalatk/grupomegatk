@@ -20,9 +20,14 @@ class TestODentalInventory(TransactionCase):
         cls.destination = cls.env["stock.location"].create({
             "name": "Consumo odontológico", "usage": "inventory", "company_id": cls.env.company.id,
         })
-        cls.picking_type = cls.env["stock.picking.type"].search([
-            ("code", "=", "internal"), ("company_id", "=", cls.env.company.id)
-        ], limit=1)
+        cls.picking_type = cls.env["stock.picking.type"].create({
+            "name": "Consumo clínico de prueba",
+            "code": "internal",
+            "sequence_code": "ODENTAL-TEST",
+            "company_id": cls.env.company.id,
+            "default_location_src_id": cls.source.id,
+            "default_location_dest_id": cls.destination.id,
+        })
         cls.organization.write({
             "clinical_stock_location_id": cls.source.id,
             "clinical_consumption_location_id": cls.destination.id,
@@ -94,4 +99,3 @@ class TestODentalInventory(TransactionCase):
         appointment.material_consumption_ids.line_ids.lot_id = lot
         with self.assertRaises(ValidationError):
             appointment.material_consumption_ids.action_ready()
-
