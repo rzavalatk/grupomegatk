@@ -2,6 +2,18 @@ from odoo import api, fields, models
 from odoo.exceptions import AccessError, UserError, ValidationError
 
 
+class ODentalClinicalAudit(models.Model):
+    _inherit = "odental.clinical.audit"
+
+    event_type = fields.Selection(
+        selection_add=[
+            ("invoice_draft_created", "Factura borrador creada"),
+            ("payment_registered", "Cobro registrado"),
+        ],
+        ondelete={"invoice_draft_created": "cascade", "payment_registered": "cascade"},
+    )
+
+
 class ODentalOrganization(models.Model):
     _inherit = "odental.organization"
 
