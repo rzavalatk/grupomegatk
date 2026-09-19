@@ -19,3 +19,4 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Publica planificación comercial 18.0.31.0.0"
           git push origin master
+# Reintento de despliegue Odoo.sh 18.0.31.0.0 tras liberarse la cola, 2026-09-19.
