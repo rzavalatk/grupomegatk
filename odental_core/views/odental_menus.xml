@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_odental_root" name="O Dental" sequence="15" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_odental_root" name="O Dental" web_icon="odental_core,icon.png" sequence="15" groups="odental_core.group_odental_user"/>
     <menuitem id="menu_odental_clinical" name="Clínica" parent="menu_odental_root" sequence="10"/>
     <menuitem id="menu_odental_appointment" name="Agenda" parent="menu_odental_clinical" action="action_odental_appointment" sequence="10"/>
     <menuitem id="menu_odental_patient" name="Pacientes" parent="menu_odental_clinical" action="action_odental_patient" sequence="20"/>
