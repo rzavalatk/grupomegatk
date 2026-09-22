@@ -1,15 +1,16 @@
 from datetime import datetime, timedelta
 
 from odoo.exceptions import ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, tagged
 
 
+@tagged("post_install", "-at_install")
 class TestODentalAppointment(TransactionCase):
     @classmethod
     def _partner_compatible_values(cls, **values):
         """Supply defaults required by optional Grupo Mega partner extensions."""
         if "autopost_bills" in cls.env["res.partner"]._fields:
-            values.setdefault("autopost_bills", False)
+            values.setdefault("autopost_bills", "never")
         return values
 
     @classmethod
