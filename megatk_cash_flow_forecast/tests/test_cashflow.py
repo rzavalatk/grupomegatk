@@ -61,6 +61,11 @@ class TestCashflowForecast(TransactionCase):
             "note": "Confirmó que pagará el lunes.",
         })
         self.assertEqual(promise.note, "Confirmó que pagará el lunes.")
+        self.assertTrue(
+            self.partner.message_ids.filtered(
+                lambda message: "Confirmó que pagará el lunes" in (message.body or "")
+            )
+        )
 
     def test_projected_collection_opens_prefilled_management_and_history(self):
         promise = self.env["cashflow.promise"].create({
@@ -200,6 +205,37 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(action["res_model"], "cashflow.promise")
         self.assertEqual(action["context"]["default_partner_id"], self.partner.id)
         self.assertEqual(action["context"]["default_direction"], "receivable")
+        self.assertEqual(action["context"]["default_amount"], 0)
+
+    def test_snapshot_projection_defaults_to_current_customer_balance(self):
+        snapshot = self.env["cashflow.portfolio.snapshot"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "classification": "employee_receivable",
+            "days_1_30": 250,
+        })
+        action = snapshot.action_schedule_promise()
+        self.assertEqual(action["context"]["default_amount"], 250)
+
+    def test_refresh_one_customer_does_not_remove_other_customer(self):
+        other = self.env["res.partner"].create({"name": "Otro cliente flujo"})
+        self.env["cashflow.portfolio.snapshot"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "classification": "customer",
+        })
+        other_snapshot = self.env["cashflow.portfolio.snapshot"].create({
+            "company_id": self.company.id,
+            "partner_id": other.id,
+            "direction": "receivable",
+            "classification": "customer",
+        })
+        self.env["cashflow.portfolio.snapshot"].refresh_partner(
+            self.company, self.partner
+        )
+        self.assertTrue(other_snapshot.exists())
 
     def test_projection_week_badge_updates_without_portfolio_refresh(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({
@@ -220,3 +256,31 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(snapshot.projected_periods, "2")
         promise.action_cancel()
         self.assertFalse(snapshot.projected_periods)
+
+    def test_partner_opens_integrated_receivable_and_payable_details(self):
+        receivable_action = self.partner.action_cashflow_open_receivables()
+        payable_action = self.partner.action_cashflow_open_payables()
+        self.assertIn(("direction", "=", "receivable"), receivable_action["domain"])
+        self.assertIn(("direction", "=", "payable"), payable_action["domain"])
+        self.assertEqual(
+            receivable_action["context"]["cashflow_report_direction"], "receivable"
+        )
+        self.assertEqual(
+            payable_action["context"]["cashflow_report_direction"], "payable"
+        )
+
+    def test_partner_projection_button_opens_promises_not_management_notes(self):
+        action = self.partner.action_cashflow_open_promises()
+        self.assertEqual(action["res_model"], "cashflow.promise")
+        self.assertIn(
+            ("commercial_partner_id", "=", self.partner.commercial_partner_id.id),
+            action["domain"],
+        )
+
+    def test_payables_screen_can_open_manual_or_recurring_expense(self):
+        action = self.env[
+            "cashflow.portfolio.snapshot"
+        ].action_new_manual_expense()
+        self.assertEqual(action["res_model"], "cashflow.manual.expense")
+        self.assertEqual(action["context"]["default_plan_id"], self.plan.id)
+        self.assertEqual(action["context"]["default_period"], "week_1")

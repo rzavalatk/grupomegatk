@@ -1,5 +1,6 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from markupsafe import Markup, escape
 
 
 class CashflowManagementNote(models.Model):
@@ -10,11 +11,24 @@ class CashflowManagementNote(models.Model):
 
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True, readonly=True)
     partner_id = fields.Many2one("res.partner", required=True, string="Cliente", index=True)
+    move_id = fields.Many2one(
+        "account.move", string="Factura de Odoo", ondelete="set null", check_company=True,
+        domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', partner_id), ('move_type', 'in', ('out_invoice', 'out_refund')), ('state', '=', 'posted')]",
+    )
     promise_id = fields.Many2one(
         "cashflow.promise", string="Cobro proyectado", ondelete="set null", check_company=True,
         domain="[('company_id', '=', company_id), ('direction', '=', 'receivable')]",
     )
     direction = fields.Selection([( "receivable", "Cuenta por cobrar")], default="receivable", required=True, readonly=True)
+    management_type = fields.Selection([
+        ("call", "Llamada"),
+        ("message", "Mensaje"),
+        ("email", "Correo"),
+        ("visit", "Visita"),
+        ("promise", "Promesa de pago"),
+        ("dispute", "Reclamo o disputa"),
+        ("other", "Otra gestión"),
+    ], default="call", required=True, string="Tipo de gestión")
     note = fields.Text(required=True, string="Gestión realizada")
     next_action_date = fields.Date(string="Próxima gestión")
     follow_up_status = fields.Selection([
@@ -27,6 +41,12 @@ class CashflowManagementNote(models.Model):
     def _onchange_promise_id(self):
         if self.promise_id:
             self.partner_id = self.promise_id.partner_id
+            self.move_id = self.promise_id.source_move_id
+
+    @api.onchange("move_id")
+    def _onchange_move_id(self):
+        if self.move_id:
+            self.partner_id = self.move_id.commercial_partner_id
 
     @api.constrains("promise_id", "partner_id", "company_id")
     def _check_promise_consistency(self):
@@ -39,6 +59,19 @@ class CashflowManagementNote(models.Model):
             ):
                 raise ValidationError(
                     "El cobro proyectado debe corresponder a la misma empresa y al mismo cliente."
+                )
+
+    @api.constrains("move_id", "partner_id", "company_id")
+    def _check_move_consistency(self):
+        for record in self.filtered("move_id"):
+            if record.move_id.move_type not in ("out_invoice", "out_refund"):
+                raise ValidationError("La gestión debe relacionarse con una factura o nota de crédito de cliente.")
+            if (
+                record.move_id.company_id != record.company_id
+                or record.move_id.commercial_partner_id != record.partner_id.commercial_partner_id
+            ):
+                raise ValidationError(
+                    "La factura debe corresponder a la misma empresa y al mismo cliente."
                 )
 
     @api.depends("next_action_date")
@@ -61,11 +94,15 @@ class CashflowManagementNote(models.Model):
             values = dict(vals)
             promise_id = values.get("promise_id")
             partner_id = values.get("partner_id")
+            move_id = values.get("move_id")
             promise = (
                 self.env["cashflow.promise"].browse(promise_id).exists()
                 if promise_id else self.env["cashflow.promise"]
             )
-            partner = promise.commercial_partner_id if promise else (
+            move = self.env["account.move"].browse(move_id).exists() if move_id else self.env["account.move"]
+            partner = (
+                move.commercial_partner_id if move else
+                promise.commercial_partner_id if promise else
                 self.env["res.partner"].browse(partner_id).commercial_partner_id
                 if partner_id else self.env["res.partner"]
             )
@@ -85,10 +122,27 @@ class CashflowManagementNote(models.Model):
                 "last_management_at": record.create_date,
                 "next_action_date": record.next_action_date,
             })
+            label = dict(record._fields["management_type"].selection).get(
+                record.management_type, "Gestión"
+            )
+            next_action = (
+                Markup("<br/><b>Próxima gestión:</b> %s") % escape(record.next_action_date)
+                if record.next_action_date else Markup("")
+            )
+            body = Markup("<b>Gestión de cobranza · %s</b><br/>%s%s") % (
+                escape(label), escape(record.note), next_action
+            )
+            record.partner_id.sudo().message_post(
+                body=body, author_id=self.env.user.partner_id.id
+            )
+            if record.move_id:
+                record.move_id.sudo().message_post(
+                    body=body, author_id=self.env.user.partner_id.id
+                )
             if record.promise_id:
                 promise = record.promise_id.sudo()
                 promise.write({"note": record.note})
-                promise.message_post(body=record.note, author_id=self.env.user.partner_id.id)
+                promise.message_post(body=body, author_id=self.env.user.partner_id.id)
         return records
 
     def write(self, vals):

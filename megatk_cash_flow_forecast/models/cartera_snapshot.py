@@ -36,6 +36,7 @@ class CashflowPortfolioSnapshot(models.Model):
     last_management = fields.Text(string="Última gestión", readonly=True)
     last_management_at = fields.Datetime(string="Fecha última gestión", readonly=True)
     next_action_date = fields.Date(string="Próxima gestión", readonly=True)
+    open_document_count = fields.Integer(string="Documentos abiertos", readonly=True)
     refreshed_at = fields.Datetime(required=True, default=fields.Datetime.now, readonly=True)
 
     _sql_constraints = [
@@ -60,13 +61,8 @@ class CashflowPortfolioSnapshot(models.Model):
             record.classification_name = classifications.get(record.classification, "")
 
     @api.model
-    def refresh_company(self, company):
-        """Rebuild the display from open receivable/payable lines, never writing accounting data."""
-        self.env.cr.execute(
-            "SELECT pg_advisory_xact_lock(hashtext(%s), %s)",
-            ["megatk_cashflow_portfolio", company.id],
-        )
-        self.search([("company_id", "=", company.id)]).unlink()
+    def _prepare_company_values(self, company):
+        """Read Odoo's open items and prepare the operational customer/vendor summary."""
         today = fields.Date.context_today(self)
         lines = self.env["account.move.line"].search([
             ("company_id", "=", company.id),
@@ -99,6 +95,7 @@ class CashflowPortfolioSnapshot(models.Model):
         for note in notes:
             latest_notes.setdefault(note.partner_id.commercial_partner_id.id, note)
         values = defaultdict(lambda: defaultdict(float))
+        documents = defaultdict(set)
         for line in lines:
             direction = "receivable" if line.account_id.account_type == "asset_receivable" else "payable"
             partner = line.partner_id.commercial_partner_id
@@ -107,6 +104,7 @@ class CashflowPortfolioSnapshot(models.Model):
             # A credit in CxC or an advance/payment in CxP is the opposite sign of its debt.
             is_credit = (direction == "receivable" and line.amount_residual < 0) or (direction == "payable" and line.amount_residual > 0)
             key = (partner.id, direction)
+            documents[key].add(line.move_id.id)
             if is_credit:
                 values[key]["credit"] += abs(line.amount_residual)
                 continue
@@ -136,9 +134,38 @@ class CashflowPortfolioSnapshot(models.Model):
                 "last_management": latest_notes[partner_id].note if direction == "receivable" and partner_id in latest_notes else False,
                 "last_management_at": latest_notes[partner_id].create_date if direction == "receivable" and partner_id in latest_notes else False,
                 "next_action_date": latest_notes[partner_id].next_action_date if direction == "receivable" and partner_id in latest_notes else False,
+                "open_document_count": len(documents[(partner_id, direction)]),
                 **buckets,
             })
-        return self.create(created)
+        return created
+
+    @api.model
+    def refresh_company(self, company):
+        """Rebuild the company summary without writing any accounting data."""
+        self.env.cr.execute(
+            "SELECT pg_advisory_xact_lock(hashtext(%s), %s)",
+            ["megatk_cashflow_portfolio", company.id],
+        )
+        self.search([("company_id", "=", company.id)]).unlink()
+        return self.create(self._prepare_company_values(company))
+
+    @api.model
+    def refresh_partner(self, company, partner):
+        """Refresh one contact for meeting and collection follow-up screens."""
+        commercial = partner.commercial_partner_id
+        self.env.cr.execute(
+            "SELECT pg_advisory_xact_lock(hashtext(%s), %s)",
+            ["megatk_cashflow_partner", company.id * 1000000 + commercial.id],
+        )
+        self.search([
+            ("company_id", "=", company.id),
+            ("partner_id", "=", commercial.id),
+        ]).unlink()
+        values = [
+            item for item in self._prepare_company_values(company)
+            if item["partner_id"] == commercial.id
+        ]
+        return self.create(values)
 
     def write(self, vals):
         """Persist the operational classification behind the refreshed report.
@@ -209,8 +236,51 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_direction": self.direction,
                 "default_classification_id": classification.id or False,
                 "default_period": "week_1",
+                "default_amount": max(self.total, 0.0),
             },
         }
+
+    @api.model
+    def action_new_manual_expense(self):
+        plan = self.env["cashflow.plan"].get_or_create_current_plan()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Nuevo egreso manual o recurrente",
+            "res_model": "cashflow.manual.expense",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_plan_id": plan.id,
+                "default_period": "week_1",
+                "default_currency_id": plan.currency_id.id,
+            },
+        }
+
+    def action_open_documents(self):
+        self.ensure_one()
+        move_types = (
+            ("out_invoice", "out_refund")
+            if self.direction == "receivable"
+            else ("in_invoice", "in_refund")
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "name": f"Documentos abiertos · {self.partner_id.display_name}",
+            "res_model": "account.move",
+            "view_mode": "list,form",
+            "domain": [
+                ("company_id", "=", self.company_id.id),
+                ("commercial_partner_id", "=", self.partner_id.id),
+                ("move_type", "in", move_types),
+                ("state", "=", "posted"),
+                ("amount_residual", "!=", 0),
+            ],
+        }
+
+    def action_refresh_partner(self):
+        self.ensure_one()
+        self.sudo().refresh_partner(self.company_id, self.partner_id)
+        return {"type": "ir.actions.client", "tag": "reload"}
 
     @api.model
     def action_refresh_current_company(self):

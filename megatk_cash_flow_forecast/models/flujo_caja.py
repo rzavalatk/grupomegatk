@@ -101,7 +101,7 @@ class CashflowPlan(models.Model):
         for plan in self:
             settled = self.env["cashflow.promise"]
             for promise in plan.promise_ids.filtered(lambda p: p.state == "active"):
-                if promise.source_move_line_id:
+                if promise.source_move_line_id or promise.source_move_id:
                     if not promise.source_open:
                         settled |= promise
                     continue
@@ -271,12 +271,27 @@ class CashflowPromise(models.Model):
     period = fields.Selection(PERIODS, required=True, default="week_1", tracking=True)
     currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
     amount = fields.Monetary(required=True, tracking=True)
+    current_open_balance = fields.Monetary(
+        compute="_compute_current_open_balance",
+        string="Saldo actual en Odoo",
+        help="Saldo abierto del contacto en la empresa activa. Es informativo y no modifica la contabilidad.",
+    )
+    projected_remaining_balance = fields.Monetary(
+        compute="_compute_current_open_balance", string="Saldo después de la proyección"
+    )
+    source_move_id = fields.Many2one(
+        "account.move", string="Factura o documento de Odoo", ondelete="set null", check_company=True,
+        domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', commercial_partner_id), ('move_type', 'in', direction == 'receivable' and ('out_invoice', 'out_refund') or ('in_invoice', 'in_refund')), ('state', '=', 'posted'), ('amount_residual', '!=', 0)]",
+        help="Opcional. Permite relacionar la proyección con una factura o documento concreto.",
+    )
     source_move_line_id = fields.Many2one(
         "account.move.line", string="Partida contable de Odoo", ondelete="set null", check_company=True,
         domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', commercial_partner_id), ('account_id.account_type', '=', direction == 'receivable' and 'asset_receivable' or 'liability_payable')]",
         help="Opcional. Si esta partida queda saldada en Odoo, se retira automáticamente de la proyección.",
     )
-    source_residual = fields.Monetary(related="source_move_line_id.amount_residual", readonly=True, string="Saldo pendiente en Odoo")
+    source_residual = fields.Monetary(
+        compute="_compute_source_residual", string="Saldo del documento", readonly=True
+    )
     source_open = fields.Boolean(compute="_compute_source_open")
     note = fields.Text(
         string="Última gestión",
@@ -289,6 +304,48 @@ class CashflowPromise(models.Model):
         "cashflow.portfolio.classification", string="Clasificación", check_company=True,
         domain="[('company_id', '=', company_id), ('partner_id', '=', commercial_partner_id), ('direction', '=', direction)]",
     )
+
+    def _open_balance_for(self, partner, direction, company):
+        if not partner or not direction or not company:
+            return 0.0
+        account_type = "asset_receivable" if direction == "receivable" else "liability_payable"
+        lines = self.env["account.move.line"].sudo().search([
+            ("company_id", "=", company.id),
+            ("parent_state", "=", "posted"),
+            ("partner_id", "child_of", partner.commercial_partner_id.id),
+            ("account_id.account_type", "=", account_type),
+            ("amount_residual", "!=", 0),
+        ])
+        signed = sum(lines.mapped("amount_residual"))
+        return signed if direction == "receivable" else -signed
+
+    @api.depends("partner_id", "direction", "company_id", "amount")
+    def _compute_current_open_balance(self):
+        for promise in self:
+            balance = promise._open_balance_for(
+                promise.partner_id, promise.direction, promise.company_id
+            )
+            promise.current_open_balance = balance
+            promise.projected_remaining_balance = balance - promise.amount
+
+    @api.depends(
+        "source_move_id.amount_residual",
+        "source_move_line_id.amount_residual",
+        "direction",
+    )
+    def _compute_source_residual(self):
+        for promise in self:
+            if promise.source_move_line_id:
+                residual = promise.source_move_line_id.amount_residual
+            elif promise.source_move_id:
+                lines = promise.source_move_id.line_ids.filtered(
+                    lambda line: line.account_id.account_type
+                    == ("asset_receivable" if promise.direction == "receivable" else "liability_payable")
+                )
+                residual = sum(lines.mapped("amount_residual"))
+            else:
+                residual = 0.0
+            promise.source_residual = residual if promise.direction == "receivable" else -residual
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -346,6 +403,7 @@ class CashflowPromise(models.Model):
     @api.onchange("partner_id", "direction", "plan_id")
     def _onchange_projection_identity(self):
         self.source_move_line_id = False
+        self.source_move_id = False
         self.classification_id = False
         if self.partner_id and self.direction and self.plan_id:
             self.classification_id = self.env["cashflow.portfolio.classification"].search([
@@ -353,6 +411,11 @@ class CashflowPromise(models.Model):
                 ("partner_id", "=", self.partner_id.commercial_partner_id.id),
                 ("direction", "=", self.direction),
             ], limit=1)
+            balance = self._open_balance_for(
+                self.partner_id, self.direction, self.plan_id.company_id
+            )
+            if balance > 0 and not self.amount:
+                self.amount = balance
 
     @api.constrains("amount")
     def _check_positive_amount(self):
@@ -385,6 +448,22 @@ class CashflowPromise(models.Model):
             if line.account_id.account_type != expected_type:
                 raise ValidationError("La partida contable no corresponde al tipo de cobro o pago seleccionado.")
 
+    @api.constrains("source_move_id", "partner_id", "direction", "company_id")
+    def _check_source_move_consistency(self):
+        for promise in self.filtered("source_move_id"):
+            move = promise.source_move_id
+            expected_types = (
+                {"out_invoice", "out_refund"}
+                if promise.direction == "receivable"
+                else {"in_invoice", "in_refund"}
+            )
+            if move.company_id != promise.company_id:
+                raise ValidationError("El documento debe pertenecer a la misma empresa de la proyección.")
+            if move.commercial_partner_id != promise.commercial_partner_id:
+                raise ValidationError("El documento debe pertenecer al mismo contacto de la proyección.")
+            if move.move_type not in expected_types:
+                raise ValidationError("El documento no corresponde al tipo de cobro o pago seleccionado.")
+
     def action_cancel(self):
         self.write({"state": "cancelled"})
 
@@ -402,6 +481,7 @@ class CashflowPromise(models.Model):
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_promise_id": self.id,
+                "default_move_id": self.source_move_id.id or False,
                 "default_direction": "receivable",
             },
         }
@@ -424,14 +504,23 @@ class CashflowPromise(models.Model):
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_promise_id": self.id,
+                "default_move_id": self.source_move_id.id or False,
                 "default_direction": "receivable",
             },
         }
 
-    @api.depends("source_move_line_id.amount_residual")
+    @api.depends(
+        "source_move_id.amount_residual",
+        "source_move_line_id.amount_residual",
+        "source_residual",
+    )
     def _compute_source_open(self):
         for promise in self:
-            promise.source_open = not promise.source_move_line_id or not promise.company_id.currency_id.is_zero(promise.source_move_line_id.amount_residual)
+            has_source = bool(promise.source_move_id or promise.source_move_line_id)
+            promise.source_open = (
+                not has_source
+                or not promise.company_id.currency_id.is_zero(promise.source_residual)
+            )
 
 
 class CashflowManualExpense(models.Model):
