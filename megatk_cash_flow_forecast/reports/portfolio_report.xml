@@ -1,0 +1,44 @@
+<odoo>
+  <record id="action_report_portfolio" model="ir.actions.report">
+    <field name="name">Detalle de cartera proyectado</field>
+    <field name="model">cashflow.portfolio.snapshot</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">megatk_cash_flow_forecast.report_portfolio_document</field>
+    <field name="report_file">megatk_cash_flow_forecast.report_portfolio_document</field>
+    <field name="binding_model_id" ref="model_cashflow_portfolio_snapshot"/>
+    <field name="binding_type">report</field>
+  </record>
+  <template id="report_portfolio_document">
+    <t t-call="web.html_container">
+      <t t-set="o" t-value="docs[:1]"/>
+      <t t-call="web.external_layout">
+        <div class="page">
+          <h2 t-if="docs.env.context.get('cashflow_report_direction') == 'receivable'">Detalle de cuentas por cobrar</h2>
+          <h2 t-elif="docs.env.context.get('cashflow_report_direction') == 'payable'">Detalle de cuentas por pagar</h2>
+          <h2 t-else="">Detalle de cuentas por cobrar y pagar</h2>
+          <p>Flujo de caja proyectado · <span t-esc="o.company_id.name"/></p>
+          <p style="font-size: 10px">Verde: al día · amarillo: 1 a 30 días · rojo: desde 31 días · azul: crédito o anticipo.</p>
+          <table class="table table-sm" style="font-size: 9px; width: 100%; border-collapse: collapse">
+            <thead><tr style="background: #e8eef0"><th>Contacto</th><th>Tipo</th><th>Clasificación</th><th>Al día</th><th>1–30</th><th>31–60</th><th>61–90</th><th>91–120</th><th>Antiguos</th><th>Crédito / anticipo</th><th>Total</th><th>Última gestión</th></tr></thead>
+            <tbody>
+              <tr t-foreach="docs" t-as="line">
+                <td><span t-esc="line.partner_id.name"/><br/><small t-esc="line.projected_periods"/></td>
+                <td t-esc="line.direction_name"/>
+                <td t-esc="line.classification_name"/>
+                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-esc="formatLang(line.at_day, currency_obj=line.currency_id) if line.at_day else ''"/></td>
+                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-esc="formatLang(line.days_1_30, currency_obj=line.currency_id) if line.days_1_30 else ''"/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-esc="formatLang(line.days_31_60, currency_obj=line.currency_id) if line.days_31_60 else ''"/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-esc="formatLang(line.days_61_90, currency_obj=line.currency_id) if line.days_61_90 else ''"/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-esc="formatLang(line.days_91_120, currency_obj=line.currency_id) if line.days_91_120 else ''"/></td>
+                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-esc="formatLang(line.old, currency_obj=line.currency_id) if line.old else ''"/></td>
+                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-esc="formatLang(line.credit, currency_obj=line.currency_id) if line.credit else ''"/></td>
+                <td><strong t-esc="formatLang(line.total, currency_obj=line.currency_id)"/></td>
+                <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </t>
+    </t>
+  </template>
+</odoo>

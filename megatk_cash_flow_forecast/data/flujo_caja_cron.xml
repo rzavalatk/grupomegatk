@@ -1,0 +1,20 @@
+<odoo>
+  <record id="ir_cron_refresh_cashflow_promises" model="ir.cron">
+    <field name="name">Flujo proyectado: retirar partidas saldadas</field>
+    <field name="model_id" ref="model_cashflow_plan"/>
+    <field name="state">code</field>
+    <field name="code">model._cron_refresh_open_promises()</field>
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="active">True</field>
+  </record>
+  <record id="ir_cron_refresh_cashflow_portfolio" model="ir.cron">
+    <field name="name">Flujo proyectado: actualizar cartera desde Odoo</field>
+    <field name="model_id" ref="model_cashflow_plan"/>
+    <field name="state">code</field>
+    <field name="code">model._cron_refresh_portfolio()</field>
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="active">True</field>
+  </record>
+</odoo>
