@@ -1,0 +1,13 @@
+.o_field_widget.o_lenka_needs_attention {
+    outline: 2px solid #b42318;
+    outline-offset: 4px;
+    border-radius: 3px;
+    background-color: #fff1f0;
+
+    .o_lenka_validation_hint {
+        display: block;
+        color: #b42318;
+        font-weight: 600;
+        margin-top: 0.35rem;
+    }
+}
