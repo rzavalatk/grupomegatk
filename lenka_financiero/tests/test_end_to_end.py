@@ -80,8 +80,10 @@ class TestLenkaEndToEnd(TransactionCase):
             'body_html': '<p>{{CLIENTE}} - {{MONTO_FINANCIADO}} - {{TASA}}</p>',
         })
         operation.action_generate_contract_documents()
-        self.assertEqual(len(operation.generated_document_ids), 1)
-        document = operation.generated_document_ids[0]
+        # Odoo.sh loads demo templates as well as the template created here.
+        # Check this fixture's document without depending on demo data being absent.
+        document = operation.generated_document_ids.filtered(lambda d: d.template_id == template)
+        self.assertEqual(len(document), 1)
         self.assertEqual(document.template_id, template)
         self.assertEqual(document.state, 'generated')
         self.assertIn(self.client.name, document.rendered_html)
