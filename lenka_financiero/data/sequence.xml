@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_lenka_financial_operation" model="ir.sequence">
+        <field name="name">Operacion Financiera Lenka</field>
+        <field name="code">lenka.financial.operation</field>
+        <field name="prefix">LENKA-OP-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_payment" model="ir.sequence">
+        <field name="name">Cobro Lenka</field>
+        <field name="code">lenka.payment</field>
+        <field name="prefix">LENKA-PAG-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_disbursement" model="ir.sequence">
+        <field name="name">Desembolso Lenka</field>
+        <field name="code">lenka.disbursement</field>
+        <field name="prefix">LENKA-DES-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_investment" model="ir.sequence">
+        <field name="name">Inversion / Deposito Lenka</field>
+        <field name="code">lenka.investment</field>
+        <field name="prefix">LENKA-INV-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_statement" model="ir.sequence">
+        <field name="name">Estado de Cuenta Lenka</field>
+        <field name="code">lenka.statement</field>
+        <field name="prefix">LENKA-EC-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_funding_cost" model="ir.sequence">
+        <field name="name">Costo de Fondeo Lenka</field>
+        <field name="code">lenka.funding.cost</field>
+        <field name="prefix">LENKA-CF-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_restructuring" model="ir.sequence">
+        <field name="name">Reestructuracion Financiera Lenka</field>
+        <field name="code">lenka.restructuring</field>
+        <field name="prefix">LENKA-RE-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

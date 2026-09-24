@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_operation_search_management" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.search.management</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="arch" type="xml">
+            <search string="Analisis de cartera">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="operation_type"/>
+                <field name="currency_id"/>
+                <filter string="Activas" name="active" domain="[('state','=','active')]"/>
+                <filter string="Prestamos" name="loans" domain="[('operation_type','=','loan')]"/>
+                <filter string="Financiamientos" name="financing" domain="[('operation_type','=','financing')]"/>
+                <filter string="Arrendamientos" name="leases" domain="[('operation_type','=','lease')]"/>
+                <separator/>
+                <filter string="Tipo de operacion" name="group_operation_type" context="{'group_by':'operation_type'}"/>
+                <filter string="Cliente" name="group_partner" context="{'group_by':'partner_id'}"/>
+                <filter string="Moneda" name="group_currency" context="{'group_by':'currency_id'}"/>
+                <filter string="Estado" name="group_state" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lenka_portfolio_management" model="ir.actions.act_window">
+        <field name="name">Cartera financiera</field>
+        <field name="res_model">lenka.financial.operation</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_lenka_operation_search_management"/>
+        <field name="domain">[('is_quote','=',False)]</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="view_lenka_investment_search_management" model="ir.ui.view">
+        <field name="name">lenka.investment.search.management</field>
+        <field name="model">lenka.investment</field>
+        <field name="arch" type="xml">
+            <search string="Analisis de inversiones">
+                <field name="partner_id"/>
+                <field name="investment_type"/>
+                <field name="currency_id"/>
+                <filter string="Activas" name="active" domain="[('state','=','active')]"/>
+                <filter string="Vencidas" name="matured" domain="[('state','=','matured')]"/>
+                <separator/>
+                <filter string="Tipo" name="group_type" context="{'group_by':'investment_type'}"/>
+                <filter string="Inversionista" name="group_partner" context="{'group_by':'partner_id'}"/>
+                <filter string="Moneda" name="group_currency" context="{'group_by':'currency_id'}"/>
+                <filter string="Estado" name="group_state" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lenka_investment_management" model="ir.actions.act_window">
+        <field name="name">Obligaciones con inversionistas</field>
+        <field name="res_model">lenka.investment</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_lenka_investment_search_management"/>
+    </record>
+</odoo>

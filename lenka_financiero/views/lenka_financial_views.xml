@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_operation_list" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.list</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="operation_type"/>
+                <field name="is_quote"/>
+                <field name="principal_amount"/>
+                <field name="financed_amount"/>
+                <field name="currency_id"/>
+                <field name="interest_rate"/>
+                <field name="term_months"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lenka_operation_form" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.form</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="arch" type="xml">
+            <form string="Operacion Financiera Lenka">
+                <header>
+                    <button name="action_generate_schedule" string="Calcular plan" type="object" class="btn-primary"/>
+                    <button name="action_convert_to_application" string="Convertir en solicitud" type="object" invisible="not is_quote"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,contracted,active,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="is_quote"/>
+                            <field name="partner_id"/>
+                            <field name="guarantor_ids" widget="many2many_tags"/>
+                            <field name="operation_type"/>
+                            <field name="product_id" invisible="operation_type == 'loan'"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="currency_id"/>
+                            <field name="principal_amount"/>
+                            <field name="down_payment" invisible="operation_type == 'loan'"/>
+                            <field name="financed_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Condiciones financieras">
+                        <group>
+                            <field name="interest_rate"/>
+                            <field name="rate_period"/>
+                            <field name="term_months"/>
+                        </group>
+                        <group>
+                            <field name="first_payment_date"/>
+                            <field name="calculation_method"/>
+                            <field name="balloon_base_payment" invisible="calculation_method != 'balloon'"/>
+                            <field name="recalculation_policy"/>
+                            <field name="residual_purchase_percent" invisible="operation_type != 'lease'"/>
+                            <field name="residual_purchase_amount" readonly="1" invisible="operation_type != 'lease'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Pagos extraordinarios" invisible="calculation_method != 'balloon'">
+                            <field name="extra_payment_line_ids">
+                                <list editable="bottom">
+                                    <field name="installment_number"/>
+                                    <field name="amount"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tabla de amortizacion">
+                            <field name="schedule_line_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="sequence"/>
+                                    <field name="date"/>
+                                    <field name="opening_balance"/>
+                                    <field name="capital"/>
+                                    <field name="interest"/>
+                                    <field name="extra_charge"/>
+                                    <field name="payment"/>
+                                    <field name="closing_balance"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="funding" string="Fondeo">
+                            <field name="funding_line_ids">
+                                <list editable="bottom">
+                                    <field name="source_type"/>
+                                    <field name="partner_id"/>
+                                    <field name="reference"/>
+                                    <field name="amount"/>
+                                    <field name="cost_rate"/>
+                                    <field name="cost_period"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Garantias">
+                            <field name="guarantee_ids">
+                                <list editable="bottom">
+                                    <field name="guarantee_type"/>
+                                    <field name="owner_id"/>
+                                    <field name="description"/>
+                                    <field name="declared_value"/>
+                                    <field name="appraisal_value"/>
+                                    <field name="serial_reference"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Observaciones"><field name="notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lenka_operations" model="ir.actions.act_window">
+        <field name="name">Operaciones</field>
+        <field name="res_model">lenka.financial.operation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_quote','=',False)]</field>
+    </record>
+    <record id="action_lenka_quotes" model="ir.actions.act_window">
+        <field name="name">Cotizaciones</field>
+        <field name="res_model">lenka.financial.operation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_quote','=',True)]</field>
+        <field name="context">{'default_is_quote': True}</field>
+    </record>
+</odoo>

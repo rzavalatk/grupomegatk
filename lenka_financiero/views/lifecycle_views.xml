@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_operation_form_lifecycle" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.form.lifecycle</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_approve" string="Aprobar" type="object" class="btn-primary" invisible="is_quote or state != 'review'" groups="lenka_financiero.group_lenka_manager"/>
+                <button name="action_mark_contracted" string="Marcar contratado" type="object" invisible="state != 'approved'"/>
+                <button name="action_activate" string="Activar operacion" type="object" class="btn-primary" invisible="state != 'contracted'" groups="lenka_financiero.group_lenka_manager"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="approval_contract" string="Aprobacion y contrato">
+                    <group>
+                        <group>
+                            <field name="approved_by" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="approval_notes"/>
+                        </group>
+                        <group>
+                            <field name="contract_reference"/>
+                            <field name="contract_date"/>
+                            <field name="contract_signed"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Expediente">
+                    <field name="document_ids">
+                        <list editable="bottom">
+                            <field name="document_type"/>
+                            <field name="name"/>
+                            <field name="required"/>
+                            <field name="state"/>
+                            <field name="attachment_id"/>
+                            <field name="expiration_date"/>
+                            <field name="notes"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Desembolsos">
+                    <group>
+                        <field name="disbursed_amount" readonly="1"/>
+                        <field name="restructured_funding_amount" readonly="1" invisible="not restructured_funding_amount"/>
+                        <field name="pending_disbursement" readonly="1"/>
+                    </group>
+                    <field name="disbursement_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="destination_type"/>
+                            <field name="destination_partner_id"/>
+                            <field name="payment_method"/>
+                            <field name="funding_line_id"/>
+                            <field name="reference"/>
+                            <field name="move_id"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lenka_disbursement_list" model="ir.ui.view">
+        <field name="name">lenka.disbursement.list</field>
+        <field name="model">lenka.disbursement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="operation_id"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="destination_type"/>
+                <field name="destination_partner_id"/>
+                <field name="payment_method"/>
+                <field name="move_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lenka_disbursement_form" model="ir.ui.view">
+        <field name="name">lenka.disbursement.form</field>
+        <field name="model">lenka.disbursement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_post" string="Aplicar desembolso" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_account_move" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id" groups="lenka_financiero.group_lenka_manager"/>
+                    <button name="action_open_account_move" string="Ver borrador contable" type="object" invisible="not move_id"/>
+                    <button name="action_cancel" string="Anular" type="object" invisible="state == 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="operation_id"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="destination_type"/>
+                            <field name="destination_partner_id"/>
+                            <field name="payment_method"/>
+                            <field name="funding_line_id"/>
+                            <field name="reference"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lenka_disbursements" model="ir.actions.act_window">
+        <field name="name">Desembolsos</field>
+        <field name="res_model">lenka.disbursement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="partner_lenka_demo_cliente" model="res.partner">
+        <field name="name">Cliente Demo Financiamiento Lenka</field>
+        <field name="email">cliente.demo@lenka.test</field>
+        <field name="phone">9999-0001</field>
+    </record>
+
+    <record id="partner_lenka_demo_aval" model="res.partner">
+        <field name="name">Aval Demo Lenka</field>
+        <field name="email">aval.demo@lenka.test</field>
+        <field name="phone">9999-0002</field>
+    </record>
+
+    <record id="partner_lenka_demo_banco" model="res.partner">
+        <field name="name">Banco Demo Lenka</field>
+    </record>
+
+    <record id="partner_lenka_demo_tarjeta" model="res.partner">
+        <field name="name">Emisor Tarjeta Empresarial Demo</field>
+    </record>
+
+    <record id="partner_lenka_demo_inversionista" model="res.partner">
+        <field name="name">Inversionista Demo Lenka</field>
+        <field name="email">inversionista.demo@lenka.test</field>
+        <field name="phone">9999-0003</field>
+    </record>
+
+    <record id="product_lenka_demo_vending" model="product.product">
+        <field name="name">Vending Machine Demo MORAK</field>
+        <field name="type">consu</field>
+        <field name="list_price">150000.00</field>
+    </record>
+
+    <record id="operation_lenka_demo_financing" model="lenka.financial.operation">
+        <field name="is_quote" eval="False"/>
+        <field name="partner_id" ref="partner_lenka_demo_cliente"/>
+        <field name="guarantor_ids" eval="[(6, 0, [ref('partner_lenka_demo_aval')])]"/>
+        <field name="operation_type">financing</field>
+        <field name="product_id" ref="product_lenka_demo_vending"/>
+        <field name="principal_amount">150000.00</field>
+        <field name="down_payment">15000.00</field>
+        <field name="interest_rate">3.0</field>
+        <field name="rate_period">monthly</field>
+        <field name="term_months">24</field>
+        <field name="calculation_method">level</field>
+        <field name="state">review</field>
+        <field name="notes">Escenario demo: financiamiento con 10% de prima y cuota nivelada.</field>
+    </record>
+
+    <record id="funding_lenka_demo_bank" model="lenka.funding.line">
+        <field name="operation_id" ref="operation_lenka_demo_financing"/>
+        <field name="source_type">bank_loan</field>
+        <field name="partner_id" ref="partner_lenka_demo_banco"/>
+        <field name="reference">Prestamo bancario demo 15% anual</field>
+        <field name="amount">80000.00</field>
+        <field name="cost_rate">15.0</field>
+        <field name="cost_period">annual</field>
+    </record>
+
+    <record id="funding_lenka_demo_own" model="lenka.funding.line">
+        <field name="operation_id" ref="operation_lenka_demo_financing"/>
+        <field name="source_type">own</field>
+        <field name="reference">Capital propio demo</field>
+        <field name="amount">35000.00</field>
+        <field name="cost_rate">0.0</field>
+        <field name="cost_period">annual</field>
+    </record>
+
+    <record id="funding_lenka_demo_card" model="lenka.funding.line">
+        <field name="operation_id" ref="operation_lenka_demo_financing"/>
+        <field name="source_type">credit_card</field>
+        <field name="partner_id" ref="partner_lenka_demo_tarjeta"/>
+        <field name="reference">Tarjeta empresarial demo</field>
+        <field name="amount">20000.00</field>
+        <field name="cost_rate">3.5</field>
+        <field name="cost_period">monthly</field>
+    </record>
+
+    <record id="guarantee_lenka_demo_equipment" model="lenka.guarantee">
+        <field name="operation_id" ref="operation_lenka_demo_financing"/>
+        <field name="guarantee_type">equipment</field>
+        <field name="owner_id" ref="partner_lenka_demo_cliente"/>
+        <field name="description">Vending Machine Demo MORAK financiada</field>
+        <field name="declared_value">150000.00</field>
+        <field name="state">accepted</field>
+    </record>
+
+    <record id="operation_lenka_demo_interest_only" model="lenka.financial.operation">
+        <field name="is_quote" eval="False"/>
+        <field name="partner_id" ref="partner_lenka_demo_cliente"/>
+        <field name="operation_type">loan</field>
+        <field name="principal_amount">100000.00</field>
+        <field name="down_payment">0.00</field>
+        <field name="interest_rate">2.5</field>
+        <field name="rate_period">monthly</field>
+        <field name="term_months">12</field>
+        <field name="calculation_method">interest_only</field>
+        <field name="state">review</field>
+        <field name="notes">Escenario demo: pago mensual de intereses y capital al vencimiento.</field>
+    </record>
+
+    <record id="operation_lenka_demo_lease" model="lenka.financial.operation">
+        <field name="is_quote" eval="False"/>
+        <field name="partner_id" ref="partner_lenka_demo_cliente"/>
+        <field name="operation_type">lease</field>
+        <field name="product_id" ref="product_lenka_demo_vending"/>
+        <field name="principal_amount">150000.00</field>
+        <field name="down_payment">15000.00</field>
+        <field name="interest_rate">3.0</field>
+        <field name="rate_period">monthly</field>
+        <field name="term_months">36</field>
+        <field name="calculation_method">level</field>
+        <field name="residual_purchase_percent">5.0</field>
+        <field name="state">review</field>
+        <field name="notes">Escenario demo: arrendamiento con opcion de compra del 5%.</field>
+    </record>
+
+    <record id="investment_lenka_demo_fixed" model="lenka.investment">
+        <field name="partner_id" ref="partner_lenka_demo_inversionista"/>
+        <field name="investment_type">fixed</field>
+        <field name="principal_amount">100000.00</field>
+        <field name="passive_rate">1.5</field>
+        <field name="early_withdrawal_rate">1.0</field>
+        <field name="rate_period">monthly</field>
+        <field name="start_date">2026-06-01</field>
+        <field name="term_months">12</field>
+        <field name="capitalization">monthly</field>
+        <field name="state">draft</field>
+        <field name="contract_reference">DEMO-INV-001</field>
+        <field name="notes">Escenario demo: 1.5% mensual; retiro anticipado recalcula retroactivamente al 1% mensual.</field>
+    </record>
+
+    <record id="contract_template_lenka_demo" model="lenka.contract.template">
+        <field name="name">Contrato Demo Financiamiento Lenka</field>
+        <field name="document_type">contract</field>
+        <field name="operation_type">financing</field>
+        <field name="body_html">&lt;p&gt;&lt;strong&gt;Contrato de Financiamiento Demo&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Cliente: {{CLIENTE}}&lt;/p&gt;&lt;p&gt;Monto financiado: {{MONTO_FINANCIADO}} {{MONEDA}}&lt;/p&gt;&lt;p&gt;Tasa: {{TASA}} - Plazo: {{PLAZO_MESES}} meses.&lt;/p&gt;</field>
+    </record>
+</odoo>

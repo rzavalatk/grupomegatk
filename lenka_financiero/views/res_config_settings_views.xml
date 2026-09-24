@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_lenka" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.lenka</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Financiero Lenka" name="lenka_financiero" groups="lenka_financiero.group_lenka_manager">
+                    <block title="Cobros y tarjetas">
+                        <setting string="Comision de tarjeta (%)" help="Porcentaje retenido por el banco o POS. El neto resultante es el monto que se aplica a la deuda del cliente.">
+                            <field name="lenka_card_fee_rate"/>
+                        </setting>
+                    </block>
+                    <block title="Integracion contable Odoo">
+                        <setting string="Diario de desembolsos">
+                            <field name="lenka_disbursement_journal_id"/>
+                        </setting>
+                        <setting string="Diario de cobros">
+                            <field name="lenka_collection_journal_id"/>
+                        </setting>
+                        <setting string="Cuenta de cartera / capital por cobrar">
+                            <field name="lenka_portfolio_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de ingreso por intereses">
+                            <field name="lenka_interest_income_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de ingreso por mora">
+                            <field name="lenka_late_fee_income_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de cobros no aplicados / anticipos">
+                            <field name="lenka_unapplied_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de gasto por comision bancaria de tarjeta">
+                            <field name="lenka_card_fee_expense_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de gasto por costo de fondeo">
+                            <field name="lenka_funding_cost_expense_account_id"/>
+                        </setting>
+                        <setting string="Diario de inversiones y depositantes">
+                            <field name="lenka_investment_journal_id"/>
+                        </setting>
+                        <setting string="Cuenta de obligacion con inversionistas">
+                            <field name="lenka_investor_liability_account_id"/>
+                        </setting>
+                        <setting string="Cuenta de gasto por intereses pasivos">
+                            <field name="lenka_passive_interest_expense_account_id"/>
+                        </setting>
+                        <setting string="Impuesto / retencion sobre intereses pasivos (%)">
+                            <field name="lenka_passive_interest_tax_rate"/>
+                        </setting>
+                        <setting string="Cuenta de retencion por pagar sobre intereses pasivos">
+                            <field name="lenka_passive_interest_tax_payable_account_id"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
