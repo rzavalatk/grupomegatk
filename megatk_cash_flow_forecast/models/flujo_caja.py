@@ -407,7 +407,7 @@ class CashflowPromise(models.Model):
         default="active", required=True, tracking=True, string="Estado",
     )
     classification_id = fields.Many2one(
-        "cashflow.portfolio.classification", string="Clasificación", check_company=True,
+        "cashflow.portfolio.classification", string="Clasificación vinculada", check_company=True,
         domain="[('company_id', '=', company_id), ('partner_id', '=', commercial_partner_id), ('direction', '=', direction)]",
     )
     classification = fields.Selection(
