@@ -248,7 +248,13 @@ class CashflowBankPosition(models.Model):
         """Reject a repeated source immediately, before the user saves the form."""
         if not self.plan_id:
             return
-        siblings = self.plan_id.bank_position_ids - self
+        # During an onchange Odoo represents an existing one2many row with a
+        # temporary record whose ``_origin`` is the persisted row.  Subtracting
+        # only ``self`` therefore left its origin among the siblings and made a
+        # saved journal look duplicated every time the plan was opened.
+        siblings = self.plan_id.bank_position_ids.filtered(
+            lambda line: line != self and not (self._origin and line._origin == self._origin)
+        )
         if self.journal_id and self.journal_id in siblings.mapped("journal_id"):
             self.journal_id = False
             return {

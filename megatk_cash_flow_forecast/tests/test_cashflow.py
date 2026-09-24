@@ -70,6 +70,31 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(self.plan.total_real_available, 1000)
         self.assertEqual(self.plan.projected_balance, 1000)
 
+    def test_existing_bank_position_does_not_flag_itself_as_duplicate(self):
+        journal = self.env["account.journal"].search([
+            ("type", "in", ("bank", "cash")),
+            ("company_id", "=", self.company.id),
+        ], limit=1)
+        if not journal:
+            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "real_balance": 100,
+        })
+        editable_position = self.env["cashflow.bank.position"].new({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "real_balance": 100,
+        }, origin=position)
+
+        warning = editable_position._onchange_prevent_duplicate_source()
+
+        self.assertFalse(warning)
+        self.assertEqual(editable_position.journal_id, journal)
+
     def test_cancelled_promise_is_excluded_from_projection(self):
         promise = self.env["cashflow.promise"].create({
             "plan_id": self.plan.id, "partner_id": self.partner.id,
