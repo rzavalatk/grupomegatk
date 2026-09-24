@@ -23,7 +23,7 @@
         <field name="name">lenka.financial.operation.form</field>
         <field name="model">lenka.financial.operation</field>
         <field name="arch" type="xml">
-            <form string="Operacion Financiera Lenka">
+            <form string="Operacion Financiera Lenka" js_class="lenka_operation_form">
                 <header>
                     <button name="action_generate_schedule" string="Calcular plan" type="object" class="btn-primary"/>
                     <button name="action_convert_to_application" string="Convertir en solicitud" type="object" invisible="not is_quote"/>

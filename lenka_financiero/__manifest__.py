@@ -33,6 +33,12 @@
     'demo': [
         'demo/lenka_demo.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'lenka_financiero/static/src/views/operation_form.js',
+            'lenka_financiero/static/src/views/operation_form.scss',
+        ],
+    },
     'application': True,
     'installable': True,
 }

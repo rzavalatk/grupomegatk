@@ -60,9 +60,13 @@
                         <group><field name="name"/><field name="operation_id"/><field name="partner_id" readonly="1"/></group>
                         <group><field name="template_id"/><field name="document_type" readonly="1"/><field name="date"/><field name="signed_date" readonly="1"/></group>
                     </group>
+                    <group string="Contrato firmado">
+                        <field name="attachment_id" string="PDF / archivo firmado" placeholder="Seleccioná el archivo adjunto"/>
+                    </group>
                     <field name="rendered_html" widget="html"/>
-                    <field name="attachment_id"/>
-                    <field name="notes"/>
+                    <group string="Observaciones">
+                        <field name="notes" string="Notas"/>
+                    </group>
                 </sheet>
                 <chatter/>
             </form>
@@ -83,7 +87,7 @@
                 <button name="action_generate_contract_documents" string="Generar documentos" type="object" invisible="is_quote or state not in ('review','approved','contracted','active')" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
             <xpath expr="//page[@name='approval_contract']" position="after">
-                <page string="Contratos y documentos">
+                <page name="contract_documents" string="Contratos y documentos">
                     <field name="generated_document_ids">
                         <list>
                             <field name="name"/><field name="document_type"/><field name="template_id"/>
