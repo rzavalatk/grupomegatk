@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_restructuring_list" model="ir.ui.view">
+        <field name="name">lenka.restructuring.list</field>
+        <field name="model">lenka.restructuring</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="operation_id"/>
+                <field name="partner_id"/>
+                <field name="request_date"/>
+                <field name="original_outstanding_capital"/>
+                <field name="proposed_principal_amount"/>
+                <field name="proposed_interest_rate"/>
+                <field name="proposed_term_months"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_lenka_restructuring_form" model="ir.ui.view">
+        <field name="name">lenka.restructuring.form</field>
+        <field name="model">lenka.restructuring</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Enviar a revision" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_refresh_proposal" type="object" string="Actualizar saldos de propuesta" invisible="state not in ('draft', 'review')"/>
+                    <button name="action_return_to_review" type="object" string="Revisar aprobacion" groups="lenka_financiero.group_lenka_manager" invisible="state not in ('approved', 'prepared') or original_operation_closed"/>
+                    <button name="action_approve" type="object" string="Aprobar" class="btn-primary" groups="lenka_financiero.group_lenka_manager" invisible="state != 'review'"/>
+                    <button name="action_prepare_successor" type="object" string="Preparar nueva operacion" class="btn-primary" groups="lenka_financiero.group_lenka_manager" invisible="state != 'approved'"/>
+                    <button name="action_complete_restructuring" type="object" string="Completar sustitucion" class="btn-primary" groups="lenka_financiero.group_lenka_manager" invisible="state != 'prepared' or original_operation_closed"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state not in ('draft','review','approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,prepared"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="operation_id" readonly="id"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="company_id" readonly="1"/>
+                            <field name="currency_id" readonly="1"/>
+                            <field name="successor_operation_id" readonly="1"/>
+                            <field name="original_operation_closed" readonly="1"/>
+                            <field name="completed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Condiciones originales">
+                        <field name="original_outstanding_capital"/>
+                        <field name="original_payoff_amount"/>
+                        <field name="original_interest_rate"/>
+                        <field name="original_rate_period"/>
+                        <field name="original_term_months"/>
+                    </group>
+                    <group string="Modalidad y saldos actuales">
+                        <field name="settlement_method" readonly="state not in ('draft','review')"/>
+                        <field name="pending_capital"/>
+                        <field name="pending_interest"/>
+                        <field name="pending_late_fees"/>
+                        <field name="suggested_principal"/>
+                    </group>
+                    <group string="Desglose aprobado" invisible="not approved_at">
+                        <field name="approved_capital"/>
+                        <field name="approved_interest"/>
+                        <field name="approved_late_fees"/>
+                        <field name="approved_by"/>
+                        <field name="approved_at"/>
+                    </group>
+                    <group string="Nueva propuesta">
+                        <field name="proposed_principal_amount" readonly="state not in ('draft','review')"/>
+                        <field name="proposed_interest_rate" readonly="state not in ('draft','review')"/>
+                        <field name="proposed_rate_period" readonly="state not in ('draft','review')"/>
+                        <field name="proposed_term_months" readonly="state not in ('draft','review')"/>
+                        <field name="proposed_calculation_method" readonly="state not in ('draft','review')"/>
+                    </group>
+                    <group>
+                        <field name="reason" readonly="state not in ('draft','review')"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_lenka_restructurings" model="ir.actions.act_window">
+        <field name="name">Reestructuraciones</field>
+        <field name="res_model">lenka.restructuring</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

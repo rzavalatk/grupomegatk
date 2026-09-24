@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_contract_template_list" model="ir.ui.view">
+        <field name="name">lenka.contract.template.list</field>
+        <field name="model">lenka.contract.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/><field name="document_type"/><field name="operation_type"/>
+                <field name="company_id"/><field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_lenka_contract_template_form" model="ir.ui.view">
+        <field name="name">lenka.contract.template.form</field>
+        <field name="model">lenka.contract.template</field>
+        <field name="arch" type="xml">
+            <form string="Plantilla contractual">
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="document_type"/><field name="operation_type"/></group>
+                        <group><field name="company_id"/><field name="active"/></group>
+                    </group>
+                    <field name="body_html" widget="html"/>
+                    <group string="Variables disponibles">
+                        <div class="o_form_label">{{CLIENTE}}, {{IDENTIDAD_CLIENTE}}, {{DIRECCION_CLIENTE}}, {{AVALES}}, {{MONEDA}}, {{MONTO}}, {{PRIMA}}, {{MONTO_FINANCIADO}}, {{TASA}}, {{PERIODO_TASA}}, {{PLAZO_MESES}}, {{PRIMER_PAGO}}, {{PRODUCTO}}, {{GARANTIAS}}, {{OPCION_COMPRA}}, {{FECHA}}, {{OPERACION}}, {{TIPO_OPERACION}}</div>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_lenka_contract_templates" model="ir.actions.act_window">
+        <field name="name">Plantillas contractuales</field>
+        <field name="res_model">lenka.contract.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lenka_generated_document_list" model="ir.ui.view">
+        <field name="name">lenka.generated.document.list</field>
+        <field name="model">lenka.generated.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/><field name="operation_id"/><field name="partner_id"/>
+                <field name="document_type"/><field name="date"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_lenka_generated_document_form" model="ir.ui.view">
+        <field name="name">lenka.generated.document.form</field>
+        <field name="model">lenka.generated.document</field>
+        <field name="arch" type="xml">
+            <form string="Documento contractual">
+                <header>
+                    <button name="action_render" string="Regenerar" type="object" invisible="state == 'signed'"/>
+                    <button name="action_mark_signed" string="Marcar firmado" type="object" class="btn-primary" invisible="state != 'generated'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,signed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="operation_id"/><field name="partner_id" readonly="1"/></group>
+                        <group><field name="template_id"/><field name="document_type" readonly="1"/><field name="date"/><field name="signed_date" readonly="1"/></group>
+                    </group>
+                    <field name="rendered_html" widget="html"/>
+                    <field name="attachment_id"/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_lenka_generated_documents" model="ir.actions.act_window">
+        <field name="name">Documentos generados</field>
+        <field name="res_model">lenka.generated.document</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lenka_operation_form_contracts" model="ir.ui.view">
+        <field name="name">lenka.operation.form.contracts</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form_lifecycle"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_contract_documents" string="Generar documentos" type="object" invisible="is_quote or state not in ('review','approved','contracted','active')" groups="lenka_financiero.group_lenka_manager"/>
+            </xpath>
+            <xpath expr="//page[@name='approval_contract']" position="after">
+                <page string="Contratos y documentos">
+                    <field name="generated_document_ids">
+                        <list>
+                            <field name="name"/><field name="document_type"/><field name="template_id"/>
+                            <field name="date"/><field name="state"/><field name="signed_date"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
