@@ -313,7 +313,7 @@ class CashflowPortfolioSnapshot(models.Model):
         return {"type": "ir.actions.client", "tag": "reload"}
 
     @api.model
-    def action_refresh_current_company(self):
+    def action_refresh_current_company(self, *args):
         """Refresh the active company's read-only portfolio cache on demand."""
         plan = self.env["cashflow.plan"].sudo().get_or_create_current_plan()
         plan.action_refresh_open_items()
@@ -321,7 +321,7 @@ class CashflowPortfolioSnapshot(models.Model):
         return {"type": "ir.actions.client", "tag": "reload"}
 
     @api.model
-    def action_print_current_company(self):
+    def action_print_current_company(self, *args):
         """Refresh and print the active company's current CxC/CxP view."""
         direction = self.env.context.get("cashflow_report_direction")
         if direction not in (False, None, "receivable", "payable"):

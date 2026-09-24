@@ -343,3 +343,10 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(action["res_model"], "cashflow.manual.expense")
         self.assertEqual(action["context"]["default_plan_id"], self.plan.id)
         self.assertEqual(action["context"]["default_period"], "week_1")
+
+    def test_list_header_actions_accept_odoo_web_arguments(self):
+        snapshots = self.env["cashflow.portfolio.snapshot"]
+        refresh_action = snapshots.action_refresh_current_company([])
+        self.assertEqual(refresh_action["tag"], "reload")
+        with self.assertRaises(UserError):
+            snapshots.action_print_current_company([])
