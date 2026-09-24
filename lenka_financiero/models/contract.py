@@ -56,11 +56,42 @@ class LenkaGeneratedDocument(models.Model):
         ('cancelled', 'Cancelado'),
     ], default='draft', tracking=True)
     attachment_id = fields.Many2one('ir.attachment', string='PDF / archivo firmado')
+    signed_file = fields.Binary(
+        string='Subir contrato firmado', compute='_compute_signed_file',
+        inverse='_inverse_signed_file', attachment=False,
+    )
+    signed_filename = fields.Char(string='Nombre del archivo firmado')
     signed_date = fields.Date()
     notes = fields.Text()
 
+    @api.depends('attachment_id', 'attachment_id.datas')
+    def _compute_signed_file(self):
+        for rec in self:
+            rec.signed_file = rec.attachment_id.with_context(bin_size=False).datas
+
+    def _inverse_signed_file(self):
+        for rec in self:
+            if rec.state == 'signed':
+                raise ValidationError(_('El documento ya está firmado; no se puede sustituir su archivo.'))
+            if rec.signed_file:
+                rec.attachment_id = self.env['ir.attachment'].create({
+                    'name': rec.signed_filename or '%s-firmado.pdf' % rec.name,
+                    'type': 'binary', 'datas': rec.signed_file,
+                    'res_model': rec._name, 'res_id': rec.id,
+                })
+            else:
+                rec.attachment_id = False
+
+    def action_download_contract(self):
+        self.ensure_one()
+        if self.state not in ('generated', 'signed') or not self.rendered_html:
+            raise ValidationError(_('Primero generá el documento para poder descargarlo.'))
+        return self.env.ref('lenka_financiero.action_report_lenka_generated_document').report_action(self)
+
     def action_render(self):
         for rec in self:
+            if rec.state == 'signed':
+                raise ValidationError(_('No se puede regenerar un documento firmado.'))
             rec.rendered_html = rec.operation_id._render_lenka_template(rec.template_id)
             rec.state = 'generated'
         return True
@@ -159,4 +190,14 @@ class LenkaFinancialOperationContract(models.Model):
                     'template_id': template.id,
                 })
                 doc.action_render()
-        return True
+        self.ensure_one()
+        documents = self.generated_document_ids.filtered(lambda d: d.state != 'cancelled')
+        action = {
+            'type': 'ir.actions.act_window', 'name': _('Descargar y adjuntar documentos'),
+            'res_model': 'lenka.generated.document',
+            'domain': [('id', 'in', documents.ids)],
+            'view_mode': 'list,form', 'target': 'current',
+        }
+        if len(documents) == 1:
+            action.update(view_mode='form', res_id=documents.id, target='new')
+        return action

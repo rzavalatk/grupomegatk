@@ -215,3 +215,57 @@ class TestLenkaOperationalFlow(TransactionCase):
         report = self.env.ref('lenka_financiero.action_report_lenka_statement').with_user(self.operator)
         html, _ = report._render_qweb_html(report.report_name, docids=statement.ids)
         self.assertIn(self.client.name, html.decode())
+
+    def test_contract_pdf_upload_and_sign_without_manual_checkbox(self):
+        import base64
+        operation = self._quote()
+        operation.action_generate_schedule()
+        operation.action_convert_to_application()
+        operation.action_approve()
+        template = self.env['lenka.contract.template'].create({
+            'name': 'Contrato prueba carga directa', 'company_id': self.company.id,
+            'document_type': 'contract', 'operation_type': 'financing',
+            'body_html': '<p>{{CLIENTE}} {{MONTO_FINANCIADO}}</p>',
+        })
+        action = operation.action_generate_contract_documents()
+        self.assertEqual(action['res_model'], 'lenka.generated.document')
+        document = operation.generated_document_ids.filtered(lambda d: d.template_id == template)
+        report_action = document.action_download_contract()
+        self.assertEqual(report_action['type'], 'ir.actions.report')
+        report = self.env.ref('lenka_financiero.action_report_lenka_generated_document')
+        html, _ = report._render_qweb_html(report.report_name, docids=document.ids)
+        self.assertIn(self.client.name, html.decode())
+        with self.assertRaises(ValidationError):
+            document.action_mark_signed()
+        payload = base64.b64encode(b'Archivo de prueba - no es una firma real')
+        document.write({'signed_filename': 'prueba-firmado.pdf', 'signed_file': payload})
+        self.assertEqual(document.attachment_id.res_model, document._name)
+        self.assertEqual(document.attachment_id.res_id, document.id)
+        self.assertEqual(document.attachment_id.name, 'prueba-firmado.pdf')
+        self.assertEqual(document.attachment_id.datas, payload)
+        document.invalidate_recordset(['signed_file'])
+        self.assertEqual(document.with_context(bin_size=False).signed_file, payload)
+        document.action_mark_signed()
+        self.assertTrue(operation.contract_signed)
+        operation.action_mark_contracted()
+        self.assertEqual(operation.state, 'contracted')
+        with self.assertRaises(ValidationError):
+            document.action_render()
+
+    def test_contract_upload_can_be_removed_before_signing(self):
+        import base64
+        operation = self._quote()
+        template = self.env['lenka.contract.template'].create({
+            'name': 'Contrato prueba eliminar carga', 'company_id': self.company.id,
+            'document_type': 'contract', 'operation_type': 'financing',
+            'body_html': '<p>{{CLIENTE}}</p>',
+        })
+        document = self.env['lenka.generated.document'].create({
+            'name': 'Carga de prueba', 'operation_id': operation.id, 'template_id': template.id,
+        })
+        document.action_render()
+        document.write({'signed_file': base64.b64encode(b'Prueba')})
+        document.signed_file = False
+        self.assertFalse(document.attachment_id)
+        with self.assertRaises(ValidationError):
+            document.action_mark_signed()

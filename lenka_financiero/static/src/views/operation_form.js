@@ -20,19 +20,6 @@ export class LenkaOperationFormController extends FormController {
     async beforeExecuteActionButton(params) {
         const record = this.model.root;
         if (params.name === "action_mark_contracted" &&
-            record.data.state === "approved" && !record.data.contract_signed) {
-            const guide = () => this.showContractGuidance();
-            this.dialogService.add(AlertDialog, {
-                title: "Falta confirmar la firma",
-                body: "En Aprobación y contrato, marcá Contrato firmado únicamente cuando el contrato ya esté firmado. También debe existir el contrato firmado y adjunto en Contratos y documentos.",
-                confirmLabel: "Cerrar e ir al campo",
-                confirm: guide,
-                dismiss: guide,
-            });
-            // Keep all draft edits and do not execute the server action yet.
-            return false;
-        }
-        if (params.name === "action_mark_contracted" &&
             record.data.state === "approved" && record.resId) {
             const signedContracts = await this.orm.searchCount("lenka.generated.document", [
                 ["operation_id", "=", record.resId],
@@ -43,11 +30,11 @@ export class LenkaOperationFormController extends FormController {
             if (!signedContracts) {
                 const guide = () => this.showContractGuidance(
                     "contract_documents", "generated_document_ids",
-                    "Pendiente: generá el contrato, abrilo, adjuntá el archivo firmado y pulsá Marcar firmado."
+                    "Pendiente: abrí el contrato, descargá el PDF, gestioná la firma, subí la copia firmada y pulsá Marcar firmado."
                 );
                 this.dialogService.add(AlertDialog, {
                     title: "Falta el contrato firmado y adjunto",
-                    body: "En Contratos y documentos, abrí el documento de tipo Contrato. Si no existe, usá Generar documentos. En el documento, completá PDF / archivo firmado y pulsá Marcar firmado. Después volvé a esta operación y pulsá Marcar contratado.",
+                    body: "En Contratos y documentos, abrí el documento de tipo Contrato. Si no existe, usá Generar documentos. En el documento, usá Descargar contrato PDF, gestioná la firma, subí la copia firmada y pulsá Marcar firmado. Después volvé a esta operación y pulsá Marcar contratado.",
                     confirmLabel: "Cerrar e ir a los documentos",
                     confirm: guide,
                     dismiss: guide,
@@ -114,4 +101,32 @@ export class LenkaOperationFormController extends FormController {
 registry.category("views").add("lenka_operation_form", {
     ...formView,
     Controller: LenkaOperationFormController,
+});
+
+
+export class LenkaDocumentFormController extends LenkaOperationFormController {
+    async beforeExecuteActionButton(params) {
+        const record = this.model.root;
+        if (params.name === "action_mark_signed" && record.data.state === "generated" &&
+            record.data.document_type === "contract" &&
+            !record.data.signed_file && !record.data.attachment_id) {
+            const guide = () => this.showContractGuidance(
+                "", "signed_file", "Subí aquí la copia del contrato que ya fue firmada."
+            );
+            this.dialogService.add(AlertDialog, {
+                title: "Falta adjuntar el contrato firmado",
+                body: "Primero descargá el contrato PDF y gestioná la firma. Después subí la copia firmada en Subir contrato firmado y pulsá Marcar firmado.",
+                confirmLabel: "Ir a subir el archivo",
+                confirm: guide,
+                dismiss: guide,
+            });
+            return false;
+        }
+        return super.beforeExecuteActionButton(params);
+    }
+}
+
+registry.category("views").add("lenka_document_form", {
+    ...formView,
+    Controller: LenkaDocumentFormController,
 });
