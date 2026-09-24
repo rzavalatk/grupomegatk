@@ -38,7 +38,10 @@
                             <field name="guarantor_ids" widget="many2many_tags"/>
                             <field name="operation_type"/>
                             <field name="product_id" invisible="operation_type == 'loan'"/>
-                            <field name="company_id"/>
+                            <field name="company_id" string="Empresa"
+                                   domain="[('id', 'in', allowed_company_ids)]"
+                                   options="{'no_create': True}"
+                                   help="Solo podés elegir empresas activas en tu sesión. Para trabajar con otra empresa autorizada, activala en el selector superior antes de iniciar la cotización."/>
                         </group>
                         <group>
                             <field name="date"/>
