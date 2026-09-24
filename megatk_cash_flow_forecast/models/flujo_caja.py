@@ -248,14 +248,18 @@ class CashflowBankPosition(models.Model):
         """Reject a repeated source immediately, before the user saves the form."""
         if not self.plan_id:
             return
-        # During an onchange Odoo represents an existing one2many row with a
-        # temporary record whose ``_origin`` is the persisted row.  Subtracting
-        # only ``self`` therefore left its origin among the siblings and made a
-        # saved journal look duplicated every time the plan was opened.
-        siblings = self.plan_id.bank_position_ids.filtered(
-            lambda line: line != self and not (self._origin and line._origin == self._origin)
-        )
-        if self.journal_id and self.journal_id in siblings.mapped("journal_id"):
+        # Inline one2many editing can keep more than one virtual representation
+        # of the same unsaved row in the parent cache.  Comparing that cache
+        # produced false duplicate warnings.  Only persisted rows are reliable
+        # here; the SQL constraints still protect the final save, including two
+        # genuinely duplicated new rows created in the same edit session.
+        plan = self.plan_id._origin
+        if not plan.id:
+            return
+        domain = [("plan_id", "=", plan.id)]
+        if self._origin.id:
+            domain.append(("id", "!=", self._origin.id))
+        if self.journal_id and self.search_count(domain + [("journal_id", "=", self.journal_id.id)]):
             self.journal_id = False
             return {
                 "warning": {
@@ -263,7 +267,7 @@ class CashflowBankPosition(models.Model):
                     "message": "Ese diario ya está en el flujo. La línea fue conservada para que pueda escoger otro.",
                 }
             }
-        if self.account_id and self.account_id in siblings.mapped("account_id"):
+        if self.account_id and self.search_count(domain + [("account_id", "=", self.account_id.id)]):
             self.account_id = False
             return {
                 "warning": {
