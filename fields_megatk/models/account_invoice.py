@@ -51,11 +51,24 @@ class Account_Move(models.Model):
         ], order='id desc', limit=1)
         return fallback_order.name if fallback_order else 'SIN COTIZACION'
 
+    def _get_sale_order_from_origin(self, invoice_origin, company_id=None):
+        """Return the quotation linked to an invoice without modifying the invoice."""
+        if not invoice_origin:
+            return self.env['sale.order']
+
+        domain = [('name', '=', invoice_origin)]
+        if company_id:
+            domain.append(('company_id', '=', company_id))
+        return self.env['sale.order'].search(domain, limit=1)
+
+    @api.depends('invoice_origin', 'company_id')
     def _compute_contacto(self):
-        cotizacion = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
-        self.x_contacto = cotizacion.x_contacto
-        self.sorteo_id = cotizacion.sorteo_id.id
-        self.x_student = cotizacion.x_student
+        for move in self:
+            quotation = move._get_sale_order_from_origin(
+                move.invoice_origin,
+                move.company_id.id,
+            )
+            move.x_contacto = quotation.x_contacto if quotation else False
     
     # Override para quitar el requisito de team_id
     team_id = fields.Many2one(
@@ -140,6 +153,15 @@ class Account_Move(models.Model):
                     invoice_partner_id = vals.get('partner_id')
                     invoice_company_id = vals.get('company_id') or self.env.company.id
                     vals['invoice_origin'] = self._get_fallback_invoice_origin(invoice_partner_id, invoice_company_id)
+
+                invoice_company_id = vals.get('company_id') or self.env.company.id
+                quotation = self._get_sale_order_from_origin(
+                    vals.get('invoice_origin'),
+                    invoice_company_id,
+                )
+                if quotation:
+                    vals.setdefault('sorteo_id', quotation.sorteo_id.id)
+                    vals.setdefault('x_student', quotation.x_student)
         
         # Segundo: Validar crédito
         company_id = self.env.user.company_id.id
@@ -231,6 +253,15 @@ class Account_Move(models.Model):
                     team = self._get_sales_team_for_company(move.company_id.id)
                     if team:
                         move.team_id = team.id
+
+                quotation = move._get_sale_order_from_origin(
+                    move.invoice_origin,
+                    move.company_id.id,
+                )
+                if quotation:
+                    if not move.sorteo_id:
+                        move.sorteo_id = quotation.sorteo_id
+                    move.x_student = quotation.x_student
             elif move.team_id and move._is_scrap_generated_move():
                 move.team_id = False
         
