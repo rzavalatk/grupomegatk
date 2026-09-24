@@ -28,6 +28,48 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(self.plan.projected_week_1, 100)
         self.assertEqual(self.plan.projected_week_2, 0)
 
+    def test_other_income_is_separate_and_increases_projection(self):
+        income = self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Préstamo para capital de trabajo",
+            "income_type": "loan",
+            "counterparty_name": "Persona que no existe en Odoo",
+            "period": "week_1",
+            "amount": 500,
+        })
+        self.assertFalse(income.partner_id)
+        self.assertEqual(income.company_amount, 500)
+        self.assertEqual(self.plan.total_expected_receivable, 0)
+        self.assertEqual(self.plan.total_other_income, 500)
+        self.assertEqual(self.plan.other_income_week_1, 500)
+        self.assertEqual(self.plan.projected_week_1, 500)
+
+    def test_credit_card_and_loan_do_not_reduce_available_cash(self):
+        liquidity_account = self.env["account.account"].search([
+            ("account_type", "=", "asset_cash"),
+            ("company_ids", "in", self.company.id),
+        ], limit=1)
+        liability_account = self.env["account.account"].search([
+            ("account_type", "in", ("liability_credit_card", "liability_current", "liability_payable")),
+            ("company_ids", "in", self.company.id),
+        ], limit=1)
+        if not liquidity_account or not liability_account:
+            self.skipTest("La compañía de prueba no tiene cuentas de liquidez y pasivo.")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": liquidity_account.id,
+            "real_balance": 1000,
+        })
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "credit_card",
+            "account_id": liability_account.id,
+            "real_balance": 400,
+        })
+        self.assertEqual(self.plan.total_real_available, 1000)
+        self.assertEqual(self.plan.projected_balance, 1000)
+
     def test_cancelled_promise_is_excluded_from_projection(self):
         promise = self.env["cashflow.promise"].create({
             "plan_id": self.plan.id, "partner_id": self.partner.id,
@@ -47,6 +89,11 @@ class TestCashflowForecast(TransactionCase):
             self.env["cashflow.manual.expense"].create({
                 "plan_id": self.plan.id, "name": "Inválido",
                 "period": "week_1", "amount": -1,
+            })
+        with self.assertRaises(ValidationError):
+            self.env["cashflow.manual.income"].create({
+                "plan_id": self.plan.id, "name": "Inválido",
+                "period": "week_1", "amount": 0,
             })
 
     def test_management_note_updates_projected_collection_latest_note(self):
@@ -180,7 +227,19 @@ class TestCashflowForecast(TransactionCase):
             "recurring": True,
         })
         self.assertEqual(expense.company_amount, 250)
+        self.assertEqual(expense.classification, "other")
         self.assertEqual(self.plan.payable_week_1, 250)
+
+    def test_manual_expense_classification_is_required_and_selectable(self):
+        expense = self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Planilla quincenal",
+            "classification": "payroll",
+            "period": "week_2",
+            "amount": 1000,
+            "recurring": True,
+        })
+        self.assertEqual(expense.classification, "payroll")
 
     def test_snapshot_opens_prefilled_collection_management(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({

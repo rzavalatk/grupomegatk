@@ -11,7 +11,10 @@ Incluye:
 - Actualización inmediata de las insignias de semana al crear, mover o retirar una proyección.
 - La última gestión es de solo lectura: toda observación nueva conserva fecha, autor e historial.
 - Clasificación por empresa de clientes, CxC empleados, Grupo Mega, proveedores, acreedores, anticipos, legal, por depurar y por asignar.
-- Saldos contables de bancos/tarjetas solo de lectura y disponible real editable para el flujo.
+- Saldos contables de bancos, tarjetas y préstamos solo de lectura, con saldo real editable.
+- Solo efectivo y bancos forman el disponible; tarjetas y préstamos se muestran como obligaciones y no alteran la liquidez.
+- Separación operativa entre cobros de clientes, otros ingresos, pagos a proveedores y otros egresos.
+- Otros ingresos permiten registrar préstamos o aportes de personas que no existen como contactos de Odoo.
 - Egresos manuales recurrentes, por ejemplo planilla y alquiler, con moneda, fecha de tipo de cambio y equivalente en la moneda de la empresa.
 - Tres roles configurables desde Ajustes > Usuarios: Gestor de cobros, Usuario y Administrador.
 - Actualización inmediata del detalle de cartera desde Odoo, además de la actualización automática diaria.

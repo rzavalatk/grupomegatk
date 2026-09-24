@@ -12,8 +12,11 @@ class CashflowPortfolioSnapshot(models.Model):
     _order = "direction, partner_id"
 
     company_id = fields.Many2one("res.company", required=True, index=True)
-    partner_id = fields.Many2one("res.partner", required=True, index=True)
-    direction = fields.Selection([( "receivable", "Cuenta por cobrar"), ("payable", "Cuenta por pagar")], required=True, index=True)
+    partner_id = fields.Many2one("res.partner", required=True, index=True, string="Contacto")
+    direction = fields.Selection(
+        [("receivable", "Cuenta por cobrar"), ("payable", "Cuenta por pagar")],
+        required=True, index=True, string="Tipo de cuenta",
+    )
     direction_name = fields.Char(compute="_compute_labels")
     classification = fields.Selection([
         ("customer", "Clientes"), ("employee_receivable", "CxC empleados"),
@@ -21,7 +24,7 @@ class CashflowPortfolioSnapshot(models.Model):
         ("creditor", "Acreedores"), ("advance", "Anticipos"),
         ("legal", "En legal"), ("to_reconcile", "Por depurar"),
         ("unassigned", "Por asignar"),
-    ], required=True, default="unassigned", index=True)
+    ], required=True, default="unassigned", index=True, string="Clasificación")
     classification_name = fields.Char(compute="_compute_labels")
     currency_id = fields.Many2one(related="company_id.currency_id", store=True)
     at_day = fields.Monetary(string="Al día")
@@ -223,6 +226,30 @@ class CashflowPortfolioSnapshot(models.Model):
             ("direction", "=", self.direction),
         ], limit=1)
         plan = self.env["cashflow.plan"].with_company(self.company_id).get_or_create_current_plan()
+        move_types = (
+            ("out_invoice", "out_refund")
+            if self.direction == "receivable"
+            else ("in_invoice", "in_refund")
+        )
+        open_moves = self.env["account.move"].search([
+            ("company_id", "=", self.company_id.id),
+            ("commercial_partner_id", "=", self.partner_id.id),
+            ("move_type", "in", move_types),
+            ("state", "=", "posted"),
+            ("amount_residual", "!=", 0),
+        ])
+        currencies = open_moves.mapped("currency_id")
+        projection_currency = (
+            currencies
+            if len(currencies) == 1
+            else self.company_id.currency_id
+        )
+        default_amount = self.company_id.currency_id._convert(
+            max(self.total, 0.0),
+            projection_currency,
+            self.company_id,
+            fields.Date.context_today(self),
+        )
         return {
             "type": "ir.actions.act_window",
             "name": "Programar cobro" if self.direction == "receivable" else "Programar pago",
@@ -236,7 +263,9 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_direction": self.direction,
                 "default_classification_id": classification.id or False,
                 "default_period": "week_1",
-                "default_amount": max(self.total, 0.0),
+                "default_currency_id": projection_currency.id,
+                "default_rate_date": fields.Date.context_today(self),
+                "default_amount": default_amount,
             },
         }
 
@@ -245,7 +274,7 @@ class CashflowPortfolioSnapshot(models.Model):
         plan = self.env["cashflow.plan"].get_or_create_current_plan()
         return {
             "type": "ir.actions.act_window",
-            "name": "Nuevo egreso manual o recurrente",
+            "name": "Nuevo pago programado",
             "res_model": "cashflow.manual.expense",
             "view_mode": "form",
             "target": "new",
@@ -253,6 +282,7 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_plan_id": plan.id,
                 "default_period": "week_1",
                 "default_currency_id": plan.currency_id.id,
+                "default_recurring": False,
             },
         }
 

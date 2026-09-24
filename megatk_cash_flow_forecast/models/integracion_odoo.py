@@ -199,6 +199,8 @@ class AccountMove(models.Model):
                 "default_direction": direction,
                 "default_source_move_id": self.id,
                 "default_classification_id": classification.id or False,
+                "default_currency_id": self.currency_id.id,
+                "default_rate_date": fields.Date.context_today(self),
                 "default_amount": abs(self.amount_residual),
                 "default_period": "week_1",
             },
