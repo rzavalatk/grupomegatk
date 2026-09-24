@@ -86,7 +86,7 @@ class LenkaGeneratedDocument(models.Model):
         self.ensure_one()
         if self.state not in ('generated', 'signed') or not self.rendered_html:
             raise ValidationError(_('Primero generá el documento para poder descargarlo.'))
-        return self.env.ref('lenka_financiero.action_report_lenka_generated_document').report_action(self)
+        return self.env.ref('lenka_financiero.action_report_lenka_generated_document').report_action(self, config=False)
 
     def action_render(self):
         for rec in self:
