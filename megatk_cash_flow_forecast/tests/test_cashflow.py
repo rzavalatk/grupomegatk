@@ -95,6 +95,50 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(warning)
         self.assertEqual(editable_position.journal_id, journal)
 
+    def test_new_bank_position_does_not_compare_against_virtual_rows(self):
+        journal = self.env["account.journal"].search([
+            ("type", "in", ("bank", "cash")),
+            ("company_id", "=", self.company.id),
+        ], limit=1)
+        if not journal:
+            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
+        new_position = self.env["cashflow.bank.position"].new({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "real_balance": 100,
+        })
+
+        warning = new_position._onchange_prevent_duplicate_source()
+
+        self.assertFalse(warning)
+        self.assertEqual(new_position.journal_id, journal)
+
+    def test_new_bank_position_warns_for_a_persisted_duplicate(self):
+        journal = self.env["account.journal"].search([
+            ("type", "in", ("bank", "cash")),
+            ("company_id", "=", self.company.id),
+        ], limit=1)
+        if not journal:
+            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "real_balance": 100,
+        })
+        duplicate = self.env["cashflow.bank.position"].new({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "real_balance": 200,
+        })
+
+        warning = duplicate._onchange_prevent_duplicate_source()
+
+        self.assertEqual(warning["warning"]["title"], "Diario ya agregado")
+        self.assertFalse(duplicate.journal_id)
+
     def test_cancelled_promise_is_excluded_from_projection(self):
         promise = self.env["cashflow.promise"].create({
             "plan_id": self.plan.id, "partner_id": self.partner.id,
