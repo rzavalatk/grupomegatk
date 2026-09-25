@@ -33,7 +33,7 @@ class CashflowPlan(models.Model):
     bank_position_ids = fields.One2many("cashflow.bank.position", "plan_id", string="Disponible por banco")
     promise_ids = fields.One2many("cashflow.promise", "plan_id", string="Promesas y pagos")
     manual_income_ids = fields.One2many(
-        "cashflow.manual.income", "plan_id", string="Financiamientos proyectados"
+        "cashflow.manual.income", "plan_id", string="Detalle de financiamientos proyectados"
     )
     manual_expense_ids = fields.One2many("cashflow.manual.expense", "plan_id", string="Egresos manuales")
     total_real_available = fields.Monetary(compute="_compute_totals", string="Disponible real")
