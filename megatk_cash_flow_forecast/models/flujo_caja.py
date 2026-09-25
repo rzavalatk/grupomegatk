@@ -33,11 +33,12 @@ class CashflowPlan(models.Model):
     bank_position_ids = fields.One2many("cashflow.bank.position", "plan_id", string="Disponible por banco")
     promise_ids = fields.One2many("cashflow.promise", "plan_id", string="Promesas y pagos")
     manual_income_ids = fields.One2many(
-        "cashflow.manual.income", "plan_id", string="Otros ingresos proyectados"
+        "cashflow.manual.income", "plan_id", string="Financiamientos proyectados"
     )
     manual_expense_ids = fields.One2many("cashflow.manual.expense", "plan_id", string="Egresos manuales")
     total_real_available = fields.Monetary(compute="_compute_totals", string="Disponible real")
     total_expected_receivable = fields.Monetary(compute="_compute_totals", string="Cobros de clientes")
+    total_expected_financing = fields.Monetary(compute="_compute_totals", string="Financiamientos proyectados")
     total_other_income = fields.Monetary(compute="_compute_totals", string="Otros ingresos")
     total_expected_payable = fields.Monetary(compute="_compute_totals", string="Pagos y egresos")
     projected_balance = fields.Monetary(compute="_compute_totals", string="Flujo estimado")
@@ -45,6 +46,10 @@ class CashflowPlan(models.Model):
     receivable_week_2 = fields.Monetary(compute="_compute_period_totals", string="Cobros · Semana 2")
     receivable_week_3 = fields.Monetary(compute="_compute_period_totals", string="Cobros · Semana 3")
     receivable_pending = fields.Monetary(compute="_compute_period_totals", string="Cobros · Pendiente")
+    financing_week_1 = fields.Monetary(compute="_compute_period_totals", string="Financiamientos · Semana 1")
+    financing_week_2 = fields.Monetary(compute="_compute_period_totals", string="Financiamientos · Semana 2")
+    financing_week_3 = fields.Monetary(compute="_compute_period_totals", string="Financiamientos · Semana 3")
+    financing_pending = fields.Monetary(compute="_compute_period_totals", string="Financiamientos · Pendiente")
     other_income_week_1 = fields.Monetary(compute="_compute_period_totals", string="Otros ingresos · Semana 1")
     other_income_week_2 = fields.Monetary(compute="_compute_period_totals", string="Otros ingresos · Semana 2")
     other_income_week_3 = fields.Monetary(compute="_compute_period_totals", string="Otros ingresos · Semana 3")
@@ -64,6 +69,7 @@ class CashflowPlan(models.Model):
         "bank_position_ids.real_balance", "bank_position_ids.position_type",
         "promise_ids.company_amount", "promise_ids.direction", "promise_ids.state",
         "manual_income_ids.company_amount", "manual_income_ids.active",
+        "manual_income_ids.income_type", "manual_income_ids.state",
         "manual_expense_ids.company_amount", "manual_expense_ids.active",
     )
     def _compute_totals(self):
@@ -74,30 +80,43 @@ class CashflowPlan(models.Model):
                 ).mapped("real_balance")
             )
             receivable = sum(record.promise_ids.filtered(lambda p: p.state == "active" and p.direction == "receivable").mapped("company_amount"))
-            other_income = sum(record.manual_income_ids.filtered("active").mapped("company_amount"))
+            projected_income = record.manual_income_ids.filtered(
+                lambda income: income.active and income.state in ("requested", "approved", "confirmed")
+            )
+            financing = sum(
+                projected_income.filtered(lambda income: income.income_type != "other").mapped("company_amount")
+            )
+            other_income = sum(
+                projected_income.filtered(lambda income: income.income_type == "other").mapped("company_amount")
+            )
             payable = sum(record.promise_ids.filtered(lambda p: p.state == "active" and p.direction == "payable").mapped("company_amount"))
             manual = sum(record.manual_expense_ids.filtered("active").mapped("company_amount"))
             record.total_real_available = real
             record.total_expected_receivable = receivable
+            record.total_expected_financing = financing
             record.total_other_income = other_income
             record.total_expected_payable = payable + manual
-            record.projected_balance = real + receivable + other_income - payable - manual
+            record.projected_balance = real + receivable + financing + other_income - payable - manual
 
     @api.depends(
         "promise_ids.company_amount", "promise_ids.direction", "promise_ids.period", "promise_ids.state",
         "manual_income_ids.company_amount", "manual_income_ids.period", "manual_income_ids.active",
+        "manual_income_ids.income_type", "manual_income_ids.state",
         "manual_expense_ids.company_amount", "manual_expense_ids.period", "manual_expense_ids.active",
     )
     def _compute_period_totals(self):
         for record in self:
-            for prefix in ("receivable", "other_income", "payable"):
+            for prefix in ("receivable", "financing", "other_income", "payable"):
                 for period, _label in PERIODS:
                     setattr(record, f"{prefix}_{period}", 0)
             for promise in record.promise_ids.filtered(lambda p: p.state == "active"):
                 field_name = f"{promise.direction}_{promise.period}"
                 setattr(record, field_name, getattr(record, field_name) + promise.company_amount)
-            for income in record.manual_income_ids.filtered("active"):
-                field_name = f"other_income_{income.period}"
+            for income in record.manual_income_ids.filtered(
+                lambda item: item.active and item.state in ("requested", "approved", "confirmed")
+            ):
+                prefix = "other_income" if income.income_type == "other" else "financing"
+                field_name = f"{prefix}_{income.period}"
                 setattr(record, field_name, getattr(record, field_name) + income.company_amount)
             for expense in record.manual_expense_ids.filtered("active"):
                 field_name = f"payable_{expense.period}"
@@ -106,6 +125,7 @@ class CashflowPlan(models.Model):
     @api.depends(
         "total_real_available",
         "receivable_week_1", "receivable_week_2", "receivable_week_3", "receivable_pending",
+        "financing_week_1", "financing_week_2", "financing_week_3", "financing_pending",
         "other_income_week_1", "other_income_week_2", "other_income_week_3", "other_income_pending",
         "payable_week_1", "payable_week_2", "payable_week_3", "payable_pending",
     )
@@ -115,6 +135,7 @@ class CashflowPlan(models.Model):
             for period, _label in PERIODS:
                 running += (
                     getattr(record, f"receivable_{period}")
+                    + getattr(record, f"financing_{period}")
                     + getattr(record, f"other_income_{period}")
                     - getattr(record, f"payable_{period}")
                 )
@@ -693,7 +714,7 @@ class CashflowPromise(models.Model):
 
 class CashflowManualIncome(models.Model):
     _name = "cashflow.manual.income"
-    _description = "Otro ingreso proyectado"
+    _description = "Financiamiento o ingreso proyectado"
     _inherit = ["mail.thread"]
     _order = "period, name"
     _check_company_auto = True
@@ -707,9 +728,11 @@ class CashflowManualIncome(models.Model):
     name = fields.Char(required=True, string="Concepto", tracking=True)
     income_type = fields.Selection(
         [
-            ("loan", "Préstamo recibido"),
-            ("contribution", "Aporte de socios"),
-            ("other", "Otro ingreso"),
+            ("loan", "Préstamo bancario por recibir"),
+            ("credit_card_draw", "Efectivo de tarjeta por recibir"),
+            ("shareholder_loan", "Préstamo de socio por recibir"),
+            ("contribution", "Aporte de socios por recibir"),
+            ("other", "Otro ingreso proyectado"),
         ],
         required=True,
         default="other",
@@ -724,6 +747,36 @@ class CashflowManualIncome(models.Model):
     counterparty_name = fields.Char(
         string="Persona o entidad",
         help="Nombre libre para registrar el origen del ingreso sin crear un contacto en Odoo.",
+    )
+    state = fields.Selection(
+        [
+            ("requested", "Solicitado"),
+            ("approved", "Aprobado"),
+            ("confirmed", "Confirmado"),
+            ("received", "Recibido / contabilizado"),
+            ("cancelled", "Cancelado"),
+        ],
+        required=True,
+        default="requested",
+        string="Estado",
+        tracking=True,
+        help="Los estados Solicitado, Aprobado y Confirmado forman parte del flujo. "
+             "Al marcarlo como Recibido o Cancelado deja de sumarse para evitar duplicarlo.",
+    )
+    destination_journal_id = fields.Many2one(
+        "account.journal",
+        string="Banco o caja de destino",
+        domain="[('type', 'in', ('bank', 'cash')), ('company_id', '=', company_id)]",
+        check_company=True,
+        help="Es opcional. Indica dónde se espera recibir el dinero; no genera un asiento.",
+    )
+    source_move_id = fields.Many2one(
+        "account.move",
+        string="Partida real vinculada",
+        domain="[('company_id', '=', company_id), ('state', '=', 'posted')]",
+        check_company=True,
+        help="Se deja vacío mientras el financiamiento no exista en contabilidad. "
+             "Puede vincularse después del desembolso.",
     )
     period = fields.Selection(PERIODS, required=True, default="week_1", tracking=True, string="Semana")
     company_currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
