@@ -6,6 +6,13 @@ class TestCashflowForecast(TransactionCase):
     def setUp(self):
         super().setUp()
         self.company = self.env.company
+        # Staging is updated with a copy of the operational database, where the
+        # company already has its single cash-flow plan.  Each test runs in a
+        # savepoint, so removing it here gives the test a clean plan and is
+        # rolled back automatically when the test finishes.
+        self.env["cashflow.plan"].search([
+            ("company_id", "=", self.company.id),
+        ]).unlink()
         self.plan = self.env["cashflow.plan"].create({"company_id": self.company.id})
         self.partner = self.env["res.partner"].create({"name": "Cliente de prueba flujo"})
 
@@ -79,7 +86,7 @@ class TestCashflowForecast(TransactionCase):
     def test_bank_cash_and_new_financing_build_weekly_available_cash(self):
         liquidity_account = self.env["account.account"].search([
             ("account_type", "=", "asset_cash"),
-            ("company_ids", "in", self.company.id),
+            ("company_ids", "in", [self.company.id]),
         ], limit=1)
         if not liquidity_account:
             self.skipTest("La compañía de prueba no tiene una cuenta de liquidez.")
@@ -114,11 +121,11 @@ class TestCashflowForecast(TransactionCase):
     def test_credit_card_and_loan_do_not_reduce_available_cash(self):
         liquidity_account = self.env["account.account"].search([
             ("account_type", "=", "asset_cash"),
-            ("company_ids", "in", self.company.id),
+            ("company_ids", "in", [self.company.id]),
         ], limit=1)
         liability_account = self.env["account.account"].search([
             ("account_type", "in", ("liability_credit_card", "liability_current", "liability_payable")),
-            ("company_ids", "in", self.company.id),
+            ("company_ids", "in", [self.company.id]),
         ], limit=1)
         if not liquidity_account or not liability_account:
             self.skipTest("La compañía de prueba no tiene cuentas de liquidez y pasivo.")
