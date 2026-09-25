@@ -40,9 +40,76 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(income.partner_id)
         self.assertEqual(income.company_amount, 500)
         self.assertEqual(self.plan.total_expected_receivable, 0)
-        self.assertEqual(self.plan.total_other_income, 500)
-        self.assertEqual(self.plan.other_income_week_1, 500)
+        self.assertEqual(self.plan.total_expected_financing, 500)
+        self.assertEqual(self.plan.total_other_income, 0)
+        self.assertEqual(self.plan.financing_week_1, 500)
         self.assertEqual(self.plan.projected_week_1, 500)
+
+    def test_projected_financing_does_not_require_accounting_entry(self):
+        financing = self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Préstamo solicitado sin desembolso",
+            "income_type": "loan",
+            "counterparty_name": "Banco de prueba",
+            "state": "requested",
+            "period": "week_3",
+            "amount": 1000000,
+        })
+        self.assertFalse(financing.source_move_id)
+        self.assertFalse(financing.destination_journal_id)
+        self.assertEqual(self.plan.financing_week_3, 1000000)
+        self.assertEqual(self.plan.projected_week_1, 0)
+        self.assertEqual(self.plan.projected_week_2, 0)
+        self.assertEqual(self.plan.projected_week_3, 1000000)
+
+    def test_received_financing_is_not_counted_twice(self):
+        financing = self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Préstamo desembolsado",
+            "income_type": "loan",
+            "state": "confirmed",
+            "period": "week_1",
+            "amount": 1000,
+        })
+        self.assertEqual(self.plan.financing_week_1, 1000)
+        financing.state = "received"
+        self.assertEqual(self.plan.financing_week_1, 0)
+        self.assertEqual(self.plan.total_expected_financing, 0)
+
+    def test_bank_cash_and_new_financing_build_weekly_available_cash(self):
+        liquidity_account = self.env["account.account"].search([
+            ("account_type", "=", "asset_cash"),
+            ("company_ids", "in", self.company.id),
+        ], limit=1)
+        if not liquidity_account:
+            self.skipTest("La compañía de prueba no tiene una cuenta de liquidez.")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": liquidity_account.id,
+            "real_balance": 1000000,
+        })
+        for values in (
+            {
+                "name": "Efectivo recibido de tarjeta",
+                "income_type": "credit_card_draw",
+                "period": "week_1",
+                "amount": 100000,
+            },
+            {
+                "name": "Préstamo nuevo por recibir",
+                "income_type": "loan",
+                "period": "week_1",
+                "amount": 1000000,
+            },
+        ):
+            self.env["cashflow.manual.income"].create({
+                "plan_id": self.plan.id,
+                **values,
+            })
+        self.assertEqual(self.plan.total_real_available, 1000000)
+        self.assertEqual(self.plan.financing_week_1, 1100000)
+        self.assertEqual(self.plan.projected_week_1, 2100000)
 
     def test_credit_card_and_loan_do_not_reduce_available_cash(self):
         liquidity_account = self.env["account.account"].search([
