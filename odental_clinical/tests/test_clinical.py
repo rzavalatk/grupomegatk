@@ -118,7 +118,7 @@ class TestODentalPatientFlow(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.company = cls.env['res.company'].create({'name': 'Dental flow test'})
+        cls.company = cls.env['res.company'].with_context(default_autopost_bills='never').create({'name': 'Dental flow test'})
         values = {
             'name': 'Dental flow professional',
             'login': 'odental-flow-professional',
@@ -153,7 +153,7 @@ class TestODentalPatientFlow(TransactionCase):
         self.assertEqual(self.patients.with_context(default_organization_id=self.organization.id).default_get(['organization_id'])['organization_id'], self.organization.id)
 
     def test_no_default_from_another_company(self):
-        other_company = self.env['res.company'].create({'name': 'Empty dental company'})
+        other_company = self.env['res.company'].with_context(default_autopost_bills='never').create({'name': 'Empty dental company'})
         self.operator.write({'company_ids': [(4, other_company.id)]})
         self.assertFalse(self.patients.with_company(other_company).default_get(['organization_id']).get('organization_id'))
 
