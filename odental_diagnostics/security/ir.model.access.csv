@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_tooth_professional,odental.tooth professional,model_odental_tooth,odental_core.group_odental_professional,1,0,0,0
+access_odental_tooth_manager,odental.tooth manager,model_odental_tooth,odental_core.group_odental_manager,1,0,0,0
+access_odental_tooth_admin,odental.tooth admin,model_odental_tooth,odental_core.group_odental_admin,1,1,1,1
+access_odental_odontogram_professional,odental.odontogram professional,model_odental_odontogram,odental_core.group_odental_professional,1,1,1,0
+access_odental_odontogram_manager,odental.odontogram manager,model_odental_odontogram,odental_core.group_odental_manager,1,1,1,0
+access_odental_odontogram_admin,odental.odontogram admin,model_odental_odontogram,odental_core.group_odental_admin,1,1,1,1
+access_odental_finding_professional,odental.odontogram.finding professional,model_odental_odontogram_finding,odental_core.group_odental_professional,1,1,1,0
+access_odental_finding_manager,odental.odontogram.finding manager,model_odental_odontogram_finding,odental_core.group_odental_manager,1,1,1,0
+access_odental_finding_admin,odental.odontogram.finding admin,model_odental_odontogram_finding,odental_core.group_odental_admin,1,1,1,1
+access_odental_image_professional,odental.clinical.image professional,model_odental_clinical_image,odental_core.group_odental_professional,1,1,1,0
+access_odental_image_manager,odental.clinical.image manager,model_odental_clinical_image,odental_core.group_odental_manager,1,1,1,0
+access_odental_image_admin,odental.clinical.image admin,model_odental_clinical_image,odental_core.group_odental_admin,1,1,1,1
+

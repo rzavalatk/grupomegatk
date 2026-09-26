@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_odontogram" name="Odontogramas" parent="odental_core.menu_odental_clinical" action="action_odental_odontogram" sequence="60" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_clinical_image" name="Imágenes clínicas" parent="odental_core.menu_odental_clinical" action="action_odental_clinical_image" sequence="70" groups="odental_core.group_odental_professional"/>
+</odoo>
+
