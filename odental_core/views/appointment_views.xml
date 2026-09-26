@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_appointment_list" model="ir.ui.view"><field name="name">odental.appointment.list</field><field name="model">odental.appointment</field><field name="arch" type="xml"><list decoration-success="state == 'done'" decoration-muted="state == 'cancelled'"><field name="name"/><field name="start_datetime"/><field name="patient_id"/><field name="professional_id"/><field name="service_id"/><field name="site_id"/><field name="state"/></list></field></record>
+    <record id="view_odental_appointment_calendar" model="ir.ui.view"><field name="name">odental.appointment.calendar</field><field name="model">odental.appointment</field><field name="arch" type="xml"><calendar string="Agenda O Dental" date_start="start_datetime" date_stop="end_datetime" color="professional_id" quick_create="false"><field name="patient_id"/><field name="professional_id"/><field name="service_id"/><field name="state"/></calendar></field></record>
+    <record id="view_odental_appointment_form" model="ir.ui.view">
+        <field name="name">odental.appointment.form</field>
+        <field name="model">odental.appointment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_schedule" type="object" string="Programar" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary" invisible="state != 'scheduled'"/>
+                    <button name="action_start" type="object" string="Iniciar atención" invisible="state != 'confirmed'"/>
+                    <button name="action_done" type="object" string="Finalizar" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state in ('done', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,confirmed,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="organization_id"/>
+                            <field name="patient_id" domain="[('organization_id', '=', organization_id)]"/>
+                            <field name="professional_id" string="Profesional responsable"
+                                   domain="[('organization_ids', 'in', organization_id)]"/>
+                            <field name="service_id" domain="[('organization_id', '=', organization_id)]"/>
+                            <field name="service_requires_assistant" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="site_id" domain="[('organization_id', '=', organization_id)]"/>
+                            <field name="start_datetime"/>
+                            <field name="end_datetime" readonly="1"/>
+                            <field name="duration_minutes"/>
+                        </group>
+                    </group>
+                    <group string="Espacio y equipo reservado">
+                        <field name="resource_ids" string="Consultorio y equipos adicionales"
+                               widget="many2many_tags"
+                               domain="[('organization_id', '=', organization_id), ('site_id', '=', site_id)]"/>
+                    </group>
+                    <group string="Personas asignadas al turno">
+                        <div class="alert alert-warning" role="alert" invisible="not service_requires_assistant">
+                            Este servicio requiere asistente. Agregue una persona con la función «Asistente» antes de programar la cita.
+                        </div>
+                        <field name="available_participant_user_ids" invisible="1"/>
+                        <field name="participant_line_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="role"/>
+                                <field name="user_id" domain="[('id', 'in', parent.available_participant_user_ids)]"/>
+                                <field name="notes" optional="hide"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Bloqueo de agenda">
+                        <field name="preparation_minutes"/>
+                        <field name="cleaning_minutes"/>
+                        <field name="blocking_start" readonly="1"/>
+                        <field name="blocking_end" readonly="1"/>
+                    </group>
+                    <field name="notes" placeholder="Notas operativas de la cita..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_appointment" model="ir.actions.act_window"><field name="name">Agenda</field><field name="res_model">odental.appointment</field><field name="view_mode">calendar,list,form</field></record>
+</odoo>
