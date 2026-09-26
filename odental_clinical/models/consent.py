@@ -132,7 +132,17 @@ class ODentalPatientConsent(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        controlled_fields = [
+            "state", "signed_at", "signed_by_user_id", "content_hash",
+            "revoked_at", "revoked_by_user_id",
+        ]
+        defaults = self.default_get(controlled_fields)
         for vals in vals_list:
+            initial = dict(defaults, **vals)
+            if initial.get("state", "draft") != "draft" or any(
+                initial.get(field) for field in controlled_fields if field != "state"
+            ):
+                raise UserError("Cree el consentimiento en borrador y utilice sus acciones controladas.")
             if vals.get("name", "Nuevo") == "Nuevo":
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "odental.patient.consent"
@@ -220,20 +230,23 @@ class ODentalPatientConsent(models.Model):
             "signed_by_user_id",
             "content_hash",
         }
-        if not self.env.context.get("allow_consent_transition"):
-            for consent in self:
-                if vals.get("state") in ("signed", "revoked", "expired"):
-                    raise UserError("Utilice las acciones controladas del consentimiento.")
-                if (
-                    consent.state in ("signed", "revoked", "expired")
-                    and vals.get("state")
-                    and vals["state"] != consent.state
-                ):
-                    raise UserError("El estado del consentimiento no puede revertirse.")
-                if consent.state in ("signed", "revoked", "expired") and immutable_fields.intersection(vals):
-                    raise UserError(
-                        "Un consentimiento firmado no puede alterarse. Debe emitirse uno nuevo."
-                    )
+        if {"signed_at", "signed_by_user_id", "content_hash", "revoked_at", "revoked_by_user_id"}.intersection(vals):
+            raise UserError("Los datos de firma y revocación se generan mediante sus acciones controladas.")
+        for consent in self:
+            if vals.get("state") in ("signed", "revoked", "expired"):
+                raise UserError("Utilice las acciones controladas del consentimiento.")
+            if (
+                consent.state in ("signed", "revoked", "expired")
+                and vals.get("state")
+                and vals["state"] != consent.state
+            ):
+                raise UserError("El estado del consentimiento no puede revertirse.")
+            if consent.state in ("signed", "revoked", "expired") and immutable_fields.intersection(vals):
+                raise UserError(
+                    "Un consentimiento firmado no puede alterarse. Debe emitirse uno nuevo."
+                )
+        if "revocation_reason" in vals and any(consent.state == "revoked" for consent in self):
+            raise UserError("El motivo de una revocación registrada no puede modificarse.")
         if "template_id" in vals:
             template = self.env["odental.consent.template"].browse(vals["template_id"])
             vals.update(
@@ -270,7 +283,7 @@ class ODentalPatientConsent(models.Model):
             if not consent.signature and not consent.verification_reference:
                 raise ValidationError("Debe existir una firma o una referencia de verificación.")
             content_hash = consent._hash_payload()
-            consent.with_context(allow_consent_transition=True).write(
+            super(ODentalPatientConsent, consent).write(
                 {
                     "state": "signed",
                     "signed_at": fields.Datetime.now(),
@@ -301,7 +314,7 @@ class ODentalPatientConsent(models.Model):
                 raise UserError("Solo un consentimiento firmado puede revocarse.")
             if not consent.revocation_reason:
                 raise ValidationError("Debe registrar el motivo de la revocación.")
-            consent.with_context(allow_consent_transition=True).write(
+            super(ODentalPatientConsent, consent).write(
                 {
                     "state": "revoked",
                     "revoked_at": fields.Datetime.now(),
