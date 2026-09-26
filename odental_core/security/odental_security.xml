@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_odental" model="ir.module.category">
+        <field name="name">O Dental</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <record id="group_odental_user" model="res.groups">
+        <field name="name">Usuario clínico</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+    </record>
+    <record id="group_odental_professional" model="res.groups">
+        <field name="name">Profesional</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="implied_ids" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+    </record>
+    <record id="group_odental_manager" model="res.groups">
+        <field name="name">Administrador clínico</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="implied_ids" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+    </record>
+    <record id="group_odental_admin" model="res.groups">
+        <field name="name">Administrador O Dental</field>
+        <field name="category_id" ref="odental_core.module_category_odental"/>
+        <field name="implied_ids" eval="[(4, ref('odental_core.group_odental_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="rule_odental_organization_member" model="ir.rule">
+        <field name="name">O Dental: organizaciones autorizadas</field>
+        <field name="model_id" ref="model_odental_organization"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('owner_user_id', '=', user.id), ('user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_patient_member" model="ir.rule">
+        <field name="name">O Dental: pacientes autorizados</field>
+        <field name="model_id" ref="model_odental_patient"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_appointment_member" model="ir.rule">
+        <field name="name">O Dental: citas autorizadas</field>
+        <field name="model_id" ref="model_odental_appointment"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_appointment_participant_member" model="ir.rule">
+        <field name="name">O Dental: participantes de citas autorizadas</field>
+        <field name="model_id" ref="model_odental_appointment_participant"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_professional_member" model="ir.rule">
+        <field name="name">O Dental: profesionales autorizados</field>
+        <field name="model_id" ref="model_odental_professional"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_ids.owner_user_id', '=', user.id), ('organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_site_member" model="ir.rule">
+        <field name="name">O Dental: sedes autorizadas</field>
+        <field name="model_id" ref="model_odental_site"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id]), ('shared_with_organization_ids.owner_user_id', '=', user.id), ('shared_with_organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_resource_member" model="ir.rule">
+        <field name="name">O Dental: recursos autorizados</field>
+        <field name="model_id" ref="model_odental_resource"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', '|', '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id]), ('shared_with_organization_ids.owner_user_id', '=', user.id), ('shared_with_organization_ids.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_resource_photo_member" model="ir.rule">
+        <field name="name">O Dental: fotografías de equipos autorizadas</field>
+        <field name="model_id" ref="model_odental_resource_photo"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_resource_handover_member" model="ir.rule">
+        <field name="name">O Dental: entregas de equipos autorizadas</field>
+        <field name="model_id" ref="model_odental_resource_handover"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_resource_maintenance_member" model="ir.rule">
+        <field name="name">O Dental: mantenimientos de equipos autorizados</field>
+        <field name="model_id" ref="model_odental_resource_maintenance"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_service_member" model="ir.rule">
+        <field name="name">O Dental: servicios autorizados</field>
+        <field name="model_id" ref="model_odental_service"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_service_duration_member" model="ir.rule">
+        <field name="name">O Dental: duraciones autorizadas</field>
+        <field name="model_id" ref="model_odental_service_duration"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('service_id.organization_id.owner_user_id', '=', user.id), ('service_id.organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="rule_odental_organization_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de organizaciones</field>
+        <field name="model_id" ref="model_odental_organization"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_professional_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de profesionales</field>
+        <field name="model_id" ref="model_odental_professional"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_patient_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de pacientes</field>
+        <field name="model_id" ref="model_odental_patient"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_site_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de sedes</field>
+        <field name="model_id" ref="model_odental_site"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_resource_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de recursos</field>
+        <field name="model_id" ref="model_odental_resource"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_resource_photo_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de fotografías de equipos</field>
+        <field name="model_id" ref="model_odental_resource_photo"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_resource_handover_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de entregas de equipos</field>
+        <field name="model_id" ref="model_odental_resource_handover"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_resource_maintenance_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de mantenimientos de equipos</field>
+        <field name="model_id" ref="model_odental_resource_maintenance"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_service_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de servicios</field>
+        <field name="model_id" ref="model_odental_service"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_service_duration_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de duraciones</field>
+        <field name="model_id" ref="model_odental_service_duration"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_appointment_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de citas</field>
+        <field name="model_id" ref="model_odental_appointment"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_appointment_participant_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de participantes</field>
+        <field name="model_id" ref="model_odental_appointment_participant"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>
