@@ -1,7 +1,7 @@
 from psycopg2 import IntegrityError
 
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 
@@ -114,6 +114,7 @@ class TestODentalClinical(TransactionCase):
             consent.action_sign()
 
 
+@tagged("post_install", "-at_install")
 class TestODentalPatientFlow(TransactionCase):
     @classmethod
     def setUpClass(cls):
