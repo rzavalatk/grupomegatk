@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_odental_patient_form_clinical" model="ir.ui.view">
+        <field name="name">odental.patient.form.clinical</field>
+        <field name="model">odental.patient</field>
+        <field name="inherit_id" ref="odental_core.view_odental_patient_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_new_appointment']" position="after">
+                <button name="action_open_clinical_record" type="object"
+                        string="Expediente clínico" icon="fa-folder-open"
+                        groups="odental_core.group_odental_professional"/>
+            </xpath>
+        </field>
+    </record>
     <record id="view_odental_clinical_record_list" model="ir.ui.view">
         <field name="name">odental.clinical.record.list</field>
         <field name="model">odental.clinical.record</field>
@@ -82,4 +94,3 @@
         <field name="view_mode">list,form</field>
     </record>
 </odoo>
-
