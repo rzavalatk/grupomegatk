@@ -2,6 +2,46 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
+class ODentalPatientClinical(models.Model):
+    _inherit = "odental.patient"
+
+    @api.model
+    def default_get(self, fields_list):
+        values = super().default_get(fields_list)
+        if "organization_id" in fields_list and "organization_id" not in values:
+            # Respect record rules and the active company; never choose an
+            # arbitrary organization when the user has several possibilities.
+            organizations = self.env["odental.organization"].search(
+                [("company_id", "=", self.env.company.id)], limit=2
+            )
+            if len(organizations) == 1:
+                values["organization_id"] = organizations.id
+        return values
+
+    def action_open_clinical_record(self):
+        self.ensure_one()
+        self.check_access_rights("read")
+        self.check_access_rule("read")
+        records = self.env["odental.clinical.record"]
+        records.check_access_rights("read")
+        record = records.search([("patient_id", "=", self.id)], limit=1)
+        if not record:
+            records.check_access_rights("create")
+        # Opening this action does not create or reopen an expediente.
+        # The user saves a new record explicitly; the existing unique
+        # constraint remains the protection against concurrent duplicates.
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Expediente clínico",
+            "res_model": "odental.clinical.record",
+            "res_id": record.id or False,
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "current",
+            "context": {"default_patient_id": self.id},
+        }
+
+
 class ODentalClinicalRecord(models.Model):
     _name = "odental.clinical.record"
     _description = "Expediente clínico O Dental"
