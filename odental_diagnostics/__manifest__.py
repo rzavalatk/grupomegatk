@@ -1,7 +1,7 @@
 {
     "name": "O Dental Odontograma e Imágenes",
     "summary": "Odontograma versionado y repositorio de imágenes clínicas y DICOM",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
