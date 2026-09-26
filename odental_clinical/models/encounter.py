@@ -11,22 +11,26 @@ class ODentalClinicalEncounter(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "encounter_datetime desc, id desc"
 
-    name = fields.Char(default="Nuevo", readonly=True, copy=False, index=True)
+    name = fields.Char(default="Nuevo", readonly=True, copy=False, index=True, string="Nombre")
     clinical_record_id = fields.Many2one(
-        "odental.clinical.record", required=True, ondelete="restrict", index=True
+        "odental.clinical.record", required=True, ondelete="restrict", index=True,
+        string="Expediente clínico",
     )
     patient_id = fields.Many2one(
-        related="clinical_record_id.patient_id", store=True, index=True
+        related="clinical_record_id.patient_id", store=True, index=True,
+        string="Paciente",
     )
     organization_id = fields.Many2one(
-        related="clinical_record_id.organization_id", store=True, index=True
+        related="clinical_record_id.organization_id", store=True, index=True,
+        string="Organización",
     )
-    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
+    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True, string="Compañía")
     appointment_id = fields.Many2one(
         "odental.appointment", string="Cita relacionada", ondelete="set null", index=True
     )
     professional_id = fields.Many2one(
-        "odental.professional", required=True, ondelete="restrict", index=True, tracking=True
+        "odental.professional", required=True, ondelete="restrict", index=True, tracking=True,
+        string="Profesional responsable",
     )
     encounter_datetime = fields.Datetime(
         string="Fecha y hora", required=True, default=fields.Datetime.now, index=True
@@ -52,13 +56,15 @@ class ODentalClinicalEncounter(models.Model):
         default="draft",
         tracking=True,
         index=True,
+        string="Estado",
     )
-    signed_at = fields.Datetime(readonly=True)
-    signed_by_user_id = fields.Many2one("res.users", readonly=True)
+    signed_at = fields.Datetime(readonly=True, string="Fecha de firma")
+    signed_by_user_id = fields.Many2one("res.users", readonly=True, string="Firma registrada por")
     content_hash = fields.Char(string="Huella digital", readonly=True, copy=False, index=True)
-    version = fields.Integer(required=True, default=1, readonly=True, copy=False)
+    version = fields.Integer(required=True, default=1, readonly=True, copy=False, string="Versión")
     previous_version_id = fields.Many2one(
-        "odental.clinical.encounter", readonly=True, copy=False, ondelete="restrict"
+        "odental.clinical.encounter", readonly=True, copy=False, ondelete="restrict",
+        string="Versión anterior",
     )
     amendment_ids = fields.One2many(
         "odental.clinical.encounter", "previous_version_id", string="Rectificaciones"

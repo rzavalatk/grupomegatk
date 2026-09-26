@@ -10,19 +10,22 @@ class ODentalClinicalRecord(models.Model):
     _rec_name = "patient_id"
 
     patient_id = fields.Many2one(
-        "odental.patient", required=True, ondelete="restrict", index=True, tracking=True
+        "odental.patient", required=True, ondelete="restrict", index=True, tracking=True,
+        string="Paciente",
     )
     organization_id = fields.Many2one(
-        related="patient_id.organization_id", store=True, index=True
+        related="patient_id.organization_id", store=True, index=True,
+        string="Organización",
     )
-    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
-    opened_at = fields.Datetime(required=True, default=fields.Datetime.now, readonly=True)
+    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True, string="Compañía")
+    opened_at = fields.Datetime(required=True, default=fields.Datetime.now, readonly=True, string="Fecha de apertura")
     state = fields.Selection(
         [("active", "Activo"), ("closed", "Cerrado")],
         required=True,
         default="active",
         tracking=True,
         index=True,
+        string="Estado",
     )
     blood_type = fields.Selection(
         [
@@ -38,6 +41,7 @@ class ODentalClinicalRecord(models.Model):
         ],
         default="unknown",
         tracking=True,
+        string="Grupo sanguíneo",
     )
     alerts = fields.Text(string="Alertas clínicas", tracking=True)
     general_notes = fields.Text(string="Observaciones generales")
@@ -100,13 +104,16 @@ class ODentalMedicalHistoryEntry(models.Model):
     _order = "clinically_relevant desc, start_date desc, id desc"
 
     clinical_record_id = fields.Many2one(
-        "odental.clinical.record", required=True, ondelete="cascade", index=True
+        "odental.clinical.record", required=True, ondelete="cascade", index=True,
+        string="Expediente clínico",
     )
     patient_id = fields.Many2one(
-        related="clinical_record_id.patient_id", store=True, index=True
+        related="clinical_record_id.patient_id", store=True, index=True,
+        string="Paciente",
     )
     organization_id = fields.Many2one(
-        related="clinical_record_id.organization_id", store=True, index=True
+        related="clinical_record_id.organization_id", store=True, index=True,
+        string="Organización",
     )
     category = fields.Selection(
         [
@@ -124,9 +131,10 @@ class ODentalMedicalHistoryEntry(models.Model):
         required=True,
         index=True,
         tracking=True,
+        string="Categoría",
     )
-    name = fields.Char(required=True, tracking=True)
-    details = fields.Text()
+    name = fields.Char(required=True, tracking=True, string="Nombre")
+    details = fields.Text(string="Detalles")
     start_date = fields.Date(string="Fecha de inicio")
     end_date = fields.Date(string="Fecha de finalización")
     status = fields.Selection(
@@ -134,6 +142,7 @@ class ODentalMedicalHistoryEntry(models.Model):
         required=True,
         default="active",
         tracking=True,
+        string="Estado",
     )
     severity = fields.Selection(
         [
@@ -152,6 +161,7 @@ class ODentalMedicalHistoryEntry(models.Model):
         required=True,
         default="regular",
         tracking=True,
+        string="Confidencialidad",
     )
     referral_sharing = fields.Selection(
         [
