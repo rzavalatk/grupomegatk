@@ -196,3 +196,65 @@ class TestODentalPatientFlow(TransactionCase):
         self.operator.write({'groups_id': [(6, 0, [self.env.ref('base.group_user').id, self.env.ref('odental_core.group_odental_user').id])]})
         with self.assertRaises(AccessError):
             self.patient.action_open_clinical_record()
+
+    def _flow_encounter(self):
+        professional = self.env['odental.professional'].create({
+            'name': 'Flow clinician', 'company_id': self.company.id,
+            'organization_ids': [(4, self.organization.id)],
+            'user_id': self.operator.id,
+        })
+        record = self.env['odental.clinical.record'].with_user(self.operator).with_company(self.company).create({'patient_id': self.patient.id})
+        return self.env['odental.clinical.encounter'].with_user(self.operator).with_company(self.company).create({
+            'clinical_record_id': record.id, 'professional_id': professional.id,
+            'clinical_findings': 'Synthetic test finding',
+        })
+
+    def test_context_cannot_modify_signed_encounter(self):
+        encounter = self._flow_encounter()
+        encounter.action_sign()
+        original_hash = encounter.content_hash
+        for values in ({'clinical_findings': 'Altered'}, {'state': 'draft'}, {'content_hash': 'fake'}):
+            with self.assertRaises(UserError):
+                encounter.with_context(allow_clinical_transition=True).write(values)
+        self.assertEqual(encounter.content_hash, original_hash)
+        self.assertEqual(encounter.state, 'signed')
+
+    def test_signature_metadata_cannot_be_written(self):
+        encounter = self._flow_encounter()
+        with self.assertRaises(UserError):
+            encounter.write({'signed_by_user_id': self.operator.id})
+        with self.assertRaises(UserError):
+            encounter.with_context(allow_clinical_transition=True).write({'state': 'signed'})
+
+    def test_signed_creation_and_context_defaults_are_rejected(self):
+        encounter = self._flow_encounter()
+        values = {'clinical_record_id': encounter.clinical_record_id.id,
+                  'professional_id': encounter.professional_id.id}
+        with self.assertRaises(UserError):
+            encounter.create(dict(values, state='signed'))
+        with self.assertRaises(UserError):
+            encounter.with_context(default_state='signed').create(values)
+        with self.assertRaises(UserError):
+            encounter.with_context(default_content_hash='fake').create(values)
+
+    def test_amendment_keeps_signed_original_and_audit(self):
+        encounter = self._flow_encounter()
+        encounter.action_sign()
+        original_hash = encounter.content_hash
+        action = encounter.action_create_amendment()
+        amendment = encounter.browse(action['res_id'])
+        self.assertEqual(encounter.state, 'amended')
+        self.assertEqual(encounter.content_hash, original_hash)
+        self.assertEqual(amendment.state, 'draft')
+        self.assertEqual(amendment.previous_version_id, encounter)
+        self.assertEqual(amendment.version, 2)
+        with self.assertRaises(ValidationError):
+            amendment.action_sign()
+        amendment.write({'amendment_reason': 'Synthetic correction', 'clinical_findings': 'Corrected test finding'})
+        amendment.action_sign()
+        self.assertEqual(amendment.state, 'signed')
+        self.assertEqual(amendment.signed_by_user_id, self.operator)
+        self.assertNotEqual(amendment.content_hash, original_hash)
+        self.assertTrue(self.env['odental.clinical.audit'].search_count([
+            ('record_res_id', '=', amendment.id), ('model_name', '=', amendment._name),
+            ('event_type', '=', 'encounter_signed')]))
