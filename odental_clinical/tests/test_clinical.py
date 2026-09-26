@@ -144,7 +144,8 @@ class TestODentalPatientFlow(TransactionCase):
         cls.operator = cls.env['res.users'].with_context(no_reset_password=True).create(values)
         cls.organization = cls.env['odental.organization'].create({
             'name': 'Authorized dental organization', 'code': 'FLOW-A',
-            'company_id': cls.company.id, 'user_ids': [(4, cls.operator.id)],
+            'company_id': cls.company.id, 'owner_user_id': cls.env.user.id,
+            'user_ids': [(4, cls.env.user.id), (4, cls.operator.id)],
         })
         cls.hidden = cls.env['odental.organization'].create({
             'name': 'Other dental organization', 'code': 'FLOW-B',
