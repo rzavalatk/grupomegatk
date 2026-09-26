@@ -8,15 +8,18 @@ class ODentalClinicalAudit(models.Model):
     _order = "occurred_at desc, id desc"
     _rec_name = "summary"
 
-    occurred_at = fields.Datetime(required=True, default=fields.Datetime.now, index=True)
+    occurred_at = fields.Datetime(required=True, default=fields.Datetime.now, index=True, string="Fecha y hora")
     organization_id = fields.Many2one(
-        "odental.organization", required=True, ondelete="restrict", index=True
+        "odental.organization", required=True, ondelete="restrict", index=True,
+        string="Organización",
     )
     patient_id = fields.Many2one(
-        "odental.patient", required=True, ondelete="restrict", index=True
+        "odental.patient", required=True, ondelete="restrict", index=True,
+        string="Paciente",
     )
     user_id = fields.Many2one(
-        "res.users", required=True, default=lambda self: self.env.user, ondelete="restrict"
+        "res.users", required=True, default=lambda self: self.env.user, ondelete="restrict",
+        string="Usuario",
     )
     event_type = fields.Selection(
         [
@@ -37,10 +40,11 @@ class ODentalClinicalAudit(models.Model):
         ],
         required=True,
         index=True,
+        string="Tipo de evento",
     )
-    model_name = fields.Char(required=True, index=True)
-    record_res_id = fields.Integer(required=True, index=True)
-    summary = fields.Char(required=True)
+    model_name = fields.Char(required=True, index=True, string="Modelo")
+    record_res_id = fields.Integer(required=True, index=True, string="Identificador del registro")
+    summary = fields.Char(required=True, string="Resumen")
     content_hash = fields.Char(string="Huella digital", readonly=True, index=True)
 
     def init(self):

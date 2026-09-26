@@ -21,14 +21,15 @@ class ODentalConsentTemplate(models.Model):
     _inherit = ["mail.thread"]
     _order = "name, version desc"
 
-    name = fields.Char(required=True, tracking=True)
+    name = fields.Char(required=True, tracking=True, string="Nombre")
     organization_id = fields.Many2one(
-        "odental.organization", required=True, ondelete="restrict", index=True
+        "odental.organization", required=True, ondelete="restrict", index=True,
+        string="Organización",
     )
-    purpose = fields.Selection(CONSENT_PURPOSES, required=True, default="treatment")
-    version = fields.Integer(required=True, default=1)
+    purpose = fields.Selection(CONSENT_PURPOSES, required=True, default="treatment", string="Finalidad")
+    version = fields.Integer(required=True, default=1, string="Versión")
     text = fields.Html(string="Texto del consentimiento", required=True, sanitize=True)
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(default=True, string="Activo")
 
     _sql_constraints = [
         (
@@ -50,26 +51,30 @@ class ODentalPatientConsent(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "create_date desc, id desc"
 
-    name = fields.Char(default="Nuevo", readonly=True, copy=False, index=True)
+    name = fields.Char(default="Nuevo", readonly=True, copy=False, index=True, string="Nombre")
     clinical_record_id = fields.Many2one(
-        "odental.clinical.record", required=True, ondelete="restrict", index=True
+        "odental.clinical.record", required=True, ondelete="restrict", index=True,
+        string="Expediente clínico",
     )
     patient_id = fields.Many2one(
-        related="clinical_record_id.patient_id", store=True, index=True
+        related="clinical_record_id.patient_id", store=True, index=True,
+        string="Paciente",
     )
     organization_id = fields.Many2one(
-        related="clinical_record_id.organization_id", store=True, index=True
+        related="clinical_record_id.organization_id", store=True, index=True,
+        string="Organización",
     )
-    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
+    company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True, string="Compañía")
     professional_id = fields.Many2one(
         "odental.professional", string="Profesional responsable", ondelete="restrict"
     )
     template_id = fields.Many2one(
-        "odental.consent.template", required=True, ondelete="restrict"
+        "odental.consent.template", required=True, ondelete="restrict",
+        string="Plantilla",
     )
-    template_name = fields.Char(readonly=True, required=True)
-    template_version = fields.Integer(readonly=True, required=True)
-    purpose = fields.Selection(CONSENT_PURPOSES, required=True, readonly=True)
+    template_name = fields.Char(readonly=True, required=True, string="Nombre de la plantilla")
+    template_version = fields.Integer(readonly=True, required=True, string="Versión de la plantilla")
+    purpose = fields.Selection(CONSENT_PURPOSES, required=True, readonly=True, string="Finalidad")
     consent_text = fields.Html(
         string="Documento autorizado", required=True, readonly=True, sanitize=True
     )
@@ -77,7 +82,7 @@ class ODentalPatientConsent(models.Model):
         string="Resumen comprensible del alcance",
         help="Explica al paciente qué autoriza, para qué finalidad y durante cuánto tiempo.",
     )
-    valid_from = fields.Date(default=fields.Date.context_today)
+    valid_from = fields.Date(default=fields.Date.context_today, string="Válido desde")
     valid_until = fields.Date(string="Válido hasta")
     state = fields.Selection(
         [
@@ -92,11 +97,13 @@ class ODentalPatientConsent(models.Model):
         default="draft",
         tracking=True,
         index=True,
+        string="Estado",
     )
     signer_type = fields.Selection(
         [("patient", "Paciente"), ("representative", "Representante")],
         default="patient",
         required=True,
+        string="Tipo de firmante",
     )
     signer_name = fields.Char(string="Nombre del firmante")
     signer_identification = fields.Char(string="Identificación del firmante")
@@ -115,13 +122,13 @@ class ODentalPatientConsent(models.Model):
         help="Identificador técnico de la sesión. No almacena el código secreto.",
     )
     signature = fields.Binary(string="Firma o documento", attachment=True)
-    signature_filename = fields.Char()
-    signed_at = fields.Datetime(readonly=True)
-    signed_by_user_id = fields.Many2one("res.users", readonly=True)
+    signature_filename = fields.Char(string="Nombre del archivo")
+    signed_at = fields.Datetime(readonly=True, string="Fecha de firma")
+    signed_by_user_id = fields.Many2one("res.users", readonly=True, string="Firma registrada por")
     content_hash = fields.Char(string="Huella digital", readonly=True, copy=False, index=True)
     revocation_reason = fields.Text(string="Motivo de revocación")
-    revoked_at = fields.Datetime(readonly=True)
-    revoked_by_user_id = fields.Many2one("res.users", readonly=True)
+    revoked_at = fields.Datetime(readonly=True, string="Fecha de revocación")
+    revoked_by_user_id = fields.Many2one("res.users", readonly=True, string="Revocación registrada por")
 
     @api.model_create_multi
     def create(self, vals_list):
