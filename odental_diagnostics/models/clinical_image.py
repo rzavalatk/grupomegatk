@@ -133,13 +133,20 @@ class ODentalClinicalImage(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        controlled_fields = ["state", "finalized_at", "finalized_by_user_id"]
+        defaults = self.default_get(controlled_fields + ["file_data", "filename"])
         for vals in vals_list:
+            initial = dict(defaults, **vals)
+            if initial.get("state", "draft") != "draft" or any(
+                initial.get(field) for field in controlled_fields if field != "state"
+            ):
+                raise UserError("Cree la imagen en borrador y utilice la acción de finalización.")
             if vals.get("name", "Nuevo") == "Nuevo":
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "odental.clinical.image"
                 ) or "Nuevo"
-            if vals.get("file_data"):
-                vals.update(self._file_metadata(vals["file_data"], vals.get("filename")))
+            if initial.get("file_data"):
+                vals.update(self._file_metadata(initial["file_data"], initial.get("filename")))
         images = super().create(vals_list)
         for image in images:
             image.clinical_record_id._log_event(
@@ -175,18 +182,19 @@ class ODentalClinicalImage(models.Model):
             "finalized_at",
             "finalized_by_user_id",
         }
-        if not self.env.context.get("allow_image_transition"):
-            for image in self:
-                if vals.get("state") in ("final", "archived"):
-                    raise UserError("Utilice las acciones controladas de la imagen clínica.")
-                if image.state in ("final", "archived") and protected_fields.intersection(vals):
-                    raise UserError("Una imagen clínica finalizada no puede alterarse.")
-                if (
-                    image.state in ("final", "archived")
-                    and vals.get("state")
-                    and vals["state"] != image.state
-                ):
-                    raise UserError("El estado de una imagen finalizada no puede revertirse.")
+        if {"finalized_at", "finalized_by_user_id", "file_hash", "file_size", "mimetype"}.intersection(vals):
+            raise UserError("Los datos de archivo y finalización se generan automáticamente.")
+        for image in self:
+            if vals.get("state") in ("final", "archived"):
+                raise UserError("Utilice las acciones controladas de la imagen clínica.")
+            if image.state in ("final", "archived") and protected_fields.intersection(vals):
+                raise UserError("Una imagen clínica finalizada no puede alterarse.")
+            if (
+                image.state in ("final", "archived")
+                and vals.get("state")
+                and vals["state"] != image.state
+            ):
+                raise UserError("El estado de una imagen finalizada no puede revertirse.")
         if vals.get("file_data"):
             filename = vals.get("filename") or (self[:1].filename if len(self) == 1 else False)
             vals.update(self._file_metadata(vals["file_data"], filename))
@@ -211,7 +219,7 @@ class ODentalClinicalImage(models.Model):
                 raise UserError("Solo las imágenes en borrador pueden finalizarse.")
             if not image.file_data or not image.file_hash:
                 raise ValidationError("Debe adjuntar un archivo clínico válido.")
-            image.with_context(allow_image_transition=True).write(
+            super(ODentalClinicalImage, image).write(
                 {
                     "state": "final",
                     "finalized_at": fields.Datetime.now(),
@@ -229,7 +237,7 @@ class ODentalClinicalImage(models.Model):
         for image in self:
             if image.state != "final":
                 raise UserError("Solo una imagen finalizada puede archivarse.")
-            image.with_context(allow_image_transition=True).write(
+            super(ODentalClinicalImage, image).write(
                 {"state": "archived", "active": False}
             )
             image.clinical_record_id._log_event(
