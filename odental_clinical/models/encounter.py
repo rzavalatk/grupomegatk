@@ -73,7 +73,14 @@ class ODentalClinicalEncounter(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        signature_fields = ("state", "signed_at", "signed_by_user_id", "content_hash")
+        defaults = self.default_get(list(signature_fields))
         for vals in vals_list:
+            initial = dict(defaults, **vals)
+            if initial.get("state", "draft") != "draft" or any(
+                initial.get(field) for field in signature_fields[1:]
+            ):
+                raise UserError("Cree la evolución en borrador y utilice la acción de firma.")
             if vals.get("name", "Nuevo") == "Nuevo":
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "odental.clinical.encounter"
@@ -140,20 +147,21 @@ class ODentalClinicalEncounter(models.Model):
             "signed_by_user_id",
             "content_hash",
         }
-        if not self.env.context.get("allow_clinical_transition"):
-            for encounter in self:
-                if vals.get("state") in ("signed", "amended"):
-                    raise UserError("Utilice las acciones de firma o rectificación.")
-                if (
-                    encounter.state in ("signed", "amended")
-                    and vals.get("state")
-                    and vals["state"] != encounter.state
-                ):
-                    raise UserError("El estado de una evolución firmada no puede revertirse.")
-                if encounter.state in ("signed", "amended") and protected_fields.intersection(vals):
-                    raise UserError(
-                        "Una evolución firmada no puede modificarse. Cree una rectificación."
-                    )
+        if {"signed_at", "signed_by_user_id", "content_hash"}.intersection(vals):
+            raise UserError("Los datos de firma se generan mediante la acción de firma.")
+        for encounter in self:
+            if vals.get("state") in ("signed", "amended"):
+                raise UserError("Utilice las acciones de firma o rectificación.")
+            if (
+                encounter.state in ("signed", "amended")
+                and vals.get("state")
+                and vals["state"] != encounter.state
+            ):
+                raise UserError("El estado de una evolución firmada no puede revertirse.")
+            if encounter.state in ("signed", "amended") and protected_fields.intersection(vals):
+                raise UserError(
+                    "Una evolución firmada no puede modificarse. Cree una rectificación."
+                )
         return super().write(vals)
 
     def unlink(self):
@@ -177,7 +185,7 @@ class ODentalClinicalEncounter(models.Model):
             if encounter.previous_version_id and not encounter.amendment_reason:
                 raise ValidationError("Debe indicar el motivo de la rectificación.")
             content_hash = encounter._hash_payload()
-            encounter.with_context(allow_clinical_transition=True).write(
+            super(ODentalClinicalEncounter, encounter).write(
                 {
                     "state": "signed",
                     "signed_at": fields.Datetime.now(),
@@ -212,7 +220,7 @@ class ODentalClinicalEncounter(models.Model):
             "previous_version_id": self.id,
         }
         amendment = self.create(values)
-        self.with_context(allow_clinical_transition=True).write({"state": "amended"})
+        super(ODentalClinicalEncounter, self).write({"state": "amended"})
         self.clinical_record_id._log_event(
             "encounter_amended",
             f"Rectificación creada para {self.name}: versión {amendment.version}",
