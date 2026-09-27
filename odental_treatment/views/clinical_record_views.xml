@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_record_form_treatment" model="ir.ui.view">
+        <field name="name">odental.clinical.record.form.treatment</field>
+        <field name="model">odental.clinical.record</field>
+        <field name="inherit_id" ref="odental_clinical.view_odental_clinical_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Planes de tratamiento">
+                    <field name="treatment_plan_ids" context="{'default_clinical_record_id': id}">
+                        <list decoration-success="state == 'completed'" decoration-muted="state in ('cancelled', 'superseded')">
+                            <field name="name"/>
+                            <field name="responsible_professional_id"/>
+                            <field name="version"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id" column_invisible="True"/>
+                            <field name="progress" widget="progressbar"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

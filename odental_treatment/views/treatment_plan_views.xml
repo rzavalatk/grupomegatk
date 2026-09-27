@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_treatment_plan_list" model="ir.ui.view">
+        <field name="name">odental.treatment.plan.list</field>
+        <field name="model">odental.treatment.plan</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'completed'" decoration-muted="state in ('cancelled', 'superseded')" decoration-warning="state == 'offered'">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="organization_id"/>
+                <field name="responsible_professional_id"/>
+                <field name="billing_mode"/>
+                <field name="version"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odental_treatment_plan_search" model="ir.ui.view">
+        <field name="name">odental.treatment.plan.search</field>
+        <field name="model">odental.treatment.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="responsible_professional_id"/>
+                <field name="organization_id"/>
+                <filter name="pending" string="Pendientes" domain="[('state', 'in', ('draft', 'offered', 'approved', 'in_progress'))]"/>
+                <filter name="approved" string="Aprobados" domain="[('state', 'in', ('approved', 'in_progress', 'completed'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_patient" string="Paciente" context="{'group_by': 'patient_id'}"/>
+                    <filter name="group_professional" string="Profesional" context="{'group_by': 'responsible_professional_id'}"/>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_odental_treatment_plan_form" model="ir.ui.view">
+        <field name="name">odental.treatment.plan.form</field>
+        <field name="model">odental.treatment.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_offer" type="object" string="Presentar al paciente" class="btn-primary" invisible="state not in ('draft', 'rejected')"/>
+                    <button name="action_approve" type="object" string="Registrar aprobación" class="btn-primary" invisible="state != 'offered'"/>
+                    <button name="action_reject" type="object" string="Registrar rechazo" invisible="state != 'offered'"/>
+                    <button name="action_start" type="object" string="Iniciar tratamiento" class="btn-primary" invisible="state != 'approved'"/>
+                    <button name="action_complete" type="object" string="Completar" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_create_revision" type="object" string="Crear revisión" invisible="state not in ('approved', 'in_progress')"/>
+                    <button name="action_create_quotation" type="object" string="Crear cotización" groups="odental_core.group_odental_manager" invisible="state not in ('approved', 'in_progress', 'completed') or sale_order_id"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state in ('completed', 'cancelled', 'superseded')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,offered,approved,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_quotation" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not sale_order_id">
+                            <field name="sale_order_id" widget="statinfo" string="Cotización"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="clinical_record_id" readonly="state not in ('draft', 'rejected')"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="responsible_professional_id" readonly="state not in ('draft', 'rejected')" domain="[('organization_ids', 'in', [organization_id])]"/>
+                        </group>
+                        <group>
+                            <field name="version"/>
+                            <field name="valid_until" readonly="state not in ('draft', 'rejected', 'offered')"/>
+                            <field name="billing_mode" readonly="state not in ('draft', 'rejected')"/>
+                            <field name="billing_company_id" readonly="1" groups="base.group_multi_company"/>
+                            <field name="progress" widget="progressbar" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Procedimientos">
+                            <field name="line_ids" context="{'default_plan_id': id}">
+                                <list editable="bottom" decoration-success="state == 'completed'" decoration-muted="state == 'cancelled'">
+                                    <field name="sequence" widget="handle" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="service_id" domain="[('organization_id', '=', parent.organization_id)]" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="tooth_id" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="surface" optional="show" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="description" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="professional_id" domain="[('organization_ids', 'in', [parent.organization_id])]" optional="show" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="quantity" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="price_unit" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="discount" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="tax_ids" widget="many2many_tags" optional="show" readonly="parent.state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                    <field name="price_subtotal" sum="Subtotal"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="encounter_id" optional="hide" domain="[('clinical_record_id', '=', parent.clinical_record_id)]"/>
+                                    <field name="state" optional="show" readonly="parent.state in ('draft', 'offered', 'rejected', 'completed', 'cancelled', 'superseded')"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="Aceptación">
+                            <group>
+                                <group>
+                                    <field name="signer_name" readonly="state not in ('draft', 'rejected', 'offered')"/>
+                                    <field name="acceptance_method" readonly="state not in ('draft', 'rejected', 'offered')"/>
+                                    <field name="acceptance_reference" readonly="state not in ('draft', 'rejected', 'offered')"/>
+                                    <field name="signature" filename="signature_filename" readonly="state not in ('draft', 'rejected', 'offered')"/>
+                                    <field name="signature_filename" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="accepted_at"/>
+                                    <field name="accepted_by_user_id"/>
+                                    <field name="content_hash"/>
+                                </group>
+                            </group>
+                            <field name="rejection_reason" placeholder="Obligatorio antes de registrar un rechazo..." readonly="state != 'offered'"/>
+                            <field name="cancellation_reason" placeholder="Obligatorio antes de cancelar..." readonly="state in ('completed', 'cancelled', 'superseded')"/>
+                        </page>
+                        <page string="Condiciones y notas">
+                            <group>
+                                <field name="terms" readonly="state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                                <field name="clinical_notes" readonly="state in ('approved', 'in_progress', 'completed', 'cancelled', 'superseded')"/>
+                            </group>
+                        </page>
+                        <page string="Versiones">
+                            <group>
+                                <field name="previous_version_id"/>
+                                <field name="revision_reason" placeholder="Indique el motivo antes de crear una revisión..."/>
+                            </group>
+                            <field name="revision_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="version"/>
+                                    <field name="create_date"/>
+                                    <field name="state"/>
+                                    <field name="amount_total"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odental_treatment_plan" model="ir.actions.act_window">
+        <field name="name">Planes de tratamiento</field>
+        <field name="res_model">odental.treatment.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_odental_treatment_plan_search"/>
+    </record>
+</odoo>
