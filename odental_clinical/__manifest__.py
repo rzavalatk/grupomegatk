@@ -1,7 +1,7 @@
 {
     "name": "O Dental Expediente Clínico",
     "summary": "Expediente, antecedentes, evoluciones, diagnósticos y consentimientos",
-    "version": "18.0.1.1.1",
+    "version": "18.0.1.1.2",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",

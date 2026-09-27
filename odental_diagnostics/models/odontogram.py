@@ -105,7 +105,14 @@ class ODentalOdontogram(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        signature_fields = ["state", "signed_at", "signed_by_user_id", "content_hash"]
+        defaults = self.default_get(signature_fields)
         for vals in vals_list:
+            initial = dict(defaults, **vals)
+            if initial.get("state", "draft") != "draft" or any(
+                initial.get(field) for field in signature_fields if field != "state"
+            ):
+                raise UserError("Cree el odontograma en borrador y utilice la acción de firma.")
             if vals.get("name", "Nuevo") == "Nuevo":
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "odental.odontogram"
@@ -185,20 +192,21 @@ class ODentalOdontogram(models.Model):
             "signed_by_user_id",
             "content_hash",
         }
-        if not self.env.context.get("allow_odontogram_transition"):
-            for odontogram in self:
-                if vals.get("state") in ("signed", "amended"):
-                    raise UserError("Utilice las acciones de firma o rectificación.")
-                if (
-                    odontogram.state in ("signed", "amended")
-                    and vals.get("state")
-                    and vals["state"] != odontogram.state
-                ):
-                    raise UserError("El estado de un odontograma firmado no puede revertirse.")
-                if odontogram.state in ("signed", "amended") and protected_fields.intersection(vals):
-                    raise UserError(
-                        "Un odontograma firmado no puede modificarse. Cree una rectificación."
-                    )
+        if {"signed_at", "signed_by_user_id", "content_hash"}.intersection(vals):
+            raise UserError("Los datos de firma se generan mediante la acción de firma.")
+        for odontogram in self:
+            if vals.get("state") in ("signed", "amended"):
+                raise UserError("Utilice las acciones de firma o rectificación.")
+            if (
+                odontogram.state in ("signed", "amended")
+                and vals.get("state")
+                and vals["state"] != odontogram.state
+            ):
+                raise UserError("El estado de un odontograma firmado no puede revertirse.")
+            if odontogram.state in ("signed", "amended") and protected_fields.intersection(vals):
+                raise UserError(
+                    "Un odontograma firmado no puede modificarse. Cree una rectificación."
+                )
         return super().write(vals)
 
     def unlink(self):
@@ -214,7 +222,7 @@ class ODentalOdontogram(models.Model):
                 raise ValidationError("Debe indicar el motivo de la rectificación.")
             odontogram._check_chart_dentition()
             content_hash = odontogram._hash_payload()
-            odontogram.with_context(allow_odontogram_transition=True).write(
+            super(ODentalOdontogram, odontogram).write(
                 {
                     "state": "signed",
                     "signed_at": fields.Datetime.now(),
@@ -260,7 +268,7 @@ class ODentalOdontogram(models.Model):
                 "previous_version_id": self.id,
             }
         )
-        self.with_context(allow_odontogram_transition=True).write({"state": "amended"})
+        super(ODentalOdontogram, self).write({"state": "amended"})
         self.clinical_record_id._log_event(
             "odontogram_amended",
             f"Rectificación creada para {self.name}: versión {amendment.version}",
@@ -316,9 +324,9 @@ class ODentalOdontogramFinding(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        charts = self.env["odental.odontogram"].browse(
-            [vals.get("odontogram_id") for vals in vals_list if vals.get("odontogram_id")]
-        )
+        default_chart = self.default_get(["odontogram_id"]).get("odontogram_id")
+        chart_ids = [vals.get("odontogram_id", default_chart) for vals in vals_list]
+        charts = self.env["odental.odontogram"].browse([chart_id for chart_id in chart_ids if chart_id])
         if any(chart.state != "draft" for chart in charts):
             raise UserError("No se pueden agregar hallazgos a un odontograma firmado.")
         return super().create(vals_list)

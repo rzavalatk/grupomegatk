@@ -193,7 +193,9 @@ class ODentalAppointment(models.Model):
                 ("blocking_start", "<", appointment.blocking_end),
                 ("blocking_end", ">", appointment.blocking_start),
             ]
-            same_professional = self.search(
+            # Availability spans clinics sharing staff or resources. Read only
+            # for conflict detection; never return the other clinic's records.
+            same_professional = self.sudo().search(
                 base_domain + [("professional_id", "=", appointment.professional_id.id)]
             )
             if same_professional and any(
@@ -204,7 +206,7 @@ class ODentalAppointment(models.Model):
                 for other in same_professional
             ):
                 raise ValidationError("El profesional ya tiene otra cita durante este horario.")
-            if appointment.resource_ids and self.search_count(base_domain + [("resource_ids", "in", appointment.resource_ids.ids)]):
+            if appointment.resource_ids and self.sudo().search_count(base_domain + [("resource_ids", "in", appointment.resource_ids.ids)]):
                 raise ValidationError("Uno o más recursos ya están reservados durante este horario.")
             appointment._check_participant_conflicts()
 
@@ -226,7 +228,8 @@ class ODentalAppointment(models.Model):
         ).mapped("user_id")
         if not exclusive_users:
             return
-        conflict = self.env["odental.appointment.participant"].search_count(
+        # Return a generic availability error, without exposing other patients.
+        conflict = self.env["odental.appointment.participant"].sudo().search_count(
             [
                 ("appointment_id", "!=", self.id),
                 ("appointment_id.state", "in", ("scheduled", "confirmed", "in_progress")),

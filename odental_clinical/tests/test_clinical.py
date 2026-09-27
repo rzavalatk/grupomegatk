@@ -1,6 +1,6 @@
 from psycopg2 import IntegrityError
 
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
@@ -258,3 +258,87 @@ class TestODentalPatientFlow(TransactionCase):
         self.assertTrue(self.env['odental.clinical.audit'].search_count([
             ('record_res_id', '=', amendment.id), ('model_name', '=', amendment._name),
             ('event_type', '=', 'encounter_signed')]))
+
+    def _flow_consent(self):
+        encounter = self._flow_encounter()
+        template = self.env['odental.consent.template'].create({
+            'name': 'Synthetic consent', 'organization_id': self.organization.id,
+            'text': '<p>Synthetic authorization for testing.</p>',
+        })
+        return self.env['odental.patient.consent'].with_user(self.operator).with_company(self.company).create({
+            'clinical_record_id': encounter.clinical_record_id.id,
+            'professional_id': encounter.professional_id.id, 'template_id': template.id,
+            'signer_name': 'Synthetic signer', 'verification_method': 'in_person',
+            'verification_reference': 'TEST-ONLY',
+        })
+
+    def test_consent_context_cannot_change_signed_document(self):
+        consent = self._flow_consent()
+        consent.action_sign()
+        original_hash = consent.content_hash
+        for values in ({'consent_text': '<p>Altered</p>'}, {'state': 'draft'},
+                       {'signature': False}, {'content_hash': 'fake'}):
+            with self.assertRaises(UserError):
+                consent.with_context(allow_consent_transition=True).write(values)
+        self.assertEqual(consent.content_hash, original_hash)
+        self.assertEqual(consent.state, 'signed')
+
+    def test_consent_direct_signature_and_revocation_are_rejected(self):
+        consent = self._flow_consent()
+        for values in ({'state': 'signed'}, {'state': 'revoked'},
+                       {'signed_by_user_id': self.operator.id},
+                       {'revoked_by_user_id': self.operator.id}):
+            with self.assertRaises(UserError):
+                consent.with_context(allow_consent_transition=True).write(values)
+        values = {'clinical_record_id': consent.clinical_record_id.id,
+                  'template_id': consent.template_id.id}
+        for defaults in ({'state': 'signed'}, {'content_hash': 'fake'},
+                         {'revoked_by_user_id': self.operator.id}):
+            with self.assertRaises(UserError):
+                consent.create(dict(values, **defaults))
+            with self.assertRaises(UserError):
+                consent.with_context(**{'default_' + key: val for key, val in defaults.items()}).create(values)
+
+    def test_consent_evidence_and_revocation_audit(self):
+        consent = self._flow_consent()
+        consent.write({'verification_reference': False})
+        consent.action_request()
+        self.assertEqual(consent.state, 'pending')
+        with self.assertRaises(ValidationError):
+            consent.action_sign()
+        consent.write({'verification_reference': 'TEST-EVIDENCE'})
+        consent.action_sign()
+        original_hash = consent.content_hash
+        self.assertEqual(consent.signed_by_user_id, self.operator)
+        with self.assertRaises(ValidationError):
+            consent.action_revoke()
+        consent.write({'revocation_reason': 'Synthetic withdrawal'})
+        consent.action_revoke()
+        self.assertEqual(consent.state, 'revoked')
+        self.assertEqual(consent.content_hash, original_hash)
+        self.assertEqual(consent.revoked_by_user_id, self.operator)
+        self.assertTrue(consent.revoked_at)
+        with self.assertRaises(UserError):
+            consent.write({'revocation_reason': 'Altered reason'})
+        with self.assertRaises(UserError):
+            consent.unlink()
+        events = self.env['odental.clinical.audit'].search([
+            ('record_res_id', '=', consent.id), ('model_name', '=', consent._name)])
+        self.assertTrue({'consent_signed', 'consent_revoked'}.issubset(set(events.mapped('event_type'))))
+
+    def test_consent_snapshot_survives_template_change(self):
+        consent = self._flow_consent()
+        original_text = consent.consent_text
+        consent.action_sign()
+        consent.template_id.with_env(self.env).write({'text': '<p>New template text.</p>'})
+        self.assertEqual(consent.consent_text, original_text)
+        self.assertEqual(consent.content_hash, consent._hash_payload())
+
+    def test_consent_hidden_from_other_organization_and_reception(self):
+        consent = self._flow_consent()
+        with self.assertRaises(AccessError):
+            consent.with_user(self.other_operator).read(['consent_text'])
+        self.operator.groups_id = [(6, 0, [self.env.ref('base.group_user').id,
+            self.env.ref('odental_core.group_odental_user').id])]
+        with self.assertRaises(AccessError):
+            consent.read(['consent_text'])
