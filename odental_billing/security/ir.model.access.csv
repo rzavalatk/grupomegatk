@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_fiscal_authorization_manager,odental.fiscal.authorization manager,model_odental_fiscal_authorization,odental_core.group_odental_manager,1,1,1,0
+access_odental_fiscal_authorization_admin,odental.fiscal.authorization admin,model_odental_fiscal_authorization,odental_core.group_odental_admin,1,1,1,1
+access_odental_cash_session_user,odental.cash.session user,model_odental_cash_session,odental_core.group_odental_user,1,0,0,0
+access_odental_cash_session_manager,odental.cash.session manager,model_odental_cash_session,odental_core.group_odental_manager,1,1,1,0
+access_odental_cash_session_admin,odental.cash.session admin,model_odental_cash_session,odental_core.group_odental_admin,1,1,1,1
+access_odental_clinical_collection_user,odental.clinical.collection user,model_odental_clinical_collection,odental_core.group_odental_user,1,1,1,0
+access_odental_clinical_collection_manager,odental.clinical.collection manager,model_odental_clinical_collection,odental_core.group_odental_manager,1,1,1,0
+access_odental_clinical_collection_admin,odental.clinical.collection admin,model_odental_clinical_collection,odental_core.group_odental_admin,1,1,1,1

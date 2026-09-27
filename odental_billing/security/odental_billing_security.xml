@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_fiscal_authorization_member" model="ir.rule">
+        <field name="name">O Dental: autorizaciones fiscales permitidas</field>
+        <field name="model_id" ref="model_odental_fiscal_authorization"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_manager'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_cash_session_member" model="ir.rule">
+        <field name="name">O Dental: cajas permitidas</field>
+        <field name="model_id" ref="model_odental_cash_session"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_clinical_collection_member" model="ir.rule">
+        <field name="name">O Dental: cobros permitidos</field>
+        <field name="model_id" ref="model_odental_clinical_collection"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_fiscal_authorization_admin" model="ir.rule">
+        <field name="name">O Dental: autorizaciones fiscales globales</field>
+        <field name="model_id" ref="model_odental_fiscal_authorization"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_cash_session_admin" model="ir.rule">
+        <field name="name">O Dental: cajas globales</field>
+        <field name="model_id" ref="model_odental_cash_session"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_clinical_collection_admin" model="ir.rule">
+        <field name="name">O Dental: cobros globales</field>
+        <field name="model_id" ref="model_odental_clinical_collection"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>
