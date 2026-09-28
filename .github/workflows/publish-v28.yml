@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.40
+name: Publicar planificación comercial 18.0.41
 on:
   workflow_dispatch:
 permissions:
@@ -11,11 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Publicar tabla de marcas legible y encabezados en negrita
+      - name: Publicar evaluacion mensual y cartera por vendedor
         run: |
-          git update-index --cacheinfo 160000,29ed7c3419ba16856c8f70ea12814e2eaed865af,commercial_planning_addons
+          git update-index --cacheinfo 160000,fd8787ba7ed671c79db1cb048b07a69a1dc924cd,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.40.0.0"
+          git commit -m "Publica planificación comercial 18.0.41.0.0"
           git push origin master
