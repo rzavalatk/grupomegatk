@@ -1,3 +1,4 @@
+# Reintento de carga v36 tras fallo de clonación del submódulo.
 name: Publicar planificación comercial 18.0.36
 on:
   workflow_dispatch:
