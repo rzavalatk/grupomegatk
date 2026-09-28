@@ -1,5 +1,4 @@
-# Reintento de carga v36 tras fallo de clonación del submódulo.
-name: Publicar planificación comercial 18.0.36
+name: Publicar planificación comercial 18.0.37
 on:
   workflow_dispatch:
 permissions:
@@ -12,11 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Publicar seguimiento por marca
+      - name: Publicar participantes y semaforo de marcas
         run: |
-          git update-index --cacheinfo 160000,9b1501a00aedfb9cb8f80dfff0aad27e85df70e8,commercial_planning_addons
+          git update-index --cacheinfo 160000,38dad9cc14dde55faf64444823757e2b21efd0e2,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.36.0.0"
+          git commit -m "Publica planificación comercial 18.0.37.0.0"
           git push origin master
