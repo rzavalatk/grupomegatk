@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.35
+name: Publicar planificación comercial 18.0.36
 on:
   workflow_dispatch:
 permissions:
@@ -11,11 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Publicar planificacion mensual de equipos
+      - name: Publicar seguimiento por marca
         run: |
-          git update-index --cacheinfo 160000,4ecb23065d03e65aca9a4cdef2dce720f8d01260,commercial_planning_addons
+          git update-index --cacheinfo 160000,9b1501a00aedfb9cb8f80dfff0aad27e85df70e8,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.35.0.0"
+          git commit -m "Publica planificación comercial 18.0.36.0.0"
           git push origin master
