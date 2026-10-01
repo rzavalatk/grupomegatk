@@ -5,16 +5,34 @@ from odoo.tests.common import TransactionCase
 class TestCashflowForecast(TransactionCase):
     def setUp(self):
         super().setUp()
-        self.company = self.env.company
-        # Staging is updated with a copy of the operational database, where the
-        # company already has its single cash-flow plan.  Each test runs in a
-        # savepoint, so removing it here gives the test a clean plan and is
-        # rolled back automatically when the test finishes.
-        self.env["cashflow.plan"].search([
-            ("company_id", "=", self.company.id),
-        ]).unlink()
-        self.plan = self.env["cashflow.plan"].create({"company_id": self.company.id})
+        # Staging uses a copy of the operational database.  Never delete or
+        # reuse its real cash-flow plan in a test: create an isolated company
+        # so balances and projections always start at zero.
+        self.company = self.env["res.company"].create({
+            "name": "Empresa aislada para pruebas de flujo",
+        })
+        self.plan = self.env["cashflow.plan"].with_company(self.company).create({
+            "company_id": self.company.id,
+        })
         self.partner = self.env["res.partner"].create({"name": "Cliente de prueba flujo"})
+
+    def _account(self, code, account_type, currency=False):
+        return self.env["account.account"].create({
+            "name": f"Cuenta de prueba {code}",
+            "code": code,
+            "account_type": account_type,
+            "company_ids": [(6, 0, [self.company.id])],
+            "currency_id": currency.id if currency else False,
+        })
+
+    def _bank_journal(self, default_account, code="CFB"):
+        return self.env["account.journal"].create({
+            "name": f"Cheques de prueba {code}",
+            "code": code,
+            "type": "bank",
+            "company_id": self.company.id,
+            "default_account_id": default_account.id,
+        })
 
     def test_period_totals_include_manual_expense(self):
         self.env["cashflow.promise"].create({
@@ -84,22 +102,25 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(self.plan.total_expected_financing, 0)
 
     def test_bank_cash_and_new_financing_build_weekly_available_cash(self):
-        liquidity_account = self.env["account.account"].search([
-            ("account_type", "=", "asset_cash"),
-            ("company_ids", "in", [self.company.id]),
-        ], limit=1)
-        if not liquidity_account:
-            self.skipTest("La compañía de prueba no tiene una cuenta de liquidez.")
+        liquidity_account = self._account("CF1001", "asset_cash")
+        card_account = self._account("CF2003", "liability_credit_card")
         self.env["cashflow.bank.position"].create({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "account_id": liquidity_account.id,
             "real_balance": 1000000,
         })
+        card_position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "credit_card",
+            "account_id": card_account.id,
+            "real_balance": 0,
+        })
         for values in (
             {
                 "name": "Efectivo recibido de tarjeta",
                 "income_type": "credit_card_draw",
+                "liability_position_id": card_position.id,
                 "period": "week_1",
                 "amount": 100000,
             },
@@ -117,18 +138,11 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(self.plan.total_real_available, 1000000)
         self.assertEqual(self.plan.financing_week_1, 1100000)
         self.assertEqual(self.plan.projected_week_1, 2100000)
+        self.assertEqual(card_position.projected_debt, 100000)
 
     def test_credit_card_and_loan_do_not_reduce_available_cash(self):
-        liquidity_account = self.env["account.account"].search([
-            ("account_type", "=", "asset_cash"),
-            ("company_ids", "in", [self.company.id]),
-        ], limit=1)
-        liability_account = self.env["account.account"].search([
-            ("account_type", "in", ("liability_credit_card", "liability_current", "liability_payable")),
-            ("company_ids", "in", [self.company.id]),
-        ], limit=1)
-        if not liquidity_account or not liability_account:
-            self.skipTest("La compañía de prueba no tiene cuentas de liquidez y pasivo.")
+        liquidity_account = self._account("CF1002", "asset_cash")
+        liability_account = self._account("CF2001", "liability_credit_card")
         self.env["cashflow.bank.position"].create({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
@@ -145,22 +159,20 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(self.plan.projected_balance, 1000)
 
     def test_existing_bank_position_does_not_flag_itself_as_duplicate(self):
-        journal = self.env["account.journal"].search([
-            ("type", "in", ("bank", "cash")),
-            ("company_id", "=", self.company.id),
-        ], limit=1)
-        if not journal:
-            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
+        account = self._account("CF1003", "asset_cash")
+        journal = self._bank_journal(account, "CF1")
         position = self.env["cashflow.bank.position"].create({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "journal_id": journal.id,
+            "account_id": account.id,
             "real_balance": 100,
         })
         editable_position = self.env["cashflow.bank.position"].new({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "journal_id": journal.id,
+            "account_id": account.id,
             "real_balance": 100,
         }, origin=position)
 
@@ -169,49 +181,142 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(warning)
         self.assertEqual(editable_position.journal_id, journal)
 
-    def test_new_bank_position_does_not_compare_against_virtual_rows(self):
-        journal = self.env["account.journal"].search([
-            ("type", "in", ("bank", "cash")),
-            ("company_id", "=", self.company.id),
-        ], limit=1)
-        if not journal:
-            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
-        new_position = self.env["cashflow.bank.position"].new({
+    def test_same_journal_accepts_multiple_specific_accounts(self):
+        first_account = self._account("CF1004", "asset_cash")
+        second_account = self._account("CF1005", "asset_cash")
+        journal = self._bank_journal(first_account, "CF2")
+        first_position = self.env["cashflow.bank.position"].create({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "journal_id": journal.id,
+            "account_id": first_account.id,
             "real_balance": 100,
         })
+        second_position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": journal.id,
+            "account_id": second_account.id,
+            "real_balance": 200,
+        })
 
-        warning = new_position._onchange_prevent_duplicate_source()
+        self.assertEqual(first_position.journal_id, second_position.journal_id)
+        self.assertEqual(len(self.plan.bank_position_ids), 2)
+        self.assertEqual(self.plan.total_real_available, 300)
 
-        self.assertFalse(warning)
-        self.assertEqual(new_position.journal_id, journal)
+    def test_each_bank_position_reads_only_its_selected_account(self):
+        first_account = self._account("CF1008", "asset_cash")
+        second_account = self._account("CF1009", "asset_cash")
+        counterpart = self._account("CF2004", "liability_current")
+        bank_journal = self._bank_journal(first_account, "CF4")
+        general_journal = self.env["account.journal"].create({
+            "name": "Diario general de prueba flujo",
+            "code": "CFG",
+            "type": "general",
+            "company_id": self.company.id,
+        })
+        move = self.env["account.move"].create({
+            "company_id": self.company.id,
+            "journal_id": general_journal.id,
+            "date": "2026-09-29",
+            "line_ids": [
+                (0, 0, {"name": "Banco uno", "account_id": first_account.id, "debit": 100}),
+                (0, 0, {"name": "Banco dos", "account_id": second_account.id, "debit": 200}),
+                (0, 0, {"name": "Contrapartida", "account_id": counterpart.id, "credit": 300}),
+            ],
+        })
+        move.action_post()
+        first_position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": bank_journal.id,
+            "account_id": first_account.id,
+            "real_balance": 100,
+        })
+        second_position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": bank_journal.id,
+            "account_id": second_account.id,
+            "real_balance": 200,
+        })
 
-    def test_new_bank_position_warns_for_a_persisted_duplicate(self):
-        journal = self.env["account.journal"].search([
-            ("type", "in", ("bank", "cash")),
-            ("company_id", "=", self.company.id),
-        ], limit=1)
-        if not journal:
-            self.skipTest("La compañía de prueba no tiene un diario bancario o de efectivo.")
+        self.assertEqual(first_position.accounting_balance, 100)
+        self.assertEqual(second_position.accounting_balance, 200)
+
+    def test_new_bank_position_warns_only_for_a_persisted_account(self):
+        account = self._account("CF1006", "asset_cash")
+        journal = self._bank_journal(account, "CF3")
         self.env["cashflow.bank.position"].create({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "journal_id": journal.id,
+            "account_id": account.id,
             "real_balance": 100,
         })
         duplicate = self.env["cashflow.bank.position"].new({
             "plan_id": self.plan.id,
             "position_type": "liquidity",
             "journal_id": journal.id,
+            "account_id": account.id,
             "real_balance": 200,
         })
 
         warning = duplicate._onchange_prevent_duplicate_source()
 
-        self.assertEqual(warning["warning"]["title"], "Diario ya agregado")
-        self.assertFalse(duplicate.journal_id)
+        self.assertEqual(warning["warning"]["title"], "Cuenta ya agregada")
+        self.assertFalse(duplicate.account_id)
+        self.assertEqual(duplicate.journal_id, journal)
+
+    def test_account_currency_is_converted_for_the_company_flow(self):
+        usd = self.env.ref("base.USD")
+        liquidity_account = self._account("CF1007", "asset_cash", currency=usd)
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": liquidity_account.id,
+            "real_balance": 100,
+        })
+
+        expected = usd._convert(
+            100, self.company.currency_id, self.company, position.rate_date
+        )
+        self.assertEqual(position.currency_id, usd)
+        self.assertAlmostEqual(position.real_balance_company, expected, places=2)
+        self.assertAlmostEqual(self.plan.total_real_available, expected, places=2)
+
+    def test_direct_credit_card_supplier_payment_affects_debt_not_cash(self):
+        card_account = self._account("CF2002", "liability_credit_card")
+        card_position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "credit_card",
+            "account_id": card_account.id,
+            "real_balance": 400,
+        })
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "payment_method": "credit_card",
+            "funding_position_id": card_position.id,
+            "period": "week_1",
+            "amount": 100,
+        })
+
+        self.assertEqual(self.plan.payable_week_1, 0)
+        self.assertEqual(self.plan.projected_week_1, 0)
+        self.assertEqual(card_position.projected_debt, 500)
+
+        self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago de tarjeta",
+            "classification": "credit_card_payment",
+            "liability_position_id": card_position.id,
+            "period": "week_2",
+            "amount": 150,
+        })
+        self.assertEqual(self.plan.payable_week_2, 150)
+        self.assertEqual(card_position.projected_debt, 350)
 
     def test_cancelled_promise_is_excluded_from_projection(self):
         promise = self.env["cashflow.promise"].create({
