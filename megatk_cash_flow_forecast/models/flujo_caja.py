@@ -66,8 +66,8 @@ class CashflowPlan(models.Model):
     _sql_constraints = [("cashflow_plan_company_unique", "unique(company_id)", "Solo puede existir un flujo proyectado por empresa.")]
 
     @api.depends(
-        "bank_position_ids.real_balance", "bank_position_ids.position_type",
-        "promise_ids.company_amount", "promise_ids.direction", "promise_ids.state",
+        "bank_position_ids.real_balance_company", "bank_position_ids.position_type",
+        "promise_ids.cash_effect_amount", "promise_ids.direction", "promise_ids.state",
         "manual_income_ids.company_amount", "manual_income_ids.active",
         "manual_income_ids.income_type", "manual_income_ids.state",
         "manual_expense_ids.company_amount", "manual_expense_ids.active",
@@ -77,7 +77,7 @@ class CashflowPlan(models.Model):
             real = sum(
                 record.bank_position_ids.filtered(
                     lambda position: position.position_type == "liquidity"
-                ).mapped("real_balance")
+                ).mapped("real_balance_company")
             )
             receivable = sum(record.promise_ids.filtered(lambda p: p.state == "active" and p.direction == "receivable").mapped("company_amount"))
             projected_income = record.manual_income_ids.filtered(
@@ -89,7 +89,11 @@ class CashflowPlan(models.Model):
             other_income = sum(
                 projected_income.filtered(lambda income: income.income_type == "other").mapped("company_amount")
             )
-            payable = sum(record.promise_ids.filtered(lambda p: p.state == "active" and p.direction == "payable").mapped("company_amount"))
+            payable = sum(
+                record.promise_ids.filtered(
+                    lambda p: p.state == "active" and p.direction == "payable"
+                ).mapped("cash_effect_amount")
+            )
             manual = sum(record.manual_expense_ids.filtered("active").mapped("company_amount"))
             record.total_real_available = real
             record.total_expected_receivable = receivable
@@ -99,7 +103,8 @@ class CashflowPlan(models.Model):
             record.projected_balance = real + receivable + financing + other_income - payable - manual
 
     @api.depends(
-        "promise_ids.company_amount", "promise_ids.direction", "promise_ids.period", "promise_ids.state",
+        "promise_ids.company_amount", "promise_ids.cash_effect_amount",
+        "promise_ids.direction", "promise_ids.period", "promise_ids.state",
         "manual_income_ids.company_amount", "manual_income_ids.period", "manual_income_ids.active",
         "manual_income_ids.income_type", "manual_income_ids.state",
         "manual_expense_ids.company_amount", "manual_expense_ids.period", "manual_expense_ids.active",
@@ -111,7 +116,12 @@ class CashflowPlan(models.Model):
                     setattr(record, f"{prefix}_{period}", 0)
             for promise in record.promise_ids.filtered(lambda p: p.state == "active"):
                 field_name = f"{promise.direction}_{promise.period}"
-                setattr(record, field_name, getattr(record, field_name) + promise.company_amount)
+                amount = (
+                    promise.company_amount
+                    if promise.direction == "receivable"
+                    else promise.cash_effect_amount
+                )
+                setattr(record, field_name, getattr(record, field_name) + amount)
             for income in record.manual_income_ids.filtered(
                 lambda item: item.active and item.state in ("requested", "approved", "confirmed")
             ):
@@ -220,7 +230,11 @@ class CashflowBankPosition(models.Model):
 
     plan_id = fields.Many2one("cashflow.plan", required=True, ondelete="cascade", check_company=True)
     company_id = fields.Many2one(related="plan_id.company_id", store=True, index=True)
-    currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
+    company_currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
+    currency_id = fields.Many2one(
+        "res.currency", compute="_compute_currency_id", store=True,
+        string="Moneda de la cuenta",
+    )
     position_type = fields.Selection(
         [
             ("liquidity", "Efectivo / banco"),
@@ -237,36 +251,101 @@ class CashflowBankPosition(models.Model):
     )
     account_id = fields.Many2one(
         "account.account", string="Cuenta del catálogo", check_company=True,
-        help="Úsela si la tarjeta o cuenta no tiene un diario bancario configurado.",
+        help="Cuenta contable específica cuyo saldo se consulta. Puede compartir el mismo diario con otras cuentas.",
     )
-    accounting_balance = fields.Monetary(compute="_compute_accounting_balance", readonly=True, string="Saldo contable")
-    real_balance = fields.Monetary(required=True, string="Saldo real / disponible")
-    balance_difference = fields.Monetary(compute="_compute_balance_difference", string="Diferencia contra Odoo")
+    rate_date = fields.Date(
+        required=True, default=fields.Date.context_today,
+        string="Fecha del tipo de cambio",
+    )
+    exchange_rate = fields.Float(
+        compute="_compute_converted_balances", digits=(16, 6),
+        string="Tasa a moneda de la empresa",
+    )
+    accounting_balance = fields.Monetary(
+        compute="_compute_accounting_balance", readonly=True,
+        currency_field="currency_id", string="Saldo contable en moneda",
+    )
+    real_balance = fields.Monetary(
+        required=True, currency_field="currency_id",
+        string="Saldo real en moneda",
+    )
+    balance_difference = fields.Monetary(
+        compute="_compute_balance_difference", currency_field="currency_id",
+        string="Diferencia en moneda",
+    )
+    accounting_balance_company = fields.Monetary(
+        compute="_compute_accounting_balance", currency_field="company_currency_id",
+        string="Saldo contable equivalente",
+    )
+    real_balance_company = fields.Monetary(
+        compute="_compute_converted_balances", currency_field="company_currency_id",
+        string="Saldo para el flujo",
+    )
+    balance_difference_company = fields.Monetary(
+        compute="_compute_converted_balances", currency_field="company_currency_id",
+        string="Diferencia para el flujo",
+    )
+    funded_promise_ids = fields.One2many(
+        "cashflow.promise", "funding_position_id", string="Pagos directos con esta obligación"
+    )
+    projected_income_ids = fields.One2many(
+        "cashflow.manual.income", "liability_position_id", string="Financiamientos vinculados"
+    )
+    liability_payment_ids = fields.One2many(
+        "cashflow.manual.expense", "liability_position_id", string="Pagos de la obligación"
+    )
+    projected_debt = fields.Monetary(
+        compute="_compute_projected_debt", currency_field="currency_id",
+        string="Deuda proyectada en moneda",
+    )
+    projected_debt_company = fields.Monetary(
+        compute="_compute_projected_debt", currency_field="company_currency_id",
+        string="Deuda proyectada equivalente",
+    )
 
     _sql_constraints = [
-        ("cashflow_bank_journal_unique", "unique(plan_id, journal_id)", "El diario solo puede agregarse una vez al flujo."),
         ("cashflow_bank_account_unique", "unique(plan_id, account_id)", "La cuenta solo puede agregarse una vez al flujo."),
     ]
+
+    def _auto_init(self):
+        # Versions prior to 18.0.8 incorrectly made the journal unique.  A
+        # journal such as "Cheques" legitimately contains several bank
+        # accounts, so remove that obsolete database constraint on upgrade.
+        self.env.cr.execute(
+            "ALTER TABLE IF EXISTS cashflow_bank_position "
+            "DROP CONSTRAINT IF EXISTS cashflow_bank_position_cashflow_bank_journal_unique"
+        )
+        result = super()._auto_init()
+        self.env.cr.execute(
+            """
+            UPDATE cashflow_bank_position position
+               SET account_id = journal.default_account_id
+              FROM account_journal journal
+             WHERE position.journal_id = journal.id
+               AND position.account_id IS NULL
+               AND journal.default_account_id IS NOT NULL
+            """
+        )
+        return result
 
     @api.constrains("position_type", "journal_id", "account_id")
     def _check_balance_source(self):
         for record in self:
-            if bool(record.journal_id) == bool(record.account_id):
-                raise ValidationError("Seleccione un diario bancario o una cuenta del catálogo, pero no ambos.")
+            if not record.account_id:
+                raise ValidationError("Seleccione la cuenta específica del catálogo para calcular su saldo.")
             if record.position_type != "liquidity" and record.journal_id:
                 raise ValidationError("Las tarjetas y préstamos deben vincularse con su cuenta de pasivo del catálogo.")
-            if record.account_id:
-                allowed = {
-                    "liquidity": {"asset_cash"},
-                    "credit_card": {"liability_credit_card", "liability_current", "liability_payable"},
-                    "loan": {"liability_current", "liability_non_current", "liability_payable"},
-                }
-                if record.account_id.account_type not in allowed[record.position_type]:
-                    raise ValidationError("La cuenta seleccionada no corresponde al tipo de saldo indicado.")
+            allowed = {
+                "liquidity": {"asset_cash"},
+                "credit_card": {"liability_credit_card", "liability_current", "liability_payable"},
+                "loan": {"liability_current", "liability_non_current", "liability_payable"},
+            }
+            if record.account_id.account_type not in allowed[record.position_type]:
+                raise ValidationError("La cuenta seleccionada no corresponde al tipo de saldo indicado.")
 
     @api.onchange("journal_id", "account_id")
     def _onchange_prevent_duplicate_source(self):
-        """Reject a repeated source immediately, before the user saves the form."""
+        """Reject only the exact same account, never a shared journal."""
         if not self.plan_id:
             return
         # Inline one2many editing can keep more than one virtual representation
@@ -280,14 +359,6 @@ class CashflowBankPosition(models.Model):
         domain = [("plan_id", "=", plan.id)]
         if self._origin.id:
             domain.append(("id", "!=", self._origin.id))
-        if self.journal_id and self.search_count(domain + [("journal_id", "=", self.journal_id.id)]):
-            self.journal_id = False
-            return {
-                "warning": {
-                    "title": "Diario ya agregado",
-                    "message": "Ese diario ya está en el flujo. La línea fue conservada para que pueda escoger otro.",
-                }
-            }
         if self.account_id and self.search_count(domain + [("account_id", "=", self.account_id.id)]):
             self.account_id = False
             return {
@@ -302,26 +373,138 @@ class CashflowBankPosition(models.Model):
         if self.position_type != "liquidity":
             self.journal_id = False
 
-    @api.depends("journal_id", "account_id", "company_id", "position_type")
+    @api.onchange("journal_id")
+    def _onchange_journal_id(self):
+        if self.journal_id and not self.account_id:
+            self.account_id = self.journal_id.default_account_id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for values in vals_list:
+            if values.get("journal_id") and not values.get("account_id"):
+                journal = self.env["account.journal"].browse(values["journal_id"])
+                values["account_id"] = journal.default_account_id.id or False
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if vals.get("journal_id") and "account_id" not in vals:
+            journal = self.env["account.journal"].browse(vals["journal_id"])
+            vals = dict(vals, account_id=journal.default_account_id.id or False)
+        return super().write(vals)
+
+    @api.depends(
+        "account_id", "account_id.currency_id", "journal_id",
+        "journal_id.currency_id", "company_currency_id",
+    )
+    def _compute_currency_id(self):
+        for record in self:
+            record.currency_id = (
+                record.account_id.currency_id
+                or record.journal_id.currency_id
+                or record.company_currency_id
+            )
+
+    @api.depends(
+        "account_id", "account_id.currency_id", "journal_id",
+        "journal_id.currency_id", "company_id", "position_type",
+    )
     def _compute_accounting_balance(self):
         MoveLine = self.env["account.move.line"]
         for record in self:
-            account = record.journal_id.default_account_id or record.account_id
+            account = record.account_id or record.journal_id.default_account_id
             if not account:
                 record.accounting_balance = 0
+                record.accounting_balance_company = 0
                 continue
             grouped = MoveLine.read_group([
                 ("account_id", "=", account.id),
                 ("parent_state", "=", "posted"),
                 ("company_id", "=", record.company_id.id),
-            ], ["balance:sum"], [])
-            balance = grouped[0]["balance"] if grouped else 0
-            record.accounting_balance = balance if record.position_type == "liquidity" else -balance
+            ], ["balance:sum", "amount_currency:sum"], [])
+            balance_company = grouped[0]["balance"] if grouped else 0
+            balance_currency = (
+                grouped[0]["amount_currency"]
+                if grouped and record.currency_id != record.company_currency_id
+                else balance_company
+            )
+            sign = 1 if record.position_type == "liquidity" else -1
+            record.accounting_balance = sign * balance_currency
+            record.accounting_balance_company = sign * balance_company
 
     @api.depends("real_balance", "accounting_balance")
     def _compute_balance_difference(self):
         for record in self:
             record.balance_difference = record.real_balance - record.accounting_balance
+
+    @api.depends(
+        "real_balance", "accounting_balance_company", "currency_id",
+        "company_currency_id", "company_id", "rate_date",
+    )
+    def _compute_converted_balances(self):
+        for record in self:
+            if not record.currency_id or not record.company_currency_id or not record.company_id:
+                record.exchange_rate = 0
+                record.real_balance_company = 0
+                record.balance_difference_company = 0
+                continue
+            date = record.rate_date or fields.Date.context_today(record)
+            record.exchange_rate = record.currency_id._convert(
+                1.0, record.company_currency_id, record.company_id, date
+            )
+            record.real_balance_company = record.currency_id._convert(
+                record.real_balance, record.company_currency_id, record.company_id, date
+            )
+            record.balance_difference_company = (
+                record.real_balance_company - record.accounting_balance_company
+            )
+
+    @api.depends(
+        "real_balance", "real_balance_company", "currency_id", "company_currency_id",
+        "funded_promise_ids.amount", "funded_promise_ids.currency_id",
+        "funded_promise_ids.rate_date", "funded_promise_ids.company_amount",
+        "funded_promise_ids.state", "funded_promise_ids.payment_method",
+        "projected_income_ids.amount",
+        "projected_income_ids.currency_id", "projected_income_ids.rate_date",
+        "projected_income_ids.company_amount", "projected_income_ids.state",
+        "projected_income_ids.active", "liability_payment_ids.amount",
+        "liability_payment_ids.currency_id", "liability_payment_ids.rate_date",
+        "liability_payment_ids.company_amount", "liability_payment_ids.active",
+    )
+    def _compute_projected_debt(self):
+        for record in self:
+            if record.position_type == "liquidity" or not record.currency_id:
+                record.projected_debt = 0
+                record.projected_debt_company = 0
+                continue
+            debt = record.real_balance
+            debt_company = record.real_balance_company
+            promises = record.funded_promise_ids.filtered(
+                lambda line: line.state == "active" and line.payment_method == "credit_card"
+            )
+            incomes = record.projected_income_ids.filtered(
+                lambda line: line.active and line.state in ("requested", "approved", "confirmed")
+            )
+            payments = record.liability_payment_ids.filtered("active")
+            for line in promises:
+                debt += line.currency_id._convert(
+                    line.amount, record.currency_id, record.company_id,
+                    line.rate_date or fields.Date.context_today(line),
+                )
+                debt_company += line.company_amount
+            for line in incomes:
+                debt += line.currency_id._convert(
+                    line.amount, record.currency_id, record.company_id,
+                    line.rate_date or fields.Date.context_today(line),
+                )
+                debt_company += line.company_amount
+            for line in payments:
+                debt -= line.currency_id._convert(
+                    line.amount, record.currency_id, record.company_id,
+                    line.rate_date or fields.Date.context_today(line),
+                )
+                debt_company -= line.company_amount
+            record.projected_debt = debt
+            record.projected_debt_company = debt_company
 
 
 class CashflowClassification(models.Model):
@@ -401,6 +584,24 @@ class CashflowPromise(models.Model):
     company_amount = fields.Monetary(
         currency_field="company_currency_id", compute="_compute_company_amount",
         string="Equivalente en moneda de la empresa",
+    )
+    payment_method = fields.Selection(
+        [
+            ("cash_bank", "Efectivo / banco"),
+            ("credit_card", "Pago directo con tarjeta"),
+        ],
+        required=True, default="cash_bank", tracking=True,
+        string="Forma de pago",
+        help="Un pago directo con tarjeta liquida al proveedor, pero no reduce el efectivo bancario de esa semana.",
+    )
+    funding_position_id = fields.Many2one(
+        "cashflow.bank.position", string="Tarjeta utilizada", check_company=True,
+        domain="[('company_id', '=', company_id), ('position_type', '=', 'credit_card')]",
+        help="Tarjeta cuya deuda aumentará por este pago directo.",
+    )
+    cash_effect_amount = fields.Monetary(
+        compute="_compute_cash_effect_amount", currency_field="company_currency_id",
+        string="Salida de efectivo",
     )
     current_open_balance = fields.Monetary(
         compute="_compute_current_open_balance",
@@ -517,6 +718,35 @@ class CashflowPromise(models.Model):
                 promise.rate_date or fields.Date.context_today(promise),
             )
 
+    @api.depends("company_amount", "direction", "payment_method", "state")
+    def _compute_cash_effect_amount(self):
+        for promise in self:
+            promise.cash_effect_amount = (
+                0.0
+                if promise.direction == "payable" and promise.payment_method == "credit_card"
+                else promise.company_amount
+            )
+
+    @api.onchange("direction")
+    def _onchange_direction_payment_method(self):
+        if self.direction != "payable":
+            self.payment_method = "cash_bank"
+            self.funding_position_id = False
+
+    @api.onchange("payment_method")
+    def _onchange_payment_method(self):
+        if self.payment_method != "credit_card":
+            self.funding_position_id = False
+
+    @api.onchange("source_move_id")
+    def _onchange_source_move_id(self):
+        """Use the invoice currency and open amount when a document is selected."""
+        if not self.source_move_id:
+            return
+        self.currency_id = self.source_move_id.currency_id
+        if self.source_move_id.amount_residual > 0:
+            self.amount = self.source_move_id.amount_residual
+
     @api.depends(
         "source_move_id.amount_residual",
         "source_move_line_id.amount_residual",
@@ -611,6 +841,19 @@ class CashflowPromise(models.Model):
         for promise in self:
             if promise.amount <= 0:
                 raise ValidationError("El monto proyectado debe ser mayor que cero.")
+
+    @api.constrains("direction", "payment_method", "funding_position_id")
+    def _check_payment_funding(self):
+        for promise in self:
+            if promise.payment_method == "credit_card":
+                if promise.direction != "payable":
+                    raise ValidationError("La tarjeta solo puede utilizarse como forma de pago a proveedores.")
+                if not promise.funding_position_id:
+                    raise ValidationError("Seleccione la tarjeta utilizada para el pago.")
+            if promise.funding_position_id and promise.payment_method != "credit_card":
+                raise ValidationError("Para usar una tarjeta seleccione la forma de pago directo con tarjeta.")
+            if promise.funding_position_id and promise.funding_position_id.position_type != "credit_card":
+                raise ValidationError("La fuente seleccionada debe ser una tarjeta de crédito.")
 
     @api.constrains("classification_id", "partner_id", "direction", "company_id")
     def _check_classification_consistency(self):
@@ -770,6 +1013,12 @@ class CashflowManualIncome(models.Model):
         check_company=True,
         help="Es opcional. Indica dónde se espera recibir el dinero; no genera un asiento.",
     )
+    liability_position_id = fields.Many2one(
+        "cashflow.bank.position", string="Tarjeta o préstamo vinculado",
+        check_company=True,
+        domain="[('company_id', '=', company_id), ('position_type', 'in', ('credit_card', 'loan'))]",
+        help="Opcional. Permite reflejar el aumento de la deuda proyectada en su moneda original.",
+    )
     source_move_id = fields.Many2one(
         "account.move",
         string="Partida real vinculada",
@@ -799,6 +1048,25 @@ class CashflowManualIncome(models.Model):
     def _onchange_partner_id(self):
         if self.partner_id and not self.counterparty_name:
             self.counterparty_name = self.partner_id.display_name
+
+    @api.onchange("income_type")
+    def _onchange_income_type(self):
+        if self.income_type not in ("loan", "credit_card_draw", "shareholder_loan"):
+            self.liability_position_id = False
+
+    @api.constrains("income_type", "liability_position_id")
+    def _check_liability_position(self):
+        for income in self.filtered(lambda item: item.income_type == "credit_card_draw"):
+            if not income.liability_position_id:
+                raise ValidationError(
+                    "Seleccione la tarjeta cuya deuda aumentará con el retiro de efectivo."
+                )
+        for income in self.filtered("liability_position_id"):
+            expected = "credit_card" if income.income_type == "credit_card_draw" else "loan"
+            if income.income_type not in ("loan", "credit_card_draw", "shareholder_loan"):
+                raise ValidationError("Este tipo de ingreso no debe vincularse con una deuda.")
+            if income.liability_position_id.position_type != expected:
+                raise ValidationError("La tarjeta o préstamo vinculado no corresponde al tipo de ingreso.")
 
     @api.constrains("amount")
     def _check_positive_amount(self):
@@ -865,6 +1133,12 @@ class CashflowManualExpense(models.Model):
         currency_field="company_currency_id", compute="_compute_company_amount",
         string="Monto para el flujo",
     )
+    liability_position_id = fields.Many2one(
+        "cashflow.bank.position", string="Tarjeta o préstamo pagado",
+        check_company=True,
+        domain="[('company_id', '=', company_id), ('position_type', 'in', ('credit_card', 'loan'))]",
+        help="Opcional. Reduce la deuda proyectada de la tarjeta o préstamo seleccionado.",
+    )
     recurring = fields.Boolean(string="Gasto recurrente", help="Se conserva para futuras proyecciones; solo se cambia la semana.", tracking=True)
     active = fields.Boolean(default=True)
 
@@ -873,6 +1147,20 @@ class CashflowManualExpense(models.Model):
         for expense in self:
             if expense.amount <= 0:
                 raise ValidationError("El monto del egreso debe ser mayor que cero.")
+
+    @api.onchange("classification")
+    def _onchange_classification(self):
+        if self.classification not in ("credit_card_payment", "loan_payment"):
+            self.liability_position_id = False
+
+    @api.constrains("classification", "liability_position_id")
+    def _check_liability_position(self):
+        for expense in self.filtered("liability_position_id"):
+            expected = "credit_card" if expense.classification == "credit_card_payment" else "loan"
+            if expense.classification not in ("credit_card_payment", "loan_payment"):
+                raise ValidationError("Esta clasificación no debe vincularse con una deuda.")
+            if expense.liability_position_id.position_type != expected:
+                raise ValidationError("La tarjeta o préstamo vinculado no corresponde a la clasificación del pago.")
 
     @api.depends("amount", "currency_id", "company_currency_id", "company_id", "rate_date")
     def _compute_company_amount(self):
