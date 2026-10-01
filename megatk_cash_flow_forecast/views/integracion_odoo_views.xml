@@ -1,0 +1,43 @@
+<odoo>
+  <record id="view_partner_form_cashflow" model="ir.ui.view">
+    <field name="name">res.partner.form.cashflow</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button name="action_cashflow_open_receivables" type="object" class="oe_stat_button" icon="fa-money" groups="megatk_cash_flow_forecast.group_cashflow_user,megatk_cash_flow_forecast.group_cashflow_collections">
+          <field name="cashflow_receivable_balance" widget="statinfo" string="CxC pendiente"/>
+        </button>
+        <button name="action_cashflow_open_payables" type="object" class="oe_stat_button" icon="fa-credit-card" groups="megatk_cash_flow_forecast.group_cashflow_user">
+          <field name="cashflow_payable_balance" widget="statinfo" string="CxP pendiente"/>
+        </button>
+        <button name="action_cashflow_open_management_history" type="object" class="oe_stat_button" icon="fa-comments" groups="megatk_cash_flow_forecast.group_cashflow_user,megatk_cash_flow_forecast.group_cashflow_collections">
+          <field name="cashflow_management_count" widget="statinfo" string="Gestiones"/>
+        </button>
+        <button name="action_cashflow_open_promises" type="object" class="oe_stat_button" icon="fa-calendar-check-o" groups="megatk_cash_flow_forecast.group_cashflow_user">
+          <field name="cashflow_promise_count" widget="statinfo" string="Proyecciones"/>
+        </button>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="view_move_form_cashflow" model="ir.ui.view">
+    <field name="name">account.move.form.cashflow</field>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button name="action_cashflow_open_management_history" type="object" class="oe_stat_button" icon="fa-comments" invisible="move_type not in ('out_invoice', 'out_refund')" groups="megatk_cash_flow_forecast.group_cashflow_user,megatk_cash_flow_forecast.group_cashflow_collections">
+          <field name="cashflow_management_count" widget="statinfo" string="Gestiones"/>
+        </button>
+        <button name="action_cashflow_open_projections" type="object" class="oe_stat_button" icon="fa-calendar-check-o" invisible="move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund')" groups="megatk_cash_flow_forecast.group_cashflow_user">
+          <field name="cashflow_projection_count" widget="statinfo" string="Proyecciones"/>
+        </button>
+      </xpath>
+      <xpath expr="//header" position="inside">
+        <button name="action_cashflow_add_management_note" type="object" string="Registrar gestión" invisible="move_type not in ('out_invoice', 'out_refund') or state != 'posted'" groups="megatk_cash_flow_forecast.group_cashflow_user,megatk_cash_flow_forecast.group_cashflow_collections"/>
+        <button name="action_cashflow_schedule_document" type="object" string="Programar en flujo" invisible="move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund') or state != 'posted' or amount_residual == 0" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>
