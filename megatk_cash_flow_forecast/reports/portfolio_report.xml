@@ -25,14 +25,14 @@
                 <td><span t-esc="line.partner_id.name"/><br/><small t-esc="line.projected_periods"/></td>
                 <td t-esc="line.direction_name"/>
                 <td t-esc="line.classification_name"/>
-                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-esc="formatLang(line.at_day, currency_obj=line.currency_id) if line.at_day else ''"/></td>
-                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-esc="formatLang(line.days_1_30, currency_obj=line.currency_id) if line.days_1_30 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-esc="formatLang(line.days_31_60, currency_obj=line.currency_id) if line.days_31_60 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-esc="formatLang(line.days_61_90, currency_obj=line.currency_id) if line.days_61_90 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-esc="formatLang(line.days_91_120, currency_obj=line.currency_id) if line.days_91_120 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-esc="formatLang(line.old, currency_obj=line.currency_id) if line.old else ''"/></td>
-                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-esc="formatLang(line.credit, currency_obj=line.currency_id) if line.credit else ''"/></td>
-                <td><strong t-esc="formatLang(line.total, currency_obj=line.currency_id)"/></td>
+                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-if="line.at_day" t-out="line.at_day" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-if="line.old" t-out="line.old" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-if="line.credit" t-out="line.credit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td><strong t-out="line.total" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
                 <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
               </tr>
             </tbody>
@@ -77,16 +77,16 @@
               <tbody>
                 <tr style="background:#eef2f6;font-weight:bold">
                   <td>Disponible inicial de la semana</td>
-                  <td t-esc="formatLang(o.opening_week_1, currency_obj=o.currency_id)"/>
-                  <td t-esc="formatLang(o.opening_week_2, currency_obj=o.currency_id)"/>
-                  <td t-esc="formatLang(o.opening_week_3, currency_obj=o.currency_id)"/>
-                  <td t-esc="formatLang(o.opening_pending, currency_obj=o.currency_id)"/>
+                  <td><span t-out="o.opening_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                 </tr>
-                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-collections" style="color:#126b35">Cobros de clientes</a></td><td t-esc="formatLang(o.receivable_week_1, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.receivable_week_2, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.receivable_week_3, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.receivable_pending, currency_obj=o.currency_id)"/></tr>
-                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td t-esc="formatLang(o.financing_week_1, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.financing_week_2, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.financing_week_3, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.financing_pending, currency_obj=o.currency_id)"/></tr>
-                <tr style="background:#d9f2df;color:#126b35"><td>Otros ingresos</td><td t-esc="formatLang(o.other_income_week_1, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.other_income_week_2, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.other_income_week_3, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.other_income_pending, currency_obj=o.currency_id)"/></tr>
-                <tr style="background:#fde2e2;color:#9b1c1c"><td><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td t-esc="formatLang(o.payable_week_1, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.payable_week_2, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.payable_week_3, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.payable_pending, currency_obj=o.currency_id)"/></tr>
-                <tr style="background:#111827;color:white;font-weight:bold;font-size:12px"><td>Saldo proyectado final</td><td t-esc="formatLang(o.projected_week_1, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.projected_week_2, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.projected_week_3, currency_obj=o.currency_id)"/><td t-esc="formatLang(o.projected_pending, currency_obj=o.currency_id)"/></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-collections" style="color:#126b35">Cobros de clientes</a></td><td><span t-out="o.receivable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td><span t-out="o.financing_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td>Otros ingresos</td><td><span t-out="o.other_income_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#fde2e2;color:#9b1c1c"><td><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td><span t-out="o.payable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#111827;color:white;font-weight:bold;font-size:12px"><td>Saldo proyectado final</td><td><span t-out="o.projected_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
               </tbody>
             </table>
 
@@ -111,17 +111,17 @@
                 <tbody>
                   <tr t-foreach="section['lines']" t-as="line">
                     <td t-esc="line['name']"/>
-                    <td t-esc="formatLang(line['balance_hnl'], currency_obj=o.currency_id) if line['balance_hnl'] else ''"/>
+                    <td><span t-if="line['balance_hnl']" t-out="line['balance_hnl']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                     <td t-esc="line['balance_usd'] and ('%0.2f' % line['balance_usd']) or ''"/>
-                    <td t-esc="formatLang(line['week_1'], currency_obj=o.currency_id) if line['week_1'] else ''"/>
-                    <td t-esc="formatLang(line['week_2'], currency_obj=o.currency_id) if line['week_2'] else ''"/>
-                    <td t-esc="formatLang(line['week_3'], currency_obj=o.currency_id) if line['week_3'] else ''"/>
-                    <td t-esc="formatLang(line['pending'], currency_obj=o.currency_id) if line['pending'] else ''"/>
-                    <td><strong t-esc="formatLang(line['total'], currency_obj=o.currency_id) if line['total'] else ''"/></td>
+                    <td><span t-if="line['week_1']" t-out="line['week_1']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['week_2']" t-out="line['week_2']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['week_3']" t-out="line['week_3']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['pending']" t-out="line['pending']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><strong t-if="line['total']" t-out="line['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                     <td t-esc="line['note']"/>
                   </tr>
                 </tbody>
-                <tfoot><tr style="font-weight:bold"><td>Total</td><td/><td/><td/><td/><td/><td/><td t-esc="formatLang(section['total'], currency_obj=o.currency_id)"/><td/></tr></tfoot>
+                <tfoot><tr style="font-weight:bold"><td>Total</td><td/><td/><td/><td/><td/><td/><td><span t-out="section['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td/></tr></tfoot>
               </table>
             </div>
           </t>
