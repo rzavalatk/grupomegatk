@@ -571,20 +571,6 @@ class CashflowBankPosition(models.Model):
         if self.journal_id and not self.account_id:
             self.account_id = self.journal_id.default_account_id
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for values in vals_list:
-            if values.get("journal_id") and not values.get("account_id"):
-                journal = self.env["account.journal"].browse(values["journal_id"])
-                values["account_id"] = journal.default_account_id.id or False
-        return super().create(vals_list)
-
-    def write(self, vals):
-        if vals.get("journal_id") and "account_id" not in vals:
-            journal = self.env["account.journal"].browse(vals["journal_id"])
-            vals = dict(vals, account_id=journal.default_account_id.id or False)
-        return super().write(vals)
-
     @api.depends(
         "account_id", "account_id.currency_id", "journal_id",
         "journal_id.currency_id", "company_currency_id",
@@ -604,7 +590,10 @@ class CashflowBankPosition(models.Model):
     def _compute_accounting_balance(self):
         MoveLine = self.env["account.move.line"]
         for record in self:
-            account = record.account_id or record.journal_id.default_account_id
+            # The journal is only an operational reference.  Its default
+            # account must never replace the specific ledger account selected
+            # on this line, because several bank accounts can share a journal.
+            account = record.account_id
             if not account:
                 record.accounting_balance = 0
                 record.accounting_balance_company = 0

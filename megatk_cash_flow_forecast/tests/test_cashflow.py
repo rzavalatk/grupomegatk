@@ -244,6 +244,35 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(first_position.accounting_balance, 100)
         self.assertEqual(second_position.accounting_balance, 200)
 
+    def test_changing_the_journal_never_replaces_the_selected_account(self):
+        first_account = self._account("CF1011", "asset_cash")
+        second_account = self._account("CF1012", "asset_cash")
+        first_journal = self._bank_journal(first_account, "CF5")
+        second_journal = self._bank_journal(second_account, "CF6")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": first_journal.id,
+            "account_id": first_account.id,
+            "real_balance": 0,
+        })
+
+        position.write({"journal_id": second_journal.id})
+
+        self.assertEqual(position.account_id, first_account)
+
+    def test_journal_alone_cannot_define_the_ledger_balance(self):
+        account = self._account("CF1013", "asset_cash")
+        journal = self._bank_journal(account, "CF7")
+
+        with self.assertRaises(ValidationError):
+            self.env["cashflow.bank.position"].create({
+                "plan_id": self.plan.id,
+                "position_type": "liquidity",
+                "journal_id": journal.id,
+                "real_balance": 0,
+            })
+
     def test_ledger_balance_respects_the_selected_cutoff_date(self):
         bank_account = self._account("CF1010", "asset_cash")
         counterpart = self._account("CF2010", "liability_current")

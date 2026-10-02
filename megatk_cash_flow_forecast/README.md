@@ -11,7 +11,7 @@ Incluye:
 - Actualización inmediata de las insignias de semana al crear, mover o retirar una proyección.
 - La última gestión es de solo lectura: toda observación nueva conserva fecha, autor e historial.
 - Clasificación por empresa de clientes, CxC empleados, Grupo Mega, proveedores, acreedores, anticipos, legal, por depurar y por asignar.
-- Saldos contables por cuenta específica, aunque varias cuentas compartan el diario bancario "Cheques".
+- Saldos contables exclusivamente por la cuenta específica seleccionada, aunque varias cuentas compartan el diario bancario "Cheques"; cambiar el diario nunca sustituye esa cuenta.
 - Disponible inicial visible y acumulativo para cada semana, incluidos los saldos negativos.
 - Listas separadas para cobros, pagos a proveedores, pagos únicos y pagos recurrentes.
 - Reporte ejecutivo y detallado en pantalla, PDF y archivo compatible con Excel.
