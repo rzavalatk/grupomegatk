@@ -23,8 +23,8 @@ class AccountAgedPartnerBalanceReportHandler(models.AbstractModel):
         options["cashflow_direction"] = direction
         display = options.setdefault("custom_display_config", {})
         display.setdefault("components", {})[
-            "AccountReportLineName"
-        ] = "CashflowAgedPartnerLineName"
+            "AccountReportLine"
+        ] = "CashflowAgedPartnerLine"
 
     def _custom_line_postprocessor(self, report, options, lines):
         lines = super()._custom_line_postprocessor(report, options, lines)
