@@ -79,7 +79,7 @@ class AccountAgedPartnerBalanceReportHandler(models.AbstractModel):
 
     def _cashflow_week_amounts(self, direction):
         amounts = defaultdict(lambda: defaultdict(float))
-        promises = self.env["cashflow.promise"].sudo().search([
+        promises = self.env.get["cashflow.promise"].sudo().search([
             ("company_id", "in", self.env.companies.ids),
             ("direction", "=", direction),
             ("state", "=", "active"),
@@ -177,6 +177,7 @@ class CashflowPortfolioSnapshot(models.Model):
             "name": _("Documentos abiertos · %s") % partner.display_name,
             "res_model": "account.move",
             "view_mode": "list,form",
+            "views": [(False, "list"), (False, "form")],
             "domain": [("id", "in", move_ids)],
         }
 
@@ -188,7 +189,7 @@ class CashflowPortfolioSnapshot(models.Model):
             ("direction", "=", direction),
         ], limit=1)
         account_type = (
-            "asset_receivable" if direction == "receivable" else "liability_payable"
+            "asset_receivable if direction == "receivable" else "liability_payable"
         )
         lines = self.env["account.move.line"].search([
             ("company_id", "=", company.id),
@@ -212,6 +213,7 @@ class CashflowPortfolioSnapshot(models.Model):
             "name": _("Programar cobro") if direction == "receivable" else _("Programar pago"),
             "res_model": "cashflow.promise",
             "view_mode": "form",
+            "views": [(False, "form")],
             "target": "new",
             "context": {
                 "default_plan_id": plan.id,
@@ -233,6 +235,7 @@ class CashflowPortfolioSnapshot(models.Model):
             if direction == "receivable" else _("Registrar gestión de pago"),
             "res_model": "cashflow.management.note",
             "view_mode": "form",
+            "views": [(False, "form")],
             "target": "new",
             "context": {
                 "default_company_id": company.id,
@@ -247,6 +250,7 @@ class CashflowPortfolioSnapshot(models.Model):
             "name": _("Historial de gestiones · %s") % partner.display_name,
             "res_model": "cashflow.management.note",
             "view_mode": "list,form",
+            "views": [(False, "list"), (False, "form")],
             "domain": [
                 ("company_id", "=", company.id),
                 ("partner_id", "=", partner.id),
