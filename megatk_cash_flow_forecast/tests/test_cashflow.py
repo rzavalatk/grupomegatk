@@ -682,6 +682,14 @@ class TestCashflowForecast(TransactionCase):
             )
             self.assertEqual(action["views"], views)
 
+    def test_aged_report_edit_actions_open_as_normal_pages(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        for action_name in ("schedule", "management"):
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["target"], "current")
+
     def test_manual_expense_classification_is_required_and_selectable(self):
         expense = self.env["cashflow.manual.expense"].create({
             "plan_id": self.plan.id,
