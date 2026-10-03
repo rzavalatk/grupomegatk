@@ -45,15 +45,18 @@ class CashflowPlan(models.Model):
         string="Pagos a proveedores",
     )
     manual_income_ids = fields.One2many(
-        "cashflow.manual.income", "plan_id", string="Detalle de financiamientos proyectados"
+        "cashflow.manual.income", "plan_id", domain=[("active", "=", True)],
+        string="Detalle de financiamientos proyectados"
     )
     manual_expense_ids = fields.One2many("cashflow.manual.expense", "plan_id", string="Egresos manuales")
     unique_expense_ids = fields.One2many(
-        "cashflow.manual.expense", "plan_id", domain=[("recurring", "=", False)],
+        "cashflow.manual.expense", "plan_id",
+        domain=[("recurring", "=", False), ("active", "=", True)],
         string="Otros pagos a proveedores",
     )
     recurring_expense_ids = fields.One2many(
-        "cashflow.manual.expense", "plan_id", domain=[("recurring", "=", True)],
+        "cashflow.manual.expense", "plan_id",
+        domain=[("recurring", "=", True), ("active", "=", True)],
         string="Pagos recurrentes",
     )
     total_real_available = fields.Monetary(compute="_compute_totals", string="Disponible real")
@@ -1084,11 +1087,9 @@ class CashflowPromise(models.Model):
 
     def action_add_management_note(self):
         self.ensure_one()
-        if self.direction != "receivable":
-            raise ValidationError("Las gestiones de cobranza solo corresponden a cobros esperados.")
         return {
             "type": "ir.actions.act_window",
-            "name": "Registrar gestión de cobranza",
+            "name": "Registrar gestión de cobro" if self.direction == "receivable" else "Registrar gestión de pago",
             "res_model": "cashflow.management.note",
             "view_mode": "form",
             "target": "new",
@@ -1103,24 +1104,22 @@ class CashflowPromise(models.Model):
 
     def action_open_management_history(self):
         self.ensure_one()
-        if self.direction != "receivable":
-            raise ValidationError("El historial de cobranza solo corresponde a cobros esperados.")
         return {
             "type": "ir.actions.act_window",
-            "name": f"Historial de cobros · {self.commercial_partner_id.display_name}",
+            "name": f"Historial de gestiones · {self.commercial_partner_id.display_name}",
             "res_model": "cashflow.management.note",
             "view_mode": "list,form",
             "domain": [
                 ("company_id", "=", self.company_id.id),
                 ("partner_id", "=", self.commercial_partner_id.id),
-                ("direction", "=", "receivable"),
+                ("direction", "=", self.direction),
             ],
             "context": {
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_promise_id": self.id,
                 "default_move_id": self.source_move_id.id or False,
-                "default_direction": "receivable",
+                "default_direction": self.direction,
             },
         }
 
@@ -1226,6 +1225,15 @@ class CashflowManualIncome(models.Model):
         string="Monto para el flujo",
     )
     active = fields.Boolean(default=True)
+
+    def unlink(self):
+        linked = self.filtered("source_move_id")
+        if linked:
+            raise ValidationError(
+                "Un financiamiento ya vinculado con contabilidad no puede borrarse. "
+                "Desactívelo para conservar el historial."
+            )
+        return super().unlink()
 
     @api.onchange("partner_id")
     def _onchange_partner_id(self):
