@@ -214,7 +214,11 @@ class CashflowPortfolioSnapshot(models.Model):
             "res_model": "cashflow.promise",
             "view_mode": "form",
             "views": [(False, "form")],
-            "target": "new",
+            # Accounting reports provide their own action controller. Opening an
+            # unsaved form as a modal makes Odoo call an incompatible onClose
+            # callback when the user discards it. Use a normal page action so
+            # the form can be closed without raising a client-side error.
+            "target": "current",
             "context": {
                 "default_plan_id": plan.id,
                 "default_company_id": company.id,
@@ -236,7 +240,7 @@ class CashflowPortfolioSnapshot(models.Model):
             "res_model": "cashflow.management.note",
             "view_mode": "form",
             "views": [(False, "form")],
-            "target": "new",
+            "target": "current",
             "context": {
                 "default_company_id": company.id,
                 "default_partner_id": partner.id,
