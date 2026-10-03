@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
 import { AccountReport } from "@account_reports/components/account_report/account_report";
+import { AccountReportLine } from "@account_reports/components/account_report/line/line";
 import { AccountReportLineName } from "@account_reports/components/account_report/line_name/line_name";
 
 export class CashflowAgedPartnerLineName extends AccountReportLineName {
@@ -30,4 +31,12 @@ export class CashflowAgedPartnerLineName extends AccountReportLineName {
     }
 }
 
-AccountReport.registerCustomComponent(CashflowAgedPartnerLineName);
+export class CashflowAgedPartnerLine extends AccountReportLine {
+    static template = "megatk_cash_flow_forecast.CashflowAgedPartnerLine";
+    static components = {
+        ...AccountReportLine.components,
+        CashflowAgedPartnerLineName,
+    };
+}
+
+AccountReport.registerCustomComponent(CashflowAgedPartnerLine);

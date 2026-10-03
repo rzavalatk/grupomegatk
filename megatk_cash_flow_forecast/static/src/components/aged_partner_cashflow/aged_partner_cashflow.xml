@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+  <t t-name="megatk_cash_flow_forecast.CashflowAgedPartnerLine"
+     t-inherit="account_reports.AccountReportLineCustomizable"
+     t-inherit-mode="primary">
+    <xpath expr="//t[contains(@t-component, 'AccountReportLineName')]" position="replace">
+      <CashflowAgedPartnerLineName t-props="{ lineIndex: props.lineIndex, line: props.line }"/>
+    </xpath>
+  </t>
+
   <t t-name="megatk_cash_flow_forecast.CashflowAgedPartnerLineName"
      t-inherit="account_reports.AccountReportLineNameCustomizable"
      t-inherit-mode="primary">
