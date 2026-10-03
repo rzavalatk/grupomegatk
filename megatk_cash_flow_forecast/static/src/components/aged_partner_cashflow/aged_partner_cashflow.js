@@ -1,10 +1,10 @@
 /** @odoo-module **/
 
-import { AgedPartnerBalanceLineName } from "@account_reports/components/aged_partner_balance/line_name/line_name";
+import { AccountReportLineName } from "@account_reports/components/account_report/line_name/line_name";
 import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
 
-patch(AgedPartnerBalanceLineName.prototype, {
+patch(AccountReportLineName.prototype, {
     setup() {
         super.setup(...arguments);
         this.cashflowOrm = useService("orm");
