@@ -79,7 +79,7 @@ class AccountAgedPartnerBalanceReportHandler(models.AbstractModel):
 
     def _cashflow_week_amounts(self, direction):
         amounts = defaultdict(lambda: defaultdict(float))
-        promises = self.env.get["cashflow.promise"].sudo().search([
+        promises = self.env["cashflow.promise"].sudo().search([
             ("company_id", "in", self.env.companies.ids),
             ("direction", "=", direction),
             ("state", "=", "active"),
@@ -189,7 +189,7 @@ class CashflowPortfolioSnapshot(models.Model):
             ("direction", "=", direction),
         ], limit=1)
         account_type = (
-            "asset_receivable if direction == "receivable" else "liability_payable"
+            "asset_receivable" if direction == "receivable" else "liability_payable"
         )
         lines = self.env["account.move.line"].search([
             ("company_id", "=", company.id),

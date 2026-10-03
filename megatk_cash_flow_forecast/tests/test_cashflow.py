@@ -668,6 +668,20 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(partner_amounts["week_1"], 125)
         self.assertEqual(partner_amounts["pending"], 75)
 
+    def test_aged_report_actions_include_views_for_javascript_action_service(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        expected_views = {
+            "documents": [(False, "list"), (False, "form")],
+            "schedule": [(False, "form")],
+            "management": [(False, "form")],
+            "history": [(False, "list"), (False, "form")],
+        }
+        for action_name, views in expected_views.items():
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["views"], views)
+
     def test_manual_expense_classification_is_required_and_selectable(self):
         expense = self.env["cashflow.manual.expense"].create({
             "plan_id": self.plan.id,

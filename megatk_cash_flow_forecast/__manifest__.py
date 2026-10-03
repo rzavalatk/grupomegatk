@@ -1,7 +1,7 @@
 {
     "name": "Flujo de caja proyectado",
     "summary": "Proyección operativa de cobros, pagos y disponible por empresa",
-    "version": "18.0.10.0.6",
+    "version": "18.0.10.0.7",
     "category": "Accounting/Accounting",
     "author": "Grupo Megatk",
     "license": "LGPL-3",
@@ -24,6 +24,3 @@
     "application": True,
     "installable": True,
 }
-
-
-
