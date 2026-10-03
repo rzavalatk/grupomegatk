@@ -130,7 +130,7 @@ class AccountAgedPayableReportHandler(models.AbstractModel):
 
     def _custom_unfold_all_batch_data_generator(self, report, options, lines_to_expand_by_function):
         return {}
-
+self.env.get["cashflow.promise"]self.env["cashflow.promise"]"asset_receivable if direction == "receivable" else "liability_payable""asset_receivable" if direction == "receivable" else "liability_payable"
 
 class CashflowPortfolioSnapshot(models.Model):
     _inherit = "cashflow.portfolio.snapshot"
