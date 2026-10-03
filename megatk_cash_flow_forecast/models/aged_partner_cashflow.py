@@ -32,9 +32,16 @@ class AccountAgedPartnerBalanceReportHandler(models.AbstractModel):
         if not direction or not self._cashflow_user_can_manage(direction):
             return lines
         for line in lines:
-            model, record_id = report._get_model_info_from_id(line["id"])
-            if model == "res.partner" and record_id:
-                line["cashflow_partner_id"] = record_id
+            # Aged reports use composite line identifiers.  Asking the report
+            # to resolve the res.partner segment is reliable for both the
+            # receivable and payable variants, while _get_model_info_from_id
+            # can return the report segment instead of the partner segment.
+            res_ids = report._get_res_ids_from_line_id(
+                line["id"], ["account.report", "res.partner"]
+            )
+            partner_id = res_ids.get("res.partner")
+            if partner_id:
+                line["cashflow_partner_id"] = partner_id
                 line["cashflow_direction"] = direction
         return lines
 
