@@ -1,18 +1,22 @@
 /** @odoo-module **/
 
-import { AccountReport } from "@account_reports/components/account_report/account_report";
-import { AccountReportLine } from "@account_reports/components/account_report/line/line";
-import { AccountReportLineName } from "@account_reports/components/account_report/line_name/line_name";
+import { AgedPartnerBalanceLineName } from "@account_reports/components/aged_partner_balance/line_name/line_name";
+import { useService } from "@web/core/utils/hooks";
+import { patch } from "@web/core/utils/patch";
 
-export class CashflowAgedPartnerLineName extends AccountReportLineName {
-    static template = "megatk_cash_flow_forecast.CashflowAgedPartnerLineName";
+patch(AgedPartnerBalanceLineName.prototype, {
+    setup() {
+        super.setup(...arguments);
+        this.cashflowOrm = useService("orm");
+        this.cashflowActionService = useService("action");
+    },
 
     get isCashflowPartnerLine() {
         return Boolean(this.props.line.cashflow_partner_id);
-    }
+    },
 
     async cashflowAction(actionName) {
-        const result = await this.orm.call(
+        const result = await this.cashflowOrm.call(
             "cashflow.portfolio.snapshot",
             "action_from_aged_report",
             [
@@ -22,21 +26,11 @@ export class CashflowAgedPartnerLineName extends AccountReportLineName {
             ],
             { context: this.controller.context },
         );
-        return this.action.doAction(result, {
+        return this.cashflowActionService.doAction(result, {
             onClose: async () => {
                 this.controller.incrementCallNumber();
                 await this.controller.reload("", this.controller.cachedFilterOptions);
             },
         });
-    }
-}
-
-export class CashflowAgedPartnerLine extends AccountReportLine {
-    static template = "megatk_cash_flow_forecast.CashflowAgedPartnerLine";
-    static components = {
-        ...AccountReportLine.components,
-        CashflowAgedPartnerLineName,
-    };
-}
-
-AccountReport.registerCustomComponent(CashflowAgedPartnerLine);
+    },
+});
