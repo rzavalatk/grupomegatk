@@ -6,7 +6,8 @@ Incluye:
 
 - Semanas 1, 2, 3 y Pendiente.
 - Cobros esperados y pagos programados con historial en el chatter de Odoo.
-- Registro de la nueva gestión y consulta del historial completo directamente desde cada cliente en CxC.
+- Registro de gestiones e historial directamente desde clientes en CxC y proveedores en CxP.
+- Los reportes contables de cuenta antigua por cobrar y por pagar muestran S1, S2, S3 y Pendiente, y permiten ver documentos, programar, registrar gestión y consultar historial sin duplicar datos.
 - Programación directa del cobro o pago desde cada fila de cartera, con empresa, contacto y tipo prellenados.
 - Actualización inmediata de las insignias de semana al crear, mover o retirar una proyección.
 - La última gestión es de solo lectura: toda observación nueva conserva fecha, autor e historial.
@@ -14,6 +15,7 @@ Incluye:
 - Saldos contables exclusivamente por la cuenta específica seleccionada, aunque varias cuentas compartan el diario bancario "Cheques"; cambiar el diario nunca sustituye esa cuenta.
 - Disponible inicial visible y acumulativo para cada semana, incluidos los saldos negativos.
 - Listas separadas para cobros, pagos a proveedores, pagos únicos y pagos recurrentes.
+- Los financiamientos manuales, pagos únicos y pagos recurrentes pueden borrarse; al borrarlos desaparecen de todas las semanas, totales y reportes. Un financiamiento ya vinculado con una partida contable solo puede desactivarse.
 - Reporte ejecutivo y detallado en pantalla, PDF y archivo compatible con Excel.
 - Menús y pestañas con verde para ingresos y rojo para salidas.
 - Saldos en la moneda original de cada cuenta, con tipo de cambio, equivalente en lempiras y diferencia visible.
@@ -36,7 +38,7 @@ Incluye:
 ## Reglas operativas
 
 - El módulo nunca crea asientos, facturas, pagos ni conciliaciones.
-- El detalle de cartera se reconstruye con partidas abiertas de Odoo; no replica la contabilidad.
+- Los saldos de CxC y CxP se consultan de las partidas abiertas de Odoo; las proyecciones semanales son los mismos registros del flujo y no duplican la contabilidad.
 - Un saldo negativo en CxC se presenta como crédito; uno positivo en CxP como anticipo. Los demás saldos se clasifican por vencimiento.
 - Cada usuario solo consulta y registra información de las compañías que tenga activas en Odoo.
 - Bancos, cuentas, partidas y clasificaciones respetan la empresa activa y no pueden cruzarse entre compañías.

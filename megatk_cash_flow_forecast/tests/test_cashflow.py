@@ -601,6 +601,73 @@ class TestCashflowForecast(TransactionCase):
         recurring._inverse_payment_frequency()
         self.assertFalse(recurring.recurring)
 
+    def test_manual_financing_can_be_deleted_when_not_linked_to_accounting(self):
+        financing = self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Préstamo de prueba para borrar",
+            "income_type": "other",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(self.plan.financing_week_1, 0)
+        financing.unlink()
+        self.assertFalse(financing.exists())
+
+    def test_deleting_recurring_payment_removes_it_from_all_projection_totals(self):
+        payment = self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago recurrente para borrar",
+            "classification": "services",
+            "period": "week_2",
+            "amount": 325,
+            "recurring": True,
+        })
+        self.assertEqual(self.plan.payable_week_2, 325)
+        payment.unlink()
+        self.assertFalse(payment.exists())
+        self.assertEqual(self.plan.payable_week_2, 0)
+        self.assertFalse(self.plan.recurring_expense_ids)
+
+    def test_payable_management_infers_direction_from_projection(self):
+        promise = self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_3",
+            "amount": 275,
+        })
+        note = self.env["cashflow.management.note"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "promise_id": promise.id,
+            "note": "Proveedor confirmó el pago para la semana tres.",
+        })
+        self.assertEqual(note.direction, "payable")
+        self.assertEqual(promise.note, note.note)
+
+    def test_aged_reports_receive_week_amounts_from_the_same_projections(self):
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 125,
+        })
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "pending",
+            "amount": 75,
+        })
+        handler = self.env["account.aged.partner.balance.report.handler"].with_company(
+            self.company
+        )
+        amounts = handler._cashflow_week_amounts("receivable")
+        partner_amounts = amounts[self.partner.commercial_partner_id.id]
+        self.assertEqual(partner_amounts["week_1"], 125)
+        self.assertEqual(partner_amounts["pending"], 75)
+
     def test_manual_expense_classification_is_required_and_selectable(self):
         expense = self.env["cashflow.manual.expense"].create({
             "plan_id": self.plan.id,
