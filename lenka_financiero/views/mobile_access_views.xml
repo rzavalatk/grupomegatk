@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_lenka_mobile" model="ir.ui.view">
+        <field name="name">res.partner.form.lenka.mobile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Financiero Lenka" groups="lenka_financiero.group_lenka_user">
+                    <group string="Acceso App Movil">
+                        <field name="lenka_mobile_enabled" readonly="1"/>
+                        <field name="lenka_mobile_enabled_date" readonly="1"/>
+                        <field name="lenka_mobile_user_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <button name="action_enable_lenka_mobile" string="Habilitar acceso App Lenka" type="object" class="btn-primary" invisible="lenka_mobile_enabled" groups="lenka_financiero.group_lenka_manager"/>
+                        <button name="action_disable_lenka_mobile" string="Deshabilitar acceso App Lenka" type="object" invisible="not lenka_mobile_enabled" groups="lenka_financiero.group_lenka_manager"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

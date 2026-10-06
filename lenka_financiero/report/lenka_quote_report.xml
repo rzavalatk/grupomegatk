@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_lenka_quote" model="ir.actions.report">
+        <field name="name">Cotizacion / Tabla de amortizacion</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lenka_financiero.report_lenka_quote_document</field>
+        <field name="report_file">lenka_financiero.report_lenka_quote_document</field>
+        <field name="binding_model_id" ref="model_lenka_financial_operation"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Lenka - %s' % (object.name)</field>
+    </record>
+
+    <template id="report_lenka_quote_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2><t t-if="o.is_quote">Cotizacion de financiamiento</t><t t-else="">Plan de amortizacion</t></h2>
+                        <p><strong>Referencia:</strong> <span t-field="o.name"/></p>
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                                <tr><td><strong>Cliente</strong></td><td><span t-field="o.partner_id"/></td><td><strong>Fecha</strong></td><td><span t-field="o.date"/></td></tr>
+                                <tr><td><strong>Tipo</strong></td><td><span t-field="o.operation_type"/></td><td><strong>Moneda</strong></td><td><span t-field="o.currency_id"/></td></tr>
+                                <tr><td><strong>Valor / monto</strong></td><td><span t-field="o.principal_amount"/></td><td><strong>Prima</strong></td><td><span t-field="o.down_payment"/></td></tr>
+                                <tr><td><strong>Monto financiado</strong></td><td><span t-field="o.financed_amount"/></td><td><strong>Plazo</strong></td><td><span t-field="o.term_months"/> meses</td></tr>
+                                <tr><td><strong>Tasa</strong></td><td><span t-field="o.interest_rate"/>% <span t-field="o.rate_period"/></td><td><strong>Metodo</strong></td><td><span t-field="o.calculation_method"/></td></tr>
+                                <tr t-if="o.operation_type == 'lease'"><td><strong>Opcion de compra</strong></td><td><span t-field="o.residual_purchase_amount"/></td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Tabla de amortizacion</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th><th>Fecha</th><th class="text-end">Saldo inicial</th><th class="text-end">Capital</th><th class="text-end">Interes</th><th class="text-end">Otros</th><th class="text-end">Cuota</th><th class="text-end">Saldo final</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.schedule_line_ids" t-as="line">
+                                    <td><span t-field="line.sequence"/></td>
+                                    <td><span t-field="line.date"/></td>
+                                    <td class="text-end"><span t-field="line.opening_balance"/></td>
+                                    <td class="text-end"><span t-field="line.capital"/></td>
+                                    <td class="text-end"><span t-field="line.interest"/></td>
+                                    <td class="text-end"><span t-field="line.extra_charge"/></td>
+                                    <td class="text-end"><span t-field="line.payment"/></td>
+                                    <td class="text-end"><span t-field="line.closing_balance"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-3"><small>Documento generado por App Financiero Lenka. Una cotizacion es informativa y no constituye aprobacion ni desembolso hasta completar el proceso correspondiente.</small></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

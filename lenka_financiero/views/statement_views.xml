@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_statement_list" model="ir.ui.view">
+        <field name="name">lenka.statement.list</field>
+        <field name="model">lenka.statement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="statement_type"/>
+                <field name="partner_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="opening_balance"/>
+                <field name="closing_balance"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lenka_statement_form" model="ir.ui.view">
+        <field name="name">lenka.statement.form</field>
+        <field name="model">lenka.statement</field>
+        <field name="arch" type="xml">
+            <form string="Estado de cuenta Lenka">
+                <header>
+                    <button name="action_generate" string="Generar / Recalcular" type="object" class="btn-primary" invisible="state not in ('draft','generated')"/>
+                    <button name="action_send_email" string="Enviar por correo" type="object" invisible="state not in ('generated','draft')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,sent"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="statement_type" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="operation_id" invisible="statement_type != 'operation'" readonly="state != 'draft'"/>
+                            <field name="investment_id" invisible="statement_type != 'investment'" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="currency_id" readonly="state != 'draft'"/>
+                            <field name="company_id" readonly="state != 'draft'" groups="base.group_multi_company"/>
+                            <field name="sent_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Resumen">
+                        <field name="opening_balance" readonly="1"/>
+                        <field name="period_capital" readonly="1" invisible="statement_type != 'operation'"/>
+                        <field name="period_interest" readonly="1"/>
+                        <field name="period_late_fees" readonly="1" invisible="statement_type != 'operation'"/>
+                        <field name="period_fees" readonly="1" invisible="statement_type != 'operation'"/>
+                        <field name="closing_balance" readonly="1"/>
+                    </group>
+                    <field name="line_ids" readonly="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="description"/>
+                            <field name="reference"/>
+                            <field name="debit"/>
+                            <field name="credit"/>
+                            <field name="capital" column_invisible="parent.statement_type != 'operation'"/>
+                            <field name="interest" column_invisible="parent.statement_type != 'operation'"/>
+                            <field name="late_fee" column_invisible="parent.statement_type != 'operation'"/>
+                            <field name="fee" column_invisible="parent.statement_type != 'operation'"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lenka_statements" model="ir.actions.act_window">
+        <field name="name">Estados de cuenta</field>
+        <field name="res_model">lenka.statement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
