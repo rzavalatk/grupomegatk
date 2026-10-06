@@ -10,6 +10,10 @@ PR de preparación: https://github.com/rzavalatk/grupomegatk/pull/58. Mantener e
 
 Sentinel es exclusivamente el entorno autorizado de pruebas. Sus datos y permisos no se trasladan automáticamente a producción. Android e iPhone siguen fuera de esta entrega.
 
+## Estado de preparación
+
+Paquete técnico preparado para instalar cuando Luis lo ordene. Los contratos, diarios y cuentas pueden cargarse después de instalar; no son requisitos previos de instalación. Se puede comenzar con clientes, cotizaciones y cálculo de planes. Completar cada configuración antes de usar la función que la requiere.
+
 ## Resultado técnico verificado
 
 - Versión: 18.0.1.0.2.
@@ -22,21 +26,21 @@ Sentinel es exclusivamente el entorno autorizado de pruebas. Sus datos y permiso
 
 Estos resultados no sustituyen la configuración contable ni aprueban el contenido legal del contrato. No afirmar que toda la operación real está lista mientras existan los pendientes siguientes.
 
-## Información pendiente para uso real
+## Configuración posterior a la instalación
 
 En la empresa INVERSIONES LENKA de Sentinel se observaron vacíos:
 
 1. **Plantillas contractuales:** aportar contrato vigente aprobado para cada tipo de operación que se usará. No reemplazarlo por el contrato demo ni firmarlo en nombre de nadie.
 2. **Asignación contable:** confirmar los diarios de desembolsos, cobros e inversiones/depósitos y los códigos de cuentas de cartera, ingreso por intereses, ingreso por mora, anticipos no aplicados, comisión de tarjeta, costo de fondeo, obligación con inversionistas, gasto por intereses pasivos y retención por pagar. Confirmar también las tasas operativas de comisión y retención; no inferirlas de los valores predeterminados del módulo.
 
-Una vez recibidos, preparar la configuración en Sentinel, probar generación del contrato aprobado y borradores contables con esas asignaciones, y registrar los resultados antes de marcar la preparación como completa.
+Estos datos pueden introducirse desde el sistema instalado. El contrato se requiere antes de completar la contratación de una operación; los diarios y cuentas, antes de generar los movimientos contables correspondientes. Su ausencia no bloquea instalar el módulo ni crear cotizaciones. No generar movimientos reales con parámetros de demostración.
 
 ## Procedimiento reservado para la orden de instalación
 
 1. Confirmar la rama y el respaldo recuperable de producción; revisar cambios concurrentes.
 2. Integrar el PR aprobado con la rama vigente, conservando O Dental y los demás módulos; no reemplazar el árbol de producción por una copia antigua de Sentinel.
 3. Instalar solo `lenka_financiero`, sin ejecutar Preparar Demo Lenka ni importar datos ficticios.
-4. Aplicar la configuración validada de INVERSIONES LENKA y los permisos aprobados para los usuarios que operarán Lenka.
+4. Configurar el acceso de los usuarios expresamente autorizados en la empresa INVERSIONES LENKA. Los permisos otorgados únicamente en Sentinel no autorizan ampliaciones automáticas en producción. Cargar contratos y asignaciones contables cuando los responsables los definan.
 5. Verificar carga del módulo, ícono, acceso, empresa y configuración. Esta comprobación posterior de instalación no crea créditos ni movimientos reales.
 
 Si la instalación falla, revisar logs y recuperar mediante el respaldo y procedimiento de Odoo.sh; no desinstalar automáticamente ni borrar datos. Coordinar cualquier recuperación que afecte la base compartida.
