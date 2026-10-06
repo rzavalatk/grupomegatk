@@ -244,6 +244,66 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(first_position.accounting_balance, 100)
         self.assertEqual(second_position.accounting_balance, 200)
 
+    def test_changing_the_journal_never_replaces_the_selected_account(self):
+        first_account = self._account("CF1011", "asset_cash")
+        second_account = self._account("CF1012", "asset_cash")
+        first_journal = self._bank_journal(first_account, "CF5")
+        second_journal = self._bank_journal(second_account, "CF6")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "journal_id": first_journal.id,
+            "account_id": first_account.id,
+            "real_balance": 0,
+        })
+
+        position.write({"journal_id": second_journal.id})
+
+        self.assertEqual(position.account_id, first_account)
+
+    def test_journal_alone_cannot_define_the_ledger_balance(self):
+        account = self._account("CF1013", "asset_cash")
+        journal = self._bank_journal(account, "CF7")
+
+        with self.assertRaises(ValidationError):
+            self.env["cashflow.bank.position"].create({
+                "plan_id": self.plan.id,
+                "position_type": "liquidity",
+                "journal_id": journal.id,
+                "real_balance": 0,
+            })
+
+    def test_ledger_balance_respects_the_selected_cutoff_date(self):
+        bank_account = self._account("CF1010", "asset_cash")
+        counterpart = self._account("CF2010", "liability_current")
+        journal = self.env["account.journal"].create({
+            "name": "Diario corte flujo",
+            "code": "CFC",
+            "type": "general",
+            "company_id": self.company.id,
+        })
+        move = self.env["account.move"].create({
+            "company_id": self.company.id,
+            "journal_id": journal.id,
+            "date": "2026-09-29",
+            "line_ids": [
+                (0, 0, {"name": "Banco", "account_id": bank_account.id, "debit": 100}),
+                (0, 0, {"name": "Contrapartida", "account_id": counterpart.id, "credit": 100}),
+            ],
+        })
+        move.action_post()
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": bank_account.id,
+            "rate_date": "2026-09-28",
+            "real_balance": 0,
+        })
+
+        self.assertEqual(position.accounting_balance, 0)
+        position.rate_date = "2026-09-29"
+        self.assertEqual(position.accounting_balance, 100)
+
     def test_new_bank_position_warns_only_for_a_persisted_account(self):
         account = self._account("CF1006", "asset_cash")
         journal = self._bank_journal(account, "CF3")
@@ -478,6 +538,160 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(expense.classification, "other")
         self.assertEqual(self.plan.payable_week_1, 250)
 
+    def test_each_week_exposes_the_previous_projected_balance_as_opening(self):
+        self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Salida mayor que el disponible",
+            "period": "week_1",
+            "amount": 250,
+        })
+        self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Ingreso de semana dos",
+            "income_type": "other",
+            "period": "week_2",
+            "amount": 50,
+        })
+
+        self.assertEqual(self.plan.opening_week_1, 0)
+        self.assertEqual(self.plan.projected_week_1, -250)
+        self.assertEqual(self.plan.opening_week_2, -250)
+        self.assertEqual(self.plan.projected_week_2, -200)
+        self.assertEqual(self.plan.opening_week_3, -200)
+        self.assertEqual(self.plan.opening_pending, -200)
+
+    def test_filtered_relations_do_not_mix_tabs(self):
+        receivable = self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        payable = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_2",
+            "amount": 200,
+        })
+        unique = self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago único",
+            "period": "week_1",
+            "amount": 10,
+            "recurring": False,
+        })
+        recurring = self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Planilla",
+            "reference": "Pago de planilla",
+            "period": "week_2",
+            "amount": 20,
+            "recurring": True,
+        })
+
+        self.assertEqual(self.plan.receivable_promise_ids, receivable)
+        self.assertEqual(self.plan.payable_promise_ids, payable)
+        self.assertEqual(self.plan.unique_expense_ids, unique)
+        self.assertEqual(self.plan.recurring_expense_ids, recurring)
+        self.assertEqual(recurring.reference, "Pago de planilla")
+        self.assertEqual(unique.payment_frequency, "unique")
+        recurring.payment_frequency = "unique"
+        recurring._inverse_payment_frequency()
+        self.assertFalse(recurring.recurring)
+
+    def test_manual_financing_can_be_deleted_when_not_linked_to_accounting(self):
+        financing = self.env["cashflow.manual.income"].create({
+            "plan_id": self.plan.id,
+            "name": "Préstamo de prueba para borrar",
+            "income_type": "other",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(self.plan.financing_week_1, 0)
+        financing.unlink()
+        self.assertFalse(financing.exists())
+
+    def test_deleting_recurring_payment_removes_it_from_all_projection_totals(self):
+        payment = self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago recurrente para borrar",
+            "classification": "services",
+            "period": "week_2",
+            "amount": 325,
+            "recurring": True,
+        })
+        self.assertEqual(self.plan.payable_week_2, 325)
+        payment.unlink()
+        self.assertFalse(payment.exists())
+        self.assertEqual(self.plan.payable_week_2, 0)
+        self.assertFalse(self.plan.recurring_expense_ids)
+
+    def test_payable_management_infers_direction_from_projection(self):
+        promise = self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_3",
+            "amount": 275,
+        })
+        note = self.env["cashflow.management.note"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "promise_id": promise.id,
+            "note": "Proveedor confirmó el pago para la semana tres.",
+        })
+        self.assertEqual(note.direction, "payable")
+        self.assertEqual(promise.note, note.note)
+
+    def test_aged_reports_receive_week_amounts_from_the_same_projections(self):
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 125,
+        })
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "pending",
+            "amount": 75,
+        })
+        handler = self.env["account.aged.partner.balance.report.handler"].with_company(
+            self.company
+        )
+        amounts = handler._cashflow_week_amounts("receivable")
+        partner_amounts = amounts[self.partner.commercial_partner_id.id]
+        self.assertEqual(partner_amounts["week_1"], 125)
+        self.assertEqual(partner_amounts["pending"], 75)
+
+    def test_aged_report_actions_include_views_for_javascript_action_service(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        expected_views = {
+            "documents": [(False, "list"), (False, "form")],
+            "schedule": [(False, "form")],
+            "management": [(False, "form")],
+            "history": [(False, "list"), (False, "form")],
+        }
+        for action_name, views in expected_views.items():
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["views"], views)
+
+    def test_aged_report_edit_actions_open_as_normal_pages(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        for action_name in ("schedule", "management"):
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["target"], "current")
+
     def test_manual_expense_classification_is_required_and_selectable(self):
         expense = self.env["cashflow.manual.expense"].create({
             "plan_id": self.plan.id,
@@ -598,3 +812,118 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(refresh_action["tag"], "reload")
         with self.assertRaises(UserError):
             snapshots.action_print_current_company([])
+
+    def test_cancelled_promises_leave_operational_tabs_but_remain_in_history(self):
+        promise = self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 10,
+        })
+        self.assertIn(promise, self.plan.receivable_promise_ids)
+        promise.action_cancel()
+        self.assertNotIn(promise, self.plan.receivable_promise_ids)
+        self.assertTrue(promise.exists())
+        action = self.plan.action_view_cancelled_promises()
+        self.assertIn(("state", "=", "cancelled"), action["domain"])
+        promise.action_reactivate()
+        self.assertIn(promise, self.plan.receivable_promise_ids)
+
+    def test_payable_classifications_are_split_without_duplicates(self):
+        supplier = self.env["res.partner"].create({"name": "Proveedor prueba"})
+        creditor = self.env["res.partner"].create({"name": "Acreedor prueba"})
+        advance_partner = self.env["res.partner"].create({"name": "Anticipo prueba"})
+        Promise = self.env["cashflow.promise"]
+        supplier_promise = Promise.with_context(
+            default_classification="supplier"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": supplier.id,
+            "direction": "payable", "period": "week_1", "amount": 100,
+        })
+        creditor_promise = Promise.with_context(
+            default_classification="creditor"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": creditor.id,
+            "direction": "payable", "period": "week_2", "amount": 200,
+        })
+        advance_promise = Promise.with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": advance_partner.id,
+            "direction": "payable", "period": "week_3", "amount": 300,
+        })
+        self.assertEqual(self.plan.payable_promise_ids, supplier_promise)
+        self.assertEqual(self.plan.creditor_promise_ids, creditor_promise)
+        self.assertEqual(self.plan.advance_promise_ids, advance_promise)
+        all_split = (
+            self.plan.payable_promise_ids
+            | self.plan.creditor_promise_ids
+            | self.plan.advance_promise_ids
+            | self.plan.unclassified_payable_promise_ids
+        )
+        self.assertEqual(len(all_split), 3)
+
+    def test_advance_tracks_pending_balance_and_only_projects_before_delivery(self):
+        advance = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(advance.cash_effect_amount, 100)
+        self.assertEqual(advance.advance_pending_amount, 100)
+        advance.write({
+            "advance_status": "partially_applied",
+            "advance_applied_amount": 40,
+        })
+        self.assertEqual(advance.cash_effect_amount, 0)
+        self.assertEqual(advance.advance_pending_amount, 60)
+        advance.advance_status = "closed"
+        self.assertEqual(advance.state, "cancelled")
+        self.assertNotIn(advance, self.plan.advance_promise_ids)
+
+    def test_report_sections_include_column_totals_and_classification_split(self):
+        account = self._account("CF1010", "asset_cash")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 100,
+        })
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 25,
+        })
+        sections = {section["key"]: section for section in self.plan._cashflow_report_sections()}
+        self.assertEqual(sections["available"]["totals"]["balance_hnl"], 100)
+        self.assertEqual(sections["available"]["totals"]["total"], 100)
+        self.assertEqual(sections["collections"]["totals"]["week_1"], 25)
+        self.assertIn("advances", sections)
+        self.assertIn("unclassified", sections)
+
+    def test_removing_bank_position_does_not_delete_ledger_account(self):
+        account = self._account("CF1011", "asset_cash")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 50,
+        })
+        position.action_remove_from_cashflow()
+        self.assertFalse(position.exists())
+        self.assertTrue(account.exists())
+
+    def test_aged_actions_request_native_edit_mode(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        for action_name in ("schedule", "management"):
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["context"]["form_view_initial_mode"], "edit")

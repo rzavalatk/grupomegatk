@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_audit_list" model="ir.ui.view">
+        <field name="name">odental.clinical.audit.list</field>
+        <field name="model">odental.clinical.audit</field>
+        <field name="arch" type="xml"><list create="0" edit="0" delete="0"><field name="occurred_at"/><field name="patient_id"/><field name="event_type"/><field name="user_id"/><field name="summary"/><field name="content_hash" optional="hide"/></list></field>
+    </record>
+    <record id="view_odental_clinical_audit_form" model="ir.ui.view">
+        <field name="name">odental.clinical.audit.form</field>
+        <field name="model">odental.clinical.audit</field>
+        <field name="arch" type="xml"><form create="0" edit="0" delete="0"><sheet><group><field name="occurred_at"/><field name="organization_id"/><field name="patient_id"/><field name="user_id"/><field name="event_type"/><field name="model_name"/><field name="record_res_id"/><field name="summary"/><field name="content_hash"/></group></sheet></form></field>
+    </record>
+    <record id="action_odental_clinical_audit" model="ir.actions.act_window">
+        <field name="name">Auditoría clínica</field>
+        <field name="res_model">odental.clinical.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+</odoo>
+

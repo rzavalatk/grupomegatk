@@ -1,0 +1,30 @@
+/* Semantic color cues requested for the projected cash-flow workspace. */
+.cashflow-plan-form .cashflow-color-tabs .o_notebook_headers {
+    .nav-item:nth-child(-n + 3) .nav-link {
+        color: #16803d;
+    }
+
+    .nav-item:nth-child(n + 4) .nav-link {
+        color: #b42318;
+    }
+
+    .nav-link.active {
+        font-weight: 700;
+        border-bottom-width: 3px;
+    }
+}
+
+/* Odoo renders top-level application sections with data-menu-xmlid. */
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_receivable_promises"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_manual_income"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_collections"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_management_note"] {
+    color: #16803d !important;
+}
+
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_payable_promises"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_manual_expense"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_recurring_expense"],
+[data-menu-xmlid="megatk_cash_flow_forecast.menu_cashflow_payables"] {
+    color: #b42318 !important;
+}

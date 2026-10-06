@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_odontogram_list" model="ir.ui.view">
+        <field name="name">odental.odontogram.list</field>
+        <field name="model">odental.odontogram</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'signed'" decoration-muted="state in ('amended', 'cancelled')">
+                <field name="name"/><field name="chart_datetime"/><field name="patient_id"/><field name="professional_id"/><field name="dentition"/><field name="version"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_odontogram_form" model="ir.ui.view">
+        <field name="name">odental.odontogram.form</field>
+        <field name="model">odental.odontogram</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_sign" type="object" string="Firmar odontograma" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_amendment" type="object" string="Crear rectificación" invisible="state != 'signed'"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,signed,amended,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group><field name="clinical_record_id" readonly="state != 'draft'"/><field name="patient_id" readonly="1"/><field name="organization_id" readonly="1"/><field name="professional_id" domain="[('organization_ids', 'in', organization_id)]" readonly="state != 'draft'"/></group>
+                        <group><field name="encounter_id" domain="[('clinical_record_id', '=', clinical_record_id), ('professional_id', '=', professional_id)]" readonly="state != 'draft'"/><field name="chart_datetime" readonly="state != 'draft'"/><field name="dentition" readonly="state != 'draft'"/><field name="version" readonly="1"/><field name="previous_version_id" invisible="not previous_version_id"/></group>
+                    </group>
+                    <field name="summary" placeholder="Resumen general del odontograma..." readonly="state != 'draft'"/>
+                    <separator string="Hallazgos por pieza y superficie"/>
+                    <field name="finding_ids" readonly="state != 'draft'">
+                        <list editable="bottom" decoration-danger="condition in ('caries', 'fracture', 'extraction_indicated')" decoration-success="status == 'completed'">
+                            <field name="tooth_id"/><field name="surface"/><field name="condition"/><field name="status"/><field name="notes"/>
+                        </list>
+                    </field>
+                    <notebook>
+                        <page string="Firma y versiones"><group><field name="signed_at" readonly="1"/><field name="signed_by_user_id" readonly="1"/><field name="content_hash" readonly="1"/><field name="amendment_reason" invisible="not previous_version_id" readonly="state != 'draft'"/><field name="amendment_ids" readonly="1"><list><field name="name"/><field name="version"/><field name="chart_datetime"/><field name="state"/></list></field></group></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_odontogram" model="ir.actions.act_window">
+        <field name="name">Odontogramas</field>
+        <field name="res_model">odental.odontogram</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

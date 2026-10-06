@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_odental_odontogram_member" model="ir.rule">
+        <field name="name">O Dental: odontogramas autorizados</field>
+        <field name="model_id" ref="model_odental_odontogram"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_finding_member" model="ir.rule">
+        <field name="name">O Dental: hallazgos autorizados</field>
+        <field name="model_id" ref="model_odental_odontogram_finding"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+    <record id="rule_odental_image_member" model="ir.rule">
+        <field name="name">O Dental: imágenes autorizadas</field>
+        <field name="model_id" ref="model_odental_clinical_image"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_professional'))]"/>
+        <field name="domain_force">['|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="rule_odental_odontogram_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de odontogramas</field>
+        <field name="model_id" ref="model_odental_odontogram"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_finding_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de hallazgos</field>
+        <field name="model_id" ref="model_odental_odontogram_finding"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_odental_image_admin" model="ir.rule">
+        <field name="name">O Dental: administración global de imágenes</field>
+        <field name="model_id" ref="model_odental_clinical_image"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>
+

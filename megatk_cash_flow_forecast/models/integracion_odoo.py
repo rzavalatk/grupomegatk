@@ -89,7 +89,7 @@ class ResPartner(models.Model):
         commercial = self.commercial_partner_id
         return {
             "type": "ir.actions.act_window",
-            "name": f"Historial de cobranza · {commercial.display_name}",
+            "name": f"Historial de gestiones · {commercial.display_name}",
             "res_model": "cashflow.management.note",
             "view_mode": "list,form",
             "domain": [
@@ -225,9 +225,14 @@ class AccountMove(models.Model):
 
     def action_cashflow_add_management_note(self):
         self.ensure_one()
+        direction = (
+            "receivable"
+            if self.move_type in ("out_invoice", "out_refund")
+            else "payable"
+        )
         return {
             "type": "ir.actions.act_window",
-            "name": "Registrar gestión de cobranza",
+            "name": "Registrar gestión de cobro" if direction == "receivable" else "Registrar gestión de pago",
             "res_model": "cashflow.management.note",
             "view_mode": "form",
             "target": "new",
@@ -235,15 +240,20 @@ class AccountMove(models.Model):
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_move_id": self.id,
-                "default_direction": "receivable",
+                "default_direction": direction,
             },
         }
 
     def action_cashflow_open_management_history(self):
         self.ensure_one()
+        direction = (
+            "receivable"
+            if self.move_type in ("out_invoice", "out_refund")
+            else "payable"
+        )
         return {
             "type": "ir.actions.act_window",
-            "name": f"Historial de cobranza · {self.name}",
+            "name": f"Historial de gestiones · {self.name}",
             "res_model": "cashflow.management.note",
             "view_mode": "list,form",
             "domain": [("company_id", "=", self.company_id.id), ("move_id", "=", self.id)],
@@ -251,5 +261,6 @@ class AccountMove(models.Model):
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_move_id": self.id,
+                "default_direction": direction,
             },
         }

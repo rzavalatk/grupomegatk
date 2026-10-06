@@ -1,0 +1,53 @@
+id,code,name,dentition,quadrant,tooth_type,sequence
+tooth_18,18,Tercer molar superior derecho,permanent,1,molar,1
+tooth_17,17,Segundo molar superior derecho,permanent,1,molar,2
+tooth_16,16,Primer molar superior derecho,permanent,1,molar,3
+tooth_15,15,Segundo premolar superior derecho,permanent,1,premolar,4
+tooth_14,14,Primer premolar superior derecho,permanent,1,premolar,5
+tooth_13,13,Canino superior derecho,permanent,1,canine,6
+tooth_12,12,Incisivo lateral superior derecho,permanent,1,incisor,7
+tooth_11,11,Incisivo central superior derecho,permanent,1,incisor,8
+tooth_21,21,Incisivo central superior izquierdo,permanent,2,incisor,9
+tooth_22,22,Incisivo lateral superior izquierdo,permanent,2,incisor,10
+tooth_23,23,Canino superior izquierdo,permanent,2,canine,11
+tooth_24,24,Primer premolar superior izquierdo,permanent,2,premolar,12
+tooth_25,25,Segundo premolar superior izquierdo,permanent,2,premolar,13
+tooth_26,26,Primer molar superior izquierdo,permanent,2,molar,14
+tooth_27,27,Segundo molar superior izquierdo,permanent,2,molar,15
+tooth_28,28,Tercer molar superior izquierdo,permanent,2,molar,16
+tooth_38,38,Tercer molar inferior izquierdo,permanent,3,molar,17
+tooth_37,37,Segundo molar inferior izquierdo,permanent,3,molar,18
+tooth_36,36,Primer molar inferior izquierdo,permanent,3,molar,19
+tooth_35,35,Segundo premolar inferior izquierdo,permanent,3,premolar,20
+tooth_34,34,Primer premolar inferior izquierdo,permanent,3,premolar,21
+tooth_33,33,Canino inferior izquierdo,permanent,3,canine,22
+tooth_32,32,Incisivo lateral inferior izquierdo,permanent,3,incisor,23
+tooth_31,31,Incisivo central inferior izquierdo,permanent,3,incisor,24
+tooth_41,41,Incisivo central inferior derecho,permanent,4,incisor,25
+tooth_42,42,Incisivo lateral inferior derecho,permanent,4,incisor,26
+tooth_43,43,Canino inferior derecho,permanent,4,canine,27
+tooth_44,44,Primer premolar inferior derecho,permanent,4,premolar,28
+tooth_45,45,Segundo premolar inferior derecho,permanent,4,premolar,29
+tooth_46,46,Primer molar inferior derecho,permanent,4,molar,30
+tooth_47,47,Segundo molar inferior derecho,permanent,4,molar,31
+tooth_48,48,Tercer molar inferior derecho,permanent,4,molar,32
+tooth_55,55,Segundo molar temporal superior derecho,primary,5,molar,33
+tooth_54,54,Primer molar temporal superior derecho,primary,5,molar,34
+tooth_53,53,Canino temporal superior derecho,primary,5,canine,35
+tooth_52,52,Incisivo lateral temporal superior derecho,primary,5,incisor,36
+tooth_51,51,Incisivo central temporal superior derecho,primary,5,incisor,37
+tooth_61,61,Incisivo central temporal superior izquierdo,primary,6,incisor,38
+tooth_62,62,Incisivo lateral temporal superior izquierdo,primary,6,incisor,39
+tooth_63,63,Canino temporal superior izquierdo,primary,6,canine,40
+tooth_64,64,Primer molar temporal superior izquierdo,primary,6,molar,41
+tooth_65,65,Segundo molar temporal superior izquierdo,primary,6,molar,42
+tooth_75,75,Segundo molar temporal inferior izquierdo,primary,7,molar,43
+tooth_74,74,Primer molar temporal inferior izquierdo,primary,7,molar,44
+tooth_73,73,Canino temporal inferior izquierdo,primary,7,canine,45
+tooth_72,72,Incisivo lateral temporal inferior izquierdo,primary,7,incisor,46
+tooth_71,71,Incisivo central temporal inferior izquierdo,primary,7,incisor,47
+tooth_81,81,Incisivo central temporal inferior derecho,primary,8,incisor,48
+tooth_82,82,Incisivo lateral temporal inferior derecho,primary,8,incisor,49
+tooth_83,83,Canino temporal inferior derecho,primary,8,canine,50
+tooth_84,84,Primer molar temporal inferior derecho,primary,8,molar,51
+tooth_85,85,Segundo molar temporal inferior derecho,primary,8,molar,52

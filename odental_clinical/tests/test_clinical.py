@@ -1,0 +1,344 @@
+from psycopg2 import IntegrityError
+
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tests.common import TransactionCase, tagged
+from odoo.tools import mute_logger
+
+
+class TestODentalClinical(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.organization = cls.env["odental.organization"].create(
+            {"name": "Clínica prueba", "code": "CLIN", "user_ids": [(4, cls.env.user.id)]}
+        )
+        cls.professional = cls.env["odental.professional"].create(
+            {"name": "Dra. Clínica", "organization_ids": [(4, cls.organization.id)]}
+        )
+        cls.patient = cls.env["odental.patient"].create(
+            {"name": "Paciente clínico", "organization_id": cls.organization.id}
+        )
+        cls.record = cls.env["odental.clinical.record"].create(
+            {"patient_id": cls.patient.id}
+        )
+
+    def test_one_record_per_patient(self):
+        # A duplicate must fail; its expected SQL error must not mark the
+        # entire Odoo.sh build as failed. Roll back before checking the result.
+        with self.assertRaises(IntegrityError), mute_logger("odoo.sql_db"), self.env.cr.savepoint():
+            self.env["odental.clinical.record"].create({"patient_id": self.patient.id})
+        self.assertEqual(self.env["odental.clinical.record"].search_count([
+            ("patient_id", "=", self.patient.id)
+        ]), 1)
+
+    def test_signed_encounter_is_immutable(self):
+        encounter = self.env["odental.clinical.encounter"].create(
+            {
+                "clinical_record_id": self.record.id,
+                "professional_id": self.professional.id,
+                "chief_complaint": "Dolor dental",
+                "diagnosis_summary": "Pulpitis irreversible",
+            }
+        )
+        encounter.action_sign()
+        self.assertEqual(encounter.state, "signed")
+        self.assertTrue(encounter.content_hash)
+        with self.assertRaises(UserError):
+            encounter.write({"diagnosis_summary": "Contenido alterado"})
+
+    def test_amendment_preserves_original(self):
+        encounter = self.env["odental.clinical.encounter"].create(
+            {
+                "clinical_record_id": self.record.id,
+                "professional_id": self.professional.id,
+                "clinical_findings": "Hallazgo inicial",
+            }
+        )
+        encounter.action_sign()
+        action = encounter.action_create_amendment()
+        amendment = self.env["odental.clinical.encounter"].browse(action["res_id"])
+        self.assertEqual(encounter.state, "amended")
+        self.assertEqual(amendment.state, "draft")
+        self.assertEqual(amendment.version, 2)
+        self.assertEqual(amendment.previous_version_id, encounter)
+        amendment.amendment_reason = "Aclaración del diagnóstico"
+        amendment.action_sign()
+        self.assertEqual(amendment.state, "signed")
+
+    def test_consent_snapshot_and_signature(self):
+        template = self.env["odental.consent.template"].create(
+            {
+                "name": "Tratamiento general",
+                "organization_id": self.organization.id,
+                "purpose": "treatment",
+                "version": 1,
+                "text": "Autorizo el tratamiento indicado.",
+            }
+        )
+        consent = self.env["odental.patient.consent"].create(
+            {
+                "clinical_record_id": self.record.id,
+                "professional_id": self.professional.id,
+                "template_id": template.id,
+                "signer_name": "Paciente clínico",
+                "verification_method": "secure_portal",
+                "verification_reference": "event-001",
+            }
+        )
+        self.assertEqual(consent.template_version, 1)
+        self.assertEqual(consent.consent_text, template.text)
+        consent.action_sign()
+        self.assertEqual(consent.state, "signed")
+        self.assertTrue(consent.content_hash)
+        with self.assertRaises(UserError):
+            consent.write({"scope_summary": "Alteración posterior"})
+
+    def test_consent_requires_evidence(self):
+        template = self.env["odental.consent.template"].create(
+            {
+                "name": "Imágenes",
+                "organization_id": self.organization.id,
+                "purpose": "images",
+                "text": "Autorizo las imágenes clínicas.",
+            }
+        )
+        consent = self.env["odental.patient.consent"].create(
+            {
+                "clinical_record_id": self.record.id,
+                "template_id": template.id,
+                "signer_name": "Paciente clínico",
+                "verification_method": "secure_portal",
+            }
+        )
+        with self.assertRaises(ValidationError):
+            consent.action_sign()
+
+
+@tagged("post_install", "-at_install")
+class TestODentalPatientFlow(TransactionCase):
+    @classmethod
+    def _test_company(cls, name):
+        values = {'name': name}
+        if 'autopost_bills' in cls.env['res.partner']._fields:
+            values['autopost_bills'] = 'never'
+        partner = cls.env['res.partner'].create(values)
+        # Grupo Mega assigns every new contact to the current company.
+        # A company address must be shared before creating its warehouse.
+        partner.write({'company_id': False})
+        return cls.env['res.company'].create({'name': name, 'partner_id': partner.id})
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.company = cls._test_company('Dental flow test')
+        values = {
+            'name': 'Dental flow professional',
+            'login': 'odental-flow-professional',
+            'company_id': cls.company.id,
+            'company_ids': [(6, 0, cls.company.ids)],
+            'groups_id': [(6, 0, [cls.env.ref('base.group_user').id,
+                                  cls.env.ref('odental_core.group_odental_professional').id])],
+        }
+        if 'autopost_bills' in cls.env['res.users']._fields:
+            values['autopost_bills'] = 'never'
+        cls.operator = cls.env['res.users'].with_context(no_reset_password=True).create(values)
+        cls.organization = cls.env['odental.organization'].create({
+            'name': 'Authorized dental organization', 'code': 'FLOW-A',
+            'company_id': cls.company.id, 'owner_user_id': cls.operator.id,
+            'user_ids': [(4, cls.env.user.id), (4, cls.operator.id)],
+        })
+        cls.other_operator = cls.operator.with_context(no_reset_password=True).copy({'login': 'odental-flow-other', 'name': 'Other flow professional'})
+        cls.hidden = cls.env['odental.organization'].create({
+            'name': 'Other dental organization', 'code': 'FLOW-B', 'owner_user_id': cls.other_operator.id,
+            'company_id': cls.company.id,
+        })
+        cls.patients = cls.env['odental.patient'].with_user(cls.operator).with_company(cls.company)
+        cls.patient = cls.patients.create({'name': 'Flow patient', 'organization_id': cls.organization.id})
+
+    def test_default_uses_only_authorized_organization(self):
+        self.assertEqual(self.patients.default_get(['organization_id'])['organization_id'], self.organization.id)
+
+    def test_ambiguous_organization_is_not_chosen(self):
+        self.hidden.write({'user_ids': [(4, self.operator.id)]})
+        self.assertFalse(self.patients.default_get(['organization_id']).get('organization_id'))
+
+    def test_context_choice_is_preserved(self):
+        self.assertFalse(self.patients.with_context(default_organization_id=False).default_get(['organization_id'])['organization_id'])
+        self.assertEqual(self.patients.with_context(default_organization_id=self.organization.id).default_get(['organization_id'])['organization_id'], self.organization.id)
+
+    def test_no_default_from_another_company(self):
+        other_company = self._test_company('Empty dental company')
+        self.operator.write({'company_ids': [(4, other_company.id)]})
+        self.assertFalse(self.patients.with_company(other_company).default_get(['organization_id']).get('organization_id'))
+
+    def test_open_new_record_does_not_save_it(self):
+        action = self.patient.action_open_clinical_record()
+        self.assertFalse(action['res_id'])
+        self.assertEqual(action['context']['default_patient_id'], self.patient.id)
+        self.assertFalse(self.env['odental.clinical.record'].search_count([('patient_id', '=', self.patient.id)]))
+
+    def test_open_reuses_closed_record(self):
+        record = self.env['odental.clinical.record'].create({'patient_id': self.patient.id})
+        record.action_close()
+        action = self.patient.action_open_clinical_record()
+        self.assertEqual(action['res_id'], record.id)
+        self.assertEqual(record.state, 'closed')
+        self.assertEqual(self.env['odental.clinical.record'].search_count([('patient_id', '=', self.patient.id)]), 1)
+
+    def test_other_organization_patient_is_denied(self):
+        from odoo.exceptions import AccessError
+        hidden_patient = self.env['odental.patient'].create({'name': 'Other flow patient', 'organization_id': self.hidden.id})
+        with self.assertRaises(AccessError):
+            hidden_patient.with_user(self.operator).action_open_clinical_record()
+
+    def test_reception_role_cannot_open_clinical_record(self):
+        from odoo.exceptions import AccessError
+        self.operator.write({'groups_id': [(6, 0, [self.env.ref('base.group_user').id, self.env.ref('odental_core.group_odental_user').id])]})
+        with self.assertRaises(AccessError):
+            self.patient.action_open_clinical_record()
+
+    def _flow_encounter(self):
+        professional = self.env['odental.professional'].create({
+            'name': 'Flow clinician', 'company_id': self.company.id,
+            'organization_ids': [(4, self.organization.id)],
+            'user_id': self.operator.id,
+        })
+        record = self.env['odental.clinical.record'].with_user(self.operator).with_company(self.company).create({'patient_id': self.patient.id})
+        return self.env['odental.clinical.encounter'].with_user(self.operator).with_company(self.company).create({
+            'clinical_record_id': record.id, 'professional_id': professional.id,
+            'clinical_findings': 'Synthetic test finding',
+        })
+
+    def test_context_cannot_modify_signed_encounter(self):
+        encounter = self._flow_encounter()
+        encounter.action_sign()
+        original_hash = encounter.content_hash
+        for values in ({'clinical_findings': 'Altered'}, {'state': 'draft'}, {'content_hash': 'fake'}):
+            with self.assertRaises(UserError):
+                encounter.with_context(allow_clinical_transition=True).write(values)
+        self.assertEqual(encounter.content_hash, original_hash)
+        self.assertEqual(encounter.state, 'signed')
+
+    def test_signature_metadata_cannot_be_written(self):
+        encounter = self._flow_encounter()
+        with self.assertRaises(UserError):
+            encounter.write({'signed_by_user_id': self.operator.id})
+        with self.assertRaises(UserError):
+            encounter.with_context(allow_clinical_transition=True).write({'state': 'signed'})
+
+    def test_signed_creation_and_context_defaults_are_rejected(self):
+        encounter = self._flow_encounter()
+        values = {'clinical_record_id': encounter.clinical_record_id.id,
+                  'professional_id': encounter.professional_id.id}
+        with self.assertRaises(UserError):
+            encounter.create(dict(values, state='signed'))
+        with self.assertRaises(UserError):
+            encounter.with_context(default_state='signed').create(values)
+        with self.assertRaises(UserError):
+            encounter.with_context(default_content_hash='fake').create(values)
+
+    def test_amendment_keeps_signed_original_and_audit(self):
+        encounter = self._flow_encounter()
+        encounter.action_sign()
+        original_hash = encounter.content_hash
+        action = encounter.action_create_amendment()
+        amendment = encounter.browse(action['res_id'])
+        self.assertEqual(encounter.state, 'amended')
+        self.assertEqual(encounter.content_hash, original_hash)
+        self.assertEqual(amendment.state, 'draft')
+        self.assertEqual(amendment.previous_version_id, encounter)
+        self.assertEqual(amendment.version, 2)
+        with self.assertRaises(ValidationError):
+            amendment.action_sign()
+        amendment.write({'amendment_reason': 'Synthetic correction', 'clinical_findings': 'Corrected test finding'})
+        amendment.action_sign()
+        self.assertEqual(amendment.state, 'signed')
+        self.assertEqual(amendment.signed_by_user_id, self.operator)
+        self.assertNotEqual(amendment.content_hash, original_hash)
+        self.assertTrue(self.env['odental.clinical.audit'].search_count([
+            ('record_res_id', '=', amendment.id), ('model_name', '=', amendment._name),
+            ('event_type', '=', 'encounter_signed')]))
+
+    def _flow_consent(self):
+        encounter = self._flow_encounter()
+        template = self.env['odental.consent.template'].create({
+            'name': 'Synthetic consent', 'organization_id': self.organization.id,
+            'text': '<p>Synthetic authorization for testing.</p>',
+        })
+        return self.env['odental.patient.consent'].with_user(self.operator).with_company(self.company).create({
+            'clinical_record_id': encounter.clinical_record_id.id,
+            'professional_id': encounter.professional_id.id, 'template_id': template.id,
+            'signer_name': 'Synthetic signer', 'verification_method': 'in_person',
+            'verification_reference': 'TEST-ONLY',
+        })
+
+    def test_consent_context_cannot_change_signed_document(self):
+        consent = self._flow_consent()
+        consent.action_sign()
+        original_hash = consent.content_hash
+        for values in ({'consent_text': '<p>Altered</p>'}, {'state': 'draft'},
+                       {'signature': False}, {'content_hash': 'fake'}):
+            with self.assertRaises(UserError):
+                consent.with_context(allow_consent_transition=True).write(values)
+        self.assertEqual(consent.content_hash, original_hash)
+        self.assertEqual(consent.state, 'signed')
+
+    def test_consent_direct_signature_and_revocation_are_rejected(self):
+        consent = self._flow_consent()
+        for values in ({'state': 'signed'}, {'state': 'revoked'},
+                       {'signed_by_user_id': self.operator.id},
+                       {'revoked_by_user_id': self.operator.id}):
+            with self.assertRaises(UserError):
+                consent.with_context(allow_consent_transition=True).write(values)
+        values = {'clinical_record_id': consent.clinical_record_id.id,
+                  'template_id': consent.template_id.id}
+        for defaults in ({'state': 'signed'}, {'content_hash': 'fake'},
+                         {'revoked_by_user_id': self.operator.id}):
+            with self.assertRaises(UserError):
+                consent.create(dict(values, **defaults))
+            with self.assertRaises(UserError):
+                consent.with_context(**{'default_' + key: val for key, val in defaults.items()}).create(values)
+
+    def test_consent_evidence_and_revocation_audit(self):
+        consent = self._flow_consent()
+        consent.write({'verification_reference': False})
+        consent.action_request()
+        self.assertEqual(consent.state, 'pending')
+        with self.assertRaises(ValidationError):
+            consent.action_sign()
+        consent.write({'verification_reference': 'TEST-EVIDENCE'})
+        consent.action_sign()
+        original_hash = consent.content_hash
+        self.assertEqual(consent.signed_by_user_id, self.operator)
+        with self.assertRaises(ValidationError):
+            consent.action_revoke()
+        consent.write({'revocation_reason': 'Synthetic withdrawal'})
+        consent.action_revoke()
+        self.assertEqual(consent.state, 'revoked')
+        self.assertEqual(consent.content_hash, original_hash)
+        self.assertEqual(consent.revoked_by_user_id, self.operator)
+        self.assertTrue(consent.revoked_at)
+        with self.assertRaises(UserError):
+            consent.write({'revocation_reason': 'Altered reason'})
+        with self.assertRaises(UserError):
+            consent.unlink()
+        events = self.env['odental.clinical.audit'].search([
+            ('record_res_id', '=', consent.id), ('model_name', '=', consent._name)])
+        self.assertTrue({'consent_signed', 'consent_revoked'}.issubset(set(events.mapped('event_type'))))
+
+    def test_consent_snapshot_survives_template_change(self):
+        consent = self._flow_consent()
+        original_text = consent.consent_text
+        consent.action_sign()
+        consent.template_id.with_env(self.env).write({'text': '<p>New template text.</p>'})
+        self.assertEqual(consent.consent_text, original_text)
+        self.assertEqual(consent.content_hash, consent._hash_payload())
+
+    def test_consent_hidden_from_other_organization_and_reception(self):
+        consent = self._flow_consent()
+        with self.assertRaises(AccessError):
+            consent.with_user(self.other_operator).read(['consent_text'])
+        self.operator.groups_id = [(6, 0, [self.env.ref('base.group_user').id,
+            self.env.ref('odental_core.group_odental_user').id])]
+        with self.assertRaises(AccessError):
+            consent.read(['consent_text'])

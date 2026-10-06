@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="megatk_cash_flow_forecast.CashflowAgedPartnerActions"
+     t-inherit="account_reports.AgedPartnerBalanceLineName"
+     t-inherit-mode="extension">
+    <xpath expr="//t[@data-id='line_buttons']" position="inside">
+        <span t-if="isCashflowPartnerLine" class="cashflow-aged-actions ms-2">
+          <button class="btn btn-link btn-sm" t-on-click.stop="() => this.cashflowAction('documents')">Ver documentos</button>
+          <button class="btn btn-link btn-sm" t-on-click.stop="() => this.cashflowAction('schedule')">Programar</button>
+          <button class="btn btn-link btn-sm" t-on-click.stop="() => this.cashflowAction('management')">Registrar gestión</button>
+          <button class="btn btn-link btn-sm" t-on-click.stop="() => this.cashflowAction('history')">Historial</button>
+        </span>
+    </xpath>
+  </t>
+</templates>

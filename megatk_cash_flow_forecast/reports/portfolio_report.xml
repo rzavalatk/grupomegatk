@@ -17,27 +17,127 @@
           <h2 t-elif="docs.env.context.get('cashflow_report_direction') == 'payable'">Detalle de cuentas por pagar</h2>
           <h2 t-else="">Detalle de cuentas por cobrar y pagar</h2>
           <p>Flujo de caja proyectado · <span t-esc="o.company_id.name"/></p>
-          <p style="font-size: 10px">Verde: al día · amarillo: 1 a 30 días · rojo: desde 31 días · azul: crédito o anticipo.</p>
-          <table class="table table-sm" style="font-size: 9px; width: 100%; border-collapse: collapse">
+          <p style="font-size: 12px">Verde: al día · amarillo: 1 a 30 días · rojo: desde 31 días · azul: crédito o anticipo.</p>
+          <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse">
             <thead><tr style="background: #e8eef0"><th>Contacto</th><th>Tipo</th><th>Clasificación</th><th>Al día</th><th>1–30</th><th>31–60</th><th>61–90</th><th>91–120</th><th>Antiguos</th><th>Crédito / anticipo</th><th>Total</th><th>Última gestión</th></tr></thead>
             <tbody>
               <tr t-foreach="docs" t-as="line">
                 <td><span t-esc="line.partner_id.name"/><br/><small t-esc="line.projected_periods"/></td>
                 <td t-esc="line.direction_name"/>
                 <td t-esc="line.classification_name"/>
-                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-esc="formatLang(line.at_day, currency_obj=line.currency_id) if line.at_day else ''"/></td>
-                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-esc="formatLang(line.days_1_30, currency_obj=line.currency_id) if line.days_1_30 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-esc="formatLang(line.days_31_60, currency_obj=line.currency_id) if line.days_31_60 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-esc="formatLang(line.days_61_90, currency_obj=line.currency_id) if line.days_61_90 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-esc="formatLang(line.days_91_120, currency_obj=line.currency_id) if line.days_91_120 else ''"/></td>
-                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-esc="formatLang(line.old, currency_obj=line.currency_id) if line.old else ''"/></td>
-                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-esc="formatLang(line.credit, currency_obj=line.currency_id) if line.credit else ''"/></td>
-                <td><strong t-esc="formatLang(line.total, currency_obj=line.currency_id)"/></td>
+                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-if="line.at_day" t-out="line.at_day" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-if="line.old" t-out="line.old" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-if="line.credit" t-out="line.credit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                <td><strong t-out="line.total" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
                 <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
               </tr>
             </tbody>
           </table>
         </div>
+      </t>
+    </t>
+  </template>
+
+  <record id="action_report_cashflow_preview" model="ir.actions.report">
+    <field name="name">Vista preliminar del flujo</field>
+    <field name="model">cashflow.plan</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">megatk_cash_flow_forecast.report_cashflow_document</field>
+    <field name="report_file">megatk_cash_flow_forecast.report_cashflow_document</field>
+  </record>
+
+  <record id="action_report_cashflow_pdf" model="ir.actions.report">
+    <field name="name">Flujo de caja proyectado detallado</field>
+    <field name="model">cashflow.plan</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">megatk_cash_flow_forecast.report_cashflow_document</field>
+    <field name="report_file">megatk_cash_flow_forecast.report_cashflow_document</field>
+    <field name="print_report_name">'Flujo de caja - %s' % object.company_id.name</field>
+  </record>
+
+  <template id="report_cashflow_document">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page cashflow-report" style="font-size:13px">
+            <h2 style="text-align:center; margin-bottom:2px">FLUJO DE CAJA PROYECTADO</h2>
+            <h4 style="text-align:center; margin-top:0" t-esc="o.company_id.name"/>
+            <p style="text-align:center;color:#667085">Resumen ejecutivo — los conceptos pueden seleccionarse para consultar su detalle.</p>
+
+            <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
+              <thead>
+                <tr style="background:#111827;color:white">
+                  <th>Concepto</th><th>Semana 1</th><th>Semana 2</th><th>Semana 3</th><th>Pendiente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#eef2f6;font-weight:bold">
+                  <td>Disponible inicial de la semana</td>
+                  <td><span t-out="o.opening_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td><span t-out="o.opening_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                </tr>
+                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-collections" style="color:#126b35">Cobros de clientes</a></td><td><span t-out="o.receivable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td><span t-out="o.financing_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td>Otros ingresos</td><td><span t-out="o.other_income_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#fde2e2;color:#9b1c1c"><td><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td><span t-out="o.payable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#111827;color:white;font-weight:bold;font-size:14px"><td>Saldo proyectado final</td><td><span t-out="o.projected_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top:22px;padding:12px;border:1px solid #d0d5dd;border-radius:6px">
+              <strong>Lectura del reporte:</strong>
+              <span style="color:#126b35"> verde representa ingresos y disponibilidad</span>;
+              <span style="color:#9b1c1c"> rojo representa pagos y salidas</span>.
+              Todo saldo positivo o negativo se arrastra como disponible inicial de la siguiente semana.
+            </div>
+          </div>
+
+          <t t-foreach="o._cashflow_report_sections()" t-as="section">
+            <div class="page" t-att-id="'detail-' + section['key']" style="font-size:12px">
+              <h3 t-att-style="'color:#126b35' if section['kind'] == 'income' else 'color:#9b1c1c'" t-esc="section['title']"/>
+              <p t-if="not section['lines']">No hay movimientos proyectados en esta categoría.</p>
+              <table t-if="section['lines']" class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
+                <thead>
+                  <tr t-att-style="'background:#d9f2df' if section['kind'] == 'income' else 'background:#fde2e2'">
+                    <th>Concepto</th><th>Saldo HNL</th><th>Saldo USD</th><th>Semana 1</th><th>Semana 2</th><th>Semana 3</th><th>Pendiente</th><th>Total</th><th>Detalle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="section['lines']" t-as="line">
+                    <td t-esc="line['name']"/>
+                    <td><span t-if="line['balance_hnl']" t-out="line['balance_hnl']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td t-esc="line['balance_usd'] and ('$ %0.2f' % line['balance_usd']) or ''"/>
+                    <td><span t-if="line['week_1']" t-out="line['week_1']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['week_2']" t-out="line['week_2']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['week_3']" t-out="line['week_3']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-if="line['pending']" t-out="line['pending']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><strong t-if="line['total']" t-out="line['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td t-esc="line['note']"/>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr style="font-weight:bold">
+                    <td>Total</td>
+                    <td><span t-out="section['totals']['balance_hnl']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td t-esc="'$ %0.2f' % section['totals']['balance_usd']"/>
+                    <td><span t-out="section['totals']['week_1']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['week_2']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['week_3']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['pending']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td/>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </t>
+        </t>
       </t>
     </t>
   </template>

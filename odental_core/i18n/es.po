@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: O Dental 18.0\n"
+"Language: es\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: odental_core
+#: model:ir.model.fields,field_description:odental_core.field_odental_appointment_participant__appointment_id
+msgid "Appointment"
+msgstr "Cita"
+
+
+#. module: odental_core
+#: model:ir.model.fields,field_description:odental_core.field_odental_resource_photo__organization_id
+msgid "Organization"
+msgstr "Organización"
+
+#. module: odental_core
+#: model:ir.model.fields,field_description:odental_core.field_odental_resource_handover__organization_id
+msgid "Organization"
+msgstr "Organización"
+
+#. module: odental_core
+#: model:ir.model.fields,field_description:odental_core.field_odental_resource_maintenance__organization_id
+msgid "Organization"
+msgstr "Organización"
+
+#. module: odental_core
+#: model:ir.model.fields,field_description:odental_core.field_odental_appointment_participant__organization_id
+msgid "Organization"
+msgstr "Organización"
