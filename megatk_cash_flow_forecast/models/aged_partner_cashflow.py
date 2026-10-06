@@ -229,6 +229,7 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_currency_id": projection_currency.id,
                 "default_rate_date": fields.Date.context_today(self),
                 "default_amount": default_amount,
+                "form_view_initial_mode": "edit",
             },
         }
 
@@ -245,6 +246,7 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_company_id": company.id,
                 "default_partner_id": partner.id,
                 "default_direction": direction,
+                "form_view_initial_mode": "edit",
             },
         }
 

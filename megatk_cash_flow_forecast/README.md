@@ -14,9 +14,13 @@ Incluye:
 - Clasificación por empresa de clientes, CxC empleados, Grupo Mega, proveedores, acreedores, anticipos, legal, por depurar y por asignar.
 - Saldos contables exclusivamente por la cuenta específica seleccionada, aunque varias cuentas compartan el diario bancario "Cheques"; cambiar el diario nunca sustituye esa cuenta.
 - Disponible inicial visible y acumulativo para cada semana, incluidos los saldos negativos.
-- Listas separadas para cobros, pagos a proveedores, pagos únicos y pagos recurrentes.
+- Listas operativas separadas para cobros, proveedores, acreedores, anticipos, pendientes de clasificar, pagos únicos y pagos recurrentes.
+- Los cobros y pagos cancelados dejan de aparecer en las listas activas, pero se conservan en un historial desde el cual pueden reactivarse.
+- Los anticipos a proveedores controlan el monto entregado, aplicado y pendiente hasta su cierre.
+- El reporte detallado totaliza cada columna y distingue proveedores, acreedores y anticipos sin duplicar movimientos.
+- Las cuentas bancarias pueden retirarse del flujo sin borrar la cuenta contable original de Odoo.
 - Los financiamientos manuales, pagos únicos y pagos recurrentes pueden borrarse; al borrarlos desaparecen de todas las semanas, totales y reportes. Un financiamiento ya vinculado con una partida contable solo puede desactivarse.
-- Reporte ejecutivo y detallado en pantalla, PDF y archivo compatible con Excel.
+- Reporte ejecutivo y detallado con tipografía ampliada en pantalla, PDF y archivo compatible con Excel.
 - Menús y pestañas con verde para ingresos y rojo para salidas.
 - Saldos en la moneda original de cada cuenta, con tipo de cambio, equivalente en lempiras y diferencia visible.
 - Saldos de tarjetas y préstamos en su moneda original, con deuda proyectada después de consumos, desembolsos y pagos.
