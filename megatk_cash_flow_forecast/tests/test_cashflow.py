@@ -568,7 +568,9 @@ class TestCashflowForecast(TransactionCase):
             "period": "week_1",
             "amount": 100,
         })
-        payable = self.env["cashflow.promise"].create({
+        payable = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        ).create({
             "plan_id": self.plan.id,
             "partner_id": self.partner.id,
             "direction": "payable",
@@ -810,3 +812,118 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(refresh_action["tag"], "reload")
         with self.assertRaises(UserError):
             snapshots.action_print_current_company([])
+
+    def test_cancelled_promises_leave_operational_tabs_but_remain_in_history(self):
+        promise = self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 10,
+        })
+        self.assertIn(promise, self.plan.receivable_promise_ids)
+        promise.action_cancel()
+        self.assertNotIn(promise, self.plan.receivable_promise_ids)
+        self.assertTrue(promise.exists())
+        action = self.plan.action_view_cancelled_promises()
+        self.assertIn(("state", "=", "cancelled"), action["domain"])
+        promise.action_reactivate()
+        self.assertIn(promise, self.plan.receivable_promise_ids)
+
+    def test_payable_classifications_are_split_without_duplicates(self):
+        supplier = self.env["res.partner"].create({"name": "Proveedor prueba"})
+        creditor = self.env["res.partner"].create({"name": "Acreedor prueba"})
+        advance_partner = self.env["res.partner"].create({"name": "Anticipo prueba"})
+        Promise = self.env["cashflow.promise"]
+        supplier_promise = Promise.with_context(
+            default_classification="supplier"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": supplier.id,
+            "direction": "payable", "period": "week_1", "amount": 100,
+        })
+        creditor_promise = Promise.with_context(
+            default_classification="creditor"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": creditor.id,
+            "direction": "payable", "period": "week_2", "amount": 200,
+        })
+        advance_promise = Promise.with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id, "partner_id": advance_partner.id,
+            "direction": "payable", "period": "week_3", "amount": 300,
+        })
+        self.assertEqual(self.plan.payable_promise_ids, supplier_promise)
+        self.assertEqual(self.plan.creditor_promise_ids, creditor_promise)
+        self.assertEqual(self.plan.advance_promise_ids, advance_promise)
+        all_split = (
+            self.plan.payable_promise_ids
+            | self.plan.creditor_promise_ids
+            | self.plan.advance_promise_ids
+            | self.plan.unclassified_payable_promise_ids
+        )
+        self.assertEqual(len(all_split), 3)
+
+    def test_advance_tracks_pending_balance_and_only_projects_before_delivery(self):
+        advance = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(advance.cash_effect_amount, 100)
+        self.assertEqual(advance.advance_pending_amount, 100)
+        advance.write({
+            "advance_status": "partially_applied",
+            "advance_applied_amount": 40,
+        })
+        self.assertEqual(advance.cash_effect_amount, 0)
+        self.assertEqual(advance.advance_pending_amount, 60)
+        advance.advance_status = "closed"
+        self.assertEqual(advance.state, "cancelled")
+        self.assertNotIn(advance, self.plan.advance_promise_ids)
+
+    def test_report_sections_include_column_totals_and_classification_split(self):
+        account = self._account("CF1010", "asset_cash")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 100,
+        })
+        self.env["cashflow.promise"].create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "period": "week_1",
+            "amount": 25,
+        })
+        sections = {section["key"]: section for section in self.plan._cashflow_report_sections()}
+        self.assertEqual(sections["available"]["totals"]["balance_hnl"], 100)
+        self.assertEqual(sections["available"]["totals"]["total"], 100)
+        self.assertEqual(sections["collections"]["totals"]["week_1"], 25)
+        self.assertIn("advances", sections)
+        self.assertIn("unclassified", sections)
+
+    def test_removing_bank_position_does_not_delete_ledger_account(self):
+        account = self._account("CF1011", "asset_cash")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 50,
+        })
+        position.action_remove_from_cashflow()
+        self.assertFalse(position.exists())
+        self.assertTrue(account.exists())
+
+    def test_aged_actions_request_native_edit_mode(self):
+        handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)
+        for action_name in ("schedule", "management"):
+            action = handler.action_from_aged_report(
+                self.partner.id, "receivable", action_name
+            )
+            self.assertEqual(action["context"]["form_view_initial_mode"], "edit")
