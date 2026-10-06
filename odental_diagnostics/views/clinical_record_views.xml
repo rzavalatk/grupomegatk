@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_record_diagnostics_form" model="ir.ui.view">
+        <field name="name">odental.clinical.record.diagnostics.form</field>
+        <field name="model">odental.clinical.record</field>
+        <field name="inherit_id" ref="odental_clinical.view_odental_clinical_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Odontogramas"><field name="odontogram_ids" context="{'default_clinical_record_id': id}"><list><field name="name"/><field name="chart_datetime"/><field name="professional_id"/><field name="dentition"/><field name="version"/><field name="state"/></list></field></page>
+                <page string="Imágenes clínicas"><field name="clinical_image_ids" context="{'default_clinical_record_id': id}"><list><field name="name"/><field name="capture_datetime"/><field name="category"/><field name="modality"/><field name="tooth_ids" widget="many2many_tags"/><field name="sensitivity"/><field name="state"/></list></field></page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

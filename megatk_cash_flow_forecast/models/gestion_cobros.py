@@ -5,21 +5,24 @@ from markupsafe import Markup, escape
 
 class CashflowManagementNote(models.Model):
     _name = "cashflow.management.note"
-    _description = "Gestión de cobranza"
+    _description = "Gestión de cobro o pago"
     _order = "create_date desc, id desc"
     _check_company_auto = True
 
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True, readonly=True)
-    partner_id = fields.Many2one("res.partner", required=True, string="Cliente", index=True)
+    partner_id = fields.Many2one("res.partner", required=True, string="Cliente / proveedor", index=True)
     move_id = fields.Many2one(
-        "account.move", string="Factura de Odoo", ondelete="set null", check_company=True,
-        domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', partner_id), ('move_type', 'in', ('out_invoice', 'out_refund')), ('state', '=', 'posted')]",
+        "account.move", string="Documento de Odoo", ondelete="set null", check_company=True,
+        domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', partner_id), ('move_type', 'in', direction == 'receivable' and ('out_invoice', 'out_refund') or ('in_invoice', 'in_refund')), ('state', '=', 'posted')]",
     )
     promise_id = fields.Many2one(
-        "cashflow.promise", string="Cobro proyectado", ondelete="set null", check_company=True,
-        domain="[('company_id', '=', company_id), ('direction', '=', 'receivable')]",
+        "cashflow.promise", string="Cobro o pago proyectado", ondelete="set null", check_company=True,
+        domain="[('company_id', '=', company_id), ('direction', '=', direction)]",
     )
-    direction = fields.Selection([( "receivable", "Cuenta por cobrar")], default="receivable", required=True, readonly=True)
+    direction = fields.Selection([
+        ("receivable", "Cuenta por cobrar"),
+        ("payable", "Cuenta por pagar"),
+    ], default="receivable", required=True, readonly=True)
     management_type = fields.Selection([
         ("call", "Llamada"),
         ("message", "Mensaje"),
@@ -40,19 +43,25 @@ class CashflowManagementNote(models.Model):
     @api.onchange("promise_id")
     def _onchange_promise_id(self):
         if self.promise_id:
+            self.direction = self.promise_id.direction
             self.partner_id = self.promise_id.partner_id
             self.move_id = self.promise_id.source_move_id
 
     @api.onchange("move_id")
     def _onchange_move_id(self):
         if self.move_id:
+            self.direction = (
+                "receivable"
+                if self.move_id.move_type in ("out_invoice", "out_refund")
+                else "payable"
+            )
             self.partner_id = self.move_id.commercial_partner_id
 
     @api.constrains("promise_id", "partner_id", "company_id")
     def _check_promise_consistency(self):
         for record in self.filtered("promise_id"):
-            if record.promise_id.direction != "receivable":
-                raise ValidationError("La gestión solo puede vincularse con un cobro esperado.")
+            if record.promise_id.direction != record.direction:
+                raise ValidationError("La gestión y la proyección deben ser del mismo tipo.")
             if (
                 record.promise_id.company_id != record.company_id
                 or record.promise_id.commercial_partner_id != record.partner_id.commercial_partner_id
@@ -64,8 +73,13 @@ class CashflowManagementNote(models.Model):
     @api.constrains("move_id", "partner_id", "company_id")
     def _check_move_consistency(self):
         for record in self.filtered("move_id"):
-            if record.move_id.move_type not in ("out_invoice", "out_refund"):
-                raise ValidationError("La gestión debe relacionarse con una factura o nota de crédito de cliente.")
+            expected_types = (
+                ("out_invoice", "out_refund")
+                if record.direction == "receivable"
+                else ("in_invoice", "in_refund")
+            )
+            if record.move_id.move_type not in expected_types:
+                raise ValidationError("El documento no corresponde al tipo de gestión seleccionado.")
             if (
                 record.move_id.company_id != record.company_id
                 or record.move_id.commercial_partner_id != record.partner_id.commercial_partner_id
@@ -100,6 +114,14 @@ class CashflowManagementNote(models.Model):
                 if promise_id else self.env["cashflow.promise"]
             )
             move = self.env["account.move"].browse(move_id).exists() if move_id else self.env["account.move"]
+            if promise:
+                values["direction"] = promise.direction
+            elif move:
+                values["direction"] = (
+                    "receivable"
+                    if move.move_type in ("out_invoice", "out_refund")
+                    else "payable"
+                )
             partner = (
                 move.commercial_partner_id if move else
                 promise.commercial_partner_id if promise else
@@ -115,7 +137,7 @@ class CashflowManagementNote(models.Model):
             snapshots = Snapshot.search([
                 ("company_id", "=", record.company_id.id),
                 ("partner_id", "=", record.partner_id.commercial_partner_id.id),
-                ("direction", "=", "receivable"),
+                ("direction", "=", record.direction),
             ])
             snapshots.write({
                 "last_management": record.note,
@@ -129,8 +151,9 @@ class CashflowManagementNote(models.Model):
                 Markup("<br/><b>Próxima gestión:</b> %s") % escape(record.next_action_date)
                 if record.next_action_date else Markup("")
             )
-            body = Markup("<b>Gestión de cobranza · %s</b><br/>%s%s") % (
-                escape(label), escape(record.note), next_action
+            operation = "cobro" if record.direction == "receivable" else "pago"
+            body = Markup("<b>Gestión de %s · %s</b><br/>%s%s") % (
+                escape(operation), escape(label), escape(record.note), next_action
             )
             record.partner_id.sudo().message_post(
                 body=body, author_id=self.env.user.partner_id.id

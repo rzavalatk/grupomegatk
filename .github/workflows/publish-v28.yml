@@ -1,0 +1,24 @@
+name: Publicar planificación comercial 18.0.42
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          submodules: false
+      - name: Publicar estrellas por cumplimiento y conciliacion mensual
+        run: |
+          git update-index --cacheinfo 160000,c9e0d34a3258363ce275cb52796072c7782b0df4,commercial_planning_addons
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet && exit 0
+          git commit -m "Publica planificación comercial 18.0.42.0.0"
+          git push origin master
+
+
+# Reintento v42: Odoo omitio el primer despliegue por operacion simultanea.

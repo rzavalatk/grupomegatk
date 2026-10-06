@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="account_reports.aged_receivable_report" model="account.report">
+    <field name="column_ids">
+      <record id="aged_receivable_cashflow_week_1" model="account.report.column">
+        <field name="name">S1</field><field name="expression_label">cashflow_week_1</field><field name="sequence">90</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_receivable_cashflow_week_2" model="account.report.column">
+        <field name="name">S2</field><field name="expression_label">cashflow_week_2</field><field name="sequence">91</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_receivable_cashflow_week_3" model="account.report.column">
+        <field name="name">S3</field><field name="expression_label">cashflow_week_3</field><field name="sequence">92</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_receivable_cashflow_pending" model="account.report.column">
+        <field name="name">Pend.</field><field name="expression_label">cashflow_pending</field><field name="sequence">93</field><field name="blank_if_zero" eval="True"/>
+      </record>
+    </field>
+  </record>
+  <record id="account_reports.aged_receivable_line" model="account.report.line">
+    <field name="expression_ids">
+      <record id="aged_receivable_line_cashflow_week_1" model="account.report.expression"><field name="label">cashflow_week_1</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_receivable</field><field name="subformula">cashflow_week_1</field></record>
+      <record id="aged_receivable_line_cashflow_week_2" model="account.report.expression"><field name="label">cashflow_week_2</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_receivable</field><field name="subformula">cashflow_week_2</field></record>
+      <record id="aged_receivable_line_cashflow_week_3" model="account.report.expression"><field name="label">cashflow_week_3</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_receivable</field><field name="subformula">cashflow_week_3</field></record>
+      <record id="aged_receivable_line_cashflow_pending" model="account.report.expression"><field name="label">cashflow_pending</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_receivable</field><field name="subformula">cashflow_pending</field></record>
+    </field>
+  </record>
+
+  <record id="account_reports.aged_payable_report" model="account.report">
+    <field name="column_ids">
+      <record id="aged_payable_cashflow_week_1" model="account.report.column">
+        <field name="name">S1</field><field name="expression_label">cashflow_week_1</field><field name="sequence">90</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_payable_cashflow_week_2" model="account.report.column">
+        <field name="name">S2</field><field name="expression_label">cashflow_week_2</field><field name="sequence">91</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_payable_cashflow_week_3" model="account.report.column">
+        <field name="name">S3</field><field name="expression_label">cashflow_week_3</field><field name="sequence">92</field><field name="blank_if_zero" eval="True"/>
+      </record>
+      <record id="aged_payable_cashflow_pending" model="account.report.column">
+        <field name="name">Pend.</field><field name="expression_label">cashflow_pending</field><field name="sequence">93</field><field name="blank_if_zero" eval="True"/>
+      </record>
+    </field>
+  </record>
+  <record id="account_reports.aged_payable_line" model="account.report.line">
+    <field name="expression_ids">
+      <record id="aged_payable_line_cashflow_week_1" model="account.report.expression"><field name="label">cashflow_week_1</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_payable</field><field name="subformula">cashflow_week_1</field></record>
+      <record id="aged_payable_line_cashflow_week_2" model="account.report.expression"><field name="label">cashflow_week_2</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_payable</field><field name="subformula">cashflow_week_2</field></record>
+      <record id="aged_payable_line_cashflow_week_3" model="account.report.expression"><field name="label">cashflow_week_3</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_payable</field><field name="subformula">cashflow_week_3</field></record>
+      <record id="aged_payable_line_cashflow_pending" model="account.report.expression"><field name="label">cashflow_pending</field><field name="engine">custom</field><field name="formula">_report_custom_engine_cashflow_payable</field><field name="subformula">cashflow_pending</field></record>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_currency_form_bch" model="ir.ui.view">
+        <field name="name">res.currency.form.bch</field>
+        <field name="model">res.currency</field>
+        <field name="inherit_id" ref="base.view_currency_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                    <button name="action_bch_preview"
+                            type="object"
+                            string="Consultar tasa BCH"
+                            class="btn-primary"
+                            groups="account.group_account_manager"
+                            invisible="name != 'USD'"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_bch_currency_preview_form" model="ir.ui.view">
+        <field name="name">megatk.bch.currency.preview.form</field>
+        <field name="model">megatk.bch.currency.preview</field>
+        <field name="arch" type="xml">
+            <form string="Tasa de venta BCH">
+                <group>
+                    <field name="currency_id"/>
+                    <field name="quote_date"/>
+                    <field name="hnl_per_usd"/>
+                    <field name="usd_per_hnl"/>
+                    <field name="company_names" nolabel="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Esta consulta no ha modificado ninguna tasa. Revise los datos antes de actualizar.
+                </div>
+                <footer>
+                    <button name="action_apply"
+                            type="object"
+                            string="Actualizar tasas"
+                            class="btn-primary"
+                            groups="account.group_account_manager"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_odental_root" name="O Dental" web_icon="odental_core,icon.png" sequence="15" groups="odental_core.group_odental_user"/>
+    <menuitem id="menu_odental_clinical" name="Clínica" parent="menu_odental_root" sequence="10"/>
+    <menuitem id="menu_odental_appointment" name="Agenda" parent="menu_odental_clinical" action="action_odental_appointment" sequence="10"/>
+    <menuitem id="menu_odental_patient" name="Pacientes" parent="menu_odental_clinical" action="action_odental_patient" sequence="20"/>
+    <menuitem id="menu_odental_configuration" name="Configuración clínica" parent="menu_odental_root" sequence="20" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_odental_organization" name="Organizaciones" parent="menu_odental_configuration" action="action_odental_organization" sequence="10"/>
+    <menuitem id="menu_odental_site" name="Sedes" parent="menu_odental_configuration" action="action_odental_site" sequence="20"/>
+    <menuitem id="menu_odental_professional" name="Profesionales" parent="menu_odental_configuration" action="action_odental_professional" sequence="30" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_odental_clinical_space" name="Consultorios" parent="menu_odental_configuration" action="action_odental_clinical_space" sequence="40"/>
+    <menuitem id="menu_odental_equipment" name="Equipos compartidos" parent="menu_odental_configuration" action="action_odental_equipment" sequence="50"/>
+    <menuitem id="menu_odental_service" name="Servicios" parent="menu_odental_configuration" action="action_odental_service" sequence="60"/>
+</odoo>

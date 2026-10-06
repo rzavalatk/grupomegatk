@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_consent_template_list" model="ir.ui.view">
+        <field name="name">odental.consent.template.list</field>
+        <field name="model">odental.consent.template</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="organization_id"/><field name="purpose"/><field name="version"/><field name="active"/></list></field>
+    </record>
+    <record id="view_odental_consent_template_form" model="ir.ui.view">
+        <field name="name">odental.consent.template.form</field>
+        <field name="model">odental.consent.template</field>
+        <field name="arch" type="xml"><form><sheet><div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div><group><field name="organization_id"/><field name="purpose"/><field name="version"/><field name="active"/></group><field name="text" widget="html"/></sheet><chatter/></form></field>
+    </record>
+    <record id="action_odental_consent_template" model="ir.actions.act_window">
+        <field name="name">Plantillas de consentimiento</field>
+        <field name="res_model">odental.consent.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_odental_patient_consent_list" model="ir.ui.view">
+        <field name="name">odental.patient.consent.list</field>
+        <field name="model">odental.patient.consent</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'signed'" decoration-danger="state in ('rejected', 'revoked')">
+                <field name="name"/><field name="patient_id"/><field name="template_name"/><field name="template_version"/><field name="purpose"/><field name="signer_name"/><field name="signed_at"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_patient_consent_form" model="ir.ui.view">
+        <field name="name">odental.patient.consent.form</field>
+        <field name="model">odental.patient.consent</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_request" type="object" string="Solicitar autorización" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_sign" type="object" string="Registrar firma" class="btn-primary" invisible="state not in ('draft', 'pending')"/>
+                    <button name="action_reject" type="object" string="Registrar rechazo" invisible="state not in ('draft', 'pending')"/>
+                    <button name="action_revoke" type="object" string="Revocar" invisible="state != 'signed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,signed,rejected,revoked,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="clinical_record_id"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="professional_id" domain="[('organization_ids', 'in', organization_id)]"/>
+                        </group>
+                        <group>
+                            <field name="template_id" domain="[('organization_id', '=', organization_id)]"/>
+                            <field name="template_name" readonly="1"/>
+                            <field name="template_version" readonly="1"/>
+                            <field name="purpose" readonly="1"/>
+                            <field name="valid_from"/>
+                            <field name="valid_until"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Autorización"><field name="scope_summary" placeholder="Resumen que verá y comprenderá el paciente..."/><field name="consent_text" widget="html" readonly="1"/></page>
+                        <page string="Firma">
+                            <group>
+                                <group><field name="signer_type"/><field name="signer_name"/><field name="signer_identification"/></group>
+                                <group><field name="verification_method"/><field name="verification_reference" password="True"/><field name="signature" filename="signature_filename"/><field name="signature_filename" invisible="1"/></group>
+                            </group>
+                        </page>
+                        <page string="Evidencia"><group><field name="signed_at" readonly="1"/><field name="signed_by_user_id" readonly="1"/><field name="content_hash" readonly="1"/><field name="revocation_reason"/><field name="revoked_at" readonly="1"/><field name="revoked_by_user_id" readonly="1"/></group></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_patient_consent" model="ir.actions.act_window">
+        <field name="name">Consentimientos</field>
+        <field name="res_model">odental.patient.consent</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

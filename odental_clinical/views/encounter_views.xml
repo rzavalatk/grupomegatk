@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_clinical_encounter_list" model="ir.ui.view">
+        <field name="name">odental.clinical.encounter.list</field>
+        <field name="model">odental.clinical.encounter</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'signed'" decoration-muted="state in ('amended', 'cancelled')">
+                <field name="name"/>
+                <field name="encounter_datetime"/>
+                <field name="patient_id"/>
+                <field name="professional_id"/>
+                <field name="version"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_clinical_encounter_form" model="ir.ui.view">
+        <field name="name">odental.clinical.encounter.form</field>
+        <field name="model">odental.clinical.encounter</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_sign" type="object" string="Firmar evolución" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_amendment" type="object" string="Crear rectificación" invisible="state != 'signed'"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,signed,amended,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="clinical_record_id"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="organization_id" readonly="1"/>
+                            <field name="appointment_id" domain="[('patient_id', '=', patient_id), ('organization_id', '=', organization_id)]"/>
+                        </group>
+                        <group>
+                            <field name="professional_id" domain="[('organization_ids', 'in', organization_id)]"/>
+                            <field name="encounter_datetime"/>
+                            <field name="version" readonly="1"/>
+                            <field name="previous_version_id" invisible="not previous_version_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Consulta"><group><field name="chief_complaint"/><field name="clinical_findings"/><field name="diagnosis_summary"/></group></page>
+                        <page string="Tratamiento"><group><field name="treatment_plan"/><field name="procedures_performed"/><field name="prescriptions"/></group></page>
+                        <page string="Información restringida"><field name="private_notes" placeholder="Esta sección nunca se comparte automáticamente."/></page>
+                        <page string="Firma y auditoría"><group><field name="signed_at" readonly="1"/><field name="signed_by_user_id" readonly="1"/><field name="content_hash" readonly="1"/><field name="amendment_reason" invisible="not previous_version_id"/></group></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_clinical_encounter" model="ir.actions.act_window">
+        <field name="name">Evoluciones clínicas</field>
+        <field name="res_model">odental.clinical.encounter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

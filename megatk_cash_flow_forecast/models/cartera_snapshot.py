@@ -93,10 +93,12 @@ class CashflowPortfolioSnapshot(models.Model):
                 scheduled[(partner.id, promise.direction)].add(promise.period)
         latest_notes = {}
         notes = self.env["cashflow.management.note"].search([
-            ("company_id", "=", company.id), ("direction", "=", "receivable"),
+            ("company_id", "=", company.id),
         ], order="create_date desc, id desc")
         for note in notes:
-            latest_notes.setdefault(note.partner_id.commercial_partner_id.id, note)
+            latest_notes.setdefault(
+                (note.partner_id.commercial_partner_id.id, note.direction), note
+            )
         values = defaultdict(lambda: defaultdict(float))
         documents = defaultdict(set)
         for line in lines:
@@ -134,9 +136,9 @@ class CashflowPortfolioSnapshot(models.Model):
                     )
                     if period in scheduled[(partner_id, direction)]
                 ),
-                "last_management": latest_notes[partner_id].note if direction == "receivable" and partner_id in latest_notes else False,
-                "last_management_at": latest_notes[partner_id].create_date if direction == "receivable" and partner_id in latest_notes else False,
-                "next_action_date": latest_notes[partner_id].next_action_date if direction == "receivable" and partner_id in latest_notes else False,
+                "last_management": latest_notes[(partner_id, direction)].note if (partner_id, direction) in latest_notes else False,
+                "last_management_at": latest_notes[(partner_id, direction)].create_date if (partner_id, direction) in latest_notes else False,
+                "next_action_date": latest_notes[(partner_id, direction)].next_action_date if (partner_id, direction) in latest_notes else False,
                 "open_document_count": len(documents[(partner_id, direction)]),
                 **buckets,
             })
@@ -203,18 +205,16 @@ class CashflowPortfolioSnapshot(models.Model):
 
     def action_add_management_note(self):
         self.ensure_one()
-        if self.direction != "receivable":
-            raise UserError("Las gestiones de cobranza solo corresponden a cuentas por cobrar.")
         return {
             "type": "ir.actions.act_window",
-            "name": "Registrar gestión de cobranza",
+            "name": "Registrar gestión de cobro" if self.direction == "receivable" else "Registrar gestión de pago",
             "res_model": "cashflow.management.note",
             "view_mode": "form",
             "target": "new",
             "context": {
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.partner_id.id,
-                "default_direction": "receivable",
+                "default_direction": self.direction,
             },
         }
 
@@ -341,21 +341,19 @@ class CashflowPortfolioSnapshot(models.Model):
 
     def action_open_management_history(self):
         self.ensure_one()
-        if self.direction != "receivable":
-            raise UserError("El historial de cobranza solo corresponde a cuentas por cobrar.")
         return {
             "type": "ir.actions.act_window",
-            "name": f"Historial de cobros · {self.partner_id.display_name}",
+            "name": f"Historial de gestiones · {self.partner_id.display_name}",
             "res_model": "cashflow.management.note",
             "view_mode": "list,form",
             "domain": [
                 ("company_id", "=", self.company_id.id),
                 ("partner_id", "=", self.partner_id.id),
-                ("direction", "=", "receivable"),
+                ("direction", "=", self.direction),
             ],
             "context": {
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.partner_id.id,
-                "default_direction": "receivable",
+                "default_direction": self.direction,
             },
         }
