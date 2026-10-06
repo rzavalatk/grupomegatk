@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, ValidationError
 
 
 class ODentalAppointment(models.Model):
@@ -11,6 +11,10 @@ class ODentalAppointment(models.Model):
     _order = "start_datetime desc"
 
     name = fields.Char(string="Número de cita", default="Nuevo", readonly=True, copy=False, index=True)
+    entry_type = fields.Selection(
+        [("clinical", "Cita clínica"), ("busy", "No disponible")],
+        default="clinical", required=True, index=True,
+    )
     active = fields.Boolean(string="Activo", default=True)
     organization_id = fields.Many2one(
         "odental.organization", string="Organización", required=True, ondelete="restrict", index=True
@@ -19,14 +23,14 @@ class ODentalAppointment(models.Model):
         related="organization_id.company_id", string="Compañía", store=True, index=True
     )
     patient_id = fields.Many2one(
-        "odental.patient", string="Paciente", required=True, ondelete="restrict", index=True, tracking=True
+        "odental.patient", string="Paciente", ondelete="restrict", index=True, tracking=True
     )
     professional_id = fields.Many2one(
         "odental.professional", string="Profesional responsable", required=True,
         ondelete="restrict", index=True, tracking=True
     )
     service_id = fields.Many2one(
-        "odental.service", string="Servicio", required=True, ondelete="restrict", tracking=True
+        "odental.service", string="Servicio", ondelete="restrict", tracking=True
     )
     service_requires_assistant = fields.Boolean(
         related="service_id.require_assistant",
@@ -34,7 +38,7 @@ class ODentalAppointment(models.Model):
         readonly=True,
     )
     site_id = fields.Many2one(
-        "odental.site", string="Sede", required=True, ondelete="restrict"
+        "odental.site", string="Sede", ondelete="restrict"
     )
     resource_ids = fields.Many2many(
         "odental.resource", "odental_appointment_resource_rel", "appointment_id", "resource_id",
@@ -71,6 +75,33 @@ class ODentalAppointment(models.Model):
         string="Estado", default="draft", required=True, index=True, tracking=True
     )
     notes = fields.Text(string="Notas")
+    external_source = fields.Selection([("todoist", "Todoist")], copy=False, readonly=True)
+    external_uid = fields.Char(copy=False, readonly=True, index=True)
+    external_conflict = fields.Boolean(string="Conflicto clínico", copy=False, readonly=True)
+    last_schedule_changed_by = fields.Many2one(
+        "res.users", string="Último cambio de agenda por", readonly=True, copy=False
+    )
+    last_schedule_change_source = fields.Selection(
+        [("odoo", "O Dental"), ("todoist", "Todoist")],
+        string="Origen del último cambio", readonly=True, copy=False,
+    )
+    last_schedule_changed_at = fields.Datetime(
+        string="Fecha del último cambio de agenda", readonly=True, copy=False
+    )
+    schedule_audit_ids = fields.One2many(
+        "odental.appointment.audit", "appointment_id", string="Historial de agenda", readonly=True
+    )
+
+    _SCHEDULE_FIELDS = (
+        "start_datetime", "duration_minutes", "professional_id", "site_id",
+        "state", "entry_type", "patient_id", "service_id", "resource_ids",
+        "preparation_minutes", "cleaning_minutes", "active",
+    )
+
+    _sql_constraints = [
+        ("external_busy_unique", "unique(organization_id, professional_id, external_source, external_uid)",
+         "Este bloqueo externo ya está registrado para el profesional."),
+    ]
 
     @api.depends(
         "organization_id",
@@ -123,11 +154,104 @@ class ODentalAppointment(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if vals.get("name", "Nuevo") == "Nuevo":
+            if not self.env.is_superuser() and set(vals).intersection({
+                "last_schedule_changed_by", "last_schedule_change_source",
+                "last_schedule_changed_at", "schedule_audit_ids",
+            }):
+                raise AccessError("El historial de cambios de agenda se actualiza automáticamente.")
+            if vals.get("entry_type") == "busy" and not self.env.is_superuser():
+                raise AccessError("Los bloqueos externos solo se crean mediante la sincronización autorizada.")
+            if vals.get("entry_type") == "busy":
+                vals["name"] = "No disponible"
+                vals["state"] = "scheduled"
+            elif vals.get("name", "Nuevo") == "Nuevo":
                 vals["name"] = self.env["ir.sequence"].next_by_code("odental.appointment") or "Nuevo"
             self._apply_fixed_room_professional(vals)
             self._apply_service_defaults(vals)
-        return super().create(vals_list)
+        appointments = super().create(vals_list)
+        if not (self.env.is_superuser() and self.env.context.get("odental_skip_schedule_audit")):
+            for appointment in appointments:
+                appointment._record_schedule_change("created", {}, appointment._schedule_snapshot())
+        return appointments
+
+    def write(self, vals):
+        if not self.env.is_superuser() and set(vals).intersection({
+            "last_schedule_changed_by", "last_schedule_change_source",
+            "last_schedule_changed_at", "schedule_audit_ids",
+        }):
+            raise AccessError("El historial de cambios de agenda se actualiza automáticamente.")
+        if not self.env.is_superuser() and self.filtered(lambda item: item.entry_type == "busy"):
+            raise AccessError("El bloqueo se actualiza desde el calendario personal del profesional.")
+        if vals.get("entry_type") == "busy" and not self.env.is_superuser():
+            raise AccessError("No puede convertir una cita clínica en un bloqueo externo.")
+        if (self.env.is_superuser() and self.env.context.get("odental_skip_schedule_audit")) or not set(vals).intersection(self._SCHEDULE_FIELDS):
+            return super().write(vals)
+        previous = {appointment.id: appointment._schedule_snapshot() for appointment in self}
+        result = super().write(vals)
+        for appointment in self:
+            current = appointment._schedule_snapshot()
+            before = previous[appointment.id]
+            changed = [key for key in self._SCHEDULE_FIELDS if before[key] != current[key]]
+            if changed:
+                event = "cancelled" if current["state"] == "cancelled" and before["state"] != "cancelled" else "changed"
+                appointment._record_schedule_change(
+                    event, {key: before[key] for key in changed},
+                    {key: current[key] for key in changed},
+                )
+        return result
+
+    def unlink(self):
+        if not self.env.is_superuser() and self.filtered(lambda item: item.entry_type == "busy"):
+            raise AccessError("Los bloqueos externos no se eliminan desde la agenda clínica.")
+        for appointment in self:
+            appointment._record_schedule_change("deleted", appointment._schedule_snapshot(), {})
+        return super().unlink()
+
+    def _schedule_snapshot(self):
+        self.ensure_one()
+        result = {}
+        for key in self._SCHEDULE_FIELDS:
+            value = self[key]
+            if key == "resource_ids":
+                value = sorted(value.ids)
+            elif isinstance(value, models.BaseModel):
+                value = value.id or False
+            elif key == "start_datetime":
+                value = fields.Datetime.to_string(value) if value else False
+            result[key] = value
+        return result
+
+    def _record_schedule_change(self, event, before, after):
+        self.ensure_one()
+        source = "odoo"
+        actor_id = self.env.user.id
+        if self.env.is_superuser() and self.env.context.get("odental_audit_source") == "todoist":
+            source = "todoist"
+            # Only the user attached to this appointment's professional can
+            # be attributed to an external edit. Otherwise show the source
+            # without inventing a human actor.
+            doctor = self.professional_id.user_id
+            actor_id = doctor.id if doctor.id == self.env.context.get("odental_audit_actor_user_id") else False
+        now = fields.Datetime.now()
+        self.env["odental.appointment.audit"].sudo().create({
+            "appointment_id": self.id,
+            "appointment_reference": self.name,
+            "organization_id": self.organization_id.id,
+            "company_id": self.company_id.id,
+            "professional_id": self.professional_id.id,
+            "actor_user_id": actor_id,
+            "source": source,
+            "event": event,
+            "changed_at": now,
+            "old_values": before,
+            "new_values": after,
+        })
+        if event != "deleted":
+            self.with_context(odental_skip_schedule_audit=True).sudo().write({
+                "last_schedule_changed_by": actor_id,
+                "last_schedule_change_source": source,
+                "last_schedule_changed_at": now,
+            })
 
     @api.model
     def _apply_fixed_room_professional(self, vals):
@@ -165,13 +289,21 @@ class ODentalAppointment(models.Model):
     @api.constrains(
         "organization_id", "patient_id", "professional_id", "service_id", "site_id",
         "resource_ids", "start_datetime", "duration_minutes", "preparation_minutes",
-        "cleaning_minutes", "state"
+        "cleaning_minutes", "state", "entry_type"
     )
     def _check_appointment(self):
         blocking_states = ("scheduled", "confirmed", "in_progress")
         for appointment in self:
             if appointment.duration_minutes <= 0 or appointment.preparation_minutes < 0 or appointment.cleaning_minutes < 0:
                 raise ValidationError("Las duraciones de la cita no son válidas.")
+            if appointment.entry_type == "busy":
+                if appointment.patient_id or appointment.service_id or appointment.site_id or appointment.resource_ids:
+                    raise ValidationError("Un bloqueo privado no puede contener datos clínicos o recursos.")
+                if appointment.professional_id not in appointment.organization_id.professional_ids:
+                    raise ValidationError("El profesional no pertenece a la organización del bloqueo.")
+                continue
+            if not appointment.patient_id or not appointment.service_id or not appointment.site_id:
+                raise ValidationError("La cita clínica requiere paciente, servicio y sede.")
             if appointment.patient_id.organization_id != appointment.organization_id:
                 raise ValidationError("El paciente no pertenece a la organización de la cita.")
             if appointment.service_id.organization_id != appointment.organization_id:
@@ -187,8 +319,18 @@ class ODentalAppointment(models.Model):
             if appointment.state not in blocking_states or not appointment.blocking_start or not appointment.blocking_end:
                 continue
             appointment._check_required_resources()
+            if self.sudo().search_count([
+                ("id", "!=", appointment.id),
+                ("entry_type", "=", "busy"),
+                ("state", "in", blocking_states),
+                ("professional_id", "=", appointment.professional_id.id),
+                ("blocking_start", "<", appointment.blocking_end),
+                ("blocking_end", ">", appointment.blocking_start),
+            ]):
+                raise ValidationError("El profesional no está disponible durante este horario.")
             base_domain = [
                 ("id", "!=", appointment.id),
+                ("entry_type", "=", "clinical"),
                 ("state", "in", blocking_states),
                 ("blocking_start", "<", appointment.blocking_end),
                 ("blocking_end", ">", appointment.blocking_start),
