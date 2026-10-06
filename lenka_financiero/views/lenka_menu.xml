@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_lenka_root" name="Financiero Lenka" sequence="10"/>
+    <menuitem id="menu_lenka_root" name="Financiero Lenka" web_icon="lenka_financiero,static/description/icon.png" sequence="10"/>
     <menuitem id="menu_lenka_quotes" name="Cotizaciones" parent="menu_lenka_root" action="action_lenka_quotes" sequence="10"/>
     <menuitem id="menu_lenka_operations" name="Operaciones" parent="menu_lenka_root" action="action_lenka_operations" sequence="20"/>
     <menuitem id="menu_lenka_restructurings" name="Reestructuraciones" parent="menu_lenka_root" action="action_lenka_restructurings" sequence="25"/>
