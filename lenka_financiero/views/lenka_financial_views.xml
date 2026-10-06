@@ -11,7 +11,7 @@
                 <field name="is_quote"/>
                 <field name="principal_amount"/>
                 <field name="financed_amount"/>
-                <field name="currency_id"/>
+                <field name="currency_id" string="Moneda"/>
                 <field name="interest_rate"/>
                 <field name="term_months"/>
                 <field name="state"/>
@@ -44,8 +44,8 @@
                                    help="Solo podés elegir empresas activas en tu sesión. Para trabajar con otra empresa autorizada, activala en el selector superior antes de iniciar la cotización."/>
                         </group>
                         <group>
-                            <field name="date"/>
-                            <field name="currency_id"/>
+                            <field name="date" string="Fecha"/>
+                            <field name="currency_id" string="Moneda"/>
                             <field name="principal_amount"/>
                             <field name="down_payment" invisible="operation_type == 'loan'"/>
                             <field name="financed_amount" readonly="1"/>
@@ -54,7 +54,7 @@
                     <group string="Condiciones financieras">
                         <group>
                             <field name="interest_rate"/>
-                            <field name="rate_period"/>
+                            <field name="rate_period" string="Período de la tasa"/>
                             <field name="term_months"/>
                         </group>
                         <group>
@@ -91,6 +91,7 @@
                             </field>
                         </page>
                         <page name="funding" string="Fondeo">
+                            <div class="alert alert-info" role="status">Registrá de dónde proviene el dinero de esta operación y cuánto cuesta obtenerlo. Los montos se expresan en la moneda de la operación.</div>
                             <field name="funding_line_ids">
                                 <list editable="bottom">
                                     <field name="source_type"/>
@@ -115,7 +116,11 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Observaciones"><field name="notes"/></page>
+                        <page name="observations" string="Observaciones">
+                            <group string="Observaciones de la operación">
+                                <field name="notes" string="Observaciones" placeholder="Escribí aquí acuerdos, aclaraciones o seguimiento de esta operación."/>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>

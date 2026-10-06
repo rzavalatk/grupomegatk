@@ -99,6 +99,21 @@ class LenkaFinancialOperationActualFundingCost(models.Model):
         currency_field='currency_id',
     )
 
+    def action_open_funding_costs(self):
+        self.ensure_one()
+        context = dict(self.env.context, lenka_operation_id=self.id)
+        if len(self.funding_line_ids) == 1:
+            context['default_funding_line_id'] = self.funding_line_ids.id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Costos reales de fondeo'),
+            'res_model': 'lenka.funding.cost',
+            'view_mode': 'list,form',
+            'domain': [('operation_id', '=', self.id)],
+            'context': context,
+            'target': 'current',
+        }
+
     @api.depends(
         'funding_cost_ids.state',
         'funding_cost_ids.amount',
