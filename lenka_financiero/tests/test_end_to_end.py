@@ -22,15 +22,25 @@ class TestLenkaEndToEnd(TransactionCase):
         })
 
     def _configure_accounts(self):
-        journal = self.env['account.journal'].search([
-            ('company_id', '=', self.company.id),
-            ('default_account_id', '!=', False),
-        ], limit=1)
-        accounts = self.env['account.account'].search([
-            ('company_ids', 'in', self.company.id),
-        ], limit=6)
-        if not journal or len(accounts) < 6:
-            self.skipTest('Base de prueba sin configuracion contable suficiente.')
+        # Isolated test fixtures: never depend on demo charts or skip accounting.
+        specs = [
+            ('990001', 'Cartera', 'asset_current'),
+            ('990002', 'Intereses', 'income'),
+            ('990003', 'Mora', 'income'),
+            ('990004', 'Anticipos', 'liability_current'),
+            ('990005', 'Depositos', 'liability_current'),
+            ('990006', 'Costo intereses', 'expense'),
+            ('990007', 'Liquidez', 'asset_cash'),
+        ]
+        accounts = self.env['account.account'].create([
+            {'code': code, 'name': 'PRUEBA LENKA ' + name,
+             'account_type': kind, 'company_ids': [(6, 0, [self.company.id])]}
+            for code, name, kind in specs
+        ])
+        journal = self.env['account.journal'].create({
+            'name': 'PRUEBA LENKA E2E', 'code': 'LNE2E', 'type': 'general',
+            'company_id': self.company.id, 'default_account_id': accounts[6].id,
+        })
 
         self.company.write({
             'lenka_disbursement_journal_id': journal.id,
@@ -44,10 +54,31 @@ class TestLenkaEndToEnd(TransactionCase):
             'lenka_passive_interest_expense_account_id': accounts[5].id,
         })
 
-    def test_full_credit_lifecycle_to_draft_accounting(self):
+    def test_credit_lifecycle_usd(self):
+        self._run_credit_lifecycle('USD')
+
+    def test_credit_lifecycle_hnl(self):
+        self._run_credit_lifecycle('HNL')
+
+    def _test_currency(self, code):
+        currency = self.env['res.currency'].with_context(active_test=False).search(
+            [('name', '=', code)], limit=1)
+        self.assertTrue(currency, 'Required test currency missing: ' + code)
+        currency.active = True
+        return currency
+
+    def _assert_move_currency(self, move, currency):
+        self.assertEqual(move.state, 'draft')
+        self.assertEqual(move.company_id, self.company)
+        self.assertEqual(move.line_ids.currency_id, currency)
+        self.assertAlmostEqual(sum(move.line_ids.mapped('balance')), 0, places=2)
+        self.assertAlmostEqual(sum(move.line_ids.mapped('amount_currency')), 0, places=2)
+
+    def _run_credit_lifecycle(self, currency_code):
         self._configure_accounts()
 
         operation = self.env['lenka.financial.operation'].create({
+            'currency_id': self._test_currency(currency_code).id,
             'partner_id': self.client.id,
             'guarantor_ids': [(6, 0, [self.guarantor.id])],
             'operation_type': 'financing',
@@ -123,7 +154,7 @@ class TestLenkaEndToEnd(TransactionCase):
 
         disbursement.action_create_account_move()
         self.assertTrue(disbursement.move_id)
-        self.assertEqual(disbursement.move_id.state, 'draft')
+        self._assert_move_currency(disbursement.move_id, operation.currency_id)
 
         operation.action_activate()
         self.assertEqual(operation.state, 'active')
@@ -145,15 +176,22 @@ class TestLenkaEndToEnd(TransactionCase):
 
         payment.action_create_account_move()
         self.assertTrue(payment.move_id)
-        self.assertEqual(payment.move_id.state, 'draft')
+        self._assert_move_currency(payment.move_id, operation.currency_id)
 
-    def test_fixed_investment_to_early_withdrawal_and_draft_accounting(self):
+    def test_deposit_lifecycle_usd(self):
+        self._run_deposit_lifecycle('USD')
+
+    def test_deposit_lifecycle_hnl(self):
+        self._run_deposit_lifecycle('HNL')
+
+    def _run_deposit_lifecycle(self, currency_code):
         self._configure_accounts()
 
         today = fields.Date.context_today(self.env.user)
         start = fields.Date.add(today, months=-3)
 
         investment = self.env['lenka.investment'].create({
+            'currency_id': self._test_currency(currency_code).id,
             'partner_id': self.investor.id,
             'investment_type': 'fixed',
             'principal_amount': 100000.0,
@@ -174,7 +212,7 @@ class TestLenkaEndToEnd(TransactionCase):
 
         investment.action_create_receipt_move()
         self.assertTrue(investment.receipt_move_id)
-        self.assertEqual(investment.receipt_move_id.state, 'draft')
+        self._assert_move_currency(investment.receipt_move_id, investment.currency_id)
 
         withdrawal = self.env['lenka.investment.withdrawal'].create({
             'investment_id': investment.id,
@@ -190,7 +228,7 @@ class TestLenkaEndToEnd(TransactionCase):
 
         withdrawal.action_create_account_move()
         self.assertTrue(withdrawal.move_id)
-        self.assertEqual(withdrawal.move_id.state, 'draft')
+        self._assert_move_currency(withdrawal.move_id, investment.currency_id)
 
 
     def test_disbursement_cannot_exceed_selected_funding_source(self):
