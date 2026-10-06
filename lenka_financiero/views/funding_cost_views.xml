@@ -34,7 +34,7 @@
                     <div class="oe_title"><h1><field name="name"/></h1></div>
                     <group>
                         <group>
-                            <field name="funding_line_id"/>
+                            <field name="funding_line_id" domain="[('operation_id', '=', context.get('lenka_operation_id'))] if context.get('lenka_operation_id') else []"/>
                             <field name="operation_id" readonly="1"/>
                             <field name="cost_type"/>
                             <field name="partner_id"/>
@@ -71,7 +71,9 @@
                 <field name="realized_net_financial_margin" readonly="1"/>
             </xpath>
             <xpath expr="//page[@name='funding']" position="after">
-                <page string="Costos reales de fondeo">
+                <page name="funding_costs" string="Costos reales de fondeo">
+                    <div class="alert alert-info" role="status">Esta tabla muestra los costos registrados. Para agregar o revisar un costo, pulsá Abrir costos de esta operación. Primero registrá su fuente en la pestaña Fondeo.</div>
+                    <button name="action_open_funding_costs" string="Abrir costos de esta operación" type="object" class="btn-primary mb-3"/>
                     <field name="funding_cost_ids" readonly="1">
                         <list>
                             <field name="date"/>
