@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_lenka_root" name="Financiero Lenka" sequence="10"/>
+    <menuitem id="menu_lenka_quotes" name="Cotizaciones" parent="menu_lenka_root" action="action_lenka_quotes" sequence="10"/>
+    <menuitem id="menu_lenka_operations" name="Operaciones" parent="menu_lenka_root" action="action_lenka_operations" sequence="20"/>
+    <menuitem id="menu_lenka_restructurings" name="Reestructuraciones" parent="menu_lenka_root" action="action_lenka_restructurings" sequence="25"/>
+    <menuitem id="menu_lenka_payments" name="Cobros" parent="menu_lenka_root" action="action_lenka_payments" sequence="30"/>
+    <menuitem id="menu_lenka_disbursements" name="Desembolsos" parent="menu_lenka_root" action="action_lenka_disbursements" sequence="40"/>
+    <menuitem id="menu_lenka_investments" name="Inversionistas / Depositantes" parent="menu_lenka_root" action="action_lenka_investments" sequence="50"/>
+    <menuitem id="menu_lenka_withdrawals" name="Retiros de inversionistas" parent="menu_lenka_root" action="action_lenka_withdrawals" sequence="60"/>
+    <menuitem id="menu_lenka_funding_costs" name="Costos de fondeo" parent="menu_lenka_root" action="action_lenka_funding_costs" sequence="65"/>
+    <menuitem id="menu_lenka_statements" name="Estados de cuenta" parent="menu_lenka_root" action="action_lenka_statements" sequence="70"/>
+    <menuitem id="menu_lenka_contracts" name="Contratos y documentos" parent="menu_lenka_root" sequence="75"/>
+    <menuitem id="menu_lenka_contract_templates" name="Plantillas contractuales" parent="menu_lenka_contracts" action="action_lenka_contract_templates" sequence="10"/>
+    <menuitem id="menu_lenka_generated_documents" name="Documentos generados" parent="menu_lenka_contracts" action="action_lenka_generated_documents" sequence="20"/>
+    <menuitem id="menu_lenka_reports" name="Reportes gerenciales" parent="menu_lenka_root" sequence="80"/>
+    <menuitem id="menu_lenka_portfolio_management" name="Cartera financiera" parent="menu_lenka_reports" action="action_lenka_portfolio_management" sequence="10"/>
+    <menuitem id="menu_lenka_investment_management" name="Obligaciones con inversionistas" parent="menu_lenka_reports" action="action_lenka_investment_management" sequence="20"/>
+</odoo>

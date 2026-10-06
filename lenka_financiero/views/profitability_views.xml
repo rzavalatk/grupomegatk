@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_operation_form_profitability" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.form.profitability</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='funding_line_ids']/list/field[@name='cost_period']" position="after">
+                <field name="funding_share" readonly="1"/>
+                <field name="monthly_cost_rate" readonly="1"/>
+                <field name="projected_cost" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='funding_line_ids']" position="after">
+                <group string="Resumen de fondeo y rentabilidad">
+                    <group>
+                        <field name="funding_total" readonly="1"/>
+                        <field name="weighted_funding_monthly_rate" readonly="1"/>
+                        <field name="projected_funding_cost" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="projected_interest_income" readonly="1"/>
+                        <field name="projected_financial_margin" readonly="1"/>
+                    </group>
+                </group>
+                <group name="realized_result" string="Resultado realizado">
+                    <field name="realized_interest_income" readonly="1"/>
+                    <field name="realized_late_income" readonly="1"/>
+                    <field name="realized_card_fees" readonly="1"/>
+                    <field name="realized_financial_margin" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lenka_operation_list_profitability" model="ir.ui.view">
+        <field name="name">lenka.financial.operation.list.profitability</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="funding_total" optional="hide"/>
+                <field name="weighted_funding_monthly_rate" optional="hide"/>
+                <field name="projected_financial_margin" optional="show"/>
+                <field name="realized_financial_margin" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
