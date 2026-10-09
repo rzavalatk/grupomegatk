@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_odental_appointment_list" model="ir.ui.view"><field name="name">odental.appointment.list</field><field name="model">odental.appointment</field><field name="arch" type="xml"><list decoration-success="state == 'done'" decoration-muted="state == 'cancelled'"><field name="name"/><field name="start_datetime"/><field name="patient_id"/><field name="professional_id"/><field name="service_id"/><field name="site_id"/><field name="state"/></list></field></record>
+    <record id="view_odental_appointment_list" model="ir.ui.view"><field name="name">odental.appointment.list</field><field name="model">odental.appointment</field><field name="arch" type="xml"><list decoration-success="state == 'done'" decoration-muted="state == 'cancelled'"><field name="name"/><field name="start_datetime"/><field name="patient_id"/><field name="professional_id"/><field name="service_id"/><field name="site_id"/><field name="state"/><field name="last_schedule_changed_by" optional="show"/><field name="last_schedule_change_source" optional="show"/><field name="entry_type" column_invisible="1"/></list></field></record>
     <record id="view_odental_appointment_calendar" model="ir.ui.view"><field name="name">odental.appointment.calendar</field><field name="model">odental.appointment</field><field name="arch" type="xml"><calendar string="Agenda O Dental" date_start="start_datetime" date_stop="end_datetime" color="professional_id" quick_create="false"><field name="patient_id"/><field name="professional_id"/><field name="service_id"/><field name="state"/></calendar></field></record>
     <record id="view_odental_appointment_form" model="ir.ui.view">
         <field name="name">odental.appointment.form</field>
@@ -8,37 +8,45 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_schedule" type="object" string="Programar" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary" invisible="state != 'scheduled'"/>
-                    <button name="action_start" type="object" string="Iniciar atención" invisible="state != 'confirmed'"/>
-                    <button name="action_done" type="object" string="Finalizar" class="btn-primary" invisible="state != 'in_progress'"/>
-                    <button name="action_cancel" type="object" string="Cancelar" invisible="state in ('done', 'cancelled')"/>
+                    <button name="action_schedule" type="object" string="Programar" class="btn-primary" invisible="entry_type == 'busy' or state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary" invisible="entry_type == 'busy' or state != 'scheduled'"/>
+                    <button name="action_start" type="object" string="Iniciar atención" invisible="entry_type == 'busy' or state != 'confirmed'"/>
+                    <button name="action_done" type="object" string="Finalizar" class="btn-primary" invisible="entry_type == 'busy' or state != 'in_progress'"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="entry_type == 'busy' or state in ('done', 'cancelled')"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,confirmed,in_progress,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <field name="entry_type" invisible="1"/>
+                    <div class="alert alert-warning" role="alert" invisible="entry_type != 'busy' or not external_conflict">
+                        Este horario privado coincide con una cita clínica. Revise el conflicto con el profesional.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="entry_type != 'clinical' or not external_conflict">
+                        El profesional cambió este horario en su agenda personal, pero coincide con otra reserva clínica. Resuelva el conflicto antes de confirmar al paciente.
+                    </div>
+                    <field name="external_conflict" invisible="1"/>
                     <group>
                         <group>
-                            <field name="organization_id"/>
-                            <field name="patient_id" domain="[('organization_id', '=', organization_id)]"/>
+                            <field name="organization_id" readonly="entry_type == 'busy'"/>
+                            <field name="patient_id" required="entry_type == 'clinical'" invisible="entry_type == 'busy'" domain="[('organization_id', '=', organization_id)]"/>
                             <field name="professional_id" string="Profesional responsable"
-                                   domain="[('organization_ids', 'in', organization_id)]"/>
-                            <field name="service_id" domain="[('organization_id', '=', organization_id)]"/>
+                                   readonly="entry_type == 'busy'" domain="[('organization_ids', 'in', organization_id)]"/>
+                            <field name="service_id" required="entry_type == 'clinical'" invisible="entry_type == 'busy'" domain="[('organization_id', '=', organization_id)]"/>
                             <field name="service_requires_assistant" invisible="1"/>
                         </group>
                         <group>
-                            <field name="site_id" domain="['|', ('organization_id', '=', organization_id), ('shared_with_organization_ids', 'in', [organization_id])]"/>
-                            <field name="start_datetime"/>
+                            <field name="site_id" required="entry_type == 'clinical'" invisible="entry_type == 'busy'" domain="['|', ('organization_id', '=', organization_id), ('shared_with_organization_ids', 'in', [organization_id])]"/>
+                            <field name="start_datetime" readonly="entry_type == 'busy'"/>
                             <field name="end_datetime" readonly="1"/>
-                            <field name="duration_minutes"/>
+                            <field name="duration_minutes" readonly="entry_type == 'busy'"/>
                         </group>
                     </group>
-                    <group string="Espacio y equipo reservado">
+                    <group string="Espacio y equipo reservado" invisible="entry_type == 'busy'">
                         <field name="resource_ids" string="Consultorio y equipos adicionales"
                                widget="many2many_tags"
                                domain="[('site_id', '=', site_id), '|', ('organization_id', '=', organization_id), ('shared_with_organization_ids', 'in', [organization_id])]"/>
                     </group>
-                    <group string="Personas asignadas al turno">
+                    <group string="Personas asignadas al turno" invisible="entry_type == 'busy'">
                         <div class="alert alert-warning" role="alert" invisible="not service_requires_assistant">
                             Este servicio requiere asistente. Agregue una persona con la función «Asistente» antes de programar la cita.
                         </div>
@@ -51,17 +59,34 @@
                             </list>
                         </field>
                     </group>
-                    <group string="Bloqueo de agenda">
+                    <group string="Bloqueo de agenda" invisible="entry_type == 'busy'">
                         <field name="preparation_minutes"/>
                         <field name="cleaning_minutes"/>
                         <field name="blocking_start" readonly="1"/>
                         <field name="blocking_end" readonly="1"/>
                     </group>
-                    <field name="notes" placeholder="Notas operativas de la cita..."/>
+                    <group string="Último cambio de agenda">
+                        <field name="last_schedule_changed_by" readonly="1"/>
+                        <field name="last_schedule_change_source" readonly="1"/>
+                        <field name="last_schedule_changed_at" readonly="1"/>
+                    </group>
+                    <field name="schedule_audit_ids" readonly="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="changed_at"/><field name="event"/>
+                            <field name="actor_user_id"/><field name="source"/>
+                            <field name="old_values" optional="hide"/>
+                            <field name="new_values" optional="hide"/>
+                        </list>
+                    </field>
+                    <field name="notes" invisible="entry_type == 'busy'" placeholder="Notas operativas de la cita..."/>
                 </sheet>
                 <chatter/>
             </form>
         </field>
     </record>
-    <record id="action_odental_appointment" model="ir.actions.act_window"><field name="name">Agenda</field><field name="res_model">odental.appointment</field><field name="view_mode">calendar,list,form</field></record>
+    <record id="action_odental_appointment" model="ir.actions.act_window"><field name="name">Agenda</field><field name="res_model">odental.appointment</field><field name="view_mode">calendar,list,form</field><field name="domain">[('state', '!=', 'cancelled')]</field></record>
+    <record id="action_odental_cancelled_appointment" model="ir.actions.act_window"><field name="name">Historial de citas canceladas</field><field name="res_model">odental.appointment</field><field name="view_mode">list,form</field><field name="domain">[('state', '=', 'cancelled'), ('entry_type', '=', 'clinical')]</field></record>
+    <record id="view_odental_appointment_audit_list" model="ir.ui.view"><field name="name">odental.appointment.audit.list</field><field name="model">odental.appointment.audit</field><field name="arch" type="xml"><list create="false" edit="false" delete="false"><field name="changed_at"/><field name="appointment_reference"/><field name="organization_id"/><field name="professional_id"/><field name="event"/><field name="actor_user_id"/><field name="source"/><field name="old_values" optional="hide"/><field name="new_values" optional="hide"/></list></field></record>
+    <record id="view_odental_appointment_audit_form" model="ir.ui.view"><field name="name">odental.appointment.audit.form</field><field name="model">odental.appointment.audit</field><field name="arch" type="xml"><form create="false" edit="false" delete="false"><sheet><group><field name="changed_at"/><field name="appointment_reference"/><field name="organization_id"/><field name="professional_id"/><field name="event"/><field name="actor_user_id"/><field name="source"/></group><group string="Cambios"><field name="old_values"/><field name="new_values"/></group></sheet></form></field></record>
+    <record id="action_odental_appointment_audit" model="ir.actions.act_window"><field name="name">Historial de agenda</field><field name="res_model">odental.appointment.audit</field><field name="view_mode">list,form</field></record>
 </odoo>

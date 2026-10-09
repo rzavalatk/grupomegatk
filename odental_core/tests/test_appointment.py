@@ -185,6 +185,48 @@ class TestODentalAppointment(TransactionCase):
         self.assertEqual(appointment.blocking_start, start - timedelta(minutes=5))
         self.assertEqual(appointment.blocking_end, start + timedelta(minutes=40))
 
+    def test_schedule_audit_records_actor_before_after_and_cancellation(self):
+        appointment = self.env["odental.appointment"].create(
+            self._appointment_values(datetime(2026, 10, 3, 14))
+        )
+        appointment.write({"start_datetime": datetime(2026, 10, 3, 15)})
+        appointment.action_cancel()
+        entries = appointment.schedule_audit_ids.sorted("id")
+        self.assertEqual(entries.mapped("event"), ["created", "changed", "cancelled"])
+        self.assertEqual(entries[1].old_values["start_datetime"], "2026-10-03 14:00:00")
+        self.assertEqual(entries[1].new_values["start_datetime"], "2026-10-03 15:00:00")
+        self.assertEqual(entries[1].actor_user_id, self.env.user)
+        self.assertEqual(appointment.last_schedule_changed_by, self.env.user)
+        self.assertEqual(appointment.last_schedule_change_source, "odoo")
+        self.assertNotIn("notes", entries[0].new_values)
+
+    def test_schedule_audit_survives_deleted_appointment_and_is_company_scoped(self):
+        appointment = self.env["odental.appointment"].create(
+            self._appointment_values(datetime(2026, 10, 4, 14))
+        )
+        reference = appointment.name
+        appointment.unlink()
+        deleted = self.env["odental.appointment.audit"].search([
+            ("appointment_reference", "=", reference), ("event", "=", "deleted")
+        ])
+        self.assertEqual(len(deleted), 1)
+        self.assertFalse(deleted.appointment_id)
+        self.assertEqual(deleted.organization_id, self.organization)
+        self.second_user.write({"groups_id": [(4, self.env.ref("odental_core.group_odental_user").id)]})
+        other = self.env["odental.organization"].create({
+            "name": "Otra organización", "code": "AUDIT-OTHER",
+        })
+        foreign = self.env["odental.appointment.audit"].sudo().create({
+            "appointment_reference": "Cita ajena", "organization_id": other.id,
+            "company_id": other.company_id.id, "event": "created", "source": "odoo",
+            "changed_at": datetime(2026, 10, 4, 14),
+        })
+        visible = self.env["odental.appointment.audit"].with_user(self.second_user).search([])
+        self.assertIn(deleted, visible)
+        self.assertNotIn(foreign, visible)
+        with self.assertRaises(AccessError):
+            deleted.with_user(self.second_user).write({"event": "changed"})
+
     def test_schedule_without_assistant_does_not_require_participants(self):
         values = self._appointment_values(datetime(2026, 9, 14, 16, 0))
         values["state"] = "draft"
