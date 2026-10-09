@@ -6,13 +6,13 @@ Fecha: 9 de octubre de 2026.
 
 Destino previsto: proyecto Odoo.sh `grupomegatk`, rama `master`, https://grupomegatk.odoo.com/odoo, compartido con O Dental. Aplicar únicamente el módulo `lenka_financiero`; no actualizar ni reinstalar módulos ajenos.
 
-PR de preparación: https://github.com/rzavalatk/grupomegatk/pull/58. Mantener en borrador, sin auto-merge. Luis debe dar una orden expresa para instalar. Su autorización de pruebas no autoriza producción.
+PR de instalación: https://github.com/rzavalatk/grupomegatk/pull/58. Luis autorizó expresamente la instalación en el Odoo definitivo el 9 de octubre de 2026. Esta orden sustituye la espera anterior. Integrar conservando los cambios concurrentes de master.
 
 Sentinel es exclusivamente el entorno autorizado de pruebas. Sus datos y permisos no se trasladan automáticamente a producción. Android e iPhone siguen fuera de esta entrega.
 
 ## Estado de preparación
 
-Paquete técnico preparado para instalar cuando Luis lo ordene. Los contratos, diarios y cuentas pueden cargarse después de instalar; no son requisitos previos de instalación. Se puede comenzar con clientes, cotizaciones y cálculo de planes. Completar cada configuración antes de usar la función que la requiere.
+Paquete técnico autorizado para instalar. Los contratos, diarios y cuentas pueden cargarse después de instalar; no son requisitos previos de instalación. Se puede comenzar con clientes, cotizaciones y cálculo de planes. Completar cada configuración antes de usar la función que la requiere.
 
 ## Resultado técnico verificado
 
@@ -25,7 +25,7 @@ Paquete técnico preparado para instalar cuando Luis lo ordene. Los contratos, d
 - PDF tamaño carta con firmas y rúbricas al pie; descargar, obtener firma, subir el archivo y marcar firmado. Nunca se simula una firma.
 - Se conservan las cláusulas comerciales aprobadas de inflación, cambio de moneda y recuperación. Este cambio no automatiza ajustes de tasas ni recuperación de bienes.
 - Elisa configurará diarios y cuentas después de instalar. La generación contractual no depende de esa configuración.
-- Validación local: sintaxis Python/XML y cobertura de variables. Pruebas de integración nuevas en `tests/test_approved_contract.py`; resultado Odoo.sh pendiente de ejecución para esta versión. No confundir con los resultados de la versión anterior siguientes.
+- Validación local: sintaxis Python/XML y cobertura de variables. Odoo.sh: **204 pruebas, 0 fallos, 0 errores**, build `grupomegatk-lenka-pilot-39568954`, commit `65a7080124a6eccc6c01d665678bc1f25209fa04` (PR67). Incluye las ocho pruebas nuevas de `tests/test_approved_contract.py`. Advertencia no bloqueante de accesibilidad en una alerta de vista.
 
 ### Versión anterior
 
@@ -48,7 +48,7 @@ En la empresa INVERSIONES LENKA de Sentinel se observaron vacíos:
 
 Estos datos pueden introducirse desde el sistema instalado. El contrato se requiere antes de completar la contratación de una operación; los diarios y cuentas, antes de generar los movimientos contables correspondientes. Su ausencia no bloquea instalar el módulo ni crear cotizaciones. No generar movimientos reales con parámetros de demostración.
 
-## Procedimiento reservado para la orden de instalación
+## Procedimiento de instalación autorizado
 
 1. Confirmar la rama y el respaldo recuperable de producción; revisar cambios concurrentes.
 2. Integrar el PR aprobado con la rama vigente, conservando O Dental y los demás módulos; no reemplazar el árbol de producción por una copia antigua de Sentinel.
