@@ -8,6 +8,7 @@
     "depends": ["base", "mail", "contacts"],
     "data": [
         "security/odental_security.xml",
+        "security/odental_appointment_audit_security.xml",
         "security/ir.model.access.csv",
         "data/odental_sequence.xml",
         "views/organization_views.xml",
