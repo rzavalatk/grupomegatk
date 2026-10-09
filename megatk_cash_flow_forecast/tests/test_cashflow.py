@@ -470,13 +470,22 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(classification.classification, "legal")
 
-    def test_classification_must_match_account_direction(self):
+    def test_receivable_accepts_the_operational_classification_catalog(self):
+        classification = self.env["cashflow.portfolio.classification"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "classification": "supplier",
+        })
+        self.assertEqual(classification.classification, "supplier")
+
+    def test_payable_rejects_receivable_only_classification(self):
         with self.assertRaises(ValidationError):
             self.env["cashflow.portfolio.classification"].create({
                 "company_id": self.company.id,
                 "partner_id": self.partner.id,
-                "direction": "receivable",
-                "classification": "supplier",
+                "direction": "payable",
+                "classification": "legal",
             })
 
     def test_classification_uses_commercial_partner(self):
@@ -536,7 +545,52 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(expense.company_amount, 250)
         self.assertEqual(expense.classification, "other")
+        self.assertEqual(expense.obligation_type, "supplier")
         self.assertEqual(self.plan.payable_week_1, 250)
+
+    def test_manual_creditor_expense_is_reported_with_liabilities(self):
+        self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago extraordinario a acreedor",
+            "classification": "other",
+            "obligation_type": "creditor",
+            "period": "week_2",
+            "currency_id": self.company.currency_id.id,
+            "amount": 300,
+        })
+        sections = {
+            section["key"]: section
+            for section in self.plan._cashflow_report_sections()
+        }
+        self.assertEqual(sections["liabilities"]["totals"]["week_2"], 300)
+        self.assertFalse(sections["unique"]["lines"])
+
+    def test_portfolio_report_separates_unassigned_from_cleanup(self):
+        cleanup_partner = self.env["res.partner"].create({"name": "Cuenta por depurar"})
+        snapshots = self.env["cashflow.portfolio.snapshot"].create([
+            {
+                "company_id": self.company.id,
+                "partner_id": self.partner.id,
+                "direction": "receivable",
+                "classification": "unassigned",
+                "at_day": 10,
+            },
+            {
+                "company_id": self.company.id,
+                "partner_id": cleanup_partner.id,
+                "direction": "receivable",
+                "classification": "to_reconcile",
+                "days_1_30": 20,
+            },
+        ])
+        sections = {
+            section["key"]: section
+            for section in snapshots.with_context(
+                cashflow_report_direction="receivable"
+            )._portfolio_report_sections()
+        }
+        self.assertEqual(sections["unassigned"]["totals"]["total"], 10)
+        self.assertEqual(sections["to_reconcile"]["totals"]["total"], 20)
 
     def test_each_week_exposes_the_previous_projected_balance_as_opening(self):
         self.env["cashflow.manual.expense"].create({

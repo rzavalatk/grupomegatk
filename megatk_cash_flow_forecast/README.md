@@ -11,13 +11,16 @@ Incluye:
 - Programación directa del cobro o pago desde cada fila de cartera, con empresa, contacto y tipo prellenados.
 - Actualización inmediata de las insignias de semana al crear, mover o retirar una proyección.
 - La última gestión es de solo lectura: toda observación nueva conserva fecha, autor e historial.
-- Clasificación por empresa de clientes, CxC empleados, Grupo Mega, proveedores, acreedores, anticipos, legal, por depurar y por asignar.
+- Clasificación por empresa de clientes, CxC empleados, Grupo Mega, proveedores, acreedores, anticipos, legal, por depurar y por asignar. El catálogo completo se conserva en CxC tal como lo utiliza Grupo Megatk.
+- Cuentas por cobrar y por pagar aparecen agrupadas por clasificación de forma predeterminada, con filtros para consultar cada bloque por separado.
+- "Por asignar" identifica las cuentas aún no clasificadas y "Por depurar" mantiene separadas las partidas con inconsistencias que requieren revisión.
 - Saldos contables exclusivamente por la cuenta específica seleccionada, aunque varias cuentas compartan el diario bancario "Cheques"; cambiar el diario nunca sustituye esa cuenta.
 - Disponible inicial visible y acumulativo para cada semana, incluidos los saldos negativos.
 - Listas operativas separadas para cobros, proveedores, acreedores, anticipos, pendientes de clasificar, pagos únicos y pagos recurrentes.
 - Los cobros y pagos cancelados dejan de aparecer en las listas activas, pero se conservan en un historial desde el cual pueden reactivarse.
 - Los anticipos a proveedores controlan el monto entregado, aplicado y pendiente hasta su cierre.
-- El reporte detallado totaliza cada columna y distingue proveedores, acreedores y anticipos sin duplicar movimientos.
+- Los reportes de cartera y flujo presentan bloques y totales independientes por clasificación, distinguiendo proveedores, acreedores, anticipos y partidas pendientes sin duplicar movimientos.
+- Otros pagos permite indicar si la obligación corresponde a un proveedor o a un acreedor; el reporte la coloca automáticamente en el bloque correcto.
 - Las cuentas bancarias pueden retirarse del flujo sin borrar la cuenta contable original de Odoo.
 - Los financiamientos manuales, pagos únicos y pagos recurrentes pueden borrarse; al borrarlos desaparecen de todas las semanas, totales y reportes. Un financiamiento ya vinculado con una partida contable solo puede desactivarse.
 - Reporte ejecutivo y detallado con tipografía ampliada en pantalla, PDF y archivo compatible con Excel.
