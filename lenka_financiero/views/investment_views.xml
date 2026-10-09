@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_lenka_investment_list" model="ir.ui.view">
+        <field name="name">lenka.investment.list</field>
+        <field name="model">lenka.investment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/><field name="partner_id"/><field name="investment_type"/>
+                <field name="principal_amount"/><field name="passive_rate"/><field name="early_withdrawal_rate"/>
+                <field name="start_date"/><field name="maturity_date"/><field name="accrued_interest"/>
+                <field name="outstanding_principal"/><field name="currency_id"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_lenka_investment_form" model="ir.ui.view">
+        <field name="name">lenka.investment.form</field><field name="model">lenka.investment</field>
+        <field name="arch" type="xml">
+            <form string="Inversion / Deposito Lenka">
+                <header>
+                    <button name="action_activate" string="Activar" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_generate_monthly_interest" string="Generar intereses" type="object" invisible="state not in ('active','matured')"/>
+                    <button name="action_create_receipt_move" string="Crear borrador de recepcion" type="object" groups="account.group_account_user" invisible="state not in ('active', 'matured', 'closed') or receipt_move_id"/><field name="state" widget="statusbar" statusbar_visible="draft,active,matured,closed"/>
+                </header>
+                <sheet>
+                    <field name="terms_locked" invisible="1"/><div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group><field name="partner_id" readonly="terms_locked"/><field name="investment_type" readonly="terms_locked"/><field name="principal_amount" readonly="terms_locked"/><field name="currency_id" readonly="terms_locked"/><field name="receiving_account"/></group>
+                        <group>
+                            <field name="passive_rate" readonly="terms_locked"/><field name="early_withdrawal_rate" invisible="investment_type != 'fixed'" readonly="terms_locked"/><field name="current_rate" readonly="1"/>
+                            <field name="rate_period" readonly="terms_locked"/><field name="start_date" readonly="terms_locked"/><field name="term_months" readonly="terms_locked"/><field name="maturity_date" readonly="terms_locked"/>
+                            <field name="capitalization" readonly="terms_locked"/><field name="contract_reference"/>
+                        </group>
+                    </group>
+                    <group string="Contabilidad" groups="account.group_account_user"><field name="receipt_move_id" readonly="1"/></group><group string="Saldos"><field name="outstanding_principal" readonly="1"/><field name="accrued_interest" readonly="1"/><field name="paid_interest" readonly="1"/><field name="withdrawn_principal" readonly="1"/></group>
+                    <notebook>
+                        <page string="Intereses"><field name="interest_line_ids"><list editable="bottom"><field name="financial_locked" column_invisible="1"/><field name="period_start_date" optional="show" readonly="financial_locked"/><field name="period_date" readonly="financial_locked"/><field name="calculation_days" optional="show" readonly="financial_locked"/><field name="is_prorated" optional="hide" readonly="financial_locked"/><field name="base_amount" readonly="financial_locked"/><field name="rate" readonly="financial_locked"/><field name="amount" readonly="financial_locked"/><field name="state" readonly="1"/><field name="payment_reference"/><field name="move_id" readonly="1" optional="hide" groups="account.group_account_user"/><button name="action_create_account_move" string="Crear borrador contable" type="object" groups="account.group_account_user" invisible="state not in ('accrued', 'paid') or move_id"/></list></field></page>
+                        <page string="Retiros"><field name="withdrawal_ids" context="{'default_investment_id': id}"><list><field name="date"/><field name="principal_amount"/><field name="accrued_interest_amount"/><field name="early_withdrawal"/><field name="effective_rate"/><field name="total_amount"/><field name="state"/></list></field></page>
+                        <page string="Observaciones"><field name="notes"/></page>
+                    </notebook>
+                </sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_lenka_investment_withdrawal_form" model="ir.ui.view">
+        <field name="name">lenka.investment.withdrawal.form</field><field name="model">lenka.investment.withdrawal</field>
+        <field name="arch" type="xml">
+            <form string="Retiro de inversion">
+                <header><button name="action_post" string="Aplicar retiro" type="object" class="btn-primary" invisible="state != 'draft'"/><button name="action_create_account_move" string="Crear borrador contable" type="object" groups="account.group_account_user" invisible="state != 'posted' or move_id"/><field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/></header>
+                <sheet><group><group><field name="investment_id" readonly="state != 'draft'"/><field name="date" readonly="state != 'draft'"/><field name="principal_amount" readonly="state != 'draft'"/><field name="accrued_interest_amount" readonly="1"/></group><group><field name="early_withdrawal" readonly="1"/><field name="effective_rate" readonly="1"/><field name="total_amount" readonly="1"/><field name="reference"/></group></group><group string="Contabilidad" groups="account.group_account_user"><field name="move_id" readonly="1"/><field name="adjustment_move_id" readonly="1"/></group></sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_lenka_investments" model="ir.actions.act_window"><field name="name">Inversionistas / Depositantes</field><field name="res_model">lenka.investment</field><field name="view_mode">list,form</field></record>
+    <record id="action_lenka_withdrawals" model="ir.actions.act_window"><field name="name">Retiros de inversionistas</field><field name="res_model">lenka.investment.withdrawal</field><field name="view_mode">list,form</field></record>
+</odoo>
