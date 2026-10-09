@@ -1,5 +1,9 @@
+import re
+from html import escape
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from odoo.tools import file_open
 
 
 class LenkaContractTemplate(models.Model):
@@ -23,6 +27,34 @@ class LenkaContractTemplate(models.Model):
     body_html = fields.Html(string='Contenido de plantilla', required=True)
     active = fields.Boolean(default=True)
     notes = fields.Text()
+    builtin_key = fields.Char(copy=False, readonly=True)
+
+    _sql_constraints = [
+        ('builtin_company_unique', 'unique(company_id, builtin_key)',
+         'Esta empresa ya tiene una copia del contrato aprobado.'),
+    ]
+
+    @api.model
+    def _approved_equipment_template(self, company):
+        # Uses ordinary ACLs and the selected operation's company; never sudo.
+        template = self.with_context(active_test=False).search([
+            ('company_id', '=', company.id),
+            ('builtin_key', '=', 'equipment_20261009'),
+        ], limit=1)
+        if template:
+            if not template.active:
+                raise ValidationError(_('El contrato aprobado está archivado. Reactivalo en Plantillas contractuales para utilizarlo.'))
+            return template
+        with file_open('lenka_financiero/data/equipment_contract.html', 'r') as source:
+            body = source.read()
+        return self.create({
+            'name': 'Contrato de financiamiento de equipo — Lenka',
+            'company_id': company.id, 'document_type': 'contract',
+            'operation_type': 'financing', 'body_html': body,
+            'builtin_key': 'equipment_20261009',
+            'notes': 'Formato aprobado por Luis el 09/10/2026. Datos variables por operación. '
+                     'Conservar las cláusulas aprobadas; cualquier cambio posterior requiere revisión.',
+        })
 
     def action_preview(self):
         self.ensure_one()
@@ -118,6 +150,33 @@ class LenkaGeneratedDocument(models.Model):
 class LenkaFinancialOperationContract(models.Model):
     _inherit = 'lenka.financial.operation'
 
+    equipment_contract_template_id = fields.Many2one(
+        'lenka.contract.template', string='Contrato de equipo', copy=False,
+        domain="[('company_id', '=', company_id), ('document_type', '=', 'contract'), ('operation_type', 'in', ['financing', 'all'])]",
+    )
+    contract_seller_representative = fields.Char(string='Representante del vendedor')
+    contract_seller_identity = fields.Char(string='Identidad del representante del vendedor')
+    contract_buyer_representative = fields.Char(string='Representante del comprador')
+    contract_buyer_identity = fields.Char(string='Identidad del firmante comprador')
+    contract_equipment_serial = fields.Char(string='Serie del equipo')
+    contract_warranty = fields.Char(string='Garantía del equipo', default='1 año por desperfectos de fábrica')
+    contract_isv_amount = fields.Monetary(string='ISV incluido en el valor del equipo')
+    contract_payment_instructions = fields.Text(string='Lugar y cuenta para pagos')
+    contract_signing_city = fields.Char(string='Ciudad de firma')
+
+    @api.constrains('contract_isv_amount', 'principal_amount')
+    def _check_contract_isv(self):
+        for rec in self:
+            if rec.contract_isv_amount < 0 or rec.contract_isv_amount > rec.principal_amount:
+                raise ValidationError(_('El ISV incluido debe estar entre cero y el valor del equipo.'))
+
+    def action_use_approved_equipment_contract(self):
+        self.ensure_one()
+        if self.operation_type != 'financing':
+            raise ValidationError(_('Este contrato corresponde al financiamiento de equipos.'))
+        self.equipment_contract_template_id = self.env['lenka.contract.template']._approved_equipment_template(self.company_id)
+        return True
+
     generated_document_ids = fields.One2many(
         'lenka.generated.document',
         'operation_id',
@@ -131,7 +190,7 @@ class LenkaFinancialOperationContract(models.Model):
         product = self.product_id.display_name if self.product_id else ''
         operation_label = dict(self._fields['operation_type'].selection).get(self.operation_type, '')
         rate_label = dict(self._fields['rate_period'].selection).get(self.rate_period, '')
-        return {
+        values = {
             '{{OPERACION}}': self.name or '',
             '{{TIPO_OPERACION}}': operation_label,
             '{{CLIENTE}}': self.partner_id.display_name or '',
@@ -154,6 +213,24 @@ class LenkaFinancialOperationContract(models.Model):
             '{{OPCION_COMPRA}}': format(self.residual_purchase_amount or 0.0, ',.2f'),
             '{{FECHA}}': fields.Date.to_string(fields.Date.context_today(self)),
         }
+        blank = '____________________________'
+        values.update({
+            '{{EMPRESA}}': self.company_id.name or '',
+            '{{RTN_EMPRESA}}': self.company_id.vat or blank,
+            '{{DIRECCION_EMPRESA}}': self.company_id.partner_id.contact_address or blank,
+            '{{TELEFONO_EMPRESA}}': self.company_id.phone or blank,
+            '{{REPRESENTANTE_VENDEDOR}}': self.contract_seller_representative or blank,
+            '{{IDENTIDAD_VENDEDOR}}': self.contract_seller_identity or blank,
+            '{{REPRESENTANTE_COMPRADOR}}': self.contract_buyer_representative or (self.partner_id.name if not self.partner_id.is_company else blank),
+            '{{IDENTIDAD_FIRMANTE_COMPRADOR}}': self.contract_buyer_identity or blank,
+            '{{SERIE_EQUIPO}}': self.contract_equipment_serial or blank,
+            '{{GARANTIA_EQUIPO}}': self.contract_warranty or blank,
+            '{{ISV_INCLUIDO}}': format(self.contract_isv_amount or 0.0, ',.2f'),
+            '{{INSTRUCCIONES_PAGO}}': self.contract_payment_instructions or blank,
+            '{{CIUDAD_FIRMA}}': self.contract_signing_city or self.company_id.city or blank,
+            '{{TASA_MORA}}': format(self.late_fee_rate or 0.0, '.4f').rstrip('0').rstrip('.'),
+        })
+        return values
 
     def _render_lenka_template(self, template):
         self.ensure_one()
@@ -162,9 +239,32 @@ class LenkaFinancialOperationContract(models.Model):
         if template.operation_type not in ('all', self.operation_type):
             raise ValidationError(_('La plantilla seleccionada no corresponde al tipo de operacion.'))
         body = template.body_html or ''
-        for token, value in self._template_values().items():
-            body = body.replace(token, value)
+        values = self._template_values()
+        # A single replacement pass prevents customer text being interpreted as
+        # another token, and escaping prevents it becoming executable HTML.
+        body = re.sub(r'\{\{[A-Z_]+\}\}',
+                      lambda match: escape(str(values[match.group(0)]))
+                      if match.group(0) in values else match.group(0), body)
+        if template.builtin_key == 'equipment_20261009':
+            if not self.schedule_line_ids:
+                raise ValidationError(_('Primero calculá el plan en Tabla de amortización; después generá el contrato.'))
+            body += self._contract_schedule_html()
         return body
+
+    def _contract_schedule_html(self):
+        self.ensure_one()
+        rows = []
+        for line in self.schedule_line_ids.sorted(key=lambda line: (line.sequence, line.id)):
+            values = [str(line.sequence), fields.Date.to_string(line.date) or '',
+                      format(line.opening_balance, ',.2f'), format(line.capital, ',.2f'),
+                      format(line.interest, ',.2f'), format(line.extra_charge, ',.2f'),
+                      format(line.payment, ',.2f'), format(line.closing_balance, ',.2f')]
+            rows.append('<tr>' + ''.join('<td>%s</td>' % escape(value) for value in values) + '</tr>')
+        return ('<div style="page-break-before:always"><h3>Anexo: plan de pagos — %s</h3>'
+                '<table class="table table-sm table-bordered"><thead><tr>'
+                '<th>N.º</th><th>Fecha</th><th>Saldo inicial</th><th>Capital</th>'
+                '<th>Interés</th><th>Otros</th><th>Cuota</th><th>Saldo final</th>'
+                '</tr></thead><tbody>%s</tbody></table></div>') % (escape(self.currency_id.name), ''.join(rows))
 
     def action_generate_contract_documents(self):
         for rec in self:
@@ -175,6 +275,15 @@ class LenkaFinancialOperationContract(models.Model):
                 ('active', '=', True),
                 ('operation_type', 'in', (rec.operation_type, 'all')),
             ])
+            if rec.operation_type == 'financing':
+                selected = rec.equipment_contract_template_id
+                if not selected and not templates.filtered(lambda t: t.document_type == 'contract'):
+                    selected = self.env['lenka.contract.template']._approved_equipment_template(rec.company_id)
+                    rec.equipment_contract_template_id = selected
+                if selected:
+                    if not selected.active or selected.company_id != rec.company_id or selected.document_type != 'contract':
+                        raise ValidationError(_('Seleccioná un contrato activo de la misma empresa.'))
+                    templates = templates.filtered(lambda t: t.document_type != 'contract') | selected
             if not templates:
                 raise ValidationError(_('No existen plantillas contractuales activas para esta operacion.'))
             for template in templates:

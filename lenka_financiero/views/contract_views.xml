@@ -91,6 +91,26 @@
                 <button name="action_generate_contract_documents" string="Generar documentos" type="object" invisible="is_quote or state not in ('review','approved','contracted','active')" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
             <xpath expr="//page[@name='approval_contract']" position="after">
+                <page name="equipment_contract_data" string="Datos del contrato" invisible="operation_type != 'financing'">
+                    <div class="alert alert-info">El contrato toma los importes y el plan de esta operación. Completá los datos de los firmantes y del equipo antes de descargarlo para firma. Los datos que falten aparecerán como espacios en blanco. Las cuentas contables se configuran por separado.</div>
+                    <button name="action_use_approved_equipment_contract" string="Usar contrato aprobado de Lenka" type="object" groups="lenka_financiero.group_lenka_manager"/>
+                    <field name="equipment_contract_template_id" options="{'no_create': True}"/>
+                    <group>
+                        <group string="Firmantes">
+                            <field name="contract_seller_representative"/>
+                            <field name="contract_seller_identity"/>
+                            <field name="contract_buyer_representative"/>
+                            <field name="contract_buyer_identity"/>
+                            <field name="contract_signing_city"/>
+                        </group>
+                        <group string="Equipo y pagos">
+                            <field name="contract_equipment_serial"/>
+                            <field name="contract_warranty"/>
+                            <field name="contract_isv_amount"/>
+                            <field name="contract_payment_instructions" placeholder="Lugar de pago, banco, titular y número de cuenta autorizados"/>
+                        </group>
+                    </group>
+                </page>
                 <page name="contract_documents" string="Contratos y documentos">
                     <field name="generated_document_ids">
                         <list>
@@ -103,3 +123,4 @@
         </field>
     </record>
 </odoo>
+

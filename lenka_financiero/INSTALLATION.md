@@ -1,6 +1,6 @@
 # Preparación de instalación — Financiero Lenka
 
-Fecha: 6 de octubre de 2026.
+Fecha: 9 de octubre de 2026.
 
 ## Destino y autorización
 
@@ -16,6 +16,19 @@ Paquete técnico preparado para instalar cuando Luis lo ordene. Los contratos, d
 
 ## Resultado técnico verificado
 
+### Cambio contractual aprobado el 9 de octubre
+
+- Versión preparada: 18.0.1.0.3. Contrato de financiamiento de equipo aprobado por Luis, parametrizado sin datos personales ni bancarios del ejemplo Conzuma.
+- La primera generación de financiamiento, si no existe contrato activo, crea una plantilla por empresa. También se puede seleccionar desde **Datos del contrato → Usar contrato aprobado de Lenka**. No sustituye plantillas personalizadas ni textos ya generados.
+- Firmantes, serie, garantía, ISV incluido, instrucciones de pago y ciudad se completan en Datos del contrato. Información faltante se imprime con líneas en blanco; debe completarse antes de usar el documento para firma.
+- Importes, tasa, mora, moneda y cronograma proceden de la operación. El ISV es desglose del precio, no un cargo adicional. El plan anexo refleja las cuotas calculadas, incluido el redondeo final.
+- PDF tamaño carta con firmas y rúbricas al pie; descargar, obtener firma, subir el archivo y marcar firmado. Nunca se simula una firma.
+- Se conservan las cláusulas comerciales aprobadas de inflación, cambio de moneda y recuperación. Este cambio no automatiza ajustes de tasas ni recuperación de bienes.
+- Elisa configurará diarios y cuentas después de instalar. La generación contractual no depende de esa configuración.
+- Validación local: sintaxis Python/XML y cobertura de variables. Pruebas de integración nuevas en `tests/test_approved_contract.py`; resultado Odoo.sh pendiente de ejecución para esta versión. No confundir con los resultados de la versión anterior siguientes.
+
+### Versión anterior
+
 - Versión: 18.0.1.0.2.
 - Batería Odoo 18: **196 pruebas, 0 fallos, 0 errores**, build `grupomegatk-lenka-pilot-39344503`, commit `e451240d172d49fedd696ec5ca9c7757cded1ebd` (PR65).
 - Ciclos explícitos de crédito y depósito en USD y HNL, incluyendo contrato con adjunto de prueba, desembolso, cobro, retiro y borradores contables. Los cuatro casos verifican empresa, moneda y equilibrio contable y no se omiten por falta de cuentas demo.
@@ -30,8 +43,8 @@ Estos resultados no sustituyen la configuración contable ni aprueban el conteni
 
 En la empresa INVERSIONES LENKA de Sentinel se observaron vacíos:
 
-1. **Plantillas contractuales:** aportar contrato vigente aprobado para cada tipo de operación que se usará. No reemplazarlo por el contrato demo ni firmarlo en nombre de nadie.
-2. **Asignación contable:** confirmar los diarios de desembolsos, cobros e inversiones/depósitos y los códigos de cuentas de cartera, ingreso por intereses, ingreso por mora, anticipos no aplicados, comisión de tarjeta, costo de fondeo, obligación con inversionistas, gasto por intereses pasivos y retención por pagar. Confirmar también las tasas operativas de comisión y retención; no inferirlas de los valores predeterminados del módulo.
+1. **Plantillas contractuales:** financiamiento de equipos aprobado e incorporado. Los contratos para préstamos y arrendamientos son formatos distintos y no se sustituyen por este contrato de equipo.
+2. **Asignación contable (Elisa):** configurar los diarios de desembolsos, cobros e inversiones/depósitos y los códigos de cuentas de cartera, ingreso por intereses, ingreso por mora, anticipos no aplicados, comisión de tarjeta, costo de fondeo, obligación con inversionistas, gasto por intereses pasivos y retención por pagar. Confirmar también las tasas operativas de comisión y retención; no inferirlas de los valores predeterminados del módulo.
 
 Estos datos pueden introducirse desde el sistema instalado. El contrato se requiere antes de completar la contratación de una operación; los diarios y cuentas, antes de generar los movimientos contables correspondientes. Su ausencia no bloquea instalar el módulo ni crear cotizaciones. No generar movimientos reales con parámetros de demostración.
 
@@ -44,3 +57,4 @@ Estos datos pueden introducirse desde el sistema instalado. El contrato se requi
 5. Verificar carga del módulo, ícono, acceso, empresa y configuración. Esta comprobación posterior de instalación no crea créditos ni movimientos reales.
 
 Si la instalación falla, revisar logs y recuperar mediante el respaldo y procedimiento de Odoo.sh; no desinstalar automáticamente ni borrar datos. Coordinar cualquier recuperación que afecte la base compartida.
+

@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="paperformat_lenka_contract" model="report.paperformat">
+        <field name="name">Contrato Lenka — carta con rúbricas</field>
+        <field name="format">Letter</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">18</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">20</field>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
     <record id="action_report_lenka_generated_document" model="ir.actions.report">
         <field name="name">Documento Contractual Lenka</field>
         <field name="model">lenka.generated.document</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">lenka_financiero.report_lenka_generated_document</field>
         <field name="report_file">lenka_financiero.report_lenka_generated_document</field>
+        <field name="paperformat_id" ref="paperformat_lenka_contract"/>
         <field name="binding_model_id" ref="model_lenka_generated_document"/>
         <field name="binding_type">report</field>
         <field name="print_report_name">'%s' % (object.name)</field>
@@ -13,12 +25,22 @@
     <template id="report_lenka_generated_document">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
-                    <div class="page">
+                <t t-call="lenka_financiero.contract_layout">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size:11pt; line-height:1.2">
                         <div t-field="o.rendered_html"/>
                     </div>
                 </t>
             </t>
         </t>
+    </template>
+    <template id="contract_layout">
+        <div class="header"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" t-att-data-oe-lang="o.env.context.get('lang')">
+            <t t-out="0"/>
+        </div>
+        <div class="footer" style="font-family: 'Times New Roman', serif; font-size:9pt; text-align:center">
+            <p style="padding-top:10px">Rúbrica VENDEDOR: ____________________ &#160; Rúbrica COMPRADOR: ____________________</p>
+            <p><span t-field="o.name"/> · Página <span class="page"/> de <span class="topage"/></p>
+        </div>
     </template>
 </odoo>
