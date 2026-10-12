@@ -7,6 +7,16 @@ import { CalendarCommonRenderer } from "@web/views/calendar/calendar_common/cale
 
 class ODentalAppointmentCommonRenderer extends CalendarCommonRenderer {
     static eventTemplate = "odental_core.AppointmentCalendarEvent";
+
+    onEventDidMount(info) {
+        super.onEventDidMount(info);
+        const record = this.props.model.records[info.event.id];
+        const patient = record?.rawRecord.patient_id;
+        const professional = record?.rawRecord.professional_id;
+        if (patient && professional) {
+            info.el.title = `${patient[1]} · ${professional[1]}`;
+        }
+    }
 }
 
 class ODentalAppointmentRenderer extends CalendarRenderer {
