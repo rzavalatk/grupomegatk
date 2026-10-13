@@ -19,7 +19,7 @@
 
     .fc-timegrid-event-short:has(.odental_event_title) {
         .fc-time {
-            display: none;
+            display: none !important;
         }
 
         .odental_event_title {
