@@ -7,8 +7,14 @@
         </t>
         <div class="o_event_title odental_event_title">
             <t t-if="rawRecord.patient_id">
-                <div class="odental_event_patient" t-att-title="rawRecord.patient_id[1]" t-out="rawRecord.patient_id[1]"/>
-                <div class="odental_event_professional" t-att-title="rawRecord.professional_id &amp;&amp; rawRecord.professional_id[1]" t-out="rawRecord.professional_id &amp;&amp; rawRecord.professional_id[1]"/>
+                <div class="odental_event_patient" t-att-title="rawRecord.patient_id[1]">
+                    <span class="odental_name_full" t-out="rawRecord.patient_id[1]"/>
+                    <span class="odental_name_short" t-out="patientShortName"/>
+                </div>
+                <div class="odental_event_professional" t-att-title="rawRecord.professional_id &amp;&amp; rawRecord.professional_id[1]">
+                    <span class="odental_name_full" t-out="rawRecord.professional_id &amp;&amp; rawRecord.professional_id[1]"/>
+                    <span class="odental_name_short" t-out="professionalShortName"/>
+                </div>
             </t>
             <t t-else="" t-out="title"/>
         </div>
