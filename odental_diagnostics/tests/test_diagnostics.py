@@ -201,6 +201,42 @@ class TestODentalDiagnostics(TransactionCase):
         with self.assertRaises(UserError):
             chart.finding_ids.with_user(self.operator).unlink()
 
+    def test_dictation_requires_review_and_keeps_clinical_isolation(self):
+        chart = self.env['odental.odontogram'].with_user(self.operator).create({
+            'clinical_record_id': self.record.id, 'professional_id': self.professional.id,
+        })
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11, superficie mesial, fractura, existente, '
+                          'detalle: borde visible',
+        })
+        wizard.action_interpret()
+        self.assertEqual(wizard.tooth_id, self.tooth_11)
+        self.assertEqual((wizard.surface, wizard.condition, wizard.status),
+                         ('mesial', 'fracture', 'existing'))
+        self.assertEqual(len(chart.finding_ids), 0)
+        wizard.action_apply()
+        self.assertEqual(len(chart.finding_ids), 1)
+        self.assertEqual(chart.finding_ids.notes, 'borde visible')
+        events = self.env['odental.clinical.audit'].search([
+            ('record_res_id', '=', chart.id), ('event_type', '=', 'dictation_applied')])
+        self.assertEqual(events.user_id, self.operator)
+        chart.action_sign()
+        with self.assertRaises(UserError):
+            wizard.action_apply()
+
+    def test_dictation_does_not_guess_an_ambiguous_finding(self):
+        chart = self._chart()
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11 y 12, caries o fractura',
+        })
+        wizard.action_interpret()
+        self.assertFalse(wizard.tooth_id)
+        self.assertFalse(wizard.condition)
+        with self.assertRaises(ValidationError):
+            wizard.action_apply()
+
     def test_image_context_and_metadata_are_protected(self):
         image = self._image()
         with self.assertRaises(UserError):
