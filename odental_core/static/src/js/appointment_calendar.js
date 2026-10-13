@@ -9,7 +9,9 @@ import { CalendarCommonRenderer } from "@web/views/calendar/calendar_common/cale
 const PROFESSIONAL_TITLES = new Set(["dr", "dra", "doctor", "doctora", "odont", "odontologo", "odontologa"]);
 
 function firstName(name, professional = false) {
-    const words = String(name || "").trim().split(/\s+/).filter(Boolean);
+    const label = String(name || "").trim();
+    const givenName = professional && label.includes(",") ? label.split(",", 2)[1].trim() : label;
+    const words = givenName.split(/\s+/).filter(Boolean);
     while (professional && words.length > 1 && PROFESSIONAL_TITLES.has(words[0].replace(/\.$/, "").toLowerCase())) {
         words.shift();
     }
