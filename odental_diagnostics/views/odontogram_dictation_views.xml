@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_odontogram_dictation_form" model="ir.ui.view">
+        <field name="name">odental.odontogram.dictation.form</field>
+        <field name="model">odental.odontogram.dictation</field>
+        <field name="arch" type="xml">
+            <form string="Dictar hallazgo dental" create="0">
+                <group>
+                    <field name="chart_id" invisible="1"/>
+                    <field name="transcript" widget="odental_local_dictation" placeholder="Ej.: tercer molar superior derecho, superficie oclusal, fractura, existente, detalle: borde distal."/>
+                    <field name="interpretation_message" readonly="1" invisible="not interpretation_message"/>
+                </group>
+                <group string="Revise y corrija antes de guardar">
+                    <field name="tooth_id"/>
+                    <field name="surface"/>
+                    <field name="condition"/>
+                    <field name="status"/>
+                    <field name="notes"/>
+                </group>
+                <footer>
+                    <button name="action_interpret" type="object" string="Interpretar dictado" class="btn-secondary"/>
+                    <button name="action_apply" type="object" string="Guardar hallazgo revisado" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
