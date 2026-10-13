@@ -298,6 +298,18 @@ class ODentalOdontogram(models.Model):
         ]
         return action
 
+    def action_open_dictation(self):
+        self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+        if self.state != "draft":
+            raise UserError("Solo se puede dictar en un odontograma en borrador.")
+        return {
+            "type": "ir.actions.act_window", "name": "Dictar hallazgo",
+            "res_model": "odental.odontogram.dictation", "view_mode": "form",
+            "target": "new", "context": {"default_chart_id": self.id},
+        }
+
 
 class ODentalOdontogramFinding(models.Model):
     _name = "odental.odontogram.finding"
