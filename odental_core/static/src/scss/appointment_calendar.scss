@@ -17,6 +17,37 @@
         }
     }
 
+    .fc-timegrid-event-short:has(.odental_event_title) {
+        .fc-time {
+            display: none;
+        }
+
+        .odental_event_title {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .odental_event_patient,
+        .odental_event_professional {
+            display: inline;
+            flex: 0 1 auto;
+            min-width: 0;
+        }
+
+        .odental_name_full {
+            display: none;
+        }
+
+        .odental_name_short {
+            display: inline;
+        }
+
+        .odental_event_professional::before {
+            content: " · ";
+        }
+    }
+
     .fc-timeGridDay-view,
     .fc-timeGridWeek-view {
         .odental_event_title {
