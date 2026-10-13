@@ -103,6 +103,20 @@ class ODentalAppointment(models.Model):
          "Este bloqueo externo ya está registrado para el profesional."),
     ]
 
+    @api.depends("name", "entry_type", "patient_id.name", "professional_id.name")
+    def _compute_display_name(self):
+        # Odoo's calendar uses display_name as the event title. Keep the
+        # sequence in name so references, audits and integrations stay stable.
+        for appointment in self:
+            if appointment.entry_type == "busy":
+                appointment.display_name = "No disponible"
+            elif appointment.patient_id and appointment.professional_id:
+                appointment.display_name = "%s · %s" % (
+                    appointment.patient_id.name, appointment.professional_id.name
+                )
+            else:
+                appointment.display_name = appointment.name or "Nueva cita"
+
     @api.depends(
         "organization_id",
         "organization_id.user_ids",

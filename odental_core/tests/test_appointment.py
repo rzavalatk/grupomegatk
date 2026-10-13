@@ -97,6 +97,30 @@ class TestODentalAppointment(TransactionCase):
             ]
         return values
 
+    def test_calendar_title_identifies_patient_and_professional(self):
+        appointment = self.env["odental.appointment"].create(
+            self._appointment_values(datetime(2026, 10, 13, 9))
+        )
+        self.assertEqual(
+            appointment.read(["display_name"])[0]["display_name"],
+            "Paciente prueba · Dra. Prueba",
+        )
+        self.assertTrue(appointment.name.startswith("CIT-"))
+        self.patient.name = "Paciente actualizado"
+        self.assertEqual(
+            appointment.display_name, "Paciente actualizado · Dra. Prueba"
+        )
+
+    def test_private_busy_title_does_not_reveal_details(self):
+        busy = self.env["odental.appointment"].sudo().create({
+            "entry_type": "busy",
+            "organization_id": self.organization.id,
+            "professional_id": self.professional.id,
+            "start_datetime": datetime(2026, 10, 13, 11),
+            "duration_minutes": 30,
+        })
+        self.assertEqual(busy.display_name, "No disponible")
+
     def _other_clinic_booking(self, start):
         operator = self.env['res.users'].with_context(no_reset_password=True).create(
             self._partner_compatible_values(

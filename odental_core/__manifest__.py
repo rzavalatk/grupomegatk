@@ -1,7 +1,7 @@
 {
     "name": "O Dental Core",
     "summary": "Núcleo clínico, agenda y recursos para O Dental",
-    "version": "18.0.1.6.0",
+    "version": "18.0.1.6.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
@@ -19,6 +19,13 @@
         "views/appointment_views.xml",
         "views/odental_menus.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "odental_core/static/src/js/appointment_calendar.js",
+            "odental_core/static/src/xml/appointment_calendar.xml",
+            "odental_core/static/src/scss/appointment_calendar.scss",
+        ],
+    },
     "application": True,
     "installable": True,
 }

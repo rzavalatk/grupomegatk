@@ -1,0 +1,38 @@
+.o_calendar_renderer {
+    .odental_appointment_event {
+        container-type: inline-size;
+    }
+
+    .odental_name_short {
+        display: none;
+    }
+
+    @container (max-width: 150px) {
+        .odental_name_full {
+            display: none;
+        }
+
+        .odental_name_short {
+            display: inline;
+        }
+    }
+
+    .fc-timeGridDay-view,
+    .fc-timeGridWeek-view {
+        .odental_event_title {
+            display: block;
+            overflow: hidden;
+            white-space: normal;
+            line-height: 1.1;
+            font-size: .75rem;
+        }
+
+        .odental_event_patient,
+        .odental_event_professional {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
