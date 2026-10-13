@@ -285,6 +285,19 @@ class ODentalOdontogram(models.Model):
     def action_cancel(self):
         self.filtered(lambda chart: chart.state == "draft").write({"state": "cancelled"})
 
+    def action_view_finding_history(self):
+        self.ensure_one()
+        self.check_access_rights("read")
+        self.check_access_rule("read")
+        action = self.env.ref("odental_clinical.action_odental_clinical_audit").read()[0]
+        action["name"] = "Historial de hallazgos"
+        action["domain"] = [
+            ("model_name", "=", self._name),
+            ("record_res_id", "=", self.id),
+            ("event_type", "in", ("finding_created", "finding_updated", "finding_deleted")),
+        ]
+        return action
+
 
 class ODentalOdontogramFinding(models.Model):
     _name = "odental.odontogram.finding"
@@ -322,6 +335,21 @@ class ODentalOdontogramFinding(models.Model):
         )
     ]
 
+    def _audit_description(self):
+        self.ensure_one()
+        surface = dict(TOOTH_SURFACES).get(self.surface, self.surface)
+        condition = dict(TOOTH_CONDITIONS).get(self.condition, self.condition)
+        status = dict(self._fields["status"].selection).get(self.status, self.status)
+        return (
+            f"#{self.id}: {self.tooth_id.display_name}, {surface}, {condition}, "
+            f"{status}; detalle: {self.notes or '(sin detalle)'}"
+        )
+
+    def _audit_finding(self, event_type, summary, chart=None):
+        self.ensure_one()
+        chart = chart or self.odontogram_id
+        chart.clinical_record_id._log_event(event_type, summary, source_record=chart)
+
     @api.model_create_multi
     def create(self, vals_list):
         default_chart = self.default_get(["odontogram_id"]).get("odontogram_id")
@@ -329,7 +357,12 @@ class ODentalOdontogramFinding(models.Model):
         charts = self.env["odental.odontogram"].browse([chart_id for chart_id in chart_ids if chart_id])
         if any(chart.state != "draft" for chart in charts):
             raise UserError("No se pueden agregar hallazgos a un odontograma firmado.")
-        return super().create(vals_list)
+        findings = super().create(vals_list)
+        for finding in findings:
+            finding._audit_finding(
+                "finding_created", f"Hallazgo agregado: {finding._audit_description()}"
+            )
+        return findings
 
     def write(self, vals):
         if any(finding.odontogram_id.state != "draft" for finding in self):
@@ -338,12 +371,31 @@ class ODentalOdontogramFinding(models.Model):
             target = self.env["odental.odontogram"].browse(vals["odontogram_id"])
             if target.state != "draft":
                 raise UserError("No se pueden mover hallazgos a un odontograma firmado.")
-        return super().write(vals)
+            if any(finding.odontogram_id != target for finding in self):
+                raise UserError("No se puede trasladar un hallazgo entre odontogramas.")
+        tracked = {"tooth_id", "surface", "condition", "status", "notes"}
+        before = {finding.id: finding._audit_description() for finding in self} if tracked.intersection(vals) else {}
+        result = super().write(vals)
+        for finding in self:
+            if finding.id in before and before[finding.id] != finding._audit_description():
+                finding._audit_finding(
+                    "finding_updated",
+                    f"Hallazgo modificado: {before[finding.id]} → {finding._audit_description()}",
+                )
+        return result
 
     def unlink(self):
         if any(finding.odontogram_id.state != "draft" for finding in self):
             raise UserError("No se pueden eliminar hallazgos de un odontograma firmado.")
-        return super().unlink()
+        audit_entries = [
+            (finding.odontogram_id, finding._audit_description()) for finding in self
+        ]
+        result = super().unlink()
+        for chart, description in audit_entries:
+            chart.clinical_record_id._log_event(
+                "finding_deleted", f"Hallazgo eliminado: {description}", source_record=chart
+            )
+        return result
 
     @api.constrains("odontogram_id", "tooth_id")
     def _check_dentition(self):
