@@ -29,6 +29,7 @@
                     <field name="summary" placeholder="Resumen general del odontograma..." readonly="state != 'draft'"/>
                     <field name="name" widget="odental_tooth_chart" nolabel="1" readonly="1"/>
                     <separator string="Hallazgos por pieza y superficie"/>
+                    <button name="action_open_dictation" type="object" string="Dictar hallazgo" class="btn-secondary" invisible="state != 'draft'"/>
                     <button name="action_view_finding_history" type="object" string="Historial de hallazgos" class="btn-secondary"/>
                     <field name="finding_ids" readonly="state != 'draft'">
                         <list editable="bottom" decoration-danger="condition in ('caries', 'fracture', 'extraction_indicated')" decoration-success="status == 'completed'">
