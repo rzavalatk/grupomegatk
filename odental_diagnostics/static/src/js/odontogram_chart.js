@@ -22,8 +22,7 @@ export class OdontogramChart extends Component {
         this.state = useState({ teeth: [], findings: [], loading: true, error: false });
         onWillStart(() => this.load());
         onWillUpdateProps((nextProps) => {
-            if (nextProps.record.resId !== this.props.record.resId ||
-                nextProps.record.data.dentition !== this.props.record.data.dentition) {
+            if (nextProps.record.resId !== this.props.record.resId) {
                 return this.load(nextProps);
             }
         });
@@ -37,11 +36,10 @@ export class OdontogramChart extends Component {
         this.state.loading = true;
         this.state.error = false;
         try {
-            const dentition = props.record.data.dentition || "permanent";
-            const types = dentition === "mixed" ? ["permanent", "primary"] : [dentition];
             const chartId = props.record.resId;
             const [teeth, findings] = await Promise.all([
-                this.orm.searchRead("odental.tooth", [["dentition", "in", types]], ["code", "name", "dentition", "tooth_type"]),
+                // Keep both catalogues in memory so changing dentition updates the arcs immediately.
+                this.orm.searchRead("odental.tooth", [], ["code", "name", "dentition", "tooth_type"]),
                 chartId ? this.orm.searchRead("odental.odontogram.finding", [["odontogram_id", "=", chartId]],
                     ["tooth_id", "surface", "condition", "status", "notes"]) : Promise.resolve([]),
             ]);
