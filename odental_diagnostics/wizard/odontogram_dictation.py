@@ -82,6 +82,11 @@ class ODentalOdontogramDictation(models.TransientModel):
         surfaces = _matches(text, SURFACE_WORDS)
         conditions = _matches(text, CONDITION_WORDS)
         statuses = _matches(text, STATUS_WORDS)
+        negated = any(re.search(r"\b(?:sin|no hay|no presenta|descartar)\s+"
+                                + re.escape(word) + r"\b", text)
+                      for words in CONDITION_WORDS.values() for word in words)
+        if negated:
+            conditions.clear()
         # Specific terms can include a shorter generic term (e.g. restauración temporal).
         if "temporary_restoration" in conditions:
             conditions.discard("restoration")
@@ -90,6 +95,8 @@ class ODentalOdontogramDictation(models.TransientModel):
                                ("condición", conditions), ("estado", statuses)):
             if len(choices) != 1:
                 warnings.append(f"Revise {label}: {'no identificado' if not choices else 'varios valores'}.")
+        if negated:
+            warnings.append("Se detectó una negación: confirme la condición manualmente.")
         tooth = teeth.filtered(lambda item: item.code in codes) if len(codes) == 1 else teeth.browse()
         if tooth and self.chart_id.dentition != "mixed" and tooth.dentition != self.chart_id.dentition:
             warnings.append("La pieza no corresponde a la dentición del odontograma.")
