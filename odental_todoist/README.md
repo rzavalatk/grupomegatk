@@ -3,7 +3,9 @@
 Piloto para intercambiar disponibilidad entre O Dental y la agenda personal del
 profesional. Las reuniones de Todoist bloquean O Dental: recepción solo ve
 **No disponible**, el profesional y el intervalo; sus títulos y descripciones
-no se copian. Las citas clínicas se publican en el Inbox privado de Todoist
+no se copian. Las citas clínicas se publican en el proyecto personal de Todoist
+configurado para cada conexión. Si no se pega enlace o ID, se crea o reutiliza
+el nombre indicado (por defecto **MegaSmile | Agenda clínica** para MegaSmile),
 con nombre del paciente, servicio general y horario, sin expediente ni notas.
 
 ## Preparación
@@ -17,6 +19,18 @@ con nombre del paciente, servicio general y horario, sin expediente ni notas.
 3. El profesional obtiene su token personal en su propia cuenta de Todoist y
    lo pega directamente en el formulario de Odoo. No enviarlo por chat ni a la
    recepcionista. Elegir etiqueta `reunión` y zona `America/Tegucigalpa`.
+   En **Enlace o ID del proyecto existente**, puede pegar el enlace obtenido
+   con **Copiar enlace al proyecto** en Todoist o el ID del proyecto. Si lo deja
+   vacío, O Dental crea o reutiliza el proyecto indicado en **Nombre si se crea
+   el proyecto**. El destino se configura por profesional y organización y se
+   puede cambiar volviendo a **Conectar mi Todoist**. Las citas espejo se mueven
+   al destino configurado durante la siguiente sincronización. O Dental solo
+   acepta proyectos **personales y privados** de la cuenta autenticada; rechaza
+   proyectos compartidos o
+   pertenecientes a un espacio de trabajo y comprueba la privacidad en cada
+   sincronización. Si hay nombres duplicados, el profesional debe resolverlos
+   en su cuenta antes de conectar. Las reuniones personales con `@reunión`
+   siguen bloqueando disponibilidad desde cualquier proyecto.
 4. Crear en Todoist una tarea con la etiqueta `@reunión` y fecha **con hora**.
    Si Todoist permite duración explícita, se respeta; en una cuenta sin esa
    función se usa la duración predeterminada (60 minutos, configurable).
@@ -49,7 +63,7 @@ El campo administrativo `export_all_patients` permite una activación posterior
 para todas las citas de ese profesional y organización. Antes de activarlo hay
 que validar conflictos y cancelaciones, obtener confirmación específica para
 enviar nombres y servicios generales de pacientes reales al Todoist del
-profesional y confirmar la identidad y acceso de la cuenta. No se activa al
+profesional y confirmar la identidad y acceso de la cuenta y del proyecto. No se activa al
 actualizar el módulo.
 
 El receptor `/odental/todoist/webhook` está inactivo mientras no se configure
@@ -69,7 +83,8 @@ registrar ni autorizar una aplicación desde una cuenta ajena a la titular.
   cancelado fuera de la Agenda habitual.
 - Repetir desde un usuario de otra clínica: no debe ver ni administrar la
   conexión, la tarea o la cita clínica de la primera organización.
-- Crear cita clínica de prueba: debe aparecer en el Inbox Todoist con nombre y
+- Crear cita clínica de prueba: debe aparecer en el proyecto privado de la
+  clínica en Todoist con nombre y
   servicio general. Moverla en Todoist y comprobar la nueva hora en O Dental;
   moverla desde O Dental y comprobar el cambio en Todoist. Cancelarla en O
   Dental y comprobar que la tarea correspondiente desaparece.
