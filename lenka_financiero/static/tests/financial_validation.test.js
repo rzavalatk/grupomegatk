@@ -10,6 +10,8 @@ class LenkaOperation extends models.Model {
     principal_amount = fields.Float({ default: 100000 });
     down_payment = fields.Float();
     interest_rate = fields.Float({ default: 3 });
+    late_fee_rate = fields.Float();
+    grace_days = fields.Integer();
     term_months = fields.Integer({ default: 12 });
     interest_only_months = fields.Integer();
     calculation_method = fields.Selection({ selection: [["level", "Cuota nivelada"], ["interest_then_level", "Solo intereses y luego cuota nivelada"]], default: "interest_then_level" });
@@ -23,7 +25,7 @@ const valid = { principal_amount: 100000, interest_rate: 3, down_payment: 0,
     term_months: 24, interest_only_months: 12, calculation_method: "interest_then_level" };
 const arch = `<form js_class="lenka_operation_form"><header><button name="action_generate_schedule" type="object" string="Calcular plan"/></header><sheet><group>
     <field name="principal_amount"/><field name="down_payment"/><field name="interest_rate"/>
-    <field name="term_months"/><field name="interest_only_months"/><field name="calculation_method"/>
+    <field name="late_fee_rate"/><field name="grace_days"/><field name="term_months"/><field name="interest_only_months"/><field name="calculation_method"/>
     </group></sheet></form>`;
 const mount = () => mountView({ type: "form", resModel: "lenka.financial.operation", resId: 1, arch });
 
@@ -86,4 +88,25 @@ test("equal phases highlight both term and interest months", async () => {
     await animationFrame();
     expect('[name="interest_only_months"]').toHaveClass("o_lenka_financial_error");
     expect('[name="term_months"]').toHaveClass("o_lenka_financial_error");
+});
+
+
+test("mora rejects invalid percentages and allows zero", () => {
+    expect(financialValidationErrors({ ...valid, late_fee_rate: -1 }).map(e => e.field)).toEqual(["late_fee_rate"]);
+    expect(financialValidationErrors({ ...valid, late_fee_rate: 101 }).map(e => e.field)).toEqual(["late_fee_rate"]);
+    expect(financialValidationErrors({ ...valid, late_fee_rate: 0 })).toEqual([]);
+    expect(financialValidationErrors({ ...valid, grace_days: -1 }).map(e => e.field)).toEqual(["grace_days"]);
+});
+
+test("invalid mora is highlighted and clears when corrected", async () => {
+    await mount();
+    await contains('[name="term_months"] input').edit("24");
+    await contains('[name="interest_only_months"] input').edit("12");
+    await contains('[name="late_fee_rate"] input').edit("-1");
+    await contains(".o_form_button_save").click();
+    await animationFrame();
+    expect('[name="late_fee_rate"]').toHaveClass("o_lenka_financial_error");
+    await contains('[name="late_fee_rate"] input').edit("2");
+    await animationFrame();
+    expect(".o_lenka_financial_error").toHaveCount(0);
 });

@@ -173,3 +173,14 @@ class TestExclusiveSoleSignatureApproval(TransactionCase):
         self.assertEqual(op.sole_signature_activity_id.sudo().user_id, self.luis)
         op.with_user(self.luis).action_approve()
         self.assertEqual(op.approved_by, self.luis)
+
+    def test_mora_is_in_request_and_locked_while_pending(self):
+        op=self._request()
+        op.write({'late_fee_rate':1.25,'late_fee_method':'balance_monthly','grace_days':3})
+        op.action_request_sole_signature()
+        body=op.sole_signature_notification_id.sudo().body_html
+        self.assertIn('1.25%',body)
+        self.assertIn('Días de gracia',body)
+        for values in ({'late_fee_rate':2},{'late_fee_method':'legacy'},{'grace_days':0}):
+            with self.assertRaises(ValidationError),self.cr.savepoint():op.write(values)
+        self.assertEqual(op.late_fee_rate,1.25)

@@ -33,5 +33,12 @@ export function financialValidationErrors(data) {
     if (Number(data.balloon_base_payment || 0) < 0) {
         add("balloon_base_payment", "Cuota regular antes de bombas: ingrese cero o un monto positivo.");
     }
+    const mora = Number(data.late_fee_rate || 0);
+    if (!Number.isFinite(mora) || mora < 0 || mora > 100) {
+        add("late_fee_rate", "Mora mensual (%): ingrese un porcentaje entre 0 y 100. Cero significa sin mora.");
+    }
+    if (Number(data.grace_days || 0) < 0) {
+        add("grace_days", "Días de gracia: ingrese cero o un número positivo.");
+    }
     return errors;
 }

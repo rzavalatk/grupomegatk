@@ -22,7 +22,7 @@
                     </group>
                     <field name="body_html" widget="html"/>
                     <group string="Variables disponibles">
-                        <div class="o_form_label">{{CLIENTE}}, {{IDENTIDAD_CLIENTE}}, {{DIRECCION_CLIENTE}}, {{AVALES}}, {{MONEDA}}, {{MONTO}}, {{PRIMA}}, {{MONTO_FINANCIADO}}, {{TASA}}, {{PERIODO_TASA}}, {{PLAZO_MESES}}, {{PRIMER_PAGO}}, {{PRODUCTO}}, {{GARANTIAS}}, {{OPCION_COMPRA}}, {{FECHA}}, {{OPERACION}}, {{TIPO_OPERACION}}</div>
+                        <div class="o_form_label">{{CLIENTE}}, {{IDENTIDAD_CLIENTE}}, {{DIRECCION_CLIENTE}}, {{AVALES}}, {{MONEDA}}, {{MONTO}}, {{PRIMA}}, {{MONTO_FINANCIADO}}, {{TASA}}, {{PERIODO_TASA}}, {{PLAZO_MESES}}, {{PRIMER_PAGO}}, {{PRODUCTO}}, {{GARANTIAS}}, {{OPCION_COMPRA}}, {{FECHA}}, {{OPERACION}}, {{TIPO_OPERACION}}, {{TASA_MORA}}, {{DIAS_GRACIA}}, {{FACULTADES_REPRESENTANTE}}</div>
                     </group>
                     <field name="notes"/>
                 </sheet>
@@ -91,22 +91,23 @@
                 <button name="action_generate_contract_documents" string="Generar documentos" type="object" invisible="is_quote or state not in ('review','approved','contracted','active')" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
             <xpath expr="//page[@name='approval_contract']" position="after">
-                <page name="equipment_contract_data" string="Datos del contrato" invisible="operation_type != 'financing'">
-                    <div class="alert alert-info">El contrato toma los importes y el plan de esta operación. Completá los datos de los firmantes y del equipo antes de descargarlo para firma. Los datos que falten aparecerán como espacios en blanco. Las cuentas contables se configuran por separado.</div>
-                    <button name="action_use_approved_equipment_contract" string="Usar contrato aprobado de Lenka" type="object" groups="lenka_financiero.group_lenka_manager"/>
-                    <field name="equipment_contract_template_id" options="{'no_create': True}"/>
+                <page name="equipment_contract_data" string="Datos del contrato" invisible="operation_type not in ('financing', 'loan')">
+                    <div class="alert alert-info">El contrato toma los importes y el plan de esta operación. Completá los datos de los firmantes y, cuando corresponda, del equipo antes de descargarlo para firma. Los datos que falten aparecerán como espacios en blanco. Las cuentas contables se configuran por separado.</div>
+                    <button name="action_use_approved_equipment_contract" string="Usar contrato aprobado de Lenka" type="object" groups="lenka_financiero.group_lenka_manager" invisible="operation_type != 'financing'"/>
+                    <field name="equipment_contract_template_id" invisible="operation_type != 'financing'" options="{'no_create': True}"/>
                     <group>
                         <group string="Firmantes">
-                            <field name="contract_seller_representative"/>
+                            <field name="contract_seller_representative" string="Representante de Lenka"/>
                             <field name="contract_seller_identity"/>
-                            <field name="contract_buyer_representative"/>
-                            <field name="contract_buyer_identity"/>
+                            <field name="contract_buyer_representative" string="Firmante del cliente"/>
+                            <field name="contract_buyer_identity" string="Identidad del firmante del cliente"/>
+                            <field name="contract_buyer_authority" invisible="operation_type != 'loan'"/>
                             <field name="contract_signing_city"/>
                         </group>
-                        <group string="Equipo y pagos">
-                            <field name="contract_equipment_serial"/>
-                            <field name="contract_warranty"/>
-                            <field name="contract_isv_amount"/>
+                        <group string="Datos y pagos">
+                            <field name="contract_equipment_serial" invisible="operation_type != 'financing'"/>
+                            <field name="contract_warranty" invisible="operation_type != 'financing'"/>
+                            <field name="contract_isv_amount" invisible="operation_type != 'financing'"/>
                             <field name="contract_payment_instructions" placeholder="Lugar de pago, banco, titular y número de cuenta autorizados"/>
                         </group>
                     </group>
@@ -123,4 +124,5 @@
         </field>
     </record>
 </odoo>
+
 
