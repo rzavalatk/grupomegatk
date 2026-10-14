@@ -4,7 +4,7 @@
         <field name="name">odental.odontogram.dictation.form</field>
         <field name="model">odental.odontogram.dictation</field>
         <field name="arch" type="xml">
-            <form string="Dictar hallazgo dental" create="0">
+            <form string="Dictar hallazgo dental">
                 <group>
                     <field name="chart_id" invisible="1"/>
                     <field name="transcript" widget="odental_local_dictation" placeholder="Ej.: tercer molar superior derecho, superficie oclusal, fractura, existente, detalle: borde distal."/>
