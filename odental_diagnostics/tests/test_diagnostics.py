@@ -237,6 +237,16 @@ class TestODentalDiagnostics(TransactionCase):
         with self.assertRaises(ValidationError):
             wizard.action_apply()
 
+    def test_dictation_negation_needs_manual_review(self):
+        chart = self._chart()
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11, oclusal, sin caries, en observación',
+        })
+        wizard.action_interpret()
+        self.assertFalse(wizard.condition)
+        self.assertIn('negación', wizard.interpretation_message)
+
     def test_image_context_and_metadata_are_protected(self):
         image = self._image()
         with self.assertRaises(UserError):
