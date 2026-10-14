@@ -1,20 +1,55 @@
 # Próximos conectores y reserva en línea
 
+## Sincronización rápida y despliegue permanente
+
+La tarea programada de Odoo.sh funciona según disponibilidad y no garantiza
+menos de cinco minutos, incluso en producción. Staging reduce la frecuencia
+cuando la base está inactiva. Mantener el sondeo como conciliación de respaldo.
+
+Para reducir la espera: publicar cambios de O Dental tras confirmar la
+transacción y recibir eventos `item:added`, `item:updated`, `item:deleted`,
+`item:completed` y `item:uncompleted` mediante el webhook de Todoist. El
+webhook necesita aplicación registrada, URL HTTPS pública y autorización OAuth
+de la profesional; su token personal actual no habilita esas notificaciones.
+Verificar firma HMAC, identidad y organización de cada evento, evitar bucles y
+duplicados, y volver a consultar Todoist en vez de confiar en datos de un
+evento retrasado o fuera de orden. Conservar la prioridad de la hora elegida
+por la doctora y la señal de conflicto, sin mover silenciosamente pacientes.
+
+La activación para pacientes reales queda separada del despliegue de código:
+`export_all_patients` empieza desactivado. Confirmar expresamente el envío a
+Todoist de nombre, servicio general y horario para todas las citas futuras
+de MegaSmile antes de activarlo. Una reconstrucción de staging copia otra vez
+producción y puede perder la conexión y token de esta prueba; preparar una
+nueva prueba y autorización OAuth sin interrumpir el piloto actual.
+
 La cita clínica vive en `odental.appointment`. El profesional decide la hora
 desde su agenda personal cuando la conexión está activa; recepción también
 puede editarla en O Dental. Si ambos lados cambian la hora antes de conciliar,
 se aplica la del profesional. Una colisión con otra cita queda marcada para
 revisión y nunca desplaza a un segundo paciente de forma silenciosa.
 
-## Google Calendar y otros calendarios
+## Agendas personales adicionales
 
-Agregar un adaptador por proveedor con identificador externo, fechas UTC,
-organización, profesional y última versión conciliada. Solo importar intervalos
-ocupados privados; los eventos clínicos salientes muestran los datos mínimos
-que autorice la clínica. Identificar y excluir eventos generados por O Dental
-para evitar bucles y bloques duplicados si Todoist ya se sincroniza con Google.
-Outlook y Apple Calendar requieren evaluar autenticación y capacidades del
-proveedor antes de conectarlos. No activar cuentas sin autorización del titular.
+El único conector implementado actualmente es **Todoist**. Preparar una
+configuración común por profesional y organización para seleccionar fuentes de
+disponibilidad y un destino de citas por proveedor. Mantener cada conexión
+independiente: credencial del titular, calendario/proyecto de destino,
+activación, última sincronización y errores. No mostrar proveedores como
+«conectados» hasta completar su adaptador y una prueba de ida y vuelta.
+
+Priorizar **Google Calendar**, **Microsoft Outlook/Microsoft 365** y
+**Apple Calendar/iCloud**; evaluar después otros calendarios solicitados por
+profesionales. Cada adaptador necesita identificador externo, fechas UTC,
+organización, profesional, última versión conciliada y política de cancelación.
+Importar solo intervalos ocupados privados; los eventos clínicos salientes
+mostrarán únicamente los datos mínimos que autorice la clínica. Identificar y
+excluir eventos generados por O Dental para evitar bucles y bloqueos duplicados
+cuando una persona ya sincronice Todoist, Google u Outlook entre sí. Si dos
+agendas intentan modificar la misma cita, conservar un histórico y pedir
+revisión ante cambios incompatibles; no cancelar ni desplazar pacientes de
+forma silenciosa. Verificar autenticación, permisos y capacidades de cada
+proveedor antes de conectarlo. No activar cuentas sin autorización del titular.
 
 ## Enlace para pacientes
 

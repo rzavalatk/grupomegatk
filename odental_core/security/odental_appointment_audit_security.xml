@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_odental_appointment_audit_member" model="ir.rule">
+        <field name="name">O Dental: historial de agenda de la organización y compañía autorizadas</field>
+        <field name="model_id" ref="model_odental_appointment_audit"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids), '|', ('organization_id.owner_user_id', '=', user.id), ('organization_id.user_ids', 'in', [user.id])]</field>
+    </record>
+</odoo>

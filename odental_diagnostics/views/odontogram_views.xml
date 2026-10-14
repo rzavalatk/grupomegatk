@@ -27,6 +27,7 @@
                         <group><field name="encounter_id" domain="[('clinical_record_id', '=', clinical_record_id), ('professional_id', '=', professional_id)]" readonly="state != 'draft'"/><field name="chart_datetime" readonly="state != 'draft'"/><field name="dentition" readonly="state != 'draft'"/><field name="version" readonly="1"/><field name="previous_version_id" invisible="not previous_version_id"/></group>
                     </group>
                     <field name="summary" placeholder="Resumen general del odontograma..." readonly="state != 'draft'"/>
+                    <field name="name" widget="odental_tooth_chart" nolabel="1" readonly="1"/>
                     <separator string="Hallazgos por pieza y superficie"/>
                     <field name="finding_ids" readonly="state != 'draft'">
                         <list editable="bottom" decoration-danger="condition in ('caries', 'fracture', 'extraction_indicated')" decoration-success="status == 'completed'">
@@ -41,10 +42,27 @@
             </form>
         </field>
     </record>
+    <record id="view_odental_odontogram_finding_form" model="ir.ui.view">
+        <field name="name">odental.odontogram.finding.form</field>
+        <field name="model">odental.odontogram.finding</field>
+        <field name="arch" type="xml">
+            <form string="Hallazgo dental">
+                <sheet>
+                    <group>
+                        <field name="odontogram_id" readonly="1"/>
+                        <field name="tooth_id"/>
+                        <field name="surface"/>
+                        <field name="condition"/>
+                        <field name="status"/>
+                        <field name="notes" placeholder="Detalle clínico breve..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
     <record id="action_odental_odontogram" model="ir.actions.act_window">
         <field name="name">Odontogramas</field>
         <field name="res_model">odental.odontogram</field>
         <field name="view_mode">list,form</field>
     </record>
 </odoo>
-

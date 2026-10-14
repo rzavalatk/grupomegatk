@@ -63,6 +63,61 @@ class CashflowPortfolioSnapshot(models.Model):
             record.direction_name = directions.get(record.direction, "")
             record.classification_name = classifications.get(record.classification, "")
 
+    def _portfolio_report_sections(self):
+        """Group the meeting report into the same operational classifications.
+
+        The accounting values remain sourced from Odoo.  This method only
+        controls their presentation, keeping unassigned and cleanup items in
+        visibly different blocks.
+        """
+        direction = self.env.context.get("cashflow_report_direction")
+        order = {
+            "receivable": [
+                ("customer", "Clientes"),
+                ("employee_receivable", "CxC empleados"),
+                ("group_receivable", "Grupo Mega"),
+                ("supplier", "Proveedores"),
+                ("creditor", "Acreedores"),
+                ("advance", "Anticipos"),
+                ("legal", "En legal"),
+                ("to_reconcile", "Por depurar"),
+                ("unassigned", "Por asignar"),
+            ],
+            "payable": [
+                ("supplier", "Proveedores"),
+                ("advance", "Anticipos a proveedores"),
+                ("creditor", "Acreedores"),
+                ("to_reconcile", "Por depurar"),
+                ("unassigned", "Por clasificar"),
+            ],
+        }
+        classifications = order.get(direction)
+        if not classifications:
+            classifications = order["receivable"] + [
+                item for item in order["payable"]
+                if item[0] not in {key for key, _label in order["receivable"]}
+            ]
+        amount_fields = (
+            "at_day", "days_1_30", "days_31_60", "days_61_90",
+            "days_91_120", "old", "credit", "total",
+        )
+        sections = []
+        for classification, title in classifications:
+            lines = self.filtered(
+                lambda record: record.classification == classification
+                and (not direction or record.direction == direction)
+            )
+            sections.append({
+                "key": classification,
+                "title": title,
+                "lines": lines,
+                "totals": {
+                    field_name: sum(lines.mapped(field_name))
+                    for field_name in amount_fields
+                },
+            })
+        return sections
+
     @api.model
     def _prepare_company_values(self, company):
         """Read Odoo's open items and prepare the operational customer/vendor summary."""

@@ -57,7 +57,7 @@ class CashflowPlan(models.Model):
             ("state", "=", "active"),
             ("classification_id.classification", "=", "creditor"),
         ],
-        string="Acreedores por pagar",
+        string="Acreedores, tarjetas y préstamos por pagar",
     )
     advance_promise_ids = fields.One2many(
         "cashflow.promise", "plan_id",
@@ -88,7 +88,7 @@ class CashflowPlan(models.Model):
     unique_expense_ids = fields.One2many(
         "cashflow.manual.expense", "plan_id",
         domain=[("recurring", "=", False), ("active", "=", True)],
-        string="Otros pagos a proveedores",
+        string="Otros pagos a proveedores y acreedores",
     )
     recurring_expense_ids = fields.One2many(
         "cashflow.manual.expense", "plan_id",
@@ -321,15 +321,37 @@ class CashflowPlan(models.Model):
             ))
         sections.append({"key": "available", "title": "Disponible inicial", "kind": "income", "lines": available})
 
-        collections = []
-        for promise in self.receivable_promise_ids.filtered(lambda item: item.state == "active"):
-            collections.append(self._report_line(
-                promise.partner_id.display_name, promise,
-                balance=promise.current_open_balance,
-                amounts={promise.period: promise.company_amount},
-                note=promise.note or "",
-            ))
-        sections.append({"key": "collections", "title": "Cobros de clientes", "kind": "income", "lines": collections})
+        collection_groups = [
+            ("customer", "collections", "Cobros de clientes"),
+            ("employee_receivable", "collections_employees", "Cuentas por cobrar a empleados"),
+            ("group_receivable", "collections_group", "Cuentas por cobrar · Grupo Mega"),
+            ("supplier", "collections_suppliers", "Cuentas por cobrar a proveedores"),
+            ("creditor", "collections_creditors", "Cuentas por cobrar a acreedores"),
+            ("advance", "collections_advances", "Anticipos por cobrar"),
+            ("legal", "collections_legal", "Cuentas en legal"),
+            ("to_reconcile", "collections_cleanup", "Cuentas por depurar"),
+            ("unassigned", "collections_unassigned", "Cuentas por asignar"),
+        ]
+        active_receivables = self.receivable_promise_ids.filtered(
+            lambda item: item.state == "active"
+        )
+        for classification, key, title in collection_groups:
+            collections = []
+            for promise in active_receivables.filtered(
+                lambda item, value=classification: item.classification == value
+            ):
+                collections.append(self._report_line(
+                    promise.partner_id.display_name, promise,
+                    balance=promise.current_open_balance,
+                    amounts={promise.period: promise.company_amount},
+                    note=promise.note or "",
+                ))
+            sections.append({
+                "key": key,
+                "title": title,
+                "kind": "income",
+                "lines": collections,
+            })
 
         financing = []
         for income in self.manual_income_ids.filtered(
@@ -419,24 +441,28 @@ class CashflowPlan(models.Model):
             "lines": advances,
         })
 
-        unclassified = []
-        for promise in self.promise_ids.filtered(
-            lambda item: item.state == "active"
-            and item.direction == "payable"
-            and item.classification in ("unassigned", "to_reconcile")
+        for classification, key, title, note in (
+            ("unassigned", "unclassified", "Pendientes de clasificar", "Requiere clasificación"),
+            ("to_reconcile", "cleanup", "Cuentas por depurar", "Requiere revisión o corrección"),
         ):
-            unclassified.append(self._report_line(
-                promise.partner_id.display_name, promise,
-                balance=promise.current_open_balance,
-                amounts={promise.period: promise.cash_effect_amount},
-                note="Requiere clasificación",
-            ))
-        sections.append({
-            "key": "unclassified",
-            "title": "Pendientes de clasificar",
-            "kind": "expense",
-            "lines": unclassified,
-        })
+            pending_lines = []
+            for promise in self.promise_ids.filtered(
+                lambda item, value=classification: item.state == "active"
+                and item.direction == "payable"
+                and item.classification == value
+            ):
+                pending_lines.append(self._report_line(
+                    promise.partner_id.display_name, promise,
+                    balance=promise.current_open_balance,
+                    amounts={promise.period: promise.cash_effect_amount},
+                    note=note,
+                ))
+            sections.append({
+                "key": key,
+                "title": title,
+                "kind": "expense",
+                "lines": pending_lines,
+            })
 
         unique = []
         recurring = []
@@ -446,7 +472,12 @@ class CashflowPlan(models.Model):
                 amounts={expense.period: expense.company_amount},
                 note=expense.reference or "",
             )
-            (recurring if expense.recurring else unique).append(line)
+            if expense.recurring:
+                recurring.append(line)
+            elif expense.obligation_type == "creditor":
+                liabilities.append(line)
+            else:
+                unique.append(line)
         sections.append({"key": "unique", "title": "Otros pagos a proveedores", "kind": "expense", "lines": unique})
         sections.append({"key": "recurring", "title": "Pagos recurrentes", "kind": "expense", "lines": recurring})
         for section in sections:
@@ -866,8 +897,18 @@ class CashflowClassification(models.Model):
     @api.constrains("direction", "classification")
     def _check_classification_direction(self):
         allowed = {
-            "receivable": {"customer", "employee_receivable", "group_receivable", "legal", "to_reconcile", "unassigned"},
-            "payable": {"supplier", "creditor", "advance", "to_reconcile", "unassigned"},
+            # Grupo Megatk usa también Proveedores, Acreedores y Anticipos en
+            # CxC para identificar saldos a favor y partidas de naturaleza
+            # especial.  Se conserva exactamente ese catálogo operativo.
+            "receivable": {
+                "customer", "employee_receivable", "group_receivable",
+                "supplier", "creditor", "advance", "legal",
+                "to_reconcile", "unassigned",
+            },
+            "payable": {
+                "supplier", "creditor", "advance",
+                "to_reconcile", "unassigned",
+            },
         }
         for record in self:
             if record.classification not in allowed[record.direction]:
@@ -1590,6 +1631,20 @@ class CashflowManualExpense(models.Model):
         string="Detalle o referencia",
         help="Texto libre para recordar qué se pagará, por ejemplo Planilla o Tarjeta BAC.",
         tracking=True,
+    )
+    obligation_type = fields.Selection(
+        [
+            ("supplier", "Proveedor"),
+            ("creditor", "Acreedor"),
+        ],
+        required=True,
+        default="supplier",
+        string="Tipo de obligación",
+        tracking=True,
+        help=(
+            "Determina en qué bloque del reporte se presenta el pago: "
+            "proveedores o acreedores."
+        ),
     )
     liability_position_id = fields.Many2one(
         "cashflow.bank.position", string="Tarjeta o préstamo pagado",

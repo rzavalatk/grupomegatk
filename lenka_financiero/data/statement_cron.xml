@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_lenka_monthly_statements" model="ir.cron">
+        <field name="name">Lenka: Generar estados de cuenta mensuales</field>
+        <field name="model_id" ref="model_lenka_statement"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_monthly_statements()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

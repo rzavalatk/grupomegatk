@@ -2,7 +2,9 @@
 
 import hashlib
 import json
+import re
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import requests
@@ -26,11 +28,20 @@ class ODentalTodoistConnection(models.Model):
         "odental.patient", string="Paciente de prueba", required=True, ondelete="restrict",
         help="Durante el piloto solo se publican en Todoist las citas de este paciente.",
     )
+    export_all_patients = fields.Boolean(
+        string="Publicar citas de todos los pacientes",
+        default=False,
+        groups="base.group_system",
+        help="Solo para activación clínica autorizada. Envía nombre, servicio general y horario a Todoist.",
+    )
     company_id = fields.Many2one(related="organization_id.company_id", store=True, index=True)
     # The user enters this through the short-lived wizard. Only the superuser
     # running the sync can read the stored credential, never clinical staff.
     api_token = fields.Char(copy=False, groups="base.group_system")
     todoist_user_id = fields.Char(copy=False)
+    project_id = fields.Char(string="Proyecto privado de agenda en Todoist", copy=False, readonly=True)
+    project_name = fields.Char(string="Nombre del proyecto", copy=False, readonly=True)
+    project_reference = fields.Char(string="Destino configurado (enlace o ID)", copy=False, readonly=True)
     label_name = fields.Char(string="Etiqueta que bloquea", default="reunión", required=True)
     default_duration_minutes = fields.Integer(
         string="Duración si Todoist no indica una", default=60, required=True,
@@ -93,6 +104,95 @@ class ODentalTodoistConnection(models.Model):
         if not isinstance(data, dict) or not data.get("id"):
             raise UserError("Todoist no devolvió la identidad de la cuenta.")
         return str(data["id"])
+
+    @api.model
+    def _find_or_create_clinical_project(self, token, name):
+        """Use only a personal, unshared project in the doctor's own account."""
+        cursor = None
+        seen_cursors = set()
+        matches = []
+        for _page in range(100):
+            params = {"limit": 200}
+            if cursor:
+                params["cursor"] = cursor
+            data = self._get_json(token, "projects", params=params)
+            if not isinstance(data, dict) or not isinstance(data.get("results"), list):
+                raise UserError("Todoist no devolvió una lista completa de proyectos.")
+            matches.extend(project for project in data["results"]
+                           if isinstance(project, dict) and project.get("name") == name
+                           and not project.get("is_archived") and not project.get("is_deleted"))
+            cursor = data.get("next_cursor")
+            if not cursor:
+                break
+            if cursor in seen_cursors:
+                raise UserError("La lista de proyectos de Todoist quedó incompleta.")
+            seen_cursors.add(cursor)
+        else:
+            raise UserError("La lista de proyectos de Todoist quedó incompleta.")
+        if len(matches) > 1:
+            raise UserError("Hay varios proyectos con el nombre de la clínica; revise su cuenta Todoist.")
+        if matches:
+            project = matches[0]
+        else:
+            project = self._send_json(token, "POST", "projects", {"name": name})
+        self._require_private_project(project)
+        return str(project["id"])
+
+    @api.model
+    def _select_clinical_project(self, token, reference):
+        """Resolve a link/ID against this account's projects, without fetching user URLs."""
+        reference = (reference or "").strip()
+        if not reference or len(reference) > 512:
+            raise UserError("Indique el enlace o ID del proyecto de Todoist.")
+        if "://" in reference:
+            try:
+                parsed = urlsplit(reference)
+                valid_host = (parsed.hostname in
+                              ("todoist.com", "www.todoist.com", "app.todoist.com")
+                              and parsed.port is None)
+            except ValueError:
+                valid_host = False
+            if (not valid_host or parsed.scheme != "https"
+                    or parsed.username or parsed.password or parsed.query or parsed.fragment):
+                raise UserError("Pegue un enlace HTTPS directo al proyecto de Todoist.")
+            match = re.fullmatch(r"/app/project/([A-Za-z0-9_-]+)[/]?", parsed.path)
+            if not match:
+                raise UserError("Pegue el enlace del proyecto, no de una tarea o invitación.")
+            slug = match.group(1)
+        elif re.fullmatch(r"[A-Za-z0-9_-]{1,128}", reference):
+            slug = reference
+        else:
+            raise UserError("Indique un ID o enlace válido de un proyecto Todoist.")
+        cursor = None
+        seen_cursors = set()
+        for _page in range(100):
+            params = {"limit": 200}
+            if cursor:
+                params["cursor"] = cursor
+            data = self._get_json(token, "projects", params=params)
+            if not isinstance(data, dict) or not isinstance(data.get("results"), list):
+                raise UserError("Todoist no devolvió una lista completa de proyectos.")
+            for project in data["results"]:
+                if isinstance(project, dict) and project.get("id"):
+                    project_id = str(project["id"])
+                    if slug == project_id or slug.endswith("-" + project_id):
+                        self._require_private_project(project)
+                        return project
+            cursor = data.get("next_cursor")
+            if not cursor or cursor in seen_cursors:
+                break
+            seen_cursors.add(cursor)
+        if cursor:
+            raise UserError("La lista de proyectos de Todoist quedó incompleta.")
+        raise UserError("El proyecto indicado no pertenece a esta cuenta de Todoist o no existe.")
+
+    @api.model
+    def _require_private_project(self, project):
+        if (not isinstance(project, dict) or not project.get("id")
+                or project.get("is_shared") or project.get("workspace_id") is not None
+                or project.get("inbox_project") or project.get("is_deleted")
+                or project.get("is_archived")):
+            raise UserError("La agenda debe estar en un proyecto personal y privado de Todoist.")
 
     @api.model
     def _fetch_tasks(self, token):
@@ -231,12 +331,15 @@ class ODentalTodoistConnection(models.Model):
 
     def _export_payload(self, appointment):
         self.ensure_one()
+        if not self.project_id:
+            raise UserError("Reconecte Todoist para seleccionar el proyecto privado de la clínica.")
         local_tz = ZoneInfo(self.source_timezone)
         start = appointment.start_datetime.replace(tzinfo=timezone.utc)
         end = appointment.end_datetime.replace(tzinfo=timezone.utc)
         first, last = start.astimezone(local_tz), end.astimezone(local_tz)
         interval = f"{first:%d/%m %H:%M}–{last:%H:%M}"
         return {
+            "project_id": self.project_id,
             "content": f"Atender a {appointment.patient_id.name} · {appointment.service_id.name} · {interval}",
             "description": MIRROR_DESCRIPTION + self._export_marker(appointment),
             "labels": [self.label_name.strip().lstrip("@"), "odental"],
@@ -290,22 +393,24 @@ class ODentalTodoistConnection(models.Model):
             odental_audit_source="todoist",
             odental_audit_actor_user_id=self.professional_id.user_id.id,
         )
-        active = appointments.search([
+        domain = [
             ("entry_type", "=", "clinical"),
             ("active", "=", True),
             ("organization_id", "=", self.organization_id.id),
             ("professional_id", "=", self.professional_id.id),
-            ("patient_id", "=", self.pilot_patient_id.id),
             ("state", "in", ("scheduled", "confirmed", "in_progress")),
             ("start_datetime", ">=", fields.Datetime.now() - timedelta(days=1)),
-        ])
+        ]
+        if not self.export_all_patients:
+            domain.append(("patient_id", "=", self.pilot_patient_id.id))
+        active = appointments.search(domain)
         # A previously published visit can be moved from an old date in
         # Todoist; retain its mirror in the reconciliation until retired.
         active |= appointments.browse(list(existing)).filtered(lambda appointment:
             appointment.active and appointment.entry_type == "clinical"
             and appointment.organization_id == self.organization_id
             and appointment.professional_id == self.professional_id
-            and appointment.patient_id == self.pilot_patient_id
+            and (self.export_all_patients or appointment.patient_id == self.pilot_patient_id)
             and appointment.state in ("scheduled", "confirmed", "in_progress"))
         remote_by_id = {str(task.get("id")): task for task in tasks if isinstance(task, dict) and task.get("id")}
         remote_by_marker = {
@@ -319,6 +424,10 @@ class ODentalTodoistConnection(models.Model):
             remote = (remote_by_id.get(mirror.task_id) if mirror else None) or remote_by_marker.get(marker)
             if remote:
                 task_id = str(remote["id"])
+                if remote.get("project_id") and str(remote["project_id"]) != self.project_id:
+                    self._send_json(self.api_token, "POST", f"tasks/{task_id}/move",
+                                    {"project_id": self.project_id})
+                    remote = {**remote, "project_id": self.project_id}
                 interval = self._mirror_interval(remote, appointment.duration_minutes)
                 if mirror and mirror.synced_start and interval and (
                     interval[0] != mirror.synced_start
@@ -334,12 +443,20 @@ class ODentalTodoistConnection(models.Model):
                         conflicts = True
                         continue  # Keep the doctor's edit for manual conflict resolution.
                     appointment.write({"external_conflict": False})
+                elif (appointment.external_conflict and mirror and mirror.synced_start
+                      and interval and interval[0] == mirror.synced_start
+                      and (not remote.get("duration") or interval[1] == mirror.synced_duration)):
+                    # The doctor restored the last accepted time after a
+                    # rejected move. The conflict is no longer outstanding.
+                    appointment.write({"external_conflict": False})
                 payload = self._export_payload(appointment)
                 explicit_duration = remote.get("duration") or {}
                 if isinstance(explicit_duration, dict) and explicit_duration.get("unit") == "minute":
                     payload.update({"duration": appointment.duration_minutes, "duration_unit": "minute"})
                 if not self._remote_matches(remote, payload):
-                    self._send_json(self.api_token, "POST", f"tasks/{task_id}", payload)
+                    # Todoist moves an existing task through its dedicated endpoint.
+                    update = {key: value for key, value in payload.items() if key != "project_id"}
+                    self._send_json(self.api_token, "POST", f"tasks/{task_id}", update)
             else:
                 payload = self._export_payload(appointment)
                 created = self._send_json(self.api_token, "POST", "tasks", payload)
@@ -375,8 +492,14 @@ class ODentalTodoistConnection(models.Model):
             raise AccessError("La sincronización requiere el proceso autorizado de O Dental.")
         if not self.active or not self.api_token:
             return
+        if not self.project_id:
+            raise UserError("Reconecte Todoist para seleccionar el proyecto privado de la clínica.")
         if self.company_id not in self.professional_id.user_id.company_ids:
             raise ValidationError("El usuario del profesional debe tener acceso a la compañía de la clínica.")
+        project = self._get_json(self.api_token, f"projects/{self.project_id}")
+        self._require_private_project(project)
+        if str(project["id"]) != self.project_id or project.get("name") != self.project_name:
+            raise UserError("El proyecto de la clínica cambió; reconecte Todoist.")
         tasks = self._fetch_tasks(self.api_token)
         # Reconcile only after every page succeeded: a partial response must
         # never cancel legitimate blocks.
@@ -413,6 +536,12 @@ class ODentalTodoistConnection(models.Model):
         for connection in self.sudo().search([("active", "=", True)]):
             try:
                 with self.env.cr.savepoint():
+                    self.env.cr.execute(
+                        "SELECT pg_try_advisory_xact_lock(%s, %s)",
+                        (768802, connection.id),
+                    )
+                    if not self.env.cr.fetchone()[0]:
+                        continue
                     connection._sync_one()
             except Exception:  # One failed account must not block other clinics.
                 connection.sudo().write({"last_error": "Todoist no se actualizó; revise la conexión."})

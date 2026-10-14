@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lenka_demo_setup_form" model="ir.ui.view">
+        <field name="name">lenka.demo.setup.form</field>
+        <field name="model">lenka.demo.setup</field>
+        <field name="arch" type="xml">
+            <form string="Preparar Demo Lenka">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Preparar ambiente de demostracion</h1>
+                    </div>
+                    <p>Esta herramienta crea unicamente registros ficticios identificados como Demo para probar Financiero Lenka. No publica asientos contables.</p>
+                    <footer>
+                        <button name="action_prepare_demo" type="object" string="Preparar Demo Lenka" class="btn-primary"/>
+                        <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_lenka_demo_setup" model="ir.actions.act_window">
+        <field name="name">Preparar Demo Lenka</field>
+        <field name="res_model">lenka.demo.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_lenka_demo_setup" name="Preparar Demo Lenka"
+              parent="menu_lenka_root" action="action_lenka_demo_setup"
+              groups="lenka_financiero.group_lenka_manager" sequence="95"/>
+</odoo>

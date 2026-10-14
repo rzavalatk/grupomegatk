@@ -18,25 +18,43 @@
           <h2 t-else="">Detalle de cuentas por cobrar y pagar</h2>
           <p>Flujo de caja proyectado · <span t-esc="o.company_id.name"/></p>
           <p style="font-size: 12px">Verde: al día · amarillo: 1 a 30 días · rojo: desde 31 días · azul: crédito o anticipo.</p>
-          <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse">
-            <thead><tr style="background: #e8eef0"><th>Contacto</th><th>Tipo</th><th>Clasificación</th><th>Al día</th><th>1–30</th><th>31–60</th><th>61–90</th><th>91–120</th><th>Antiguos</th><th>Crédito / anticipo</th><th>Total</th><th>Última gestión</th></tr></thead>
-            <tbody>
-              <tr t-foreach="docs" t-as="line">
-                <td><span t-esc="line.partner_id.name"/><br/><small t-esc="line.projected_periods"/></td>
-                <td t-esc="line.direction_name"/>
-                <td t-esc="line.classification_name"/>
-                <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-if="line.at_day" t-out="line.at_day" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-if="line.old" t-out="line.old" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-if="line.credit" t-out="line.credit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td><strong t-out="line.total" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
-              </tr>
-            </tbody>
-          </table>
+          <t t-foreach="docs._portfolio_report_sections()" t-as="section">
+            <div t-if="section['lines']" style="margin-top:18px; page-break-inside:avoid">
+              <h3 style="margin:0 0 6px;color:#1f4e78" t-esc="section['title']"/>
+              <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse">
+                <thead><tr style="background: #e8eef0"><th>Contacto</th><th>Semanas</th><th>Al día</th><th>1–30</th><th>31–60</th><th>61–90</th><th>91–120</th><th>Antiguos</th><th>Crédito / anticipo</th><th>Total</th><th>Última gestión</th></tr></thead>
+                <tbody>
+                  <tr t-foreach="section['lines']" t-as="line">
+                    <td t-esc="line.partner_id.name"/>
+                    <td t-esc="line.projected_periods or ''"/>
+                    <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-if="line.at_day" t-out="line.at_day" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-if="line.old" t-out="line.old" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-if="line.credit" t-out="line.credit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td><strong t-out="line.total" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                    <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr style="font-weight:bold;background:#f4f6f8">
+                    <td colspan="2">Total <span t-esc="section['title']"/></td>
+                    <td><span t-out="section['totals']['at_day']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['days_1_30']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['days_31_60']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['days_61_90']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['days_91_120']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['old']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><span t-out="section['totals']['credit']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td><strong t-out="section['totals']['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    <td/>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </t>
         </div>
       </t>
     </t>
