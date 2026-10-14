@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odental_diagnostics.OdontogramChart">
+        <section class="odt-chart" aria-label="Odontograma gráfico">
+            <div class="odt-chart__heading">
+                <strong>Odontograma gráfico</strong>
+                <span t-if="!chartId" class="text-muted">Guarde el borrador para registrar hallazgos en el gráfico.</span>
+                <span t-elif="!editable" class="text-muted">Consulta de versión firmada o cerrada.</span>
+                <span t-else="" class="text-muted">Seleccione una pieza o superficie para registrar un hallazgo.</span>
+                <span class="odt-chart__notation" t-esc="notation === 'ada' ? 'Numeración ADA / Universal' : 'Numeración FDI'"/>
+            </div>
+            <div t-if="state.loading" role="status">Cargando piezas y hallazgos…</div>
+            <div t-elif="state.error" role="alert">No se pudo cargar el odontograma.</div>
+            <t t-else="">
+                <div t-foreach="arcs" t-as="arc" t-key="arc.kind" class="odt-arch">
+                    <div class="odt-arch__title" t-esc="arc.title"/>
+                    <div class="odt-arch__row odt-arch__row--upper" aria-label="Arcada superior">
+                        <t t-foreach="arc.upper" t-as="tooth" t-key="tooth.id">
+                            <t t-call="odental_diagnostics.Tooth"/>
+                        </t>
+                    </div>
+                    <div class="odt-arch__midline">Arcada superior · Arcada inferior</div>
+                    <div class="odt-arch__row odt-arch__row--lower" aria-label="Arcada inferior">
+                        <t t-foreach="arc.lower" t-as="tooth" t-key="tooth.id">
+                            <t t-call="odental_diagnostics.Tooth"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="odt-chart__legend" aria-label="Leyenda de hallazgos">
+                    <span><i class="odt-swatch odt-swatch--alert"/> Hallazgo clínico</span>
+                    <span><i class="odt-swatch odt-swatch--planned"/> Tratamiento planificado</span>
+                    <span><i class="odt-swatch odt-swatch--completed"/> Tratamiento realizado</span>
+                    <span><i class="odt-swatch odt-swatch--existing"/> Presente o en seguimiento</span>
+                </div>
+                <small class="text-muted">El dibujo de raíces representa la anatomía habitual; confirme las variantes con la evaluación clínica. La numeración visible puede cambiarse arriba sin alterar los hallazgos registrados.</small>
+            </t>
+        </section>
+    </t>
+
+    <t t-name="odental_diagnostics.Tooth">
+        <div class="odt-tooth" t-att-class="arc.upper.includes(tooth) ? 'odt-tooth--upper' : 'odt-tooth--lower'">
+            <span class="odt-tooth__code" t-esc="displayCode(tooth)"/>
+            <svg class="odt-tooth__shape" viewBox="0 0 48 72" role="img" t-att-aria-label="displayCode(tooth) + ' ' + tooth.name">
+                <path t-att-d="rootPath(tooth)"
+                      t-att-class="zoneClass(tooth, 'root')" t-att-title="zoneTitle(tooth, 'root')"
+                      t-on-click="() => this.openZone(tooth, 'root')"/>
+                <path d="M8 24 Q24 20 40 24 Q45 35 41 59 Q38 70 24 70 Q10 70 7 59 Q3 35 8 24 Z"
+                      class="odt-tooth__outline"/>
+                <path d="M9 27 L17 34 L17 56 L9 62 Q5 45 9 27 Z"
+                      t-att-class="zoneClass(tooth, leftSurface(tooth))" t-att-title="zoneTitle(tooth, leftSurface(tooth))"
+                      t-on-click="() => this.openZone(tooth, leftSurface(tooth))"/>
+                <path d="M39 27 L31 34 L31 56 L39 62 Q43 45 39 27 Z"
+                      t-att-class="zoneClass(tooth, rightSurface(tooth))" t-att-title="zoneTitle(tooth, rightSurface(tooth))"
+                      t-on-click="() => this.openZone(tooth, rightSurface(tooth))"/>
+                <path d="M10 27 Q24 23 38 27 L30 36 L18 36 Z"
+                      t-att-class="zoneClass(tooth, 'buccal')" t-att-title="zoneTitle(tooth, 'buccal')"
+                      t-on-click="() => this.openZone(tooth, 'buccal')"/>
+                <path d="M18 55 L30 55 L38 62 Q24 70 10 62 Z"
+                      t-att-class="zoneClass(tooth, innerSurface(tooth))" t-att-title="zoneTitle(tooth, innerSurface(tooth))"
+                      t-on-click="() => this.openZone(tooth, innerSurface(tooth))"/>
+                <path d="M18 37 L30 37 L30 54 L18 54 Z"
+                      t-att-class="zoneClass(tooth, centralSurface(tooth))" t-att-title="zoneTitle(tooth, centralSurface(tooth))"
+                      t-on-click="() => this.openZone(tooth, centralSurface(tooth))"/>
+                <path d="M12 31 L17 35 L31 35 L36 31 L34 34 L14 34 Z"
+                      t-att-class="zoneClass(tooth, 'cervical')" t-att-title="zoneTitle(tooth, 'cervical')"
+                      t-on-click="() => this.openZone(tooth, 'cervical')"/>
+            </svg>
+            <button type="button" class="odt-tooth__whole" t-att-disabled="!editable"
+                    t-att-title="zoneTitle(tooth, 'whole')"
+                    t-att-class="zoneClass(tooth, 'whole')"
+                    t-on-click="() => this.openZone(tooth, 'whole')">Pieza</button>
+        </div>
+    </t>
+</templates>

@@ -2,6 +2,7 @@ import base64
 
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests.common import TransactionCase, tagged
+from ..models.tooth import ada_designation
 
 
 @tagged("post_install", "-at_install")
@@ -58,6 +59,34 @@ class TestODentalDiagnostics(TransactionCase):
         self.assertTrue(chart.content_hash)
         with self.assertRaises(UserError):
             chart.finding_ids.write({"notes": "Alteración"})
+
+    def test_fdi_and_ada_switch_preserves_tooth_and_signed_content(self):
+        pairs = {
+            "18": "1", "11": "8", "21": "9", "28": "16",
+            "38": "17", "31": "24", "41": "25", "48": "32",
+            "55": "A", "51": "E", "61": "F", "65": "J",
+            "75": "K", "71": "O", "81": "P", "85": "T",
+        }
+        for fdi, ada in pairs.items():
+            tooth = self.env.ref(f"odental_diagnostics.tooth_{fdi}")
+            self.assertEqual(ada_designation(fdi), ada)
+            self.assertEqual(tooth.ada_code, ada)
+            self.assertEqual(tooth.display_name, fdi)
+            self.assertEqual(tooth.with_context(odental_notation="ada").display_name, ada)
+        chart = self.env["odental.odontogram"].create({
+            "clinical_record_id": self.record.id,
+            "professional_id": self.professional.id,
+            "finding_ids": [(0, 0, {
+                "tooth_id": self.tooth_11.id, "condition": "mobility",
+                "status": "existing",
+            })],
+        })
+        chart.action_sign()
+        signed_hash = chart.content_hash
+        chart.write({"numbering_system": "ada"})
+        self.assertEqual(chart.finding_ids.tooth_id, self.tooth_11)
+        self.assertEqual(chart.content_hash, signed_hash)
+        self.assertEqual(chart._hash_payload(), signed_hash)
 
     def test_odontogram_amendment_copies_findings(self):
         chart = self.env["odental.odontogram"].create(
