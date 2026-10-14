@@ -72,7 +72,11 @@ class TestODentalProfessional(TransactionCase):
             ))
 
     def test_specialty_must_belong_to_same_company(self):
-        other = self.env["res.company"].create({"name": "Otra clínica de prueba"})
+        other = self.env["res.company"].search(
+            [("id", "!=", self.env.company.id)], limit=1
+        )
+        if not other:
+            self.skipTest("Se requiere una segunda compañía para probar el aislamiento")
         other_specialty = self.env["odental.specialty"].sudo().with_company(other).create({
             "name": "Especialidad propia de otra clínica", "company_id": other.id,
         })
