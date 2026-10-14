@@ -42,7 +42,20 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Consulta"><group><field name="chief_complaint"/><field name="clinical_findings"/><field name="diagnosis_summary"/></group></page>
+                        <page string="Anamnesis">
+                            <group>
+                                <field name="chief_complaint" placeholder="¿Por qué viene hoy? Anote el relato del paciente."/>
+                                <field name="history_present_illness" placeholder="¿Cuándo comenzó, cuánto dura, cómo ha cambiado, qué lo mejora o empeora y qué atención recibió?"/>
+                                <field name="oral_habits"/>
+                                <field name="additional_history"/>
+                                <field name="interconsultation_notes"/>
+                            </group>
+                            <group string="Signos vitales de esta atención">
+                                <group><field name="pulse_bpm" placeholder="Ej.: 72"/><field name="blood_pressure" placeholder="Ej.: 120/80"/></group>
+                                <group><field name="temperature_celsius" placeholder="Ej.: 36.5"/><field name="respiratory_rate" placeholder="Ej.: 16"/></group>
+                            </group>
+                        </page>
+                        <page string="Evaluación y diagnóstico"><group><field name="clinical_findings"/><field name="diagnosis_summary"/></group></page>
                         <page string="Tratamiento"><group><field name="treatment_plan"/><field name="procedures_performed"/><field name="prescriptions"/></group></page>
                         <page string="Información restringida"><field name="private_notes" placeholder="Esta sección nunca se comparte automáticamente."/></page>
                         <page string="Firma y auditoría"><group><field name="signed_at" readonly="1"/><field name="signed_by_user_id" readonly="1"/><field name="content_hash" readonly="1"/><field name="amendment_reason" invisible="not previous_version_id"/></group></page>

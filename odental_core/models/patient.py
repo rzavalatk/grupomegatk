@@ -14,6 +14,18 @@ class ODentalPatient(models.Model):
     active = fields.Boolean(string="Activo", default=True)
     identification = fields.Char(string="Identificación", index=True, tracking=True)
     birthdate = fields.Date(string="Fecha de nacimiento")
+    occupation = fields.Char(string="Ocupación")
+    marital_status = fields.Selection(
+        [
+            ("single", "Soltero/a"),
+            ("married", "Casado/a"),
+            ("union", "Unión de hecho"),
+            ("divorced", "Divorciado/a"),
+            ("widowed", "Viudo/a"),
+            ("other", "Otro"),
+        ],
+        string="Estado civil",
+    )
     gender = fields.Selection(
         [("female", "Femenino"), ("male", "Masculino"), ("other", "Otro"), ("unspecified", "No especificado")],
         string="Género",
@@ -31,6 +43,9 @@ class ODentalPatient(models.Model):
     responsible_partner_id = fields.Many2one(
         "res.partner", string="Padre, madre o representante"
     )
+    guardian_relationship = fields.Char(string="Parentesco o relación con el menor")
+    guardian_identification = fields.Char(string="Identidad del responsable")
+    guardian_occupation = fields.Char(string="Ocupación del responsable")
     notes = fields.Text(string="Notas generales")
 
     _sql_constraints = [

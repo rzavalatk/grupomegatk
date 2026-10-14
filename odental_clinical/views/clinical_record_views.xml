@@ -51,6 +51,20 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="Anamnesis">
+                            <div class="alert alert-info" role="status">
+                                Abra una atención para registrar el motivo de consulta con las palabras del paciente y la historia de sus síntomas. Cada atención conserva su fecha y profesional.
+                            </div>
+                            <field name="encounter_ids" context="{'default_clinical_record_id': id}">
+                                <list>
+                                    <field name="encounter_datetime"/>
+                                    <field name="professional_id"/>
+                                    <field name="chief_complaint"/>
+                                    <field name="history_present_illness" optional="show"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
                         <page string="Antecedentes">
                             <field name="history_entry_ids" context="{'default_clinical_record_id': id}">
                                 <list editable="bottom" decoration-danger="severity == 'critical'" decoration-warning="sensitivity == 'restricted'">

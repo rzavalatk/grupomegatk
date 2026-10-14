@@ -36,6 +36,17 @@ class ODentalClinicalEncounter(models.Model):
         string="Fecha y hora", required=True, default=fields.Datetime.now, index=True
     )
     chief_complaint = fields.Text(string="Motivo de consulta", tracking=True)
+    history_present_illness = fields.Text(
+        string="Historia de la enfermedad actual", tracking=True,
+        help="Relato del paciente: inicio, duración y evolución de los síntomas, factores que los alivian o agravan y atención previa.",
+    )
+    oral_habits = fields.Text(string="Hábitos asociados a la cavidad oral")
+    additional_history = fields.Text(string="Otros antecedentes médicos u odontológicos")
+    interconsultation_notes = fields.Text(string="Observaciones e interconsultas")
+    pulse_bpm = fields.Char(string="Pulso (latidos/min)")
+    blood_pressure = fields.Char(string="Presión arterial (mmHg)")
+    temperature_celsius = fields.Char(string="Temperatura (°C)")
+    respiratory_rate = fields.Char(string="Frecuencia respiratoria (resp/min)")
     clinical_findings = fields.Text(string="Hallazgos clínicos", tracking=True)
     diagnosis_summary = fields.Text(string="Diagnóstico", tracking=True)
     treatment_plan = fields.Text(string="Plan de tratamiento", tracking=True)
@@ -61,6 +72,7 @@ class ODentalClinicalEncounter(models.Model):
     signed_at = fields.Datetime(readonly=True, string="Fecha de firma")
     signed_by_user_id = fields.Many2one("res.users", readonly=True, string="Firma registrada por")
     content_hash = fields.Char(string="Huella digital", readonly=True, copy=False, index=True)
+    signature_schema_version = fields.Integer(default=1, readonly=True, copy=False)
     version = fields.Integer(required=True, default=1, readonly=True, copy=False, string="Versión")
     previous_version_id = fields.Many2one(
         "odental.clinical.encounter", readonly=True, copy=False, ondelete="restrict",
@@ -85,6 +97,7 @@ class ODentalClinicalEncounter(models.Model):
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "odental.clinical.encounter"
                 ) or "Nuevo"
+            vals["signature_schema_version"] = 2
         encounters = super().create(vals_list)
         for encounter in encounters:
             encounter.clinical_record_id._log_event(
@@ -124,6 +137,18 @@ class ODentalClinicalEncounter(models.Model):
             "prescriptions": self.prescriptions or "",
             "private_notes": self.private_notes or "",
         }
+        # Existing signed evolutions retain their original hash payload.
+        if self.signature_schema_version >= 2:
+            payload.update({
+                "history_present_illness": self.history_present_illness or "",
+                "oral_habits": self.oral_habits or "",
+                "additional_history": self.additional_history or "",
+                "interconsultation_notes": self.interconsultation_notes or "",
+                "pulse_bpm": self.pulse_bpm or "",
+                "blood_pressure": self.blood_pressure or "",
+                "temperature_celsius": self.temperature_celsius or "",
+                "respiratory_rate": self.respiratory_rate or "",
+            })
         serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
         return hashlib.sha256(serialized).hexdigest()
 
@@ -134,12 +159,21 @@ class ODentalClinicalEncounter(models.Model):
             "professional_id",
             "encounter_datetime",
             "chief_complaint",
+            "history_present_illness",
+            "oral_habits",
+            "additional_history",
+            "interconsultation_notes",
+            "pulse_bpm",
+            "blood_pressure",
+            "temperature_celsius",
+            "respiratory_rate",
             "clinical_findings",
             "diagnosis_summary",
             "treatment_plan",
             "procedures_performed",
             "prescriptions",
             "private_notes",
+            "signature_schema_version",
             "version",
             "previous_version_id",
             "amendment_reason",
@@ -176,6 +210,7 @@ class ODentalClinicalEncounter(models.Model):
             if not any(
                 [
                     encounter.chief_complaint,
+                    encounter.history_present_illness,
                     encounter.clinical_findings,
                     encounter.diagnosis_summary,
                     encounter.procedures_performed,
@@ -184,6 +219,10 @@ class ODentalClinicalEncounter(models.Model):
                 raise ValidationError("Debe registrar contenido clínico antes de firmar.")
             if encounter.previous_version_id and not encounter.amendment_reason:
                 raise ValidationError("Debe indicar el motivo de la rectificación.")
+            if encounter.signature_schema_version < 2:
+                super(ODentalClinicalEncounter, encounter).write(
+                    {"signature_schema_version": 2}
+                )
             content_hash = encounter._hash_payload()
             super(ODentalClinicalEncounter, encounter).write(
                 {
@@ -210,6 +249,14 @@ class ODentalClinicalEncounter(models.Model):
             "professional_id": self.professional_id.id,
             "encounter_datetime": self.encounter_datetime,
             "chief_complaint": self.chief_complaint,
+            "history_present_illness": self.history_present_illness,
+            "oral_habits": self.oral_habits,
+            "additional_history": self.additional_history,
+            "interconsultation_notes": self.interconsultation_notes,
+            "pulse_bpm": self.pulse_bpm,
+            "blood_pressure": self.blood_pressure,
+            "temperature_celsius": self.temperature_celsius,
+            "respiratory_rate": self.respiratory_rate,
             "clinical_findings": self.clinical_findings,
             "diagnosis_summary": self.diagnosis_summary,
             "treatment_plan": self.treatment_plan,
