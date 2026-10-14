@@ -7,6 +7,7 @@
                 <span t-if="!chartId" class="text-muted">Guarde el borrador para registrar hallazgos en el gráfico.</span>
                 <span t-elif="!editable" class="text-muted">Consulta de versión firmada o cerrada.</span>
                 <span t-else="" class="text-muted">Seleccione una pieza o superficie para registrar un hallazgo.</span>
+                <span class="odt-chart__notation" t-esc="notation === 'ada' ? 'Numeración ADA / Universal' : 'Numeración FDI'"/>
             </div>
             <div t-if="state.loading" role="status">Cargando piezas y hallazgos…</div>
             <div t-elif="state.error" role="alert">No se pudo cargar el odontograma.</div>
@@ -27,20 +28,20 @@
                 </div>
                 <div class="odt-chart__legend" aria-label="Leyenda de hallazgos">
                     <span><i class="odt-swatch odt-swatch--alert"/> Hallazgo clínico</span>
-                    <span><i class="odt-swatch odt-swatch--planned"/> Planificado</span>
-                    <span><i class="odt-swatch odt-swatch--completed"/> Realizado</span>
-                    <span><i class="odt-swatch odt-swatch--existing"/> Existente u observación</span>
+                    <span><i class="odt-swatch odt-swatch--planned"/> Tratamiento planificado</span>
+                    <span><i class="odt-swatch odt-swatch--completed"/> Tratamiento realizado</span>
+                    <span><i class="odt-swatch odt-swatch--existing"/> Presente o en seguimiento</span>
                 </div>
-                <small class="text-muted">Los colores resumen los hallazgos; consulte la lista inferior para el detalle clínico y las superficies adicionales.</small>
+                <small class="text-muted">El dibujo de raíces representa la anatomía habitual; confirme las variantes con la evaluación clínica. La numeración visible puede cambiarse arriba sin alterar los hallazgos registrados.</small>
             </t>
         </section>
     </t>
 
     <t t-name="odental_diagnostics.Tooth">
         <div class="odt-tooth" t-att-class="arc.upper.includes(tooth) ? 'odt-tooth--upper' : 'odt-tooth--lower'">
-            <span class="odt-tooth__code" t-esc="tooth.code"/>
-            <svg class="odt-tooth__shape" viewBox="0 0 48 72" role="img" t-att-aria-label="tooth.code + ' ' + tooth.name">
-                <path d="M9 27 C7 13 10 4 15 3 C20 2 20 21 24 21 C28 21 28 2 33 3 C38 4 41 13 39 27 Z"
+            <span class="odt-tooth__code" t-esc="displayCode(tooth)"/>
+            <svg class="odt-tooth__shape" viewBox="0 0 48 72" role="img" t-att-aria-label="displayCode(tooth) + ' ' + tooth.name">
+                <path t-att-d="rootPath(tooth)"
                       t-att-class="zoneClass(tooth, 'root')" t-att-title="zoneTitle(tooth, 'root')"
                       t-on-click="() => this.openZone(tooth, 'root')"/>
                 <path d="M8 24 Q24 20 40 24 Q45 35 41 59 Q38 70 24 70 Q10 70 7 59 Q3 35 8 24 Z"

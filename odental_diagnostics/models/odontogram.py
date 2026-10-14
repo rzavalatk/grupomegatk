@@ -32,7 +32,7 @@ TOOTH_CONDITIONS = [
     ("root_canal", "Tratamiento endodóntico"),
     ("extraction_indicated", "Extracción indicada"),
     ("fracture", "Fractura"),
-    ("mobility", "Movilidad"),
+    ("mobility", "Movilidad dental (signo clínico)"),
     ("sealant", "Sellante"),
     ("prosthesis", "Prótesis"),
     ("other", "Otro"),
@@ -74,6 +74,11 @@ class ODentalOdontogram(models.Model):
         required=True,
         default="permanent",
         tracking=True,
+    )
+    numbering_system = fields.Selection(
+        [("fdi", "FDI (dos dígitos)"), ("ada", "ADA / Universal")],
+        string="Numeración visible", required=True, default="fdi",
+        help="Solo cambia los números mostrados. Las piezas y hallazgos se guardan con su código FDI estable.",
     )
     summary = fields.Text(string="Resumen clínico", tracking=True)
     finding_ids = fields.One2many(
@@ -298,21 +303,32 @@ class ODentalOdontogramFinding(models.Model):
         related="odontogram_id.organization_id", store=True, index=True
     )
     patient_id = fields.Many2one(related="odontogram_id.patient_id", store=True, index=True)
-    tooth_id = fields.Many2one("odental.tooth", required=True, ondelete="restrict", index=True)
-    surface = fields.Selection(TOOTH_SURFACES, required=True, default="whole", index=True)
-    condition = fields.Selection(TOOTH_CONDITIONS, required=True, index=True)
+    tooth_id = fields.Many2one(
+        "odental.tooth", string="Pieza", required=True, ondelete="restrict", index=True,
+        help="Seleccione el número mostrado en el odontograma. FDI y ADA identifican la misma pieza.",
+    )
+    surface = fields.Selection(
+        TOOTH_SURFACES, string="Superficie", required=True, default="whole", index=True,
+    )
+    condition = fields.Selection(
+        TOOTH_CONDITIONS, string="Hallazgo o signo", required=True, index=True,
+        help="Movilidad es un signo clínico; caries, restauraciones y otros registros son condiciones o hallazgos.",
+    )
     status = fields.Selection(
         [
-            ("existing", "Existente"),
-            ("planned", "Planificado"),
-            ("completed", "Realizado"),
-            ("monitor", "En observación"),
+            ("existing", "Presente al examinar"),
+            ("planned", "Tratamiento planificado"),
+            ("completed", "Tratamiento realizado"),
+            ("monitor", "En seguimiento"),
         ],
-        required=True,
+        string="Situación clínica", required=True,
         default="existing",
         index=True,
+        help="Presente: se observa hoy (por ejemplo, caries, movilidad o una corona previa). "
+             "Planificado: se propone un tratamiento aún no hecho. Realizado: tratamiento ya ejecutado. "
+             "En seguimiento: signo o condición que se vigila. Esto no es el estado de firma del odontograma.",
     )
-    notes = fields.Char()
+    notes = fields.Char(string="Detalle")
 
     _sql_constraints = [
         (
