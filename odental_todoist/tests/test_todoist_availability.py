@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 from odoo import fields
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests.common import TransactionCase, tagged
 
 from ..controllers.webhook import valid_signature
@@ -22,6 +22,19 @@ class TestTodoistAvailability(TransactionCase):
         self.assertFalse(valid_signature("synthetic-secret", body + b" ", signature))
         self.assertFalse(valid_signature("another-secret", body, signature))
         self.assertFalse(valid_signature("", body, signature))
+
+    def test_professional_settings_open_only_for_owner(self):
+        action = self.professional.action_open_my_todoist_settings()
+        self.assertEqual(action["res_model"], "odental.todoist.connect.wizard")
+        self.assertEqual(action["context"]["default_professional_id"], self.professional.id)
+        self.assertEqual(action["context"]["default_organization_id"], self.organization.id)
+        other = self.env["res.users"].with_context(no_reset_password=True).create({
+            "name": "Otro doctor", "login": "other-todoist-settings@example.invalid",
+            "company_ids": [(4, self.env.company.id)],
+            "groups_id": [(4, self.env.ref("odental_core.group_odental_professional").id)],
+        })
+        with self.assertRaises(AccessError):
+            self.professional.with_user(other).action_open_my_todoist_settings()
 
     @classmethod
     def setUpClass(cls):
