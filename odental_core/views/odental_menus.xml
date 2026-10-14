@@ -10,6 +10,8 @@
     <menuitem id="menu_odental_organization" name="Organizaciones" parent="menu_odental_configuration" action="action_odental_organization" sequence="10"/>
     <menuitem id="menu_odental_site" name="Sedes" parent="menu_odental_configuration" action="action_odental_site" sequence="20"/>
     <menuitem id="menu_odental_professional" name="Profesionales" parent="menu_odental_configuration" action="action_odental_professional" sequence="30" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_odental_specialty" name="Especialidades" parent="menu_odental_configuration" action="action_odental_specialty" sequence="35" groups="odental_core.group_odental_manager"/>
+    <menuitem id="menu_odental_specialty_report" name="Profesionales por especialidad" parent="menu_odental_configuration" action="action_odental_specialty_report" sequence="36" groups="odental_core.group_odental_manager"/>
     <menuitem id="menu_odental_clinical_space" name="Consultorios" parent="menu_odental_configuration" action="action_odental_clinical_space" sequence="40"/>
     <menuitem id="menu_odental_equipment" name="Equipos compartidos" parent="menu_odental_configuration" action="action_odental_equipment" sequence="50"/>
     <menuitem id="menu_odental_service" name="Servicios" parent="menu_odental_configuration" action="action_odental_service" sequence="60"/>
