@@ -53,8 +53,10 @@ class LenkaFinancialOperation(models.Model):
         for rec in self:
             if rec.interest_only_months < 0:
                 raise ValidationError(_('Los meses de solo intereses no pueden ser negativos.'))
-            if rec.calculation_method == 'interest_then_level' and not 0 < rec.interest_only_months < rec.term_months:
-                raise ValidationError(_('El plan mixto requiere al menos un mes de solo intereses y un mes de cuota nivelada dentro del plazo total.'))
+            if rec.calculation_method == 'interest_then_level' and rec.interest_only_months == 0:
+                raise ValidationError(_('Revise Meses de solo intereses: ingrese al menos 1 mes. Para 12 meses de intereses y 12 de cuota nivelada, indique 12 en Meses de solo intereses y 24 en Plazo (meses).'))
+            if rec.calculation_method == 'interest_then_level' and rec.interest_only_months >= rec.term_months:
+                raise ValidationError(_('Revise Plazo (meses) y Meses de solo intereses: el plazo total (%s) debe ser mayor que los meses de solo intereses (%s), para dejar al menos un mes de cuota nivelada.') % (rec.term_months, rec.interest_only_months))
     balloon_base_payment = fields.Monetary(string='Cuota regular antes de bombas')
     extra_payment_line_ids = fields.One2many('lenka.extra.payment.plan', 'operation_id', string='Pagos extraordinarios')
     residual_purchase_percent = fields.Float(string='Opcion de compra (%)', default=0.0)
