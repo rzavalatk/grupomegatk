@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_specialty_report_form" model="ir.ui.view">
+        <field name="name">odental.specialty.report.form</field>
+        <field name="model">odental.specialty.report</field>
+        <field name="arch" type="xml">
+            <form string="Profesionales por especialidad">
+                <header>
+                    <button name="action_generate" type="object" string="Consultar" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="organization_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                        <field name="total_professionals" readonly="1"/>
+                        <field name="without_specialty_count" readonly="1"/>
+                    </group>
+                    <field name="line_ids" readonly="1">
+                        <list create="false" delete="false" edit="false">
+                            <field name="specialty_id"/>
+                            <field name="professional_count"/>
+                            <button name="action_open_professionals" type="object" string="Ver doctores"
+                                    icon="fa-users"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_specialty_report" model="ir.actions.act_window">
+        <field name="name">Profesionales por especialidad</field>
+        <field name="res_model">odental.specialty.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -81,6 +81,35 @@ class TestODentalProfessional(TransactionCase):
                 specialty_ids=[(4, other_specialty.id)]
             ))
 
+    def test_clinic_report_counts_unique_doctors_and_each_specialty(self):
+        endo = self.env.ref("odental_core.specialty_endodontics")
+        ortho = self.env.ref("odental_core.specialty_orthodontics")
+        first = self.env["odental.professional"].create(self._values(
+            specialty_ids=[(6, 0, [endo.id, ortho.id])]
+        ))
+        self.env["odental.professional"].create(self._values(
+            first_name="Ana", specialty_ids=[(4, endo.id)]
+        ))
+        self.env["odental.professional"].create(self._values(
+            first_name="Elena", specialty_ids=[]
+        ))
+        self.env["odental.professional"].create(self._values(
+            first_name="Inactiva", active=False, specialty_ids=[(4, ortho.id)]
+        ))
+        report = self.env["odental.specialty.report"].create({
+            "organization_id": self.organization.id
+        })
+        report.action_generate()
+        counts = {line.specialty_id.id: line.professional_count for line in report.line_ids}
+        self.assertEqual(report.total_professionals, 3)
+        self.assertEqual(report.without_specialty_count, 1)
+        self.assertEqual(counts[endo.id], 2)
+        self.assertEqual(counts[ortho.id], 1)
+        action = report.line_ids.filtered(lambda line: line.specialty_id == ortho).action_open_professionals()
+        self.assertEqual(
+            self.env["odental.professional"].search(action["domain"]).ids, first.ids
+        )
+
     def test_homonyms_are_distinguished_without_blocking_real_people(self):
         first = self.env["odental.professional"].create(
             self._values(license_number="COL-1234")

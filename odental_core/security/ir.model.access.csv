@@ -8,6 +8,8 @@ access_odental_professional_admin,odental.professional admin,model_odental_profe
 access_odental_specialty_user,odental.specialty user,model_odental_specialty,odental_core.group_odental_user,1,0,0,0
 access_odental_specialty_manager,odental.specialty manager,model_odental_specialty,odental_core.group_odental_manager,1,1,1,0
 access_odental_specialty_admin,odental.specialty admin,model_odental_specialty,odental_core.group_odental_admin,1,1,1,1
+access_odental_specialty_report_manager,odental.specialty.report manager,model_odental_specialty_report,odental_core.group_odental_manager,1,1,1,1
+access_odental_specialty_report_line_manager,odental.specialty.report.line manager,model_odental_specialty_report_line,odental_core.group_odental_manager,1,1,1,1
 access_odental_patient_user,odental.patient user,model_odental_patient,odental_core.group_odental_user,1,1,1,0
 access_odental_patient_manager,odental.patient manager,model_odental_patient,odental_core.group_odental_manager,1,1,1,1
 access_odental_site_user,odental.site user,model_odental_site,odental_core.group_odental_user,1,0,0,0

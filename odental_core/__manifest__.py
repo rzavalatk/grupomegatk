@@ -15,6 +15,7 @@
         "views/organization_views.xml",
         "views/specialty_views.xml",
         "views/professional_views.xml",
+        "views/specialty_report_views.xml",
         "views/patient_views.xml",
         "views/resource_views.xml",
         "views/service_views.xml",
