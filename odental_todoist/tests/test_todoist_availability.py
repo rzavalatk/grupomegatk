@@ -51,6 +51,8 @@ class TestTodoistAvailability(TransactionCase):
             "pilot_patient_id": cls.patient.id,
             "api_token": "synthetic-test-token",
             "todoist_user_id": "doctor-1",
+            "project_id": "private-project",
+            "project_name": "Clínica piloto | Agenda clínica",
         })
 
     def _task(self, date="2026-10-02T10:00:00-06:00", labels=None, checked=False):
@@ -118,10 +120,90 @@ class TestTodoistAvailability(TransactionCase):
 
     def test_incomplete_provider_response_keeps_existing_block(self):
         self.connection._reconcile_tasks([self._task()])
-        with patch.object(type(self.connection), "_get_json", return_value={"results": None}):
+        def provider(_self, _token, endpoint, params=None):
+            if endpoint == "projects/private-project":
+                return {"id": "private-project", "name": self.connection.project_name,
+                        "is_shared": False, "workspace_id": None}
+            return {"results": None}
+        with patch.object(type(self.connection), "_get_json", provider):
             with self.assertRaises(UserError):
                 self.connection._sync_one()
         self.assertEqual(self._block().state, "scheduled")
+
+    def test_clinical_project_is_personal_private_and_reused(self):
+        project = {"id": "private-project", "name": "Clínica piloto | Agenda clínica",
+                   "is_shared": False, "workspace_id": None}
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"results": [project]}) as fetch, \
+             patch.object(type(self.connection), "_send_json") as send:
+            self.assertEqual(self.connection._find_or_create_clinical_project(
+                "synthetic-test-token", project["name"]), project["id"])
+            fetch.assert_called_once()
+            send.assert_not_called()
+        for shared in ({**project, "is_shared": True},
+                       {**project, "workspace_id": 42}):
+            with patch.object(type(self.connection), "_get_json",
+                              return_value={"results": [shared]}), \
+                 patch.object(type(self.connection), "_send_json") as send:
+                with self.assertRaisesRegex(UserError, "privado"):
+                    self.connection._find_or_create_clinical_project(
+                        "synthetic-test-token", project["name"])
+                send.assert_not_called()
+
+    def test_clinical_project_created_without_workspace(self):
+        project = {"id": "new-private", "name": "Clínica piloto | Agenda clínica",
+                   "is_shared": False, "workspace_id": None}
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"results": []}), \
+             patch.object(type(self.connection), "_send_json", return_value=project) as send:
+            self.assertEqual(self.connection._find_or_create_clinical_project(
+                "synthetic-test-token", project["name"]), "new-private")
+            self.assertEqual(send.call_args.args[1:], ("POST", "projects",
+                                                       {"name": project["name"]}))
+
+    def test_configured_project_link_uses_private_project_from_same_account(self):
+        project = {"id": "6XGabc123", "name": "Agenda Jennifer",
+                   "is_shared": False, "workspace_id": None}
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"results": [project]}) as fetch, \
+             patch.object(type(self.connection), "_send_json") as send:
+            selected = self.connection._select_clinical_project(
+                "synthetic-test-token",
+                "https://app.todoist.com/app/project/agenda-jennifer-6XGabc123",
+            )
+            self.assertEqual(selected, project)
+            self.assertEqual(fetch.call_count, 1)
+            send.assert_not_called()
+
+    def test_configured_project_rejects_untrusted_link_and_shared_destination(self):
+        with patch.object(type(self.connection), "_get_json") as fetch:
+            for reference in ("https://not-todoist.com/app/project/123",
+                              "https://app.todoist.com/app/task/123",
+                              "https://app.todoist.com:8443/app/project/123"):
+                with self.assertRaises(UserError):
+                    self.connection._select_clinical_project("synthetic-test-token", reference)
+            fetch.assert_not_called()
+        with patch.object(type(self.connection), "_get_json", return_value={
+                "results": [{"id": "123", "name": "Compartido", "is_shared": True}]}) as fetch:
+            with self.assertRaisesRegex(UserError, "privado"):
+                self.connection._select_clinical_project("synthetic-test-token", "123")
+            fetch.assert_called_once()
+
+    def test_configured_project_rejects_project_absent_from_account(self):
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"results": []}):
+            with self.assertRaisesRegex(UserError, "no pertenece"):
+                self.connection._select_clinical_project("synthetic-test-token", "unknown-id")
+
+    def test_shared_project_stops_sync_before_patient_export(self):
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"id": "private-project",
+                                        "name": self.connection.project_name,
+                                        "is_shared": True}), \
+             patch.object(type(self.connection), "_fetch_tasks") as fetch:
+            with self.assertRaisesRegex(UserError, "privado"):
+                self.connection._sync_one()
+            fetch.assert_not_called()
 
     def test_other_organization_block_is_untouched(self):
         second = self.env["odental.organization"].create({
@@ -168,6 +250,7 @@ class TestTodoistAvailability(TransactionCase):
             self.connection._reconcile_exports([])
         payload = send.call_args.args[3]
         self.assertEqual(send.call_args.args[1:3], ("POST", "tasks"))
+        self.assertEqual(payload["project_id"], "private-project")
         self.assertIn(self.patient.name, payload["content"])
         self.assertIn(self.service.name, payload["content"])
         self.assertNotIn("Diagnóstico confidencial", str(payload))
@@ -190,6 +273,22 @@ class TestTodoistAvailability(TransactionCase):
             self.connection._reconcile_exports([remote])
         self.assertEqual(send.call_args.args[1:3], ("DELETE", "tasks/mirror-1"))
         self.assertFalse(mirror.exists())
+
+    def test_existing_mirror_is_moved_back_to_private_project(self):
+        appointment = self.env["odental.appointment"].create(
+            self._clinical_values(self._future_start())
+        )
+        with patch.object(type(self.connection), "_send_json", return_value={"id": "mirror-move"}):
+            self.connection._reconcile_exports([])
+        payload = self.connection._export_payload(appointment)
+        remote = {"id": "mirror-move", "project_id": "other-project",
+                  "content": payload["content"], "description": payload["description"],
+                  "labels": payload["labels"], "due": {"datetime": payload["due_datetime"]}}
+        with patch.object(type(self.connection), "_send_json", return_value=remote) as send:
+            self.connection._reconcile_exports([remote])
+        self.assertEqual(send.call_args.args[1:],
+                         ("POST", "tasks/mirror-move/move",
+                          {"project_id": "private-project"}))
 
     def test_pilot_never_exports_other_patient_appointments(self):
         real_patient = self.env["odental.patient"].create({
@@ -341,7 +440,11 @@ class TestTodoistAvailability(TransactionCase):
             "company_ids": [(6, 0, [other_company.id, self.env.company.id])],
         })
         self.professional.user_id = professional_user
-        with patch.object(type(self.connection), "_fetch_tasks", return_value=[]) as fetch, \
+        with patch.object(type(self.connection), "_get_json",
+                          return_value={"id": "private-project",
+                                        "name": self.connection.project_name,
+                                        "is_shared": False, "workspace_id": None}), \
+             patch.object(type(self.connection), "_fetch_tasks", return_value=[]) as fetch, \
              patch.object(type(self.connection), "_reconcile_tasks"), \
              patch.object(type(self.connection), "_reconcile_exports", return_value=[]):
             self.connection._sync_one()

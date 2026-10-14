@@ -1,7 +1,7 @@
 {
     "name": "O Dental - disponibilidad Todoist",
     "summary": "Bloquea en la agenda las reuniones privadas del profesional",
-    "version": "18.0.1.4.0",
+    "version": "18.0.1.5.1",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
