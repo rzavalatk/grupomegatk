@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="odental_diagnostics.LocalDictation">
+        <div class="odt-dictation">
+            <textarea class="form-control" rows="4" t-att-value="value" t-att-readonly="props.readonly"
+                t-att-placeholder="props.placeholder" t-on-input="onInput"/>
+            <button t-if="!props.readonly" type="button" class="btn btn-outline-primary mt-2"
+                t-on-click="toggle"><t t-esc="state.listening ? 'Detener dictado' : 'Dictar en este dispositivo'"/></button>
+            <div t-if="state.message" class="small text-muted mt-1" role="status" t-esc="state.message"/>
+        </div>
+    </t>
+</templates>

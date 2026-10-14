@@ -166,6 +166,87 @@ class TestODentalDiagnostics(TransactionCase):
             findings.with_context(default_odontogram_id=chart.id).create({
                 'tooth_id': self.tooth_11.id, 'condition': 'caries'})
 
+    def test_clinician_can_delete_draft_finding_with_audit_history(self):
+        chart = self._chart()
+        finding = chart.finding_ids.with_user(self.operator)
+        finding.write({'notes': 'Fractura observada'})
+        finding.write({'condition': 'fracture'})
+        finding_id = finding.id
+        finding.unlink()
+        self.assertFalse(self.env['odental.odontogram.finding'].browse(finding_id).exists())
+        events = self.env['odental.clinical.audit'].with_user(self.operator).search([
+            ('model_name', '=', chart._name), ('record_res_id', '=', chart.id),
+            ('event_type', 'in', ['finding_created', 'finding_updated', 'finding_deleted']),
+        ], order='occurred_at asc, id asc')
+        self.assertEqual(events.mapped('event_type'), [
+            'finding_created', 'finding_updated', 'finding_updated', 'finding_deleted'])
+        self.assertTrue(all(event.user_id == self.operator for event in events))
+        self.assertIn('Fractura observada', events[-1].summary)
+        self.assertIn('Fractura', events[-1].summary)
+        self.assertEqual(chart.action_view_finding_history()['domain'][1],
+                         ('record_res_id', '=', chart.id))
+        replacement = self.env['odental.odontogram.finding'].with_user(self.operator).create({
+            'odontogram_id': chart.id, 'tooth_id': self.tooth_11.id,
+            'condition': 'healthy',
+        })
+        self.assertTrue(replacement)
+
+    def test_signed_finding_cannot_be_deleted_and_outsider_cannot_delete(self):
+        chart = self._chart()
+        outsider = self.operator.with_context(no_reset_password=True).copy({
+            'login': 'odental-diagnostic-delete-outsider', 'name': 'Synthetic delete outsider'})
+        with self.assertRaises(AccessError):
+            chart.finding_ids.with_user(outsider).unlink()
+        chart.action_sign()
+        with self.assertRaises(UserError):
+            chart.finding_ids.with_user(self.operator).unlink()
+
+    def test_dictation_requires_review_and_keeps_clinical_isolation(self):
+        chart = self.env['odental.odontogram'].with_user(self.operator).create({
+            'clinical_record_id': self.record.id, 'professional_id': self.professional.id,
+        })
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11, superficie mesial, fractura, existente, '
+                          'detalle: borde visible',
+        })
+        wizard.action_interpret()
+        self.assertEqual(wizard.tooth_id, self.tooth_11)
+        self.assertEqual((wizard.surface, wizard.condition, wizard.status),
+                         ('mesial', 'fracture', 'existing'))
+        self.assertEqual(len(chart.finding_ids), 0)
+        wizard.action_apply()
+        self.assertEqual(len(chart.finding_ids), 1)
+        self.assertEqual(chart.finding_ids.notes, 'borde visible')
+        events = self.env['odental.clinical.audit'].search([
+            ('record_res_id', '=', chart.id), ('event_type', '=', 'dictation_applied')])
+        self.assertEqual(events.user_id, self.operator)
+        chart.action_sign()
+        with self.assertRaises(UserError):
+            wizard.action_apply()
+
+    def test_dictation_does_not_guess_an_ambiguous_finding(self):
+        chart = self._chart()
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11 y 12, caries o fractura',
+        })
+        wizard.action_interpret()
+        self.assertFalse(wizard.tooth_id)
+        self.assertFalse(wizard.condition)
+        with self.assertRaises(ValidationError):
+            wizard.action_apply()
+
+    def test_dictation_negation_needs_manual_review(self):
+        chart = self._chart()
+        wizard = self.env['odental.odontogram.dictation'].with_user(self.operator).create({
+            'chart_id': chart.id,
+            'transcript': 'Pieza 11, oclusal, sin caries, en observación',
+        })
+        wizard.action_interpret()
+        self.assertFalse(wizard.condition)
+        self.assertIn('negación', wizard.interpretation_message)
+
     def test_image_context_and_metadata_are_protected(self):
         image = self._image()
         with self.assertRaises(UserError):
