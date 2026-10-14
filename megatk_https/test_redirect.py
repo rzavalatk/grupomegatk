@@ -4,6 +4,11 @@ import importlib.util
 from pathlib import Path
 import unittest
 
+try:
+    from odoo.tests.common import BaseCase
+except ModuleNotFoundError:
+    BaseCase = unittest.TestCase
+
 spec = importlib.util.spec_from_file_location(
     'megatk_https_policy', Path(__file__).with_name('redirect.py'),
 )
@@ -11,7 +16,7 @@ policy = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(policy)
 
 
-class TestHttpsPolicy(unittest.TestCase):
+class TestHttpsPolicy(BaseCase):
     def test_public_http_home(self):
         self.assertEqual(policy.https_target('http://www.megatk.net/'),
                          'https://www.megatk.net/')
