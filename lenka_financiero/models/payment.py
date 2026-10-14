@@ -1,4 +1,7 @@
+import math
+
 from odoo import api, fields, models, _
+from ..late_fee import balance_late_fees
 from odoo.exceptions import ValidationError
 
 
@@ -105,6 +108,12 @@ class LenkaPayment(models.Model):
             if rec.allocation_line_ids:
                 raise ValidationError(_('El cobro en borrador ya tiene una distribucion. Revise su historial antes de aplicarlo.'))
 
+            if rec.operation_id.late_fee_method == 'balance_monthly':
+                posted = rec.operation_id.payment_ids.filtered(lambda p: p.state == 'posted')
+                if rec.payment_date > fields.Date.context_today(rec) or any(p.payment_date > rec.payment_date for p in posted):
+                    raise ValidationError(_('La fecha del cobro debe ser hasta hoy y no anterior al último cobro aplicado. Regularice primero los cobros posteriores.'))
+                rec.operation_id._update_balance_late_fees(rec.payment_date)
+
             # IMPORTANTE: si el pago es con tarjeta, solo el neto recibido despues
             # de la comision bancaria se aplica a la deuda del cliente.
             remaining = rec.net_bank_amount
@@ -206,6 +215,12 @@ class LenkaPayment(models.Model):
                 raise ValidationError(_('No se puede anular un cobro de una operacion cerrada o inactiva. Revise primero el cierre de la operacion y sus garantias.'))
             if rec.move_id and rec.move_id.state == 'posted':
                 raise ValidationError(_('No se puede anular el cobro mientras su partida este publicada. Regularice su anulacion en Contabilidad antes de continuar.'))
+            if rec.state == 'posted' and rec.operation_id.late_fee_method == 'balance_monthly':
+                later = rec.operation_id.payment_ids.filtered(
+                    lambda p: p.state == 'posted' and p.id != rec.id
+                    and (p.payment_date, p.id) > (rec.payment_date, rec.id))
+                if later:
+                    raise ValidationError(_('Anule primero los cobros posteriores para conservar el cálculo histórico de mora.'))
             for alloc in rec.allocation_line_ids:
                 alloc.schedule_line_id.check_access('read')
                 if alloc.schedule_line_id.operation_id != rec.operation_id:
@@ -226,6 +241,8 @@ class LenkaPayment(models.Model):
                     'capital_paid': max(line.capital_paid - alloc.capital_amount, 0.0),
                 })
             super(LenkaPayment, rec).write({'state': 'cancelled'})
+            if rec.operation_id.late_fee_method == 'balance_monthly':
+                rec.operation_id._update_balance_late_fees(fields.Date.context_today(rec))
         return True
 
 
@@ -245,14 +262,48 @@ class LenkaFinancialOperationPaymentMixin(models.Model):
     _inherit = 'lenka.financial.operation'
 
     payment_ids = fields.One2many('lenka.payment', 'operation_id', string='Cobros')
-    late_fee_rate = fields.Float(string='Mora mensual (%)', default=0.0)
-    grace_days = fields.Integer(string='Dias de gracia', default=0)
+    late_fee_rate = fields.Float(string='Mora mensual (%)', default=0.0, digits=(16, 4), tracking=True)
+    late_fee_method = fields.Selection([
+        ('legacy', 'Capital vencido (método anterior)'),
+        ('balance_monthly', 'Saldo de capital pendiente, mensual / 30 días'),
+    ], string='Base de mora', default='legacy', required=True, tracking=True,
+       help='Saldo pendiente: mora simple, sin capitalización, prorrateada por días de atraso sobre base de 30 días. Se cobra una sola vez por día aunque haya varias cuotas vencidas.')
+    grace_days = fields.Integer(string='Dias de gracia', default=0, tracking=True)
     paid_capital = fields.Monetary(string='Capital pagado', compute='_compute_collection_totals')
     paid_interest = fields.Monetary(string='Interes pagado', compute='_compute_collection_totals')
     paid_late_fees = fields.Monetary(string='Mora pagada', compute='_compute_collection_totals')
     paid_card_fees = fields.Monetary(string='Comisiones de tarjeta', compute='_compute_collection_totals')
     net_collections = fields.Monetary(string='Neto recibido', compute='_compute_collection_totals')
     outstanding_capital = fields.Monetary(string='Capital pendiente', compute='_compute_collection_totals')
+
+    @api.model
+    def default_get(self, field_names):
+        values = super().default_get(field_names)
+        if values.get('operation_type') == 'loan' and 'late_fee_method' in field_names:
+            values['late_fee_method'] = 'balance_monthly'
+            if 'late_fee_rate' in field_names and 'default_late_fee_rate' not in self.env.context:
+                values['late_fee_rate'] = 2.0
+        return values
+
+    def write(self, vals):
+        if {'late_fee_rate', 'late_fee_method', 'grace_days'}.intersection(vals) and self.filtered('contract_signed'):
+            raise ValidationError(_('La mora pactada no puede modificarse después de firmar el contrato.'))
+        return super().write(vals)
+
+    @api.onchange('operation_type')
+    def _onchange_loan_late_fee_method(self):
+        if not self._origin.id and self.operation_type == 'loan':
+            self.late_fee_method = 'balance_monthly'
+            if not self.late_fee_rate and 'default_late_fee_rate' not in self.env.context:
+                self.late_fee_rate = 2.0
+
+    @api.constrains('late_fee_rate', 'grace_days')
+    def _check_late_fee_terms(self):
+        for rec in self:
+            if not math.isfinite(rec.late_fee_rate) or not 0 <= rec.late_fee_rate <= 100:
+                raise ValidationError(_('Revise Mora mensual (%): ingrese un porcentaje entre 0 y 100. Cero significa sin cargo por mora.'))
+            if rec.grace_days < 0:
+                raise ValidationError(_('Revise Días de gracia: no pueden ser negativos.'))
 
     @api.depends(
         'financed_amount',
@@ -271,9 +322,33 @@ class LenkaFinancialOperationPaymentMixin(models.Model):
             rec.net_collections = sum(posted.mapped('net_bank_amount'))
             rec.outstanding_capital = max(rec.financed_amount - rec.paid_capital, 0.0)
 
+    def _balance_late_fee_totals(self, as_of):
+        self.ensure_one()
+        lines = self.schedule_line_ids.filtered('date')
+        payments = self.payment_ids.filtered(lambda p: p.state == 'posted')
+        totals = balance_late_fees(
+            self.financed_amount, self.late_fee_rate, self.grace_days,
+            [(l.id, l.date, l.capital, l.interest) for l in lines],
+            [(p.payment_date, p.capital_amount,
+              [(a.schedule_line_id.id, a.capital_amount, a.interest_amount)
+               for a in p.allocation_line_ids]) for p in payments], as_of)
+        return {line_id: self.currency_id.round(float(value)) for line_id, value in totals.items()}
+
+    def _update_balance_late_fees(self, as_of):
+        self.ensure_one()
+        totals = self._balance_late_fee_totals(as_of)
+        for line in self.schedule_line_ids.filtered('date'):
+            line.sudo().write({'late_fee_due': totals[line.id]})
+
     def action_update_late_fees(self):
+        self.check_access('write')
         today = fields.Date.context_today(self)
         for rec in self:
+            if rec.late_fee_method == 'balance_monthly':
+                if rec.state != 'active':
+                    raise ValidationError(_('La mora se actualiza únicamente en préstamos activos.'))
+                rec._update_balance_late_fees(today)
+                continue
             monthly_rate = rec.late_fee_rate / 100.0
             for line in rec.schedule_line_ids:
                 due_date = fields.Date.add(line.date, days=rec.grace_days)
@@ -290,7 +365,11 @@ class LenkaFinancialOperationPaymentMixin(models.Model):
             max(l.interest - l.interest_paid, 0.0)
             for l in self.schedule_line_ids if l.date and l.date <= today
         )
-        pending_late = sum(max(l.late_fee_due - l.late_fee_paid, 0.0) for l in self.schedule_line_ids)
+        if self.late_fee_method == 'balance_monthly':
+            totals = self._balance_late_fee_totals(today)
+            pending_late = sum(max(totals.get(l.id, 0) - l.late_fee_paid, 0.0) for l in self.schedule_line_ids)
+        else:
+            pending_late = sum(max(l.late_fee_due - l.late_fee_paid, 0.0) for l in self.schedule_line_ids)
         return self.outstanding_capital + pending_interest + pending_late
 
     def action_close_paid_operation(self):
@@ -338,3 +417,4 @@ class LenkaAmortizationPaymentMixin(models.Model):
                 line.payment_state = 'overdue'
             else:
                 line.payment_state = 'pending'
+

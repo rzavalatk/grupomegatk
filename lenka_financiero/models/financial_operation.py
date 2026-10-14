@@ -122,7 +122,7 @@ class LenkaFinancialOperation(models.Model):
             'partner_id', 'operation_type', 'product_id', 'company_id', 'currency_id',
             'principal_amount', 'down_payment', 'interest_rate', 'rate_period',
             'term_months', 'first_payment_date', 'calculation_method',
-            'interest_only_months',
+            'interest_only_months', 'late_fee_rate', 'late_fee_method', 'grace_days',
             'balloon_base_payment', 'residual_purchase_percent', 'recalculation_policy',
         }
         if protected.intersection(vals):

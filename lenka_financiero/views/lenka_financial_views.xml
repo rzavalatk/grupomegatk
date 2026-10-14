@@ -71,6 +71,12 @@
                             <field name="residual_purchase_amount" readonly="1" invisible="operation_type != 'lease'"/>
                         </group>
                     </group>
+                    <group string="Mora del contrato">
+                        <field name="late_fee_rate" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                        <field name="late_fee_method" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                        <field name="grace_days" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                        <div class="text-muted">Indique la tasa pactada antes de enviar a aprobación. 0 % significa sin mora. La modalidad sobre saldo pendiente se calcula una sola vez por día, con tasa mensual / 30, también en cuotas de solo intereses.</div>
+                    </group>
                     <notebook>
                         <page string="Pagos extraordinarios" invisible="calculation_method != 'balloon'">
                             <field name="extra_payment_line_ids">

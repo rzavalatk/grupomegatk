@@ -16,6 +16,7 @@ TERMS_FIELDS = {
     'partner_id', 'company_id', 'currency_id', 'operation_type', 'product_id', 'date',
     'principal_amount', 'down_payment', 'interest_rate', 'rate_period', 'term_months',
     'first_payment_date', 'calculation_method', 'interest_only_months',
+    'late_fee_rate', 'late_fee_method', 'grace_days',
     'balloon_base_payment', 'residual_purchase_percent', 'recalculation_policy',
     'guarantor_ids', 'guarantee_ids', 'security_mode', 'approval_notes',
     'schedule_line_ids', 'extra_payment_line_ids', 'is_quote',
@@ -213,6 +214,9 @@ class LenkaSoleSignature(models.Model):
             ('Monto', '%s %.2f' % (self.currency_id.name, self.financed_amount)),
             ('Tasa', '%s%% %s' % (self.interest_rate, self.rate_period)),
             ('Plazo', '%s meses' % self.term_months),
+            ('Mora mensual', '%s%%' % self.late_fee_rate),
+            ('Base de mora', dict(self._fields['late_fee_method'].selection).get(self.late_fee_method, '')),
+            ('Días de gracia', str(self.grace_days)),
             ('Solicitado por', self.env.user.display_name), ('Motivo', self.approval_notes),
         ]:
             body += Markup('<li><strong>%s:</strong> %s</li>') % (escape(label), escape(value))

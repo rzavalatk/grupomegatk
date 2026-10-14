@@ -39,8 +39,9 @@
             <t t-out="0"/>
         </div>
         <div class="footer" style="font-family: 'Times New Roman', serif; font-size:9pt; text-align:center">
-            <p style="padding-top:10px">Rúbrica VENDEDOR: ____________________ &#160; Rúbrica COMPRADOR: ____________________</p>
+            <p style="padding-top:10px">Rúbrica <t t-if="o.operation_id.operation_type == 'loan'">PRESTAMISTA</t><t t-else="">VENDEDOR</t>: ____________________ &#160; Rúbrica <t t-if="o.operation_id.operation_type == 'loan'">PRESTATARIO</t><t t-else="">COMPRADOR</t>: ____________________</p>
             <p><span t-field="o.name"/> · Página <span class="page"/> de <span class="topage"/></p>
         </div>
     </template>
 </odoo>
+

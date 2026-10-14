@@ -56,6 +56,26 @@ class LenkaContractTemplate(models.Model):
                      'Conservar las cláusulas aprobadas; cualquier cambio posterior requiere revisión.',
         })
 
+    @api.model
+    def _approved_unsecured_loan_template(self, company):
+        template = self.with_context(active_test=False).search([
+            ('company_id', '=', company.id),
+            ('builtin_key', '=', 'unsecured_loan_20261014'),
+        ], limit=1)
+        if template:
+            if not template.active:
+                raise ValidationError(_('El contrato de préstamo aprobado está archivado. Reactívelo en Plantillas contractuales.'))
+            return template
+        with file_open('lenka_financiero/data/unsecured_loan_contract.html', 'r') as source:
+            body = source.read()
+        return self.create({
+            'name': 'Préstamo fiduciario sin aval ni garantía — Lenka',
+            'company_id': company.id, 'document_type': 'contract',
+            'operation_type': 'loan', 'body_html': body,
+            'builtin_key': 'unsecured_loan_20261014',
+            'notes': 'Formato para personas naturales y empresas. Mora parametrizable por operación, simple mensual sobre saldo pendiente, prorrateada /30. Aprobado por Luis el 14/10/2026. Incluye automáticamente el anexo de pagos.',
+        })
+
     def action_preview(self):
         self.ensure_one()
         return {
@@ -158,6 +178,7 @@ class LenkaFinancialOperationContract(models.Model):
     contract_seller_identity = fields.Char(string='Identidad del representante del vendedor')
     contract_buyer_representative = fields.Char(string='Representante del comprador')
     contract_buyer_identity = fields.Char(string='Identidad del firmante comprador')
+    contract_buyer_authority = fields.Text(string='Facultades del representante de la empresa')
     contract_equipment_serial = fields.Char(string='Serie del equipo')
     contract_warranty = fields.Char(string='Garantía del equipo', default='1 año por desperfectos de fábrica')
     contract_isv_amount = fields.Monetary(string='ISV incluido en el valor del equipo')
@@ -190,7 +211,17 @@ class LenkaFinancialOperationContract(models.Model):
         product = self.product_id.display_name if self.product_id else ''
         operation_label = dict(self._fields['operation_type'].selection).get(self.operation_type, '')
         rate_label = dict(self._fields['rate_period'].selection).get(self.rate_period, '')
+        first_payment = self.first_payment_date or (self.schedule_line_ids.sorted('sequence')[0].date if self.schedule_line_ids else False)
+        if self.calculation_method == 'interest_then_level':
+            stages = _('Se pactan %s meses de solo intereses y %s meses de cuota nivelada, que comienzan el %s. Durante la etapa de solo intereses no se amortiza capital; después se pagan las cuotas niveladas del anexo.') % (
+                self.interest_only_months, self.level_payment_months,
+                fields.Date.to_string(self.level_payment_start_date) or '')
+        elif self.calculation_method == 'interest_only':
+            stages = _('Durante el plazo se pagan los intereses del anexo y el capital se paga al vencimiento indicado en él.')
+        else:
+            stages = _('Las cuotas de capital e intereses corresponden al método de pago acordado y se detallan en el anexo.')
         values = {
+            '{{DESCRIPCION_PLAN}}': stages,
             '{{OPERACION}}': self.name or '',
             '{{TIPO_OPERACION}}': operation_label,
             '{{CLIENTE}}': self.partner_id.display_name or '',
@@ -211,7 +242,7 @@ class LenkaFinancialOperationContract(models.Model):
             '{{MESES_SOLO_INTERESES}}': str(self.interest_only_months if self.calculation_method == 'interest_then_level' else 0),
             '{{MESES_CUOTA_NIVELADA}}': str(self.level_payment_months or 0),
             '{{INICIO_CUOTA_NIVELADA}}': fields.Date.to_string(self.level_payment_start_date) if self.level_payment_start_date else '',
-            '{{PRIMER_PAGO}}': fields.Date.to_string(self.first_payment_date) if self.first_payment_date else '',
+            '{{PRIMER_PAGO}}': fields.Date.to_string(first_payment) if first_payment else '',
             '{{PRODUCTO}}': product,
             '{{GARANTIAS}}': guarantees,
             '{{OPCION_COMPRA}}': format(self.residual_purchase_amount or 0.0, ',.2f'),
@@ -232,6 +263,8 @@ class LenkaFinancialOperationContract(models.Model):
             '{{ISV_INCLUIDO}}': format(self.contract_isv_amount or 0.0, ',.2f'),
             '{{INSTRUCCIONES_PAGO}}': self.contract_payment_instructions or blank,
             '{{CIUDAD_FIRMA}}': self.contract_signing_city or self.company_id.city or blank,
+            '{{DIAS_GRACIA}}': str(self.grace_days),
+            '{{FACULTADES_REPRESENTANTE}}': self.contract_buyer_authority or blank,
             '{{TASA_MORA}}': format(self.late_fee_rate or 0.0, '.4f').rstrip('0').rstrip('.'),
         })
         return values
@@ -242,6 +275,11 @@ class LenkaFinancialOperationContract(models.Model):
             raise ValidationError(_('La plantilla contractual pertenece a otra empresa.'))
         if template.operation_type not in ('all', self.operation_type):
             raise ValidationError(_('La plantilla seleccionada no corresponde al tipo de operacion.'))
+        if template.builtin_key == 'unsecured_loan_20261014':
+            if self.security_mode != 'sole_signature':
+                raise ValidationError(_('Este contrato es exclusivamente para préstamos sin aval ni garantía. Revise Modalidad de respaldo.'))
+            if self.late_fee_method != 'balance_monthly':
+                raise ValidationError(_('Revise Base de mora: el contrato exige Saldo de capital pendiente, mensual / 30 días. Defina la mora antes de enviar a aprobación.'))
         body = template.body_html or ''
         values = self._template_values()
         # A single replacement pass prevents customer text being interpreted as
@@ -249,7 +287,7 @@ class LenkaFinancialOperationContract(models.Model):
         body = re.sub(r'\{\{[A-Z_]+\}\}',
                       lambda match: escape(str(values[match.group(0)]))
                       if match.group(0) in values else match.group(0), body)
-        if template.builtin_key == 'equipment_20261009':
+        if template.builtin_key in ('equipment_20261009', 'unsecured_loan_20261014'):
             if not self.schedule_line_ids:
                 raise ValidationError(_('Primero calculá el plan en Tabla de amortización; después generá el contrato.'))
             body += self._contract_schedule_html()
@@ -264,11 +302,12 @@ class LenkaFinancialOperationContract(models.Model):
                       format(line.interest, ',.2f'), format(line.extra_charge, ',.2f'),
                       format(line.payment, ',.2f'), format(line.closing_balance, ',.2f')]
             rows.append('<tr>' + ''.join('<td>%s</td>' % escape(value) for value in values) + '</tr>')
-        return ('<div style="page-break-before:always"><h3>Anexo: plan de pagos — %s</h3>'
+        annex_label = 'Anexo 1' if self.operation_type == 'loan' else 'Anexo'
+        return ('<div style="page-break-before:always"><h3>%s: plan de pagos — %s</h3>'
                 '<table class="table table-sm table-bordered"><thead><tr>'
                 '<th>N.º</th><th>Fecha</th><th>Saldo inicial</th><th>Capital</th>'
                 '<th>Interés</th><th>Otros</th><th>Cuota</th><th>Saldo final</th>'
-                '</tr></thead><tbody>%s</tbody></table></div>') % (escape(self.currency_id.name), ''.join(rows))
+                '</tr></thead><tbody>%s</tbody></table></div>') % (annex_label, escape(self.currency_id.name), ''.join(rows))
 
     def action_generate_contract_documents(self):
         for rec in self:
@@ -279,6 +318,8 @@ class LenkaFinancialOperationContract(models.Model):
                 ('active', '=', True),
                 ('operation_type', 'in', (rec.operation_type, 'all')),
             ])
+            if rec.operation_type == 'loan' and rec.security_mode == 'sole_signature' and not templates.filtered(lambda t: t.document_type == 'contract'):
+                templates |= self.env['lenka.contract.template']._approved_unsecured_loan_template(rec.company_id)
             if rec.operation_type == 'financing':
                 selected = rec.equipment_contract_template_id
                 if not selected and not templates.filtered(lambda t: t.document_type == 'contract'):
