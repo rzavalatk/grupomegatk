@@ -29,7 +29,7 @@
                     <field name="summary" placeholder="Resumen general del odontograma..." readonly="state != 'draft'"/>
                     <field name="name" widget="odental_tooth_chart" nolabel="1" readonly="1"/>
                     <separator string="Hallazgos por pieza y superficie"/>
-                    <div class="alert alert-info" role="note">
+                    <div class="alert alert-info" role="status">
                         <strong>Situación clínica:</strong> Presente al examinar indica lo que se observa ahora (incluida una restauración previa o movilidad). Planificado significa tratamiento propuesto y todavía no ejecutado. Realizado indica tratamiento efectuado. En seguimiento identifica algo que se vigila. La movilidad es un signo clínico; no significa por sí sola que se haya realizado un tratamiento.
                     </div>
                     <field name="finding_ids" readonly="state != 'draft'">
