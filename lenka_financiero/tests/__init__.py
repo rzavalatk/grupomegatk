@@ -15,3 +15,4 @@ from . import test_approved_contract
 
 
 from . import test_sole_signature_approval
+from . import test_mixed_plan
