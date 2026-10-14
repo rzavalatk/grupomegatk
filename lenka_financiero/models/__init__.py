@@ -15,3 +15,5 @@ from . import mobile_access
 
 from . import demo_setup
 from . import restructuring
+from . import sole_signature
+
