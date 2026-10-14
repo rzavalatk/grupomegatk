@@ -75,6 +75,7 @@
                         <field name="proposed_rate_period" readonly="state not in ('draft','review')"/>
                         <field name="proposed_term_months" readonly="state not in ('draft','review')"/>
                         <field name="proposed_calculation_method" readonly="state not in ('draft','review')"/>
+                        <field name="proposed_interest_only_months" invisible="proposed_calculation_method != 'interest_then_level'" readonly="state not in ('draft','review')"/>
                     </group>
                     <group>
                         <field name="reason" readonly="state not in ('draft','review')"/>

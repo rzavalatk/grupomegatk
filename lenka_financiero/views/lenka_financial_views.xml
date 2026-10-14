@@ -58,10 +58,13 @@
                             <field name="interest_rate"/>
                             <field name="rate_period" string="Período de la tasa"/>
                             <field name="term_months"/>
+                            <field name="interest_only_months" invisible="calculation_method != 'interest_then_level'" required="calculation_method == 'interest_then_level'" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                            <field name="level_payment_months" invisible="calculation_method != 'interest_then_level'"/>
                         </group>
                         <group>
                             <field name="first_payment_date"/>
                             <field name="calculation_method"/>
+                            <field name="level_payment_start_date" invisible="calculation_method != 'interest_then_level'"/>
                             <field name="balloon_base_payment" invisible="calculation_method != 'balloon'"/>
                             <field name="recalculation_policy"/>
                             <field name="residual_purchase_percent" invisible="operation_type != 'lease'"/>

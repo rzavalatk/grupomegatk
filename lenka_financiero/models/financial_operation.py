@@ -30,11 +30,31 @@ class LenkaFinancialOperation(models.Model):
     first_payment_date = fields.Date(string='Primera cuota')
     calculation_method = fields.Selection([
         ('level', 'Cuota nivelada'),
+        ('interest_then_level', 'Solo intereses y luego cuota nivelada'),
         ('balance', 'Interes sobre saldo / capital fijo'),
         ('interest_only', 'Solo intereses + capital al final'),
         ('balloon', 'Cuota bomba / extraordinarios'),
         ('custom', 'Plan personalizado'),
     ], string='Metodo de calculo', required=True, default='level')
+    interest_only_months = fields.Integer(string='Meses de solo intereses', default=0, tracking=True)
+    level_payment_months = fields.Integer(string='Meses de cuota nivelada', compute='_compute_mixed_plan')
+    level_payment_start_date = fields.Date(string='Inicio de cuota nivelada', compute='_compute_mixed_plan')
+
+    @api.depends('calculation_method', 'interest_only_months', 'term_months', 'first_payment_date', 'date')
+    def _compute_mixed_plan(self):
+        for rec in self:
+            mixed = rec.calculation_method == 'interest_then_level'
+            rec.level_payment_months = rec.term_months - rec.interest_only_months if mixed else 0
+            first = rec.first_payment_date or fields.Date.add(rec.date, months=1)
+            rec.level_payment_start_date = fields.Date.add(first, months=rec.interest_only_months) if mixed else False
+
+    @api.constrains('calculation_method', 'interest_only_months', 'term_months')
+    def _check_mixed_plan(self):
+        for rec in self:
+            if rec.interest_only_months < 0:
+                raise ValidationError(_('Los meses de solo intereses no pueden ser negativos.'))
+            if rec.calculation_method == 'interest_then_level' and not 0 < rec.interest_only_months < rec.term_months:
+                raise ValidationError(_('El plan mixto requiere al menos un mes de solo intereses y un mes de cuota nivelada dentro del plazo total.'))
     balloon_base_payment = fields.Monetary(string='Cuota regular antes de bombas')
     extra_payment_line_ids = fields.One2many('lenka.extra.payment.plan', 'operation_id', string='Pagos extraordinarios')
     residual_purchase_percent = fields.Float(string='Opcion de compra (%)', default=0.0)
@@ -100,6 +120,7 @@ class LenkaFinancialOperation(models.Model):
             'partner_id', 'operation_type', 'product_id', 'company_id', 'currency_id',
             'principal_amount', 'down_payment', 'interest_rate', 'rate_period',
             'term_months', 'first_payment_date', 'calculation_method',
+            'interest_only_months',
             'balloon_base_payment', 'residual_purchase_percent', 'recalculation_policy',
         }
         if protected.intersection(vals):
@@ -147,7 +168,8 @@ class LenkaFinancialOperation(models.Model):
             payment_date = rec.first_payment_date or fields.Date.add(rec.date, months=1)
             first_payment_date = payment_date
             lines = []
-            level_payment = rec._level_payment(principal, monthly_rate, n) if rec.calculation_method in ('level', 'balloon') else 0.0
+            level_periods = n - rec.interest_only_months if rec.calculation_method == 'interest_then_level' else n
+            level_payment = rec._level_payment(principal, monthly_rate, level_periods) if rec.calculation_method in ('level', 'balloon', 'interest_then_level') else 0.0
             fixed_capital = principal / n if rec.calculation_method == 'balance' else 0.0
             extras = {}
             for line in rec.extra_payment_line_ids:
@@ -161,7 +183,9 @@ class LenkaFinancialOperation(models.Model):
                 interest = rounding(balance * monthly_rate)
                 extra = rounding(extras.get(number, 0.0)) if rec.calculation_method == 'balloon' else 0.0
 
-                if rec.calculation_method == 'level':
+                if rec.calculation_method == 'interest_then_level' and number <= rec.interest_only_months:
+                    capital = 0.0
+                elif rec.calculation_method in ('level', 'interest_then_level'):
                     capital = rounding(min(max(level_payment - interest, 0.0), balance))
                     if number == n:
                         capital = balance
@@ -314,3 +338,4 @@ class LenkaGuarantee(models.Model):
                 raise ValidationError(_('La garantia no esta disponible para liberacion.'))
             rec.state = 'released'
         return True
+

@@ -207,6 +207,10 @@ class LenkaFinancialOperationContract(models.Model):
             '{{TASA}}': format(self.interest_rate or 0.0, '.4f').rstrip('0').rstrip('.'),
             '{{PERIODO_TASA}}': rate_label,
             '{{PLAZO_MESES}}': str(self.term_months or 0),
+            '{{MODALIDAD_RESPALDO}}': dict(self._fields['security_mode'].selection).get(self.security_mode, ''),
+            '{{MESES_SOLO_INTERESES}}': str(self.interest_only_months if self.calculation_method == 'interest_then_level' else 0),
+            '{{MESES_CUOTA_NIVELADA}}': str(self.level_payment_months or 0),
+            '{{INICIO_CUOTA_NIVELADA}}': fields.Date.to_string(self.level_payment_start_date) if self.level_payment_start_date else '',
             '{{PRIMER_PAGO}}': fields.Date.to_string(self.first_payment_date) if self.first_payment_date else '',
             '{{PRODUCTO}}': product,
             '{{GARANTIAS}}': guarantees,
@@ -310,3 +314,4 @@ class LenkaFinancialOperationContract(models.Model):
         if len(documents) == 1:
             action.update(view_mode='form', res_id=documents.id, target='new')
         return action
+
