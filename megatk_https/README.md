@@ -13,5 +13,10 @@ Validation: `python -m unittest discover -s megatk_https -v`, then verify a live
 HTTP request redirects once and HTTPS responds successfully. Check `/shop` and
 a query string as well as the homepage.
 
+Odoo.sh validation on 2026-10-14: build 39876915, commit 180a1091,
+10 tests, 0 failures and 0 errors. The build warning concerns the existing
+button role in `website_theme_install/views/views.xml`.
+Public HTTP/HTTPS verification and production activation must follow deployment.
+
 Rollback: uninstall only this add-on or revert its deployment, then verify the
 website. The module stores no business data and changes no existing records.
