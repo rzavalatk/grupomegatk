@@ -1,7 +1,7 @@
 {
     "name": "O Dental Core",
     "summary": "Núcleo clínico, agenda y recursos para O Dental",
-    "version": "18.0.1.6.1",
+    "version": "18.0.1.6.2",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
@@ -11,7 +11,9 @@
         "security/odental_appointment_audit_security.xml",
         "security/ir.model.access.csv",
         "data/odental_sequence.xml",
+        "data/odental_specialties.xml",
         "views/organization_views.xml",
+        "views/specialty_views.xml",
         "views/professional_views.xml",
         "views/patient_views.xml",
         "views/resource_views.xml",

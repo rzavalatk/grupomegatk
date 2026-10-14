@@ -56,6 +56,12 @@
         <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
         <field name="domain_force">['|', ('organization_ids.owner_user_id', '=', user.id), ('organization_ids.user_ids', 'in', [user.id])]</field>
     </record>
+    <record id="rule_odental_specialty_company" model="ir.rule">
+        <field name="name">O Dental: especialidades globales y de compañías autorizadas</field>
+        <field name="model_id" ref="model_odental_specialty"/>
+        <field name="groups" eval="[(4, ref('odental_core.group_odental_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
     <record id="rule_odental_site_member" model="ir.rule">
         <field name="name">O Dental: sedes autorizadas</field>
         <field name="model_id" ref="model_odental_site"/>

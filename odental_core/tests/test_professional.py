@@ -27,7 +27,7 @@ class TestODentalProfessional(TransactionCase):
             "middle_name": "María",
             "first_surname": "Jovel",
             "second_surname": "López",
-            "specialty": "Endodoncia",
+            "specialty_ids": [(4, self.env.ref("odental_core.specialty_endodontics").id)],
             "organization_ids": [(4, self.organization.id)],
         }
         values.update(overrides)
@@ -52,6 +52,34 @@ class TestODentalProfessional(TransactionCase):
         self.assertEqual(professional.first_name, "Jennifer")
         self.assertEqual(professional.first_surname, "Jovel")
         self.assertEqual(professional.name, "Jennifer Jovel")
+
+    def test_multiple_catalog_specialties_and_uncontrolled_text_rejected(self):
+        specialties = self.env["odental.specialty"].browse([
+            self.env.ref("odental_core.specialty_endodontics").id,
+            self.env.ref("odental_core.specialty_orthodontics").id,
+            self.env.ref("odental_core.specialty_periodontics").id,
+        ])
+        professional = self.env["odental.professional"].create(
+            self._values(specialty_ids=[(6, 0, specialties.ids)])
+        )
+        self.assertEqual(set(professional.specialty_ids.ids), set(specialties.ids))
+        self.assertIn("Ortodoncia", professional.display_name)
+        with self.assertRaisesRegex(ValidationError, "catálogo clínico"):
+            professional.write({"specialty": "Terrorista"})
+        with self.assertRaisesRegex(ValidationError, "catálogo clínico"):
+            self.env["odental.professional"].create(self._values(
+                first_name="Ana", specialty="Terrorista"
+            ))
+
+    def test_specialty_must_belong_to_same_company(self):
+        other = self.env["res.company"].create({"name": "Otra clínica de prueba"})
+        other_specialty = self.env["odental.specialty"].sudo().with_company(other).create({
+            "name": "Especialidad propia de otra clínica", "company_id": other.id,
+        })
+        with self.assertRaisesRegex(ValidationError, "compañía"):
+            self.env["odental.professional"].create(self._values(
+                specialty_ids=[(4, other_specialty.id)]
+            ))
 
     def test_homonyms_are_distinguished_without_blocking_real_people(self):
         first = self.env["odental.professional"].create(

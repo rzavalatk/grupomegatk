@@ -33,7 +33,13 @@ class ODentalProfessional(models.Model):
         help="Ficha con teléfono, correo electrónico y dirección del profesional.",
     )
     license_number = fields.Char(string="Número de colegiación", tracking=True)
-    specialty = fields.Char(string="Especialidad")
+    # Keep the old text for audit and upgrades. New edits use the controlled catalog.
+    specialty = fields.Char(string="Especialidad anterior", readonly=True, copy=False)
+    specialty_ids = fields.Many2many(
+        "odental.specialty", "odental_professional_specialty_rel",
+        "professional_id", "specialty_id", string="Especialidades",
+        help="Seleccione una o varias especialidades del catálogo clínico.",
+    )
     organization_ids = fields.Many2many(
         "odental.organization", "odental_professional_organization_rel",
         "professional_id", "organization_id", required=True,
@@ -124,6 +130,7 @@ class ODentalProfessional(models.Model):
             "first_surname",
             "second_surname",
             "specialty",
+            "specialty_ids.name",
             "license_number",
             "professional_code",
         )
@@ -149,6 +156,8 @@ class ODentalProfessional(models.Model):
         "first_surname",
         "second_surname",
         "specialty",
+        "specialty_ids",
+        "specialty_ids.name",
         "license_number",
         "professional_code",
         "company_id",
@@ -156,8 +165,9 @@ class ODentalProfessional(models.Model):
     def _compute_display_name(self):
         for professional in self:
             label = professional._display_base()
-            if professional.specialty:
-                label = f"{label} — {professional.specialty}"
+            specialties = ", ".join(professional.specialty_ids.mapped("name"))
+            if specialties or professional.specialty:
+                label = f"{label} — {specialties or professional.specialty}"
             if professional._has_homonym():
                 differentiator = (
                     f"colegiación …{professional.license_number[-4:]}"
@@ -226,6 +236,8 @@ class ODentalProfessional(models.Model):
         }
         for incoming in vals_list:
             vals = dict(incoming)
+            if "specialty" in vals:
+                raise ValidationError(_("Seleccione las especialidades desde el catálogo clínico."))
             if vals.get("name") and not component_fields.intersection(vals):
                 for field_name, value in self._split_legacy_name(vals["name"]).items():
                     vals.setdefault(field_name, value)
@@ -250,6 +262,8 @@ class ODentalProfessional(models.Model):
         result = True
         for record in self:
             prepared = dict(vals)
+            if "specialty" in prepared:
+                raise ValidationError(_("Seleccione las especialidades desde el catálogo clínico."))
             if prepared.get("name") and not component_fields.intersection(prepared):
                 prepared.update(self._split_legacy_name(prepared["name"]))
             if component_fields.intersection(prepared):
@@ -268,6 +282,17 @@ class ODentalProfessional(models.Model):
             if not professional.first_name or not professional.first_surname:
                 raise ValidationError(
                     _("Indique al menos el primer nombre y el primer apellido del profesional.")
+                )
+
+    @api.constrains("specialty_ids", "company_id")
+    def _check_specialties_company(self):
+        for professional in self:
+            if any(
+                specialty.company_id and specialty.company_id != professional.company_id
+                for specialty in professional.specialty_ids
+            ):
+                raise ValidationError(
+                    _("Las especialidades del profesional deben pertenecer a su compañía.")
                 )
 
     @api.constrains("user_id", "partner_id", "license_number", "company_id")
