@@ -6,7 +6,14 @@
         <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <button name="action_approve" string="Aprobar" type="object" class="btn-primary" invisible="is_quote or state != 'review'" groups="lenka_financiero.group_lenka_manager"/>
+                <field name="can_request_sole_signature" invisible="1"/>
+                <field name="can_decide_sole_signature" invisible="1"/>
+                <field name="can_request_legacy_sole_signature" invisible="1"/>
+                <button name="action_request_legacy_sole_signature" string="Reenviar sin respaldo a Luis Moran" type="object" invisible="not can_request_legacy_sole_signature"/>
+                <button name="action_approve" string="Aprobar" type="object" class="btn-primary" invisible="is_quote or state != 'review' or security_mode == 'sole_signature'" groups="lenka_financiero.group_lenka_manager"/>
+                <button name="action_request_sole_signature" string="Enviar a Luis Moran" type="object" class="btn-primary" invisible="is_quote or not can_request_sole_signature"/>
+                <button name="action_approve" string="Autorizar sin aval ni garantia" type="object" class="btn-primary" invisible="not can_decide_sole_signature"/>
+                <button name="action_reject_sole_signature" string="Rechazar solicitud" type="object" invisible="not can_decide_sole_signature"/>
                 <button name="action_mark_contracted" string="Marcar contratado" type="object" invisible="state != 'approved'"/>
                 <button name="action_activate" string="Activar operacion" type="object" class="btn-primary" invisible="state != 'contracted'" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
@@ -16,7 +23,13 @@
                         <group>
                             <field name="approved_by" readonly="1"/>
                             <field name="approval_date" readonly="1"/>
-                            <field name="approval_notes"/>
+                            <field name="approval_notes" readonly="sole_signature_status in ('pending', 'approved')"/>
+                            <field name="sole_signature_requested_by" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_requested_at" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_authorizer_id" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_decided_at" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_decision_notes" invisible="security_mode != 'sole_signature'" readonly="not can_decide_sole_signature"/>
+                            <field name="sole_signature_notification_state" invisible="security_mode != 'sole_signature'"/>
                         </group>
                         <group>
                             <field name="contract_reference"/>
@@ -122,3 +135,4 @@
         <field name="view_mode">list,form</field>
     </record>
 </odoo>
+

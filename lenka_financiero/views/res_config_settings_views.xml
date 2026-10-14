@@ -7,6 +7,14 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <app string="Financiero Lenka" name="lenka_financiero" groups="lenka_financiero.group_lenka_manager">
+                    <block title="Autorizacion exclusiva sin aval ni garantia" groups="base.group_system">
+                        <setting string="Luis Moran - autorizador exclusivo">
+                            <field name="lenka_sole_signature_approver_id" options="{'no_create': True}"/>
+                        </setting>
+                        <setting string="Elisa Rodriguez - responsable de solicitudes">
+                            <field name="lenka_sole_signature_requester_id" options="{'no_create': True}"/>
+                        </setting>
+                    </block>
                     <block title="Cobros y tarjetas">
                         <setting string="Comision de tarjeta (%)" help="Porcentaje retenido por el banco o POS. El neto resultante es el monto que se aplica a la deuda del cliente.">
                             <field name="lenka_card_fee_rate"/>
@@ -58,3 +66,4 @@
         </field>
     </record>
 </odoo>
+

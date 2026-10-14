@@ -12,3 +12,6 @@ from . import test_statement
 from . import test_restructuring
 from . import test_approved_contract
 
+
+
+from . import test_sole_signature_approval

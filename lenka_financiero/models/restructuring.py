@@ -270,6 +270,7 @@ class LenkaRestructuring(models.Model):
             successor = self.env['lenka.financial.operation'].create({
                 'partner_id': rec.partner_id.id,
                 'guarantor_ids': [(6, 0, rec.operation_id.guarantor_ids.ids)],
+                'security_mode': rec.operation_id.security_mode,
                 'operation_type': rec.operation_id.operation_type,
                 'product_id': rec.operation_id.product_id.id,
                 'company_id': rec.company_id.id,
@@ -394,3 +395,4 @@ class LenkaRestructuringDisbursement(models.Model):
         if any(rec.state == 'draft' and rec.operation_id.restructuring_in_ids for rec in self):
             raise ValidationError(_('Complete la sustitucion desde Reestructuraciones. El saldo se traslada sin un nuevo desembolso de efectivo.'))
         return super().action_post()
+

@@ -35,6 +35,8 @@
                         <group>
                             <field name="is_quote"/>
                             <field name="partner_id"/>
+                            <field name="security_mode" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                            <field name="sole_signature_status" invisible="security_mode != 'sole_signature'"/>
                             <field name="guarantor_ids" widget="many2many_tags"/>
                             <field name="operation_type"/>
                             <field name="product_id" invisible="operation_type == 'loan'"/>
@@ -142,3 +144,4 @@
         <field name="context">{'default_is_quote': True}</field>
     </record>
 </odoo>
+
