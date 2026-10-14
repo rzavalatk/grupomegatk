@@ -1,6 +1,7 @@
 import { expect, test } from "@odoo/hoot";
 import { animationFrame } from "@odoo/hoot-mock";
 import { contains, defineModels, fields, models, mountView, onRpc } from "@web/../tests/web_test_helpers";
+import { defineMailModels } from "@mail/../tests/mail_test_helpers";
 import { financialValidationErrors } from "@lenka_financiero/views/financial_validation";
 import "@lenka_financiero/views/operation_form";
 
@@ -15,6 +16,7 @@ class LenkaOperation extends models.Model {
     _records = [{ id: 1, principal_amount: 100000, interest_rate: 3, term_months: 12,
         interest_only_months: 0, calculation_method: "interest_then_level" }];
 }
+defineMailModels();
 defineModels([LenkaOperation]);
 
 const valid = { principal_amount: 100000, interest_rate: 3, down_payment: 0,
