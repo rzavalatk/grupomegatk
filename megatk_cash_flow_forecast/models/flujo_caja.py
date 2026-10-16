@@ -12,6 +12,7 @@ PERIODS = [
     ("week_3", "Semana 3"),
     ("pending", "Pendiente"),
 ]
+PERIOD_SEQUENCE = {period: sequence for sequence, (period, _label) in enumerate(PERIODS, 1)}
 
 PORTFOLIO_CLASSIFICATIONS = [
     ("customer", "Clientes"),
@@ -65,9 +66,9 @@ class CashflowPlan(models.Model):
             ("direction", "=", "payable"),
             ("state", "=", "active"),
             ("classification_id.classification", "=", "advance"),
-            ("advance_status", "!=", "closed"),
+            ("advance_status", "=", "projected"),
         ],
-        string="Anticipos a proveedores",
+        string="Anticipos planificados",
     )
     unclassified_payable_promise_ids = fields.One2many(
         "cashflow.promise", "plan_id",
@@ -284,7 +285,7 @@ class CashflowPlan(models.Model):
 
     def _report_line(
         self, name, record=None, balance=0.0, balance_usd=0.0,
-        amounts=None, note="", total=None,
+        amounts=None, note="", total=None, group_key=None,
     ):
         amounts = amounts or {}
         values = {period: amounts.get(period, 0.0) for period, _label in PERIODS}
@@ -298,7 +299,30 @@ class CashflowPlan(models.Model):
             "pending": values["pending"],
             "total": sum(values.values()) if total is None else total,
             "note": note,
+            "group_key": group_key,
         }
+
+    def _group_report_lines(self, lines):
+        """Combine repeated concepts without duplicating their accounting balance."""
+        grouped = {}
+        order = []
+        for sequence, line in enumerate(lines):
+            key = line.get("group_key") or ("line", sequence)
+            if key not in grouped:
+                grouped[key] = dict(line)
+                order.append(key)
+                continue
+            target = grouped[key]
+            for period, _label in PERIODS:
+                target[period] += line[period]
+            if not target["balance_hnl"] and line["balance_hnl"]:
+                target["balance_hnl"] = line["balance_hnl"]
+            if not target["balance_usd"] and line["balance_usd"]:
+                target["balance_usd"] = line["balance_usd"]
+            notes = [value for value in (target["note"], line["note"]) if value]
+            target["note"] = " · ".join(dict.fromkeys(notes))
+            target["total"] = sum(target[period] for period, _label in PERIODS)
+        return [grouped[key] for key in order]
 
     def _cashflow_report_sections(self):
         """Return the executive and detailed rows used by HTML, PDF and CSV."""
@@ -345,7 +369,9 @@ class CashflowPlan(models.Model):
                     balance=promise.current_open_balance,
                     amounts={promise.period: promise.company_amount},
                     note=promise.note or "",
+                    group_key=("partner", promise.commercial_partner_id.id),
                 ))
+            collections = self._group_report_lines(collections)
             sections.append({
                 "key": key,
                 "title": title,
@@ -360,7 +386,9 @@ class CashflowPlan(models.Model):
             financing.append(self._report_line(
                 income.name, income, amounts={income.period: income.company_amount},
                 note=dict(income._fields["income_type"].selection).get(income.income_type, ""),
+                group_key=("income", (income.name or "").strip().casefold()),
             ))
+        financing = self._group_report_lines(financing)
         sections.append({"key": "financing", "title": "Financiamientos y otros ingresos", "kind": "income", "lines": financing})
 
         liabilities = []
@@ -379,6 +407,7 @@ class CashflowPlan(models.Model):
                 ),
                 amounts=scheduled,
                 note="Deuda proyectada y pagos programados",
+                group_key=("liability", "position", position.id),
             ))
         for promise in self.promise_ids.filtered(
             lambda item: item.state == "active"
@@ -392,6 +421,7 @@ class CashflowPlan(models.Model):
                 note=dict(promise._fields["payment_method"].selection).get(
                     promise.payment_method, ""
                 ),
+                group_key=("liability", "partner", promise.commercial_partner_id.id),
             ))
         sections.append({
             "key": "liabilities",
@@ -411,38 +441,59 @@ class CashflowPlan(models.Model):
                 balance=promise.current_open_balance,
                 amounts={promise.period: promise.cash_effect_amount},
                 note=dict(promise._fields["payment_method"].selection).get(promise.payment_method, ""),
+                group_key=("partner", promise.commercial_partner_id.id),
             ))
+        payables = self._group_report_lines(payables)
         sections.append({"key": "payables", "title": "Pagos a proveedores", "kind": "expense", "lines": payables})
+
+        disbursed_advances = []
+        snapshots = self.env["cashflow.portfolio.snapshot"].search([
+            ("company_id", "=", self.company_id.id),
+            ("direction", "=", "payable"),
+            ("classification", "=", "advance"),
+            ("credit", ">", 0),
+        ])
+        for snapshot in snapshots:
+            disbursed_advances.append(self._report_line(
+                snapshot.partner_id.display_name,
+                snapshot,
+                balance=-snapshot.credit,
+                note="Anticipo ya desembolsado y pendiente de aplicar",
+                total=-snapshot.credit,
+                group_key=("partner", snapshot.partner_id.commercial_partner_id.id),
+            ))
+        sections.append({
+            "key": "disbursed_advances",
+            "title": "Anticipos desembolsados",
+            "kind": "expense",
+            "lines": self._group_report_lines(disbursed_advances),
+        })
 
         advances = []
         for promise in self.promise_ids.filtered(
             lambda item: item.state == "active"
             and item.direction == "payable"
             and item.classification == "advance"
-            and item.advance_status != "closed"
+            and item.advance_status == "projected"
         ):
-            scheduled = (
-                {promise.period: promise.cash_effect_amount}
-                if promise.advance_status == "projected" else {}
-            )
+            scheduled = {promise.period: promise.cash_effect_amount}
             status_label = dict(promise._fields["advance_status"].selection).get(
                 promise.advance_status, ""
             )
             advances.append(self._report_line(
                 promise.partner_id.display_name, promise,
-                balance=-promise.advance_pending_company,
                 amounts=scheduled,
                 note=status_label,
+                group_key=("partner", promise.commercial_partner_id.id),
             ))
         sections.append({
             "key": "advances",
-            "title": "Anticipos a proveedores",
+            "title": "Anticipos planificados",
             "kind": "expense",
-            "lines": advances,
+            "lines": self._group_report_lines(advances),
         })
 
         for classification, key, title, note in (
-            ("unassigned", "unclassified", "Pendientes de clasificar", "Requiere clasificación"),
             ("to_reconcile", "cleanup", "Cuentas por depurar", "Requiere revisión o corrección"),
         ):
             pending_lines = []
@@ -456,12 +507,13 @@ class CashflowPlan(models.Model):
                     balance=promise.current_open_balance,
                     amounts={promise.period: promise.cash_effect_amount},
                     note=note,
+                    group_key=("partner", promise.commercial_partner_id.id),
                 ))
             sections.append({
                 "key": key,
                 "title": title,
                 "kind": "expense",
-                "lines": pending_lines,
+                "lines": self._group_report_lines(pending_lines),
             })
 
         unique = []
@@ -471,6 +523,10 @@ class CashflowPlan(models.Model):
                 expense.name, expense,
                 amounts={expense.period: expense.company_amount},
                 note=expense.reference or "",
+                group_key=(
+                    "manual_expense", expense.obligation_type,
+                    (expense.name or "").strip().casefold(),
+                ),
             )
             if expense.recurring:
                 recurring.append(line)
@@ -478,8 +534,12 @@ class CashflowPlan(models.Model):
                 liabilities.append(line)
             else:
                 unique.append(line)
-        sections.append({"key": "unique", "title": "Otros pagos a proveedores", "kind": "expense", "lines": unique})
-        sections.append({"key": "recurring", "title": "Pagos recurrentes", "kind": "expense", "lines": recurring})
+        liabilities = self._group_report_lines(liabilities)
+        for section in sections:
+            if section["key"] == "liabilities":
+                section["lines"] = liabilities
+        sections.append({"key": "unique", "title": "Otros pagos a proveedores", "kind": "expense", "lines": self._group_report_lines(unique)})
+        sections.append({"key": "recurring", "title": "Pagos recurrentes", "kind": "expense", "lines": self._group_report_lines(recurring)})
         for section in sections:
             section["totals"] = {
                 key: sum(line[key] for line in section["lines"])
@@ -511,25 +571,16 @@ class CashflowPlan(models.Model):
 
     def action_refresh_open_items(self):
         """Retire projections whose underlying debt no longer exists in Odoo."""
-        MoveLine = self.env["account.move.line"]
         for plan in self:
             settled = self.env["cashflow.promise"]
             for promise in plan.promise_ids.filtered(lambda p: p.state == "active"):
+                # Manual projections, especially planned advances, are planning
+                # decisions and must only be withdrawn by a user.
+                if promise.classification == "advance":
+                    continue
                 if promise.source_move_line_id or promise.source_move_id:
                     if not promise.source_open:
                         settled |= promise
-                    continue
-                account_type = "asset_receivable" if promise.direction == "receivable" else "liability_payable"
-                residual_operator = ">" if promise.direction == "receivable" else "<"
-                has_open_debt = MoveLine.search_count([
-                    ("company_id", "=", promise.company_id.id),
-                    ("parent_state", "=", "posted"),
-                    ("account_id.account_type", "=", account_type),
-                    ("partner_id", "child_of", promise.commercial_partner_id.id),
-                    ("amount_residual", residual_operator, 0),
-                ], limit=1)
-                if not has_open_debt:
-                    settled |= promise
             for promise in settled:
                 promise.message_post(
                     body="Odoo ya no muestra una deuda abierta para este contacto; se retiró de la proyección."
@@ -919,7 +970,7 @@ class CashflowPromise(models.Model):
     _name = "cashflow.promise"
     _description = "Promesa de cobro o pago"
     _inherit = ["mail.thread", "mail.activity.mixin"]
-    _order = "period, partner_id"
+    _order = "period_sequence, partner_id, id"
     _check_company_auto = True
 
     plan_id = fields.Many2one(
@@ -935,6 +986,9 @@ class CashflowPromise(models.Model):
         required=True, tracking=True, string="Tipo de movimiento",
     )
     period = fields.Selection(PERIODS, required=True, default="week_1", tracking=True, string="Semana")
+    period_sequence = fields.Integer(
+        compute="_compute_period_sequence", store=True, index=True,
+    )
     company_currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
     currency_id = fields.Many2one(
         "res.currency", required=True, string="Moneda del pago",
@@ -970,6 +1024,11 @@ class CashflowPromise(models.Model):
         compute="_compute_cash_effect_amount", currency_field="company_currency_id",
         string="Salida de efectivo",
     )
+
+    @api.depends("period")
+    def _compute_period_sequence(self):
+        for promise in self:
+            promise.period_sequence = PERIOD_SEQUENCE.get(promise.period, 99)
     current_open_balance = fields.Monetary(
         compute="_compute_current_open_balance",
         currency_field="company_currency_id",
@@ -1007,7 +1066,7 @@ class CashflowPromise(models.Model):
     )
     advance_status = fields.Selection(
         [
-            ("projected", "Proyectado"),
+            ("projected", "Planificado"),
             ("delivered", "Entregado al proveedor"),
             ("partially_applied", "Aplicado parcialmente"),
             ("closed", "Aplicado / cerrado"),
@@ -1444,7 +1503,7 @@ class CashflowManualIncome(models.Model):
     _name = "cashflow.manual.income"
     _description = "Financiamiento o ingreso proyectado"
     _inherit = ["mail.thread"]
-    _order = "period, name"
+    _order = "period_sequence, name, id"
     _check_company_auto = True
 
     plan_id = fields.Many2one(
@@ -1513,6 +1572,9 @@ class CashflowManualIncome(models.Model):
              "Puede vincularse después del desembolso.",
     )
     period = fields.Selection(PERIODS, required=True, default="week_1", tracking=True, string="Semana")
+    period_sequence = fields.Integer(
+        compute="_compute_period_sequence", store=True, index=True,
+    )
     company_currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
     currency_id = fields.Many2one(
         "res.currency", required=True, string="Moneda",
@@ -1528,6 +1590,11 @@ class CashflowManualIncome(models.Model):
         string="Monto para el flujo",
     )
     active = fields.Boolean(default=True)
+
+    @api.depends("period")
+    def _compute_period_sequence(self):
+        for income in self:
+            income.period_sequence = PERIOD_SEQUENCE.get(income.period, 99)
 
     def unlink(self):
         linked = self.filtered("source_move_id")
@@ -1586,7 +1653,7 @@ class CashflowManualExpense(models.Model):
     _name = "cashflow.manual.expense"
     _description = "Egreso manual proyectado"
     _inherit = ["mail.thread"]
-    _order = "period, name"
+    _order = "period_sequence, name, id"
     _check_company_auto = True
 
     plan_id = fields.Many2one(
@@ -1613,6 +1680,9 @@ class CashflowManualExpense(models.Model):
         tracking=True,
     )
     period = fields.Selection(PERIODS, required=True, default="week_1", tracking=True, string="Semana de pago")
+    period_sequence = fields.Integer(
+        compute="_compute_period_sequence", store=True, index=True,
+    )
     company_currency_id = fields.Many2one(related="plan_id.currency_id", store=True)
     currency_id = fields.Many2one(
         "res.currency", required=True, string="Moneda",
@@ -1627,6 +1697,11 @@ class CashflowManualExpense(models.Model):
         currency_field="company_currency_id", compute="_compute_company_amount",
         string="Monto para el flujo",
     )
+
+    @api.depends("period")
+    def _compute_period_sequence(self):
+        for expense in self:
+            expense.period_sequence = PERIOD_SEQUENCE.get(expense.period, 99)
     reference = fields.Char(
         string="Detalle o referencia",
         help="Texto libre para recordar qué se pagará, por ejemplo Planilla o Tarjeta BAC.",

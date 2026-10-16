@@ -960,7 +960,78 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(sections["available"]["totals"]["total"], 100)
         self.assertEqual(sections["collections"]["totals"]["week_1"], 25)
         self.assertIn("advances", sections)
-        self.assertIn("unclassified", sections)
+        self.assertIn("disbursed_advances", sections)
+        self.assertNotIn("unclassified", sections)
+
+    def test_manual_projection_is_never_cancelled_by_refresh(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.plan.action_refresh_open_items()
+        self.assertEqual(promise.state, "active")
+
+    def test_planned_advance_is_never_cancelled_by_refresh(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.plan.action_refresh_open_items()
+        self.assertEqual(promise.state, "active")
+        self.assertIn(promise, self.plan.advance_promise_ids)
+
+    def test_report_groups_same_supplier_across_weeks(self):
+        Promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        )
+        for period, amount in (("week_1", 100), ("week_2", 200)):
+            Promise.create({
+                "plan_id": self.plan.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "period": period,
+                "amount": amount,
+            })
+        sections = {
+            section["key"]: section
+            for section in self.plan._cashflow_report_sections()
+        }
+        lines = sections["payables"]["lines"]
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]["week_1"], 100)
+        self.assertEqual(lines[0]["week_2"], 200)
+        self.assertEqual(lines[0]["total"], 300)
+
+    def test_operational_rows_put_pending_after_week_three(self):
+        Promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        )
+        records = self.env["cashflow.promise"]
+        for period in ("pending", "week_3", "week_1", "week_2"):
+            records |= Promise.create({
+                "plan_id": self.plan.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "period": period,
+                "amount": 10,
+            })
+        ordered = self.env["cashflow.promise"].search([
+            ("id", "in", records.ids),
+        ])
+        self.assertEqual(
+            ordered.mapped("period"),
+            ["week_1", "week_2", "week_3", "pending"],
+        )
 
     def test_removing_bank_position_does_not_delete_ledger_account(self):
         account = self._account("CF1011", "asset_cash")
