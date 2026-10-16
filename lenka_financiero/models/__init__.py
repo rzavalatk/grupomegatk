@@ -12,8 +12,7 @@ from . import funding_cost
 from . import contract
 from . import mobile_service
 from . import mobile_access
-
 from . import demo_setup
 from . import restructuring
 from . import sole_signature
-
+from . import secured_loan

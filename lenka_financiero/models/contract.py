@@ -177,6 +177,11 @@ class LenkaFinancialOperationContract(models.Model):
     contract_seller_representative = fields.Char(string='Representante del vendedor')
     contract_seller_identity = fields.Char(string='Identidad del representante del vendedor')
     contract_buyer_representative = fields.Char(string='Representante del comprador')
+    contract_buyer_partner_id = fields.Many2one(
+        'res.partner', string='Representante legal / firmante',
+        domain="[('is_company', '=', False)]", check_company=True,
+        help='Persona que firma por la entidad. Seleccionarla no la convierte en aval; agréguela expresamente en Avales si también responderá personalmente.',
+    )
     contract_buyer_identity = fields.Char(string='Identidad del firmante comprador')
     contract_buyer_authority = fields.Text(string='Facultades del representante de la empresa')
     contract_equipment_serial = fields.Char(string='Serie del equipo')
@@ -184,6 +189,21 @@ class LenkaFinancialOperationContract(models.Model):
     contract_isv_amount = fields.Monetary(string='ISV incluido en el valor del equipo')
     contract_payment_instructions = fields.Text(string='Lugar y cuenta para pagos')
     contract_signing_city = fields.Char(string='Ciudad de firma')
+
+    @api.onchange('contract_buyer_partner_id')
+    def _onchange_contract_buyer_partner(self):
+        if self.contract_buyer_partner_id:
+            self.contract_buyer_representative = self.contract_buyer_partner_id.name
+            self.contract_buyer_identity = self.contract_buyer_partner_id.lenka_identity_number or False
+
+    def action_add_representative_as_guarantor(self):
+        self.ensure_one()
+        if self.operation_type != 'loan' or self.security_mode != 'backed':
+            raise ValidationError(_('Esta acción corresponde a préstamos con aval o garantía.'))
+        if not self.contract_buyer_partner_id or self.contract_buyer_partner_id.is_company:
+            raise ValidationError(_('Seleccione una persona en Representante legal / firmante antes de agregarla como aval.'))
+        self.write({'guarantor_ids': [(4, self.contract_buyer_partner_id.id)]})
+        return True
 
     @api.constrains('contract_isv_amount', 'principal_amount')
     def _check_contract_isv(self):
@@ -318,8 +338,12 @@ class LenkaFinancialOperationContract(models.Model):
                 ('active', '=', True),
                 ('operation_type', 'in', (rec.operation_type, 'all')),
             ])
-            if rec.operation_type == 'loan' and rec.security_mode == 'sole_signature' and not templates.filtered(lambda t: t.document_type == 'contract'):
-                templates |= self.env['lenka.contract.template']._approved_unsecured_loan_template(rec.company_id)
+            if rec.operation_type == 'loan':
+                factory = self.env['lenka.contract.template']
+                selected = (factory._approved_unsecured_loan_template(rec.company_id)
+                            if rec.security_mode == 'sole_signature'
+                            else factory._approved_secured_loan_template(rec.company_id))
+                templates = templates.filtered(lambda t: t.document_type != 'contract') | selected
             if rec.operation_type == 'financing':
                 selected = rec.equipment_contract_template_id
                 if not selected and not templates.filtered(lambda t: t.document_type == 'contract'):
@@ -355,4 +379,5 @@ class LenkaFinancialOperationContract(models.Model):
         if len(documents) == 1:
             action.update(view_mode='form', res_id=documents.id, target='new')
         return action
+
 

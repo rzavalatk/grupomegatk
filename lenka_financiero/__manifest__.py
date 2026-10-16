@@ -1,6 +1,6 @@
 {
     'name': 'App Financiero Lenka',
-    'version': '18.0.1.0.7',
+    'version': '18.0.1.0.8',
     'category': 'Accounting/Finance',
     'summary': 'Cotizaciones, prestamos, financiamientos, arrendamientos y fondeo de Inversiones Lenka',
     'author': 'Grupo MEGATK',
@@ -22,6 +22,7 @@
         'views/profitability_views.xml',
         'views/funding_cost_views.xml',
         'views/contract_views.xml',
+        'views/secured_loan_views.xml',
         'views/restructuring_views.xml',
         'views/mobile_access_views.xml',
         'views/lenka_menu.xml',
@@ -29,6 +30,7 @@
         'report/lenka_quote_report.xml',
         'report/lenka_statement_report.xml',
         'report/lenka_contract_report.xml',
+        'report/secured_loan_report.xml',
     ],
     'demo': [
         'demo/lenka_demo.xml',
@@ -46,5 +48,6 @@
     'application': True,
     'installable': True,
 }
+
 
 
