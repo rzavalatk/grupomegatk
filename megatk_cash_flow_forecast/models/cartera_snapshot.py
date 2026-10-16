@@ -85,7 +85,7 @@ class CashflowPortfolioSnapshot(models.Model):
             ],
             "payable": [
                 ("supplier", "Proveedores"),
-                ("advance", "Anticipos a proveedores"),
+                ("advance", "Anticipos desembolsados"),
                 ("creditor", "Acreedores"),
                 ("to_reconcile", "Por depurar"),
                 ("unassigned", "Por clasificar"),
