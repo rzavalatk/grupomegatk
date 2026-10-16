@@ -22,6 +22,7 @@
         'views/profitability_views.xml',
         'views/funding_cost_views.xml',
         'views/contract_views.xml',
+        'views/secured_loan_views.xml',
         'views/restructuring_views.xml',
         'views/mobile_access_views.xml',
         'views/lenka_menu.xml',

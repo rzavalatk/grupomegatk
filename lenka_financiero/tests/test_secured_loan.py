@@ -12,8 +12,8 @@ class TestSecuredLoanContract(TransactionCase):
         super().setUpClass()
         Partner = cls.env['res.partner'].with_context(no_vat_validation=True)
         cls.entity = Partner.create({'name': 'Entidad ficticia', 'is_company': True, 'vat': 'RTN-PRUEBA'})
-        cls.person = Partner.create({'name': 'Representante ficticio', 'vat': 'ID-PRUEBA'})
-        cls.other = Partner.create({'name': 'Otro aval ficticio', 'vat': 'OTRO-ID'})
+        cls.person = Partner.create({'name': 'Representante ficticio', 'vat': 'RTN-PERSONA', 'lenka_identity_number': 'ID-PRUEBA'})
+        cls.other = Partner.create({'name': 'Otro aval ficticio', 'vat': 'RTN-OTRO', 'lenka_identity_number': 'OTRO-ID'})
         cls.template = cls.env['lenka.contract.template']._approved_secured_loan_template(cls.env.company)
 
     def operation(self, **values):
@@ -43,6 +43,18 @@ class TestSecuredLoanContract(TransactionCase):
         op.action_add_representative_as_guarantor()
         self.assertEqual(len(op.guarantor_ids), 1)
 
+    def test_representative_identity_is_independent_from_fiscal_rtn(self):
+        op = self.operation()
+        op._onchange_contract_buyer_partner()
+        self.assertEqual(op.contract_buyer_identity, self.person.lenka_identity_number)
+        self.assertNotEqual(op.contract_buyer_identity, self.person.vat)
+
+    def test_rtn_alone_does_not_satisfy_guarantor_identity(self):
+        self.other.lenka_identity_number = False
+        op = self.operation(guarantor_ids=[(6, 0, self.other.ids)])
+        with self.assertRaisesRegex(ValidationError, 'identidad del aval'):
+            op._render_lenka_template(self.template)
+
     def test_same_person_has_separate_capacity_and_signature(self):
         op = self.operation(guarantor_ids=[(6, 0, self.person.ids)])
         body = op._render_lenka_template(self.template)
@@ -62,7 +74,8 @@ class TestSecuredLoanContract(TransactionCase):
         op = self.operation(guarantor_ids=[(6, 0, (self.person | self.other).ids)])
         body = op._render_lenka_template(self.template)
         self.assertEqual(body.count('AVAL SOLIDARIO - a título personal'), 2)
-        self.assertIn(self.other.vat, body)
+        self.assertIn(self.other.lenka_identity_number, body)
+        self.assertNotIn(self.other.vat, body)
         self.assertIn(self.other.name, body)
 
     def test_guarantee_only_does_not_make_owner_or_representative_guarantor(self):

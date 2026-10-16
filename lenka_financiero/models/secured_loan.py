@@ -5,7 +5,7 @@ from html import escape
 from lxml import html, etree
 from markupsafe import Markup
 
-from odoo import api, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from odoo.tools import file_open
 
@@ -19,6 +19,15 @@ def bold(value):
 
 def paragraph(value):
     return '<p>%s</p>' % value
+
+
+class LenkaPartnerIdentity(models.Model):
+    _inherit = 'res.partner'
+
+    lenka_identity_number = fields.Char(
+        string='Documento de identidad (Lenka)',
+        help='DNI o documento de identidad de la persona. Es independiente del RTN / NIF fiscal.',
+    )
 
 
 class LenkaSecuredTemplate(models.Model):
@@ -102,10 +111,10 @@ class LenkaSecuredLoan(models.Model):
         self.ensure_one()
         person = self.contract_buyer_partner_id
         name = self.contract_buyer_representative or person.name
-        identity = self.contract_buyer_identity or person.vat
+        identity = self.contract_buyer_identity or person.lenka_identity_number
         if not self.partner_id.is_company:
-            name = name or self.partner_id.name
-            identity = identity or self.partner_id.vat
+            name = self.partner_id.name
+            identity = self.contract_buyer_identity or self.partner_id.lenka_identity_number
         return name or '', identity or ''
 
     def _validate_secured_loan_contract(self):
@@ -114,6 +123,8 @@ class LenkaSecuredLoan(models.Model):
             raise ValidationError(_('Este contrato corresponde a Préstamo con aval o garantía. Revise Tipo de operación y Modalidad de respaldo.'))
         if self.late_fee_method != 'balance_monthly':
             raise ValidationError(_('Revise Base de mora: seleccione Saldo de capital pendiente, mensual / 30 días para este contrato.'))
+        if self.contract_buyer_partner_id.is_company:
+            raise ValidationError(_('El representante legal / firmante debe ser una persona natural.'))
         guarantees = self.guarantee_ids.filtered(lambda g: g.state in ('proposed', 'accepted', 'active'))
         if not self.guarantor_ids and not guarantees:
             raise ValidationError(_('Registre al menos un Aval o una Garantía vigente/propuesta antes de generar el contrato.'))
@@ -129,13 +140,13 @@ class LenkaSecuredLoan(models.Model):
         if not identity:
             missing.append(_('identidad del representante legal / firmante'))
         if not self.partner_id.vat:
-            missing.append(_('RTN / identidad del deudor principal'))
+            missing.append(_('RTN fiscal del deudor principal'))
         if self.partner_id.is_company and not self.contract_buyer_authority:
             missing.append(_('facultades del representante de la empresa'))
         for guarantor in self.guarantor_ids:
             if guarantor.is_company:
                 raise ValidationError(_('El aval %s debe registrarse como persona natural para esta plantilla de aval personal.') % guarantor.name)
-            if not guarantor.vat:
+            if not guarantor.lenka_identity_number:
                 missing.append(_('identidad del aval %s') % guarantor.name)
         for guarantee in guarantees:
             if not guarantee.owner_id:
@@ -150,7 +161,7 @@ class LenkaSecuredLoan(models.Model):
         client = self.partner_id
         name, identity = self._secured_loan_signer()
         debtor = bold('EL PRESTATARIO') + ': ' + bold(client.name)
-        debtor += ', con RTN / identidad ' + bold(client.vat)
+        debtor += ', con RTN ' + bold(client.vat)
         debtor += ', domicilio ' + escape(client.contact_address or '________________') + '. '
         if client.is_company:
             debtor += 'Entidad deudora principal, representada en este acto por ' + bold(name)
@@ -159,15 +170,16 @@ class LenkaSecuredLoan(models.Model):
             debtor += escape(self.contract_buyer_authority or '') + '. '
             debtor += 'Su calidad de representante legal no lo convierte por sí sola en aval personal.'
         else:
-            debtor += 'Comparece en nombre propio y firma como ' + bold('PRESTATARIO') + '.'
+            debtor += 'Con documento de identidad ' + bold(identity)
+            debtor += ', comparece en nombre propio y firma como ' + bold('PRESTATARIO') + '.'
         avals = []
         signatures = []
         for guarantor in self.guarantor_ids.sorted('id'):
             avals.append(paragraph(bold('AVAL SOLIDARIO') + ': ' + bold(guarantor.name)
-                + ', identidad ' + bold(guarantor.vat) + ', domicilio '
+                + ', identidad ' + bold(guarantor.lenka_identity_number) + ', domicilio '
                 + escape(guarantor.contact_address or '________________')
                 + '. Comparece a título personal, en función distinta de cualquier representación que ejerza.'))
-            signatures.append(self._secured_signature(guarantor.name, 'AVAL SOLIDARIO - a título personal', guarantor.vat))
+            signatures.append(self._secured_signature(guarantor.name, 'AVAL SOLIDARIO - a título personal', guarantor.lenka_identity_number))
         if avals:
             avals.append(paragraph('Cada ' + bold('AVAL SOLIDARIO')
                 + ' declara su voluntad expresa de garantizar solidariamente con '

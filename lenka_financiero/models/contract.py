@@ -194,7 +194,7 @@ class LenkaFinancialOperationContract(models.Model):
     def _onchange_contract_buyer_partner(self):
         if self.contract_buyer_partner_id:
             self.contract_buyer_representative = self.contract_buyer_partner_id.name
-            self.contract_buyer_identity = self.contract_buyer_partner_id.vat or False
+            self.contract_buyer_identity = self.contract_buyer_partner_id.lenka_identity_number or False
 
     def action_add_representative_as_guarantor(self):
         self.ensure_one()
