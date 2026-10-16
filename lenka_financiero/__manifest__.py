@@ -29,6 +29,7 @@
         'report/lenka_quote_report.xml',
         'report/lenka_statement_report.xml',
         'report/lenka_contract_report.xml',
+        'report/secured_loan_report.xml',
     ],
     'demo': [
         'demo/lenka_demo.xml',

@@ -3,6 +3,7 @@ import re
 from html import escape
 
 from lxml import html, etree
+from markupsafe import Markup
 
 from odoo import api, models, _
 from odoo.exceptions import ValidationError
@@ -59,6 +60,13 @@ class LenkaSecuredTemplate(models.Model):
 
 class LenkaSecuredLoan(models.Model):
     _inherit = 'lenka.financial.operation'
+
+    def _secured_loan_font_css(self):
+        # Reuse the embedded fonts already configured for Lenka's approved PDF.
+        view = self.env['ir.ui.view'].search([
+            ('name', '=', 'Lenka fiduciario - Times New Roman 14'),
+        ], limit=1)
+        return Markup('\n'.join(re.findall(r'@font-face\s*\{[^}]*\}', view.arch_db or '')))
 
     def _secured_lender_and_payments(self):
         """Reuse company data in the database; private identifiers stay out of code."""

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="secured_loan_report_format" inherit_id="lenka_financiero.report_lenka_generated_document">
+        <xpath expr="//div[@t-field='o.rendered_html']" position="attributes">
+            <attribute name="t-att-class">'lenka-secured-print' if o.template_id.builtin_key == 'secured_loan_20261016' and o.state != 'signed' else ''</attribute>
+        </xpath>
+        <xpath expr="//div[@t-field='o.rendered_html']" position="before">
+            <style t-if="o.template_id.builtin_key == 'secured_loan_20261016' and o.state != 'signed'">
+                <t t-out="o.operation_id._secured_loan_font_css()"/>
+                /* Compensate wkhtmltopdf's configured 90-dpi print scaling. */
+                .lenka-secured-print, .lenka-secured-print * {
+                    font-family: 'Lenka Times New Roman', 'Times New Roman', Times, serif !important;
+                    font-size: 16.4pt !important;
+                }
+                .lenka-secured-print p { text-align: justify !important; line-height: 1.25; }
+                .lenka-secured-print h2.lenka-titulo, .lenka-secured-print h2.lenka-titulo * {
+                    font-size: 23.4pt !important; text-align: left !important; line-height: 1.15;
+                }
+                .lenka-secured-print h3 { font-weight: bold; page-break-after: avoid; }
+                .lenka-secured-print .lenka-clausula { page-break-inside: avoid; }
+                .lenka-secured-print .lenka-membrete { text-align:left; margin-bottom:18px; }
+                .lenka-secured-print .lenka-membrete img { width:220px !important; height:auto !important; }
+                .lenka-secured-print .lenka-firmas p { text-align:left !important; line-height:1.2 !important; }
+                .lenka-secured-print table { width:100% !important; table-layout:auto; }
+                .lenka-secured-print td, .lenka-secured-print th { padding:1px !important; }
+            </style>
+        </xpath>
+    </template>
+</odoo>

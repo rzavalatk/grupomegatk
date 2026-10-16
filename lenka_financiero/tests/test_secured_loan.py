@@ -10,9 +10,10 @@ class TestSecuredLoanContract(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.entity = cls.env['res.partner'].create({'name': 'Entidad ficticia', 'is_company': True, 'vat': 'RTN-PRUEBA'})
-        cls.person = cls.env['res.partner'].create({'name': 'Representante ficticio', 'vat': 'ID-PRUEBA'})
-        cls.other = cls.env['res.partner'].create({'name': 'Otro aval ficticio', 'vat': 'OTRO-ID'})
+        Partner = cls.env['res.partner'].with_context(no_vat_validation=True)
+        cls.entity = Partner.create({'name': 'Entidad ficticia', 'is_company': True, 'vat': 'RTN-PRUEBA'})
+        cls.person = Partner.create({'name': 'Representante ficticio', 'vat': 'ID-PRUEBA'})
+        cls.other = Partner.create({'name': 'Otro aval ficticio', 'vat': 'OTRO-ID'})
         cls.template = cls.env['lenka.contract.template']._approved_secured_loan_template(cls.env.company)
 
     def operation(self, **values):
