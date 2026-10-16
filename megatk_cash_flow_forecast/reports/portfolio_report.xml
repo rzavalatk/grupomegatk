@@ -80,10 +80,8 @@
   <template id="report_cashflow_document">
     <t t-call="web.html_container">
       <t t-foreach="docs" t-as="o">
-        <t t-call="web.external_layout">
-          <div class="page cashflow-report" style="font-size:13px">
+          <div class="page cashflow-report" style="font-size:15px;padding-top:8px">
             <h2 style="text-align:center; margin-bottom:2px">FLUJO DE CAJA PROYECTADO</h2>
-            <h4 style="text-align:center; margin-top:0" t-esc="o.company_id.name"/>
             <p style="text-align:center;color:#667085">Resumen ejecutivo — los conceptos pueden seleccionarse para consultar su detalle.</p>
 
             <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
@@ -104,7 +102,7 @@
                 <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td><span t-out="o.financing_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
                 <tr style="background:#d9f2df;color:#126b35"><td>Otros ingresos</td><td><span t-out="o.other_income_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
                 <tr style="background:#fde2e2;color:#9b1c1c"><td><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td><span t-out="o.payable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
-                <tr style="background:#111827;color:white;font-weight:bold;font-size:14px"><td>Saldo proyectado final</td><td><span t-out="o.projected_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#111827;color:white;font-weight:bold;font-size:14px"><td>Neto proyectado</td><td><span t-out="o.projected_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.projected_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
               </tbody>
             </table>
 
@@ -117,10 +115,9 @@
           </div>
 
           <t t-foreach="o._cashflow_report_sections()" t-as="section">
-            <div class="page" t-att-id="'detail-' + section['key']" style="font-size:12px">
+            <div t-if="section['lines']" class="page" t-att-id="'detail-' + section['key']" style="font-size:14px;padding-top:8px">
               <h3 t-att-style="'color:#126b35' if section['kind'] == 'income' else 'color:#9b1c1c'" t-esc="section['title']"/>
-              <p t-if="not section['lines']">No hay movimientos proyectados en esta categoría.</p>
-              <table t-if="section['lines']" class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
+              <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
                 <thead>
                   <tr t-att-style="'background:#d9f2df' if section['kind'] == 'income' else 'background:#fde2e2'">
                     <th>Concepto</th><th>Saldo HNL</th><th>Saldo USD</th><th>Semana 1</th><th>Semana 2</th><th>Semana 3</th><th>Pendiente</th><th>Total</th><th>Detalle</th>
@@ -155,7 +152,6 @@
               </table>
             </div>
           </t>
-        </t>
       </t>
     </t>
   </template>
