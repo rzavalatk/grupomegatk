@@ -84,8 +84,12 @@ class LenkaSecuredLoan(models.Model):
             if paragraphs:
                 names = paragraphs[0].xpath('.//strong')
                 if len(names) >= 4:
-                    seller = seller or names[-2].text_content().strip()
-                    identity = identity or names[-1].text_content().strip()
+                    old_seller = names[-2].text_content().strip()
+                    old_identity = names[-1].text_content().strip()
+                    if old_seller and not re.fullmatch(r'\{\{[A-Z_]+\}\}|[_\s]+', old_seller):
+                        seller = seller or old_seller
+                    if old_identity and not re.fullmatch(r'\{\{[A-Z_]+\}\}|[_\s]+', old_identity):
+                        identity = identity or old_identity
             if not payments:
                 headings = root.xpath('.//h3[starts-with(normalize-space(.), "Cuarta")]')
                 if headings:
