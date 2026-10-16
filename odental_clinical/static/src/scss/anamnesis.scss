@@ -1,0 +1,66 @@
+.odental-anamnesis-help {
+    color: #6f6f6f;
+    margin-bottom: 12px;
+}
+
+.odental-anamnesis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.odental-anamnesis-column {
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    padding: 10px;
+
+    h4 {
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0 0 8px;
+    }
+}
+
+.odental-history-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    margin: 5px 0;
+    padding: 7px 10px;
+    border-radius: 4px;
+    background: #f6f6f6;
+    color: #6e6e6e;
+
+    label {
+        color: inherit;
+        margin: 0;
+        flex: 1;
+    }
+
+    .o_field_widget {
+        margin: 0;
+    }
+
+    &:has(input:checked) {
+        background: #1f1f1f;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    &:has(input:checked) input {
+        accent-color: #fff;
+    }
+}
+
+[data-bs-theme="dark"] {
+    .odental-anamnesis-help { color: #b7b7b7; }
+    .odental-anamnesis-column { border-color: #555; }
+    .odental-history-item { background: #303030; color: #c3c3c3; }
+    .odental-history-item:has(input:checked) { background: #050505; color: #fff; }
+}
+
+@media (max-width: 900px) {
+    .odental-anamnesis-grid { grid-template-columns: 1fr; }
+}
