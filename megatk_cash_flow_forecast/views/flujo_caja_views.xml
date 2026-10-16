@@ -84,7 +84,7 @@
               </list>
             </field>
           </page>
-          <page string="Anticipos a proveedores">
+          <page string="Anticipos planificados">
             <field name="advance_promise_ids" context="{'default_direction': 'payable', 'default_classification': 'advance', 'default_advance_status': 'projected'}">
               <list editable="bottom">
                 <field name="company_id" column_invisible="True"/><field name="commercial_partner_id" column_invisible="True"/><field name="direction" column_invisible="True"/>
@@ -102,16 +102,6 @@
                 <field name="partner_id"/><field name="classification"/><field name="classification_id" column_invisible="True"/>
                 <field name="company_currency_id" column_invisible="True"/><field name="current_open_balance" readonly="1"/><field name="currency_id"/><field name="amount"/><field name="company_amount" readonly="1"/>
                 <field name="payment_method"/><field name="cash_effect_amount" readonly="1"/><field name="period"/><field name="state" column_invisible="True"/>
-              </list>
-            </field>
-          </page>
-          <page string="Pendientes de clasificar">
-            <field name="unclassified_payable_promise_ids" context="{'default_direction': 'payable', 'default_classification': 'unassigned'}">
-              <list editable="bottom">
-                <field name="company_id" column_invisible="True"/><field name="commercial_partner_id" column_invisible="True"/><field name="direction" column_invisible="True"/>
-                <field name="partner_id"/><field name="classification"/><field name="classification_id" column_invisible="True"/>
-                <field name="company_currency_id" column_invisible="True"/><field name="current_open_balance" readonly="1"/><field name="currency_id"/><field name="amount"/><field name="company_amount" readonly="1"/>
-                <field name="period"/><field name="state" column_invisible="True"/>
               </list>
             </field>
           </page>
