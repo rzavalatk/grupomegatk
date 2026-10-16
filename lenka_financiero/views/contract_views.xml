@@ -99,9 +99,11 @@
                         <group string="Firmantes">
                             <field name="contract_seller_representative" string="Representante de Lenka"/>
                             <field name="contract_seller_identity"/>
+                            <field name="contract_buyer_partner_id" invisible="operation_type != 'loan'"/>
                             <field name="contract_buyer_representative" string="Firmante del cliente"/>
                             <field name="contract_buyer_identity" string="Identidad del firmante del cliente"/>
                             <field name="contract_buyer_authority" invisible="operation_type != 'loan'"/>
+                            <button name="action_add_representative_as_guarantor" string="Agregar representante como aval personal" type="object" class="btn-secondary" invisible="operation_type != 'loan' or security_mode != 'backed'"/>
                             <field name="contract_signing_city"/>
                         </group>
                         <group string="Datos y pagos">
@@ -124,5 +126,6 @@
         </field>
     </record>
 </odoo>
+
 
 

@@ -19,3 +19,6 @@ from . import test_mixed_plan
 from . import test_financial_validation_ui
 
 from . import test_loan_mora
+
+from . import test_secured_loan
+
