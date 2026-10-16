@@ -222,7 +222,7 @@ class LenkaSecuredLoan(models.Model):
         }
 
     def _secured_signature(self, name, role, identity):
-        return ('<div style="float:left;width:48%;margin-right:2%;page-break-inside:avoid">'
+        return ('<div style="float:left;width:48%%;margin-right:2%%;page-break-inside:avoid">'
                 '<p style="text-align:left;margin:0 0 3pt">%s</p>'
                 '<p style="text-align:left;margin:0 0 3pt">%s</p>'
                 '<p style="text-align:left;margin:0 0 3pt">No. de identidad: %s</p></div>') % (
