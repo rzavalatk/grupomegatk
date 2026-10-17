@@ -46,6 +46,30 @@ class TestODentalClinical(TransactionCase):
         with self.assertRaises(UserError):
             encounter.write({"diagnosis_summary": "Contenido alterado"})
 
+    def test_anamnesis_is_signed_and_copied_to_amendment(self):
+        encounter = self.env["odental.clinical.encounter"].create({
+            "clinical_record_id": self.record.id,
+            "professional_id": self.professional.id,
+            "chief_complaint": "Dolor al masticar",
+            "history_present_illness": "Comenzó hace tres días y aumentó anoche.",
+            "oral_habits": "Bruxismo referido",
+            "pulse_bpm": "72",
+            "blood_pressure": "120/80",
+        })
+        self.assertEqual(encounter.signature_schema_version, 2)
+        encounter.action_sign()
+        self.assertEqual(encounter.content_hash, encounter._hash_payload())
+        with self.assertRaises(UserError):
+            encounter.write({"history_present_illness": "Texto cambiado"})
+        with self.assertRaises(UserError):
+            encounter.write({"pulse_bpm": "80"})
+        amended = self.env["odental.clinical.encounter"].browse(
+            encounter.action_create_amendment()["res_id"]
+        )
+        self.assertEqual(amended.history_present_illness, encounter.history_present_illness)
+        self.assertEqual(amended.blood_pressure, encounter.blood_pressure)
+        self.assertEqual(encounter.content_hash, encounter._hash_payload())
+
     def test_amendment_preserves_original(self):
         encounter = self.env["odental.clinical.encounter"].create(
             {
