@@ -54,7 +54,7 @@ class TestCorrectionSecurity(TestExclusiveSoleSignatureApproval):
         op.action_approve()
         template = self.env['lenka.contract.template'].create({
             'name': 'Plantilla ficticia', 'company_id': self.company.id,
-            'document_type': 'contract', 'operation_type': 'loan', 'body_html': '<p>Prueba</p>'})
+            'document_type': 'contract', 'operation_type': 'all', 'body_html': '<p>Prueba</p>'})
         document = self.env['lenka.generated.document'].create({
             'name': 'Documento anterior', 'operation_id': op.id, 'template_id': template.id})
         document.action_render()
