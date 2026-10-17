@@ -1,7 +1,7 @@
 {
     "name": "O Dental Expediente Clínico",
     "summary": "Expediente, antecedentes, evoluciones, diagnósticos y consentimientos",
-    "version": "18.0.1.1.2",
+    "version": "18.0.1.2.0",
     "category": "Services/Healthcare",
     "author": "MEGATK / MEDITEKSA",
     "license": "LGPL-3",
@@ -18,4 +18,7 @@
     ],
     "application": False,
     "installable": True,
+    "assets": {
+        "web.assets_backend": ["odental_clinical/static/src/scss/anamnesis.scss"],
+    },
 }

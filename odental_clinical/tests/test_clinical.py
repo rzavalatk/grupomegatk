@@ -31,6 +31,32 @@ class TestODentalClinical(TransactionCase):
             ("patient_id", "=", self.patient.id)
         ]), 1)
 
+    def test_anamnesis_is_unrecorded_until_marked_and_keeps_audit(self):
+        self.assertFalse(self.record.hx_allergies)
+        self.assertFalse(self.record.anamnesis_present_illness)
+        self.record.write({
+            "anamnesis_chief_complaint": "Consulta de prueba",
+            "anamnesis_present_illness": "Relato de prueba",
+            "hx_allergies": True,
+        })
+        self.assertTrue(self.record.hx_allergies)
+        self.assertEqual(self.record.anamnesis_present_illness, "Relato de prueba")
+        self.assertTrue(self.env["odental.clinical.audit"].search_count([
+            ("model_name", "=", "odental.clinical.record"),
+            ("record_res_id", "=", self.record.id),
+            ("event_type", "=", "anamnesis_updated"),
+            ("user_id", "=", self.env.user.id),
+        ]))
+        self.record.write({"hx_diabetes": True})
+        self.assertTrue(self.record.hx_allergies)
+        self.assertTrue(self.record.hx_diabetes)
+
+    def test_closed_record_does_not_accept_anamnesis_changes(self):
+        self.record.action_close()
+        with self.assertRaises(UserError):
+            self.record.write({"hx_diabetes": True})
+        self.assertFalse(self.record.hx_diabetes)
+
     def test_signed_encounter_is_immutable(self):
         encounter = self.env["odental.clinical.encounter"].create(
             {

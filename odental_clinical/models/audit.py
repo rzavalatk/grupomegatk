@@ -29,6 +29,7 @@ class ODentalClinicalAudit(models.Model):
             ("history_created", "Antecedente creado"),
             ("history_updated", "Antecedente actualizado"),
             ("history_deleted", "Antecedente eliminado"),
+            ("anamnesis_updated", "Anamnesis registrada o actualizada"),
             ("encounter_created", "Evolución creada"),
             ("encounter_signed", "Evolución firmada"),
             ("encounter_amended", "Evolución rectificada"),
