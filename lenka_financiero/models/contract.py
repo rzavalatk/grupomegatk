@@ -202,7 +202,18 @@ class LenkaFinancialOperationContract(models.Model):
             raise ValidationError(_('Esta acción corresponde a préstamos con aval o garantía.'))
         if not self.contract_buyer_partner_id or self.contract_buyer_partner_id.is_company:
             raise ValidationError(_('Seleccione una persona en Representante legal / firmante antes de agregarla como aval.'))
-        self.write({'guarantor_ids': [(4, self.contract_buyer_partner_id.id)]})
+        person = self.contract_buyer_partner_id
+        identity = (self.contract_buyer_identity or person.lenka_identity_number or '').strip()
+        if not identity:
+            raise ValidationError(_('Complete la identidad del representante antes de agregarlo como aval.'))
+        if person.lenka_identity_number and self.contract_buyer_identity:
+            normalize = lambda value: ''.join(c for c in value.upper() if c.isalnum())
+            if normalize(person.lenka_identity_number) != normalize(self.contract_buyer_identity):
+                raise ValidationError(_('La identidad del representante no coincide con su contacto. Revise ambos datos.'))
+        # Validate operation editability before updating the selected contact.
+        self.write({'guarantor_ids': [(4, person.id)], 'contract_buyer_identity': identity})
+        if not person.lenka_identity_number:
+            person.write({'lenka_identity_number': identity})
         return True
 
     @api.constrains('contract_isv_amount', 'principal_amount')
@@ -330,6 +341,8 @@ class LenkaFinancialOperationContract(models.Model):
                 '</tr></thead><tbody>%s</tbody></table></div>') % (annex_label, escape(self.currency_id.name), ''.join(rows))
 
     def action_generate_contract_documents(self):
+        if self.filtered(lambda r: r.revision_count and (r.state not in ('approved', 'contracted', 'active', 'done') or not r.approval_date)):
+            raise ValidationError(_('La operación corregida requiere una nueva aprobación de Luis Morán antes de generar documentos.'))
         for rec in self:
             if rec.is_quote:
                 raise ValidationError(_('Convierta la cotizacion en solicitud antes de generar documentos contractuales.'))

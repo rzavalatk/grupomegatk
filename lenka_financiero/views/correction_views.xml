@@ -1,0 +1,41 @@
+<odoo>
+    <record id="view_lenka_correction_wizard" model="ir.ui.view">
+        <field name="name">lenka.correction.wizard.form</field><field name="model">lenka.correction.wizard</field>
+        <field name="arch" type="xml"><form string="Devolver a revisión para corregir">
+            <group><field name="operation_id"/><field name="reason"/></group>
+            <div class="alert alert-warning">Se conservará la aprobación anterior en el historial y se cancelarán los documentos sin firmar. Después de corregir, Luis Morán deberá aprobar nuevamente.</div>
+            <footer><button name="action_confirm" string="Devolver a revisión" type="object" class="btn-primary"/><button string="Cancelar" special="cancel"/></footer>
+        </form></field>
+    </record>
+    <record id="view_lenka_operation_correction" model="ir.ui.view">
+        <field name="name">lenka.operation.correction</field><field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="view_lenka_operation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="can_return_for_correction" invisible="1"/>
+                <field name="revision_count" invisible="1"/>
+                <button name="action_approve" string="Aprobar operación corregida" type="object" invisible="not revision_count or state != 'review' or security_mode != 'backed'" groups="lenka_financiero.group_lenka_sole_authorizer"/>
+                <button name="action_open_correction" string="Devolver a revisión para corregir" type="object" invisible="not can_return_for_correction"/>
+            </xpath>
+            <xpath expr="//field[@name='guarantor_ids']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')</attribute>
+                <attribute name="domain">[('is_company', '=', False), '|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
+                <attribute name="context">{'default_company_id': company_id, 'lenka_show_company': True}</attribute>
+            </xpath>
+            <xpath expr="//group/group/field[@name='partner_id']" position="attributes">
+                <attribute name="domain">['|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
+                <attribute name="context">{'default_company_id': company_id, 'lenka_show_company': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_lenka_contract_contact_company" model="ir.ui.view">
+        <field name="name">lenka.contract.contact.company</field><field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="view_lenka_operation_form_contracts"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='contract_buyer_partner_id']" position="attributes">
+                <attribute name="domain">[('is_company', '=', False), '|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
+                <attribute name="context">{'default_company_id': company_id, 'lenka_show_company': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

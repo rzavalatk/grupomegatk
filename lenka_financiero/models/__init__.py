@@ -16,3 +16,5 @@ from . import demo_setup
 from . import restructuring
 from . import sole_signature
 from . import secured_loan
+
+from . import correction_wizard
