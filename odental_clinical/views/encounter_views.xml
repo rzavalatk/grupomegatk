@@ -42,7 +42,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Consulta"><group><field name="chief_complaint"/><field name="clinical_findings"/><field name="diagnosis_summary"/></group></page>
+                        <page string="Consulta"><group><field name="chief_complaint" string="Motivo de esta visita"/><field name="clinical_findings"/><field name="diagnosis_summary"/></group></page>
                         <page string="Tratamiento"><group><field name="treatment_plan"/><field name="procedures_performed"/><field name="prescriptions"/></group></page>
                         <page string="Información restringida"><field name="private_notes" placeholder="Esta sección nunca se comparte automáticamente."/></page>
                         <page string="Firma y auditoría"><group><field name="signed_at" readonly="1"/><field name="signed_by_user_id" readonly="1"/><field name="content_hash" readonly="1"/><field name="amendment_reason" invisible="not previous_version_id"/></group></page>
