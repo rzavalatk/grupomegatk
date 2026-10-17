@@ -89,6 +89,60 @@ class LenkaSoleSignature(models.Model):
     can_decide_sole_signature = fields.Boolean(compute='_compute_sole_signature_actions')
     can_request_legacy_sole_signature = fields.Boolean(compute='_compute_sole_signature_actions')
 
+    revision_count = fields.Integer(string='Devoluciones a revisión', readonly=True, copy=False)
+    can_return_for_correction = fields.Boolean(compute='_compute_can_return_for_correction')
+
+    @api.depends_context('uid')
+    @api.depends('state', 'company_id.lenka_sole_signature_approver_id', 'contract_signed', 'disbursed_amount')
+    def _compute_can_return_for_correction(self):
+        for rec in self:
+            rec.can_return_for_correction = (
+                rec.state == 'approved' and not rec.contract_signed and not rec.disbursed_amount
+                and rec.company_id.sudo().lenka_sole_signature_approver_id.id == self.env.uid
+                and self.env.user.has_group('lenka_financiero.group_lenka_sole_authorizer'))
+
+    def _require_correction_authorizer(self):
+        self.ensure_one()
+        self.check_access('write')
+        if (self.company_id.sudo().lenka_sole_signature_approver_id.id != self.env.uid
+                or not self.env.user.has_group('lenka_financiero.group_lenka_sole_authorizer')):
+            raise AccessError(_('Solo Luis Morán, configurado para esta empresa, puede devolver la operación a revisión.'))
+
+    def action_open_correction(self):
+        self.ensure_one()
+        self._require_correction_authorizer()
+        return {'type': 'ir.actions.act_window', 'name': _('Devolver a revisión para corregir'),
+                'res_model': 'lenka.correction.wizard', 'view_mode': 'form', 'target': 'new',
+                'context': {'default_operation_id': self.id}}
+
+    def _return_for_correction(self, reason):
+        self.ensure_one()
+        self._require_correction_authorizer()
+        if not (reason or '').strip():
+            raise ValidationError(_('Indique el motivo de la devolución.'))
+        # Serialize against concurrent approval/signature/disbursement updates.
+        self.env.cr.execute('SELECT id FROM lenka_financial_operation WHERE id = %s FOR UPDATE', [self.id])
+        self.invalidate_recordset()
+        if (self.state != 'approved' or self.contract_signed or self.contract_date
+                or self.disbursement_ids or self.disbursed_amount or self.restructured_funding_amount
+                or self.generated_document_ids.filtered(lambda d: d.state == 'signed' or d.attachment_id)
+                or self.document_ids.filtered(lambda d: d.document_type == 'contract' and d.attachment_id)):
+            raise ValidationError(_('Solo se puede devolver una operación aprobada antes de firmar o registrar desembolsos.'))
+        snapshot = self.read(list(TERMS_FIELDS | {'approved_by', 'approval_date', 'sole_signature_status'}))[0]
+        snapshot['schedule'] = self.schedule_line_ids.read(['sequence', 'date', 'opening_balance', 'capital', 'interest', 'extra_charge', 'payment', 'closing_balance'])
+        snapshot['guarantees'] = self.guarantee_ids.read(['description', 'owner_id', 'serial_reference', 'declared_value', 'appraisal_value', 'state'])
+        import json
+        self.message_post(body=Markup('<b>Devuelta a revisión por %s</b><p>%s</p><p>Aprobación y condiciones anteriores:</p><pre>%s</pre>') % (
+            escape(self.env.user.name), escape(reason.strip()), escape(json.dumps(snapshot, default=str, ensure_ascii=False))))
+        self.generated_document_ids.filtered(lambda d: d.state != 'cancelled').write({'state': 'cancelled'})
+        super(LenkaSoleSignature, self).write({
+            'state': 'review', 'approved_by': False, 'approval_date': False,
+            'sole_signature_status': 'none', 'sole_signature_authorizer_id': False,
+            'sole_signature_decided_at': False, 'sole_signature_activity_id': False,
+            'sole_signature_notification_id': False, 'revision_count': self.revision_count + 1,
+        })
+        return True
+
     @api.depends_context('uid')
     @api.depends('security_mode', 'state', 'sole_signature_status', 'sole_signature_authorizer_id', 'guarantor_ids', 'guarantee_ids', 'contract_signed', 'disbursed_amount',
                  'company_id.lenka_sole_signature_approver_id', 'company_id.lenka_sole_signature_requester_id')
@@ -116,7 +170,7 @@ class LenkaSoleSignature(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if (AUDIT_FIELDS - {'approved_by', 'approval_date'}).intersection(vals):
+            if ((AUDIT_FIELDS - {'approved_by', 'approval_date'}) | {'revision_count'}).intersection(vals):
                 raise AccessError(_('El historial de autorizacion se registra mediante las acciones del sistema.'))
         records = super().create(vals_list)
         for rec in records.filtered(lambda r: r.security_mode == 'sole_signature'):
@@ -254,7 +308,14 @@ class LenkaSoleSignature(models.Model):
     def action_approve(self):
         self.check_access('write')
         for rec in self:
+            if rec.revision_count and rec.state != 'review':
+                raise ValidationError(_('La operación corregida debe estar en revisión para aprobarla.'))
             if rec.security_mode != 'sole_signature':
+                if rec.revision_count:
+                    rec._require_correction_authorizer()
+                    rec._validate_for_approval()
+                    super(LenkaSoleSignature, rec).write({'state': 'approved', 'approved_by': self.env.uid, 'approval_date': fields.Datetime.now()})
+                    continue
                 if not self.env.su and not self.env.user.has_group('lenka_financiero.group_lenka_manager'):
                     raise AccessError(_('Solo la gerencia puede aprobar operaciones con respaldo.'))
                 super(LenkaSoleSignature, rec).action_approve()
@@ -303,6 +364,15 @@ class LenkaSoleSignature(models.Model):
         return super().action_mark_contracted()
 
     def write(self, vals):
+        if {'contract_buyer_partner_id', 'contract_buyer_identity', 'contract_buyer_representative', 'contract_buyer_authority'}.intersection(vals) and self.filtered(lambda r: r.state in LOCKED_STATES or r.sole_signature_status == 'pending'):
+            raise ValidationError(_('Devuelva la operación a revisión antes de cambiar al representante legal.'))
+        if 'revision_count' in vals:
+            raise AccessError(_('El historial de devoluciones solo cambia mediante la acción autorizada.'))
+        if self.filtered('revision_count') and ({'approved_by', 'approval_date'}.intersection(vals)
+                or vals.get('state') == 'approved'):
+            raise AccessError(_('Utilice Aprobar para registrar una nueva decisión.'))
+        if vals.get('state') in ('draft', 'review') and self.filtered(lambda r: r.state in LOCKED_STATES):
+            raise ValidationError(_('Utilice Devolver a revisión para corregir; requiere motivo y autorización de Luis Morán.'))
         sole = self.filtered(lambda r: r.security_mode == 'sole_signature' or vals.get('security_mode') == 'sole_signature')
         if sole and AUDIT_FIELDS.intersection(vals):
             raise AccessError(_('Utilice Enviar a Luis Moran, Autorizar o Rechazar para registrar la decision.'))

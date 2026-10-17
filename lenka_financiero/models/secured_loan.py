@@ -29,6 +29,13 @@ class LenkaPartnerIdentity(models.Model):
         help='DNI o documento de identidad de la persona. Es independiente del RTN / NIF fiscal.',
     )
 
+    @api.depends_context('lenka_show_company')
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        if self.env.context.get('lenka_show_company'):
+            for partner in self:
+                partner.display_name = '%s [%s]' % (partner.display_name, partner.company_id.name or _('Compartido'))
+
 
 class LenkaSecuredTemplate(models.Model):
     _inherit = 'lenka.contract.template'
@@ -107,6 +114,24 @@ class LenkaSecuredLoan(models.Model):
                         payments = etree.tostring(following, encoding='unicode', method='html')
         return seller, identity, payments
 
+    @api.constrains('partner_id', 'guarantor_ids', 'contract_buyer_partner_id', 'company_id')
+    def _check_lenka_contact_company(self):
+        for rec in self:
+            contacts = rec.partner_id | rec.guarantor_ids | rec.contract_buyer_partner_id
+            if contacts.filtered(lambda p: p.company_id and p.company_id != rec.company_id):
+                raise ValidationError(_('Seleccione contactos de la empresa de esta operación o contactos compartidos.'))
+
+    def _guarantor_identity(self, person):
+        self.ensure_one()
+        identity = person.lenka_identity_number or ''
+        if person == self.contract_buyer_partner_id:
+            explicit = self.contract_buyer_identity or ''
+            normalize = lambda value: ''.join(c for c in value.upper() if c.isalnum())
+            if identity and explicit and normalize(identity) != normalize(explicit):
+                raise ValidationError(_('La identidad del representante no coincide con la identidad del mismo contacto como aval.'))
+            identity = identity or explicit
+        return identity
+
     def _secured_loan_signer(self):
         self.ensure_one()
         person = self.contract_buyer_partner_id
@@ -146,7 +171,7 @@ class LenkaSecuredLoan(models.Model):
         for guarantor in self.guarantor_ids:
             if guarantor.is_company:
                 raise ValidationError(_('El aval %s debe registrarse como persona natural para esta plantilla de aval personal.') % guarantor.name)
-            if not guarantor.lenka_identity_number:
+            if not self._guarantor_identity(guarantor):
                 missing.append(_('identidad del aval %s') % guarantor.name)
         for guarantee in guarantees:
             if not guarantee.owner_id:
@@ -176,10 +201,10 @@ class LenkaSecuredLoan(models.Model):
         signatures = []
         for guarantor in self.guarantor_ids.sorted('id'):
             avals.append(paragraph(bold('AVAL SOLIDARIO') + ': ' + bold(guarantor.name)
-                + ', identidad ' + bold(guarantor.lenka_identity_number) + ', domicilio '
+                + ', identidad ' + bold(self._guarantor_identity(guarantor)) + ', domicilio '
                 + escape(guarantor.contact_address or '________________')
                 + '. Comparece a título personal, en función distinta de cualquier representación que ejerza.'))
-            signatures.append(self._secured_signature(guarantor.name, 'AVAL SOLIDARIO - a título personal', guarantor.lenka_identity_number))
+            signatures.append(self._secured_signature(guarantor.name, 'AVAL SOLIDARIO - a título personal', self._guarantor_identity(guarantor)))
         if avals:
             avals.append(paragraph('Cada ' + bold('AVAL SOLIDARIO')
                 + ' declara su voluntad expresa de garantizar solidariamente con '

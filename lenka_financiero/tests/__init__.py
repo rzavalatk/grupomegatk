@@ -22,3 +22,5 @@ from . import test_loan_mora
 
 from . import test_secured_loan
 
+
+from . import test_correction
