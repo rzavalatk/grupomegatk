@@ -129,6 +129,8 @@ class LenkaSoleSignature(models.Model):
                 or self.document_ids.filtered(lambda d: d.document_type == 'contract' and d.attachment_id)):
             raise ValidationError(_('Solo se puede devolver una operación aprobada antes de firmar o registrar desembolsos.'))
         snapshot = self.read(list(TERMS_FIELDS | {'approved_by', 'approval_date', 'sole_signature_status'}))[0]
+        snapshot['schedule'] = self.schedule_line_ids.read(['sequence', 'date', 'opening_balance', 'capital', 'interest', 'extra_charge', 'payment', 'closing_balance'])
+        snapshot['guarantees'] = self.guarantee_ids.read(['description', 'owner_id', 'serial_reference', 'declared_value', 'appraisal_value', 'state'])
         import json
         self.message_post(body=Markup('<b>Devuelta a revisión por %s</b><p>%s</p><p>Aprobación y condiciones anteriores:</p><pre>%s</pre>') % (
             escape(self.env.user.name), escape(reason.strip()), escape(json.dumps(snapshot, default=str, ensure_ascii=False))))

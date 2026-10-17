@@ -45,6 +45,31 @@ class TestCorrectionSecurity(TestExclusiveSoleSignatureApproval):
         with self.assertRaises(ValidationError), self.cr.savepoint():
             op._return_for_correction('Cambio')
 
+    def test_backed_correction_invalidates_old_document_and_luis_reapproves(self):
+        op = self._approved()
+        op._return_for_correction('Agregar aval')
+        op.write({'security_mode': 'backed', 'guarantor_ids': [(4, self.client.copy({'name': 'Aval diferente'}).id)]})
+        # The initial unsecured approval remains in the audit; the new backed
+        # approval still belongs to configured Luis even without manager group.
+        op.action_approve()
+        template = self.env['lenka.contract.template'].create({
+            'name': 'Plantilla ficticia', 'company_id': self.company.id,
+            'document_type': 'contract', 'operation_type': 'loan', 'body_html': '<p>Prueba</p>'})
+        document = self.env['lenka.generated.document'].create({
+            'name': 'Documento anterior', 'operation_id': op.id, 'template_id': template.id})
+        document.action_render()
+        op._return_for_correction('Segunda corrección')
+        self.assertEqual(document.state, 'cancelled')
+        self.assertEqual(op.revision_count, 2)
+        with self.assertRaises(ValidationError), self.cr.savepoint():
+            document.action_render()
+        with self.assertRaises(ValidationError), self.cr.savepoint():
+            document.write({'state': 'generated'})
+        with self.assertRaises(AccessError), self.cr.savepoint():
+            op.with_user(self.elisa).action_approve()
+        op.action_approve()
+        self.assertEqual(op.approved_by, self.luis)
+
 
 class TestRepresentativeIdentity(TestSecuredLoanContract):
     def test_same_contact_uses_entered_identity_without_using_rtn(self):

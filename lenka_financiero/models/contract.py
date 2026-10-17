@@ -140,8 +140,18 @@ class LenkaGeneratedDocument(models.Model):
             raise ValidationError(_('Primero generá el documento para poder descargarlo.'))
         return self.env.ref('lenka_financiero.action_report_lenka_generated_document').report_action(self, config=False)
 
+    def write(self, vals):
+        if self.filtered(lambda d: d.state == 'cancelled') and {
+                'state', 'rendered_html', 'operation_id', 'template_id', 'attachment_id'}.intersection(vals):
+            raise ValidationError(_('El documento cancelado conserva el historial. Genere uno nuevo después de la aprobación.'))
+        return super().write(vals)
+
     def action_render(self):
         for rec in self:
+            if rec.state == 'cancelled':
+                raise ValidationError(_('El documento fue cancelado; genere uno nuevo después de la aprobación.'))
+            if rec.operation_id.revision_count and rec.operation_id.state not in ('approved', 'contracted', 'active', 'done'):
+                raise ValidationError(_('La operación corregida requiere una nueva aprobación antes de generar documentos.'))
             if rec.state == 'signed':
                 raise ValidationError(_('No se puede regenerar un documento firmado.'))
             rec.rendered_html = rec.operation_id._render_lenka_template(rec.template_id)
