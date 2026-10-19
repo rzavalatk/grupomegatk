@@ -1,4 +1,3 @@
-# Retry Odoo.sh deployment after the previous update completed.
 name: Publicar planificación comercial 18.0.42.2
 on:
   workflow_dispatch:
@@ -14,9 +13,9 @@ jobs:
           submodules: false
       - name: Publicar reporte global por marcas
         run: |
-          git update-index --cacheinfo 160000,76ae533e42aa8c418cb03ab2051b9f00b19d2470,commercial_planning_addons
+          git update-index --cacheinfo 160000,48e99f90d6898f6a42f3eb53eb9e26f99ff68efd,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.42.2.0: marcas seleccionadas"
+          git commit -m "Publica planificación comercial 18.0.42.2.1: marcas seleccionadas"
           git push origin master
