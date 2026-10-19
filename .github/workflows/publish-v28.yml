@@ -13,7 +13,7 @@ jobs:
           submodules: false
       - name: Publicar reporte global por marcas
         run: |
-          git update-index --cacheinfo 160000,7f8d33d2235d67cf9819914f34eaecdc6a81b058,commercial_planning_addons
+          git update-index --cacheinfo 160000,76ae533e42aa8c418cb03ab2051b9f00b19d2470,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
