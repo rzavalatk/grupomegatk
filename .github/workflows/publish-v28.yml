@@ -1,3 +1,4 @@
+# Retry Odoo.sh deployment after the previous update completed.
 name: Publicar planificación comercial 18.0.42.2
 on:
   workflow_dispatch:
