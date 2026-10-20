@@ -11,6 +11,10 @@ class TestCashflowForecast(TransactionCase):
         self.company = self.env["res.company"].create({
             "name": "Empresa aislada para pruebas de flujo",
         })
+        # All actions under test must use this isolated company, including
+        # model-level actions that read env.company and role checks.
+        self.env = self.env(context=dict(self.env.context, allowed_company_ids=self.company.ids))
+        self.env.user.write({'groups_id': [(4, self.env.ref('megatk_cash_flow_forecast.group_cashflow_user').id)]})
         self.plan = self.env["cashflow.plan"].with_company(self.company).create({
             "company_id": self.company.id,
         })
@@ -953,7 +957,7 @@ class TestCashflowForecast(TransactionCase):
             "partner_id": self.partner.id,
             "direction": "receivable",
             "period": "week_1",
-            "amount": 25,
+            "amount": 25, "classification": "customer",
         })
         sections = {section["key"]: section for section in self.plan._cashflow_report_sections()}
         self.assertEqual(sections["available"]["totals"]["balance_hnl"], 100)

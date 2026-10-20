@@ -88,4 +88,19 @@ class TestCompletedPaymentsAndReports(TestCashflowForecast):
         # Odoo parses the raw bytes before converting the PDF. Encoding must
         # survive this step too, not just look correct in a browser.
         bodies, *_ = Report._prepare_html(body)
-        self.assertTrue(any('Clínica Castellón' in b.decode('utf-8') for b in bodies))
+        self.assertTrue(any('Clínica Castellón' in (b.decode('utf-8') if isinstance(b, bytes) else b) for b in bodies))
+
+    def test_completion_obeys_company_access_and_collections_read_only(self):
+        from odoo.tests.common import new_test_user
+        promise = self.payment()
+        outsider = new_test_user(self.env, login='cashflow_other_company',
+            groups='megatk_cash_flow_forecast.group_cashflow_user',
+            company_id=self.env.ref('base.main_company').id,
+            company_ids=[(6, 0, self.env.ref('base.main_company').ids)])
+        with self.assertRaises(AccessError), self.cr.savepoint():
+            promise.with_user(outsider)._complete_payment(100, fields.Date.today(), 'Prueba')
+        reader = new_test_user(self.env, login='cashflow_read_only',
+            groups='megatk_cash_flow_forecast.group_cashflow_collections',
+            company_id=self.company.id, company_ids=[(6, 0, self.company.ids)])
+        with self.assertRaises(AccessError), self.cr.savepoint():
+            promise.with_user(reader)._complete_payment(100, fields.Date.today(), 'Prueba')
