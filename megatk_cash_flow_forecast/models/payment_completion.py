@@ -74,8 +74,11 @@ class CashflowPaymentCompletion(models.TransientModel):
     _name = 'cashflow.payment.completion'
     _description = 'Confirmar pago realizado en la proyección'
 
-    promise_id = fields.Many2one('cashflow.promise', required=True, readonly=True)
-    currency_id = fields.Many2one(related='promise_id.currency_id')
+    promise_id = fields.Many2one('cashflow.promise', string='Pago planificado', required=True, readonly=True)
+    partner_id = fields.Many2one(related='promise_id.partner_id', string='Acreedor / proveedor', readonly=True)
+    planned_amount = fields.Monetary(related='promise_id.amount', string='Importe planificado', readonly=True, currency_field='currency_id')
+    planned_period = fields.Selection(related='promise_id.period', string='Semana planificada', readonly=True)
+    currency_id = fields.Many2one(related='promise_id.currency_id', string='Moneda del pago')
     amount = fields.Monetary(string='Importe pagado', required=True, currency_field='currency_id')
     payment_date = fields.Date(string='Fecha del pago', required=True, default=fields.Date.context_today)
     reference = fields.Char(string='Referencia o descripción', required=True)

@@ -104,3 +104,12 @@ class TestCompletedPaymentsAndReports(TestCashflowForecast):
             company_id=self.company.id, company_ids=[(6, 0, self.company.ids)])
         with self.assertRaises(AccessError), self.cr.savepoint():
             promise.with_user(reader)._complete_payment(100, fields.Date.today(), 'Prueba')
+
+    def test_completion_form_identifies_creditor_currency_amount_and_week(self):
+        promise = self.payment(125)
+        wizard = self.env['cashflow.payment.completion'].with_context(default_promise_id=promise.id).create({'reference': 'Prueba'})
+        self.assertEqual(wizard.partner_id, self.partner)
+        self.assertEqual(wizard.currency_id, promise.currency_id)
+        self.assertEqual(wizard.planned_amount, 125)
+        self.assertEqual(wizard.amount, 125)
+        self.assertEqual(wizard.planned_period, 'week_1')
