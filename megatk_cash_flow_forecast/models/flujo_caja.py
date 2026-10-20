@@ -595,6 +595,17 @@ class CashflowPlan(models.Model):
         self.env["cashflow.portfolio.snapshot"].sudo().refresh_company(self.company_id)
         return {"type": "ir.actions.client", "tag": "reload"}
 
+    def action_view_completed_payments(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window', 'name': 'Pagos realizados',
+            'res_model': 'cashflow.promise', 'view_mode': 'list,form',
+            'views': [(self.env.ref('megatk_cash_flow_forecast.view_completed_payments_list').id, 'list'),
+                      (self.env.ref('megatk_cash_flow_forecast.view_cashflow_promise_form').id, 'form')],
+            'domain': [('plan_id', '=', self.id), ('state', '=', 'paid')],
+            'context': {'create': False},
+        }
+
     def action_view_cancelled_promises(self):
         self.ensure_one()
         list_view = self.env.ref(
