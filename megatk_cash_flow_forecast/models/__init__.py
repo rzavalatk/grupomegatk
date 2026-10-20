@@ -3,3 +3,5 @@ from . import cartera_snapshot
 from . import gestion_cobros
 from . import integracion_odoo
 from . import aged_partner_cashflow
+
+from . import payment_completion

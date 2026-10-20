@@ -19,3 +19,5 @@ access_cashflow_classification_collections,cashflow.classification.collections,m
 access_cashflow_note_collections,cashflow.management.note.collections,model_cashflow_management_note,group_cashflow_collections,1,0,1,0
 access_cashflow_note_user,cashflow.management.note.user,model_cashflow_management_note,group_cashflow_user,1,0,1,0
 access_cashflow_note_manager,cashflow.management.note.manager,model_cashflow_management_note,group_cashflow_manager,1,1,1,1
+
+access_cashflow_payment_completion,cashflow.payment.completion,model_cashflow_payment_completion,group_cashflow_user,1,1,1,1

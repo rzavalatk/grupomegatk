@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <record id="action_report_portfolio" model="ir.actions.report">
     <field name="name">Detalle de cartera proyectado</field>
@@ -10,7 +11,7 @@
   </record>
   <template id="report_portfolio_document">
     <t t-call="web.html_container">
-      <t t-set="o" t-value="docs[:1]"/>
+      <meta charset="utf-8"/><t t-set="o" t-value="docs[:1]"/>
       <t t-call="web.external_layout">
         <div class="page">
           <h2 t-if="docs.env.context.get('cashflow_report_direction') == 'receivable'">Detalle de cuentas por cobrar</h2>
@@ -21,35 +22,35 @@
           <t t-foreach="docs._portfolio_report_sections()" t-as="section">
             <div t-if="section['lines']" style="margin-top:18px; page-break-inside:avoid">
               <h3 style="margin:0 0 6px;color:#1f4e78" t-esc="section['title']"/>
-              <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse">
-                <thead><tr style="background: #e8eef0"><th>Contacto</th><th>Semanas</th><th>Al día</th><th>1–30</th><th>31–60</th><th>61–90</th><th>91–120</th><th>Antiguos</th><th>Crédito / anticipo</th><th>Total</th><th>Última gestión</th></tr></thead>
+              <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse;border:1px solid #6b7280;border-collapse:collapse">
+                <thead><tr style="background: #e8eef0"><th style=";border:1px solid #6b7280;padding:5px">Contacto</th><th style=";border:1px solid #6b7280;padding:5px">Semanas</th><th style=";border:1px solid #6b7280;padding:5px">Al día</th><th style=";border:1px solid #6b7280;padding:5px">1–30</th><th style=";border:1px solid #6b7280;padding:5px">31–60</th><th style=";border:1px solid #6b7280;padding:5px">61–90</th><th style=";border:1px solid #6b7280;padding:5px">91–120</th><th style=";border:1px solid #6b7280;padding:5px">Antiguos</th><th style=";border:1px solid #6b7280;padding:5px">Crédito / anticipo</th><th style=";border:1px solid #6b7280;padding:5px">Total</th><th style=";border:1px solid #6b7280;padding:5px">Última gestión</th></tr></thead>
                 <tbody>
                   <tr t-foreach="section['lines']" t-as="line">
-                    <td t-esc="line.partner_id.name"/>
-                    <td t-esc="line.projected_periods or ''"/>
-                    <td t-att-style="'background:#d9f2df' if line.at_day else ''"><span t-if="line.at_day" t-out="line.at_day" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#ffd8df' if line.old else ''"><span t-if="line.old" t-out="line.old" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td t-att-style="'background:#d9eafa' if line.credit else ''"><span t-if="line.credit" t-out="line.credit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td><strong t-out="line.total" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
-                    <td><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
+                    <td t-esc="line.partner_id.name" style=";border:1px solid #6b7280;padding:5px"/>
+                    <td t-esc="line.projected_periods or ''" style=";border:1px solid #6b7280;padding:5px"/>
+                    <td t-att-style="'background:#d9f2df' if line.at_day else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.at_day" t-out="line.at_day" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#fff0bd' if line.days_1_30 else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.days_1_30" t-out="line.days_1_30" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_31_60 else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.days_31_60" t-out="line.days_31_60" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_61_90 else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.days_61_90" t-out="line.days_61_90" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#ffd8df' if line.days_91_120 else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.days_91_120" t-out="line.days_91_120" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#ffd8df' if line.old else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.old" t-out="line.old" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td t-att-style="'background:#d9eafa' if line.credit else ''" style=";border:1px solid #6b7280;padding:5px"><span t-if="line.credit" t-out="line.credit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><strong t-out="line.total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: line.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-esc="line.last_management or ''"/><br/><small t-if="line.next_action_date">Próxima: <span t-esc="line.next_action_date"/></small></td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr style="font-weight:bold;background:#f4f6f8">
-                    <td colspan="2">Total <span t-esc="section['title']"/></td>
-                    <td><span t-out="section['totals']['at_day']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['days_1_30']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['days_31_60']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['days_61_90']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['days_91_120']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['old']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['credit']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><strong t-out="section['totals']['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td/>
+                    <td colspan="2" style=";border:1px solid #6b7280;padding:5px">Total <span t-esc="section['title']"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['at_day']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['days_1_30']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['days_31_60']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['days_61_90']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['days_91_120']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['old']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['credit']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><strong t-out="section['totals']['total']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"/>
                   </tr>
                 </tfoot>
               </table>
@@ -79,30 +80,30 @@
 
   <template id="report_cashflow_document">
     <t t-call="web.html_container">
-      <t t-foreach="docs" t-as="o">
+      <meta charset="utf-8"/><t t-foreach="docs" t-as="o">
           <div class="page cashflow-report" style="font-size:15px;padding-top:8px">
             <h2 style="text-align:center; margin-bottom:2px">FLUJO DE CAJA PROYECTADO</h2>
             <p style="text-align:center;color:#667085">Resumen ejecutivo — los conceptos pueden seleccionarse para consultar su detalle.</p>
 
-            <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
+            <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse;border:1px solid #6b7280;border-collapse:collapse">
               <thead>
                 <tr style="background:#111827;color:white">
-                  <th style="color:#fff">Concepto</th><th style="color:#fff">Semana 1</th><th style="color:#fff">Semana 2</th><th style="color:#fff">Semana 3</th><th style="color:#fff">Pendiente</th>
+                  <th style="color:#fff;border:1px solid #6b7280;padding:5px">Concepto</th><th style="color:#fff;border:1px solid #6b7280;padding:5px">Semana 1</th><th style="color:#fff;border:1px solid #6b7280;padding:5px">Semana 2</th><th style="color:#fff;border:1px solid #6b7280;padding:5px">Semana 3</th><th style="color:#fff;border:1px solid #6b7280;padding:5px">Pendiente</th>
                 </tr>
               </thead>
               <tbody>
                 <tr style="background:#eef2f6;font-weight:bold">
-                  <td>Disponible inicial de la semana</td>
-                  <td><span t-out="o.opening_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                  <td><span t-out="o.opening_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                  <td><span t-out="o.opening_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                  <td><span t-out="o.opening_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                  <td style=";border:1px solid #6b7280;padding:5px">Disponible inicial de la semana</td>
+                  <td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.opening_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                  <td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.opening_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                  <td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.opening_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                  <td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.opening_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
                 </tr>
-                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-collections" style="color:#126b35">Cobros de clientes</a></td><td><span t-out="o.receivable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.receivable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
-                <tr style="background:#d9f2df;color:#126b35"><td><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td><span t-out="o.financing_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.financing_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
-                <tr style="background:#d9f2df;color:#126b35"><td>Otros ingresos</td><td><span t-out="o.other_income_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.other_income_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
-                <tr style="background:#fde2e2;color:#9b1c1c"><td><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td><span t-out="o.payable_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td><span t-out="o.payable_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
-                <tr style="background:#111827;font-weight:bold;font-size:14px"><td style="color:#fff">Neto proyectado</td><td style="color:#fff"><span t-out="o.projected_week_1" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td style="color:#fff"><span t-out="o.projected_week_2" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td style="color:#fff"><span t-out="o.projected_week_3" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td><td style="color:#fff"><span t-out="o.projected_pending" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td style=";border:1px solid #6b7280;padding:5px"><a href="#detail-collections" style="color:#126b35">Cobros de clientes</a></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.receivable_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.receivable_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.receivable_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.receivable_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td style=";border:1px solid #6b7280;padding:5px"><a href="#detail-financing" style="color:#126b35">Financiamientos proyectados</a></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.financing_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.financing_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.financing_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.financing_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td></tr>
+                <tr style="background:#d9f2df;color:#126b35"><td style=";border:1px solid #6b7280;padding:5px">Otros ingresos</td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.other_income_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.other_income_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.other_income_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.other_income_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td></tr>
+                <tr style="background:#fde2e2;color:#9b1c1c"><td style=";border:1px solid #6b7280;padding:5px"><a href="#detail-payables" style="color:#9b1c1c">Pagos y salidas</a></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.payable_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.payable_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.payable_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style=";border:1px solid #6b7280;padding:5px"><span t-out="o.payable_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td></tr>
+                <tr style="background:#111827;font-weight:bold;font-size:14px"><td style="color:#fff;border:1px solid #6b7280;padding:5px">Neto proyectado</td><td style="color:#fff;border:1px solid #6b7280;padding:5px"><span t-out="o.projected_week_1" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style="color:#fff;border:1px solid #6b7280;padding:5px"><span t-out="o.projected_week_2" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style="color:#fff;border:1px solid #6b7280;padding:5px"><span t-out="o.projected_week_3" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td><td style="color:#fff;border:1px solid #6b7280;padding:5px"><span t-out="o.projected_pending" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td></tr>
               </tbody>
             </table>
 
@@ -117,36 +118,36 @@
           <t t-foreach="o._cashflow_report_sections()" t-as="section">
             <div t-if="section['lines']" class="page" t-att-id="'detail-' + section['key']" style="font-size:14px;padding-top:8px">
               <h3 t-att-style="'color:#126b35' if section['kind'] == 'income' else 'color:#9b1c1c'" t-esc="section['title']"/>
-              <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse">
+              <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse;border:1px solid #6b7280;border-collapse:collapse">
                 <thead>
                   <tr t-att-style="'background:#d9f2df' if section['kind'] == 'income' else 'background:#fde2e2'">
-                    <th>Concepto</th><th>Saldo HNL</th><th>Saldo USD</th><th>Semana 1</th><th>Semana 2</th><th>Semana 3</th><th>Pendiente</th><th>Total</th><th>Detalle</th>
+                    <th style=";border:1px solid #6b7280;padding:5px">Concepto</th><th style=";border:1px solid #6b7280;padding:5px">Saldo HNL</th><th style=";border:1px solid #6b7280;padding:5px">Saldo USD</th><th style=";border:1px solid #6b7280;padding:5px">Semana 1</th><th style=";border:1px solid #6b7280;padding:5px">Semana 2</th><th style=";border:1px solid #6b7280;padding:5px">Semana 3</th><th style=";border:1px solid #6b7280;padding:5px">Pendiente</th><th style=";border:1px solid #6b7280;padding:5px">Total</th><th style=";border:1px solid #6b7280;padding:5px">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr t-foreach="section['lines']" t-as="line">
-                    <td t-esc="line['name']"/>
-                    <td><span t-if="line['balance_hnl']" t-out="line['balance_hnl']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td t-esc="line['balance_usd'] and ('$ %0.2f' % line['balance_usd']) or ''"/>
-                    <td><span t-if="line['week_1']" t-out="line['week_1']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-if="line['week_2']" t-out="line['week_2']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-if="line['week_3']" t-out="line['week_3']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-if="line['pending']" t-out="line['pending']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><strong t-if="line['total']" t-out="line['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td t-esc="line['note']"/>
+                    <td t-esc="line['name']" style=";border:1px solid #6b7280;padding:5px"/>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-if="line['balance_hnl']" t-out="line['balance_hnl']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td t-esc="line['balance_usd'] and ('$ %0.2f' % line['balance_usd']) or ''" style=";border:1px solid #6b7280;padding:5px"/>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-if="line['week_1']" t-out="line['week_1']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-if="line['week_2']" t-out="line['week_2']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-if="line['week_3']" t-out="line['week_3']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-if="line['pending']" t-out="line['pending']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><strong t-if="line['total']" t-out="line['total']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td t-esc="line['note']" style=";border:1px solid #6b7280;padding:5px"/>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr style="font-weight:bold">
-                    <td>Total</td>
-                    <td><span t-out="section['totals']['balance_hnl']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td t-esc="'$ %0.2f' % section['totals']['balance_usd']"/>
-                    <td><span t-out="section['totals']['week_1']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['week_2']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['week_3']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['pending']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td><span t-out="section['totals']['total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                    <td/>
+                    <td style=";border:1px solid #6b7280;padding:5px">Total</td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['balance_hnl']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td t-esc="'$ %0.2f' % section['totals']['balance_usd']" style=";border:1px solid #6b7280;padding:5px"/>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['week_1']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['week_2']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['week_3']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['pending']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"><span t-out="section['totals']['total']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                    <td style=";border:1px solid #6b7280;padding:5px"/>
                   </tr>
                 </tfoot>
               </table>
