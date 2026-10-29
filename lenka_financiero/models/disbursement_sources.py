@@ -11,7 +11,8 @@ class LenkaDisbursementSources(models.Model):
     @api.onchange('operation_id', 'payment_method')
     def _onchange_disbursement_journal(self):
         if self.payment_method != 'refinance_entry' and self.operation_id:
-            self.disbursement_journal_id = self.operation_id.company_id.lenka_disbursement_journal_id
+            if not self.disbursement_journal_id or self.disbursement_journal_id.company_id != self.operation_id.company_id:
+                self.disbursement_journal_id = self.operation_id.company_id.lenka_disbursement_journal_id
 
     def write(self, vals):
         if 'disbursement_journal_id' in vals and any(r.state != 'draft' for r in self):

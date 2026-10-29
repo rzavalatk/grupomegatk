@@ -138,3 +138,9 @@ class TestLenkaBanks(TransactionCase):
         disbursement = self._disbursement(self._operation(), 150000, method='credit_card')
         with self.assertRaises(ValidationError):
             disbursement.action_post()
+
+    def test_method_change_preserves_selected_bank(self):
+        disbursement = self._disbursement(self._operation(), 150000, self.journals[1], 'transfer')
+        disbursement.payment_method = 'check'
+        disbursement._onchange_disbursement_journal()
+        self.assertEqual(disbursement.disbursement_journal_id, self.journals[1])
