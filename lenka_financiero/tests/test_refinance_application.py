@@ -9,6 +9,7 @@ class TestRefinanceApplication(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env.user.write({'groups_id': [Command.link(cls.env.ref('lenka_financiero.group_lenka_manager').id)]})
         cls.company = cls.env.company
         cls.partner = cls.env['res.partner'].create({'name': 'David nuevo - prueba refinanciamiento'})
         cls.old_partner = cls.env['res.partner'].create({'name': 'Empleado David - prueba'})
@@ -203,7 +204,7 @@ class TestRefinanceApplication(TransactionCase):
         with self.assertRaises(ValidationError):
             application.action_post()
         operation.company_id = self.company
-        other_currency = self.env['res.currency'].search([('id', '!=', operation.currency_id.id)], limit=1)
+        other_currency = self.env['res.currency'].with_context(active_test=False).search([('id', '!=', operation.currency_id.id)], limit=1)
         other_currency.active = True
         operation.currency_id = other_currency
         with self.assertRaises(ValidationError):
