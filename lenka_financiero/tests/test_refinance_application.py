@@ -196,19 +196,22 @@ class TestRefinanceApplication(TransactionCase):
             self.assertEqual(cash.reference, reference)
 
     def test_wrong_company_and_currency_are_rejected(self):
-        operation = self._operation()
         line = self._entry()
-        application = self._application(operation, line)
         other_company = self.env['res.company'].create({'name': 'Otra empresa prueba refinanciamiento'})
-        operation.company_id = other_company
-        with self.assertRaises(ValidationError):
-            application.action_post()
-        operation.company_id = self.company
-        other_currency = self.env['res.currency'].with_context(active_test=False).search([('id', '!=', operation.currency_id.id)], limit=1)
+        other_currency = self.env['res.currency'].with_context(active_test=False).search(
+            [('id', '!=', self.company.currency_id.id)], limit=1)
         other_currency.active = True
-        operation.currency_id = other_currency
-        with self.assertRaises(ValidationError):
-            application.action_post()
+        for overrides in [{'company_id': other_company.id}, {'currency_id': other_currency.id}]:
+            values = {
+                'partner_id': self.partner.id, 'operation_type': 'loan',
+                'principal_amount': 75000, 'interest_rate': 4.5,
+                'term_months': 60, 'is_quote': False, 'state': 'contracted',
+            }
+            values.update(overrides)
+            operation = self.env['lenka.financial.operation'].create(values)
+            application = self._application(operation, line)
+            with self.assertRaises(ValidationError):
+                application.action_post()
 
     def test_link_on_cash_and_internal_funding_source_are_rejected(self):
         operation = self._operation()

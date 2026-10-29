@@ -349,8 +349,13 @@ class TestLenkaEndToEnd(TransactionCase):
             'operation_type': 'loan',
             'body_html': '<p>{{CLIENTE}}</p>',
         })
-        operation.action_generate_contract_documents()
-        document = operation.generated_document_ids.filtered(lambda d: d.template_id == template)[:1]
+        # This case tests attachment evidence using its explicit fixture,
+        # independently of the built-in loan template's party validation.
+        document = self.env['lenka.generated.document'].create({
+            'name': 'Contrato sin evidencia adjunta', 'operation_id': operation.id,
+            'template_id': template.id,
+        })
+        document.action_render()
         self.assertTrue(document)
         document.write({'state': 'signed'})
         operation.write({'contract_signed': True})
