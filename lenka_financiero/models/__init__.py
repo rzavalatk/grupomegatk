@@ -18,3 +18,4 @@ from . import sole_signature
 from . import secured_loan
 
 from . import correction_wizard
+from . import refinance_application

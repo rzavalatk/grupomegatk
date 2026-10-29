@@ -1,0 +1,37 @@
+name: Lenka - refinanciamiento contabilizado
+on:
+  push:
+    branches: [lenka-refinanciamiento-contabilizado-20261029]
+    paths:
+      - 'lenka_financiero/**'
+      - '.github/workflows/lenka-refinance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-odoo18:
+    if: github.repository == 'ajz04megatk/grupomegatk'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Start isolated PostgreSQL
+        run: |
+          docker network create lenka-test
+          docker run -d --name lenka-pg --network lenka-test -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=test-only -e POSTGRES_DB=postgres postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec lenka-pg pg_isready -U odoo; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Install module and run refinancing tests in Odoo 18
+        run: |
+          docker run --rm --network lenka-test \
+            -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
+            odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+            -d lenka_refinance_test -i lenka_financiero --without-demo=all \
+            --test-enable --test-tags '/lenka_financiero:TestRefinanceApplication' \
+            --stop-after-init --max-cron-threads=0 --log-level=test
+      - name: Stop isolated database
+        if: always()
+        run: docker rm -f lenka-pg || true
