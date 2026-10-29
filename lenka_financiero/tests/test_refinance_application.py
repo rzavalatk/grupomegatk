@@ -193,3 +193,40 @@ class TestRefinanceApplication(TransactionCase):
             cash.write({'payment_method': method, 'reference': reference})
             cash.action_post()
             self.assertEqual(cash.reference, reference)
+
+    def test_wrong_company_and_currency_are_rejected(self):
+        operation = self._operation()
+        line = self._entry()
+        application = self._application(operation, line)
+        other_company = self.env['res.company'].create({'name': 'Otra empresa prueba refinanciamiento'})
+        operation.company_id = other_company
+        with self.assertRaises(ValidationError):
+            application.action_post()
+        operation.company_id = self.company
+        other_currency = self.env['res.currency'].search([('id', '!=', operation.currency_id.id)], limit=1)
+        other_currency.active = True
+        operation.currency_id = other_currency
+        with self.assertRaises(ValidationError):
+            application.action_post()
+
+    def test_link_on_cash_and_internal_funding_source_are_rejected(self):
+        operation = self._operation()
+        line = self._entry()
+        with self.assertRaises(ValidationError), self.cr.savepoint():
+            self.env['lenka.disbursement'].create({
+                'operation_id': operation.id, 'amount': 19269.20,
+                'payment_method': 'transfer', 'refinance_line_id': line.id,
+            })
+        with self.assertRaises(ValidationError), self.cr.savepoint():
+            self.env['lenka.disbursement'].create({
+                'operation_id': operation.id, 'amount': 19269.20,
+                'payment_method': 'refinance_entry', 'refinance_line_id': line.id,
+                'funding_line_id': operation.funding_line_ids.id,
+            })
+
+    def test_reversed_entry_is_rejected(self):
+        line = self._entry()
+        line.move_id._reverse_moves([{'date': '2026-10-29'}], cancel=True)
+        application = self._application(self._operation(), line)
+        with self.assertRaises(ValidationError):
+            application.action_post()

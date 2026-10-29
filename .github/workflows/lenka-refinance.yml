@@ -30,7 +30,7 @@ jobs:
             -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
             odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
             -d lenka_refinance_test -i lenka_financiero --without-demo=all \
-            --test-enable --test-tags '/lenka_financiero:TestRefinanceApplication' \
+            --test-enable --test-tags '/lenka_financiero' \
             --stop-after-init --max-cron-threads=0 --log-level=test
       - name: Stop isolated database
         if: always()
