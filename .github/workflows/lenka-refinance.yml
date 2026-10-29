@@ -14,6 +14,10 @@ jobs:
     if: github.repository == 'ajz04megatk/grupomegatk'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [core, treasury]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Start isolated PostgreSQL
@@ -26,6 +30,7 @@ jobs:
           done
           exit 1
       - name: Install module and run refinancing tests in Odoo 18
+        if: matrix.kind == 'core'
         run: |
           docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
             -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
@@ -34,6 +39,7 @@ jobs:
             --test-enable --test-tags '/lenka_financiero' \
             --stop-after-init --max-cron-threads=0 --log-level=test
       - name: Install treasury bridge and test split checks
+        if: matrix.kind == 'treasury'
         run: |
           docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
             -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
