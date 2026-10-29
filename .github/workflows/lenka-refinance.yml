@@ -4,6 +4,7 @@ on:
     branches: [lenka-refinanciamiento-contabilizado-20261029]
     paths:
       - 'lenka_financiero/**'
+      - 'lenka_banks/**'
       - '.github/workflows/lenka-refinance.yml'
   workflow_dispatch:
 permissions:
@@ -31,6 +32,16 @@ jobs:
             odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
             -d lenka_refinance_test -i lenka_financiero --without-demo=all \
             --test-enable --test-tags '/lenka_financiero' \
+            --stop-after-init --max-cron-threads=0 --log-level=test
+      - name: Install treasury bridge and test split checks
+        run: |
+          docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
+            -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
+            -v "$GITHUB_WORKSPACE/banks:/mnt/extra-addons/banks:ro" \
+            -v "$GITHUB_WORKSPACE/lenka_banks:/mnt/extra-addons/lenka_banks:ro" \
+            odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+            -d lenka_banks_test -i lenka_banks --without-demo=all \
+            --test-enable --test-tags '/lenka_banks' \
             --stop-after-init --max-cron-threads=0 --log-level=test
       - name: Stop isolated database
         if: always()

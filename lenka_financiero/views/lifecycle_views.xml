@@ -67,6 +67,7 @@
                             <field name="destination_type"/>
                             <field name="destination_partner_id"/>
                             <field name="payment_method"/>
+                            <field name="disbursement_journal_id"/>
                             <field name="funding_line_id"/>
                             <field name="reference"/>
                             <field name="move_id"/>
@@ -130,6 +131,7 @@
                             <field name="currency_id" invisible="1"/>
                             <field name="refinance_line_id" invisible="payment_method != 'refinance_entry'" required="payment_method == 'refinance_entry'" readonly="state != 'draft'" domain="[('parent_state', '=', 'posted'), ('move_id.move_type', '=', 'entry'), ('debit', '&gt;', 0), ('company_id', '=', refinance_company_id), ('partner_id', '=', refinance_partner_id), ('account_id', '=', refinance_portfolio_account_id), ('currency_id', '=', currency_id)]" options="{'no_create': True}"/>
                             <field name="refinance_move_id" invisible="not refinance_move_id"/>
+                            <field name="disbursement_journal_id" invisible="payment_method == 'refinance_entry'" domain="[('company_id', '=', refinance_company_id)]" readonly="state != 'draft'" options="{'no_create': True}"/>
                             <field name="funding_line_id" invisible="payment_method == 'refinance_entry'"/>
                             <field name="reference" placeholder="Numero de cheque, transaccion bancaria o referencia del refinanciamiento"/>
                             <field name="move_id" readonly="1"/>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+history_wizard,Historial cheque Lenka,model_lenka_historical_check_wizard,lenka_financiero.group_lenka_manager,1,1,1,1
+history_line,Linea historial cheque Lenka,model_lenka_historical_check_line,lenka_financiero.group_lenka_manager,1,1,1,1
