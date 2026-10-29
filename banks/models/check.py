@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-import odoo.addons.decimal_precision as dp
 import math
 from datetime import datetime
 from odoo.exceptions import UserError
