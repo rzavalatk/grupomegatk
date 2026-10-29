@@ -26,7 +26,7 @@ jobs:
           exit 1
       - name: Install module and run refinancing tests in Odoo 18
         run: |
-          docker run --rm --network lenka-test \
+          docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
             -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
             odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
             -d lenka_refinance_test -i lenka_financiero --without-demo=all \
