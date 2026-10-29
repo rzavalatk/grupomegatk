@@ -59,6 +59,7 @@ class LenkaBankDisbursement(models.Model):
             sequence.invalidate_recordset()
             check = self.env['banks.check'].create(rec._native_check_values(journal, rec.amount))
             check.action_validate()  # Native numbering and ONE native draft accounting entry.
+            sequence.invalidate_recordset(['number_next_actual'])
             if not check.move_id or check.move_id.state != 'draft':
                 raise ValidationError(_('Tesoreria no genero el borrador contable esperado.'))
             rec._link_disbursement_move(check.move_id)
