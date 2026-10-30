@@ -1,6 +1,10 @@
 # Entregas de Lenka y Tesorería
 
-Instalar `lenka_financiero` versión 18.0.1.0.13 y el puente `lenka_banks` versión 18.0.1.0.1 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+Instalar `lenka_financiero` versión 18.0.1.0.13 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+
+## Anular desembolsos anteriores sin banco
+
+El banco es obligatorio mientras se prepara una nueva entrega en borrador. En los desembolsos ya aplicados o anulados el campo es de solo lectura y no impide guardar o anular registros antiguos que quedaron sin banco. La anulación conserva las validaciones existentes: no admite cheques vinculados, asientos publicados ni operaciones activas o terminadas. La actualización no anula ni completa registros automáticamente.
 
 ## Actualización aislada de los históricos de otras empresas
 

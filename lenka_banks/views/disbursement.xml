@@ -9,7 +9,7 @@
                 <button name="action_register_historical_checks" type="object" string="Identificar cheques ya contabilizados" invisible="payment_method != 'check' or state != 'posted' or not move_id or bank_check_ids" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
             <xpath expr="//field[@name='disbursement_journal_id']" position="attributes">
-                <attribute name="required">payment_method in ('check', 'transfer', 'cash', 'credit_card')</attribute>
+                <attribute name="required">state == 'draft' and payment_method in ('check', 'transfer', 'cash', 'credit_card')</attribute>
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <div class="alert alert-info" invisible="payment_method != 'check'">Cada entrega por cheque debe tener su propio desembolso y banco. Crear borrador contable registra el cheque en Tesoreria usando la misma chequera. Para una salida antigua ya contabilizada utilice Identificar cheques ya contabilizados; no se generara otra salida bancaria.</div>
