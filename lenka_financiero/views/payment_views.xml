@@ -104,8 +104,8 @@
                             <field name="paid_interest" readonly="1"/>
                             <field name="paid_late_fees" readonly="1"/>
                             <field name="paid_card_fees" readonly="1"/>
-                            <field name="late_fee_rate"/>
-                            <field name="grace_days"/>
+                            <field name="late_fee_rate" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
+                            <field name="grace_days" readonly="state not in ('draft', 'review', 'rejected') or sole_signature_status in ('pending', 'approved')"/>
                         </group>
                     </group>
                     <button name="action_update_late_fees" string="Actualizar mora" type="object"/>
@@ -134,3 +134,4 @@
         </field>
     </record>
 </odoo>
+

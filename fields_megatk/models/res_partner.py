@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 #CAMPOS EN FORMULARIO CONTACTO/VENTAS Y COMPRAS/VARIOS
 class Campos_clientes(models.Model):
@@ -23,25 +23,33 @@ class Campos_clientes(models.Model):
     
     @api.model_create_multi
     def create(self, vals_list):
-        """Condicion que busca el vat de todos los clientes y luego verifica si ya existe."""
-
-        company_id = self.env.user.company_id.id
-        for idx, vals in enumerate(vals_list):
-            vat = vals.get('vat')
-            if vat:
-                partner = self.env['res.partner'].search(['&',('vat', '=', vat),('company_id', '=', self.env.user.company_id.id)], limit=1)
-                if partner:
-                    raise UserError(_("Usuario ya creado con este RTN / En caso de duplicar este contacto con un numero diferente de RTN se le multara."))
-
-            vals = self._normalize_zona_in_vals(vals)
-            vals['company_id'] = company_id
-            vals_list[idx] = vals
-
-        return super().create(vals_list)
+        prepared = []
+        for values in vals_list:
+            vals = self._normalize_zona_in_vals(values)
+            # Respect explicit company (including shared contacts); otherwise use
+            # the company selected in this session, never the user's main company.
+            vals.setdefault('company_id', self.env.context.get('default_company_id', self.env.company.id))
+            prepared.append(vals)
+        return super().create(prepared)
 
     def write(self, vals):
-        vals = self._normalize_zona_in_vals(vals)
-        return super().write(vals)
+        return super().write(self._normalize_zona_in_vals(vals))
+
+    @api.constrains('vat', 'company_id', 'parent_id')
+    def _check_company_rtn(self):
+        for partner in self.filtered('vat'):
+            # Odoo intentionally propagates a commercial entity's fiscal data
+            # to its dependent contacts. Those are not duplicate customers.
+            commercial = partner.commercial_partner_id
+            others = self.sudo().with_context(active_test=False).search([
+                ('company_id', '=', partner.company_id.id or False),
+                ('vat', '=', partner.vat), ('id', '!=', partner.id),
+            ])
+            if any(other.commercial_partner_id != commercial for other in others):
+                raise ValidationError(_(
+                    'Este RTN ya está registrado en esta empresa. Seleccione el contacto existente. '
+                    'Puede registrar el mismo RTN por separado en otra empresa.'
+                ))
 
     def _normalize_zona_in_vals(self, vals):
         """Mantiene x_zonac guardado como nombre para exportaciones legibles."""

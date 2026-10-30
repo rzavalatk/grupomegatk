@@ -37,3 +37,5 @@ access_lenka_generated_document_manager,lenka.generated.document.manager,model_l
 access_lenka_demo_setup_manager,lenka.demo.setup.manager,model_lenka_demo_setup,lenka_financiero.group_lenka_manager,1,1,1,1
 access_lenka_restructuring_user,lenka.restructuring.user,model_lenka_restructuring,lenka_financiero.group_lenka_user,1,1,1,0
 access_lenka_restructuring_manager,lenka.restructuring.manager,model_lenka_restructuring,lenka_financiero.group_lenka_manager,1,1,1,1
+
+access_lenka_correction_wizard,lenka.correction.wizard,model_lenka_correction_wizard,lenka_financiero.group_lenka_sole_authorizer,1,1,1,1

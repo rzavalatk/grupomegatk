@@ -131,7 +131,7 @@ class LenkaDisbursement(models.Model):
         ('cash', 'Efectivo'), ('transfer', 'Transferencia'), ('check', 'Cheque'),
         ('credit_card', 'Tarjeta de credito empresarial'), ('other', 'Otro')
     ], string='Medio', required=True, default='transfer')
-    reference = fields.Char(string='Referencia')
+    reference = fields.Char(string='Numero de cheque / transaccion / referencia', tracking=True)
     funding_line_id = fields.Many2one('lenka.funding.line', string='Fuente de fondeo')
     state = fields.Selection([('draft', 'Borrador'), ('posted', 'Aplicado'), ('cancelled', 'Anulado')], default='draft', tracking=True, copy=False)
 

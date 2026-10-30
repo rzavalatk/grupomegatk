@@ -55,11 +55,21 @@ class LenkaRestructuring(models.Model):
     proposed_term_months = fields.Integer(string='Nuevo plazo (meses)', required=True, tracking=True)
     proposed_calculation_method = fields.Selection([
         ('level', 'Cuota nivelada'),
+        ('interest_then_level', 'Solo intereses y luego cuota nivelada'),
         ('balance', 'Interes sobre saldo / capital fijo'),
         ('interest_only', 'Solo intereses + capital al final'),
         ('balloon', 'Cuota bomba / extraordinarios'),
         ('custom', 'Plan personalizado'),
     ], string='Nuevo metodo', required=True, default='level')
+    proposed_interest_only_months = fields.Integer(string='Nuevos meses de solo intereses', default=0)
+
+    @api.constrains('proposed_calculation_method', 'proposed_interest_only_months', 'proposed_term_months')
+    def _check_proposed_mixed_plan(self):
+        for rec in self:
+            if rec.proposed_interest_only_months < 0:
+                raise ValidationError(_('Los meses de solo intereses no pueden ser negativos.'))
+            if rec.proposed_calculation_method == 'interest_then_level' and not 0 < rec.proposed_interest_only_months < rec.proposed_term_months:
+                raise ValidationError(_('El nuevo plan mixto requiere meses de solo intereses y de cuota nivelada dentro del plazo total.'))
 
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -106,6 +116,7 @@ class LenkaRestructuring(models.Model):
             vals.setdefault('proposed_rate_period', operation.rate_period)
             vals.setdefault('proposed_term_months', operation.term_months)
             vals.setdefault('proposed_calculation_method', operation.calculation_method)
+            vals.setdefault('proposed_interest_only_months', operation.interest_only_months)
             records |= super().create(vals)
         return records
 
@@ -124,6 +135,7 @@ class LenkaRestructuring(models.Model):
             'operation_id', 'proposed_principal_amount', 'proposed_interest_rate',
             'proposed_rate_period', 'proposed_term_months',
             'proposed_calculation_method', 'reason', 'request_date', 'settlement_method',
+            'proposed_interest_only_months',
         }
         if proposal_fields.intersection(vals):
             locked = self.filtered(lambda r: r.state in ('approved', 'prepared', 'cancelled'))
@@ -270,6 +282,7 @@ class LenkaRestructuring(models.Model):
             successor = self.env['lenka.financial.operation'].create({
                 'partner_id': rec.partner_id.id,
                 'guarantor_ids': [(6, 0, rec.operation_id.guarantor_ids.ids)],
+                'security_mode': rec.operation_id.security_mode,
                 'operation_type': rec.operation_id.operation_type,
                 'product_id': rec.operation_id.product_id.id,
                 'company_id': rec.company_id.id,
@@ -280,6 +293,7 @@ class LenkaRestructuring(models.Model):
                 'rate_period': rec.proposed_rate_period,
                 'term_months': rec.proposed_term_months,
                 'calculation_method': rec.proposed_calculation_method,
+                'interest_only_months': rec.proposed_interest_only_months,
                 'is_quote': False,
                 'state': 'review',
                 'notes': _('Preparada desde reestructuracion %s de la operacion %s. La operacion original permanece intacta hasta completar contrato y cierre controlado.') % (rec.name, rec.operation_id.name),
@@ -318,7 +332,9 @@ class LenkaRestructuring(models.Model):
                     or successor.interest_rate != rec.proposed_interest_rate
                     or successor.rate_period != rec.proposed_rate_period
                     or successor.term_months != rec.proposed_term_months
-                    or successor.calculation_method != rec.proposed_calculation_method):
+                    or successor.calculation_method != rec.proposed_calculation_method
+                    or successor.interest_only_months != rec.proposed_interest_only_months
+                    or successor.security_mode != original.security_mode):
                 raise ValidationError(_('La nueva operacion debe conservar las condiciones aprobadas de la reestructuracion.'))
             super(LenkaRestructuring, rec).write({
                 'original_operation_closed': True, 'completed_date': fields.Date.context_today(rec),
@@ -394,3 +410,4 @@ class LenkaRestructuringDisbursement(models.Model):
         if any(rec.state == 'draft' and rec.operation_id.restructuring_in_ids for rec in self):
             raise ValidationError(_('Complete la sustitucion desde Reestructuraciones. El saldo se traslada sin un nuevo desembolso de efectivo.'))
         return super().action_post()
+

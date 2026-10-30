@@ -26,6 +26,8 @@
                                 <tr><td><strong>Monto financiado</strong></td><td><span t-field="o.financed_amount"/></td><td><strong>Plazo</strong></td><td><span t-field="o.term_months"/> meses</td></tr>
                                 <tr><td><strong>Tasa</strong></td><td><span t-field="o.interest_rate"/>% <span t-field="o.rate_period"/></td><td><strong>Metodo</strong></td><td><span t-field="o.calculation_method"/></td></tr>
                                 <tr t-if="o.operation_type == 'lease'"><td><strong>Opcion de compra</strong></td><td><span t-field="o.residual_purchase_amount"/></td><td></td><td></td></tr>
+                                <tr><td><strong>Respaldo</strong></td><td colspan="3"><span t-field="o.security_mode"/></td></tr>
+                                <tr t-if="o.calculation_method == 'interest_then_level'"><td><strong>Solo intereses</strong></td><td><span t-field="o.interest_only_months"/> meses</td><td><strong>Cuota nivelada</strong></td><td><span t-field="o.level_payment_months"/> meses desde <span t-field="o.level_payment_start_date"/></td></tr>
                             </tbody>
                         </table>
 
@@ -56,3 +58,4 @@
         </t>
     </template>
 </odoo>
+

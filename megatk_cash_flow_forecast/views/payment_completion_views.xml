@@ -1,0 +1,30 @@
+<odoo>
+  <record id="view_payment_completion_form" model="ir.ui.view">
+    <field name="name">cashflow.payment.completion.form</field><field name="model">cashflow.payment.completion</field>
+    <field name="arch" type="xml"><form string="Marcar pago realizado">
+      <group><field name="promise_id" invisible="1"/><field name="partner_id" options="{'no_open': True}"/><field name="currency_id" options="{'no_open': True}"/><field name="planned_amount"/><field name="planned_period"/><field name="amount"/><field name="payment_date"/><field name="reference"/></group>
+      <div class="alert alert-info">Se retirará el importe pagado de la proyección. Si es un abono parcial, solo quedará la diferencia pendiente. Esta acción no realiza transferencias ni genera asientos contables.</div>
+      <footer><button name="action_confirm" string="Confirmar pago realizado" type="object" class="btn-primary"/><button string="Cancelar" special="cancel"/></footer>
+    </form></field>
+  </record>
+  <record id="view_plan_payment_completion" model="ir.ui.view">
+    <field name="name">cashflow.plan.payment.completion</field><field name="model">cashflow.plan</field><field name="inherit_id" ref="view_cashflow_plan_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='creditor_promise_ids']/list" position="inside">
+        <button name="action_open_payment_completion" string="Marcar pago realizado" type="object" class="btn-link" invisible="state != 'active'"/>
+      </xpath>
+      <xpath expr="//header" position="inside"><button name="action_view_completed_payments" string="Pagos realizados" type="object"/></xpath>
+    </field>
+  </record>
+  <record id="view_promise_payment_completion" model="ir.ui.view">
+    <field name="name">cashflow.promise.payment.completion</field><field name="model">cashflow.promise</field><field name="inherit_id" ref="view_cashflow_promise_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside"><button name="action_open_payment_completion" string="Marcar pago realizado" type="object" class="btn-primary" invisible="direction != 'payable' or state != 'active'"/></xpath>
+      <xpath expr="//sheet" position="inside"><group string="Pago realizado" invisible="state != 'paid'"><field name="paid_amount"/><field name="paid_date"/><field name="paid_reference"/><field name="paid_by"/></group></xpath>
+    </field>
+  </record>
+  <record id="view_completed_payments_list" model="ir.ui.view">
+    <field name="name">cashflow.promise.completed.payments.list</field><field name="model">cashflow.promise</field>
+    <field name="arch" type="xml"><list create="0" delete="0"><field name="company_id" groups="base.group_multi_company"/><field name="partner_id"/><field name="period"/><field name="currency_id"/><field name="amount" string="Importe planificado"/><field name="paid_amount"/><field name="paid_date"/><field name="paid_reference"/><field name="paid_by"/></list></field>
+  </record>
+</odoo>

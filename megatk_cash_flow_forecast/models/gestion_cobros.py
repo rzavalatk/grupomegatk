@@ -19,6 +19,10 @@ class CashflowManagementNote(models.Model):
         "cashflow.promise", string="Cobro o pago proyectado", ondelete="set null", check_company=True,
         domain="[('company_id', '=', company_id), ('direction', '=', direction)]",
     )
+    scope = fields.Selection([
+        ("general", "Gestión general del contacto"),
+        ("document", "Factura o documento específico"),
+    ], required=True, default="general", string="Aplicar gestión a")
     direction = fields.Selection([
         ("receivable", "Cuenta por cobrar"),
         ("payable", "Cuenta por pagar"),
@@ -50,12 +54,18 @@ class CashflowManagementNote(models.Model):
     @api.onchange("move_id")
     def _onchange_move_id(self):
         if self.move_id:
+            self.scope = "document"
             self.direction = (
                 "receivable"
                 if self.move_id.move_type in ("out_invoice", "out_refund")
                 else "payable"
             )
             self.partner_id = self.move_id.commercial_partner_id
+
+    @api.onchange("scope")
+    def _onchange_scope(self):
+        if self.scope == "general":
+            self.move_id = False
 
     @api.constrains("promise_id", "partner_id", "company_id")
     def _check_promise_consistency(self):
@@ -86,6 +96,14 @@ class CashflowManagementNote(models.Model):
             ):
                 raise ValidationError(
                     "La factura debe corresponder a la misma empresa y al mismo cliente."
+                )
+
+    @api.constrains("scope", "move_id")
+    def _check_scope_document(self):
+        for record in self:
+            if record.scope == "document" and not record.move_id:
+                raise ValidationError(
+                    "Seleccione la factura o documento al que corresponde esta gestión."
                 )
 
     @api.depends("next_action_date")
@@ -130,20 +148,15 @@ class CashflowManagementNote(models.Model):
             )
             if partner:
                 values["partner_id"] = partner.id
+            values["scope"] = "document" if move else "general"
             normalized.append(values)
         records = super().create(normalized)
         Snapshot = self.env["cashflow.portfolio.snapshot"].sudo().with_context(cashflow_internal_update=True)
         for record in records:
-            snapshots = Snapshot.search([
-                ("company_id", "=", record.company_id.id),
-                ("partner_id", "=", record.partner_id.commercial_partner_id.id),
-                ("direction", "=", record.direction),
-            ])
-            snapshots.write({
-                "last_management": record.note,
-                "last_management_at": record.create_date,
-                "next_action_date": record.next_action_date,
-            })
+            # Rebuild from currently open documents so a note from an already
+            # paid invoice never appears on a newer invoice of the same client.
+            if record.move_id:
+                Snapshot.refresh_partner(record.company_id, record.partner_id)
             label = dict(record._fields["management_type"].selection).get(
                 record.management_type, "Gestión"
             )

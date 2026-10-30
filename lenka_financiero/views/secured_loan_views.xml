@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_lenka_identity" model="ir.ui.view">
+        <field name="name">res.partner.lenka.identity</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="lenka_identity_number" invisible="is_company"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_secured_loan_contract_help" model="ir.ui.view">
+        <field name="name">lenka.secured.loan.contract.help</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form_contracts"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='equipment_contract_data']/div" position="after">
+                <div class="alert alert-info" invisible="operation_type != 'loan' or security_mode != 'backed'">
+                    Para empresas o instituciones, el Cliente es el deudor principal. Seleccione al representante legal y complete sus facultades. Si también responderá personalmente, pulse Agregar representante como aval personal. Puede elegir otros contactos en Avales. Complete Documento de identidad (Lenka) en cada contacto; este dato es independiente del RTN fiscal. En Garantías registre propietario, descripción, serie o matrícula y valores. Generar documentos selecciona el contrato según la modalidad de respaldo.
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

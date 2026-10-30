@@ -1,0 +1,7 @@
+<odoo>
+    <record id="history_company" model="ir.rule">
+        <field name="name">Identificacion historica por empresa Lenka</field>
+        <field name="model_id" ref="model_lenka_historical_check_wizard"/>
+        <field name="domain_force">[('disbursement_id.operation_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

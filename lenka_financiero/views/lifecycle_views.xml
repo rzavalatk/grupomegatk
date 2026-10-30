@@ -6,7 +6,14 @@
         <field name="inherit_id" ref="lenka_financiero.view_lenka_operation_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <button name="action_approve" string="Aprobar" type="object" class="btn-primary" invisible="is_quote or state != 'review'" groups="lenka_financiero.group_lenka_manager"/>
+                <field name="can_request_sole_signature" invisible="1"/>
+                <field name="can_decide_sole_signature" invisible="1"/>
+                <field name="can_request_legacy_sole_signature" invisible="1"/>
+                <button name="action_request_legacy_sole_signature" string="Reenviar sin respaldo a Luis Moran" type="object" invisible="not can_request_legacy_sole_signature"/>
+                <button name="action_approve" string="Aprobar" type="object" class="btn-primary" invisible="is_quote or state != 'review' or security_mode == 'sole_signature'" groups="lenka_financiero.group_lenka_manager"/>
+                <button name="action_request_sole_signature" string="Enviar a Luis Moran" type="object" class="btn-primary" invisible="is_quote or not can_request_sole_signature"/>
+                <button name="action_approve" string="Autorizar sin aval ni garantia" type="object" class="btn-primary" invisible="not can_decide_sole_signature"/>
+                <button name="action_reject_sole_signature" string="Rechazar solicitud" type="object" invisible="not can_decide_sole_signature"/>
                 <button name="action_mark_contracted" string="Marcar contratado" type="object" invisible="state != 'approved'"/>
                 <button name="action_activate" string="Activar operacion" type="object" class="btn-primary" invisible="state != 'contracted'" groups="lenka_financiero.group_lenka_manager"/>
             </xpath>
@@ -16,7 +23,13 @@
                         <group>
                             <field name="approved_by" readonly="1"/>
                             <field name="approval_date" readonly="1"/>
-                            <field name="approval_notes"/>
+                            <field name="approval_notes" readonly="sole_signature_status in ('pending', 'approved')"/>
+                            <field name="sole_signature_requested_by" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_requested_at" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_authorizer_id" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_decided_at" invisible="security_mode != 'sole_signature'"/>
+                            <field name="sole_signature_decision_notes" invisible="security_mode != 'sole_signature'" readonly="not can_decide_sole_signature"/>
+                            <field name="sole_signature_notification_state" invisible="security_mode != 'sole_signature'"/>
                         </group>
                         <group>
                             <field name="contract_reference"/>
@@ -40,7 +53,9 @@
                 </page>
                 <page string="Desembolsos">
                     <group>
-                        <field name="disbursed_amount" readonly="1"/>
+                        <field name="disbursed_amount" string="Total aplicado al prestamo" readonly="1"/>
+                        <field name="cash_disbursed_amount" readonly="1"/>
+                        <field name="refinance_applied_amount" readonly="1"/>
                         <field name="restructured_funding_amount" readonly="1" invisible="not restructured_funding_amount"/>
                         <field name="pending_disbursement" readonly="1"/>
                     </group>
@@ -52,9 +67,11 @@
                             <field name="destination_type"/>
                             <field name="destination_partner_id"/>
                             <field name="payment_method"/>
+                            <field name="disbursement_journal_id"/>
                             <field name="funding_line_id"/>
                             <field name="reference"/>
                             <field name="move_id"/>
+                            <field name="refinance_move_id" optional="hide"/>
                             <field name="state"/>
                         </list>
                     </field>
@@ -76,6 +93,7 @@
                 <field name="destination_partner_id"/>
                 <field name="payment_method"/>
                 <field name="move_id"/>
+                            <field name="refinance_move_id" optional="hide"/>
                 <field name="state"/>
             </list>
         </field>
@@ -88,12 +106,14 @@
             <form>
                 <header>
                     <button name="action_post" string="Aplicar desembolso" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_create_account_move" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id" groups="lenka_financiero.group_lenka_manager"/>
+                    <button name="action_create_account_move" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id or payment_method == 'refinance_entry'" groups="lenka_financiero.group_lenka_manager"/>
                     <button name="action_open_account_move" string="Ver borrador contable" type="object" invisible="not move_id"/>
                     <button name="action_cancel" string="Anular" type="object" invisible="state == 'cancelled'"/>
+                    <button name="action_open_refinance_move" string="Ver asiento existente" type="object" invisible="not refinance_move_id"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
                 </header>
                 <sheet>
+                    <div class="alert alert-info" invisible="payment_method != 'refinance_entry'">Aplicacion interna sin salida bancaria. Seleccione el cargo completo a cartera del cliente nuevo. Se reconoce el importe ya contabilizado, sin crear otro asiento. La anulacion solo desvincula la aplicacion y conserva la contabilidad.</div>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>
@@ -105,8 +125,15 @@
                             <field name="destination_type"/>
                             <field name="destination_partner_id"/>
                             <field name="payment_method"/>
-                            <field name="funding_line_id"/>
-                            <field name="reference"/>
+                            <field name="refinance_company_id" invisible="1"/>
+                            <field name="refinance_partner_id" invisible="1"/>
+                            <field name="refinance_portfolio_account_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="refinance_line_id" invisible="payment_method != 'refinance_entry'" required="payment_method == 'refinance_entry'" readonly="state != 'draft'" domain="[('parent_state', '=', 'posted'), ('move_id.move_type', '=', 'entry'), ('debit', '&gt;', 0), ('company_id', '=', refinance_company_id), ('partner_id', '=', refinance_partner_id), ('account_id', '=', refinance_portfolio_account_id), ('currency_id', '=', currency_id)]" options="{'no_create': True}"/>
+                            <field name="refinance_move_id" invisible="not refinance_move_id"/>
+                            <field name="disbursement_journal_id" invisible="payment_method == 'refinance_entry'" domain="[('company_id', '=', refinance_company_id)]" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="funding_line_id" invisible="payment_method == 'refinance_entry'"/>
+                            <field name="reference" placeholder="Numero de cheque, transaccion bancaria o referencia del refinanciamiento"/>
                             <field name="move_id" readonly="1"/>
                         </group>
                     </group>
@@ -122,3 +149,4 @@
         <field name="view_mode">list,form</field>
     </record>
 </odoo>
+
