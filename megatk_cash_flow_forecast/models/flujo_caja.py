@@ -20,6 +20,7 @@ PORTFOLIO_CLASSIFICATIONS = [
     ("group_receivable", "Grupo Mega"),
     ("supplier", "Proveedores"),
     ("creditor", "Acreedores"),
+    ("depositor", "Depositantes"),
     ("advance", "Anticipos"),
     ("legal", "En legal"),
     ("to_reconcile", "Por depurar"),
@@ -56,7 +57,7 @@ class CashflowPlan(models.Model):
         domain=[
             ("direction", "=", "payable"),
             ("state", "=", "active"),
-            ("classification_id.classification", "=", "creditor"),
+            ("classification_id.classification", "in", ("creditor", "depositor")),
         ],
         string="Acreedores, tarjetas y préstamos por pagar",
     )
@@ -412,7 +413,7 @@ class CashflowPlan(models.Model):
         for promise in self.promise_ids.filtered(
             lambda item: item.state == "active"
             and item.direction == "payable"
-            and item.classification == "creditor"
+            and item.classification in ("creditor", "depositor")
         ):
             liabilities.append(self._report_line(
                 promise.partner_id.display_name, promise,
@@ -968,13 +969,20 @@ class CashflowClassification(models.Model):
                 "to_reconcile", "unassigned",
             },
             "payable": {
-                "supplier", "creditor", "advance",
+                "supplier", "creditor", "depositor", "advance",
                 "to_reconcile", "unassigned",
             },
         }
         for record in self:
             if record.classification not in allowed[record.direction]:
                 raise ValidationError("La clasificación seleccionada no corresponde al tipo de cuenta.")
+            if (
+                record.classification == "depositor"
+                and "inversiones lenka" not in (record.company_id.name or "").casefold()
+            ):
+                raise ValidationError(
+                    "La clasificación Depositantes se utiliza únicamente en Inversiones Lenka."
+                )
 
 
 class CashflowPromise(models.Model):
@@ -1456,6 +1464,11 @@ class CashflowPromise(models.Model):
             promise.write(values)
         return {"type": "ir.actions.client", "tag": "reload"}
 
+    def action_delete_projection(self):
+        """Delete only this projection, never its Odoo document or contact."""
+        self.unlink()
+        return {"type": "ir.actions.client", "tag": "reload"}
+
     def action_add_management_note(self):
         self.ensure_one()
         return {
@@ -1470,6 +1483,7 @@ class CashflowPromise(models.Model):
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_promise_id": self.id,
                 "default_move_id": self.source_move_id.id or False,
+                "default_scope": "document" if self.source_move_id else "general",
                 "default_direction": self.direction,
                 "form_view_initial_mode": "edit",
             },
@@ -1477,6 +1491,11 @@ class CashflowPromise(models.Model):
 
     def action_open_management_history(self):
         self.ensure_one()
+        link_domain = (
+            [("move_id", "=", self.source_move_id.id)]
+            if self.source_move_id
+            else [("promise_id", "=", self.id)]
+        )
         return {
             "type": "ir.actions.act_window",
             "name": f"Historial de gestiones · {self.commercial_partner_id.display_name}",
@@ -1486,12 +1505,13 @@ class CashflowPromise(models.Model):
                 ("company_id", "=", self.company_id.id),
                 ("partner_id", "=", self.commercial_partner_id.id),
                 ("direction", "=", self.direction),
-            ],
+            ] + link_domain,
             "context": {
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.commercial_partner_id.id,
                 "default_promise_id": self.id,
                 "default_move_id": self.source_move_id.id or False,
+                "default_scope": "document" if self.source_move_id else "general",
                 "default_direction": self.direction,
             },
         }

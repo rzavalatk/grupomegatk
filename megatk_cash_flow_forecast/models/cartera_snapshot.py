@@ -21,7 +21,8 @@ class CashflowPortfolioSnapshot(models.Model):
     classification = fields.Selection([
         ("customer", "Clientes"), ("employee_receivable", "CxC empleados"),
         ("group_receivable", "Grupo Mega"), ("supplier", "Proveedores"),
-        ("creditor", "Acreedores"), ("advance", "Anticipos"),
+        ("creditor", "Acreedores"), ("depositor", "Depositantes"),
+        ("advance", "Anticipos"),
         ("legal", "En legal"), ("to_reconcile", "Por depurar"),
         ("unassigned", "Por asignar"),
     ], required=True, default="unassigned", index=True, string="Clasificación")
@@ -87,6 +88,7 @@ class CashflowPortfolioSnapshot(models.Model):
                 ("supplier", "Proveedores"),
                 ("advance", "Anticipos desembolsados"),
                 ("creditor", "Acreedores"),
+                ("depositor", "Depositantes"),
                 ("to_reconcile", "Por depurar"),
                 ("unassigned", "Por clasificar"),
             ],
@@ -146,14 +148,6 @@ class CashflowPortfolioSnapshot(models.Model):
             partner = promise.partner_id.commercial_partner_id
             if partner:
                 scheduled[(partner.id, promise.direction)].add(promise.period)
-        latest_notes = {}
-        notes = self.env["cashflow.management.note"].search([
-            ("company_id", "=", company.id),
-        ], order="create_date desc, id desc")
-        for note in notes:
-            latest_notes.setdefault(
-                (note.partner_id.commercial_partner_id.id, note.direction), note
-            )
         values = defaultdict(lambda: defaultdict(float))
         documents = defaultdict(set)
         for line in lines:
@@ -174,6 +168,18 @@ class CashflowPortfolioSnapshot(models.Model):
                 "days_61_90" if overdue <= 90 else "days_91_120" if overdue <= 120 else "old"
             )
             values[key][field_name] += abs(line.amount_residual)
+        # Show only a management linked to a document that remains open.
+        # General notes and paid-document notes stay available in history.
+        latest_notes = {}
+        notes = self.env["cashflow.management.note"].search([
+            ("company_id", "=", company.id),
+            ("scope", "=", "document"),
+            ("move_id", "!=", False),
+        ], order="create_date desc, id desc")
+        for note in notes:
+            key = (note.partner_id.commercial_partner_id.id, note.direction)
+            if note.move_id.id in documents[key]:
+                latest_notes.setdefault(key, note)
         created = []
         for (partner_id, direction), buckets in values.items():
             created.append({
@@ -191,13 +197,29 @@ class CashflowPortfolioSnapshot(models.Model):
                     )
                     if period in scheduled[(partner_id, direction)]
                 ),
-                "last_management": latest_notes[(partner_id, direction)].note if (partner_id, direction) in latest_notes else False,
+                "last_management": self._management_summary(latest_notes[(partner_id, direction)]) if (partner_id, direction) in latest_notes else False,
                 "last_management_at": latest_notes[(partner_id, direction)].create_date if (partner_id, direction) in latest_notes else False,
                 "next_action_date": latest_notes[(partner_id, direction)].next_action_date if (partner_id, direction) in latest_notes else False,
                 "open_document_count": len(documents[(partner_id, direction)]),
                 **buckets,
             })
         return created
+
+    @api.model
+    def _management_summary(self, note):
+        """Visible audit line with local date, time, author and document."""
+        local_dt = fields.Datetime.context_timestamp(note, note.create_date)
+        label = dict(note._fields["management_type"].selection).get(
+            note.management_type, "Gestión"
+        )
+        document = note.move_id.name or note.move_id.ref or "Documento"
+        return "%s · %s · %s · %s: %s" % (
+            local_dt.strftime("%d/%m/%Y %H:%M"),
+            note.author_id.name or "Usuario",
+            label,
+            document,
+            note.note,
+        )
 
     @api.model
     def refresh_company(self, company):
