@@ -38,6 +38,12 @@ class TestLenkaBanks(TransactionCase):
             'prefix': 'CK-B-', 'padding': 4, 'number_next': 1,
         })
 
+    def setUp(self):
+        super().setUp()
+        # PostgreSQL nextval is not rolled back between TransactionCase tests.
+        # Each scenario owns its expected physical check numbers.
+        self.sequence.number_next_actual = 667
+
     def _operation(self):
         operation = self.env['lenka.financial.operation'].create({
             'partner_id': self.partner.id, 'operation_type': 'loan', 'principal_amount': 300000,
@@ -144,3 +150,19 @@ class TestLenkaBanks(TransactionCase):
         disbursement.payment_method = 'check'
         disbursement._onchange_disbursement_journal()
         self.assertEqual(disbursement.disbursement_journal_id, self.journals[1])
+
+    def test_runtime_guard_protects_posted_check_lines(self):
+        disbursement = self._disbursement(self._operation(), 150000)
+        disbursement.action_post()
+        disbursement.action_create_account_move()
+        disbursement.move_id.action_post()
+        line = disbursement.move_id.line_ids[:1]
+        with self.assertRaisesRegex(ValidationError, 'cheques'):
+            line.write({'partner_id': False})
+        with self.assertRaisesRegex(ValidationError, 'cheques'):
+            line.with_context(check_move_validity=False).unlink()
+        with self.assertRaisesRegex(ValidationError, 'cheques'):
+            self.env['account.move.line'].create({
+                'move_id': disbursement.move_id.id, 'account_id': self.portfolio.id,
+                'partner_id': self.partner.id, 'debit': 1, 'credit': 0,
+            })

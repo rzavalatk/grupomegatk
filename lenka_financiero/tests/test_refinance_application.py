@@ -2,6 +2,7 @@ from odoo import Command
 from odoo.exceptions import AccessError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase, new_test_user
+from unittest.mock import patch
 
 
 @tagged('post_install', '-at_install')
@@ -234,3 +235,39 @@ class TestRefinanceApplication(TransactionCase):
         application = self._application(self._operation(), line)
         with self.assertRaises(ValidationError):
             application.action_post()
+
+    def test_runtime_guard_preserves_create_write_unlink_protection(self):
+        line = self._entry()
+        application = self._application(self._operation(), line)
+        application.action_post()
+        with self.assertRaisesRegex(ValidationError, 'refinanciamiento'):
+            self.env['account.move.line'].create({
+                'move_id': line.move_id.id, 'account_id': self.clearing.id,
+                'debit': 1, 'credit': 0,
+            })
+        with self.assertRaisesRegex(ValidationError, 'refinanciamiento'):
+            line.with_context(check_move_validity=False).unlink()
+        other_line = self._entry(posted=False)
+        other_line.write({'partner_id': self.old_partner.id})
+        with self.assertRaisesRegex(ValidationError, 'refinanciamiento'):
+            other_line.write({'move_id': line.move_id.id})
+
+    def test_runtime_guard_idempotent_and_composes_with_existing_wrapper(self):
+        guard = self.env['lenka.accounting.guard']
+        line = self._entry()
+        application = self._application(self._operation(), line)
+        application.action_post()
+        line_class = type(line)
+        original = line_class.write
+        guard._register_hook()
+        guard._register_hook()
+        self.assertIs(line_class.write, original)
+
+        def existing_wrapper(records, vals):
+            return existing_wrapper.origin(records, vals)
+        existing_wrapper.origin = original
+        with patch.object(line_class, 'write', existing_wrapper):
+            guard._register_hook()
+            self.assertIs(line_class.write, existing_wrapper)
+            with self.assertRaisesRegex(ValidationError, 'refinanciamiento'):
+                line.write({'partner_id': self.old_partner.id})
