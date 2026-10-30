@@ -228,23 +228,3 @@ class AccountMoveRefinanceProtection(models.Model):
         originals = self.browse([v['reversed_entry_id'] for v in vals_list if v.get('reversed_entry_id')])
         originals._check_lenka_refinance_unlinked()
         return super().create(vals_list)
-
-
-class AccountMoveLineRefinanceProtection(models.Model):
-    _inherit = 'account.move.line'
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        moves = self.env['account.move'].browse(list({v['move_id'] for v in vals_list if v.get('move_id')}))
-        moves._check_lenka_refinance_unlinked()
-        return super().create(vals_list)
-
-    def write(self, vals):
-        if {'move_id', 'account_id', 'partner_id', 'debit', 'credit', 'balance',
-            'amount_currency', 'currency_id', 'date'}.intersection(vals):
-            self.mapped('move_id')._check_lenka_refinance_unlinked()
-        return super().write(vals)
-
-    def unlink(self):
-        self.mapped('move_id')._check_lenka_refinance_unlinked()
-        return super().unlink()

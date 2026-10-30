@@ -1,6 +1,14 @@
 # Entregas de Lenka y Tesorería
 
-Instalar `lenka_financiero` versión 18.0.1.0.12 y el nuevo puente `lenka_banks` sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+Instalar `lenka_financiero` versión 18.0.1.0.13 y el puente `lenka_banks` versión 18.0.1.0.1 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+
+## Actualización aislada de los históricos de otras empresas
+
+Las protecciones de líneas se registran al construir el registro de Odoo, mediante el mecanismo de hooks que también utiliza Audit Log. No se amplía el esquema de `account.move.line` al actualizar Lenka. Los métodos originales y sus permisos siguen ejecutándose; las validaciones adicionales se limitan a asientos efectivamente vinculados a refinanciamientos o cheques Lenka. Se conservan las protecciones de creación, edición y borrado, incluyendo el intento de trasladar una línea hacia un asiento protegido.
+
+La instalación no elimina, modifica ni agrega excepciones a restricciones contables globales. No corrige datos históricos, ni cambia saldos, monedas, estados o correlativos de otras empresas. Esto conserva el despliegue multiempresa existente; no crea una base de datos separada. En producción se configura y utiliza únicamente INVERSIONES LENKA.
+
+CI incluye la actualización desde el código anterior de producción en una base aislada con dos asientos ficticios, uno publicado y otro cancelado, de otra empresa. El escenario reproduce una restricción previamente ausente, instala la actualización y el puente, reinicia Odoo y compara todos los registros históricos y restricciones con su estado original. Ningún dato real se copia a CI.
 
 ## Nuevas entregas
 

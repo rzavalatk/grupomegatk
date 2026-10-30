@@ -191,22 +191,11 @@ class AccountMoveLenkaChecks(models.Model):
         return super()._post(soft=soft)
 
 
-class AccountMoveLineLenkaChecks(models.Model):
-    _inherit = 'account.move.line'
+class LenkaAccountingGuardChecks(models.AbstractModel):
+    _inherit = 'lenka.accounting.guard'
 
-    def _protect_posted_checks(self):
-        self.mapped('move_id').filtered(lambda m: m.state == 'posted')._check_lenka_checks()
-
-    def write(self, vals):
-        if {'move_id', 'account_id', 'partner_id', 'debit', 'credit', 'balance', 'amount_currency', 'currency_id', 'date'}.intersection(vals):
-            self._protect_posted_checks()
-        return super().write(vals)
-
-    def unlink(self):
-        self._protect_posted_checks()
-        return super().unlink()
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        self.env['account.move'].browse([v['move_id'] for v in vals_list if v.get('move_id')]).filtered(lambda m: m.state == 'posted')._check_lenka_checks()
-        return super().create(vals_list)
+    def _check_line_moves(self, moves):
+        super()._check_line_moves(moves)
+        posted = moves.filtered(lambda move: move.state == 'posted')
+        if posted:
+            posted._check_lenka_checks()
