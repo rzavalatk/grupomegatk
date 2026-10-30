@@ -24,3 +24,4 @@ from . import test_secured_loan
 
 
 from . import test_correction
+from . import test_refinance_application
