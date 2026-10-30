@@ -450,7 +450,7 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(note.partner_id, self.partner.commercial_partner_id)
 
-    def test_management_note_updates_portfolio_detail_immediately(self):
+    def test_general_management_note_does_not_replace_invoice_management(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({
             "company_id": self.company.id,
             "partner_id": self.partner.id,
@@ -463,9 +463,9 @@ class TestCashflowForecast(TransactionCase):
             "note": "Se envió un mensaje nuevo.",
             "next_action_date": "2026-10-01",
         })
-        self.assertEqual(snapshot.last_management, "Se envió un mensaje nuevo.")
-        self.assertTrue(snapshot.last_management_at)
-        self.assertEqual(str(snapshot.next_action_date), "2026-10-01")
+        self.assertFalse(snapshot.last_management)
+        self.assertFalse(snapshot.last_management_at)
+        self.assertFalse(snapshot.next_action_date)
 
     def test_classification_is_company_specific(self):
         classification = self.env["cashflow.portfolio.classification"].create({
@@ -921,6 +921,56 @@ class TestCashflowForecast(TransactionCase):
             | self.plan.unclassified_payable_promise_ids
         )
         self.assertEqual(len(all_split), 3)
+
+    def test_creditor_projection_can_be_deleted_without_touching_partner(self):
+        creditor = self.env["res.partner"].create({"name": "Acreedor eliminable"})
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="creditor"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": creditor.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 250,
+        })
+        promise.action_delete_projection()
+        self.assertFalse(promise.exists())
+        self.assertTrue(creditor.exists())
+
+    def test_depositors_are_available_only_for_inversiones_lenka(self):
+        Classification = self.env["cashflow.portfolio.classification"]
+        with self.assertRaises(ValidationError):
+            Classification.create({
+                "company_id": self.company.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "classification": "depositor",
+            })
+        self.company.name = "Inversiones Lenka S. de R.L."
+        classification = Classification.create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "depositor",
+        })
+        self.assertEqual(classification.classification, "depositor")
+
+    def test_payable_pdf_has_separate_depositors_section(self):
+        snapshot = self.env["cashflow.portfolio.snapshot"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "depositor",
+            "at_day": 500,
+        })
+        sections = {
+            section["key"]: section
+            for section in snapshot.with_context(
+                cashflow_report_direction="payable"
+            )._portfolio_report_sections()
+        }
+        self.assertEqual(sections["depositor"]["title"], "Depositantes")
+        self.assertEqual(sections["depositor"]["totals"]["total"], 500)
 
     def test_advance_tracks_pending_balance_and_only_projects_before_delivery(self):
         advance = self.env["cashflow.promise"].with_context(
