@@ -1,4 +1,6 @@
 from odoo import Command
+from lxml import etree
+from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -150,6 +152,32 @@ class TestLenkaBanks(TransactionCase):
         disbursement.payment_method = 'check'
         disbursement._onchange_disbursement_journal()
         self.assertEqual(disbursement.disbursement_journal_id, self.journals[1])
+
+    def test_legacy_applied_without_bank_can_be_cancelled_from_form(self):
+        operation = self._operation()
+        legacy = self.env['lenka.disbursement'].create({
+            'operation_id': operation.id, 'amount': 150000, 'payment_method': 'check',
+        })
+        legacy.action_post()  # Legacy record, before per-delivery banks were required in the UI.
+        self.assertFalse(legacy.disbursement_journal_id)
+        view = self.env['lenka.disbursement'].get_view(
+            self.env.ref('lenka_financiero.view_lenka_disbursement_form').id, 'form')
+        field = etree.fromstring(view['arch']).xpath("//field[@name='disbursement_journal_id']")[0]
+        required = field.get('required')
+        for method in ('check', 'transfer', 'cash', 'credit_card'):
+            self.assertTrue(safe_eval(required, {'state': 'draft', 'payment_method': method}))
+            for state in ('posted', 'cancelled'):
+                self.assertFalse(safe_eval(required, {'state': state, 'payment_method': method}))
+        self.assertFalse(safe_eval(required, {'state': 'draft', 'payment_method': 'refinance_entry'}))
+        before = self.env['account.move'].search_count([])
+        number_next = self.sequence.number_next_actual
+        legacy.action_cancel()
+        self.assertEqual(legacy.state, 'cancelled')
+        self.assertEqual(operation.pending_disbursement, operation.financed_amount)
+        self.assertFalse(legacy.move_id)
+        self.assertFalse(legacy.bank_check_ids)
+        self.assertEqual(self.env['account.move'].search_count([]), before)
+        self.assertEqual(self.sequence.number_next_actual, number_next)
 
     def test_runtime_guard_protects_posted_check_lines(self):
         disbursement = self._disbursement(self._operation(), 150000)

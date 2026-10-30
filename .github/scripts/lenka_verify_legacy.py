@@ -14,7 +14,7 @@ assert json.loads(json.dumps(env.cr.fetchall())) == snapshot['constraints'], 'In
 modules = env['ir.module.module'].search([('name', 'in', ['lenka_financiero', 'lenka_banks'])])
 assert all(m.state == 'installed' for m in modules) and len(modules) == 2
 assert {m.name: m.installed_version for m in modules} == {
-    'lenka_financiero': '18.0.1.0.13', 'lenka_banks': '18.0.1.0.1'}
+    'lenka_financiero': '18.0.1.0.13', 'lenka_banks': '18.0.1.0.2'}
 from odoo.addons.lenka_financiero.models.accounting_guard import _has_guard
 for method in ('create', 'write', 'unlink'):
     assert _has_guard(getattr(type(env['account.move.line']), method)), 'Missing runtime protection: %s' % method

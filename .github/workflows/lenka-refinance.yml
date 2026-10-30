@@ -1,7 +1,7 @@
 name: Lenka - refinanciamiento contabilizado
 on:
   push:
-    branches: [lenka-refinanciamiento-contabilizado-20261029, lenka-isolated-upgrade-20261030]
+    branches: [lenka-refinanciamiento-contabilizado-20261029, lenka-isolated-upgrade-20261030, lenka-disbursement-validation-20261030]
     paths:
       - 'lenka_financiero/**'
       - 'lenka_banks/**'
