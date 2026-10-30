@@ -38,6 +38,12 @@ class TestLenkaBanks(TransactionCase):
             'prefix': 'CK-B-', 'padding': 4, 'number_next': 1,
         })
 
+    def setUp(self):
+        super().setUp()
+        # PostgreSQL nextval is not rolled back between TransactionCase tests.
+        # Each scenario owns its expected physical check numbers.
+        self.sequence.number_next_actual = 667
+
     def _operation(self):
         operation = self.env['lenka.financial.operation'].create({
             'partner_id': self.partner.id, 'operation_type': 'loan', 'principal_amount': 300000,
