@@ -1,0 +1,45 @@
+<odoo>
+    <record id="disbursement_form_banks" model="ir.ui.view">
+        <field name="name">lenka.disbursement.banks</field>
+        <field name="model">lenka.disbursement</field>
+        <field name="inherit_id" ref="lenka_financiero.view_lenka_disbursement_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_bank_checks" type="object" string="Ver cheques de Tesoreria" invisible="not bank_check_ids"/>
+                <button name="action_register_historical_checks" type="object" string="Identificar cheques ya contabilizados" invisible="payment_method != 'check' or state != 'posted' or not move_id or bank_check_ids" groups="lenka_financiero.group_lenka_manager"/>
+            </xpath>
+            <xpath expr="//field[@name='disbursement_journal_id']" position="attributes">
+                <attribute name="required">payment_method in ('check', 'transfer', 'cash', 'credit_card')</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="alert alert-info" invisible="payment_method != 'check'">Cada entrega por cheque debe tener su propio desembolso y banco. Crear borrador contable registra el cheque en Tesoreria usando la misma chequera. Para una salida antigua ya contabilizada utilice Identificar cheques ya contabilizados; no se generara otra salida bancaria.</div>
+                <group string="Cheques de Tesoreria" invisible="not bank_check_ids">
+                    <field name="bank_check_ids" readonly="1">
+                        <list create="0" delete="0">
+                            <field name="number"/>
+                            <field name="journal_id"/>
+                            <field name="date"/>
+                            <field name="total"/>
+                            <field name="state"/>
+                            <field name="move_id"/>
+                            <field name="lenka_historical"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="check_form_lenka" model="ir.ui.view">
+        <field name="name">banks.check.lenka</field>
+        <field name="model">banks.check</field>
+        <field name="inherit_id" ref="banks.check_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Prestamo vinculado" invisible="not lenka_disbursement_id">
+                    <field name="lenka_disbursement_id"/>
+                    <field name="lenka_historical"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

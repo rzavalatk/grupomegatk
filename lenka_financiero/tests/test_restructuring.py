@@ -407,13 +407,18 @@ class TestLenkaRestructuring(TransactionCase):
     def _contract_successor(self, request):
         successor = request.successor_operation_id
         successor.action_approve()
-        self.env['lenka.contract.template'].create({
+        template = self.env['lenka.contract.template'].create({
             'name': 'Contrato reestructuracion prueba', 'company_id': successor.company_id.id,
             'document_type': 'contract', 'operation_type': 'loan',
             'body_html': '<p>{{CLIENTE}} {{MONTO_FINANCIADO}}</p>',
         })
-        successor.action_generate_contract_documents()
-        document = successor.generated_document_ids.filtered(lambda d: d.document_type == 'contract')[0]
+        # Use this fixture's minimal template explicitly. Automatic generation
+        # now selects the built-in secured contract with its own party checks.
+        document = self.env['lenka.generated.document'].create({
+            'name': 'Contrato reestructuracion prueba', 'operation_id': successor.id,
+            'template_id': template.id,
+        })
+        document.action_render()
         document.attachment_id = self.env['ir.attachment'].create({
             'name': 'contrato-reestructuracion-prueba.pdf', 'datas': 'RklSTUFETw==',
             'res_model': document._name, 'res_id': document.id,

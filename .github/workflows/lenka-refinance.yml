@@ -1,0 +1,79 @@
+name: Lenka - refinanciamiento contabilizado
+on:
+  push:
+    branches: [lenka-refinanciamiento-contabilizado-20261029, lenka-isolated-upgrade-20261030]
+    paths:
+      - 'lenka_financiero/**'
+      - 'lenka_banks/**'
+      - '.github/workflows/lenka-refinance.yml'
+      - '.github/scripts/lenka_*.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-odoo18:
+    if: github.repository == 'ajz04megatk/grupomegatk'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [core, treasury, legacy-upgrade]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Start isolated PostgreSQL
+        run: |
+          docker network create lenka-test
+          docker run -d --name lenka-pg --network lenka-test -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=test-only -e POSTGRES_DB=postgres postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec lenka-pg pg_isready -U odoo; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Install module and run refinancing tests in Odoo 18
+        if: matrix.kind == 'core'
+        run: |
+          docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
+            -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
+            odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+            -d lenka_refinance_test -i lenka_financiero --without-demo=all \
+            --test-enable --test-tags '/lenka_financiero' \
+            --stop-after-init --max-cron-threads=0 --log-level=test
+      - name: Install treasury bridge and test split checks
+        if: matrix.kind == 'treasury'
+        run: |
+          docker run --rm --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
+            -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
+            -v "$GITHUB_WORKSPACE/banks:/mnt/extra-addons/banks:ro" \
+            -v "$GITHUB_WORKSPACE/lenka_banks:/mnt/extra-addons/lenka_banks:ro" \
+            odoo:18.0 odoo --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+            -d lenka_banks_test -i lenka_banks --without-demo=all \
+            --test-enable --test-tags '/lenka_banks' \
+            --stop-after-init --max-cron-threads=0 --log-level=test
+      - name: Upgrade around unrelated historical entries without changing them
+        if: matrix.kind == 'legacy-upgrade'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/lenka-baseline
+          git archive 21fdf283df17b36f58309b56b6006c39a7908774 lenka_financiero | tar -x -C /tmp/lenka-baseline
+          run_odoo() {
+            local source_path="$1"
+            shift
+            docker run --rm -i --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
+              -v "$source_path:/mnt/extra-addons/lenka_financiero:ro" \
+              -v "$GITHUB_WORKSPACE/banks:/mnt/extra-addons/banks:ro" \
+              -v "$GITHUB_WORKSPACE/lenka_banks:/mnt/extra-addons/lenka_banks:ro" \
+              odoo:18.0 odoo "$@" --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+              -d lenka_legacy_upgrade_test --max-cron-threads=0
+          }
+          run_odoo /tmp/lenka-baseline/lenka_financiero -i lenka_financiero,banks --without-demo=all --stop-after-init
+          run_odoo /tmp/lenka-baseline/lenka_financiero shell --no-http < .github/scripts/lenka_legacy_fixture.py
+          run_odoo "$GITHUB_WORKSPACE/lenka_financiero" -u lenka_financiero --without-demo=all --stop-after-init
+          run_odoo "$GITHUB_WORKSPACE/lenka_financiero" -i lenka_banks --without-demo=all --stop-after-init
+          run_odoo "$GITHUB_WORKSPACE/lenka_financiero" shell --no-http < .github/scripts/lenka_verify_legacy.py
+      - name: Stop isolated database
+        if: always()
+        run: docker rm -f lenka-pg || true

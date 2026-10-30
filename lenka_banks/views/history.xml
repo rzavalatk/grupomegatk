@@ -1,0 +1,14 @@
+<odoo>
+    <record id="historical_check_form" model="ir.ui.view">
+        <field name="name">lenka.historical.check.wizard.form</field>
+        <field name="model">lenka.historical.check.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Identificar cheques ya contabilizados">
+                <div class="alert alert-warning">Use esta opcion solo para cheques fisicos ya entregados y cuya salida esta contabilizada. Identifica cada cheque sin generar, modificar o publicar asientos y sin retroceder la chequera.</div>
+                <group><field name="disbursement_id"/><field name="journal_id"/><field name="amount"/><field name="currency_id" invisible="1"/></group>
+                <field name="line_ids"><list editable="bottom"><field name="check_number"/><field name="amount"/><field name="currency_id" column_invisible="True"/></list></field>
+                <footer><button name="action_register" type="object" string="Registrar identificacion" class="btn-primary"/><button special="cancel" string="Cancelar"/></footer>
+            </form>
+        </field>
+    </record>
+</odoo>
