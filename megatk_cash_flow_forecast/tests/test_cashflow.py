@@ -11,6 +11,10 @@ class TestCashflowForecast(TransactionCase):
         self.company = self.env["res.company"].create({
             "name": "Empresa aislada para pruebas de flujo",
         })
+        # All actions under test must use this isolated company, including
+        # model-level actions that read env.company and role checks.
+        self.env = self.env(context=dict(self.env.context, allowed_company_ids=self.company.ids))
+        self.env.user.write({'groups_id': [(4, self.env.ref('megatk_cash_flow_forecast.group_cashflow_user').id)]})
         self.plan = self.env["cashflow.plan"].with_company(self.company).create({
             "company_id": self.company.id,
         })
@@ -446,7 +450,7 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(note.partner_id, self.partner.commercial_partner_id)
 
-    def test_management_note_updates_portfolio_detail_immediately(self):
+    def test_general_management_note_does_not_replace_invoice_management(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({
             "company_id": self.company.id,
             "partner_id": self.partner.id,
@@ -459,9 +463,9 @@ class TestCashflowForecast(TransactionCase):
             "note": "Se envió un mensaje nuevo.",
             "next_action_date": "2026-10-01",
         })
-        self.assertEqual(snapshot.last_management, "Se envió un mensaje nuevo.")
-        self.assertTrue(snapshot.last_management_at)
-        self.assertEqual(str(snapshot.next_action_date), "2026-10-01")
+        self.assertFalse(snapshot.last_management)
+        self.assertFalse(snapshot.last_management_at)
+        self.assertFalse(snapshot.next_action_date)
 
     def test_classification_is_company_specific(self):
         classification = self.env["cashflow.portfolio.classification"].create({
@@ -470,13 +474,22 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(classification.classification, "legal")
 
-    def test_classification_must_match_account_direction(self):
+    def test_receivable_accepts_the_operational_classification_catalog(self):
+        classification = self.env["cashflow.portfolio.classification"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "receivable",
+            "classification": "supplier",
+        })
+        self.assertEqual(classification.classification, "supplier")
+
+    def test_payable_rejects_receivable_only_classification(self):
         with self.assertRaises(ValidationError):
             self.env["cashflow.portfolio.classification"].create({
                 "company_id": self.company.id,
                 "partner_id": self.partner.id,
-                "direction": "receivable",
-                "classification": "supplier",
+                "direction": "payable",
+                "classification": "legal",
             })
 
     def test_classification_uses_commercial_partner(self):
@@ -536,7 +549,52 @@ class TestCashflowForecast(TransactionCase):
         })
         self.assertEqual(expense.company_amount, 250)
         self.assertEqual(expense.classification, "other")
+        self.assertEqual(expense.obligation_type, "supplier")
         self.assertEqual(self.plan.payable_week_1, 250)
+
+    def test_manual_creditor_expense_is_reported_with_liabilities(self):
+        self.env["cashflow.manual.expense"].create({
+            "plan_id": self.plan.id,
+            "name": "Pago extraordinario a acreedor",
+            "classification": "other",
+            "obligation_type": "creditor",
+            "period": "week_2",
+            "currency_id": self.company.currency_id.id,
+            "amount": 300,
+        })
+        sections = {
+            section["key"]: section
+            for section in self.plan._cashflow_report_sections()
+        }
+        self.assertEqual(sections["liabilities"]["totals"]["week_2"], 300)
+        self.assertFalse(sections["unique"]["lines"])
+
+    def test_portfolio_report_separates_unassigned_from_cleanup(self):
+        cleanup_partner = self.env["res.partner"].create({"name": "Cuenta por depurar"})
+        snapshots = self.env["cashflow.portfolio.snapshot"].create([
+            {
+                "company_id": self.company.id,
+                "partner_id": self.partner.id,
+                "direction": "receivable",
+                "classification": "unassigned",
+                "at_day": 10,
+            },
+            {
+                "company_id": self.company.id,
+                "partner_id": cleanup_partner.id,
+                "direction": "receivable",
+                "classification": "to_reconcile",
+                "days_1_30": 20,
+            },
+        ])
+        sections = {
+            section["key"]: section
+            for section in snapshots.with_context(
+                cashflow_report_direction="receivable"
+            )._portfolio_report_sections()
+        }
+        self.assertEqual(sections["unassigned"]["totals"]["total"], 10)
+        self.assertEqual(sections["to_reconcile"]["totals"]["total"], 20)
 
     def test_each_week_exposes_the_previous_projected_balance_as_opening(self):
         self.env["cashflow.manual.expense"].create({
@@ -864,6 +922,56 @@ class TestCashflowForecast(TransactionCase):
         )
         self.assertEqual(len(all_split), 3)
 
+    def test_creditor_projection_can_be_deleted_without_touching_partner(self):
+        creditor = self.env["res.partner"].create({"name": "Acreedor eliminable"})
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="creditor"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": creditor.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 250,
+        })
+        promise.action_delete_projection()
+        self.assertFalse(promise.exists())
+        self.assertTrue(creditor.exists())
+
+    def test_depositors_are_available_only_for_inversiones_lenka(self):
+        Classification = self.env["cashflow.portfolio.classification"]
+        with self.assertRaises(ValidationError):
+            Classification.create({
+                "company_id": self.company.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "classification": "depositor",
+            })
+        self.company.name = "Inversiones Lenka S. de R.L."
+        classification = Classification.create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "depositor",
+        })
+        self.assertEqual(classification.classification, "depositor")
+
+    def test_payable_pdf_has_separate_depositors_section(self):
+        snapshot = self.env["cashflow.portfolio.snapshot"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "depositor",
+            "at_day": 500,
+        })
+        sections = {
+            section["key"]: section
+            for section in snapshot.with_context(
+                cashflow_report_direction="payable"
+            )._portfolio_report_sections()
+        }
+        self.assertEqual(sections["depositor"]["title"], "Depositantes")
+        self.assertEqual(sections["depositor"]["totals"]["total"], 500)
+
     def test_advance_tracks_pending_balance_and_only_projects_before_delivery(self):
         advance = self.env["cashflow.promise"].with_context(
             default_classification="advance"
@@ -899,14 +1007,85 @@ class TestCashflowForecast(TransactionCase):
             "partner_id": self.partner.id,
             "direction": "receivable",
             "period": "week_1",
-            "amount": 25,
+            "amount": 25, "classification": "customer",
         })
         sections = {section["key"]: section for section in self.plan._cashflow_report_sections()}
         self.assertEqual(sections["available"]["totals"]["balance_hnl"], 100)
         self.assertEqual(sections["available"]["totals"]["total"], 100)
         self.assertEqual(sections["collections"]["totals"]["week_1"], 25)
         self.assertIn("advances", sections)
-        self.assertIn("unclassified", sections)
+        self.assertIn("disbursed_advances", sections)
+        self.assertNotIn("unclassified", sections)
+
+    def test_manual_projection_is_never_cancelled_by_refresh(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.plan.action_refresh_open_items()
+        self.assertEqual(promise.state, "active")
+
+    def test_planned_advance_is_never_cancelled_by_refresh(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.plan.action_refresh_open_items()
+        self.assertEqual(promise.state, "active")
+        self.assertIn(promise, self.plan.advance_promise_ids)
+
+    def test_report_groups_same_supplier_across_weeks(self):
+        Promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        )
+        for period, amount in (("week_1", 100), ("week_2", 200)):
+            Promise.create({
+                "plan_id": self.plan.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "period": period,
+                "amount": amount,
+            })
+        sections = {
+            section["key"]: section
+            for section in self.plan._cashflow_report_sections()
+        }
+        lines = sections["payables"]["lines"]
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]["week_1"], 100)
+        self.assertEqual(lines[0]["week_2"], 200)
+        self.assertEqual(lines[0]["total"], 300)
+
+    def test_operational_rows_put_pending_after_week_three(self):
+        Promise = self.env["cashflow.promise"].with_context(
+            default_classification="supplier"
+        )
+        records = self.env["cashflow.promise"]
+        for period in ("pending", "week_3", "week_1", "week_2"):
+            records |= Promise.create({
+                "plan_id": self.plan.id,
+                "partner_id": self.partner.id,
+                "direction": "payable",
+                "period": period,
+                "amount": 10,
+            })
+        ordered = self.env["cashflow.promise"].search([
+            ("id", "in", records.ids),
+        ])
+        self.assertEqual(
+            ordered.mapped("period"),
+            ["week_1", "week_2", "week_3", "pending"],
+        )
 
     def test_removing_bank_position_does_not_delete_ledger_account(self):
         account = self._account("CF1011", "asset_cash")

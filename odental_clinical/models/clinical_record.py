@@ -1,5 +1,43 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+
+
+ANAMNESIS_FIELDS = {
+    "anamnesis_chief_complaint",
+    "anamnesis_present_illness",
+    "anamnesis_oral_habits",
+    "anamnesis_other_history",
+    "anamnesis_positive_details",
+    "anamnesis_observations",
+    "anamnesis_pulse",
+    "anamnesis_blood_pressure",
+    "anamnesis_temperature",
+    "anamnesis_respiratory_rate",
+    "hx_allergies",
+    "hx_blood_disorders",
+    "hx_heart_disease",
+    "hx_pregnancy",
+    "hx_blood_pressure_changes",
+    "hx_medications",
+    "hx_current_medical_treatment",
+    "hx_headaches",
+    "hx_hepatitis",
+    "hx_diabetes",
+    "hx_rheumatic_fever",
+    "hx_hiv_aids",
+    "hx_immunosuppression",
+    "hx_kidney_disease",
+    "hx_respiratory_disease",
+    "hx_hormonal_disorders",
+    "hx_gastric_disorders",
+    "hx_emotional_disorders",
+    "hx_loss_of_consciousness",
+    "hx_sinusitis",
+    "hx_surgeries",
+    "hx_extractions",
+    "hx_oral_diseases",
+    "hx_oral_appliances",
+}
 
 
 class ODentalPatientClinical(models.Model):
@@ -85,6 +123,42 @@ class ODentalClinicalRecord(models.Model):
     )
     alerts = fields.Text(string="Alertas clínicas", tracking=True)
     general_notes = fields.Text(string="Observaciones generales")
+    anamnesis_chief_complaint = fields.Text(string="Motivo de consulta")
+    anamnesis_present_illness = fields.Text(string="Historia de la enfermedad actual")
+    # An unmarked checkbox means "not recorded", never a confirmed negative.
+    hx_allergies = fields.Boolean(string="Alergias")
+    hx_blood_disorders = fields.Boolean(string="Discrasias sanguíneas")
+    hx_heart_disease = fields.Boolean(string="Cardiopatías")
+    hx_pregnancy = fields.Boolean(string="Embarazo")
+    hx_blood_pressure_changes = fields.Boolean(string="Alteraciones de tensión arterial")
+    hx_medications = fields.Boolean(string="Ingesta de medicamentos")
+    hx_current_medical_treatment = fields.Boolean(string="Tratamiento médico actual")
+    hx_headaches = fields.Boolean(string="Cefaleas")
+    hx_hepatitis = fields.Boolean(string="Hepatitis")
+    hx_diabetes = fields.Boolean(string="Diabetes")
+    hx_rheumatic_fever = fields.Boolean(string="Fiebre reumática")
+    hx_hiv_aids = fields.Boolean(string="VIH/SIDA")
+    hx_immunosuppression = fields.Boolean(string="Inmunosupresión")
+    hx_kidney_disease = fields.Boolean(string="Patologías renales")
+    hx_respiratory_disease = fields.Boolean(string="Patologías respiratorias")
+    hx_hormonal_disorders = fields.Boolean(string="Trastornos hormonales")
+    hx_gastric_disorders = fields.Boolean(string="Trastornos gástricos")
+    hx_emotional_disorders = fields.Boolean(string="Trastornos emocionales")
+    hx_loss_of_consciousness = fields.Boolean(string="Pérdida de conciencia")
+    hx_sinusitis = fields.Boolean(string="Sinusitis")
+    hx_surgeries = fields.Boolean(string="Cirugías (incluso orales)")
+    hx_extractions = fields.Boolean(string="Exodoncias")
+    hx_oral_diseases = fields.Boolean(string="Enfermedades orales")
+    hx_oral_appliances = fields.Boolean(string="Aparatología oral")
+    anamnesis_oral_habits = fields.Text(string="Hábitos asociados a la cavidad oral")
+    anamnesis_other_history = fields.Text(string="Otras patologías o antecedentes médicos u odontológicos")
+    anamnesis_positive_details = fields.Text(string="Detalles de respuestas positivas")
+    anamnesis_observations = fields.Text(string="Observaciones e interconsultas")
+    # Text keeps missing vital signs empty instead of displaying a misleading 0.
+    anamnesis_pulse = fields.Char(string="Pulso (lpm)")
+    anamnesis_blood_pressure = fields.Char(string="Presión arterial (mmHg)")
+    anamnesis_temperature = fields.Char(string="Temperatura (°C)")
+    anamnesis_respiratory_rate = fields.Char(string="Frecuencia respiratoria (rpm)")
     history_entry_ids = fields.One2many(
         "odental.medical.history.entry", "clinical_record_id", string="Antecedentes"
     )
@@ -106,9 +180,23 @@ class ODentalClinicalRecord(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
-        for record in records:
+        for record, values in zip(records, vals_list):
             record._log_event("record_created", "Expediente clínico creado")
+            if any(values.get(field) for field in ANAMNESIS_FIELDS):
+                record._log_event("anamnesis_updated", "Anamnesis registrada")
         return records
+
+    def write(self, vals):
+        changed_fields = ANAMNESIS_FIELDS.intersection(vals)
+        changed_records = self.filtered(
+            lambda record: any(record[field] != vals[field] for field in changed_fields)
+        ) if changed_fields else self.browse()
+        if changed_records.filtered(lambda record: record.state == "closed"):
+            raise UserError("Reabra el expediente antes de modificar la anamnesis.")
+        result = super().write(vals)
+        for record in changed_records:
+            record._log_event("anamnesis_updated", "Anamnesis actualizada")
+        return result
 
     def _log_event(self, event_type, summary, content_hash=False, source_record=False):
         for record in self:

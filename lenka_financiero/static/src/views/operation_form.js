@@ -1,24 +1,129 @@
 /** @odoo-module **/
 
-import { onWillUnmount } from "@odoo/owl";
+import { onWillUnmount, useEffect, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { AlertDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { FormController } from "@web/views/form/form_controller";
 import { formView } from "@web/views/form/form_view";
+import { financialValidationErrors } from "./financial_validation";
 
 export class LenkaOperationFormController extends FormController {
     setup() {
         super.setup();
         this.guidanceFrame = null;
         this.clearGuidance = () => {};
+        this.financialValidation = useState({ enabled: false });
+        this.clearFinancialGuidance = () => {};
+        useEffect(() => {
+            this.paintFinancialValidation();
+        }, () => [this.model.root.id, this.financialValidation.enabled,
+            JSON.stringify(this.financialErrors())]);
         onWillUnmount(() => {
             cancelAnimationFrame(this.guidanceFrame);
             this.clearGuidance();
+            this.clearFinancialGuidance();
         });
+    }
+
+    financialErrors() {
+        return this.model.root.resModel === "lenka.financial.operation"
+            ? financialValidationErrors(this.model.root.data) : [];
+    }
+
+    onWillLoadRoot(...args) {
+        if (this.financialValidation) {
+            this.financialValidation.enabled = false;
+            this.clearFinancialGuidance();
+        }
+        return super.onWillLoadRoot(...args);
+    }
+
+    validateFinancialInputs() {
+        if (this.model.root.resModel !== "lenka.financial.operation") {
+            return true;
+        }
+        this.financialValidation.enabled = true;
+        const errors = this.financialErrors();
+        this.paintFinancialValidation(true);
+        if (errors.length) {
+            this.model.notification.add("Revise los campos marcados en rojo. Debajo de cada uno se indica cómo corregirlo.", {
+                title: "Hay datos que corregir", type: "danger",
+            });
+            return false;
+        }
+        return true;
+    }
+
+    paintFinancialValidation(focus = false) {
+        this.clearFinancialGuidance();
+        const root = this.rootRef.el;
+        if (!root || !this.financialValidation.enabled) {
+            return;
+        }
+        const cleanup = [];
+        let firstInput;
+        for (const { field: fieldName, message } of this.financialErrors()) {
+            for (const field of root.querySelectorAll(`.o_field_widget[name="${fieldName}"]`)) {
+                const input = field.querySelector("input, select, textarea");
+                const hint = document.createElement("span");
+                hint.className = "o_lenka_financial_validation_hint";
+                hint.textContent = message;
+                hint.setAttribute("role", "alert");
+                hint.id = `lenka_error_${this.model.root.id}_${fieldName}`;
+                field.classList.add("o_lenka_financial_error");
+                field.appendChild(hint);
+                const previousInvalid = input?.getAttribute("aria-invalid");
+                const previousDescribedby = input?.getAttribute("aria-describedby");
+                input?.setAttribute("aria-invalid", "true");
+                input?.setAttribute("aria-describedby", [previousDescribedby, hint.id].filter(Boolean).join(" "));
+                if (!firstInput && input && field.getClientRects().length) {
+                    firstInput = input;
+                }
+                cleanup.push(() => {
+                    field.classList.remove("o_lenka_financial_error");
+                    hint.remove();
+                    for (const [attribute, previous] of [["aria-invalid", previousInvalid], ["aria-describedby", previousDescribedby]]) {
+                        if (previous == null) {
+                            input?.removeAttribute(attribute);
+                        } else {
+                            input?.setAttribute(attribute, previous);
+                        }
+                    }
+                });
+            }
+        }
+        this.clearFinancialGuidance = () => cleanup.forEach((clear) => clear());
+        if (focus && firstInput) {
+            firstInput.scrollIntoView({ block: "center", behavior: "smooth" });
+            firstInput.focus({ preventScroll: true });
+        }
+    }
+
+    async onWillSaveRecord(...args) {
+        if (!this.validateFinancialInputs()) {
+            return false;
+        }
+        return super.onWillSaveRecord(...args);
+    }
+
+    async save(params) {
+        if (!this.validateFinancialInputs()) {
+            return false;
+        }
+        return super.save(params);
+    }
+
+    async discard() {
+        this.financialValidation.enabled = false;
+        this.clearFinancialGuidance();
+        return super.discard();
     }
 
     async beforeExecuteActionButton(params) {
         const record = this.model.root;
+        if (params.special !== "cancel" && !this.validateFinancialInputs()) {
+            return false;
+        }
         if (params.name === "action_mark_contracted" &&
             record.data.state === "approved" && record.resId) {
             const signedContracts = await this.orm.searchCount("lenka.generated.document", [

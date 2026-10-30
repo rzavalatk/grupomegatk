@@ -1,7 +1,7 @@
 {
     "name": "Flujo de caja proyectado",
     "summary": "Proyección operativa de cobros, pagos y disponible por empresa",
-    "version": "18.0.11.0.0",
+    "version": "18.0.15.0.0",
     "category": "Accounting/Accounting",
     "author": "Grupo Megatk",
     "license": "LGPL-3",
@@ -13,6 +13,7 @@
         "data/aged_partner_cashflow_report.xml",
         "views/flujo_caja_views.xml",
         "views/integracion_odoo_views.xml",
+        "views/payment_completion_views.xml",
         "reports/portfolio_report.xml",
     ],
     "assets": {

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odental_todoist_connection_list" model="ir.ui.view">
+        <field name="name">odental.todoist.connection.list</field>
+        <field name="model">odental.todoist.connection</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" edit="false">
+                <field name="professional_id"/>
+                <field name="organization_id"/>
+                <field name="pilot_patient_id"/>
+                <field name="label_name"/>
+                <field name="default_duration_minutes"/>
+                <field name="last_synced_at"/>
+                <field name="last_error"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_odental_todoist_connection_form" model="ir.ui.view">
+        <field name="name">odental.todoist.connection.form</field>
+        <field name="model">odental.todoist.connection</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false">
+                <header>
+                    <button name="action_sync_now" type="object" string="Actualizar ahora" class="btn-primary" invisible="not active"/>
+                    <button name="action_disconnect" type="object" string="Desconectar" invisible="not active" confirm="Se liberarán los horarios bloqueados por Todoist. ¿Continuar?"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="professional_id"/>
+                        <field name="organization_id"/>
+                        <field name="pilot_patient_id"/>
+                        <field name="label_name"/>
+                        <field name="default_duration_minutes"/>
+                        <field name="source_timezone"/>
+                        <field name="last_synced_at"/>
+                        <field name="last_error"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_odental_todoist_connect_wizard_form" model="ir.ui.view">
+        <field name="name">odental.todoist.connect.wizard.form</field>
+        <field name="model">odental.todoist.connect.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Conectar mi Todoist">
+                <group>
+                    <field name="professional_id" domain="[('user_id', '=', uid)]"/>
+                    <field name="organization_id"/>
+                    <field name="pilot_patient_id" domain="[('organization_id', '=', organization_id)]"/>
+                    <field name="label_name"/>
+                    <field name="default_duration_minutes"/>
+                    <field name="source_timezone"/>
+                    <field name="api_token" password="True" placeholder="Pegar aquí desde Todoist; no compartir por chat"/>
+                </group>
+                <footer>
+                    <button name="action_connect" type="object" string="Conectar y probar" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_odental_todoist_connection" model="ir.actions.act_window">
+        <field name="name">Mi disponibilidad Todoist</field>
+        <field name="res_model">odental.todoist.connection</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_odental_todoist_connect" model="ir.actions.act_window">
+        <field name="name">Conectar mi Todoist</field>
+        <field name="res_model">odental.todoist.connect.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_odental_todoist_connect" name="Conectar mi Todoist" parent="odental_core.menu_odental_clinical"
+              action="action_odental_todoist_connect" sequence="35" groups="odental_core.group_odental_professional"/>
+    <menuitem id="menu_odental_todoist_connection" name="Mi disponibilidad Todoist" parent="odental_core.menu_odental_clinical"
+              action="action_odental_todoist_connection" sequence="36" groups="odental_core.group_odental_professional"/>
+</odoo>

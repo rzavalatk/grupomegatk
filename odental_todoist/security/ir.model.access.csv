@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odental_todoist_connection_professional,odental.todoist.connection professional,model_odental_todoist_connection,odental_core.group_odental_professional,1,0,0,0
+access_odental_todoist_connection_admin,odental.todoist.connection administrator,model_odental_todoist_connection,odental_core.group_odental_admin,1,0,0,0
+access_odental_todoist_connect_wizard_professional,odental.todoist.connect.wizard professional,model_odental_todoist_connect_wizard,odental_core.group_odental_professional,1,1,1,1

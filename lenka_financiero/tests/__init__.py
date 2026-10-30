@@ -10,3 +10,18 @@ from . import test_end_to_end
 
 from . import test_statement
 from . import test_restructuring
+from . import test_approved_contract
+
+
+
+from . import test_sole_signature_approval
+from . import test_mixed_plan
+from . import test_financial_validation_ui
+
+from . import test_loan_mora
+
+from . import test_secured_loan
+
+
+from . import test_correction
+from . import test_refinance_application

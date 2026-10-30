@@ -1,0 +1,32 @@
+.odt-chart {
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+    border: 1px solid #d8e1e5;
+    border-radius: 0.75rem;
+    background: #f8fbfc;
+    overflow-x: auto;
+    color: #24343b;
+}
+.odt-chart__heading { display: flex; gap: 0.75rem; align-items: baseline; flex-wrap: wrap; margin-bottom: 1rem; }
+.odt-arch { margin: 0.75rem auto 1.25rem; min-width: 440px; max-width: 960px; }
+.odt-arch__title { font-weight: 600; margin-bottom: 0.4rem; }
+.odt-arch__row { display: flex; align-items: center; justify-content: center; gap: 0.1rem; }
+.odt-arch__row--upper { border-bottom: 2px solid #bed3db; padding-bottom: 0.3rem; }
+.odt-arch__row--lower { border-top: 2px solid #bed3db; padding-top: 0.3rem; }
+.odt-arch__midline { text-align: center; font-size: 0.7rem; color: #657d87; padding: 0.25rem; }
+.odt-tooth { display: flex; flex-direction: column; align-items: center; flex: 1 1 0; min-width: 26px; max-width: 56px; }
+.odt-tooth__code { font-weight: 600; font-size: 0.75rem; }
+.odt-tooth__shape { width: 100%; height: 68px; overflow: visible; }
+.odt-tooth--lower .odt-tooth__shape { transform: rotate(180deg); }
+.odt-tooth__outline { fill: #fff; stroke: #68818b; stroke-width: 1.5; }
+.odt-zone { fill: #fff; stroke: #9db1b7; stroke-width: 0.6; cursor: pointer; }
+.odt-zone:hover, .odt-zone:focus { fill: #b8e0ed; stroke: #276780; stroke-width: 1.4; }
+.odt-zone--alert, .odt-swatch--alert { fill: #e9837d; background: #e9837d; }
+.odt-zone--planned, .odt-swatch--planned { fill: #86aee9; background: #86aee9; }
+.odt-zone--completed, .odt-swatch--completed { fill: #72c4a2; background: #72c4a2; }
+.odt-zone--existing, .odt-swatch--existing { fill: #e8c46b; background: #e8c46b; }
+.odt-tooth__whole { border: 1px solid #b7ccd3; border-radius: 0.3rem; font-size: 0.58rem; padding: 0 0.12rem; margin-top: 0.15rem; line-height: 1.25rem; }
+.odt-tooth__whole:hover:not(:disabled) { outline: 2px solid #276780; }
+.odt-tooth__whole:disabled { opacity: 0.7; }
+.odt-chart__legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.8rem; margin: 1rem 0 0.4rem; }
+.odt-swatch { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 50%; vertical-align: -0.1rem; border: 1px solid #789; }

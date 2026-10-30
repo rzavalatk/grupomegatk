@@ -91,14 +91,23 @@ class LenkaDisbursementAccounting(models.Model):
             ],
         }
 
+    def _link_disbursement_move(self, move):
+        self.ensure_one()
+        self.check_access('write')
+        move.check_access('read')
+        if self.state != 'posted' or self.move_id or move.company_id != self.operation_id.company_id:
+            raise ValidationError(_('No puede vincular esta partida al desembolso.'))
+        super(LenkaDisbursementAccounting, self).write({'move_id': move.id})
+
     def action_create_account_move(self):
+        self.check_access('write')
         for rec in self:
             if rec.state != 'posted':
                 raise ValidationError(_('El desembolso debe estar aplicado antes de crear la partida contable.'))
             if rec.move_id:
                 continue
             move = self.env['account.move'].with_company(rec.operation_id.company_id).create(rec._prepare_disbursement_move())
-            super(LenkaDisbursementAccounting, rec).write({'move_id': move.id})
+            rec._link_disbursement_move(move)
         return True
 
     def action_open_account_move(self):

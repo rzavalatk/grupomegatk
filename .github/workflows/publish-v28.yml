@@ -1,4 +1,4 @@
-name: Publicar planificación comercial 18.0.42
+name: Publicar planificación comercial 18.0.42.2
 on:
   workflow_dispatch:
 permissions:
@@ -11,14 +11,11 @@ jobs:
         with:
           ref: master
           submodules: false
-      - name: Publicar estrellas por cumplimiento y conciliacion mensual
+      - name: Publicar reporte global por marcas
         run: |
-          git update-index --cacheinfo 160000,c9e0d34a3258363ce275cb52796072c7782b0df4,commercial_planning_addons
+          git update-index --cacheinfo 160000,48e99f90d6898f6a42f3eb53eb9e26f99ff68efd,commercial_planning_addons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git diff --cached --quiet && exit 0
-          git commit -m "Publica planificación comercial 18.0.42.0.0"
+          git commit -m "Publica planificación comercial 18.0.42.2.1: marcas seleccionadas"
           git push origin master
-
-
-# Reintento v42: Odoo omitio el primer despliegue por operacion simultanea.

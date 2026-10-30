@@ -9,7 +9,7 @@
                 <field name="second_surname" optional="show"/>
                 <field name="first_name"/>
                 <field name="middle_name" optional="hide"/>
-                <field name="specialty"/>
+                <field name="specialty_ids" widget="many2many_tags"/>
                 <field name="license_number"/>
                 <field name="professional_code" optional="hide"/>
                 <field name="user_id" optional="hide"/>
@@ -45,9 +45,13 @@
                             <field name="license_number"/>
                         </group>
                         <group>
-                            <field name="specialty"/>
+                            <field name="specialty_ids" widget="many2many_tags"
+                                   domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="specialty" readonly="1" invisible="not specialty or specialty_ids"
+                                   groups="odental_core.group_odental_manager"/>
                             <field name="professional_code" readonly="1"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="company_id"/>
                             <field name="active"/>
                         </group>
                     </group>
@@ -65,7 +69,7 @@
         <field name="arch" type="xml">
             <search string="Buscar profesionales">
                 <field name="name" string="Nombre o apellido"/>
-                <field name="specialty"/>
+                <field name="specialty_ids"/>
                 <field name="license_number"/>
                 <field name="professional_code"/>
                 <field name="organization_ids"/>

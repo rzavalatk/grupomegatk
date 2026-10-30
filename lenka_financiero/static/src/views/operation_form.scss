@@ -11,3 +11,23 @@
         margin-top: 0.35rem;
     }
 }
+
+.o_field_widget.o_lenka_financial_error {
+    outline: 2px solid #b42318;
+    outline-offset: 3px;
+    border-radius: 3px;
+    background-color: #fff1f0;
+
+    input, select, textarea {
+        color: #b42318;
+        border-color: #b42318;
+    }
+
+    .o_lenka_financial_validation_hint {
+        display: block;
+        color: #b42318;
+        font-weight: 600;
+        margin-top: 0.4rem;
+        white-space: normal;
+    }
+}

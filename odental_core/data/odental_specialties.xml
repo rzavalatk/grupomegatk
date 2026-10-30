@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="specialty_general" model="odental.specialty"><field name="name">Odontología general</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_endodontics" model="odental.specialty"><field name="name">Endodoncia</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_orthodontics" model="odental.specialty"><field name="name">Ortodoncia</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_periodontics" model="odental.specialty"><field name="name">Periodoncia</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_pediatric" model="odental.specialty"><field name="name">Odontopediatría</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_oral_surgery" model="odental.specialty"><field name="name">Cirugía oral y maxilofacial</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_prosthodontics" model="odental.specialty"><field name="name">Prostodoncia</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_oral_rehabilitation" model="odental.specialty"><field name="name">Rehabilitación oral</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_implantology" model="odental.specialty"><field name="name">Implantología oral</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_oral_pathology" model="odental.specialty"><field name="name">Patología oral</field><field name="company_id" eval="False"/></record>
+    <record id="specialty_oral_radiology" model="odental.specialty"><field name="name">Radiología oral y maxilofacial</field><field name="company_id" eval="False"/></record>
+</odoo>

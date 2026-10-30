@@ -51,8 +51,64 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Antecedentes">
-                            <field name="history_entry_ids" context="{'default_clinical_record_id': id}">
+                        <page string="Anamnesis">
+                            <group col="1" string="Relato del paciente">
+                                <field name="anamnesis_chief_complaint" readonly="state == 'closed'"
+                                       placeholder="Registre el motivo de consulta con las palabras del paciente."/>
+                                <field name="anamnesis_present_illness" readonly="state == 'closed'"
+                                       placeholder="Desde cuándo comenzaron los síntomas, cómo han evolucionado, qué los mejora o empeora y qué ha intentado el paciente."/>
+                            </group>
+                            <separator string="Antecedentes médicos y odontológicos generales"/>
+                            <div class="odental-anamnesis-help">Marque los antecedentes presentes. Una casilla sin marcar significa «no registrado», no una respuesta negativa.</div>
+                            <div class="odental-anamnesis-grid">
+                                <div class="odental-anamnesis-column">
+                                    <h4>Salud general</h4>
+                                    <div class="odental-history-item"><field name="hx_allergies" nolabel="1" readonly="state == 'closed'"/><label for="hx_allergies"/></div>
+                                    <div class="odental-history-item"><field name="hx_blood_disorders" nolabel="1" readonly="state == 'closed'"/><label for="hx_blood_disorders"/></div>
+                                    <div class="odental-history-item"><field name="hx_heart_disease" nolabel="1" readonly="state == 'closed'"/><label for="hx_heart_disease"/></div>
+                                    <div class="odental-history-item"><field name="hx_pregnancy" nolabel="1" readonly="state == 'closed'"/><label for="hx_pregnancy"/></div>
+                                    <div class="odental-history-item"><field name="hx_blood_pressure_changes" nolabel="1" readonly="state == 'closed'"/><label for="hx_blood_pressure_changes"/></div>
+                                    <div class="odental-history-item"><field name="hx_medications" nolabel="1" readonly="state == 'closed'"/><label for="hx_medications"/></div>
+                                    <div class="odental-history-item"><field name="hx_current_medical_treatment" nolabel="1" readonly="state == 'closed'"/><label for="hx_current_medical_treatment"/></div>
+                                    <div class="odental-history-item"><field name="hx_headaches" nolabel="1" readonly="state == 'closed'"/><label for="hx_headaches"/></div>
+                                </div>
+                                <div class="odental-anamnesis-column">
+                                    <h4>Enfermedades y condiciones</h4>
+                                    <div class="odental-history-item"><field name="hx_hepatitis" nolabel="1" readonly="state == 'closed'"/><label for="hx_hepatitis"/></div>
+                                    <div class="odental-history-item"><field name="hx_diabetes" nolabel="1" readonly="state == 'closed'"/><label for="hx_diabetes"/></div>
+                                    <div class="odental-history-item"><field name="hx_rheumatic_fever" nolabel="1" readonly="state == 'closed'"/><label for="hx_rheumatic_fever"/></div>
+                                    <div class="odental-history-item"><field name="hx_hiv_aids" nolabel="1" readonly="state == 'closed'"/><label for="hx_hiv_aids"/></div>
+                                    <div class="odental-history-item"><field name="hx_immunosuppression" nolabel="1" readonly="state == 'closed'"/><label for="hx_immunosuppression"/></div>
+                                    <div class="odental-history-item"><field name="hx_kidney_disease" nolabel="1" readonly="state == 'closed'"/><label for="hx_kidney_disease"/></div>
+                                    <div class="odental-history-item"><field name="hx_respiratory_disease" nolabel="1" readonly="state == 'closed'"/><label for="hx_respiratory_disease"/></div>
+                                    <div class="odental-history-item"><field name="hx_hormonal_disorders" nolabel="1" readonly="state == 'closed'"/><label for="hx_hormonal_disorders"/></div>
+                                </div>
+                                <div class="odental-anamnesis-column">
+                                    <h4>Otros antecedentes</h4>
+                                    <div class="odental-history-item"><field name="hx_gastric_disorders" nolabel="1" readonly="state == 'closed'"/><label for="hx_gastric_disorders"/></div>
+                                    <div class="odental-history-item"><field name="hx_emotional_disorders" nolabel="1" readonly="state == 'closed'"/><label for="hx_emotional_disorders"/></div>
+                                    <div class="odental-history-item"><field name="hx_loss_of_consciousness" nolabel="1" readonly="state == 'closed'"/><label for="hx_loss_of_consciousness"/></div>
+                                    <div class="odental-history-item"><field name="hx_sinusitis" nolabel="1" readonly="state == 'closed'"/><label for="hx_sinusitis"/></div>
+                                    <div class="odental-history-item"><field name="hx_surgeries" nolabel="1" readonly="state == 'closed'"/><label for="hx_surgeries"/></div>
+                                    <div class="odental-history-item"><field name="hx_extractions" nolabel="1" readonly="state == 'closed'"/><label for="hx_extractions"/></div>
+                                    <div class="odental-history-item"><field name="hx_oral_diseases" nolabel="1" readonly="state == 'closed'"/><label for="hx_oral_diseases"/></div>
+                                    <div class="odental-history-item"><field name="hx_oral_appliances" nolabel="1" readonly="state == 'closed'"/><label for="hx_oral_appliances"/></div>
+                                </div>
+                            </div>
+                            <group col="2" string="Información adicional">
+                                <field name="anamnesis_oral_habits" readonly="state == 'closed'"/>
+                                <field name="anamnesis_other_history" readonly="state == 'closed'"/>
+                                <field name="anamnesis_positive_details" readonly="state == 'closed'"/>
+                                <field name="anamnesis_observations" readonly="state == 'closed'"/>
+                            </group>
+                            <group col="4" string="Signos vitales">
+                                <field name="anamnesis_pulse" readonly="state == 'closed'"/>
+                                <field name="anamnesis_blood_pressure" readonly="state == 'closed'"/>
+                                <field name="anamnesis_temperature" readonly="state == 'closed'"/>
+                                <field name="anamnesis_respiratory_rate" readonly="state == 'closed'"/>
+                            </group>
+                            <separator string="Antecedentes detallados"/>
+                            <field name="history_entry_ids" context="{'default_clinical_record_id': id}" readonly="state == 'closed'">
                                 <list editable="bottom" decoration-danger="severity == 'critical'" decoration-warning="sensitivity == 'restricted'">
                                     <field name="category"/>
                                     <field name="name"/>
