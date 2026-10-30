@@ -12,17 +12,28 @@
   <template id="report_portfolio_document">
     <t t-call="web.html_container">
       <meta charset="utf-8"/><t t-set="o" t-value="docs[:1]"/>
-      <t t-call="web.external_layout">
-        <div class="page">
+      <div class="page cashflow-portfolio-report">
+          <style>
+            .cashflow-portfolio-report { font-size:10px; padding-top:2px; }
+            .cashflow-portfolio-report h2 { margin:0 0 4px; }
+            .cashflow-portfolio-report p { margin:2px 0 5px; }
+            .cf-portfolio-section { margin-top:8px; page-break-inside:auto; }
+            .cf-portfolio-section h3 { margin:0 0 4px; page-break-after:avoid; }
+            .cf-portfolio-table { page-break-before:avoid; }
+            .cf-portfolio-table thead { display:table-header-group; }
+            .cf-portfolio-table tfoot { display:table-row-group; }
+            .cf-portfolio-table tr { page-break-inside:avoid; }
+            .cf-portfolio-table th, .cf-portfolio-table td { padding:2px 3px !important; }
+          </style>
           <h2 t-if="docs.env.context.get('cashflow_report_direction') == 'receivable'">Detalle de cuentas por cobrar</h2>
           <h2 t-elif="docs.env.context.get('cashflow_report_direction') == 'payable'">Detalle de cuentas por pagar</h2>
           <h2 t-else="">Detalle de cuentas por cobrar y pagar</h2>
           <p>Flujo de caja proyectado · <span t-esc="o.company_id.name"/></p>
           <p style="font-size: 12px">Verde: al día · amarillo: 1 a 30 días · rojo: desde 31 días · azul: crédito o anticipo.</p>
           <t t-foreach="docs._portfolio_report_sections()" t-as="section">
-            <div t-if="section['lines']" style="margin-top:18px; page-break-inside:avoid">
-              <h3 style="margin:0 0 6px;color:#1f4e78" t-esc="section['title']"/>
-              <table class="table table-sm" style="font-size: 11px; width: 100%; border-collapse: collapse;border:1px solid #6b7280;border-collapse:collapse">
+            <div t-if="section['lines']" class="cf-portfolio-section">
+              <h3 style="color:#1f4e78" t-esc="section['title']"/>
+              <table class="table table-sm cf-portfolio-table" style="font-size:10px;width:100%;border-collapse:collapse;border:1px solid #6b7280">
                 <thead><tr style="background: #e8eef0"><th style=";border:1px solid #6b7280;padding:5px">Contacto</th><th style=";border:1px solid #6b7280;padding:5px">Semanas</th><th style=";border:1px solid #6b7280;padding:5px">Al día</th><th style=";border:1px solid #6b7280;padding:5px">1–30</th><th style=";border:1px solid #6b7280;padding:5px">31–60</th><th style=";border:1px solid #6b7280;padding:5px">61–90</th><th style=";border:1px solid #6b7280;padding:5px">91–120</th><th style=";border:1px solid #6b7280;padding:5px">Antiguos</th><th style=";border:1px solid #6b7280;padding:5px">Crédito / anticipo</th><th style=";border:1px solid #6b7280;padding:5px">Total</th><th style=";border:1px solid #6b7280;padding:5px">Última gestión</th></tr></thead>
                 <tbody>
                   <tr t-foreach="section['lines']" t-as="line">
@@ -56,8 +67,7 @@
               </table>
             </div>
           </t>
-        </div>
-      </t>
+      </div>
     </t>
   </template>
 
@@ -115,10 +125,20 @@
             </div>
           </div>
 
+          <div class="page cashflow-details" style="font-size:12px;padding-top:2px">
+            <style>
+              .cashflow-detail-section { margin-top:8px; page-break-inside:auto; }
+              .cashflow-detail-section h3 { margin:0 0 4px; page-break-after:avoid; }
+              .cashflow-detail-table { page-break-before:avoid; }
+              .cashflow-detail-table thead { display:table-header-group; }
+              .cashflow-detail-table tfoot { display:table-row-group; }
+              .cashflow-detail-table tr { page-break-inside:avoid; }
+              .cashflow-detail-table th, .cashflow-detail-table td { padding:3px !important; }
+            </style>
           <t t-foreach="o._cashflow_report_sections()" t-as="section">
-            <div t-if="section['lines']" class="page" t-att-id="'detail-' + section['key']" style="font-size:14px;padding-top:8px">
+            <div t-if="section['lines']" class="cashflow-detail-section" t-att-id="'detail-' + section['key']">
               <h3 t-att-style="'color:#126b35' if section['kind'] == 'income' else 'color:#9b1c1c'" t-esc="section['title']"/>
-              <table class="table table-sm table-bordered" style="width:100%;border-collapse:collapse;border:1px solid #6b7280;border-collapse:collapse">
+              <table class="table table-sm table-bordered cashflow-detail-table" style="width:100%;border-collapse:collapse;border:1px solid #6b7280">
                 <thead>
                   <tr t-att-style="'background:#d9f2df' if section['kind'] == 'income' else 'background:#fde2e2'">
                     <th style=";border:1px solid #6b7280;padding:5px">Concepto</th><th style=";border:1px solid #6b7280;padding:5px">Saldo HNL</th><th style=";border:1px solid #6b7280;padding:5px">Saldo USD</th><th style=";border:1px solid #6b7280;padding:5px">Semana 1</th><th style=";border:1px solid #6b7280;padding:5px">Semana 2</th><th style=";border:1px solid #6b7280;padding:5px">Semana 3</th><th style=";border:1px solid #6b7280;padding:5px">Pendiente</th><th style=";border:1px solid #6b7280;padding:5px">Total</th><th style=";border:1px solid #6b7280;padding:5px">Detalle</th>
@@ -153,6 +173,7 @@
               </table>
             </div>
           </t>
+          </div>
       </t>
     </t>
   </template>
