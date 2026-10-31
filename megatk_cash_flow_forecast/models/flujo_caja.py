@@ -1120,7 +1120,11 @@ class CashflowPromise(models.Model):
     @api.depends("classification_id.classification")
     def _compute_classification(self):
         for promise in self:
-            promise.classification = promise.classification_id.classification or "unassigned"
+            promise.classification = (
+                promise.classification_id.classification
+                or promise.env.context.get("default_classification")
+                or "unassigned"
+            )
 
     def _inverse_classification(self):
         Classification = self.env["cashflow.portfolio.classification"]
