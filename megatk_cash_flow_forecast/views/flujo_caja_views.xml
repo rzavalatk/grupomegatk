@@ -92,7 +92,7 @@
                 <field name="company_currency_id" column_invisible="True"/><field name="current_open_balance" readonly="1"/><field name="currency_id"/><field name="amount"/>
                 <field name="advance_applied_amount"/><field name="advance_pending_amount" readonly="1"/><field name="advance_pending_company" readonly="1"/>
                 <field name="advance_status"/><field name="period"/><field name="state" column_invisible="True"/>
-                <button name="action_delete_projection" type="object" icon="fa-trash" title="Eliminar anticipo planificado" class="btn-link text-danger" confirm="Se eliminará únicamente este anticipo planificado del flujo. No se borrará el proveedor, la factura ni ningún asiento contable. ¿Desea continuar?"/>
+                <button name="action_delete_planned_advance" type="object" icon="fa-trash" title="Eliminar anticipo planificado" class="btn-link text-danger" confirm="Se eliminará únicamente este anticipo planificado del flujo. No se borrará el proveedor, la factura ni ningún asiento contable. ¿Desea continuar?"/>
               </list>
             </field>
           </page>

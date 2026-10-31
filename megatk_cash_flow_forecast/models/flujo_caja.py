@@ -1500,6 +1500,18 @@ class CashflowPromise(models.Model):
         self.unlink()
         return {"type": "ir.actions.client", "tag": "reload"}
 
+    def action_delete_planned_advance(self):
+        """Safely remove one planned advance without granting broad unlink rights."""
+        self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+        if self.classification != "advance" or self.advance_status != "projected":
+            raise ValidationError(
+                "Solo se pueden eliminar desde aquí los anticipos planificados."
+            )
+        self.sudo().unlink()
+        return {"type": "ir.actions.client", "tag": "reload"}
+
     def action_add_management_note(self):
         self.ensure_one()
         return {
