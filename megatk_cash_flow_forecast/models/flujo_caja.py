@@ -1269,9 +1269,23 @@ class CashflowPromise(models.Model):
         normalized = []
         for vals in vals_list:
             values = dict(vals)
-            classification_value = values.pop(
-                "classification", self.env.context.get("default_classification")
+            forced_classification = self.env.context.get("default_classification")
+            classification_value = (
+                forced_classification
+                or values.pop("classification", False)
             )
+            if forced_classification:
+                # A line created from a specialized tab must keep the tab's
+                # classification. Partner onchange data may otherwise send
+                # the contact's previous classification and make the new line
+                # disappear from the tab immediately after saving.
+                values.pop("classification", None)
+                values["classification_id"] = False
+            if forced_classification == "advance":
+                values["advance_status"] = self.env.context.get(
+                    "default_advance_status", "projected"
+                )
+                values["state"] = "active"
             plan = self.env["cashflow.plan"].browse(
                 values.get("plan_id") or self.env.context.get("default_plan_id")
             )
@@ -1371,11 +1385,24 @@ class CashflowPromise(models.Model):
         self.source_move_id = False
         self.classification_id = False
         if self.partner_id and self.direction and self.plan_id:
-            self.classification_id = self.env["cashflow.portfolio.classification"].search([
+            classification = self.env["cashflow.portfolio.classification"].search([
                 ("company_id", "=", self.plan_id.company_id.id),
                 ("partner_id", "=", self.partner_id.commercial_partner_id.id),
                 ("direction", "=", self.direction),
             ], limit=1)
+            forced_classification = self.env.context.get("default_classification")
+            if forced_classification:
+                if classification.classification == forced_classification:
+                    self.classification_id = classification
+                else:
+                    self.classification = forced_classification
+                if forced_classification == "advance":
+                    self.advance_status = self.env.context.get(
+                        "default_advance_status", "projected"
+                    )
+                    self.state = "active"
+            else:
+                self.classification_id = classification
             balance = self._open_balance_for(
                 self.partner_id, self.direction, self.plan_id.company_id
             )
