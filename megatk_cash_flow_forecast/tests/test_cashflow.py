@@ -1070,6 +1070,13 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(promise.state, "active")
         self.assertIn(promise, self.plan.advance_promise_ids)
 
+    def test_advance_tab_shows_advance_before_partner_is_selected(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).new({})
+        promise._compute_classification()
+        self.assertEqual(promise.classification, "advance")
+
     def test_report_groups_same_supplier_across_weeks(self):
         Promise = self.env["cashflow.promise"].with_context(
             default_classification="supplier"
