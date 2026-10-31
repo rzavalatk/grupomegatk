@@ -978,7 +978,7 @@ class TestCashflowForecast(TransactionCase):
             "period": "week_1",
             "amount": 100,
         })
-        promise.with_user(cashflow_user).action_delete_projection()
+        promise.with_user(cashflow_user).action_delete_planned_advance()
         self.assertFalse(promise.exists())
 
     def test_depositors_are_available_only_for_inversiones_lenka(self):
