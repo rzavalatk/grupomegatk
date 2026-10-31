@@ -937,6 +937,24 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(promise.exists())
         self.assertTrue(creditor.exists())
 
+    def test_planned_advance_can_be_deleted_without_touching_partner(self):
+        supplier = self.env["res.partner"].create({
+            "name": "Proveedor con anticipo eliminable",
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": supplier.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 250,
+        })
+        promise.action_delete_projection()
+        self.assertFalse(promise.exists())
+        self.assertTrue(supplier.exists())
+
     def test_depositors_are_available_only_for_inversiones_lenka(self):
         Classification = self.env["cashflow.portfolio.classification"]
         with self.assertRaises(ValidationError):
