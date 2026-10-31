@@ -1044,6 +1044,32 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(promise.state, "active")
         self.assertIn(promise, self.plan.advance_promise_ids)
 
+    def test_advance_tab_overrides_partner_previous_classification(self):
+        classification = self.env["cashflow.portfolio.classification"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.commercial_partner_id.id,
+            "direction": "payable",
+            "classification": "supplier",
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "supplier",
+            "classification_id": classification.id,
+            "advance_status": "closed",
+            "state": "cancelled",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(promise.classification, "advance")
+        self.assertEqual(promise.advance_status, "projected")
+        self.assertEqual(promise.state, "active")
+        self.assertIn(promise, self.plan.advance_promise_ids)
+
     def test_report_groups_same_supplier_across_weeks(self):
         Promise = self.env["cashflow.promise"].with_context(
             default_classification="supplier"
