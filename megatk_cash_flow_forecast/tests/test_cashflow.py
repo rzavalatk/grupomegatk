@@ -955,6 +955,32 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(promise.exists())
         self.assertTrue(supplier.exists())
 
+    def test_cashflow_user_can_delete_planned_advance(self):
+        cashflow_user = self.env["res.users"].create({
+            "name": "Usuario operativo del flujo",
+            "login": "cashflow-delete-test",
+            "company_id": self.company.id,
+            "company_ids": [(6, 0, self.company.ids)],
+            "groups_id": [(6, 0, [
+                self.env.ref("base.group_user").id,
+                self.env.ref(
+                    "megatk_cash_flow_forecast.group_cashflow_user"
+                ).id,
+            ])],
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        promise.with_user(cashflow_user).action_delete_projection()
+        self.assertFalse(promise.exists())
+
     def test_depositors_are_available_only_for_inversiones_lenka(self):
         Classification = self.env["cashflow.portfolio.classification"]
         with self.assertRaises(ValidationError):
