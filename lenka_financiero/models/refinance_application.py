@@ -118,9 +118,12 @@ class LenkaDisbursementRefinance(models.Model):
         if self.date != move.date:
             raise ValidationError(_('La fecha de aplicacion debe coincidir con la fecha contable del asiento existente.'))
         credits = move.line_ids.filtered(lambda l: l.credit > 0)
-        if (not credits or any(l.account_id.account_type != 'asset_current' or l.account_id == portfolio for l in credits)
+        legacy_bridge = self._is_configured_internal_bridge(credits)
+        if (not credits or any((l.account_id.account_type != 'asset_current' and not legacy_bridge)
+                               or l.account_id == portfolio for l in credits)
                 or move.line_ids.filtered(lambda l: l != line and l.debit > 0)):
-            raise ValidationError(_('La contrapartida debe ser una cuenta de intercambio de activo corriente, sin salida bancaria ni ingresos.'))
+            raise ValidationError(_('La contrapartida debe ser una cuenta de intercambio de activo corriente '
+                                    'o el diario puente interno configurado para esta empresa, sin salida bancaria ni ingresos.'))
         if initial and portfolio.reconcile and operation.currency_id.compare_amounts(line.amount_residual_currency, self.amount):
             raise ValidationError(_('El cargo de capital ya tiene conciliaciones. Revise el saldo antes de aplicarlo al prestamo.'))
         # Elevated READ ONLY checks prevent reusing entries hidden by other record rules.
@@ -132,6 +135,28 @@ class LenkaDisbursementRefinance(models.Model):
             raise ValidationError(_('El asiento ya pertenece a un desembolso Lenka; no puede reutilizarse.'))
         if self.env['lenka.payment'].sudo().search_count([('move_id', '=', move.id)]):
             raise ValidationError(_('El asiento pertenece a un cobro Lenka; no es un traslado de capital.'))
+        return True
+
+    def _is_configured_internal_bridge(self, credits):
+        """An explicit company setting, never an exemption for all cash accounts."""
+        self.ensure_one()
+        company = self.operation_id.company_id
+        journal = company.lenka_refinance_clearing_journal_id
+        move = self.refinance_move_id
+        # Elevated READ ONLY checks also see documents hidden by record rules.
+        for model in ('account.payment', 'account.bank.statement.line', 'banks.check'):
+            if model in self.env and self.env[model].sudo().search_count([('move_id', '=', move.id)]):
+                raise ValidationError(_('El asiento tiene un pago, extracto o cheque vinculado; '
+                                        'no puede reconocerse como traslado interno sin salida de dinero.'))
+        if not journal or move.journal_id != journal:
+            return False
+        account = journal.default_account_id
+        if (journal.company_id != company or journal.type not in ('general', 'bank')
+                or journal.bank_account_id or not account or company not in account.company_ids
+                or account.account_type not in ('asset_current', 'asset_cash')
+                or not credits or any(line.account_id != account for line in credits)):
+            raise ValidationError(_('Revise el diario puente interno y su contrapartida: deben '
+                                    'pertenecer a esta empresa, sin cuenta bancaria real vinculada.'))
         return True
 
     def action_post(self):

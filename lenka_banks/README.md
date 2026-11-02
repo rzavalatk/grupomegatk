@@ -1,6 +1,12 @@
 # Entregas de Lenka y Tesorería
 
-Instalar `lenka_financiero` versión 18.0.1.0.13 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+Instalar `lenka_financiero` versión 18.0.1.0.14 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+
+## Puente interno de refinanciamiento con clasificacion historica bancaria
+
+Un gerente puede seleccionar en Ajustes de Financiero Lenka el **Diario puente interno de refinanciamiento**, dentro de la empresa correspondiente, tras confirmar que solo traslada saldos y no mueve dinero. No se selecciona automaticamente al instalar. El diario y su cuenta predeterminada deben pertenecer a la empresa; no puede tener una cuenta bancaria real vinculada ni usar la cartera como contrapartida. La clasificacion historica del diario y la cuenta no se modifica.
+
+La aplicacion reconoce exclusivamente el asiento existente del diario designado y sus creditos a la cuenta puente. Rechaza pagos, extractos y cheques vinculados, otros bancos, otra empresa, ingresos y cargos adicionales. Mantiene las validaciones de cliente, moneda, importe completo, fecha, no duplicidad y tope financiado. No crea asientos ni modifica correlativos. El diario designado no puede reemplazarse mientras tenga aplicaciones vigentes. La configuracion es independiente por empresa.
 
 ## Anular desembolsos anteriores sin banco
 

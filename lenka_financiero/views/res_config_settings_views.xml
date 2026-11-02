@@ -30,6 +30,10 @@
                         <setting string="Cuenta de cartera / capital por cobrar">
                             <field name="lenka_portfolio_account_id"/>
                         </setting>
+                        <setting string="Diario puente interno de refinanciamiento" help="Seleccione solo un diario confirmado como puente interno sin movimientos reales de dinero. Conserva los asientos y la clasificacion historica.">
+                            <field name="lenka_refinance_clearing_journal_id" domain="[('company_id', '=', company_id), ('type', 'in', ['general', 'bank']), ('bank_account_id', '=', False)]" options="{'no_create': True}"/>
+                            <field name="lenka_refinance_clearing_account_id" readonly="1"/>
+                        </setting>
                         <setting string="Cuenta de ingreso por intereses">
                             <field name="lenka_interest_income_account_id"/>
                         </setting>

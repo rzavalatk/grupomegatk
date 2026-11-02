@@ -4,6 +4,7 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from unittest.mock import patch
 
 
 @tagged('post_install', '-at_install')
@@ -194,3 +195,25 @@ class TestLenkaBanks(TransactionCase):
                 'move_id': disbursement.move_id.id, 'account_id': self.portfolio.id,
                 'partner_id': self.partner.id, 'debit': 1, 'credit': 0,
             })
+
+    def test_internal_bridge_rejects_existing_treasury_check(self):
+        self.company.lenka_refinance_clearing_journal_id = self.journals[0]
+        operation = self._operation()
+        move = self.env['account.move'].create({
+            'journal_id': self.journals[0].id, 'date': '2026-10-22',
+            'line_ids': [Command.create({
+                'account_id': self.portfolio.id, 'partner_id': self.partner.id, 'debit': 150000,
+            }), Command.create({
+                'account_id': self.journals[0].default_account_id.id, 'credit': 150000,
+            })],
+        })
+        move.action_post()
+        application = self.env['lenka.disbursement'].create({
+            'operation_id': operation.id, 'amount': 150000, 'date': move.date,
+            'payment_method': 'refinance_entry', 'destination_partner_id': self.partner.id,
+            'refinance_line_id': move.line_ids.filtered(lambda line: line.debit).id,
+        })
+        with patch.object(type(self.env['banks.check']), 'search_count', return_value=1):
+            with self.assertRaisesRegex(ValidationError, 'pago, extracto o cheque'):
+                application.action_post()
+        self.assertEqual(application.state, 'draft')
