@@ -16,7 +16,9 @@ for table, rows in snapshot['tables'].items():
     if table == 'lenka_investment_interest':
         for _record_id, values in actual:
             assert values.pop('day_count_basis') == 30
-            assert values.pop('is_calendar_period') is False
+            # Nullable new marker: both SQL NULL and false mean an original
+            # anniversary line. No original column is excluded below.
+            assert values.pop('is_calendar_period') in (False, None)
     assert actual == rows, 'Installer changed historical records in %s' % table
 env.cr.execute("""SELECT conname, pg_get_constraintdef(oid), convalidated
                   FROM pg_constraint WHERE conrelid = 'account_move_line'::regclass

@@ -2,10 +2,12 @@
 from datetime import timedelta
 
 from odoo import fields
-from odoo.exceptions import AccessError, ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 
+@tagged('post_install', '-at_install')
 class TestLenkaMonthEndDeposits(TransactionCase):
 
     @classmethod
@@ -230,7 +232,7 @@ class TestLenkaMonthEndDeposits(TransactionCase):
         journal = self.env['account.journal'].with_company(other).create({
             'name': 'FICTITIOUS foreign bank', 'code': 'FDEP', 'type': 'bank', 'company_id': other.id,
         })
-        with self.assertRaises((ValidationError, AccessError)), self.cr.savepoint():
+        with self.assertRaises(UserError), self.cr.savepoint():
             self._deposit(rec, journal_id=journal.id)
 
     def test_net_interest_is_capitalized_after_withholding(self):
@@ -328,6 +330,44 @@ class TestLenkaMonthEndDeposits(TransactionCase):
         deposit = self._deposit(rec, confirm=False)
         with self.assertRaises(ValidationError):
             deposit.action_post()
+
+    def test_hnl_and_usd_deposits_keep_currency_and_balance(self):
+        for code in ('HNL', 'USD'):
+            currency = self.env['res.currency'].with_context(active_test=False).search([('name', '=', code)], limit=1)
+            self.assertTrue(currency)
+            currency.active = True
+            rec = self._investment(currency_id=currency.id)
+            deposit = self._deposit(rec, reference='FICTITIOUS-' + code)
+            self.assertEqual(deposit.move_id.line_ids.currency_id, currency)
+            self.assertAlmostEqual(sum(deposit.move_id.line_ids.mapped('amount_currency')), 0)
+            self.assertAlmostEqual(sum(deposit.move_id.line_ids.mapped('balance')), 0)
+            self.assertAlmostEqual(deposit.move_id.line_ids.filtered(lambda l: l.account_id == self.bank).amount_currency, 30000)
+
+    def test_operator_without_accounting_cannot_confirm_or_gain_permissions(self):
+        operator = self.env['res.users'].with_context(no_reset_password=True).create({
+            'name': 'FICTITIOUS deposit operator', 'login': 'lenka_deposit_operator',
+            'company_id': self.company.id, 'company_ids': [(6, 0, self.company.ids)],
+            'groups_id': [(6, 0, [self.env.ref('base.group_user').id, self.env.ref('lenka_financiero.group_lenka_user').id])],
+        })
+        deposit = self._deposit(self._investment(), confirm=False)
+        with self.assertRaises(AccessError), self.cr.savepoint():
+            deposit.with_user(operator).action_post()
+        self.assertEqual(deposit.state, 'draft')
+        self.assertFalse(deposit.move_id)
+        self.assertFalse(operator.has_group('account.group_account_user'))
+
+    def test_company_rule_hides_other_company_deposits(self):
+        deposit = self._deposit(self._investment())
+        other = self.env['res.company'].create({'name': 'FICTITIOUS isolated reading company'})
+        operator = self.env['res.users'].with_context(no_reset_password=True).create({
+            'name': 'FICTITIOUS other-company operator', 'login': 'lenka_deposit_other_company',
+            'company_id': other.id, 'company_ids': [(6, 0, other.ids)],
+            'groups_id': [(6, 0, [self.env.ref('base.group_user').id, self.env.ref('lenka_financiero.group_lenka_user').id])],
+        })
+        model = self.env['lenka.investment.deposit'].with_user(operator).with_context(allowed_company_ids=other.ids)
+        self.assertFalse(model.search([('id', '=', deposit.id)]))
+        with self.assertRaises(AccessError):
+            model.browse(deposit.id).read(['amount'])
 
     def test_zero_and_negative_deposits_are_rejected(self):
         for amount in (0, -1):
