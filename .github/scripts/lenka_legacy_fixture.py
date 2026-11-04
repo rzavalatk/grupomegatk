@@ -27,6 +27,18 @@ for state in ('posted', 'cancel'):
     else:
         move.button_cancel()
     moves |= move
+partner = local['res.partner'].create({'name': 'FICTITIOUS historical investor'})
+investment = local['lenka.investment'].create({
+    'partner_id': partner.id, 'company_id': company.id, 'investment_type': 'current',
+    'principal_amount': 1000, 'passive_rate': 1, 'rate_period': 'monthly',
+    'start_date': '2025-09-20', 'capitalization': 'monthly',
+})
+investment.action_activate()
+interest = local['lenka.investment.interest'].create({
+    'investment_id': investment.id, 'period_start_date': '2025-09-20',
+    'period_date': '2025-10-20', 'calculation_days': 30, 'base_amount': 1000,
+    'rate': 1, 'amount': 10, 'state': 'accrued',
+})
 env.flush_all()
 # Reproduce a constraint ALREADY ABSENT in the legacy fixture, before installing
 # the new release. The installer is never allowed to drop or bypass constraints.
@@ -35,7 +47,8 @@ env.cr.execute('UPDATE account_move_line SET amount_currency = -balance WHERE mo
 
 tables = {'account_move': moves.ids, 'account_move_line': moves.line_ids.ids,
           'res_company': company.ids, 'account_journal': journal.ids,
-          'account_account': accounts.ids}
+          'account_account': accounts.ids, 'lenka_investment': investment.ids,
+          'lenka_investment_interest': interest.ids}
 snapshot = {'tables': {}, 'constraints': None}
 for table, ids in tables.items():
     env.cr.execute('SELECT id, to_jsonb(t) FROM %s t WHERE id IN %%s ORDER BY id' % table, [tuple(ids)])

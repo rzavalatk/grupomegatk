@@ -1,6 +1,8 @@
 # Entregas de Lenka y Tesorería
 
-Instalar `lenka_financiero` versión 18.0.1.0.14 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+Instalar `lenka_financiero` versión 18.0.1.0.15 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+
+La version 18.0.1.0.15 agrega depositos adicionales de inversionistas y cierre de intereses a fin de mes. Ver `lenka_financiero/DEPOSITOS_Y_CIERRE_MENSUAL.md`. No requiere reinstalar `banks` ni cambiar el puente existente.
 
 ## Puente interno de refinanciamiento con clasificacion historica bancaria
 

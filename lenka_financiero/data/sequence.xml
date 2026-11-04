@@ -28,6 +28,13 @@
         <field name="padding">6</field>
         <field name="company_id" eval="False"/>
     </record>
+    <record id="seq_lenka_investment_deposit" model="ir.sequence">
+        <field name="name">Deposito adicional Lenka</field>
+        <field name="code">lenka.investment.deposit</field>
+        <field name="prefix">LENKA-DEP-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
     <record id="seq_lenka_statement" model="ir.sequence">
         <field name="name">Estado de Cuenta Lenka</field>
         <field name="code">lenka.statement</field>

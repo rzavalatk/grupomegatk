@@ -175,6 +175,8 @@ class LenkaStatement(models.Model):
             lambda w: w.state == 'posted' and w.date < self.date_from
         )
         principal_before = investment.principal_amount if investment.start_date < self.date_from else 0.0
+        deposits_before = investment.deposit_ids.filtered(lambda d: d.state == 'posted' and d.date < self.date_from)
+        principal_before += sum(deposits_before.mapped('amount'))
         opening = principal_before + sum(interest_before.mapped('net_amount')) - sum(withdrawals_before.mapped('total_amount'))
         self.opening_balance = max(opening, 0.0)
 
@@ -187,6 +189,14 @@ class LenkaStatement(models.Model):
                 'reference': investment.contract_reference,
                 'credit': deposit,
                 'capital': deposit,
+            }))
+        for additional in investment.deposit_ids.filtered(
+            lambda d: d.state == 'posted' and self.date_from <= d.date <= self.date_to
+        ).sorted('date'):
+            deposit += additional.amount
+            lines.append((0, 0, {
+                'date': additional.date, 'description': _('Deposito adicional %s') % additional.name,
+                'reference': additional.reference, 'credit': additional.amount, 'capital': additional.amount,
             }))
         interest_total = 0.0
         tax_total = 0.0
