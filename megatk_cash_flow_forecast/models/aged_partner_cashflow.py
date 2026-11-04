@@ -234,6 +234,8 @@ class CashflowPortfolioSnapshot(models.Model):
         }
 
     def _cashflow_register_partner_management(self, company, partner, direction):
+        move = self._preferred_open_move(self.env.companies, partner, direction)
+        management_company = move.company_id or company
         return {
             "type": "ir.actions.act_window",
             "name": _("Registrar gestión de cobro")
@@ -243,9 +245,11 @@ class CashflowPortfolioSnapshot(models.Model):
             "views": [(False, "form")],
             "target": "current",
             "context": {
-                "default_company_id": company.id,
+                "default_company_id": management_company.id,
                 "default_partner_id": partner.id,
                 "default_direction": direction,
+                "default_move_id": move.id or False,
+                "default_scope": "document" if move else "general",
                 "form_view_initial_mode": "edit",
             },
         }
