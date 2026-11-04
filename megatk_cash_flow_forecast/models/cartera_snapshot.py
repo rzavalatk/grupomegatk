@@ -150,6 +150,7 @@ class CashflowPortfolioSnapshot(models.Model):
                 scheduled[(partner.id, promise.direction)].add(promise.period)
         values = defaultdict(lambda: defaultdict(float))
         documents = defaultdict(set)
+        document_dates = defaultdict(list)
         for line in lines:
             direction = "receivable" if line.account_id.account_type == "asset_receivable" else "payable"
             partner = line.partner_id.commercial_partner_id
@@ -159,6 +160,7 @@ class CashflowPortfolioSnapshot(models.Model):
             is_credit = (direction == "receivable" and line.amount_residual < 0) or (direction == "payable" and line.amount_residual > 0)
             key = (partner.id, direction)
             documents[key].add(line.move_id.id)
+            document_dates[key].append(line.move_id.invoice_date or line.date)
             if is_credit:
                 values[key]["credit"] += abs(line.amount_residual)
                 continue
@@ -168,17 +170,30 @@ class CashflowPortfolioSnapshot(models.Model):
                 "days_61_90" if overdue <= 90 else "days_91_120" if overdue <= 120 else "old"
             )
             values[key][field_name] += abs(line.amount_residual)
-        # Show only a management linked to a document that remains open.
-        # General notes and paid-document notes stay available in history.
+        # Prefer a management linked to a document that remains open. Legacy
+        # general notes created while the current debt already existed are a
+        # safe fallback. A note older than every open document is never reused
+        # on a new invoice after the previous debt has been paid.
         latest_notes = {}
         notes = self.env["cashflow.management.note"].search([
             ("company_id", "=", company.id),
-            ("scope", "=", "document"),
-            ("move_id", "!=", False),
         ], order="create_date desc, id desc")
         for note in notes:
             key = (note.partner_id.commercial_partner_id.id, note.direction)
-            if note.move_id.id in documents[key]:
+            if key in latest_notes:
+                continue
+            is_open_document_note = (
+                note.scope == "document" and note.move_id.id in documents[key]
+            )
+            oldest_open_date = (
+                min(document_dates[key]) if document_dates[key] else False
+            )
+            is_current_general_note = (
+                note.scope == "general"
+                and oldest_open_date
+                and note.create_date.date() >= oldest_open_date
+            )
+            if is_open_document_note or is_current_general_note:
                 latest_notes.setdefault(key, note)
         created = []
         for (partner_id, direction), buckets in values.items():
@@ -212,7 +227,11 @@ class CashflowPortfolioSnapshot(models.Model):
         label = dict(note._fields["management_type"].selection).get(
             note.management_type, "Gestión"
         )
-        document = note.move_id.name or note.move_id.ref or "Documento"
+        document = (
+            note.move_id.name or note.move_id.ref
+            if note.move_id
+            else "Gestión del contacto"
+        )
         return "%s · %s · %s · %s: %s" % (
             local_dt.strftime("%d/%m/%Y %H:%M"),
             note.author_id.name or "Usuario",
@@ -282,6 +301,9 @@ class CashflowPortfolioSnapshot(models.Model):
 
     def action_add_management_note(self):
         self.ensure_one()
+        move = self._preferred_open_move(
+            self.company_id, self.partner_id, self.direction
+        )
         return {
             "type": "ir.actions.act_window",
             "name": "Registrar gestión de cobro" if self.direction == "receivable" else "Registrar gestión de pago",
@@ -292,8 +314,26 @@ class CashflowPortfolioSnapshot(models.Model):
                 "default_company_id": self.company_id.id,
                 "default_partner_id": self.partner_id.id,
                 "default_direction": self.direction,
+                "default_move_id": move.id or False,
+                "default_scope": "document" if move else "general",
             },
         }
+
+    @api.model
+    def _preferred_open_move(self, companies, partner, direction):
+        """Return the oldest open document for quick portfolio follow-up."""
+        move_types = (
+            ("out_invoice", "out_refund")
+            if direction == "receivable"
+            else ("in_invoice", "in_refund")
+        )
+        return self.env["account.move"].search([
+            ("company_id", "in", companies.ids),
+            ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+            ("move_type", "in", move_types),
+            ("state", "=", "posted"),
+            ("amount_residual", "!=", 0),
+        ], order="invoice_date_due asc, invoice_date asc, id asc", limit=1)
 
     def action_schedule_promise(self):
         self.ensure_one()

@@ -772,6 +772,15 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(action["res_model"], "cashflow.management.note")
         self.assertEqual(action["context"]["default_partner_id"], self.partner.id)
         self.assertEqual(action["context"]["default_company_id"], self.company.id)
+        self.assertFalse(action["context"]["default_move_id"])
+        self.assertEqual(action["context"]["default_scope"], "general")
+
+    def test_aged_management_action_exposes_document_defaults(self):
+        action = self.env["cashflow.portfolio.snapshot"].with_company(
+            self.company
+        ).action_from_aged_report(self.partner.id, "receivable", "management")
+        self.assertIn("default_move_id", action["context"])
+        self.assertIn("default_scope", action["context"])
 
     def test_snapshot_opens_prefilled_projection(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({
