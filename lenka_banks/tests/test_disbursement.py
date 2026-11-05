@@ -241,7 +241,7 @@ class TestLenkaBanks(TransactionCase):
         investment = self.env['lenka.investment'].create({
             'partner_id': self.partner.id, 'company_id': self.company.id,
             'principal_amount': 1000, 'start_date': '2025-09-01',
-            'maturity_date': '2026-09-01', 'passive_rate': 1.5,
+            'maturity_date': '2026-09-01', 'passive_rate': 1.5, 'early_withdrawal_rate': 1,
             'rate_period': 'monthly', 'investment_type': 'fixed',
         })
         investment.action_activate()
