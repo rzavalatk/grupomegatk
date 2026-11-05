@@ -1,6 +1,6 @@
 # Depositos adicionales y cierre de intereses
 
-Version del nucleo: **18.0.1.0.15**. El puente de cheques mantiene **18.0.1.0.2**.
+Version del nucleo: **18.0.1.0.16**. El puente de cheques mantiene **18.0.1.0.2**.
 
 ## Operacion
 
@@ -32,6 +32,12 @@ Un deposito confirmado no puede reescribirse o eliminarse. Puede anularse si su 
 
 ## Despliegue y verificacion
 
-Actualizar **lenka_financiero** a 18.0.1.0.15 con el mecanismo autorizado. No reinstalar `banks`; conservar `lenka_banks` 18.0.1.0.2 y su configuracion. Comprobar la version instalada y que la cuenta muestre el cierre calendario, boton de deposito, pestana de ingresos y saldos. Verificar las vistas sin confirmar movimientos reales como prueba.
+Actualizar **lenka_financiero** a 18.0.1.0.16 con el mecanismo autorizado. No reinstalar `banks`; conservar `lenka_banks` 18.0.1.0.2 y su configuracion. Comprobar la version instalada y que la cuenta muestre el cierre calendario, boton de deposito, pestana de ingresos y saldos. Verificar las vistas sin confirmar movimientos reales como prueba.
 
 La CI ejecuta la suite completa del nucleo, el puente con `banks` real y una actualizacion desde el codigo anterior con datos exclusivamente ficticios de otra empresa. La actualizacion compara todos los valores historicos originales de asientos y de una inversion con interes por aniversario; solo admite los nuevos campos de calendario con sus valores iniciales documentados. No se amplian permisos de modelos existentes ni se agregan restricciones globales a `account.move.line`.
+
+## Numeracion de recepciones
+
+Las nuevas recepciones iniciales y los depositos adicionales usan la serie propia LENKA-REC- (nucleo 18.0.1.0.16). Se asigna al crear el borrador y se conserva al publicarlo. No consume ni reajusta correlativos de cheques, depositos o transferencias de Tesoreria. Los asientos que usan numeracion ordinaria del diario no continuan esta serie. La secuencia nueva no se reinicia al actualizar. La recepcion inicial tambien se serializa para impedir creaciones dobles concurrentes. No reinstalar banks ni el puente 18.0.1.0.2.
+
+La actualizacion no renumera ni revierte partidas existentes, ni crea registros banks.check. Una recepcion ya publicada con numeracion de cheque requiere revision contable separada del asiento, cheques existentes y siguiente numero antes de cualquier regularizacion. No volver a crear la recepcion para corregir su nombre: duplicaria el saldo.

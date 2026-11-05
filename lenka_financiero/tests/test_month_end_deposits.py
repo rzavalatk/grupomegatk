@@ -382,3 +382,63 @@ class TestLenkaMonthEndDeposits(TransactionCase):
         self.assertTrue(arch.xpath("//field[@name='deposit_ids']"))
         self.assertTrue(arch.xpath("//field[@name='interest_schedule']"))
         self.env.ref('lenka_financiero.view_lenka_investment_deposit_form')._check_xml()
+
+    def test_opening_receipt_uses_own_series_and_is_idempotent(self):
+        rec = self._investment()
+        previous = self.env['account.move'].create({
+            'journal_id': self.journal.id, 'date': '2025-08-31', 'name': 'CK-FICTITIOUS-0677',
+            'line_ids': [(0, 0, {'account_id': self.bank.id, 'debit': 1}),
+                         (0, 0, {'account_id': self.liability.id, 'credit': 1})],
+        })
+        previous.action_post()
+        rec.action_create_receipt_move()
+        move = rec.receipt_move_id
+        self.assertTrue(move.name.startswith('LENKA-REC-'))
+        self.assertEqual(move.state, 'draft')
+        name = move.name
+        sequence = self.env.ref('lenka_financiero.seq_lenka_investment_receipt')
+        next_number = sequence.number_next_actual
+        rec.action_create_receipt_move()
+        self.assertEqual(rec.receipt_move_id, move)
+        self.assertEqual(sequence.number_next_actual, next_number)
+        move.action_post()
+        self.assertEqual(move.name, name)
+        self.assertEqual(previous.name, 'CK-FICTITIOUS-0677')
+
+    def test_additional_receipt_uses_own_series_without_double_allocation(self):
+        rec = self._investment()
+        rec.action_create_receipt_move()
+        deposit = self._deposit(rec)
+        move = deposit.move_id
+        self.assertTrue(move.name.startswith('LENKA-REC-'))
+        self.assertNotEqual(move.name, rec.receipt_move_id.name)
+        name = move.name
+        sequence = self.env.ref('lenka_financiero.seq_lenka_investment_receipt')
+        next_number = sequence.number_next_actual
+        deposit.action_post()
+        self.assertEqual(sequence.number_next_actual, next_number)
+        move.action_post()
+        self.assertEqual(move.name, name)
+
+    def test_journal_numbering_cannot_continue_receipt_series(self):
+        rec = self._investment()
+        rec.action_create_receipt_move()
+        rec.receipt_move_id.action_post()
+        ordinary = self.env['account.move'].create({
+            'journal_id': self.journal.id, 'date': rec.start_date,
+            'line_ids': [(0, 0, {'account_id': self.bank.id, 'debit': 1}),
+                         (0, 0, {'account_id': self.liability.id, 'credit': 1})],
+        })
+        ordinary.action_post()
+        self.assertFalse(ordinary.name.startswith('LENKA-REC-'))
+        deposit = self._deposit(rec)
+        deposit.move_id.action_post()
+        self.assertNotEqual(deposit.move_id.name, ordinary.name)
+
+    def test_upgrade_does_not_reset_receipt_sequence(self):
+        sequence = self.env.ref('lenka_financiero.seq_lenka_investment_receipt')
+        sequence.number_next_actual = 400
+        from odoo.tools.convert import convert_file
+        convert_file(self.env, 'lenka_financiero', 'data/sequence.xml', {}, mode='update', noupdate=False, kind='data')
+        sequence.invalidate_recordset()
+        self.assertEqual(sequence.number_next_actual, 400)

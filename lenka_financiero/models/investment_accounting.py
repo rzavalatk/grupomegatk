@@ -41,6 +41,9 @@ class LenkaInvestmentAccounting(models.Model):
         return super().write(vals)
 
     def action_create_receipt_move(self):
+        self.check_access('write')
+        self._lock_investment_movements()
+        self.invalidate_recordset(['receipt_move_id'])
         for rec in self:
             if rec.state not in ('active', 'matured', 'closed'):
                 raise ValidationError(_('La inversion debe estar activa antes de contabilizar la recepcion.'))
@@ -78,6 +81,7 @@ class LenkaInvestmentAccounting(models.Model):
                 }),
             ]
             move = self.env['account.move'].with_company(company).create({
+                **rec._receipt_number_values(),
                 'move_type': 'entry',
                 'date': rec.start_date,
                 'journal_id': journal.id,
@@ -86,6 +90,30 @@ class LenkaInvestmentAccounting(models.Model):
             })
             super(LenkaInvestmentAccounting, rec).write({'receipt_move_id': move.id})
         return True
+
+    def _receipt_number_values(self):
+        """Opening receipts and additions use their own immutable series.
+
+        Never derive a receipt number from the bank's last cheque, nor consume
+        Treasury sequences. Existing linked entries are not renumbered.
+        """
+        self.ensure_one()
+        sequence = self.env.ref('lenka_financiero.seq_lenka_investment_receipt')
+        name = sequence.with_company(self.company_id).next_by_id()
+        if not name:
+            raise ValidationError(_('Configure la numeracion de recepciones de inversionistas Lenka.'))
+        return {'name': name}
+
+
+class LenkaReceiptSequenceIsolation(models.Model):
+    _inherit = 'account.move'
+
+    def _get_last_sequence_domain(self, relaxed=False):
+        # Entries using journal numbering must not continue Lenka's explicitly
+        # allocated receipt series. No historical entry or counter is changed.
+        where, params = super()._get_last_sequence_domain(relaxed=relaxed)
+        return where + " AND name NOT LIKE %(lenka_receipt_prefix)s", dict(
+            params, lenka_receipt_prefix='LENKA-REC-%')
 
 
 class LenkaInvestmentInterestAccounting(models.Model):

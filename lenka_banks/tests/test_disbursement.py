@@ -217,3 +217,51 @@ class TestLenkaBanks(TransactionCase):
             with self.assertRaisesRegex(ValidationError, 'pago, extracto o cheque'):
                 application.action_post()
         self.assertEqual(application.state, 'draft')
+
+    def test_investor_receipts_leave_treasury_counters_untouched(self):
+        journal = self.journals[0]
+        self.company.write({
+            'lenka_investment_journal_id': journal.id,
+            'lenka_investor_liability_account_id': self.journals[2].default_account_id.id,
+        })
+        deposits = self.env['ir.sequence'].create({
+            'name': 'FICTITIOUS Treasury deposits', 'code': 'deposit', 'move_type': 'deposit',
+            'journal_id': journal.id, 'company_id': self.company.id,
+            'prefix': 'DP-FICTITIOUS-', 'padding': 4, 'number_next': 306,
+        })
+        operation = self._operation()
+        first = self._disbursement(operation, 150000)
+        first.action_post()
+        first.action_create_account_move()
+        first.move_id.action_post()
+        self.assertEqual(first.move_id.name, 'CK-A-0667')
+        check_next = self.sequence.number_next_actual
+        deposit_next = deposits.number_next_actual
+        check_count = self.env['banks.check'].search_count([])
+        investment = self.env['lenka.investment'].create({
+            'partner_id': self.partner.id, 'company_id': self.company.id,
+            'principal_amount': 1000, 'start_date': '2025-09-01',
+            'maturity_date': '2026-09-01', 'passive_rate': 1.5, 'early_withdrawal_rate': 1,
+            'rate_period': 'monthly', 'investment_type': 'fixed',
+        })
+        investment.action_activate()
+        investment.action_create_receipt_move()
+        additional = self.env['lenka.investment.deposit'].create({
+            'investment_id': investment.id, 'journal_id': journal.id,
+            'date': '2025-09-20', 'amount': 100, 'reference': 'FICTITIOUS-RECEIPT',
+        })
+        additional.action_post()
+        moves = investment.receipt_move_id | additional.move_id
+        names = moves.mapped('name')
+        self.assertEqual(len(set(names)), 2)
+        self.assertTrue(all(name.startswith('LENKA-REC-') for name in names))
+        moves.action_post()
+        self.assertEqual(moves.mapped('name'), names)
+        self.assertEqual(self.sequence.number_next_actual, check_next)
+        self.assertEqual(deposits.number_next_actual, deposit_next)
+        self.assertEqual(self.env['banks.check'].search_count([]), check_count)
+        second = self._disbursement(operation, 150000)
+        second.action_post()
+        second.action_create_account_move()
+        second.move_id.action_post()
+        self.assertEqual(second.move_id.name, 'CK-A-0668')
