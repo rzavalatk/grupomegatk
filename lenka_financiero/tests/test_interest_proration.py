@@ -12,6 +12,7 @@ class TestLenkaInterestProration(TransactionCase):
 
     def _investment(self, **extra):
         vals = {
+            'interest_schedule': 'anniversary',  # Preserve coverage of historical contracts.
             'partner_id': self.partner.id, 'principal_amount': 100000.0,
             'passive_rate': 1.5, 'early_withdrawal_rate': 1.0,
             'rate_period': 'monthly', 'investment_type': 'fixed',

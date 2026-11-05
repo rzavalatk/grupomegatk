@@ -168,6 +168,7 @@ class TestLenkaOperationalFlow(TransactionCase):
         # Synthetic withholding configuration, not a statutory tax assumption.
         self.env['ir.config_parameter'].sudo().set_param('lenka_financiero.passive_interest_tax_rate', '10')
         investment = self.env['lenka.investment'].with_user(self.operator).create({
+            'interest_schedule': 'anniversary',  # Regression of historical settlement.
             'partner_id': self.client.id, 'principal_amount': 100000.0,
             'investment_type': 'fixed', 'passive_rate': 1.5,
             'early_withdrawal_rate': 1.0, 'rate_period': 'monthly',

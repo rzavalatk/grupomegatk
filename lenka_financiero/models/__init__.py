@@ -5,6 +5,7 @@ from . import lifecycle
 from . import accounting
 from . import investment
 from . import investment_accounting
+from . import investment_deposit
 from . import statement
 from . import alerts
 from . import profitability

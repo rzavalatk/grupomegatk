@@ -1,7 +1,7 @@
 name: Lenka - refinanciamiento contabilizado
 on:
   push:
-    branches: [lenka-refinanciamiento-contabilizado-20261029, lenka-isolated-upgrade-20261030, lenka-disbursement-validation-20261030, lenka-refinance-internal-bridge-20261102]
+    branches: [lenka-refinanciamiento-contabilizado-20261029, lenka-isolated-upgrade-20261030, lenka-disbursement-validation-20261030, lenka-refinance-internal-bridge-20261102, lenka-month-end-deposits-20261104]
     paths:
       - 'lenka_financiero/**'
       - 'lenka_banks/**'
@@ -41,6 +41,13 @@ jobs:
             -d lenka_refinance_test -i lenka_financiero --without-demo=all \
             --test-enable --test-tags '/lenka_financiero' \
             --stop-after-init --max-cron-threads=0 --log-level=test
+      - name: Verify concurrent month-end closing and deposit confirmation
+        if: matrix.kind == 'core'
+        run: |
+          docker run --rm -i --network lenka-test -e HOST=lenka-pg -e USER=odoo -e PASSWORD=test-only \
+            -v "$GITHUB_WORKSPACE/lenka_financiero:/mnt/extra-addons/lenka_financiero:ro" \
+            odoo:18.0 odoo shell --no-http --db_host=lenka-pg --db_user=odoo --db_password=test-only \
+            -d lenka_refinance_test --max-cron-threads=0 < .github/scripts/lenka_month_end_concurrency.py
       - name: Install treasury bridge and test split checks
         if: matrix.kind == 'treasury'
         run: |

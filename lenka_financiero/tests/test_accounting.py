@@ -408,6 +408,7 @@ class TestLenkaAccounting(TransactionCase):
             'partner_id': self.partner.id, 'principal_amount': 10000.0,
             'passive_rate': 1.0, 'early_withdrawal_rate': .5, 'rate_period': 'monthly',
             'start_date': '2025-01-15', 'maturity_date': '2025-02-15',
+            'interest_schedule': 'anniversary',
         })
         investment.action_activate()
         investment.action_create_receipt_move()
@@ -490,6 +491,7 @@ class TestLenkaAccounting(TransactionCase):
             'passive_rate': 1.5, 'early_withdrawal_rate': 1.0,
             'rate_period': 'monthly', 'start_date': '2025-01-15',
             'maturity_date': '2026-01-15',
+            'interest_schedule': 'anniversary',
         })
         investment.action_activate()
         investment.action_create_receipt_move()

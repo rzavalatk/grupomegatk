@@ -18,7 +18,8 @@
             <form string="Inversion / Deposito Lenka">
                 <header>
                     <button name="action_activate" string="Activar" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_generate_monthly_interest" string="Generar intereses" type="object" invisible="state not in ('active','matured')"/>
+                    <button name="action_generate_monthly_interest" string="Generar intereses al cierre" type="object" invisible="state not in ('active','matured')"/>
+                    <button name="action_register_deposit" string="Registrar deposito adicional" type="object" class="btn-primary" invisible="state != 'active'"/>
                     <button name="action_create_receipt_move" string="Crear borrador de recepcion" type="object" groups="account.group_account_user" invisible="state not in ('active', 'matured', 'closed') or receipt_move_id"/><field name="state" widget="statusbar" statusbar_visible="draft,active,matured,closed"/>
                 </header>
                 <sheet>
@@ -28,13 +29,15 @@
                         <group>
                             <field name="passive_rate" readonly="terms_locked"/><field name="early_withdrawal_rate" invisible="investment_type != 'fixed'" readonly="terms_locked"/><field name="current_rate" readonly="1"/>
                             <field name="rate_period" readonly="terms_locked"/><field name="start_date" readonly="terms_locked"/><field name="term_months" readonly="terms_locked"/><field name="maturity_date" readonly="terms_locked"/>
-                            <field name="capitalization" readonly="terms_locked"/><field name="contract_reference"/>
+                            <field name="capitalization" readonly="terms_locked"/><field name="interest_schedule" readonly="1"/><field name="contract_reference"/>
                         </group>
                     </group>
-                    <group string="Contabilidad" groups="account.group_account_user"><field name="receipt_move_id" readonly="1"/></group><group string="Saldos"><field name="outstanding_principal" readonly="1"/><field name="accrued_interest" readonly="1"/><field name="paid_interest" readonly="1"/><field name="withdrawn_principal" readonly="1"/></group>
+                    <group string="Contabilidad" groups="account.group_account_user"><field name="receipt_move_id" readonly="1"/></group><group string="Saldos"><field name="additional_deposits"/><field name="outstanding_principal" readonly="1"/><field name="accrued_interest" readonly="1"/><field name="paid_interest" readonly="1"/><field name="withdrawn_principal" readonly="1"/><field name="account_balance"/></group>
+                    <div class="alert alert-info" role="alert" invisible="interest_schedule != 'month_end'">Cierre al ultimo dia de cada mes. El primer mes y los depositos adicionales devengan proporcionalmente por dias reales del mes, contando el dia de ingreso. Los intereses netos se capitalizan al cierre segun el contrato. Los retiros y el vencimiento dejan de devengar desde su fecha. Generar intereses calcula periodos cerrados; los borradores contables se revisan y publican por separado. El historial anterior se conserva.</div>
                     <notebook>
-                        <page string="Intereses"><field name="interest_line_ids"><list editable="bottom"><field name="financial_locked" column_invisible="1"/><field name="period_start_date" optional="show" readonly="financial_locked"/><field name="period_date" readonly="financial_locked"/><field name="calculation_days" optional="show" readonly="financial_locked"/><field name="is_prorated" optional="hide" readonly="financial_locked"/><field name="base_amount" readonly="financial_locked"/><field name="rate" readonly="financial_locked"/><field name="amount" readonly="financial_locked"/><field name="state" readonly="1"/><field name="payment_reference"/><field name="move_id" readonly="1" optional="hide" groups="account.group_account_user"/><button name="action_create_account_move" string="Crear borrador contable" type="object" groups="account.group_account_user" invisible="state not in ('accrued', 'paid') or move_id"/></list></field></page>
+                        <page string="Intereses"><field name="interest_line_ids"><list editable="bottom"><field name="financial_locked" column_invisible="1"/><field name="period_start_date" optional="show" readonly="financial_locked"/><field name="period_date" readonly="financial_locked"/><field name="calculation_days" optional="show" readonly="financial_locked"/><field name="day_count_basis" optional="show" readonly="1"/><field name="is_prorated" optional="hide" readonly="financial_locked"/><field name="base_amount" readonly="financial_locked"/><field name="rate" readonly="financial_locked"/><field name="amount" readonly="financial_locked"/><field name="state" readonly="1"/><field name="payment_reference"/><field name="move_id" readonly="1" optional="hide" groups="account.group_account_user"/><button name="action_create_account_move" string="Crear borrador contable" type="object" groups="account.group_account_user" invisible="state not in ('accrued', 'paid') or move_id"/></list></field></page>
                         <page string="Retiros"><field name="withdrawal_ids" context="{'default_investment_id': id}"><list><field name="date"/><field name="principal_amount"/><field name="accrued_interest_amount"/><field name="early_withdrawal"/><field name="effective_rate"/><field name="total_amount"/><field name="state"/></list></field></page>
+                        <page string="Depositos adicionales"><field name="deposit_ids" context="{'default_investment_id': id}" readonly="state != 'active'"><list><field name="name"/><field name="date"/><field name="amount"/><field name="currency_id" column_invisible="1"/><field name="journal_id"/><field name="reference"/><field name="state"/><field name="accounting_state"/><field name="move_id" optional="show"/></list></field></page>
                         <page string="Observaciones"><field name="notes"/></page>
                     </notebook>
                 </sheet><chatter/>
@@ -47,6 +50,28 @@
             <form string="Retiro de inversion">
                 <header><button name="action_post" string="Aplicar retiro" type="object" class="btn-primary" invisible="state != 'draft'"/><button name="action_create_account_move" string="Crear borrador contable" type="object" groups="account.group_account_user" invisible="state != 'posted' or move_id"/><field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/></header>
                 <sheet><group><group><field name="investment_id" readonly="state != 'draft'"/><field name="date" readonly="state != 'draft'"/><field name="principal_amount" readonly="state != 'draft'"/><field name="accrued_interest_amount" readonly="1"/></group><group><field name="early_withdrawal" readonly="1"/><field name="effective_rate" readonly="1"/><field name="total_amount" readonly="1"/><field name="reference"/></group></group><group string="Contabilidad" groups="account.group_account_user"><field name="move_id" readonly="1"/><field name="adjustment_move_id" readonly="1"/></group></sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_lenka_investment_deposit_form" model="ir.ui.view">
+        <field name="name">lenka.investment.deposit.form</field><field name="model">lenka.investment.deposit</field>
+        <field name="arch" type="xml">
+            <form string="Deposito adicional de inversionista">
+                <header>
+                    <button name="action_post" string="Confirmar y crear borrador contable" type="object" class="btn-primary" invisible="state != 'draft'" groups="account.group_account_user"/>
+                    <button name="action_cancel" string="Anular" type="object" invisible="state == 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <field name="company_id" invisible="1"/><field name="currency_id" invisible="1"/>
+                    <group>
+                        <group><field name="investment_id" readonly="state != 'draft'"/><field name="partner_id"/><field name="date" readonly="state != 'draft'"/><field name="amount" readonly="state != 'draft'"/></group>
+                        <group><field name="journal_id" readonly="state != 'draft'"/><field name="reference" readonly="state != 'draft'"/><field name="move_id" readonly="1"/><field name="accounting_state"/></group>
+                    </group>
+                    <div class="alert alert-info" role="alert">Conserva la tasa y el vencimiento de la cuenta. El deposito genera intereses desde su fecha de ingreso y se incorpora al cierre de fin de mes. Confirmar aumenta el capital y crea una sola partida borrador: banco / caja contra obligacion con el inversionista. Contabilidad debe revisar y publicar esa partida. Utilice esta opcion para ingresos nuevos que aun no tengan un asiento registrado.</div>
+                    <field name="notes"/>
+                </sheet><chatter/>
             </form>
         </field>
     </record>
