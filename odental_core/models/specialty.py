@@ -4,11 +4,11 @@ from odoo.exceptions import AccessError, ValidationError
 
 class ODentalSpecialty(models.Model):
     _name = "odental.specialty"
-    _description = "Especialidad odontológica"
+    _description = "Especialidad o área de práctica clínica"
     _order = "name"
 
-    name = fields.Char(string="Especialidad", required=True, index=True)
-    active = fields.Boolean(default=True)
+    name = fields.Char(string="Especialidad o área de práctica", required=True, index=True)
+    active = fields.Boolean(string="Activa", default=True)
     company_id = fields.Many2one(
         "res.company", string="Compañía",
         default=lambda self: self.env.company, index=True,

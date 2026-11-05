@@ -47,7 +47,8 @@
                         <group>
                             <field name="specialty_ids" widget="many2many_tags"
                                    domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"
-                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                                   context="{'default_company_id': company_id}"
+                                   options="{'no_quick_create': True}"/>
                             <field name="specialty" readonly="1" invisible="not specialty or specialty_ids"
                                    groups="odental_core.group_odental_manager"/>
                             <field name="professional_code" readonly="1"/>
