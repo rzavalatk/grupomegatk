@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data noupdate="1">
+        <record id="seq_lenka_investment_receipt" model="ir.sequence">
+            <field name="name">Recepcion de inversionista Lenka</field>
+            <field name="code">lenka.investment.receipt</field>
+            <field name="prefix">LENKA-REC-</field>
+            <field name="padding">6</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
     <record id="seq_lenka_financial_operation" model="ir.sequence">
         <field name="name">Operacion Financiera Lenka</field>
         <field name="code">lenka.financial.operation</field>

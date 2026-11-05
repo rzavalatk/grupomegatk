@@ -111,6 +111,7 @@ class LenkaInvestmentDeposit(models.Model):
             if company.currency_id.is_zero(converted):
                 raise ValidationError(_('El importe convertido no puede ser cero.'))
             move = self.env['account.move'].with_company(company).create({
+                **investment._receipt_number_values(),
                 'move_type': 'entry', 'date': rec.date, 'journal_id': rec.journal_id.id,
                 'ref': '%s - %s' % (rec.name, rec.reference.strip()),
                 'line_ids': [(0, 0, {
