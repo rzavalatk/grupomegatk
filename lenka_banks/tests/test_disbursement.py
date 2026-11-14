@@ -265,3 +265,34 @@ class TestLenkaBanks(TransactionCase):
         second.action_create_account_move()
         second.move_id.action_post()
         self.assertEqual(second.move_id.name, 'CK-A-0668')
+
+    def test_bank_collection_keeps_native_check_sequence_available(self):
+        income = self.env['account.account'].create({
+            'name': 'FICTITIOUS collection interest', 'code': 'LBCI',
+            'account_type': 'income', 'company_ids': [Command.set(self.company.ids)],
+        })
+        self.company.write({'lenka_interest_income_account_id': income.id,
+                            'lenka_late_fee_income_account_id': income.id})
+        operation = self.env['lenka.financial.operation'].create({
+            'partner_id': self.partner.id, 'principal_amount': 100000,
+            'interest_rate': 1, 'rate_period': 'monthly', 'term_months': 12,
+            'calculation_method': 'interest_only', 'first_payment_date': '2025-01-14',
+            'is_quote': False,
+        })
+        operation.action_generate_schedule()
+        operation.state = 'active'
+        payment = self.env['lenka.payment'].create({
+            'operation_id': operation.id, 'payment_date': '2025-01-14', 'amount': 1000,
+            'collection_destination': 'bank', 'collection_journal_id': self.journals[0].id,
+        })
+        check_count = self.env['banks.check'].search_count([])
+        payment.action_apply_and_prepare_collection()
+        payment.move_id.action_post()
+        self.assertTrue(payment.move_id.name.startswith('LENKA-COB-'))
+        self.assertEqual(self.env['banks.check'].search_count([]), check_count)
+        self.assertEqual(self.sequence.number_next_actual, 667)
+        delivery = self._disbursement(self._operation(), 1000)
+        delivery.action_post()
+        delivery.action_create_account_move()
+        delivery.move_id.action_post()
+        self.assertEqual(delivery.move_id.name, 'CK-A-0667')

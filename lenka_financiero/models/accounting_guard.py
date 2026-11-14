@@ -87,3 +87,4 @@ class LenkaAccountingGuard(models.AbstractModel):
         # link metadata and rejects linked entries; it never changes any move.
         moves._check_lenka_refinance_unlinked()
         moves._check_lenka_deposit_unlinked()
+        moves._check_lenka_target_collection_unlinked()

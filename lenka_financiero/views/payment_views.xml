@@ -11,6 +11,9 @@
                 <field name="operation_id"/>
                 <field name="amount"/>
                 <field name="payment_method"/>
+                <field name="collection_destination" optional="show"/>
+                <field name="collection_journal_id" optional="show"/>
+                <field name="collection_accounting_state" optional="show"/>
                 <field name="card_fee_amount"/>
                 <field name="net_bank_amount"/>
                 <field name="capital_amount"/>
@@ -29,13 +32,15 @@
         <field name="arch" type="xml">
             <form string="Cobro Lenka">
                 <header>
-                    <button name="action_post" string="Aplicar pago" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_apply_and_prepare_collection" string="Aplicar y crear borrador contable" type="object" class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_create_account_move" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id" groups="lenka_financiero.group_lenka_manager"/>
-                    <button name="action_open_account_move" string="Ver borrador contable" type="object" invisible="not move_id"/>
+                    <button name="action_open_account_move" string="Ver partida contable" type="object" invisible="not move_id"/>
                     <button name="action_cancel" string="Anular" type="object" invisible="state == 'cancelled'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
                 </header>
                 <sheet>
+                    <div class="alert alert-info" role="status">La forma de pago no elige la cuenta receptora. Seleccione Banco, Caja o Intercambio interno y el diario de esta transaccion. Aplicar y crear borrador contable distribuye el pago una sola vez y prepara la partida. El saldo contable del banco cambia al publicar la partida en Contabilidad. Si el ingreso ya tiene un asiento registrado, no cree otro: revise la vinculacion con Contabilidad.</div>
+                    <div class="alert alert-warning" role="status" invisible="state != 'posted' or move_id">Este cobro esta aplicado a la deuda, pero aun no tiene partida vinculada. No registre otro pago para contabilizarlo. Revise si ya existe un asiento antes de preparar su contabilidad.</div>
                     <div class="oe_title"><h1><field name="name"/></h1></div>
                     <group>
                         <group>
@@ -46,6 +51,12 @@
                         </group>
                         <group>
                             <field name="payment_method" readonly="state != 'draft'"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="collection_bridge_journal_id" invisible="1"/>
+                            <field name="collection_destination" required="not move_id and state != 'cancelled'" readonly="move_id or state == 'cancelled'"/>
+                            <field name="collection_journal_id" required="not move_id and state != 'cancelled'" readonly="move_id or state == 'cancelled'" domain="[('company_id', '=', company_id)] + (['|', ('type', '=', 'general'), ('id', '=', collection_bridge_journal_id)] if collection_destination == 'clearing' else [('type', '=', collection_destination or 'bank')])" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="collection_account_id"/>
+                            <field name="collection_accounting_state"/>
                             <field name="card_fee_rate" invisible="payment_method != 'card'" readonly="state != 'draft'"/>
                             <field name="card_fee_amount" readonly="1" invisible="payment_method != 'card'"/>
                             <field name="net_bank_amount" readonly="1"/>
@@ -118,6 +129,8 @@
                             <field name="capital_amount"/>
                             <field name="interest_amount"/>
                             <field name="late_fee_amount"/>
+                            <field name="collection_journal_id" optional="show"/>
+                            <field name="collection_accounting_state" optional="show"/>
                             <field name="move_id"/>
                             <field name="state"/>
                         </list>

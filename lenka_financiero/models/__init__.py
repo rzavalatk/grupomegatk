@@ -23,3 +23,4 @@ from . import refinance_application
 from . import refinance_configuration
 from . import disbursement_sources
 from . import accounting_guard
+from . import collection_destination

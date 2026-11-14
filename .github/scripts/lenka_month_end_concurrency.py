@@ -79,3 +79,39 @@ assert local['account.move'].search_count([('ref', '=', deposit.move_id.ref)]) =
 assert investment.outstanding_principal == 101000
 print('PASS: concurrent month-end generation creates two periods once; concurrent deposit confirmation creates one receipt; serialization retries preserve balances')
 env.cr.rollback()
+
+# The same loan payment must also be idempotent across independent RPCs.
+portfolio, interest, late = local['account.account'].create([
+    {'name': 'FICTITIOUS collection ' + label, 'code': code, 'account_type': kind,
+     'company_ids': [(6, 0, company.ids)]}
+    for label, code, kind in [('portfolio', 'LCC01', 'asset_current'),
+                              ('interest', 'LCC02', 'income'), ('late', 'LCC03', 'income')]
+])
+company.write({'lenka_portfolio_account_id': portfolio.id,
+               'lenka_interest_income_account_id': interest.id,
+               'lenka_late_fee_income_account_id': late.id})
+operation = local['lenka.financial.operation'].create({
+    'partner_id': partner.id, 'company_id': company.id, 'operation_type': 'loan',
+    'principal_amount': 100000, 'interest_rate': 3.5, 'rate_period': 'monthly',
+    'term_months': 12, 'calculation_method': 'interest_only',
+    'first_payment_date': '2025-09-30', 'is_quote': False, 'late_fee_method': 'legacy',
+})
+operation.action_generate_schedule()
+operation.state = 'active'
+payment = local['lenka.payment'].create({
+    'operation_id': operation.id, 'payment_date': '2025-09-30', 'amount': 3500,
+    'collection_destination': 'bank', 'collection_journal_id': journal.id,
+})
+payment_id = payment.id
+env.cr.commit()
+run_twice('lenka.payment', payment_id, lambda rec: rec.action_apply_and_prepare_collection())
+env.cr.rollback()
+env.invalidate_all()
+payment = local['lenka.payment'].browse(payment_id)
+assert payment.state == 'posted' and payment.move_id.state == 'draft'
+assert payment.interest_amount == 3500 and payment.capital_amount == 0
+assert payment.operation_id.paid_interest == 3500
+assert local['account.move'].search_count([('ref', '=', payment.move_id.ref)]) == 1
+assert len(payment.allocation_line_ids) == 1
+print('PASS: concurrent loan collection applies interest once and creates exactly one draft in the selected bank')
+env.cr.rollback()
