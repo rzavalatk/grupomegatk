@@ -39,6 +39,19 @@ interest = local['lenka.investment.interest'].create({
     'period_date': '2025-10-20', 'calculation_days': 30, 'base_amount': 1000,
     'rate': 1, 'amount': 10, 'state': 'accrued',
 })
+# An applied, unaccounted legacy collection must not be booked by upgrade.
+operation = local['lenka.financial.operation'].create({
+    'partner_id': partner.id, 'company_id': company.id, 'principal_amount': 1000,
+    'operation_type': 'loan', 'interest_rate': 1, 'rate_period': 'monthly',
+    'term_months': 12, 'calculation_method': 'interest_only',
+    'first_payment_date': '2025-09-30', 'is_quote': False,
+})
+operation.action_generate_schedule()
+operation.state = 'active'
+payment = local['lenka.payment'].create({
+    'operation_id': operation.id, 'payment_date': '2025-09-30', 'amount': 10,
+})
+payment.action_post()
 env.flush_all()
 # Reproduce a constraint ALREADY ABSENT in the legacy fixture, before installing
 # the new release. The installer is never allowed to drop or bypass constraints.
@@ -48,7 +61,8 @@ env.cr.execute('UPDATE account_move_line SET amount_currency = -balance WHERE mo
 tables = {'account_move': moves.ids, 'account_move_line': moves.line_ids.ids,
           'res_company': company.ids, 'account_journal': journal.ids,
           'account_account': accounts.ids, 'lenka_investment': investment.ids,
-          'lenka_investment_interest': interest.ids}
+          'lenka_investment_interest': interest.ids, 'lenka_payment': payment.ids,
+          'lenka_payment_allocation': payment.allocation_line_ids.ids}
 snapshot = {'tables': {}, 'constraints': None}
 for table, ids in tables.items():
     env.cr.execute('SELECT id, to_jsonb(t) FROM %s t WHERE id IN %%s ORDER BY id' % table, [tuple(ids)])

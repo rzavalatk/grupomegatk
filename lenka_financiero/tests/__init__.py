@@ -3,6 +3,7 @@ from . import test_accounting
 from . import test_investment
 from . import test_interest_proration
 from . import test_month_end_deposits
+from . import test_collection_destination
 from . import test_payment
 from . import test_payment_access
 from . import test_operational_flow
