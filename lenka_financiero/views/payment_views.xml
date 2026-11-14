@@ -33,7 +33,7 @@
             <form string="Cobro Lenka">
                 <header>
                     <button name="action_apply_and_prepare_collection" string="Aplicar y crear borrador contable" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_create_account_move" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id" groups="lenka_financiero.group_lenka_manager"/>
+                    <button name="action_prepare_collection" string="Crear borrador contable" type="object" class="btn-primary" invisible="state != 'posted' or move_id" groups="lenka_financiero.group_lenka_manager"/>
                     <button name="action_open_account_move" string="Ver partida contable" type="object" invisible="not move_id"/>
                     <button name="action_cancel" string="Anular" type="object" invisible="state == 'cancelled'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
@@ -53,8 +53,8 @@
                             <field name="payment_method" readonly="state != 'draft'"/>
                             <field name="company_id" invisible="1"/>
                             <field name="collection_bridge_journal_id" invisible="1"/>
-                            <field name="collection_destination" required="not move_id and state != 'cancelled'" readonly="move_id or state == 'cancelled'"/>
-                            <field name="collection_journal_id" required="not move_id and state != 'cancelled'" readonly="move_id or state == 'cancelled'" domain="[('company_id', '=', company_id)] + (['|', ('type', '=', 'general'), ('id', '=', collection_bridge_journal_id)] if collection_destination == 'clearing' else [('type', '=', collection_destination or 'bank')])" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="collection_destination" required="state == 'draft'" readonly="move_id or state == 'cancelled'"/>
+                            <field name="collection_journal_id" required="state == 'draft'" readonly="move_id or state == 'cancelled'" domain="[('company_id', '=', company_id)] + (['|', ('type', '=', 'general'), ('id', '=', collection_bridge_journal_id)] if collection_destination == 'clearing' else [('type', '=', collection_destination or 'bank')])" options="{'no_create': True, 'no_open': True}"/>
                             <field name="collection_account_id"/>
                             <field name="collection_accounting_state"/>
                             <field name="card_fee_rate" invisible="payment_method != 'card'" readonly="state != 'draft'"/>

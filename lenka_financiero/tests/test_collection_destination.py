@@ -11,6 +11,7 @@ class TestCollectionDestination(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env.user.write({'groups_id': [(4, cls.env.ref('lenka_financiero.group_lenka_manager').id)]})
         cls.company = cls.env.company
         cls.partner = cls.env['res.partner'].create({'name': 'FICTITIOUS collection client'})
         accounts = cls.env['account.account'].create([
@@ -149,8 +150,8 @@ class TestCollectionDestination(TransactionCase):
         allocations = rec.allocation_line_ids.ids
         interest_paid = rec.operation_id.paid_interest
         rec.write({'collection_destination': 'bank', 'collection_journal_id': self.journals[1].id})
-        rec.action_create_account_move()
-        rec.action_create_account_move()
+        rec.action_prepare_collection()
+        rec.action_prepare_collection()
         self.assertEqual(rec.allocation_line_ids.ids, allocations)
         self.assertEqual(rec.operation_id.paid_interest, interest_paid)
         self.assertEqual(rec.move_id.journal_id, self.journals[1])
@@ -214,7 +215,8 @@ class TestCollectionDestination(TransactionCase):
         self.assertEqual(rec.operation_id.paid_interest, 0)
 
     def test_currency_mismatch_rejected(self):
-        other = self.env['res.currency'].search([('id', '!=', self.company.currency_id.id)], limit=1)
+        other = self.env['res.currency'].with_context(active_test=False).search([('id', '!=', self.company.currency_id.id)], limit=1)
+        self.assertTrue(other)
         other.active = True
         self.journals[0].currency_id = other
         rec = self._payment()
@@ -228,3 +230,18 @@ class TestCollectionDestination(TransactionCase):
         self.assertFalse(arch.xpath("//button[@name='action_post']"))
         for field in ('collection_destination', 'collection_journal_id', 'collection_account_id', 'collection_accounting_state'):
             self.assertTrue(arch.xpath("//field[@name='%s']" % field))
+        from odoo.tools.safe_eval import safe_eval
+        for field in ('collection_destination', 'collection_journal_id'):
+            expression = arch.xpath("//field[@name='%s']" % field)[0].get('required')
+            self.assertTrue(safe_eval(expression, {'state': 'draft'}))
+            for state in ('posted', 'cancelled'):
+                self.assertFalse(safe_eval(expression, {'state': state}))
+
+    def test_old_applied_without_destination_can_be_cancelled_but_not_prepared(self):
+        rec = self._payment(collection_destination=False, collection_journal_id=False)
+        rec.action_post()
+        with self.assertRaises(ValidationError):
+            rec.action_prepare_collection()
+        rec.action_cancel()
+        self.assertEqual(rec.state, 'cancelled')
+        self.assertEqual(rec.operation_id.paid_interest, 0)

@@ -85,6 +85,15 @@ class LenkaCollectionDestination(models.Model):
             self.action_create_account_move()
         return True
 
+    def action_prepare_collection(self):
+        """Prepare an old applied payment without allocating it a second time."""
+        with self.env.cr.savepoint():
+            self._lock_collection_operations()
+            for rec in self.filtered(lambda payment: not payment.move_id):
+                rec._validate_collection_destination()
+            self.action_create_account_move()
+        return True
+
     def _validate_collection_move(self):
         self.ensure_one()
         move = self.move_id
