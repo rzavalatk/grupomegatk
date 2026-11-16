@@ -12,6 +12,7 @@ class TestLenkaInvestment(TransactionCase):
 
     def _investment(self, **extra):
         vals = {
+            'interest_schedule': 'anniversary',  # Preserve coverage of historical contracts.
             'partner_id': self.partner.id,
             'investment_type': 'fixed',
             'principal_amount': 100000.0,

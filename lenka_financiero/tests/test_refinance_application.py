@@ -117,6 +117,84 @@ class TestRefinanceApplication(TransactionCase):
             with self.assertRaises(ValidationError):
                 application.action_post()
 
+    def test_designated_internal_bank_bridge_preserves_posted_accounting(self):
+        self.journal.write({'type': 'bank'})
+        self.company.lenka_refinance_clearing_journal_id = self.journal
+        operation = self._operation()
+        line = self._entry(credit_account=self.bank)
+        self.env['account.move.line'].create({
+            'move_id': line.move_id.id, 'account_id': self.bank.id, 'name': 'Zero historical line',
+        })
+        application = self._application(operation, line)
+        self._cash(operation).action_post()
+        before = self.env['account.move'].search_count([])
+        values = line.move_id.line_ids.read(['account_id', 'partner_id', 'debit', 'credit', 'amount_currency'])
+        application.action_post()
+        application.action_post()
+        self.assertEqual(application.state, 'posted')
+        self.assertFalse(application.move_id)
+        self.assertEqual(operation.pending_disbursement, 0)
+        self.assertEqual(line.move_id.state, 'posted')
+        self.assertEqual(line.move_id.line_ids.read(['account_id', 'partner_id', 'debit', 'credit', 'amount_currency']), values)
+        self.assertEqual(self.env['account.move'].search_count([]), before)
+        self.assertEqual(self.bank.account_type, 'asset_cash')
+        self.assertEqual(self.journal.type, 'bank')
+        with self.assertRaisesRegex(ValidationError, 'configuracion'):
+            self.company.lenka_refinance_clearing_journal_id = False
+        application.action_cancel()
+        self.company.lenka_refinance_clearing_journal_id = False
+        self.assertEqual(line.move_id.state, 'posted')
+
+    def test_internal_bridge_does_not_authorize_another_bank_journal(self):
+        self.company.lenka_refinance_clearing_journal_id = self.journal
+        other = self.env['account.journal'].create({
+            'name': 'Other bank - fictitious', 'code': 'OTHB', 'type': 'bank',
+            'default_account_id': self.bank.id,
+        })
+        line = self._entry(posted=False, credit_account=self.bank)
+        line.move_id.journal_id = other
+        line.move_id.action_post()
+        application = self._application(self._operation(), line)
+        with self.assertRaisesRegex(ValidationError, 'contrapartida'):
+            application.action_post()
+        self.assertEqual(application.state, 'draft')
+
+    def test_internal_bridge_requires_exact_default_account_and_no_real_bank(self):
+        self.company.lenka_refinance_clearing_journal_id = self.journal
+        line = self._entry(credit_account=self.bank)
+        application = self._application(self._operation(), line)
+        self.journal.default_account_id = self.clearing
+        with self.assertRaisesRegex(ValidationError, 'contrapartida'):
+            application.action_post()
+        self.journal.default_account_id = self.bank
+        bank_account = self.env['res.partner.bank'].create({
+            'acc_number': 'FICTITIOUS-ONLY-001', 'partner_id': self.company.partner_id.id,
+        })
+        self.journal.write({'type': 'bank', 'bank_account_id': bank_account.id})
+        with self.assertRaisesRegex(ValidationError, 'bancaria real'):
+            application.action_post()
+
+    def test_internal_bridge_rejects_linked_payment_or_statement(self):
+        self.company.lenka_refinance_clearing_journal_id = self.journal
+        for model in ('account.payment', 'account.bank.statement.line'):
+            application = self._application(self._operation(), self._entry(credit_account=self.bank))
+            with patch.object(type(self.env[model]), 'search_count', return_value=1):
+                with self.assertRaisesRegex(ValidationError, 'pago, extracto o cheque'):
+                    application.action_post()
+            self.assertEqual(application.state, 'draft')
+
+    def test_internal_bridge_configuration_cannot_cross_companies(self):
+        other_company = self.env['res.company'].create({'name': 'Other fictitious bridge company'})
+        with self.assertRaisesRegex(ValidationError, 'esta empresa'), self.cr.savepoint():
+            other_company.lenka_refinance_clearing_journal_id = self.journal
+        self.assertFalse(other_company.lenka_refinance_clearing_journal_id)
+
+    def test_internal_bridge_configuration_requires_lenka_manager(self):
+        user = new_test_user(self.env, login='lenka_bridge_accountant',
+                             groups='account.group_account_manager')
+        with self.assertRaisesRegex(AccessError, 'gerente de Lenka'):
+            self.company.with_user(user).write({'lenka_refinance_clearing_journal_id': self.journal.id})
+
     def test_amount_date_currency_and_portfolio_validation(self):
         application = self._application(self._operation(), self._entry())
         for values in [{'amount': 19000}, {'date': '2026-10-23'},

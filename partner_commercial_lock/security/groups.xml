@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_no_reassign_partner_commercial" model="res.groups">
+        <field name="name">No reasignar comercial de contactos</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="comment">Restricción específica: permite consultar el comercial y conserva los demás permisos del usuario, pero impide cambiar o quitar el comercial de contactos existentes. Este grupo no concede permisos adicionales.</field>
+    </record>
+</odoo>

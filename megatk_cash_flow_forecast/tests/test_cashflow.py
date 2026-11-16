@@ -772,6 +772,15 @@ class TestCashflowForecast(TransactionCase):
         self.assertEqual(action["res_model"], "cashflow.management.note")
         self.assertEqual(action["context"]["default_partner_id"], self.partner.id)
         self.assertEqual(action["context"]["default_company_id"], self.company.id)
+        self.assertFalse(action["context"]["default_move_id"])
+        self.assertEqual(action["context"]["default_scope"], "general")
+
+    def test_aged_management_action_exposes_document_defaults(self):
+        action = self.env["cashflow.portfolio.snapshot"].with_company(
+            self.company
+        ).action_from_aged_report(self.partner.id, "receivable", "management")
+        self.assertIn("default_move_id", action["context"])
+        self.assertIn("default_scope", action["context"])
 
     def test_snapshot_opens_prefilled_projection(self):
         snapshot = self.env["cashflow.portfolio.snapshot"].create({
@@ -937,6 +946,50 @@ class TestCashflowForecast(TransactionCase):
         self.assertFalse(promise.exists())
         self.assertTrue(creditor.exists())
 
+    def test_planned_advance_can_be_deleted_without_touching_partner(self):
+        supplier = self.env["res.partner"].create({
+            "name": "Proveedor con anticipo eliminable",
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": supplier.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 250,
+        })
+        promise.action_delete_projection()
+        self.assertFalse(promise.exists())
+        self.assertTrue(supplier.exists())
+
+    def test_cashflow_user_can_delete_planned_advance(self):
+        cashflow_user = self.env["res.users"].create({
+            "name": "Usuario operativo del flujo",
+            "login": "cashflow-delete-test",
+            "company_id": self.company.id,
+            "company_ids": [(6, 0, self.company.ids)],
+            "groups_id": [(6, 0, [
+                self.env.ref("base.group_user").id,
+                self.env.ref(
+                    "megatk_cash_flow_forecast.group_cashflow_user"
+                ).id,
+            ])],
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "period": "week_1",
+            "amount": 100,
+        })
+        promise.with_user(cashflow_user).action_delete_planned_advance()
+        self.assertFalse(promise.exists())
+
     def test_depositors_are_available_only_for_inversiones_lenka(self):
         Classification = self.env["cashflow.portfolio.classification"]
         with self.assertRaises(ValidationError):
@@ -1043,6 +1096,39 @@ class TestCashflowForecast(TransactionCase):
         self.plan.action_refresh_open_items()
         self.assertEqual(promise.state, "active")
         self.assertIn(promise, self.plan.advance_promise_ids)
+
+    def test_advance_tab_overrides_partner_previous_classification(self):
+        classification = self.env["cashflow.portfolio.classification"].create({
+            "company_id": self.company.id,
+            "partner_id": self.partner.commercial_partner_id.id,
+            "direction": "payable",
+            "classification": "supplier",
+        })
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance",
+            default_advance_status="projected",
+        ).create({
+            "plan_id": self.plan.id,
+            "partner_id": self.partner.id,
+            "direction": "payable",
+            "classification": "supplier",
+            "classification_id": classification.id,
+            "advance_status": "closed",
+            "state": "cancelled",
+            "period": "week_1",
+            "amount": 100,
+        })
+        self.assertEqual(promise.classification, "advance")
+        self.assertEqual(promise.advance_status, "projected")
+        self.assertEqual(promise.state, "active")
+        self.assertIn(promise, self.plan.advance_promise_ids)
+
+    def test_advance_tab_shows_advance_before_partner_is_selected(self):
+        promise = self.env["cashflow.promise"].with_context(
+            default_classification="advance"
+        ).new({})
+        promise._compute_classification()
+        self.assertEqual(promise.classification, "advance")
 
     def test_report_groups_same_supplier_across_weeks(self):
         Promise = self.env["cashflow.promise"].with_context(

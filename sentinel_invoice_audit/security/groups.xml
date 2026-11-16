@@ -1,0 +1,6 @@
+<odoo>
+  <record id="group_audit_reader" model="res.groups">
+    <field name="name">Sentinel: lectura de auditoría de facturas</field>
+    <field name="comment">Lectura del historial de MEGATK y MEDITEK. Bloquea crear, modificar y eliminar facturas, apuntes, pagos y conciliaciones para sus miembros, incluso si otros grupos les conceden escritura.</field>
+  </record>
+</odoo>

@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data noupdate="1">
+        <record id="seq_lenka_collection_move" model="ir.sequence">
+            <field name="name">Partida de cobro Lenka</field>
+            <field name="code">lenka.collection.move</field>
+            <field name="prefix">LENKA-COB-</field>
+            <field name="padding">6</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_lenka_investment_receipt" model="ir.sequence">
+            <field name="name">Recepcion de inversionista Lenka</field>
+            <field name="code">lenka.investment.receipt</field>
+            <field name="prefix">LENKA-REC-</field>
+            <field name="padding">6</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
     <record id="seq_lenka_financial_operation" model="ir.sequence">
         <field name="name">Operacion Financiera Lenka</field>
         <field name="code">lenka.financial.operation</field>
@@ -25,6 +43,13 @@
         <field name="name">Inversion / Deposito Lenka</field>
         <field name="code">lenka.investment</field>
         <field name="prefix">LENKA-INV-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_lenka_investment_deposit" model="ir.sequence">
+        <field name="name">Deposito adicional Lenka</field>
+        <field name="code">lenka.investment.deposit</field>
+        <field name="prefix">LENKA-DEP-</field>
         <field name="padding">6</field>
         <field name="company_id" eval="False"/>
     </record>

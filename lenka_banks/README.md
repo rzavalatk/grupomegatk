@@ -1,6 +1,18 @@
 # Entregas de Lenka y Tesorería
 
-Instalar `lenka_financiero` versión 18.0.1.0.13 y el puente `lenka_banks` versión 18.0.1.0.1 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+Instalar `lenka_financiero` versión 18.0.1.0.16 y el puente `lenka_banks` versión 18.0.1.0.2 sobre el módulo existente `banks`. El puente no se instala automáticamente y no modifica préstamos, asientos, chequeras ni usuarios existentes al instalarse.
+
+La version 18.0.1.0.16 agrega depositos adicionales de inversionistas y cierre de intereses a fin de mes. Ver `lenka_financiero/DEPOSITOS_Y_CIERRE_MENSUAL.md`. No requiere reinstalar `banks` ni cambiar el puente existente.
+
+## Puente interno de refinanciamiento con clasificacion historica bancaria
+
+Un gerente puede seleccionar en Ajustes de Financiero Lenka el **Diario puente interno de refinanciamiento**, dentro de la empresa correspondiente, tras confirmar que solo traslada saldos y no mueve dinero. No se selecciona automaticamente al instalar. El diario y su cuenta predeterminada deben pertenecer a la empresa; no puede tener una cuenta bancaria real vinculada ni usar la cartera como contrapartida. La clasificacion historica del diario y la cuenta no se modifica.
+
+La aplicacion reconoce exclusivamente el asiento existente del diario designado y sus creditos a la cuenta puente. Rechaza pagos, extractos y cheques vinculados, otros bancos, otra empresa, ingresos y cargos adicionales. Mantiene las validaciones de cliente, moneda, importe completo, fecha, no duplicidad y tope financiado. No crea asientos ni modifica correlativos. El diario designado no puede reemplazarse mientras tenga aplicaciones vigentes. La configuracion es independiente por empresa.
+
+## Anular desembolsos anteriores sin banco
+
+El banco es obligatorio mientras se prepara una nueva entrega en borrador. En los desembolsos ya aplicados o anulados el campo es de solo lectura y no impide guardar o anular registros antiguos que quedaron sin banco. La anulación conserva las validaciones existentes: no admite cheques vinculados, asientos publicados ni operaciones activas o terminadas. La actualización no anula ni completa registros automáticamente.
 
 ## Actualización aislada de los históricos de otras empresas
 
@@ -39,3 +51,9 @@ La referencia de transferencia y los números de cheques son datos diferentes. L
 El módulo móvil pendiente no está incluido. La rama conserva el refinanciamiento ya contabilizado de la entrega anterior.
 
 CI instala el núcleo con su suite completa y después el puente con el módulo `banks` real en otra base aislada. Verificar ambos resultados antes de instalar.
+
+## Numeracion de recepciones
+
+Las nuevas recepciones iniciales y los depositos adicionales usan la serie propia LENKA-REC- (nucleo 18.0.1.0.16). Se asigna al crear el borrador y se conserva al publicarlo. No consume ni reajusta correlativos de cheques, depositos o transferencias de Tesoreria. Los asientos que usan numeracion ordinaria del diario no continuan esta serie. La secuencia nueva no se reinicia al actualizar. La recepcion inicial tambien se serializa para impedir creaciones dobles concurrentes. No reinstalar banks ni el puente 18.0.1.0.2.
+
+La actualizacion no renumera ni revierte partidas existentes, ni crea registros banks.check. Una recepcion ya publicada con numeracion de cheque requiere revision contable separada del asiento, cheques existentes y siguiente numero antes de cualquier regularizacion. No volver a crear la recepcion para corregir su nombre: duplicaria el saldo.

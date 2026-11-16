@@ -145,7 +145,9 @@ class LenkaPaymentAccounting(models.Model):
     def _prepare_collection_move(self):
         self.ensure_one()
         company = self.operation_id.company_id
-        journal = company.lenka_collection_journal_id
+        journal = self.collection_journal_id or company.lenka_collection_journal_id
+        if self.collection_destination or self.collection_journal_id:
+            self._validate_collection_destination()
         portfolio = company.lenka_portfolio_account_id
         interest_income = company.lenka_interest_income_account_id
         late_income = company.lenka_late_fee_income_account_id
@@ -223,12 +225,15 @@ class LenkaPaymentAccounting(models.Model):
         }
 
     def action_create_account_move(self):
+        self._lock_collection_operations()
         for rec in self:
             if rec.state != 'posted':
                 raise ValidationError(_('El cobro debe estar aplicado antes de crear la partida contable.'))
             if rec.move_id:
                 continue
-            move = self.env['account.move'].with_company(rec.operation_id.company_id).create(rec._prepare_collection_move())
+            values = rec._prepare_collection_move()
+            values['name'] = self.env.ref('lenka_financiero.seq_lenka_collection_move').with_company(rec.operation_id.company_id).next_by_id()
+            move = self.env['account.move'].with_company(rec.operation_id.company_id).create(values)
             super(LenkaPaymentAccounting, rec).write({'move_id': move.id})
         return True
 

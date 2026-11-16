@@ -5,6 +5,7 @@ from . import lifecycle
 from . import accounting
 from . import investment
 from . import investment_accounting
+from . import investment_deposit
 from . import statement
 from . import alerts
 from . import profitability
@@ -19,5 +20,7 @@ from . import secured_loan
 
 from . import correction_wizard
 from . import refinance_application
+from . import refinance_configuration
 from . import disbursement_sources
 from . import accounting_guard
+from . import collection_destination

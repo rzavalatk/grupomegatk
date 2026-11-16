@@ -96,11 +96,14 @@ class LenkaPayment(models.Model):
                 raise ValidationError(_('La comision de tarjeta debe estar entre 0% y 100%.'))
 
     def action_post(self):
+        self._lock_collection_operations()
         self.check_access('write')
         self.mapped('operation_id').check_access('read')
         for rec in self:
             if rec.state != 'draft':
                 continue
+            if rec.collection_destination or rec.collection_journal_id:
+                rec._validate_collection_destination()
             if rec.operation_id.state != 'active':
                 raise ValidationError(_('Solo se pueden aplicar cobros a operaciones activas.'))
             if not rec.operation_id.schedule_line_ids:
@@ -205,6 +208,7 @@ class LenkaPayment(models.Model):
         return True
 
     def action_cancel(self):
+        self._lock_collection_operations()
         self.check_access('write')
         self.mapped('operation_id').check_access('read')
         # Validar todo el lote antes de modificar cuotas o partidas.
