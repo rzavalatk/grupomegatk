@@ -1,0 +1,17 @@
+<odoo>
+  <record id="rule_event_company" model="ir.rule">
+    <field name="name">Sentinel events: authorized MEGATK/MEDITEK companies</field>
+    <field name="model_id" ref="model_sentinel_invoice_audit_event"/>
+    <field name="domain_force">[('company_id', 'in', company_ids), ('company_id', 'in', [8,9])]</field>
+  </record>
+  <record id="rule_coverage_company" model="ir.rule">
+    <field name="name">Sentinel coverage: authorized MEGATK/MEDITEK companies</field>
+    <field name="model_id" ref="model_sentinel_invoice_audit_coverage"/>
+    <field name="domain_force">[('company_id', 'in', company_ids), ('company_id', 'in', [8,9])]</field>
+  </record>
+  <record id="rule_message_company" model="ir.rule">
+    <field name="name">Sentinel chatter: authorized MEGATK/MEDITEK companies</field>
+    <field name="model_id" ref="model_sentinel_invoice_audit_message"/>
+    <field name="domain_force">[('company_id', 'in', company_ids), ('company_id', 'in', [8,9])]</field>
+  </record>
+</odoo>
