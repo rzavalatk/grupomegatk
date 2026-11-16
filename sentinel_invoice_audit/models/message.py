@@ -43,10 +43,35 @@ class AuditMessage(models.Model):
 
     def _search(self, domain, offset=0, limit=None, order=None):
         invoice_query = self.env['account.move']._search([('company_id', 'in', [8, 9])])
-        message_query = self.env['mail.message']._search([('model', '=', 'account.move')])
-        domain = expression.AND([domain, [('invoice_res_id', 'in', invoice_query),
-                                          ('source_message_id', 'in', message_query)]])
-        return super()._search(domain, offset=offset, limit=limit, order=order)
+        scoped_domain = expression.AND([domain, [('invoice_res_id', 'in', invoice_query)]])
+        # Native mail.message._search materializes matching rows in Python to
+        # apply its document/recipient rules. Never call it on the whole ledger.
+        # Bound candidates FIRST, then retain native checks and allowed-row
+        # pagination. Do not let an inaccessible candidate end a page early.
+        batch_size, scan_limit = 200, 10000
+        accepted, scanned = [], 0
+        needed = offset + limit if limit else None
+        while scanned < scan_limit:
+            candidate_query = super()._search(
+                scoped_domain, offset=scanned, limit=batch_size, order=order)
+            candidates = candidate_query.get_result_ids()
+            if not candidates:
+                break
+            readable = set(self.env['mail.message']._search([
+                ('id', 'in', list(candidates)), ('model', '=', 'account.move'),
+            ]).get_result_ids())
+            accepted.extend(message_id for message_id in candidates if message_id in readable)
+            scanned += len(candidates)
+            if needed is not None and len(accepted) >= needed:
+                break
+            if len(candidates) < batch_size:
+                break
+        else:
+            from odoo.exceptions import UserError
+            raise UserError('Acote las fechas o las facturas del historial: se alcanzó el límite seguro de candidatos.')
+        selected = accepted[offset:needed] if needed is not None else accepted[offset:]
+        return super()._search(expression.AND([scoped_domain, [('id', 'in', selected)]]),
+                               offset=0, limit=None, order=order)
 
     def check_access(self, operation):
         result = super().check_access(operation)

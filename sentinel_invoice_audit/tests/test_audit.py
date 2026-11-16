@@ -1,4 +1,5 @@
 from datetime import date
+from unittest.mock import patch
 
 from odoo import Command
 from odoo.exceptions import AccessError
@@ -298,3 +299,36 @@ class TestInvoiceAudit(AccountTestInvoicingCommon):
         self.assertIn('raw SQL changes', coverage.policy['excluded'])
         with self.assertRaises(AccessError):
             coverage.sudo().write({'capture_started_at': '2026-11-01 00:00:00'})
+
+    def test_chatter_access_is_bounded_and_paginates_readable_rows(self):
+        invoice = self._invoice()
+        messages = self.env['mail.message'].with_company(self.company8).create([
+            {'model': 'account.move', 'res_id': invoice.id,
+             'message_type': 'comment' if index % 2 == 0 else 'user_notification',
+             'author_id': self.env.user.partner_id.id,
+             'reply_to': 'synthetic@example.invalid', 'email_from': 'synthetic@example.invalid',
+             'body': 'Synthetic bounded history %s' % index}
+            for index in range(230)
+        ])
+        native = self.env['mail.message'].with_user(self.reader).with_context(allowed_company_ids=[8])
+        expected = native.search([('id', 'in', messages.ids)], order='id').ids
+        projection = self.env['sentinel.invoice.audit.message'].with_user(self.reader).with_context(allowed_company_ids=[8])
+        original = type(native)._search
+        batch_sizes = []
+
+        def bounded_search(records, domain, offset=0, limit=None, order=None):
+            candidates = [term[2] for term in domain
+                          if isinstance(term, (tuple, list)) and len(term) == 3
+                          and term[0] == 'id' and term[1] == 'in']
+            self.assertTrue(candidates, 'Native message search must receive bounded candidate IDs')
+            self.assertTrue(all(isinstance(ids, list) and len(ids) <= 200 for ids in candidates))
+            batch_sizes.append(len(candidates[0]))
+            return original(records, domain, offset=offset, limit=limit, order=order)
+
+        domain = [('id', 'in', messages.ids), ('invoice_res_id', '=', invoice.id)]
+        with patch.object(type(native), '_search', bounded_search):
+            rows = projection.search_read(domain, ['id'], offset=101, limit=10, order='id')
+            count = projection.search_count(domain)
+        self.assertEqual([row['id'] for row in rows], expected[101:111])
+        self.assertEqual(count, len(expected))
+        self.assertTrue(batch_sizes)
