@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_event_reader,event reader,model_sentinel_invoice_audit_event,group_audit_reader,1,0,0,0
+access_coverage_reader,coverage reader,model_sentinel_invoice_audit_coverage,group_audit_reader,1,0,0,0
+access_message_reader,message reader,model_sentinel_invoice_audit_message,group_audit_reader,1,0,0,0
+access_event_system,event system read,model_sentinel_invoice_audit_event,base.group_system,1,0,0,0
+access_coverage_system,coverage system read,model_sentinel_invoice_audit_coverage,base.group_system,1,0,0,0
+access_message_system,message system read,model_sentinel_invoice_audit_message,base.group_system,1,0,0,0

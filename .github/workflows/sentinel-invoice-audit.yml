@@ -1,0 +1,39 @@
+name: Sentinel invoice audit (Odoo 18)
+on:
+  push:
+    branches: ['codex/sentinel-invoice-audit-20261114']
+    paths: ['sentinel_invoice_audit/**', '.github/workflows/sentinel-invoice-audit.yml']
+  pull_request:
+    paths: ['sentinel_invoice_audit/**', '.github/workflows/sentinel-invoice-audit.yml']
+permissions:
+  contents: read
+jobs:
+  odoo18:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run real ORM, posting and reconciliation tests in a synthetic database
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker network create sentinel-audit-ci
+          docker run -d --name sentinel-db --network sentinel-audit-ci -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=synthetic_ci_only -e POSTGRES_DB=postgres postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec sentinel-db pg_isready -U odoo; then break; fi
+            sleep 1
+          done
+          docker run --rm --name sentinel-test --network sentinel-audit-ci --entrypoint odoo \
+            -v "$PWD/sentinel_invoice_audit:/mnt/extra-addons/sentinel_invoice_audit:ro" \
+            odoo:18.0 --db_host=sentinel-db --db_user=odoo --db_password=synthetic_ci_only \
+            --database=sentinel_synthetic_ci --init=l10n_us,sentinel_invoice_audit --without-demo=all \
+            --test-enable --test-tags=/sentinel_invoice_audit --stop-after-init \
+            --workers=0 --max-cron-threads=0 --http-port=8069 --log-level=test \
+            2>&1 | tee sentinel-audit-tests.log
+      - name: Retain synthetic test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentinel-audit-test-log
+          path: sentinel-audit-tests.log
+          retention-days: 14
