@@ -1,7 +1,10 @@
 from odoo import Command
+from lxml import etree
+from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from unittest.mock import patch
 
 
 @tagged('post_install', '-at_install')
@@ -151,6 +154,32 @@ class TestLenkaBanks(TransactionCase):
         disbursement._onchange_disbursement_journal()
         self.assertEqual(disbursement.disbursement_journal_id, self.journals[1])
 
+    def test_legacy_applied_without_bank_can_be_cancelled_from_form(self):
+        operation = self._operation()
+        legacy = self.env['lenka.disbursement'].create({
+            'operation_id': operation.id, 'amount': 150000, 'payment_method': 'check',
+        })
+        legacy.action_post()  # Legacy record, before per-delivery banks were required in the UI.
+        self.assertFalse(legacy.disbursement_journal_id)
+        view = self.env['lenka.disbursement'].get_view(
+            self.env.ref('lenka_financiero.view_lenka_disbursement_form').id, 'form')
+        field = etree.fromstring(view['arch']).xpath("//field[@name='disbursement_journal_id']")[0]
+        required = field.get('required')
+        for method in ('check', 'transfer', 'cash', 'credit_card'):
+            self.assertTrue(safe_eval(required, {'state': 'draft', 'payment_method': method}))
+            for state in ('posted', 'cancelled'):
+                self.assertFalse(safe_eval(required, {'state': state, 'payment_method': method}))
+        self.assertFalse(safe_eval(required, {'state': 'draft', 'payment_method': 'refinance_entry'}))
+        before = self.env['account.move'].search_count([])
+        number_next = self.sequence.number_next_actual
+        legacy.action_cancel()
+        self.assertEqual(legacy.state, 'cancelled')
+        self.assertEqual(operation.pending_disbursement, operation.financed_amount)
+        self.assertFalse(legacy.move_id)
+        self.assertFalse(legacy.bank_check_ids)
+        self.assertEqual(self.env['account.move'].search_count([]), before)
+        self.assertEqual(self.sequence.number_next_actual, number_next)
+
     def test_runtime_guard_protects_posted_check_lines(self):
         disbursement = self._disbursement(self._operation(), 150000)
         disbursement.action_post()
@@ -166,3 +195,104 @@ class TestLenkaBanks(TransactionCase):
                 'move_id': disbursement.move_id.id, 'account_id': self.portfolio.id,
                 'partner_id': self.partner.id, 'debit': 1, 'credit': 0,
             })
+
+    def test_internal_bridge_rejects_existing_treasury_check(self):
+        self.company.lenka_refinance_clearing_journal_id = self.journals[0]
+        operation = self._operation()
+        move = self.env['account.move'].create({
+            'journal_id': self.journals[0].id, 'date': '2026-10-22',
+            'line_ids': [Command.create({
+                'account_id': self.portfolio.id, 'partner_id': self.partner.id, 'debit': 150000,
+            }), Command.create({
+                'account_id': self.journals[0].default_account_id.id, 'credit': 150000,
+            })],
+        })
+        move.action_post()
+        application = self.env['lenka.disbursement'].create({
+            'operation_id': operation.id, 'amount': 150000, 'date': move.date,
+            'payment_method': 'refinance_entry', 'destination_partner_id': self.partner.id,
+            'refinance_line_id': move.line_ids.filtered(lambda line: line.debit).id,
+        })
+        with patch.object(type(self.env['banks.check']), 'search_count', return_value=1):
+            with self.assertRaisesRegex(ValidationError, 'pago, extracto o cheque'):
+                application.action_post()
+        self.assertEqual(application.state, 'draft')
+
+    def test_investor_receipts_leave_treasury_counters_untouched(self):
+        journal = self.journals[0]
+        self.company.write({
+            'lenka_investment_journal_id': journal.id,
+            'lenka_investor_liability_account_id': self.journals[2].default_account_id.id,
+        })
+        deposits = self.env['ir.sequence'].create({
+            'name': 'FICTITIOUS Treasury deposits', 'code': 'deposit', 'move_type': 'deposit',
+            'journal_id': journal.id, 'company_id': self.company.id,
+            'prefix': 'DP-FICTITIOUS-', 'padding': 4, 'number_next': 306,
+        })
+        operation = self._operation()
+        first = self._disbursement(operation, 150000)
+        first.action_post()
+        first.action_create_account_move()
+        first.move_id.action_post()
+        self.assertEqual(first.move_id.name, 'CK-A-0667')
+        check_next = self.sequence.number_next_actual
+        deposit_next = deposits.number_next_actual
+        check_count = self.env['banks.check'].search_count([])
+        investment = self.env['lenka.investment'].create({
+            'partner_id': self.partner.id, 'company_id': self.company.id,
+            'principal_amount': 1000, 'start_date': '2025-09-01',
+            'maturity_date': '2026-09-01', 'passive_rate': 1.5, 'early_withdrawal_rate': 1,
+            'rate_period': 'monthly', 'investment_type': 'fixed',
+        })
+        investment.action_activate()
+        investment.action_create_receipt_move()
+        additional = self.env['lenka.investment.deposit'].create({
+            'investment_id': investment.id, 'journal_id': journal.id,
+            'date': '2025-09-20', 'amount': 100, 'reference': 'FICTITIOUS-RECEIPT',
+        })
+        additional.action_post()
+        moves = investment.receipt_move_id | additional.move_id
+        names = moves.mapped('name')
+        self.assertEqual(len(set(names)), 2)
+        self.assertTrue(all(name.startswith('LENKA-REC-') for name in names))
+        moves.action_post()
+        self.assertEqual(moves.mapped('name'), names)
+        self.assertEqual(self.sequence.number_next_actual, check_next)
+        self.assertEqual(deposits.number_next_actual, deposit_next)
+        self.assertEqual(self.env['banks.check'].search_count([]), check_count)
+        second = self._disbursement(operation, 150000)
+        second.action_post()
+        second.action_create_account_move()
+        second.move_id.action_post()
+        self.assertEqual(second.move_id.name, 'CK-A-0668')
+
+    def test_bank_collection_keeps_native_check_sequence_available(self):
+        income = self.env['account.account'].create({
+            'name': 'FICTITIOUS collection interest', 'code': 'LBCI',
+            'account_type': 'income', 'company_ids': [Command.set(self.company.ids)],
+        })
+        self.company.write({'lenka_interest_income_account_id': income.id,
+                            'lenka_late_fee_income_account_id': income.id})
+        operation = self.env['lenka.financial.operation'].create({
+            'partner_id': self.partner.id, 'principal_amount': 100000,
+            'interest_rate': 1, 'rate_period': 'monthly', 'term_months': 12,
+            'calculation_method': 'interest_only', 'first_payment_date': '2025-01-14',
+            'is_quote': False,
+        })
+        operation.action_generate_schedule()
+        operation.state = 'active'
+        payment = self.env['lenka.payment'].create({
+            'operation_id': operation.id, 'payment_date': '2025-01-14', 'amount': 1000,
+            'collection_destination': 'bank', 'collection_journal_id': self.journals[0].id,
+        })
+        check_count = self.env['banks.check'].search_count([])
+        payment.action_apply_and_prepare_collection()
+        payment.move_id.action_post()
+        self.assertTrue(payment.move_id.name.startswith('LENKA-COB-'))
+        self.assertEqual(self.env['banks.check'].search_count([]), check_count)
+        self.assertEqual(self.sequence.number_next_actual, 667)
+        delivery = self._disbursement(self._operation(), 1000)
+        delivery.action_post()
+        delivery.action_create_account_move()
+        delivery.move_id.action_post()
+        self.assertEqual(delivery.move_id.name, 'CK-A-0667')

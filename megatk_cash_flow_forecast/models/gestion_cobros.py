@@ -131,6 +131,9 @@ class CashflowManagementNote(models.Model):
                 self.env["cashflow.promise"].browse(promise_id).exists()
                 if promise_id else self.env["cashflow.promise"]
             )
+            if promise and not move_id and promise.source_move_id:
+                move_id = promise.source_move_id.id
+                values["move_id"] = move_id
             move = self.env["account.move"].browse(move_id).exists() if move_id else self.env["account.move"]
             if promise:
                 values["direction"] = promise.direction

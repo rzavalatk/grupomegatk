@@ -1,0 +1,48 @@
+name: Pruebas del bloqueo de comercial
+
+on:
+  push:
+    branches: [fix/bloqueo-comercial-20261113]
+    paths:
+      - 'partner_commercial_lock/**'
+      - '.github/workflows/partner-commercial-lock.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-odoo18:
+    if: github.repository == 'ajz04megatk/grupomegatk'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Start isolated PostgreSQL
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker network create commercial-lock-test
+          docker run -d --name commercial-lock-pg --network commercial-lock-test \
+            -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=test-only \
+            -e POSTGRES_DB=postgres postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec commercial-lock-pg pg_isready -U odoo; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Install module and run permission tests in Odoo 18
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network commercial-lock-test \
+            -e HOST=commercial-lock-pg -e USER=odoo -e PASSWORD=test-only \
+            -v "$GITHUB_WORKSPACE/partner_commercial_lock:/mnt/extra-addons/partner_commercial_lock:ro" \
+            odoo:18.0 odoo --db_host=commercial-lock-pg \
+            --db_user=odoo --db_password=test-only -d commercial_lock_test \
+            -i partner_commercial_lock --without-demo=all --test-enable \
+            --test-tags '/partner_commercial_lock' --stop-after-init \
+            --max-cron-threads=0 --log-level=test
+      - name: Stop isolated database
+        if: always()
+        run: docker rm -f commercial-lock-pg || true

@@ -1,3 +1,6 @@
+from calendar import monthrange
+from datetime import timedelta
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -29,6 +32,10 @@ class LenkaInvestment(models.Model):
     capitalization = fields.Selection([
         ('monthly', 'Capitalizacion mensual'), ('maturity', 'Pago al vencimiento'), ('manual', 'Manual')
     ], string='Forma de reconocimiento', default='monthly', required=True)
+    interest_schedule = fields.Selection([
+        ('month_end', 'Fin de mes: dias reales del mes'),
+        ('anniversary', 'Aniversario mensual historico (base 30)'),
+    ], string='Cierre de intereses', default='month_end', required=True, readonly=True, copy=False)
     receiving_account = fields.Char(string='Cuenta receptora / referencia bancaria')
     contract_reference = fields.Char(string='Referencia de contrato')
     state = fields.Selection([
@@ -37,6 +44,9 @@ class LenkaInvestment(models.Model):
     ], default='draft', tracking=True, copy=False)
     interest_line_ids = fields.One2many('lenka.investment.interest', 'investment_id', string='Intereses')
     withdrawal_ids = fields.One2many('lenka.investment.withdrawal', 'investment_id', string='Retiros')
+    deposit_ids = fields.One2many('lenka.investment.deposit', 'investment_id', string='Depositos adicionales')
+    additional_deposits = fields.Monetary(string='Depositos adicionales', compute='_compute_totals')
+    account_balance = fields.Monetary(string='Saldo de la cuenta', compute='_compute_totals')
     accrued_interest = fields.Monetary(string='Interes acumulado', compute='_compute_totals')
     paid_interest = fields.Monetary(string='Interes pagado', compute='_compute_totals')
     withheld_interest_tax = fields.Monetary(string='Impuesto retenido sobre intereses', compute='_compute_totals')
@@ -45,12 +55,13 @@ class LenkaInvestment(models.Model):
     notes = fields.Text(string='Observaciones')
     terms_locked = fields.Boolean(compute='_compute_terms_locked')
 
-    @api.depends('receipt_move_id', 'interest_line_ids.state', 'withdrawal_ids.state')
+    @api.depends('receipt_move_id', 'interest_line_ids.state', 'withdrawal_ids.state', 'deposit_ids.state')
     def _compute_terms_locked(self):
         for rec in self:
             rec.terms_locked = bool(rec.receipt_move_id or
                                     rec.interest_line_ids.filtered(lambda l: l.state in ('accrued', 'paid')) or
-                                    rec.withdrawal_ids.filtered(lambda w: w.state == 'posted'))
+                                    rec.withdrawal_ids.filtered(lambda w: w.state == 'posted') or
+                                    rec.deposit_ids.filtered(lambda d: d.state == 'posted'))
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -62,15 +73,16 @@ class LenkaInvestment(models.Model):
     def write(self, vals):
         terms = {'partner_id', 'company_id', 'currency_id', 'principal_amount',
                  'investment_type', 'passive_rate', 'early_withdrawal_rate',
-                 'rate_period', 'start_date', 'maturity_date', 'term_months', 'capitalization'}
+                 'rate_period', 'start_date', 'maturity_date', 'term_months', 'capitalization', 'interest_schedule'}
         if terms.intersection(vals):
+            self._lock_investment_movements()
             for rec in self:
                 if rec.terms_locked:
                     raise ValidationError(_('No puede cambiar las condiciones de una inversion con movimientos registrados. Conserve su historial y formalice una nueva operacion.'))
         return super().write(vals)
 
     def unlink(self):
-        if any(rec.state != 'draft' or rec.receipt_move_id or rec.interest_line_ids or rec.withdrawal_ids for rec in self):
+        if any(rec.state != 'draft' or rec.receipt_move_id or rec.interest_line_ids or rec.withdrawal_ids or rec.deposit_ids for rec in self):
             raise ValidationError(_('Solo puede eliminar inversiones en borrador sin movimientos.'))
         return super().unlink()
 
@@ -86,7 +98,7 @@ class LenkaInvestment(models.Model):
             if rec.maturity_date and rec.maturity_date < rec.start_date:
                 raise ValidationError(_('El vencimiento no puede ser anterior a la fecha de inicio.'))
 
-    @api.depends('principal_amount', 'interest_line_ids.amount', 'interest_line_ids.net_amount', 'interest_line_ids.tax_amount', 'interest_line_ids.state', 'withdrawal_ids.principal_amount', 'withdrawal_ids.state')
+    @api.depends('principal_amount', 'interest_line_ids.amount', 'interest_line_ids.net_amount', 'interest_line_ids.tax_amount', 'interest_line_ids.state', 'withdrawal_ids.principal_amount', 'withdrawal_ids.state', 'deposit_ids.amount', 'deposit_ids.state')
     def _compute_totals(self):
         for rec in self:
             posted_interest = rec.interest_line_ids.filtered(lambda l: l.state in ('accrued', 'paid'))
@@ -94,7 +106,9 @@ class LenkaInvestment(models.Model):
             rec.paid_interest = sum(rec.interest_line_ids.filtered(lambda l: l.state == 'paid').mapped('net_amount'))
             rec.withheld_interest_tax = sum(posted_interest.mapped('tax_amount'))
             rec.withdrawn_principal = sum(rec.withdrawal_ids.filtered(lambda w: w.state == 'posted').mapped('principal_amount'))
-            rec.outstanding_principal = max(rec.principal_amount - rec.withdrawn_principal, 0.0)
+            rec.additional_deposits = sum(rec.deposit_ids.filtered(lambda d: d.state == 'posted').mapped('amount'))
+            rec.outstanding_principal = max(rec.principal_amount + rec.additional_deposits - rec.withdrawn_principal, 0.0)
+            rec.account_balance = rec.outstanding_principal + sum(posted_interest.filtered(lambda l: l.state != 'paid').mapped('net_amount'))
 
     def _monthly_rate_for(self, rate):
         self.ensure_one()
@@ -127,6 +141,101 @@ class LenkaInvestment(models.Model):
         return True
 
     def _generate_interest_until(self, end_date, rate, replace=False, settle_partial=False):
+        self.ensure_one()
+        self._lock_investment_movements()
+        if self.interest_schedule == 'anniversary':
+            return self._generate_anniversary_interest_until(end_date, rate, replace, settle_partial)
+        return self._generate_calendar_interest_until(end_date, rate, replace, settle_partial)
+
+    def _lock_investment_movements(self):
+        """Serialize deposits, withdrawals and accruals on their account."""
+        self.check_access('write')
+        self.flush_recordset()
+        if not self:
+            return
+        self.env.cr.execute('SELECT id FROM lenka_investment WHERE id IN %s ORDER BY id FOR UPDATE', [tuple(self.ids)])
+        # Bump the row version without changing values. PostgreSQL repeatable
+        # read then retries a concurrent RPC instead of using stale child rows.
+        self.env.cr.execute('UPDATE lenka_investment SET write_date = write_date WHERE id IN %s', [tuple(self.ids)])
+        self.invalidate_recordset(['interest_line_ids', 'withdrawal_ids', 'deposit_ids', 'terms_locked',
+                                  'outstanding_principal', 'additional_deposits', 'account_balance'])
+
+    def action_register_deposit(self):
+        self.ensure_one()
+        self.check_access('write')
+        if self.state != 'active':
+            raise ValidationError(_('La cuenta debe estar activa para recibir depositos adicionales.'))
+        return {
+            'type': 'ir.actions.act_window', 'name': _('Registrar deposito adicional'),
+            'res_model': 'lenka.investment.deposit', 'view_mode': 'form', 'target': 'current',
+            'context': {'default_investment_id': self.id},
+        }
+
+    def _calendar_capital_at(self, day):
+        """Opening-day deposits earn interest; withdrawals stop earning that day.
+
+        Net interest compounds at month end. Existing anniversary lines retain
+        their original recognition dates; upgrading never rewrites those rows.
+        A withdrawal settles all prior interest, so its date resets compounding.
+        """
+        deposits = self.deposit_ids.filtered(lambda d: d.state == 'posted' and d.date <= day)
+        withdrawals = self.withdrawal_ids.filtered(lambda w: w.state == 'posted' and w.date <= day)
+        principal = self.principal_amount + sum(deposits.mapped('amount')) - sum(withdrawals.mapped('principal_amount'))
+        last_withdrawal = max(withdrawals.mapped('date'), default=self.start_date)
+        interest = self.interest_line_ids.filtered(
+            lambda l: l.state in ('accrued', 'paid') and last_withdrawal <= l.period_date < day and
+            (not withdrawals or l.period_date > last_withdrawal) and
+            (not l.is_calendar_period or l.period_date.day == monthrange(l.period_date.year, l.period_date.month)[1])
+        ) if self.capitalization == 'monthly' else self.env['lenka.investment.interest']
+        return max(principal + self.currency_id.round(sum(interest.mapped('net_amount'))), 0.0)
+
+    def _generate_calendar_interest_until(self, end_date, rate, replace=False, settle_partial=False):
+        end_date = fields.Date.to_date(end_date)
+        if replace:
+            if self.interest_line_ids.filtered(lambda l: l.state != 'paid' and (l.move_id or l.adjustment_move_id)):
+                raise ValidationError(_('Debe regularizar los asientos de intereses antes de recalcular el retiro anticipado.'))
+            self.interest_line_ids.filtered(lambda l: l.state != 'paid').sudo().unlink()
+        # Arrival day is included. A withdrawal or contractual maturity stops
+        # accrual at the beginning of its date (half-open cashflow interval).
+        limit = end_date - timedelta(days=1) if settle_partial else end_date
+        if self.maturity_date:
+            limit = min(limit, self.maturity_date - timedelta(days=1))
+        existing = self.interest_line_ids.filtered(lambda l: l.state != 'cancelled')
+        cursor = max(existing.mapped('period_date'), default=self.start_date - timedelta(days=1)) + timedelta(days=1)
+        cursor = max(cursor, self.start_date)
+        while cursor <= limit:
+            denominator = monthrange(cursor.year, cursor.month)[1]
+            month_end = cursor.replace(day=denominator)
+            period_end = min(month_end, limit)
+            if period_end < month_end and not settle_partial and not (
+                self.maturity_date and period_end == self.maturity_date - timedelta(days=1)
+            ):
+                break
+            boundaries = {cursor, period_end + timedelta(days=1)}
+            boundaries.update(d.date for d in self.deposit_ids if d.state == 'posted' and cursor < d.date <= period_end)
+            boundaries.update(w.date for w in self.withdrawal_ids if w.state == 'posted' and cursor < w.date <= period_end)
+            dates = sorted(boundaries)
+            weighted_capital = 0.0
+            raw_interest = 0.0
+            applied_rate = rate
+            for first, stop in zip(dates, dates[1:]):
+                early = self.withdrawal_ids.filtered(lambda w: w.state == 'posted' and w.early_withdrawal and w.date <= first).sorted('date')[:1]
+                applied_rate = early.effective_rate if early else rate
+                capital = self._calendar_capital_at(first)
+                days = (stop - first).days
+                weighted_capital += capital * days
+                raw_interest += capital * self._monthly_rate_for(applied_rate) * days / denominator
+            days = (period_end - cursor).days + 1
+            self.env['lenka.investment.interest'].create({
+                'investment_id': self.id, 'period_start_date': cursor, 'period_date': period_end,
+                'calculation_days': days, 'day_count_basis': denominator, 'is_calendar_period': True,
+                'is_prorated': days != denominator, 'base_amount': weighted_capital / days,
+                'rate': applied_rate, 'amount': self.currency_id.round(raw_interest), 'state': 'accrued',
+            })
+            cursor = period_end + timedelta(days=1)
+        return self._calendar_capital_at(max(cursor, self.start_date))
+
+    def _generate_anniversary_interest_until(self, end_date, rate, replace=False, settle_partial=False):
         self.ensure_one()
         self.check_access('write')
         if replace:
@@ -248,7 +357,9 @@ class LenkaInvestmentInterest(models.Model):
     currency_id = fields.Many2one(related='investment_id.currency_id')
     period_date = fields.Date(string='Fecha periodo', required=True)
     period_start_date = fields.Date(string='Inicio del tramo', readonly=True)
-    calculation_days = fields.Integer(string='Dias de calculo (base 30)', readonly=True)
+    calculation_days = fields.Integer(string='Dias de calculo', readonly=True)
+    day_count_basis = fields.Integer(string='Dias del mes / divisor', readonly=True, default=30)
+    is_calendar_period = fields.Boolean(string='Cierre calendario', readonly=True)
     is_prorated = fields.Boolean(string='Interes proporcional', readonly=True)
     base_amount = fields.Monetary(string='Base')
     rate = fields.Float(string='Tasa (%)')
@@ -267,7 +378,7 @@ class LenkaInvestmentInterest(models.Model):
 
     def write(self, vals):
         financial = {'investment_id', 'period_date', 'period_start_date', 'calculation_days',
-                     'is_prorated', 'base_amount', 'rate', 'amount', 'tax_rate'}
+                     'is_prorated', 'base_amount', 'rate', 'amount', 'tax_rate', 'day_count_basis', 'is_calendar_period'}
         if financial.intersection(vals) and any(rec.state == 'paid' or rec.move_id or rec.adjustment_move_id for rec in self):
             raise ValidationError(_('No puede modificar intereses pagados o vinculados a una partida contable.'))
         if 'state' in vals and any(rec.state == 'paid' and vals['state'] != 'paid' for rec in self):
@@ -367,7 +478,10 @@ class LenkaInvestmentWithdrawal(models.Model):
             if rec.state != 'draft':
                 continue
             investment = rec.investment_id
-            investment.check_access('write')
+            investment._lock_investment_movements()
+            rec.invalidate_recordset()
+            if rec.state != 'draft':
+                continue
             if investment.state not in ('active', 'matured'):
                 raise ValidationError(_('La inversion debe estar activa o vencida para registrar un retiro.'))
             if rec.date < investment.start_date:
@@ -379,6 +493,8 @@ class LenkaInvestmentWithdrawal(models.Model):
             previous_withdrawals = investment.withdrawal_ids.filtered(lambda w: w.state == 'posted' and w.id != rec.id)
             if any(w.date > rec.date for w in previous_withdrawals):
                 raise ValidationError(_('No puede aplicar un retiro anterior a otro retiro ya aplicado.'))
+            if investment.deposit_ids.filtered(lambda d: d.state == 'posted' and d.date > rec.date):
+                raise ValidationError(_('No puede aplicar un retiro anterior a un deposito ya confirmado.'))
             future_interest = investment.interest_line_ids.filtered(lambda l: l.state != 'cancelled' and l.period_date > rec.date)
             if future_interest.filtered(lambda l: l.state == 'paid' or l.move_id or l.adjustment_move_id):
                 raise ValidationError(_('Existen intereses posteriores pagados o contabilizados. Regularicelos antes de aplicar este retiro.'))

@@ -6,6 +6,24 @@ for table, rows in snapshot['tables'].items():
     ids = tuple(row[0] for row in rows)
     env.cr.execute('SELECT id, to_jsonb(t) FROM %s t WHERE id IN %%s ORDER BY id' % table, [ids])
     actual = json.loads(json.dumps(env.cr.fetchall(), default=str))
+    if table == 'res_company':
+        for _record_id, values in actual:
+            # The release adds one nullable company setting; never auto-select a journal.
+            assert values.pop('lenka_refinance_clearing_journal_id', None) is None
+    if table == 'lenka_investment':
+        for _record_id, values in actual:
+            assert values.pop('interest_schedule') == 'month_end'
+    if table == 'lenka_investment_interest':
+        for _record_id, values in actual:
+            assert values.pop('day_count_basis') == 30
+            # Nullable new marker: both SQL NULL and false mean an original
+            # anniversary line. No original column is excluded below.
+            assert values.pop('is_calendar_period') in (False, None)
+    if table == 'lenka_payment':
+        for _record_id, values in actual:
+            assert values.pop('company_id') == snapshot['tables']['res_company'][0][0]
+            assert values.pop('collection_destination') in (False, None)
+            assert values.pop('collection_journal_id') in (False, None)
     assert actual == rows, 'Installer changed historical records in %s' % table
 env.cr.execute("""SELECT conname, pg_get_constraintdef(oid), convalidated
                   FROM pg_constraint WHERE conrelid = 'account_move_line'::regclass
@@ -14,9 +32,9 @@ assert json.loads(json.dumps(env.cr.fetchall())) == snapshot['constraints'], 'In
 modules = env['ir.module.module'].search([('name', 'in', ['lenka_financiero', 'lenka_banks'])])
 assert all(m.state == 'installed' for m in modules) and len(modules) == 2
 assert {m.name: m.installed_version for m in modules} == {
-    'lenka_financiero': '18.0.1.0.13', 'lenka_banks': '18.0.1.0.1'}
+    'lenka_financiero': '18.0.1.0.17', 'lenka_banks': '18.0.1.0.2'}
 from odoo.addons.lenka_financiero.models.accounting_guard import _has_guard
 for method in ('create', 'write', 'unlink'):
     assert _has_guard(getattr(type(env['account.move.line']), method)), 'Missing runtime protection: %s' % method
-print('PASS: both modules installed; every historical row and accounting constraint unchanged; guards active after restart')
+print('PASS: both modules installed; all original historical values and accounting constraints unchanged; new bridge setting empty; guards active after restart')
 env.cr.rollback()
