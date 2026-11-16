@@ -302,10 +302,11 @@ class TestInvoiceAudit(AccountTestInvoicingCommon):
 
     def test_chatter_access_is_bounded_and_paginates_readable_rows(self):
         invoice = self._invoice()
-        messages = self.env['mail.message'].create([
+        messages = self.env['mail.message'].with_company(self.company8).create([
             {'model': 'account.move', 'res_id': invoice.id,
              'message_type': 'comment' if index % 2 == 0 else 'user_notification',
              'author_id': self.env.user.partner_id.id,
+             'reply_to': 'synthetic@example.invalid', 'email_from': 'synthetic@example.invalid',
              'body': 'Synthetic bounded history %s' % index}
             for index in range(230)
         ])
