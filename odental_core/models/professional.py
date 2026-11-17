@@ -38,7 +38,7 @@ class ODentalProfessional(models.Model):
     specialty_ids = fields.Many2many(
         "odental.specialty", "odental_professional_specialty_rel",
         "professional_id", "specialty_id", string="Especialidades",
-        help="Seleccione una o varias especialidades del catálogo clínico.",
+        help="Seleccione una o varias especialidades o áreas de práctica. Puede crear una desde el selector o administrarlas en Configuración clínica > Especialidades. Los procedimientos concretos se crean en Servicios.",
     )
     organization_ids = fields.Many2many(
         "odental.organization", "odental_professional_organization_rel",
