@@ -52,6 +52,11 @@ payment = local['lenka.payment'].create({
     'operation_id': operation.id, 'payment_date': '2025-09-30', 'amount': 10,
 })
 payment.action_post()
+# A legacy disbursement must retain all original values and an unset new due date.
+disbursement = local['lenka.disbursement'].create({
+    'operation_id': operation.id, 'date': '2025-09-20', 'amount': 1000,
+    'payment_method': 'other', 'destination_partner_id': partner.id,
+})
 env.flush_all()
 # Reproduce a constraint ALREADY ABSENT in the legacy fixture, before installing
 # the new release. The installer is never allowed to drop or bypass constraints.
@@ -62,7 +67,8 @@ tables = {'account_move': moves.ids, 'account_move_line': moves.line_ids.ids,
           'res_company': company.ids, 'account_journal': journal.ids,
           'account_account': accounts.ids, 'lenka_investment': investment.ids,
           'lenka_investment_interest': interest.ids, 'lenka_payment': payment.ids,
-          'lenka_payment_allocation': payment.allocation_line_ids.ids}
+          'lenka_payment_allocation': payment.allocation_line_ids.ids,
+          'lenka_disbursement': disbursement.ids}
 snapshot = {'tables': {}, 'constraints': None}
 for table, ids in tables.items():
     env.cr.execute('SELECT id, to_jsonb(t) FROM %s t WHERE id IN %%s ORDER BY id' % table, [tuple(ids)])

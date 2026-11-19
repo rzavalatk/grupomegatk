@@ -24,6 +24,12 @@ for table, rows in snapshot['tables'].items():
             assert values.pop('company_id') == snapshot['tables']['res_company'][0][0]
             assert values.pop('collection_destination') in (False, None)
             assert values.pop('collection_journal_id') in (False, None)
+    if table == 'lenka_disbursement':
+        for _record_id, values in actual:
+            assert values.pop('capital_due_date') in (False, None)
+            # Existing nullable fields introduced after the baseline are never selected.
+            assert values.pop('disbursement_journal_id', None) in (False, None)
+            assert values.pop('refinance_line_id', None) in (False, None)
     assert actual == rows, 'Installer changed historical records in %s' % table
 env.cr.execute("""SELECT conname, pg_get_constraintdef(oid), convalidated
                   FROM pg_constraint WHERE conrelid = 'account_move_line'::regclass
@@ -32,7 +38,7 @@ assert json.loads(json.dumps(env.cr.fetchall())) == snapshot['constraints'], 'In
 modules = env['ir.module.module'].search([('name', 'in', ['lenka_financiero', 'lenka_banks'])])
 assert all(m.state == 'installed' for m in modules) and len(modules) == 2
 assert {m.name: m.installed_version for m in modules} == {
-    'lenka_financiero': '18.0.1.0.17', 'lenka_banks': '18.0.1.0.2'}
+    'lenka_financiero': '18.0.1.0.18', 'lenka_banks': '18.0.1.0.2'}
 from odoo.addons.lenka_financiero.models.accounting_guard import _has_guard
 for method in ('create', 'write', 'unlink'):
     assert _has_guard(getattr(type(env['account.move.line']), method)), 'Missing runtime protection: %s' % method
