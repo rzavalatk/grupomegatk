@@ -85,6 +85,25 @@ class TestLenkaBanks(TransactionCase):
         with self.assertRaises(ValidationError):
             checks[0].move_id.button_draft()
 
+    def test_capital_due_date_keeps_native_check_and_bank_unchanged(self):
+        disb = self._disbursement(self._operation(), 300000)
+        disb.capital_due_date = '2028-01-15'
+        disb.date = '2026-01-15'
+        disb.action_post()
+        disb.action_create_account_move()
+        line = disb.move_id.line_ids.filtered(lambda l: l.account_id == self.portfolio)
+        self.assertEqual(str(line.date_maturity), '2028-01-15')
+        self.assertEqual(disb.bank_check_ids.number, 'CK-A-0667')
+        self.assertEqual(self.sequence.number_next_actual, 668)
+        disb.move_id.action_post()
+        bank_before = disb.move_id.line_ids.filtered(lambda l: l.account_id != self.portfolio).read(
+            ['account_id', 'balance', 'date_maturity'])
+        disb._apply_capital_maturity('2028-02-15', 'FICTITIOUS revised accounting maturity')
+        self.assertEqual(disb.move_id.line_ids.filtered(lambda l: l.account_id != self.portfolio).read(
+            ['account_id', 'balance', 'date_maturity']), bank_before)
+        self.assertEqual(self.sequence.number_next_actual, 668)
+        self.assertEqual(disb.bank_check_ids.number, 'CK-A-0667')
+
     def test_mixed_bank_transfer_and_card(self):
         operation = self._operation()
         first = self._disbursement(operation, 100000, self.journals[0], 'transfer')
