@@ -125,7 +125,7 @@ class LenkaFinancialOperation(models.Model):
             'interest_only_months', 'late_fee_rate', 'late_fee_method', 'grace_days',
             'balloon_base_payment', 'residual_purchase_percent', 'recalculation_policy',
         }
-        if protected.intersection(vals):
+        if protected.intersection(vals) and not self._is_contract_date_correction_write(vals):
             locked = self.filtered(lambda r: r.state in ('approved', 'contracted', 'active', 'done'))
             if locked:
                 raise ValidationError(_('Las condiciones financieras no pueden modificarse despues de aprobar la operacion. Use una reestructuracion para conservar el historial.'))
