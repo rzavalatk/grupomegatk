@@ -1,0 +1,37 @@
+<odoo>
+    <record id="view_lenka_contract_date_correction" model="ir.ui.view">
+        <field name="name">lenka.operation.contract.date.correction</field>
+        <field name="model">lenka.financial.operation</field>
+        <field name="inherit_id" ref="view_lenka_operation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="can_correct_contract_dates" invisible="1"/>
+                <button name="action_open_contract_date_correction" string="Corregir fechas del contrato" type="object" invisible="not can_correct_contract_dates" groups="lenka_financiero.group_lenka_sole_authorizer"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_lenka_contract_date_wizard" model="ir.ui.view">
+        <field name="name">lenka.contract.date.wizard.form</field>
+        <field name="model">lenka.contract.date.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Corregir fechas del contrato">
+                <div class="alert alert-warning" role="status">Correccion de captura para prestamos contratados sin cobros ni mora registrada. Se conservan los importes de las cuotas y se ajustan sus fechas mensuales. No se generan partidas ni salidas de dinero. El contrato firmado original se conserva y no se regenera; revise su respaldo documental. El vencimiento contable de la CxC se revisa por separado.</div>
+                <group>
+                    <field name="operation_id"/>
+                    <field name="fingerprint" invisible="1"/>
+                    <field name="operation_date"/>
+                    <field name="contract_date"/>
+                    <field name="first_payment_date"/>
+                    <field name="level_payment_start_date"/>
+                    <field name="last_payment_date"/>
+                    <field name="reason"/>
+                    <field name="confirmed"/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Aplicar correccion de fechas" type="object" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

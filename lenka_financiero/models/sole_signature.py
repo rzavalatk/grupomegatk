@@ -378,7 +378,8 @@ class LenkaSoleSignature(models.Model):
             raise AccessError(_('Utilice Enviar a Luis Moran, Autorizar o Rechazar para registrar la decision.'))
         if {'security_mode', 'guarantor_ids', 'guarantee_ids'}.intersection(vals) and self.filtered(lambda r: r.state in LOCKED_STATES or r.approval_date):
             raise ValidationError(_('No puede cambiar el respaldo de una operacion aprobada.'))
-        if TERMS_FIELDS.intersection(vals) and sole.filtered(lambda r: r.sole_signature_status in ('pending', 'approved')):
+        if (TERMS_FIELDS.intersection(vals) and not self._is_contract_date_correction_write(vals)
+                and sole.filtered(lambda r: r.sole_signature_status in ('pending', 'approved'))):
             raise ValidationError(_('Las condiciones enviadas a Luis Moran no pueden modificarse.'))
         if 'sole_signature_decision_notes' in vals:
             for rec in sole:
@@ -469,7 +470,7 @@ class LenkaAmortizationProtection(models.Model):
 
     def write(self, vals):
         protected = {'operation_id', 'sequence', 'date', 'opening_balance', 'capital', 'interest', 'extra_charge', 'payment', 'closing_balance'}
-        if protected.intersection(vals):
+        if protected.intersection(vals) and not self._is_contract_date_correction_write(vals):
             self._check_authorization_plan()
             if vals.get('operation_id'):
                 operation = self.env['lenka.financial.operation'].browse(vals['operation_id'])
