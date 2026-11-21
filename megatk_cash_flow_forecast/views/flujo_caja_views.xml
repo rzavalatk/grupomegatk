@@ -135,7 +135,88 @@
   <record id="action_cashflow_classification" model="ir.actions.act_window"><field name="name">Clasificación de cartera</field><field name="res_model">cashflow.portfolio.classification</field><field name="view_mode">list,form</field><field name="domain">[('company_id', '=', context.get('allowed_company_ids', [False])[0])]</field></record>
   <record id="action_cashflow_classification_receivable" model="ir.actions.act_window"><field name="name">Clasificaciones CXC</field><field name="res_model">cashflow.portfolio.classification</field><field name="view_mode">list,form</field><field name="domain">[('company_id', '=', context.get('allowed_company_ids', [False])[0]), ('direction', '=', 'receivable')]</field><field name="context">{'default_direction': 'receivable'}</field></record>
   <record id="action_cashflow_classification_payable" model="ir.actions.act_window"><field name="name">Clasificaciones CXP</field><field name="res_model">cashflow.portfolio.classification</field><field name="view_mode">list,form</field><field name="domain">[('company_id', '=', context.get('allowed_company_ids', [False])[0]), ('direction', '=', 'payable')]</field><field name="context">{'default_direction': 'payable'}</field></record>
-  <record id="action_cashflow_statistics" model="ir.actions.act_window"><field name="name">Estadísticas</field><field name="res_model">cashflow.portfolio.snapshot</field><field name="view_mode">graph,pivot,list</field><field name="domain">[('company_id', '=', context.get('allowed_company_ids', [False])[0])]</field><field name="context">{'search_default_group_classification': 1}</field></record>
+  <record id="view_cashflow_bank_reconciliation_list" model="ir.ui.view">
+    <field name="name">cashflow.bank.reconciliation.snapshot.list</field>
+    <field name="model">cashflow.bank.reconciliation.snapshot</field>
+    <field name="arch" type="xml">
+      <list create="0" edit="0" delete="0" decoration-success="status == 'reconciled'" decoration-warning="status == 'review'" decoration-danger="status == 'critical'">
+        <header><button name="action_capture_current_company" type="object" string="Generar corte ahora" display="always" class="btn-primary"/></header>
+        <field name="company_id" column_invisible="True"/>
+        <field name="company_currency_id" column_invisible="True"/>
+        <field name="cutoff_date"/>
+        <field name="account_id"/>
+        <field name="journal_id" optional="show"/>
+        <field name="currency_id"/>
+        <field name="real_balance" sum="Total real"/>
+        <field name="accounting_balance" sum="Total Odoo"/>
+        <field name="difference" sum="Diferencia total"/>
+        <field name="real_balance_company" sum="Total real equivalente" optional="show"/>
+        <field name="accounting_balance_company" sum="Total Odoo equivalente" optional="show"/>
+        <field name="difference_company" sum="Diferencia total equivalente"/>
+        <field name="match_percentage" widget="percentage"/>
+        <field name="status" widget="badge" decoration-success="status == 'reconciled'" decoration-warning="status == 'review'" decoration-danger="status == 'critical'"/>
+        <field name="capture_source" optional="show"/>
+        <field name="captured_at" optional="show"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_cashflow_bank_reconciliation_graph" model="ir.ui.view">
+    <field name="name">cashflow.bank.reconciliation.snapshot.graph</field>
+    <field name="model">cashflow.bank.reconciliation.snapshot</field>
+    <field name="arch" type="xml">
+      <graph string="Saldo real vs. Odoo por cuenta" type="bar">
+        <field name="account_id"/>
+        <field name="real_balance_company" type="measure"/>
+        <field name="accounting_balance_company" type="measure"/>
+      </graph>
+    </field>
+  </record>
+  <record id="view_cashflow_bank_reconciliation_pivot" model="ir.ui.view">
+    <field name="name">cashflow.bank.reconciliation.snapshot.pivot</field>
+    <field name="model">cashflow.bank.reconciliation.snapshot</field>
+    <field name="arch" type="xml">
+      <pivot string="Histórico de estatus bancario">
+        <field name="cutoff_date" type="row" interval="week"/>
+        <field name="account_id" type="col"/>
+        <field name="absolute_difference_company" type="measure"/>
+        <field name="real_balance_company" type="measure"/>
+        <field name="accounting_balance_company" type="measure"/>
+      </pivot>
+    </field>
+  </record>
+  <record id="view_cashflow_bank_reconciliation_search" model="ir.ui.view">
+    <field name="name">cashflow.bank.reconciliation.snapshot.search</field>
+    <field name="model">cashflow.bank.reconciliation.snapshot</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="account_id"/>
+        <field name="cutoff_date"/>
+        <filter string="Último corte" name="latest" domain="[('is_latest', '=', True)]"/>
+        <filter string="Conciliadas" name="reconciled" domain="[('status', '=', 'reconciled')]"/>
+        <filter string="Revisar" name="review" domain="[('status', '=', 'review')]"/>
+        <filter string="Críticas" name="critical" domain="[('status', '=', 'critical')]"/>
+        <separator/>
+        <group expand="0" string="Agrupar por">
+          <filter string="Fecha del corte" name="group_cutoff" context="{'group_by': 'cutoff_date:week'}"/>
+          <filter string="Cuenta bancaria" name="group_account" context="{'group_by': 'account_id'}"/>
+          <filter string="Estado" name="group_status" context="{'group_by': 'status'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+  <record id="action_cashflow_statistics" model="ir.actions.act_window">
+    <field name="name">Estatus de cuentas bancarias</field>
+    <field name="res_model">cashflow.bank.reconciliation.snapshot</field>
+    <field name="view_mode">list,graph,pivot</field>
+    <field name="search_view_id" ref="view_cashflow_bank_reconciliation_search"/>
+    <field name="domain">[('company_id', '=', context.get('allowed_company_ids', [False])[0])]</field>
+    <field name="context">{'search_default_latest': 1}</field>
+    <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Todavía no existe un corte bancario.</p><p>El corte se generará automáticamente los viernes después de las 6:00 p. m. o puede usar el botón “Generar corte ahora”.</p></field>
+  </record>
+  <record id="action_cashflow_bank_status_dashboard" model="ir.actions.client">
+    <field name="name">Estatus de cuentas bancarias</field>
+    <field name="tag">cashflow_bank_status_dashboard</field>
+  </record>
   <record id="view_cashflow_classification_list" model="ir.ui.view"><field name="name">cashflow.portfolio.classification.list</field><field name="model">cashflow.portfolio.classification</field><field name="arch" type="xml"><list editable="bottom"><field name="company_id" invisible="1"/><field name="partner_id"/><field name="direction"/><field name="classification"/></list></field></record>
   <record id="view_cashflow_management_note_list" model="ir.ui.view"><field name="name">cashflow.management.note.list</field><field name="model">cashflow.management.note</field><field name="arch" type="xml"><list decoration-danger="follow_up_status == 'overdue'" decoration-warning="follow_up_status == 'today'"><field name="create_date" string="Fecha y hora"/><field name="direction"/><field name="partner_id"/><field name="scope"/><field name="move_id" optional="show"/><field name="management_type"/><field name="promise_id" optional="hide"/><field name="note"/><field name="next_action_date"/><field name="follow_up_status"/><field name="author_id"/></list></field></record>
   <record id="view_cashflow_management_note_form" model="ir.ui.view"><field name="name">cashflow.management.note.form</field><field name="model">cashflow.management.note</field><field name="arch" type="xml"><form string="Registrar gestión"><sheet><group><field name="company_id" invisible="1"/><field name="direction"/><field name="partner_id"/><field name="scope"/><field name="move_id" invisible="scope != 'document'" required="scope == 'document'" domain="[('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', partner_id), ('move_type', 'in', direction == 'receivable' and ('out_invoice', 'out_refund') or ('in_invoice', 'in_refund')), ('state', '=', 'posted'), ('amount_residual', '!=', 0)]"/><field name="management_type"/><field name="promise_id"/><field name="note" placeholder="Ej.: Se confirmó el cobro o pago para la Semana 2."/><field name="next_action_date"/><field name="author_id"/></group></sheet></form></field></record>
@@ -147,7 +228,7 @@
   <menuitem id="menu_cashflow_plan" name="Proyección" parent="menu_cashflow_root" action="action_cashflow_plan" sequence="10" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
   <menuitem id="menu_cashflow_reports" name="Reporte" parent="menu_cashflow_root" sequence="20" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
   <menuitem id="menu_cashflow_report" name="Flujo de caja" parent="menu_cashflow_reports" action="action_cashflow_report" sequence="10" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
-  <menuitem id="menu_cashflow_statistics" name="Estadísticas" parent="menu_cashflow_reports" action="action_cashflow_statistics" sequence="20" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
+  <menuitem id="menu_cashflow_statistics" name="Estatus de cuentas bancarias" parent="menu_cashflow_reports" action="action_cashflow_bank_status_dashboard" sequence="20" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
   <menuitem id="menu_cashflow_income" name="Ingresos" parent="menu_cashflow_root" sequence="30" groups="megatk_cash_flow_forecast.group_cashflow_user,megatk_cash_flow_forecast.group_cashflow_collections"/>
   <menuitem id="menu_cashflow_expenses" name="Egresos" parent="menu_cashflow_root" sequence="40" groups="megatk_cash_flow_forecast.group_cashflow_user"/>
   <record id="menu_cashflow_snapshot" model="ir.ui.menu"><field name="name">Detalle de cartera</field><field name="parent_id" ref="menu_cashflow_root"/><field name="action" ref="action_cashflow_snapshot"/><field name="active" eval="False"/></record>

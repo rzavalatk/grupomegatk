@@ -17,4 +17,13 @@
     <field name="interval_type">days</field>
     <field name="active">True</field>
   </record>
+  <record id="ir_cron_capture_cashflow_bank_reconciliation" model="ir.cron">
+    <field name="name">Flujo proyectado: corte bancario semanal</field>
+    <field name="model_id" ref="model_cashflow_plan"/>
+    <field name="state">code</field>
+    <field name="code">model._cron_capture_bank_reconciliation()</field>
+    <field name="interval_number">1</field>
+    <field name="interval_type">hours</field>
+    <field name="active">True</field>
+  </record>
 </odoo>

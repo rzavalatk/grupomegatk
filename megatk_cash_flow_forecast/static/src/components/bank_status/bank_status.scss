@@ -1,0 +1,51 @@
+.o_cashflow_bank_status {
+    overflow: auto;
+    background: var(--o-view-background-color, #fff);
+
+    .cashflow-kpi {
+        margin-top: 0.25rem;
+        font-size: 1.65rem;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .cashflow-legend {
+        display: flex;
+        gap: 1.25rem;
+
+        span { display: inline-flex; align-items: center; gap: 0.4rem; }
+    }
+
+    .cashflow-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 0.2rem;
+        display: inline-block;
+    }
+
+    .cashflow-real { background: #4caf50; }
+    .cashflow-odoo { background: #875a7b; }
+
+    .cashflow-bars { display: grid; gap: 0.8rem; }
+    .cashflow-bar-row { display: grid; grid-template-columns: minmax(9rem, 1.25fr) 3fr 3fr; gap: 0.75rem; align-items: center; }
+    .cashflow-account-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cashflow-bar-track { position: relative; min-height: 1.55rem; background: rgba(128, 128, 128, 0.12); border-radius: 0.25rem; overflow: hidden; }
+    .cashflow-bar { position: absolute; inset: 0 auto 0 0; min-width: 2px; opacity: 0.9; }
+    .cashflow-bar-track span { position: relative; z-index: 1; display: block; padding: 0.15rem 0.45rem; font-variant-numeric: tabular-nums; }
+
+    .cashflow-trend { width: 100%; min-height: 16rem; }
+    .cashflow-axis { stroke: var(--border-color, #adb5bd); stroke-width: 1; }
+    .cashflow-trend-line { fill: none; stroke: #875a7b; stroke-width: 4; }
+    .cashflow-trend-point { fill: #fff; stroke: #875a7b; stroke-width: 4; }
+    .cashflow-trend-value { fill: currentColor; font-size: 12px; font-weight: 600; }
+    .cashflow-trend-date { fill: currentColor; font-size: 12px; opacity: 0.75; }
+    .cashflow-empty-trend { min-height: 16rem; display: grid; place-items: center; color: var(--text-muted, #6c757d); text-align: center; }
+
+    .cashflow-status-reconciled { background: #d7f4dc; color: #236b2d; }
+    .cashflow-status-review { background: #fff0c7; color: #805c00; }
+    .cashflow-status-critical { background: #fbd4d8; color: #9b1c2c; }
+
+    @media (max-width: 767px) {
+        .cashflow-bar-row { grid-template-columns: 1fr; gap: 0.25rem; }
+    }
+}

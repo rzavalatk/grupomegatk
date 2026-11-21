@@ -1,7 +1,7 @@
 {
     "name": "Flujo de caja proyectado",
     "summary": "Proyección operativa de cobros, pagos y disponible por empresa",
-    "version": "18.0.16.0.0",
+    "version": "18.0.17.0.0",
     "category": "Accounting/Accounting",
     "author": "Grupo Megatk",
     "license": "LGPL-3",
@@ -20,6 +20,7 @@
         "web.assets_backend": [
             "megatk_cash_flow_forecast/static/src/scss/cashflow_colors.scss",
             "megatk_cash_flow_forecast/static/src/components/aged_partner_cashflow/**/*",
+            "megatk_cash_flow_forecast/static/src/components/bank_status/**/*",
         ],
     },
     "application": True,

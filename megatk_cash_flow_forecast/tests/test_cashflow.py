@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
@@ -1184,6 +1186,74 @@ class TestCashflowForecast(TransactionCase):
         position.action_remove_from_cashflow()
         self.assertFalse(position.exists())
         self.assertTrue(account.exists())
+
+    def test_bank_reconciliation_capture_uses_flow_balances_and_updates_same_day(self):
+        account = self._account("CF1090", "asset_cash")
+        position = self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 200000,
+        })
+        snapshots = self.plan._capture_bank_reconciliation(
+            cutoff_date="2026-11-20", source="manual"
+        )
+        self.assertEqual(len(snapshots), 1)
+        snapshot = snapshots
+        self.assertEqual(snapshot.position_id, position)
+        self.assertEqual(snapshot.real_balance, 200000)
+        self.assertEqual(snapshot.accounting_balance, 0)
+        self.assertEqual(snapshot.difference_company, 200000)
+        self.assertEqual(snapshot.match_percentage, 0)
+        self.assertEqual(snapshot.status, "critical")
+        self.assertTrue(snapshot.is_latest)
+        dashboard = self.env["cashflow.plan"].with_company(
+            self.company
+        ).get_bank_status_dashboard_data()
+        self.assertEqual(dashboard["totals"]["real"], 200000)
+        self.assertEqual(dashboard["totals"]["accounting"], 0)
+        self.assertEqual(dashboard["accounts"][0]["status"], "critical")
+        self.assertEqual(dashboard["history"][0]["date"], "2026-11-20")
+
+        position.real_balance = 250000
+        updated = self.plan._capture_bank_reconciliation(
+            cutoff_date="2026-11-20", source="manual"
+        )
+        self.assertEqual(updated, snapshot)
+        self.assertEqual(updated.real_balance, 250000)
+        self.assertEqual(self.env["cashflow.bank.reconciliation.snapshot"].search_count([
+            ("company_id", "=", self.company.id),
+            ("cutoff_date", "=", "2026-11-20"),
+        ]), 1)
+
+    def test_weekly_bank_reconciliation_runs_only_friday_after_six_honduras(self):
+        account = self._account("CF1091", "asset_cash")
+        self.env["cashflow.bank.position"].create({
+            "plan_id": self.plan.id,
+            "position_type": "liquidity",
+            "account_id": account.id,
+            "real_balance": 10000,
+        })
+        Plan = self.env["cashflow.plan"]
+        self.assertFalse(Plan._cron_capture_bank_reconciliation(
+            now=datetime(2026, 11, 20, 20, 0, 0)
+        ))
+        self.assertFalse(self.env["cashflow.bank.reconciliation.snapshot"].search([]))
+
+        self.assertTrue(Plan._cron_capture_bank_reconciliation(
+            now=datetime(2026, 11, 21, 0, 5, 0)
+        ))
+        snapshots = self.env["cashflow.bank.reconciliation.snapshot"].search([])
+        self.assertEqual(len(snapshots), 1)
+        self.assertEqual(snapshots.cutoff_date.isoformat(), "2026-11-20")
+        self.assertEqual(snapshots.capture_source, "automatic")
+
+        Plan._cron_capture_bank_reconciliation(
+            now=datetime(2026, 11, 21, 1, 5, 0)
+        )
+        self.assertEqual(
+            self.env["cashflow.bank.reconciliation.snapshot"].search_count([]), 1
+        )
 
     def test_aged_actions_request_native_edit_mode(self):
         handler = self.env["cashflow.portfolio.snapshot"].with_company(self.company)

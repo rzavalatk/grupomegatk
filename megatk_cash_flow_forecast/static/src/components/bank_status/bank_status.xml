@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="megatk_cash_flow_forecast.CashflowBankStatus">
+    <div class="o_cashflow_bank_status p-4">
+      <div t-if="state.loading" class="d-flex justify-content-center p-5"><i class="fa fa-spinner fa-spin fa-2x"/></div>
+      <t t-else="">
+        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
+          <div>
+            <h2 class="mb-1">Estatus de cuentas bancarias</h2>
+            <div class="text-muted"><t t-esc="state.data.company"/> · Comparación entre saldo real y saldo en Odoo</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-secondary" t-on-click="openDetail">Ver detalle e histórico</button>
+            <button class="btn btn-primary" t-on-click="captureNow" t-att-disabled="state.capturing">
+              <i t-if="state.capturing" class="fa fa-spinner fa-spin me-1"/>Generar corte ahora
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><div class="text-muted">Saldo real total</div><div class="cashflow-kpi" t-esc="money(state.data.totals.real)"/></div></div></div>
+          <div class="col-12 col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><div class="text-muted">Saldo en Odoo</div><div class="cashflow-kpi" t-esc="money(state.data.totals.accounting)"/></div></div></div>
+          <div class="col-12 col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><div class="text-muted">Diferencia neta</div><div class="cashflow-kpi text-warning" t-esc="money(state.data.totals.difference)"/><div class="small text-muted">Diferencia absoluta: <t t-esc="money(state.data.totals.absolute_difference)"/></div></div></div></div>
+          <div class="col-12 col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><div class="text-muted">Coincidencia</div><div class="cashflow-kpi text-success" t-esc="percent(state.data.totals.match_percentage)"/><div class="small text-muted">Meta sugerida: 98% o más</div></div></div></div>
+        </div>
+
+        <div t-if="!state.data.accounts.length" class="alert alert-info">No hay cuentas de efectivo o banco registradas en el flujo activo.</div>
+        <t t-else="">
+          <div class="row g-4 mb-4">
+            <div class="col-12 col-xl-7">
+              <div class="card h-100"><div class="card-body">
+                <h4 class="mb-1">Saldo real vs. Odoo por cuenta</h4>
+                <div class="small text-muted mb-2">Valores equivalentes en <t t-esc="state.data.currency"/>.</div>
+                <div class="cashflow-legend mb-3"><span><i class="cashflow-dot cashflow-real"/>Saldo real</span><span><i class="cashflow-dot cashflow-odoo"/>Saldo Odoo</span></div>
+                <div class="cashflow-bars">
+                  <div t-foreach="state.data.accounts" t-as="account" t-key="account.id" class="cashflow-bar-row">
+                    <div class="cashflow-account-name" t-att-title="account.name" t-esc="account.name"/>
+                    <div class="cashflow-bar-track"><div class="cashflow-bar cashflow-real" t-att-style="'width:' + barWidth(account.real)"/><span t-esc="money(account.real)"/></div>
+                    <div class="cashflow-bar-track"><div class="cashflow-bar cashflow-odoo" t-att-style="'width:' + barWidth(account.accounting)"/><span t-esc="money(account.accounting)"/></div>
+                  </div>
+                </div>
+              </div></div>
+            </div>
+            <div class="col-12 col-xl-5">
+              <div class="card h-100"><div class="card-body">
+                <h4>Evolución de la diferencia</h4>
+                <div class="small text-muted mb-3">Cortes de los viernes; la meta es acercarse a cero.</div>
+                <div t-if="state.data.history.length &lt; 2" class="cashflow-empty-trend">La tendencia aparecerá cuando existan al menos dos cortes.</div>
+                <svg t-else="" class="cashflow-trend" viewBox="-25 -15 730 245" role="img" aria-label="Evolución semanal de la diferencia absoluta">
+                  <line x1="0" y1="190" x2="680" y2="190" class="cashflow-axis"/>
+                  <path t-att-d="trendPath" class="cashflow-trend-line"/>
+                  <g t-foreach="trendPoints" t-as="point" t-key="point.date">
+                    <circle t-att-cx="point.x" t-att-cy="point.y" r="5" class="cashflow-trend-point"/>
+                    <text t-att-x="point.x" t-att-y="point.y - 10" text-anchor="middle" class="cashflow-trend-value" t-esc="money(point.absolute_difference)"/>
+                    <text t-att-x="point.x" y="214" text-anchor="middle" class="cashflow-trend-date" t-esc="point.date"/>
+                  </g>
+                </svg>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="card"><div class="card-body p-0">
+            <div class="p-3 pb-2"><h4 class="mb-1">Detalle por cuenta</h4><div class="small text-muted">Ordenado por la diferencia absoluta más alta.</div></div>
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead><tr><th>Cuenta</th><th>Moneda</th><th class="text-end">Saldo real</th><th class="text-end">Saldo Odoo</th><th class="text-end">Diferencia</th><th class="text-center">Coincidencia</th><th>Estado</th></tr></thead>
+                <tbody>
+                  <tr t-foreach="state.data.accounts" t-as="account" t-key="account.id">
+                    <td><div t-esc="account.name"/><div class="small text-muted" t-esc="account.journal"/></td>
+                    <td t-esc="account.currency"/>
+                    <td class="text-end" t-esc="moneyCurrency(account.real_original, account.currency)"/>
+                    <td class="text-end" t-esc="moneyCurrency(account.accounting_original, account.currency)"/>
+                    <td class="text-end" t-esc="moneyCurrency(account.difference_original, account.currency)"/>
+                    <td class="text-center" t-esc="percent(account.match_percentage)"/>
+                    <td><span class="badge" t-att-class="'cashflow-status-' + account.status" t-esc="statusLabel(account.status)"/></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div></div>
+        </t>
+      </t>
+    </div>
+  </t>
+</templates>

@@ -5,3 +5,4 @@ from . import integracion_odoo
 from . import aged_partner_cashflow
 
 from . import payment_completion
+from . import bank_reconciliation
